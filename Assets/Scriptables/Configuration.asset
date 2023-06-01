@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b9f64c8e7525f499420b3b9acb4691, type: 3}
+  m_Name: Configuration
+  m_EditorClassIdentifier: 
+  title: Amersfoort
+  Features:
+  - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
+  - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
+  - {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
+  - {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
+  - {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
+  - {fileID: 11400000, guid: 42464fdf892b6b245a26a6156b70ed6d, type: 2}
+  - {fileID: 11400000, guid: e649b402ab73d1144a36dfc3d3213136, type: 2}
+  - {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
+  OnOriginChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTitleChanged:
+    m_PersistentCalls:
+      m_Calls: []
