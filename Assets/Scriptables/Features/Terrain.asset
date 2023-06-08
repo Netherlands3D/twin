@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: terrain
   Caption: Show terrain
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
