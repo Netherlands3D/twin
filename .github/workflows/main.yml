@@ -44,11 +44,11 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Build
-          path: build
+          path: build/WebGL/WebGL
       
       - uses: actions/upload-pages-artifact@v1
         with:
-          path: build
+          path: build/WebGL/WebGL
 
   # see: https://github.com/actions/deploy-pages
   deploy:
