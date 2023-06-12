@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b9f64c8e7525f499420b3b9acb4691, type: 3}
   m_Name: Configuration
   m_EditorClassIdentifier: 
-  title: Amersfoort
+  title: Lelystad
   Features:
   - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
   - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}

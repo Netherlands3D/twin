@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         public string title = "Amersfoort";
         [SerializeField]
-        private Vector3RD origin = new(155000, 463000, 300);
+        private Vector3RD origin = new(161088, 503050, 300);
         public List<Feature> Features = new();
 
         public string Title
