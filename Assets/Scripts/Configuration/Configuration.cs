@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using Netherlands3D.Core;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         public string title = "Amersfoort";
         [SerializeField]
-        private Vector3RD origin = new(161088, 503050, 300);
+        private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
         public List<Feature> Features = new();
 
         public string Title
@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
         
-        public Vector3RD Origin
+        public Coordinate Origin
         {
             get => origin;
             set
@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        public UnityEvent<Vector3RD> OnOriginChanged = new();
+        public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
 
         public bool LoadFromUrl(string url)
@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[1].Trim(), out int y);
             int.TryParse(originParts[2].Trim(), out int z);
 
-            Origin = new Vector3RD(x, y, z);
+            Origin = new Coordinate(CoordinateSystem.RD, x, y, z);
         }
 
         private void LoadFeaturesFromString(string features)
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Configuration
         public string GenerateQueryString()
         {
             string url = "?";
-            url += $"origin={Origin.x},{origin.y},{origin.z}";
+            url += $"origin={Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}";
             url += "&features=";
             url += String.Join(',', Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id).ToArray());
 

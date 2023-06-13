@@ -1,4 +1,5 @@
-using Netherlands3D.Core;
+using System.Globalization;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
 using TMPro;
 using UnityEngine;
@@ -25,10 +26,10 @@ namespace Netherlands3D.Twin.Configuration
             titleField.text = configuration.Title;
             titleField.onValueChanged.AddListener(value => configuration.Title = value);
             
-            originXField.text = configuration.Origin.x.ToString();
+            originXField.text = configuration.Origin.Points[0].ToString(CultureInfo.InvariantCulture);
             originXField.onValueChanged.AddListener(OnOriginXChanged);
 
-            originYField.text = configuration.Origin.y.ToString();
+            originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onValueChanged.AddListener(OnOriginYChanged);
 
             foreach (var availableFeature in configuration.Features)
@@ -56,9 +57,9 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        private void ValidateRdCoordinates(Vector3RD coordinates)
+        private void ValidateRdCoordinates(Coordinate coordinates)
         {
-            var validRdCoordinates = CoordConvert.RDIsValid(coordinates);
+            var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
@@ -84,7 +85,7 @@ namespace Netherlands3D.Twin.Configuration
             shareUrlField.text = configuration.GenerateQueryString();
         }
 
-        private void UpdateShareUrlWhenOriginChanges(Vector3RD origin)
+        private void UpdateShareUrlWhenOriginChanges(Coordinate origin)
         {
             shareUrlField.text = configuration.GenerateQueryString();
         }
@@ -102,13 +103,13 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginYChanged(string value)
         {
             int.TryParse(value, out int y);
-            configuration.Origin = new Vector3RD(configuration.Origin.x, y, 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, configuration.Origin.Points[0], y, 300);
         }
 
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
-            configuration.Origin = new Vector3RD(x, configuration.Origin.y, 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, configuration.Origin.Points[1], 300);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Netherlands3D.Core;
+using Netherlands3D.Coordinates;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.RemoveListener(MoveOrigin);
         }
 
-        private void MoveOrigin(Vector3RD newOrigin)
+        private void MoveOrigin(Coordinate newOrigin)
         {
             if (movingCoRoutine != null)
             {
@@ -37,13 +37,13 @@ namespace Netherlands3D.Twin.Configuration
             movingCoRoutine = StartCoroutine(DebounceMovingOfOrigin(newOrigin));
         }
 
-        private IEnumerator DebounceMovingOfOrigin(Vector3RD newOrigin)
+        private IEnumerator DebounceMovingOfOrigin(Coordinate newOrigin)
         {
             yield return new WaitForSeconds(.3f);
 
             movingCoRoutine = null;
 
-            if (CoordConvert.RDIsValid(newOrigin) == false)
+            if (EPSG7415.IsValid(newOrigin.ToVector3RD()) == false)
             {
                 Debug.LogWarning(
                     $"{newOrigin} is not a valid RD coordinate, camera is not moving to that position"
@@ -52,7 +52,9 @@ namespace Netherlands3D.Twin.Configuration
                 yield break;
             };
 
-            mainCamera.transform.position = CoordConvert.RDtoUnity(newOrigin);
+            mainCamera.transform.position = CoordinateConverter
+                .ConvertTo(newOrigin, CoordinateSystem.Unity)
+                .ToVector3();
         }
     }
 }
