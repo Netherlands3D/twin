@@ -70,12 +70,6 @@ namespace Netherlands3D.TileHandler
             }
         }
 
-        private void OnDisable()
-        {
-            //Clear loaded asset texture reference
-            texturedSkyMaterial.SetTexture("_Tex", null);
-        }
-
         public void ApplyEnvironment(bool mobile = false)
         {
             //Load up our environment based on platform (mobile should be lightweight)

@@ -21,6 +21,7 @@ To get this to work, you need to do a couple of things:
       type `Skybox` with an intensity of `1.5`.
    3. In Environment: set a custom Environment Reflection with the Cubemap `Reflection_Cubemap`
    4. Enable fog with color `#F0EDE4` in `Linear` mode with a start of `0` and end of `20000`
+6. Copy the WebGLTemplate assets from the package folder into your own WebGLTemplate
 
 With all these settings, your TileHandler output should look a lot better immediately. You may want to tweak the LOD 
 distances of the TileHandler layers and the clipping distance of the camera for the best results. 
