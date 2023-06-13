@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1131018513434534420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6129593076402616864}
+  - component: {fileID: 2612055032915279106}
+  m_Layer: 0
+  m_Name: EnvironmentSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6129593076402616864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131018513434534420}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2612055032915279106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131018513434534420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a59afbf73bc6d4f4980a8dc136aafa3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyIndexMobile: 1
+  skyIndexDesktop: 0
+  selectableProfiles:
+  - {fileID: 11400000, guid: 05fabec785b79304ca2b1a4d9c686258, type: 2}
+  - {fileID: 11400000, guid: 2b884312c0b2e054db8579126d337e49, type: 2}
+  - {fileID: 11400000, guid: b80d1459bc382e843b5d086d74f65717, type: 2}
+  proceduralSkyMaterial: {fileID: 2100000, guid: 57852752f68fcdd418a4c9f1b98fbfa0,
+    type: 2}
+  texturedSkyMaterial: {fileID: 2100000, guid: 2e49ee24d95244542bd03b1af7272cbe, type: 2}
+  directionalLightSun: {fileID: 0}
+  sunUpAmount: -0.2
+  sunDownAmount: 0.5
+  intensityMaterialTrees: {fileID: 2100000, guid: fe330b24b2a46b54f9f209bb9222af32,
+    type: 2}
+  sunGraphic: {fileID: 0}
+  sunHaloGraphic: {fileID: 0}

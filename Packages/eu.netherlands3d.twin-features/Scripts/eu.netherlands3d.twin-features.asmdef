@@ -1,0 +1,14 @@
+{
+    "name": "eu.netherlands3d.twin-features",
+    "rootNamespace": "Netherlands3D.Twin.Features",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

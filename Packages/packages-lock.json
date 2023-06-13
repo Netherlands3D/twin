@@ -179,6 +179,18 @@
       },
       "url": "https://packages.unity.com"
     },
+    "eu.netherlands3d.tilehandler-styling": {
+      "version": "file:eu.netherlands3d.tilehandler-styling",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "eu.netherlands3d.twin-features": {
+      "version": "file:eu.netherlands3d.twin-features",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "nl.netherlands3d": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
       "depth": 0,

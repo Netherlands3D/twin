@@ -1,0 +1,14 @@
+{
+    "name": "eu.netherlands3d.tilehandler-styling",
+    "rootNamespace": "Netherlands3D.TileHandler",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
