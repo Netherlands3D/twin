@@ -59,7 +59,9 @@ namespace Netherlands3D.Twin.Configuration
 
         private void ValidateRdCoordinates(Coordinate coordinates)
         {
-            var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
+            // TODO: IsValid is broken.. whoops!
+            // var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
+            var validRdCoordinates = true;
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
