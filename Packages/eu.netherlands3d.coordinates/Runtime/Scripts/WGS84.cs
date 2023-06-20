@@ -189,7 +189,7 @@ namespace Netherlands3D.Coordinates
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_3857)
+            if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_4326)
             {
                 throw new ArgumentOutOfRangeException(
                     $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
