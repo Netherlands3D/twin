@@ -50,7 +50,7 @@ namespace Netherlands3D.Coordinates
             {
                 Vector2RD change = new Vector2RD(value.x - relativeCenterCoordinate.x, value.y - relativeCenterCoordinate.y);
 
-                EPSG4936.relativeCenter = WGS84.ToECEF(ToWGS84(value.x, value.y));
+                EPSG4936.relativeCenter = EPSG4326.ToECEF(ToWGS84(value.x, value.y));
 
                 //TODO: rotation from earth centered earth fixed
                 relativeCenterCoordinate = value;

@@ -57,11 +57,12 @@ namespace Netherlands3D.Coordinates
             return coordinate.CoordinateSystem switch
             {
                 (int)CoordinateSystem.Unity => Unity.ConvertTo(coordinate, targetCrs),
-                (int)CoordinateSystem.WGS84 => WGS84.ConvertTo(coordinate, targetCrs),
+                (int)CoordinateSystem.WGS84 => EPSG4326.ConvertTo(coordinate, targetCrs),
                 (int)CoordinateSystem.RD => EPSG7415.ConvertTo(coordinate, targetCrs),
+                (int)CoordinateSystem.EPSG_3857 => EPSG3857.ConvertTo(coordinate, targetCrs),
                 (int)CoordinateSystem.EPSG_4936 => EPSG4936.ConvertTo(coordinate, targetCrs),
                 _ => throw new ArgumentOutOfRangeException(
-                    $"Conversion between CRS ${coordinate.CoordinateSystem} and ${targetCrs} is not yet supported")
+                    $"Conversion between CRS {coordinate.CoordinateSystem} and {targetCrs} is not yet supported")
             };
         }
 
@@ -296,7 +297,7 @@ namespace Netherlands3D.Coordinates
         [Obsolete("RotationToUnityUP() is deprecated, please use WGS84.RotationToUp()")]
         public static Vector3 RotationToUnityUP(Vector3WGS position)
         {
-            return WGS84.RotationToUp(position);
+            return EPSG4326.RotationToUp(position);
         }
 
         /// <summary>
@@ -318,7 +319,7 @@ namespace Netherlands3D.Coordinates
         [Obsolete("WGS84IsValid() is deprecated, please use WGS84.IsValid()")]
         public static bool WGS84IsValid(Vector3WGS coordinate)
         {
-            return WGS84.IsValid(coordinate);
+            return EPSG4326.IsValid(coordinate);
         }
     }
 }

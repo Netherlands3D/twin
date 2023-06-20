@@ -24,6 +24,7 @@ namespace Netherlands3D.Coordinates
     public enum CoordinateSystem
     {
         Unity = -1, // Deprecated, Unity should not be considered a coordinate system but a translation by the MovingOrigin
+        EPSG_3857 = 3857, // WGS 84 / Pseudo-Mercator in meters
         EPSG_4326 = 4326, // WGS 84 / Pseudo-Mercator in degrees
         EPSG_4936 = 4936, // ETRS98-ECEF
         EPSG_7415 = 7415,

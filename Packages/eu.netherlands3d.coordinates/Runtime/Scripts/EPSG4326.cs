@@ -26,7 +26,7 @@ namespace Netherlands3D.Coordinates
     /// <!-- accuracy: WGS84 to RD  X <0.01m, Y <0.02m H <0.03m, tested in Amsterdam with PCNapTrans-->
     /// <!-- accuracy: RD to WGS84  X <0.01m, Y <0.02m H <0.03m, tested in Amsterdam with PCNapTrans-->
     /// </summary>
-    public static class WGS84
+    public static class EPSG4326
     {
         //setup coefficients for ecef-calculation ETRD89
         private static double semimajorAxis = 6378137;
@@ -157,6 +157,18 @@ namespace Netherlands3D.Coordinates
             return EPSG7415.ToUnity(vectorRD);
         }
 
+        // See: https://developers.auravant.com/en/blog/2022/09/09/post-3/#epsg4326-to-epsg3857
+        private static Coordinate ToEPSG3857(Coordinate coordinate)
+        {
+            var x = coordinate.Points[0];
+            var y = coordinate.Points[1];
+            x = (x * 20037508.34d) / 180d;
+            y = Math.Log(Math.Tan(((90d + y) * Math.PI) / 360d)) / (Math.PI / 180d);
+            y = (y * 20037508.34d) / 180d;
+            
+            return new Coordinate(CoordinateSystem.EPSG_3857, x, y, coordinate.Points[2]);
+        }
+
         /// <summary>
         /// checks if WGS-coordinate is valid
         /// </summary>
@@ -215,6 +227,7 @@ namespace Netherlands3D.Coordinates
                     var result = ToECEF(vector3);
                     return new Coordinate(targetCrs, result.X, result.Y, result.Z);
                 }
+                case (int)CoordinateSystem.EPSG_3857: return ToEPSG3857(coordinate);
             }
 
             throw new ArgumentOutOfRangeException(

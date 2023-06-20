@@ -78,7 +78,7 @@ namespace Netherlands3D.Coordinates
             //A long coordinate pointing east
             var wgs84East = Unity.ToWGS84(Vector3.zero);
             wgs84East.lon += 0.0001;
-            var ecefEast = WGS84.ToECEF(wgs84East); // Use a unit vector pointing in the north direction
+            var ecefEast = EPSG4326.ToECEF(wgs84East); // Use a unit vector pointing in the north direction
 
             Vector3 northVector = new Vector3((float)-ecefEast.X, (float)ecefEast.Z, (float)-ecefEast.Y) - locationVector;
             Quaternion northRotation = Quaternion.FromToRotation(northVector, Vector3.right);
