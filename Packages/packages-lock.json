@@ -191,6 +191,15 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.indicators": {
+      "version": "file:eu.netherlands3d.indicators",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.0"
+      }
+    },
     "eu.netherlands3d.tilehandler-styling": {
       "version": "file:eu.netherlands3d.tilehandler-styling",
       "depth": 0,
