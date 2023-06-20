@@ -2997,6 +2997,54 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4888022043817112357}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1449052329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1449052330}
+  - component: {fileID: 1449052331}
+  m_Layer: 0
+  m_Name: Areas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1449052330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449052329}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1677871921}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1449052331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449052329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64a4b33f937477bbdaae47c56a5fbc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 538199934}
+  meshMaterial: {fileID: 2100000, guid: 44d459479e0340446b1215b3f6901764, type: 2}
+  lineMaterial: {fileID: 2100000, guid: 6d3ba74657c311e4299e528df3c94ff6, type: 2}
+  meshExtrusionHeight: 50
 --- !u!1001 &1452110423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3153,22 +3201,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.049503766
+      value: -0.049568407
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.011480552
+      value: -0.01149535
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.97288793
+      value: 0.9728855
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.22562507
+      value: -0.2256207
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -4824,7 +4872,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cd23e9aad74c5bb22fd64f612d14ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 538199934}
   dossierUrl: https://engine.tygron.com/share/provincie-utrecht/mike_test/dossier.geojson
   onOpen:
     m_PersistentCalls:
@@ -4856,6 +4903,21 @@ MonoBehaviour:
   onFailedToOpen:
     m_PersistentCalls:
       m_Calls: []
+  onLoadedProjectArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1449052331}
+        m_TargetAssemblyTypeName: Netherlands.Indicators.AreaRenderer, eu.netherlands3d.indicators.Runtime
+        m_MethodName: set_Geometry
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onClose:
     m_PersistentCalls:
       m_Calls:
@@ -4882,7 +4944,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1449052330}
   m_Father: {fileID: 1561646421}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
