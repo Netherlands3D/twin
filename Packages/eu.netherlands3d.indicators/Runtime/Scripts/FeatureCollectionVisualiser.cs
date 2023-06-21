@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
@@ -14,7 +15,15 @@ namespace Netherlands.Indicators
         [SerializeField] private FreeCamera mainCamera;
         [SerializeField] private Material meshMaterial;
         [SerializeField] private Material lineMaterial;
+        [SerializeField] private Material selectedMeshMaterial;
         [SerializeField] private float meshExtrusionHeight = 10f;
+
+        [SerializeField] private PolygonVisualisation selectedArea;
+        public PolygonVisualisation SelectedArea
+        {
+            get => selectedArea;
+            set => selectedArea = value;
+        }
 
         private readonly List<PolygonVisualisation> areas = new();
         public List<PolygonVisualisation> Areas => areas;
@@ -33,8 +42,57 @@ namespace Netherlands.Indicators
 
         public UnityEvent<PolygonVisualisation> onAreaVisualised = new();
         public UnityEvent<PolygonVisualisation> onAreaRemoved = new();
+        public UnityEvent<PolygonVisualisation> onSelectedArea = new();
 
-        private void Refresh()
+        private void OnEnable()
+        {
+            onAreaVisualised.AddListener(OnAreaVisualized);
+            onAreaRemoved.AddListener(OnAreaRemoved);
+        }
+
+        private void OnAreaVisualized(PolygonVisualisation visualisation)
+        {
+            visualisation.reselectVisualisedPolygon.AddListener(SelectArea);
+            if (!SelectedArea)
+            {
+                SelectArea(visualisation);
+            }
+        }
+
+        private void OnAreaRemoved(PolygonVisualisation visualisation)
+        {
+            if (SelectedArea == visualisation)
+            {
+                SelectArea(null);
+            }
+            visualisation.reselectVisualisedPolygon.RemoveListener(SelectArea);
+        }
+
+        private void SelectArea(PolygonVisualisation visualisation)
+        {
+            // nothing happens when you try to select the already selected area
+            if (SelectedArea == visualisation)
+            {
+                return;
+            }
+
+            // Deselect previous area
+            if (SelectedArea)
+            {
+                SelectedArea.GetComponent<MeshRenderer>().material = meshMaterial;
+            }
+            
+            // Select new area
+            this.SelectedArea = visualisation;
+            if (SelectedArea)
+            {
+                SelectedArea.GetComponent<MeshRenderer>().material = selectedMeshMaterial;
+            }
+            
+            onSelectedArea.Invoke(visualisation);
+        }
+
+        public void Refresh()
         {
             Clear();
 
@@ -125,6 +183,7 @@ namespace Netherlands.Indicators
 
         private void Clear()
         {
+            SelectedArea = null;
             foreach (var polygon in Areas)
             {
                 onAreaRemoved.Invoke(polygon);
