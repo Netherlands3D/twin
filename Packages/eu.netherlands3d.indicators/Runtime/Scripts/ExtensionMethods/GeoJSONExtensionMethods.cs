@@ -11,7 +11,9 @@ namespace Netherlands.Indicators.ExtensionMethods
     {
         public static int EPSGId(this GeoJSONObject geoJsonObject)
         {
+            // Default EPSG code for GeoJSON
             int epsgId = 4326;
+
             NamedCRS crsObject = geoJsonObject.CRS as NamedCRS;
             if (crsObject != null)
             {

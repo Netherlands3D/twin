@@ -1,15 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
-using GeoJSON.Net.Geometry;
 using Netherlands.Indicators.ExtensionMethods;
 using Netherlands3D.Coordinates;
-using Netherlands3D.SelectionTools;
-using Netherlands3D.TileSystem;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands.Indicators
 {
@@ -21,6 +14,9 @@ namespace Netherlands.Indicators
     /// </summary>
     public class PositionAndScaleToFeatureCollection : MonoBehaviour
     {
+        public UnityEvent<Vector3> onSetPosition = new();
+        public UnityEvent<Vector3> onSetSize = new();
+        
         void Start()
         {
             Hide();
@@ -55,17 +51,24 @@ namespace Netherlands.Indicators
                 CoordinateSystem.Unity
             );
 
-            Debug.Log(topLeft.ToVector3());
-            Debug.Log(bottomRight.ToVector3());
-
-            Vector3 size = new Vector3(
+            Vector3 position = new Vector3(
+                center.ToVector3().x, 
+                transform.position.y, 
+                center.ToVector3().z
+            );
+            Vector3 scale = new Vector3(
                 bottomRight.ToVector3().x - topLeft.ToVector3().x,
                 0, 
                 bottomRight.ToVector3().z - topLeft.ToVector3().z
             );
+            // Size is expressed in Width x Height x Depth, thus: x, z, y
+            Vector3 size = new Vector3(scale.x, scale.z, scale.y);
 
-            transform.position = new Vector3(center.ToVector3().x, transform.position.y, center.ToVector3().z);
-            transform.localScale = new Vector3(size.x, size.y, size.z);
+            transform.position = position;
+            onSetPosition.Invoke(position);
+            transform.localScale = scale;
+            onSetSize.Invoke(size); 
+            
             gameObject.SetActive(true);
         }
 
