@@ -1,3 +1,4 @@
+using System;
 using GeoJSON.Net.Feature;
 using Netherlands.Indicators.ExtensionMethods;
 using Netherlands3D.Coordinates;
@@ -14,9 +15,19 @@ namespace Netherlands.Indicators
     /// </summary>
     public class PositionAndScaleToFeatureCollection : MonoBehaviour
     {
+        [SerializeField] private bool activateGameObject = true;
+        private Vector3 originalPosition = Vector3.zero;
+        private Vector3 originalScale = Vector3.one;
+
         public UnityEvent<Vector3> onSetPosition = new();
         public UnityEvent<Vector3> onSetSize = new();
-        
+
+        private void Awake()
+        {
+            originalPosition = transform.position;
+            originalScale = transform.localScale;
+        }
+
         void Start()
         {
             Hide();
@@ -58,7 +69,7 @@ namespace Netherlands.Indicators
             );
             Vector3 scale = new Vector3(
                 bottomRight.ToVector3().x - topLeft.ToVector3().x,
-                0, 
+                transform.localScale.y, 
                 bottomRight.ToVector3().z - topLeft.ToVector3().z
             );
             // Size is expressed in Width x Height x Depth, thus: x, z, y
@@ -69,15 +80,15 @@ namespace Netherlands.Indicators
             transform.localScale = scale;
             onSetSize.Invoke(size); 
             
-            gameObject.SetActive(true);
+            if (activateGameObject) gameObject.SetActive(true);
         }
 
         public void Hide()
         {
-            transform.position = new Vector3(0, transform.position.y, 0);
-            transform.localScale = Vector3.one;
+            transform.position = originalPosition;
+            transform.localScale = originalScale;
 
-            gameObject.SetActive(false);
+            if (activateGameObject) gameObject.SetActive(false);
         }
     }
 }

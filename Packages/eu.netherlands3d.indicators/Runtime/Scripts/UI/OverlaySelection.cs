@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Netherlands3D.Rendering;
+using Netherlands3D.TileSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,7 @@ namespace Netherlands.Indicators.UI
         [SerializeField] private Toggle overlayRadioOptionPrefab;
         [SerializeField] private RemoteTextureLoader remoteTextureLoader;
         [SerializeField] private TextureDecalProjector textureProjector;
+        [SerializeField] private List<BinaryMeshLayer> disableShadowsOnLayers = new();
         
         private void Awake()
         {
@@ -37,6 +40,11 @@ namespace Netherlands.Indicators.UI
                     (value) =>
                     {
                         textureProjector.gameObject.SetActive(value);
+
+                        foreach (var meshLayer in disableShadowsOnLayers)
+                        {
+                            meshLayer.EnableShadows(!value);
+                        }
 
                         if (value)
                         {

@@ -15,6 +15,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3883320769536567203, guid: d62ffe26c4958754e9ee3be0a03b28f6,
         type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883320769536567203, guid: d62ffe26c4958754e9ee3be0a03b28f6,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -66,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 8605441521365290572, guid: d62ffe26c4958754e9ee3be0a03b28f6,
         type: 3}
       propertyPath: m_Name
-      value: DecalProjectorPrefab Variant
+      value: OverlayProjector
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -99,6 +104,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3441f309d8394e459ca742bf6c3a7b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activateGameObject: 1
+  onSetPosition:
+    m_PersistentCalls:
+      m_Calls: []
+  onSetSize:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3935001219056799147
 MonoBehaviour:
   m_ObjectHideFlags: 0

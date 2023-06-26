@@ -15,18 +15,14 @@ namespace Netherlands.Indicators.ExtensionMethods
             int epsgId = 4326;
 
             NamedCRS crsObject = geoJsonObject.CRS as NamedCRS;
-            if (crsObject != null)
-            {
-                crsObject.Properties.TryGetValue("name", out var crsName);
+            if (crsObject == null) return epsgId;
+    
+            crsObject.Properties.TryGetValue("name", out var crsName);
 
-                if (
-                    crsName is string crsNameString 
-                    && crsNameString.StartsWith("urn:ogc:def:crs:EPSG")
-                ) {
-                    int.TryParse(crsNameString.Split(':').Last(), out epsgId);
-                }
-            }
+            if (crsName is not string crsNameString || !crsNameString.StartsWith("urn:ogc:def:crs:EPSG")) return epsgId;
             
+            int.TryParse(crsNameString.Split(':').Last(), out epsgId);
+
             return epsgId;
         }
         
