@@ -18,9 +18,13 @@ namespace Netherlands.Indicators.ExtensionMethods
             if (crsObject != null)
             {
                 crsObject.Properties.TryGetValue("name", out var crsName);
-                
-                // We make a dangerous assumption here that the URN always contains an EPSG code
-                int.TryParse((crsName as String).Split(':').Last(), out epsgId);
+
+                if (
+                    crsName is string crsNameString 
+                    && crsNameString.StartsWith("urn:ogc:def:crs:EPSG")
+                ) {
+                    int.TryParse(crsNameString.Split(':').Last(), out epsgId);
+                }
             }
             
             return epsgId;
