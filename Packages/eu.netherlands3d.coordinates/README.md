@@ -5,7 +5,8 @@ Using this package it is possible to
 
 1. Convert between the following coordinate systems:
    1. Unity units (interpreted as **meters**)
-   2. [World Geodetic System 1984 (EPSG:4326, WGS84)](https://nl.wikipedia.org/wiki/WGS_84)
+   2. [World Geodetic System 1984 (EPSG:3857, WGS84)](https://epsg.io/3857)
+   2. [World Geodetic System 1984 (EPSG:4326, WGS84)](https://epsg.io/4326)
    3. [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) + [NAP height](https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:7415](https://epsg.io/7415))
    4. [Earth-centered, Earth-fixed (EPSG:4936, ECEF)](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system)
 

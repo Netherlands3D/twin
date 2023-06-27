@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.coordinates",
   "displayName": "Netherlands 3D - Coordinates Conversion",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "unity": "2022.2",
   "description": "",
   "type": "library",
@@ -10,6 +10,7 @@
     "digital twin",
     "coordinates",
     "conversion",
+    "CRS",
     "EPSG",
     "RD"
   ],
@@ -19,7 +20,7 @@
   "changelogURL": "https://github.com/Netherlands3D/Coordinates/blob/main/CHANGELOG.md",
   "hideInEditor": false,
   "author": {
-    "name": "3D Amsterdam Team",
-    "url": "https://3d.amsterdam.nl"
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
   }
 }

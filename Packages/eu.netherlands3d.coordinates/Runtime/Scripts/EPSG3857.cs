@@ -21,7 +21,9 @@ using System;
 namespace Netherlands3D.Coordinates
 {
     /// <summary>
+	/// CRS converter for EPSG:3857 (WGS 84 / Pseudo-Mercator -- Spherical Mercator, Google Maps, OpenStreetMap, Bing, ArcGIS, ESRI).
     /// </summary>
+    /// <see href="https://epsg.io/3857">https://epsg.io/3857</see>
     public static class EPSG3857
     {
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
@@ -29,7 +31,7 @@ namespace Netherlands3D.Coordinates
             if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_3857)
             {
                 throw new ArgumentOutOfRangeException(
-                    $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
+                    $"Invalid coordinate received, this class cannot convert CRS {coordinate.CoordinateSystem}"
                 );
             }
 
