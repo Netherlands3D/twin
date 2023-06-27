@@ -15,11 +15,10 @@ Using this package it is possible to
 This package exposes a unit called Coordinate that is related to a specific Coordinate Reference System (CRS)
 and represents a _coordinate_ in that CRS using 2 or 3 or more _points_.
 
-Example, describing longitude 10.02, latitude 20.01 and height 0 in the WGS-84, or EPSG:4326, Coordinate
-Reference System.
+Example, describing longitude 10.02, latitude 20.01 in the WGS-84, or EPSG:4326, Coordinate Reference System.
 
 ```
-$coordinate = new Coordinate(CoordinateSystem.EPSG_4326, 10.02, 20.01, 0);
+$coordinate = new Coordinate(CoordinateSystem.EPSG_4326, 10.02, 20.01);
 ```
 
 ### Converting to another CoordinateSystem

@@ -144,9 +144,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3 ToUnity(double lon, double lat)
         {
             Vector3 output = new Vector3();
-            if (IsValid(new Vector3WGS(lon,lat,0)) == false)
+            if (IsValid(new Vector3WGS(lon, lat, 0)) == false)
             {
-                Debug.Log("<color=red>coordinate " + lon + "," + lat + " is not a valid WGS84-coordinate!</color>");
+                Debug.Log("<color=red>coordinate " + lon + "," + lat + " is not a valid EPSG:4326 coordinate</color>");
                 return output;
             }
 
@@ -166,7 +166,7 @@ namespace Netherlands3D.Coordinates
             y = Math.Log(Math.Tan(((90d + y) * Math.PI) / 360d)) / (Math.PI / 180d);
             y = (y * 20037508.34d) / 180d;
             
-            return new Coordinate(CoordinateSystem.EPSG_3857, x, y, coordinate.Points[2]);
+            return new Coordinate(CoordinateSystem.EPSG_3857, x, y, 0);
         }
 
         /// <summary>
