@@ -5,7 +5,8 @@ Using this package it is possible to
 
 1. Convert between the following coordinate systems:
    1. Unity units (interpreted as **meters**)
-   2. [World Geodetic System 1984 (EPSG:3857, WGS84)](https://nl.wikipedia.org/wiki/WGS_84)
+   2. [World Geodetic System 1984 (EPSG:3857, WGS84)](https://epsg.io/3857)
+   2. [World Geodetic System 1984 (EPSG:4326, WGS84)](https://epsg.io/4326)
    3. [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) + [NAP height](https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:7415](https://epsg.io/7415))
    4. [Earth-centered, Earth-fixed (EPSG:4936, ECEF)](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system)
 
@@ -14,11 +15,10 @@ Using this package it is possible to
 This package exposes a unit called Coordinate that is related to a specific Coordinate Reference System (CRS)
 and represents a _coordinate_ in that CRS using 2 or 3 or more _points_.
 
-Example, describing longitude 10.02, latitude 20.01 and height 0 in the WGS-84, or EPSG:3857, Coordinate
-Reference System.
+Example, describing longitude 10.02, latitude 20.01 in the WGS-84, or EPSG:4326, Coordinate Reference System.
 
 ```
-$coordinate = new Coordinate(CoordinateSystem.EPSG_3857, 10.02, 20.01, 0);
+$coordinate = new Coordinate(CoordinateSystem.EPSG_4326, 10.02, 20.01);
 ```
 
 ### Converting to another CoordinateSystem
