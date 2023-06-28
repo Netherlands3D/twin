@@ -20,7 +20,6 @@ namespace Netherlands.Indicators.UI
 
         public void Render(Dossiers dossiers)
         {
-            Debug.Log("Start Rendering");
             Clear();
             if (dossiers.ActiveVariant.HasValue == false) return;
 
@@ -28,13 +27,7 @@ namespace Netherlands.Indicators.UI
             {
                 var overlayName = map.Value.name;
                 var overlayUrl = map.Value.frames[0].map;
-                Debug.Log("Will it toggle?");
-                Debug.Log(overlayRadioOptionPrefab);
-
                 Toggle option = Instantiate(overlayRadioOptionPrefab.gameObject, Vector3.zero, Quaternion.identity, transform).GetComponent<Toggle>();
-                Debug.Log("It will toggle!");
-                Debug.Log(overlayName);
-                Debug.Log(overlayUrl);
                 option.GetComponentInChildren<Text>().text = overlayName;
                 option.onValueChanged.AddListener(
                     (value) =>

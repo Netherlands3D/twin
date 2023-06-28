@@ -70,7 +70,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6782671015579272880}
+      - m_Target: {fileID: 2443238212457592661}
         m_TargetAssemblyTypeName: Netherlands.Indicators.PositionAndScaleToFeatureCollection,
           eu.netherlands3d.indicators.Runtime
         m_MethodName: Show
@@ -83,7 +83,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2443238212457592661}
+      - m_Target: {fileID: 6782671015579272880}
         m_TargetAssemblyTypeName: Netherlands.Indicators.PositionAndScaleToFeatureCollection,
           eu.netherlands3d.indicators.Runtime
         m_MethodName: Show
@@ -99,7 +99,7 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6782671015579272880}
+      - m_Target: {fileID: 2443238212457592661}
         m_TargetAssemblyTypeName: Netherlands.Indicators.PositionAndScaleToFeatureCollection,
           eu.netherlands3d.indicators.Runtime
         m_MethodName: Hide
@@ -112,7 +112,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2443238212457592661}
+      - m_Target: {fileID: 6782671015579272880}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: Hide
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6782671015579272880}
         m_TargetAssemblyTypeName: Netherlands.Indicators.PositionAndScaleToFeatureCollection,
           eu.netherlands3d.indicators.Runtime
         m_MethodName: Hide
@@ -259,6 +271,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3441f309d8394e459ca742bf6c3a7b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activateGameObject: 1
+  onSetPosition:
+    m_PersistentCalls:
+      m_Calls: []
+  onSetSize:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &502927429926597110
 PrefabInstance:
   m_ObjectHideFlags: 0

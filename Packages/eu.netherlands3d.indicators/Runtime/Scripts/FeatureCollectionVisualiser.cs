@@ -12,6 +12,7 @@ namespace Netherlands.Indicators
 {
     public class FeatureCollectionVisualiser : MonoBehaviour
     {
+        [Tooltip("The camera to move to a selected area, when left null the first FreeCamera is used from the scene")]
         [SerializeField] private FreeCamera mainCamera;
         [SerializeField] private Material meshMaterial;
         [SerializeField] private Material lineMaterial;
@@ -43,6 +44,14 @@ namespace Netherlands.Indicators
         public UnityEvent<PolygonVisualisation> onAreaVisualised = new();
         public UnityEvent<PolygonVisualisation> onAreaRemoved = new();
         public UnityEvent<PolygonVisualisation> onSelectedArea = new();
+
+        private void Awake()
+        {
+            if (this.mainCamera == null)
+            {
+                this.mainCamera = FindObjectOfType<FreeCamera>();
+            }
+        }
 
         private void OnEnable()
         {

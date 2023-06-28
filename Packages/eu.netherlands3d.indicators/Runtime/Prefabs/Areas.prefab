@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  meshMaterial: {fileID: 2100000, guid: 44d459479e0340446b1215b3f6901764, type: 2}
-  lineMaterial: {fileID: 2100000, guid: 6d3ba74657c311e4299e528df3c94ff6, type: 2}
-  selectedMeshMaterial: {fileID: 2100000, guid: 6d5134c598e5c084ab722c0bee12830e,
+  meshMaterial: {fileID: 2100000, guid: 5744ec079728ef947a9e7dd07e23da60, type: 2}
+  lineMaterial: {fileID: 2100000, guid: 4f267586f46b6a94c9781289ff754a8c, type: 2}
+  selectedMeshMaterial: {fileID: 2100000, guid: c97c2263e74f4a54e84f0d51586448eb,
     type: 2}
   meshExtrusionHeight: 50
   selectedArea: {fileID: 0}
