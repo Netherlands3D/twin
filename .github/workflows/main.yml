@@ -47,11 +47,13 @@ jobs:
           path: build/WebGL/WebGL
       
       - uses: actions/upload-pages-artifact@v1
+        if: github.ref_name == 'main'
         with:
           path: build/WebGL/WebGL
 
   # see: https://github.com/actions/deploy-pages
   deploy:
+    if: github.ref_name == 'main'
     needs: build
     permissions:
       pages: write
