@@ -1,0 +1,23 @@
+﻿{
+  "name": "eu.netherlands3d.indicators",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Indicators",
+  "description": "Read areas with their indicators and show where the data is based on",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://example.com/changelog.html",
+  "licensesUrl": "https://example.com/licensing.html",
+  "keywords": [
+    "digital-twin",
+    "indicators"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+    "com.unity.modules.unitywebrequest": "1.0.0",
+    "com.unity.nuget.newtonsoft-json": "3.2.0",
+    "com.virgis.geojson.net":  "1.2.17"
+  }
+}
