@@ -2,7 +2,8 @@
     "name": "eu.netherlands3d.indicators.Runtime",
     "rootNamespace": "Netherlands3D.Indicators",
     "references": [
-        "GUID:33a0d05a98c744ae9baf0f37b6cd5e93"
+        "GUID:33a0d05a98c744ae9baf0f37b6cd5e93",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
