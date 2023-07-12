@@ -10,7 +10,6 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration
 {
-    [Serializable]
     public struct IndicatorConfiguration
     {
         public string dossierId;
@@ -24,7 +23,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
         public List<Feature> Features = new();
-        public IndicatorConfiguration indicatorConfiguration;
+        private IndicatorConfiguration indicatorConfiguration;
 
         public string Title
         {
