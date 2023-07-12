@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration
@@ -7,8 +8,11 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         private Configurator configurator;
 
-        private void Awake()
+        private IEnumerator Start()
         {
+            // Wait one frame to give all other start methods a chance to initialize
+            yield return null;
+
             configurator.Execute();
         }
     }

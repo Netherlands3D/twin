@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Netherlands3D.Indicators;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration.Indicators
@@ -6,8 +7,7 @@ namespace Netherlands3D.Twin.Configuration.Indicators
     public class DossierLoader : MonoBehaviour
     {
         [SerializeField] private Configuration configuration;
-        
-        public UnityEvent<string> dossierStartLoading;
+        [SerializeField] private DossierSO dossier;
 
         private void OnEnable()
         {
@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         private void OnDossierStartLoading(string dossierId)
         {
-            dossierStartLoading.Invoke(dossierId);
+            StartCoroutine(dossier.Open(dossierId));
         }
     }
 }
