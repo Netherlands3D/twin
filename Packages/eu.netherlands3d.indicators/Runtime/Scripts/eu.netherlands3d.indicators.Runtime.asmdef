@@ -3,7 +3,8 @@
     "rootNamespace": "Netherlands3D.Indicators",
     "references": [
         "GUID:33a0d05a98c744ae9baf0f37b6cd5e93",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:871b38c5af53a0544a0ecda2e0492310"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

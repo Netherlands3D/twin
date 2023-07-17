@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators.JsonConverters
+namespace Netherlands3D.Json.JsonConverters
 {
     public class ColorConverter : JsonConverter<Color>
     {
