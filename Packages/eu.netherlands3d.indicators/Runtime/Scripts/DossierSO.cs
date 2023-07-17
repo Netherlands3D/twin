@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using Netherlands3D.Indicators.Dossier;
+using Netherlands3D.Indicators.Dossiers;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,12 +16,12 @@ namespace Netherlands3D.Indicators
         [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using {id} (without spaces).")]
         private string dossierUriTemplate = "";
 
-        public UnityEvent<Dossier.Dossier> onOpen = new();
+        public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
 
-        public Dossier.Dossier? Data { get; private set; }
+        public Dossier? Data { get; private set; }
         public Variant? ActiveVariant { get; private set; }
 
         public IEnumerator Open(string dossierId)
@@ -45,10 +45,10 @@ namespace Netherlands3D.Indicators
             Debug.Log($"<color=orange>Received dossier data from {url}</color>");
             Debug.Log(json);
 
-            Dossier.Dossier dossier;
+            Dossier dossier;
             try
             {
-                dossier = JsonConvert.DeserializeObject<Dossier.Dossier>(json);
+                dossier = JsonConvert.DeserializeObject<Dossier>(json);
             }
             catch (Exception e)
             {

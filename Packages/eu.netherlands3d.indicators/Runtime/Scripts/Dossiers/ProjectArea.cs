@@ -1,7 +1,7 @@
 ﻿using System;
-using Netherlands3D.Indicators.Dossier.Indicators;
+using Netherlands3D.Indicators.Dossiers.Indicators;
 
-namespace Netherlands3D.Indicators.Dossier
+namespace Netherlands3D.Indicators.Dossiers
 {
     [Serializable]
     public struct ProjectArea

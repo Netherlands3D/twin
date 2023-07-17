@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Converters;
 using GeoJSON.Net.CoordinateReferenceSystem;
-using Netherlands3D.Indicators.Dossier;
-using Netherlands3D.Indicators.Dossier.Indicators;
+using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Indicators.Dossiers.Indicators;
 using Newtonsoft.Json;
 
-namespace Netherlands3D.Indicators.Dossier
+namespace Netherlands3D.Indicators
 {
     [Serializable]
     public struct Dossier

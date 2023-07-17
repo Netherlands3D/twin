@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netherlands3D.Indicators.Dossier.Indicators
+namespace Netherlands3D.Indicators.Dossiers.Indicators
 {
     [Serializable]
     public struct Definition

@@ -1,4 +1,4 @@
-﻿using Netherlands3D.Indicators.Dossier;
+﻿using Netherlands3D.Indicators.Dossiers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +8,8 @@ namespace Netherlands3D.Indicators
     {
         [SerializeField] private DossierSO Dossier;
         
-        public UnityEvent<Dossier.Dossier> onOpen = new();
-        public UnityEvent<Dossier.Variant?> onSelectedVariant = new();
+        public UnityEvent<Dossier> onOpen = new();
+        public UnityEvent<Dossiers.Variant?> onSelectedVariant = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
 
@@ -29,7 +29,7 @@ namespace Netherlands3D.Indicators
             Dossier.onFailedToOpen.RemoveListener(OnFailedToOpen);
         }
 
-        private void OnOpen(Dossier.Dossier dossier)
+        private void OnOpen(Dossier dossier)
         {
             onOpen.Invoke(dossier);
         }

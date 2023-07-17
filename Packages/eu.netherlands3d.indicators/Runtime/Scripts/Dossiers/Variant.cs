@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Netherlands3D.Indicators.Dossier
+namespace Netherlands3D.Indicators.Dossiers
 {
     [Serializable]
     public struct Variant

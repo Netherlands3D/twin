@@ -2,7 +2,7 @@
 using Netherlands3D.Json.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Netherlands3D.Indicators.Dossier.DataLayers
+namespace Netherlands3D.Indicators.Dossiers.DataLayers
 {
     [Serializable]
     public struct Frame

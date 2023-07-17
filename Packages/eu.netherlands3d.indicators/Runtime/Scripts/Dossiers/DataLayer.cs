@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Netherlands3D.Indicators.Dossier.DataLayers;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
 
-namespace Netherlands3D.Indicators.Dossier
+namespace Netherlands3D.Indicators.Dossiers
 {
     [Serializable]
     public struct DataLayer
