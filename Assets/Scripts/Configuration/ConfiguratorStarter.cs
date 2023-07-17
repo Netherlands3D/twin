@@ -8,11 +8,8 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         private Configurator configurator;
 
-        private IEnumerator Start()
+        private void Start()
         {
-            // Wait one frame to give all other start methods a chance to initialize
-            yield return null;
-
             configurator.Execute();
         }
     }
