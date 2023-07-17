@@ -1,6 +1,6 @@
 ﻿using Netherlands3D.Indicators;
+using Netherlands3D.Indicators.Dossier;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration.Indicators
 {
@@ -12,16 +12,28 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         private void OnEnable()
         {
             configuration.OnDossierLoadingStart.AddListener(OnDossierStartLoading);
+            dossier.onSelectedVariant.AddListener(OnSelectedVariant);
         }
 
         private void OnDisable()
         {
+            dossier.onSelectedVariant.RemoveListener(OnSelectedVariant);
             configuration.OnDossierLoadingStart.RemoveListener(OnDossierStartLoading);
         }
 
         private void OnDossierStartLoading(string dossierId)
         {
             StartCoroutine(dossier.Open(dossierId));
+        }
+
+        private void OnSelectedVariant(Variant? variant)
+        {
+            if (variant.HasValue == false)
+            {
+                return;
+            }
+
+            StartCoroutine(dossier.LoadProjectAreaGeometry(variant.Value));
         }
     }
 }

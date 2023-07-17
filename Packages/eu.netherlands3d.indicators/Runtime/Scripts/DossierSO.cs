@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
+using GeoJSON.Net.Feature;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +21,7 @@ namespace Netherlands3D.Indicators
         public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
+        public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
 
         public Dossier? Data { get; private set; }
         public Variant? ActiveVariant { get; private set; }
@@ -80,7 +82,25 @@ namespace Netherlands3D.Indicators
 
             if (variant.HasValue != false) return;
         }
-        
+
+        public IEnumerator LoadProjectAreaGeometry(Variant variant)
+        {
+            var geometryUrl = variant.geometry;
+            
+            UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                SelectVariant(null);
+                Debug.LogError(www.error);
+                yield break;
+            }
+
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
+            onLoadedProjectArea.Invoke(featureCollection);
+        }
+
         private string AssembleUri(string dossierId)
         {
             return dossierUriTemplate.Replace("{id}", dossierId);
