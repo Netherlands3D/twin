@@ -51,7 +51,8 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "eu.netherlands3d",
-        "com.cdm"
+        "com.cdm",
+        "com.virgis.geojson.net"
       ]
     }
   ]

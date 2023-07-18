@@ -10,6 +10,11 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration
 {
+    public struct IndicatorConfiguration
+    {
+        public string dossierId;
+    }
+    
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configuration", fileName = "Configuration", order = 0)]
     public class Configuration : ScriptableObject
     {
@@ -18,6 +23,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
         public List<Feature> Features = new();
+        private IndicatorConfiguration indicatorConfiguration;
 
         public string Title
         {
@@ -41,6 +47,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
+        public UnityEvent<string> OnDossierLoadingStart = new();
 
         public bool LoadFromUrl(string url)
         {
@@ -55,6 +62,11 @@ namespace Netherlands3D.Twin.Configuration
 
             LoadOriginFromString(queryParameters.Get("origin"));
             LoadFeaturesFromString(queryParameters.Get("features"));
+            indicatorConfiguration.dossierId = queryParameters.Get("indicators.dossier");
+            if (indicatorConfiguration.dossierId != null)
+            {
+                OnDossierLoadingStart.Invoke(indicatorConfiguration.dossierId);
+            }
 
             return true;
         }

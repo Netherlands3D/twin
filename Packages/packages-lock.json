@@ -179,6 +179,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.virgis.geojson.net": {
+      "version": "1.2.17",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
     "eu.netherlands3d.gltfast": {
       "version": "5.0.3",
       "depth": 1,
@@ -190,6 +199,24 @@
         "com.unity.burst": "1.6.6"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.indicators": {
+      "version": "file:eu.netherlands3d.indicators",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.0",
+        "com.virgis.geojson.net": "1.2.17"
+      }
+    },
+    "eu.netherlands3d.json": {
+      "version": "file:eu.netherlands3d.json",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.0"
+      }
     },
     "eu.netherlands3d.tilehandler-styling": {
       "version": "file:eu.netherlands3d.tilehandler-styling",
