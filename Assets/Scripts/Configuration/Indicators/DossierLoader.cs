@@ -1,5 +1,4 @@
 ﻿using Netherlands3D.Indicators;
-using Netherlands3D.Indicators.Dossiers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration.Indicators
@@ -12,12 +11,10 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         private void OnEnable()
         {
             configuration.OnDossierLoadingStart.AddListener(OnDossierStartLoading);
-            dossier.onSelectedVariant.AddListener(OnSelectedVariant);
         }
 
         private void OnDisable()
         {
-            dossier.onSelectedVariant.RemoveListener(OnSelectedVariant);
             configuration.OnDossierLoadingStart.RemoveListener(OnDossierStartLoading);
         }
 
@@ -26,8 +23,9 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             StartCoroutine(dossier.Open(dossierId));
         }
 
-        private void OnSelectedVariant(Variant? variant)
+        public void LoadProjectAreas()
         {
+            var variant = dossier.ActiveVariant;
             if (variant.HasValue == false)
             {
                 return;

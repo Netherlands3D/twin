@@ -49,13 +49,16 @@ namespace Netherlands.GeoJSON
                 CoordinateSystem.Unity
             );
 
+            var targetTransform = targetGameObject.transform;
             Vector3 position = new Vector3(
                 center.ToVector3().x, 
-                transform.position.y, 
+                targetTransform.position.y, 
                 center.ToVector3().z
             );
 
-            transform.position = position;
+            Debug.Log($"Moving {targetGameObject} to {position}");
+
+            targetTransform.position = position;
             onSetPosition.Invoke(position);
         }
     }

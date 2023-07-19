@@ -55,7 +55,6 @@ namespace Netherlands3D.Indicators
         private void OnLoadedProjectArea(FeatureCollection featureCollection)
         {
             onLoadedProjectArea.Invoke(featureCollection);
-            Debug.Log(featureCollection);
         }
     }
 }
