@@ -5,8 +5,8 @@
   "description": "A series of extras for working with JSON in the context of Netherlands3D",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
-  "changelogUrl": "https://example.com/changelog.html",
-  "licensesUrl": "https://example.com/licensing.html",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/Json-Extras/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/Json-Extras/main/LICENSE.txt",
   "keywords": [
     "digital-twin",
     "json.net",
