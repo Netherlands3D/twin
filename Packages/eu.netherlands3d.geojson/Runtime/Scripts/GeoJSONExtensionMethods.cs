@@ -4,15 +4,17 @@ using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using UnityEngine;
 
 namespace Netherlands.GeoJSON
 {
     public static class GeoJSONExtensionMethods
     {
+        private const int DEFAULT_GEOJSON_CRS_EPSG_CODE = 4326;
+
         public static int EPSGId(this GeoJSONObject geoJsonObject)
         {
-            // Default EPSG code for GeoJSON
-            int epsgId = 4326;
+            int epsgId = DEFAULT_GEOJSON_CRS_EPSG_CODE;
 
             NamedCRS crsObject = geoJsonObject.CRS as NamedCRS;
             if (crsObject == null) return epsgId;

@@ -1,5 +1,5 @@
 ﻿using Netherlands3D.Indicators;
-using Netherlands3D.Indicators.Dossier;
+using Netherlands3D.Indicators.Dossiers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration.Indicators
