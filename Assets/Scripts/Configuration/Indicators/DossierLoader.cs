@@ -1,6 +1,5 @@
 ﻿using Netherlands3D.Indicators;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration.Indicators
 {
@@ -22,6 +21,17 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         private void OnDossierStartLoading(string dossierId)
         {
             StartCoroutine(dossier.Open(dossierId));
+        }
+
+        public void LoadProjectAreas()
+        {
+            var variant = dossier.ActiveVariant;
+            if (variant.HasValue == false)
+            {
+                return;
+            }
+
+            StartCoroutine(dossier.LoadProjectAreaGeometry(variant.Value));
         }
     }
 }

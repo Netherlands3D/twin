@@ -1,4 +1,5 @@
-﻿using Netherlands3D.Indicators.Dossiers;
+using GeoJSON.Net.Feature;
+using Netherlands3D.Indicators.Dossiers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,9 +10,10 @@ namespace Netherlands3D.Indicators
         [SerializeField] private DossierSO Dossier;
         
         public UnityEvent<Dossier> onOpen = new();
-        public UnityEvent<Dossiers.Variant?> onSelectedVariant = new();
+        public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
+        public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
 
         private void OnEnable()
         {
@@ -19,6 +21,7 @@ namespace Netherlands3D.Indicators
             Dossier.onClose.AddListener(OnClose);
             Dossier.onSelectedVariant.AddListener(OnSelectedVariant);
             Dossier.onFailedToOpen.AddListener(OnFailedToOpen);
+            Dossier.onLoadedProjectArea.AddListener(OnLoadedProjectArea);
         }
 
         private void OnDisable()
@@ -47,6 +50,11 @@ namespace Netherlands3D.Indicators
         private void OnClose()
         {
             onClose.Invoke();
+        }
+
+        private void OnLoadedProjectArea(FeatureCollection featureCollection)
+        {
+            onLoadedProjectArea.Invoke(featureCollection);
         }
     }
 }

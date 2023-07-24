@@ -16,3 +16,29 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 
 - `eu.netherlands3d` and
 - `com.virgis.geojson.net`
+
+## Usage
+
+To make use of this package, you can follow these steps:
+
+1. Drag the Indicators prefab into your scene
+2. Connect your camera to the `Center On Feature Collection`'s Target Game Object
+
+After that you can start the `Open` coroutine on the Dossier Scriptable Object attached to the `Dossier Listener` with the 
+dossier id of your Indicator provider.
+
+Once the Dossier is loaded, the GeoJSON FeatureCollection describing the dossier's project area boundaries can be fetched 
+using'the Dossier Scriptable Object's `LoadProjectAreaGeometry` coroutine. This coroutine will want a variant of 
+the Dossier for which to retrieve the geometry.
+
+## Configuring a Provider
+
+This package depends on a web service that exposes dossiers. In the Dossier scriptable object you can define a template
+URI with a field `{id}` where to fetch dossiers from. 
+
+## Exposing Dossiers through a Provider
+
+In order to expose your own indicator dossiers, you need an HTTP endpoint that can expose a JSON document with a 
+set structure.
+
+TODO: Define a JSON-LD schema and reference it here, possibly include an example

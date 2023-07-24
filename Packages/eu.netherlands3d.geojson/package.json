@@ -1,8 +1,8 @@
 ﻿{
-  "name": "eu.netherlands3d.indicators",
+  "name": "eu.netherlands3d.geojson",
   "version": "1.0.0",
-  "displayName": "Netherlands3D - Indicators",
-  "description": "Read areas with their indicators and show where the data is based on",
+  "displayName": "Netherlands3D - GeoJSON",
+  "description": "Extra GeoJSON-based features for Netherlands3D",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
   "changelogUrl": "https://example.com/changelog.html",
@@ -18,8 +18,6 @@
   "dependencies": {
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.2.0",
-    "eu.netherlands3d.geojson":  "1.0.0",
-    "eu.netherlands3d.json":  "1.0.0",
-    "eu.netherlands3d.coordinates": "1.1.0"
+    "com.virgis.geojson.net":  "1.2.17"
   }
 }
