@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6119329088547462491}
   - component: {fileID: 589428993377803893}
   - component: {fileID: 7562979231812192285}
+  - component: {fileID: 6637341396108375670}
   m_Layer: 0
   m_Name: Indicators
   m_TagString: Untagged
@@ -74,6 +75,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6637341396108375670}
+        m_TargetAssemblyTypeName: Netherlands3D.Indicators.DossierGeometryVisualiser,
+          eu.netherlands3d.indicators.Runtime
+        m_MethodName: set_Geometry
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7562979231812192285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +101,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetGameObject: {fileID: 0}
-  onSetPosition:
+  pullBack: 1
+  pullBackFactor: 0.75
+  movingDuration: 1
+  onPositionChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6637341396108375670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3248279717057453531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 009dfb7b117049a1a3f2a2e9cb4e6db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshMaterial: {fileID: 2100000, guid: 53006c35af9556846916ce83795fd3a0, type: 2}
+  lineMaterial: {fileID: 2100000, guid: c9ca3310a0b8542479992bbcbe4800df, type: 2}
+  meshExtrusionHeight: 10
+  onAreaVisualised:
+    m_PersistentCalls:
+      m_Calls: []
+  onAreaRemoved:
     m_PersistentCalls:
       m_Calls: []
