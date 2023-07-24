@@ -99,11 +99,13 @@ namespace Netherlands3D.Indicators
 
         private List<Vector3> CreateContourFromLineString(LineString line)
         {
+            var coordinateSystem = line.CRS != null ? line.EPSGId() : geometry.EPSGId();
+
             var contour = new List<Vector3>();
             foreach (var position in line.Coordinates)
             {
                 var coordinate = new Coordinate(
-                    CoordinateSystem.EPSG_3857, // TODO: Remove this assumption
+                    coordinateSystem,
                     position.Longitude,
                     position.Latitude,
                     position.Altitude.GetValueOrDefault(0)
