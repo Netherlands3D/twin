@@ -20,10 +20,15 @@ namespace Netherlands.GeoJSON
         [Tooltip("The target game object to move.")]
         [SerializeField] private GameObject targetGameObject;
         
-        [Tooltip("By default, the Y position of the target Game Object is maintained; when this toggle is enabled the game object is instead pulled back on its local Z-axis")]
-        [SerializeField] private bool pullBack;
+        [Tooltip(
+            "Instead of maintaining the Y of the target game object; move it backwards in local space to fit the " 
+            + "whole bounds of the feature collection. This could be used in combination with a Camera " 
+            + "-as the target transform- to fit the whole area in view"
+        )]
+        [SerializeField] private bool fitToBounds;
 
-        [SerializeField] private float pullBackFactor = 1.0f;
+        [Tooltip("When fitting to bounds: use this factor to make the end result closer or further away, where 1.0 is the default distance.")]
+        [SerializeField] private float fittingDistanceModifier = 1.0f;
 
         [Tooltip("The amount of time it should take to animate to the desired position")]
         [SerializeField] private float movingDuration = 1.0f;
@@ -40,29 +45,27 @@ namespace Netherlands.GeoJSON
 
         public void CenterOn(FeatureCollection featureCollection)
         {
-            CalculateCenterAndExtents(featureCollection, out var position, out var extents);
+            var bounds = CalculateCenterAndExtents(featureCollection);
 
-            Debug.Log($"Moving {targetGameObject} to {position}");
+            Debug.Log($"Moving {targetGameObject} to {bounds.center}");
             var targetTransform = targetGameObject.transform;
 
-            Move(targetTransform, PullbackPosition(targetTransform, position, extents));
+            MoveTo(targetTransform, PullbackToFitBounds(targetTransform, bounds));
         }
 
-        private Vector3 PullbackPosition(Transform targetTransform, Vector3 position, Bounds extents)
+        private Vector3 PullbackToFitBounds(Transform targetTransform, Bounds bounds)
         {
-            if (!pullBack) return position;
+            var position = bounds.center;
+            if (!fitToBounds) return position;
 
             position = new Vector3(position.x, elevation, position.z);
-            position += targetTransform.TransformDirection(Vector3.back * extents.size.magnitude * pullBackFactor);
+            position += targetTransform.TransformDirection(Vector3.back * bounds.size.magnitude * fittingDistanceModifier);
 
             return position;
         }
 
-        private void CalculateCenterAndExtents(
-            FeatureCollection featureCollection, 
-            out Vector3 position, 
-            out Bounds extents
-        ) {
+        private Bounds CalculateCenterAndExtents(FeatureCollection featureCollection) 
+        {
             double[] boundingBox = featureCollection.BoundingBoxes ?? featureCollection.DerivedBoundingBoxes();
             int epsgId = featureCollection.EPSGId();
 
@@ -78,14 +81,13 @@ namespace Netherlands.GeoJSON
                Convert.ToSingle(topLeft.Points[2] + depth * .5d)
             );
 
-            position = new Vector3(center.x, targetGameObject.transform.position.y, center.z);
-            extents = new Bounds(
-                position,
+            return new Bounds(
+                new Vector3(center.x, targetGameObject.transform.position.y, center.z),
                 new Vector3(Convert.ToSingle(width), Convert.ToSingle(depth), 0f)
             );
         }
 
-        private void Move(Transform targetTransform, Vector3 position)
+        private void MoveTo(Transform targetTransform, Vector3 position)
         {
             if (movingDuration == 0)
             {
