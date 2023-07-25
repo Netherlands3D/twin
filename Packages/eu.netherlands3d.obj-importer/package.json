@@ -1,0 +1,23 @@
+{
+  "name": "eu.netherlands3d.objimporter",
+  "displayName": "Netherlands 3D - import obj files",
+  "version": "1.0.0",
+  "unity": "2022.2",
+  "dependencies": {},
+  "type": "library",
+  "keywords": [
+    "netherlands3d",
+    "digital twin",
+    "obj",
+    "importing"
+  ],
+  "license": "EUPL-1.2",
+  "documentationUrl": "https://github.com/Netherlands3D/objImporter/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/objImporter/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/objImporter/blob/main/CHANGELOG.md",
+  "hideInEditor": false,
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  }
+}
