@@ -230,12 +230,13 @@
       }
     },
     "eu.netherlands3d.json": {
-      "version": "file:eu.netherlands3d.json",
-      "depth": 0,
-      "source": "embedded",
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.0"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tilehandler-styling": {
       "version": "file:eu.netherlands3d.tilehandler-styling",
