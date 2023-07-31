@@ -11,9 +11,9 @@
     "netherlands3d"
   ],
   "license": "EUPL-1.2",
-  "documentationUrl": "https://github.com/Amsterdam/Netherlands3D/blob/main/Packages/eu.netherlands3d.snapshots/README.md",
-  "licensesUrl": "https://github.com/Amsterdam/Netherlands3D/blob/main/Packages/eu.netherlands3d.snapshots/LICENSE.txt",
-  "changelogURL": "https://github.com/Amsterdam/Netherlands3D/blob/main/Packages/eu.netherlands3d.snapshots/CHANGELOG.md",
+  "documentationUrl": "https://github.com/Netherlands3D/Snapshots/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/Snapshots/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/Snapshots/blob/main/CHANGELOG.md",
   "author": {
     "name": "Netherlands3D",
     "url": "https://netherlands3d.eu"
