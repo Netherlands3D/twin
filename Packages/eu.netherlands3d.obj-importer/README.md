@@ -20,17 +20,17 @@ Using the public function Cancel(), the importing can be cancelled. During cance
 - Create SubMeshes: when selected all the geometry in the obj-file will be combined into a single mesh, with submeshes for the different materials.
 When not selected, a gameobject will be crated for each material in the obj-file.
 
-###Result
-Created Moveable Game Object: gameobject-event will be invoked when the imported obj-file did not contain RD-coordinates.
-Created Immoveable Game Object: gameobject-event will be invoked when the imported obj-file DID contain RD-coordinates.
+### Result
+- Created Moveable Game Object: gameobject-event will be invoked when the imported obj-file did not contain RD-coordinates.
+- Created Immoveable Game Object: gameobject-event will be invoked when the imported obj-file DID contain RD-coordinates.
 
-###Progress
-Busy: boolEvent will be invoked with the value "true" on starting and will be invoked with the value "false" after finishing.
-Current Activity: stringEvent for disclosing the active activity.
-Current Action: stringEvent for disclosing the active action. (an action is a subtask of an activity).
-Progress Percentage: Invoked every frame to show the progress of the current activity in perCent.
+### Progress
+- Busy: boolEvent will be invoked with the value "true" on starting and will be invoked with the value "false" after finishing.
+- Current Activity: stringEvent for disclosing the active activity.
+- Current Action: stringEvent for disclosing the active action. (an action is a subtask of an activity).
+- Progress Percentage: Invoked every frame to show the progress of the current activity in perCent.
 
-###Alerts and errors
-AlertMessage: StringEvent that is invoked if something didn't go as expected, for example an imageFile was not found.
-Errormessage: StringEvent that is invoked if something went wrong that caused the import to be unsuccesfull.
+### Alerts and errors
+- AlertMessage: StringEvent that is invoked if something didn't go as expected, for example an imageFile was not found.
+- Errormessage: StringEvent that is invoked if something went wrong that caused the import to be unsuccesfull.
 
