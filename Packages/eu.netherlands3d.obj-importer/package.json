@@ -19,5 +19,15 @@
   "author": {
     "name": "Netherlands3D",
     "url": "https://www.netherlands3d.eu"
-  }
+  },
+  "dependencies": {
+    "eu.netherlands3d.coordinates": "1.1.0"
+ },
+"samples": [
+        {
+            "displayName": "load obj",
+            "description": "import a obj-file",
+            "path": "Samples~/SimpleSample"
+        }
+]
 }
