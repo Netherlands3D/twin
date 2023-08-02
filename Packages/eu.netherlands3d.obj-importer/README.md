@@ -1,7 +1,7 @@
 ﻿objImporter
 ===========
 
-Using this package it is possible to create a gameobject from an obj-file.
+Using this package it is possible to create a gameobject from an obj-file in runtime.
 
 
 ## Usage
