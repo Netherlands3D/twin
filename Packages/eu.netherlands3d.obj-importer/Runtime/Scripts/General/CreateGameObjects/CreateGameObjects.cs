@@ -31,7 +31,6 @@ public class CreateGameObjects : MonoBehaviour
 
     bool gameObjectCreated = false;
     //GameObject createdGameObject;
-    bool meshcreated = false;
     Mesh createdMesh;
 
     System.Action<GameObject> callback;
@@ -173,7 +172,6 @@ public class CreateGameObjects : MonoBehaviour
             uvs.EndReading();
             uvs.RemoveData();
 
-            meshcreated = true;
             yield break;
         }
         Vector3[] meshvector3 = new Vector3[vertexcount];
@@ -266,7 +264,6 @@ public class CreateGameObjects : MonoBehaviour
                     normals.RemoveData();
                     Debug.Log(meshdata.name + "number of normals != number of vertices");
                     Destroy(createdMesh);
-                    meshcreated = true;
                     yield break;
 
                 }
@@ -305,6 +302,5 @@ public class CreateGameObjects : MonoBehaviour
             time = System.DateTime.UtcNow;
         }
         createdMesh.RecalculateBounds();
-        meshcreated = true;
     }
 }

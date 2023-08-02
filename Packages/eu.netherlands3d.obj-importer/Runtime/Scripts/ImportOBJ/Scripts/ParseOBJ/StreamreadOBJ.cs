@@ -20,7 +20,6 @@ namespace Netherlands3D.ModelParsing
         public List<MaterialData> materialDataSlots;
 
         string fileNameWithoutExtention;
-        int currentCharStartIndex;
         int currentcharindex;
         char[] readCharsinArray = new char[1024];
         int charlistlength;
@@ -198,7 +197,6 @@ namespace Netherlands3D.ModelParsing
             streamReader = new StreamReader(fileStream, System.Text.Encoding.UTF8);
 
             charlistlength = 0;
-            currentCharStartIndex = 0;
             currentcharindex = 0;
             System.DateTime time = System.DateTime.UtcNow;
 
@@ -607,11 +605,15 @@ namespace Netherlands3D.ModelParsing
                     Vector3 coord;
                     if (flipYZ)
                     {
-                        coord = CoordinateConverter.RDtoUnity(new Vector3(x, z, y));
+                        
+                        Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, z, y }),CoordinateSystem.Unity);
+                        coord = coordinate.ToVector3();
                     }
                     else
                     {
-                        coord = CoordinateConverter.RDtoUnity(new Vector3(x, y, z));
+                        Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, y, z }), CoordinateSystem.Unity);
+                        coord = coordinate.ToVector3();
+                       
                     }
                     vertices.Add(coord.x, coord.y, coord.z);
                     return;
@@ -630,12 +632,13 @@ namespace Netherlands3D.ModelParsing
         }
         void CheckForRD(float x, float y, float z)
         {
-            if (CoordinateConverter.RDIsValid(new Vector3RD(x, z, y)))
+            
+            if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = true;
             }
-            else if (CoordinateConverter.RDIsValid(new Vector3RD(x, y, z)))
+            else if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = false;
@@ -1005,10 +1008,7 @@ namespace Netherlands3D.ModelParsing
 
             }
 
-            if (currentcharindex >= readCharsinArray.Length)
-            {
-                int x = 0;
-            }
+            
             character = readCharsinArray[currentcharindex];
             currentcharindex++;
             return true;

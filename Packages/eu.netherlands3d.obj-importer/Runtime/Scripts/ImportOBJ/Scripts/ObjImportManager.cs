@@ -9,9 +9,7 @@ public class ObjImportManager : MonoBehaviour
 {
     [Header("Required input")]
     [SerializeField] Material baseMaterial;
-    bool expectingObjFile = false;
-    bool expectingMTLFile = false;
-    bool expectingImageFile = false;
+
     
     [Header("Settings")]
     [SerializeField] bool createSubMeshes = false;
