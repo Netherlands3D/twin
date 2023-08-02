@@ -12,7 +12,9 @@ Make sure a Base Material is set. This material will be used as template for the
 Start the importing by calling the public function ParseFiles() with a string as variable.
 The stringvariable contains the filename of the obj-file, and optionally a mtl-file and an imagefile.
 filenames are seperated by a comma (,).
+
 To let a user select their own files from their computer, use the Filebrowser-package.
+
 Using the public function Cancel(), the importing can be cancelled. During cancelling all temporary files will be removed.
 > Important:All the files are assumed to be placed in the application.persistentDataPath, and will be deleted after the file is imported.
 
