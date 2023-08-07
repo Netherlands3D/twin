@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
-namespace Netherlands3D.ModelParsing
+
+namespace Netherlands3D.ObjImporter.General.GameObjectDataSet
 {
     [Serializable]
     public class GameObjectDataSet

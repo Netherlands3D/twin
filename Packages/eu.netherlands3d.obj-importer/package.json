@@ -1,9 +1,8 @@
 {
-  "name": "eu.netherlands3d.objimporter",
-  "displayName": "Netherlands 3D - import obj files",
+  "name": "eu.netherlands3d.obj-importer",
+  "displayName": "Netherlands 3D - Import .obj files",
   "version": "1.0.0",
   "unity": "2022.2",
-  "dependencies": {},
   "type": "library",
   "keywords": [
     "netherlands3d",
@@ -22,12 +21,12 @@
   },
   "dependencies": {
     "eu.netherlands3d.coordinates": "1.1.0"
- },
-"samples": [
-        {
-            "displayName": "load obj",
-            "description": "import a obj-file",
-            "path": "Samples~/SimpleSample"
-        }
-]
+  },
+  "samples": [
+    {
+      "displayName": "load obj",
+      "description": "import a obj-file",
+      "path": "Samples~/SimpleSample"
+    }
+  ]
 }

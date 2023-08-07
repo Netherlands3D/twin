@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
-namespace Netherlands3D.ModelParsing
+
+namespace Netherlands3D.ObjImporter.General.GameObjectDataSet
 {
     [Serializable]
     public class MeshData
