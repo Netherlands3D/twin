@@ -9,24 +9,24 @@ namespace Netherlands3D.ObjImporter
 {
     public class ObjImportManager : MonoBehaviour
     {
-        [Header("Required input")] [SerializeField]
-        Material baseMaterial;
+        [Header("Required input")]
+        [SerializeField] Material baseMaterial;
 
-        [Header("Settings")] [SerializeField] bool createSubMeshes = false;
+        [Header("Settings")]
+        [SerializeField] bool createSubMeshes = false;
 
-        [Header("Result")] [SerializeField] UnityEvent<GameObject> CreatedMoveableGameObject;
-        [SerializeField] UnityEvent<GameObject> CreatedImmoveableGameObject;
+        [Header("Result")] public UnityEvent<GameObject> CreatedMoveableGameObject;
+        public UnityEvent<GameObject> CreatedImmoveableGameObject;
 
-        [Header("Progress")] [SerializeField] UnityEvent<bool> busy;
-        [SerializeField] UnityEvent<string> currentActivity;
-        [SerializeField] UnityEvent<string> currentAction;
-        [SerializeField] UnityEvent<float> progressPercentage;
+        [Header("Progress")][SerializeField] UnityEvent<bool> busy;
+        public UnityEvent<string> currentActivity;
+        public UnityEvent<string> currentAction;
+        public UnityEvent<float> progressPercentage;
 
 
-        [Header("Alerts and errors")] [SerializeField]
-        UnityEvent<string> alertmessage;
-
-        [SerializeField] UnityEvent<string> errormessage;
+        [Header("Alerts and errors")]
+        public UnityEvent<string> alertmessage;
+        public UnityEvent<string> errormessage;
 
         string objFileName = "";
 
@@ -65,13 +65,7 @@ namespace Netherlands3D.ObjImporter
             }
         }
 
-
-
         ObjImporter importer;
-
-
-
-
 
         public void ParseFiles(string value)
         {
