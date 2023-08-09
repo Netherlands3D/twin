@@ -9,12 +9,6 @@
       },
       "hash": "a7f502e4bba2416411c64b1160dc01d53da75fcd"
     },
-    "com.shtif.runtimetransformhandle": {
-      "version": "file:/Users/Tom/Documents/TSCD/Repos/NL3DPackages/Packages/RuntimeTransformHandle/Assets/Plugins/RuntimeTransformHandle",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.unity.burst": {
       "version": "1.8.4",
       "depth": 1,
@@ -219,15 +213,16 @@
       }
     },
     "eu.netherlands3d.gltfast": {
-      "version": "file:/Users/Tom/Documents/TSCD/Repos/NL3DPackages/Packages/gltFast",
-      "depth": 0,
-      "source": "local",
+      "version": "5.0.3",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.mathematics": "1.2.6",
         "com.unity.burst": "1.6.6"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.indicators": {
       "version": "file:eu.netherlands3d.indicators",
@@ -290,6 +285,13 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
+    },
+    "eu.netherlands3d.transform-handles": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.twin-features": {
       "version": "file:eu.netherlands3d.twin-features",
