@@ -60,7 +60,7 @@ namespace Netherlands3D.Indicators
 
         public void UpdateVisualisation()
         {
-            var previouslySelectedAreaId = SelectedArea?.ProjectArea.id;
+            string previouslySelectedAreaId = SelectedArea?.ProjectArea.id;
             Clear();
 
             if (geometry == null)
@@ -81,9 +81,11 @@ namespace Netherlands3D.Indicators
             }
 
             // Restore selection
-            if (previouslySelectedAreaId != null)
+            if (string.IsNullOrEmpty(previouslySelectedAreaId) == false)
             {
-                var previouslySelectedArea = Areas.FirstOrDefault(visualisation => visualisation.ProjectArea.id == previouslySelectedAreaId);
+                var previouslySelectedArea = Areas.FirstOrDefault(
+                    visualisation => visualisation.ProjectArea.id == previouslySelectedAreaId
+                );
                 if (previouslySelectedArea != null)
                 {
                     SelectArea(previouslySelectedArea);
