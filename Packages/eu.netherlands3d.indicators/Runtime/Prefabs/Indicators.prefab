@@ -101,8 +101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetGameObject: {fileID: 0}
-  pullBack: 1
-  pullBackFactor: 0.75
+  fitToBounds: 1
+  fittingDistanceModifier: 0.75
   movingDuration: 1
   onPositionChanged:
     m_PersistentCalls:
@@ -119,12 +119,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009dfb7b117049a1a3f2a2e9cb4e6db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dossier: {fileID: 11400000, guid: 84a7c9f73f20c8c4ba60ce64ca5ef6d7, type: 2}
   meshMaterial: {fileID: 2100000, guid: 53006c35af9556846916ce83795fd3a0, type: 2}
   lineMaterial: {fileID: 2100000, guid: c9ca3310a0b8542479992bbcbe4800df, type: 2}
+  selectedMeshMaterial: {fileID: 2100000, guid: c562d39411dae6b4eb5545f4ddad5a4d,
+    type: 2}
   meshExtrusionHeight: 10
   onAreaVisualised:
     m_PersistentCalls:
       m_Calls: []
   onAreaRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedArea:
     m_PersistentCalls:
       m_Calls: []

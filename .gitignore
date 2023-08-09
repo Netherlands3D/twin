@@ -16,6 +16,7 @@
 
 # Imported Samples should not be included; if you need something: copy it.
 /[Aa]ssets/Samples
+/[Aa]ssets/Samples.meta
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

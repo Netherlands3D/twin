@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Netherlands3D.Indicators.Dossiers
 {
@@ -9,5 +10,10 @@ namespace Netherlands3D.Indicators.Dossiers
         public string geometry;
         public List<ProjectArea> areas;
         public Dictionary<string, DataLayer> maps;
+
+        public ProjectArea FindProjectAreaById(string id)
+        {
+            return areas.First(area => area.id == id);
+        }
     }
 }
