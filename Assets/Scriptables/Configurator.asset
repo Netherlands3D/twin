@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
   setupSceneName: SetupWizard
-  debugUrl: 
+  debugUrl: https://localhost/?origin=161088,503050,500&features=terrain,buildings,sun,indicators&indicators.dossier=provincie-utrecht/mike_test
   OnLoaded:
     m_PersistentCalls:
       m_Calls: []

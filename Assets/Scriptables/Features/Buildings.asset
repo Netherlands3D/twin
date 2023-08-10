@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Buildings
   m_EditorClassIdentifier: 
   Id: buildings
-  Caption: Show buildings
+  Caption: Toon gebouwen
+  configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
     m_PersistentCalls:

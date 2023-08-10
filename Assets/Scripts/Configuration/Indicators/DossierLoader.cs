@@ -5,7 +5,7 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 {
     public class DossierLoader : MonoBehaviour
     {
-        [SerializeField] private Configuration configuration;
+        [SerializeField] private Twin.Configuration.Configuration configuration;
         [SerializeField] private DossierSO dossier;
 
         private void OnEnable()

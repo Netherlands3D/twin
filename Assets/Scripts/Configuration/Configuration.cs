@@ -4,26 +4,19 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Configuration.Indicators;
 using Netherlands3D.Twin.Features;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration
 {
-    public struct IndicatorConfiguration
-    {
-        public string dossierId;
-    }
-    
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configuration", fileName = "Configuration", order = 0)]
     public class Configuration : ScriptableObject
     {
-        [SerializeField]
-        public string title = "Amersfoort";
-        [SerializeField]
-        private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
+        [SerializeField] public string title = "Amersfoort";
+        [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
         public List<Feature> Features = new();
-        private IndicatorConfiguration indicatorConfiguration;
 
         public string Title
         {
@@ -62,13 +55,29 @@ namespace Netherlands3D.Twin.Configuration
 
             LoadOriginFromString(queryParameters.Get("origin"));
             LoadFeaturesFromString(queryParameters.Get("features"));
-            indicatorConfiguration.dossierId = queryParameters.Get("indicators.dossier");
-            if (indicatorConfiguration.dossierId != null)
-            {
-                OnDossierLoadingStart.Invoke(indicatorConfiguration.dossierId);
-            }
+            LoadIndicatorConfiguration(queryParameters);
 
             return true;
+        }
+
+        private void LoadIndicatorConfiguration(NameValueCollection queryParameters)
+        {
+            var featureId = "indicators";
+            var indicatorFeature = GetFeatureById(featureId);
+            if (!indicatorFeature) return;
+            
+            var indicatorConfiguration = indicatorFeature.configuration as Indicators.Configuration;
+            if (!indicatorConfiguration) return;
+            
+            indicatorConfiguration.dossierId = queryParameters.Get("indicators.dossier");
+            if (indicatorConfiguration.dossierId == null) return;
+            
+            OnDossierLoadingStart.Invoke(indicatorConfiguration.dossierId);
+        }
+
+        private Feature GetFeatureById(string featureId)
+        {
+            return Features.FirstOrDefault(feature => string.Equals(feature.Id, featureId));
         }
 
         private bool UrlContainsConfiguration(NameValueCollection queryParameters) 

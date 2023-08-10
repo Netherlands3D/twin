@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Features
 {
@@ -8,6 +10,9 @@ namespace Netherlands3D.Twin.Features
     {
         public string Id;
         public string Caption;
+        
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Auto)]
+        public ScriptableObject configuration;
 
         [SerializeField] private bool isEnabled;
 

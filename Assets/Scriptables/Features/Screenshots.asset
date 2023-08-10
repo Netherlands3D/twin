@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Screenshots
   m_EditorClassIdentifier: 
   Id: screenshot
-  Caption: Make screenshots
+  Caption: Maak screenshots
+  configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
     m_PersistentCalls:

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Address Search
   m_EditorClassIdentifier: 
   Id: address-search
-  Caption: Searching by address
+  Caption: Zoeken op adres
+  configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
     m_PersistentCalls:

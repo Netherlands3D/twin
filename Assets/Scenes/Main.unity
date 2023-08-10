@@ -4557,19 +4557,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FeatureLinks:
-  - name: Searching by address -> ToggleSearch (GameObject)
+  - name: Zoeken op adres -> ToggleSearch (GameObject)
     feature: {fileID: 11400000, guid: 3684ee2c206979e4783d50e0c07322b3, type: 2}
     component: {fileID: 165824982}
     action: 1
-  - name: Show buildings -> Buildings (GameObject)
+  - name: Toon gebouwen -> Buildings (GameObject)
     feature: {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
     component: {fileID: 1625012860}
     action: 1
-  - name: Show terrain -> Terrain (GameObject)
+  - name: Toon het maaiveld -> Terrain (GameObject)
     feature: {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
     component: {fileID: 950477402}
     action: 1
-  - name: Show neighbourhoods -> NeighbourhoodNames (GameObject)
+  - name: Toon namen van wijken -> NeighbourhoodNames (GameObject)
     feature: {fileID: 11400000, guid: cd4d713ac36eed3478e85868b1e0e0f9, type: 2}
     component: {fileID: 2135947165}
     action: 1
@@ -4577,7 +4577,7 @@ MonoBehaviour:
     feature: {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
     component: {fileID: 2129315138}
     action: 1
-  - name: Make screenshots -> ToggleSnapshot (GameObject)
+  - name: Maak screenshots -> ToggleSnapshot (GameObject)
     feature: {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
     component: {fileID: 1601663924}
     action: 1
@@ -4585,23 +4585,23 @@ MonoBehaviour:
     feature: {fileID: 11400000, guid: 42464fdf892b6b245a26a6156b70ed6d, type: 2}
     component: {fileID: 1585974259}
     action: 1
-  - name: Traffic Simulation -> ToggleImportFile (GameObject)
+  - name: Verkeerssimulatie -> ToggleImportFile (GameObject)
     feature: {fileID: 11400000, guid: e649b402ab73d1144a36dfc3d3213136, type: 2}
     component: {fileID: 215354644}
     action: 1
-  - name: Show Trees -> Trees (GameObject)
+  - name: Toon bomen -> Trees (GameObject)
     feature: {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
     component: {fileID: 273624541}
     action: 1
-  - name: Show Streetnames -> StreetNames (GameObject)
+  - name: Toon straatnamen -> StreetNames (GameObject)
     feature: {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
     component: {fileID: 977031950}
     action: 1
-  - name: Sun -> ToggleSunSettings (GameObject)
+  - name: Stel de zonnestand en schaduwen in -> ToggleSunSettings (GameObject)
     feature: {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
     component: {fileID: 68587761}
     action: 1
-  - name: Object Importer -> ToggleImportFile (GameObject)
+  - name: Importeer .obj bestanden -> ToggleImportFile (GameObject)
     feature: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
     component: {fileID: 215354644}
     action: 1
