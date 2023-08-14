@@ -8,9 +8,17 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField]
         private Configurator configurator;
 
-        private void Start()
+        /// <summary>
+        /// The configuration will affect all systems that first need to be initialized on Start. Because of this,
+        /// the loading of the configuration needs to happen in the second frame (hence the yield return null) as to
+        /// ensure everything has completed loading. Without this, you will get all kinds of weird Null exceptions
+        /// and the progressbar won't show.
+        /// </summary>
+        private IEnumerator Start()
         {
-            configurator.Execute();
+            yield return null;
+
+            yield return configurator.Execute();
         }
     }
 }

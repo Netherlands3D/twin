@@ -1,17 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Features
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Feature", fileName = "Feature", order = 0)]
-    public class Feature : ScriptableObject
+    public class Feature : ScriptableObject, ISimpleJsonMapper
     {
         public string Id;
         public string Caption;
-        
-        [JsonProperty(TypeNameHandling = TypeNameHandling.Auto)]
         public ScriptableObject configuration;
 
         [SerializeField] private bool isEnabled;
@@ -37,5 +34,20 @@ namespace Netherlands3D.Twin.Features
 
         public UnityEvent OnEnable = new();
         public UnityEvent OnDisable = new();
+
+        public void Populate(JSONNode jsonNode)
+        {
+            IsEnabled = jsonNode["enabled"];
+            (configuration as IConfiguration)?.Populate(jsonNode["configuration"]);
+        }
+
+        public JSONNode ToJsonNode()
+        {
+            return new JSONObject
+            {
+                ["enabled"] = isEnabled,
+                ["configuration"] = (configuration as IConfiguration)?.ToJsonNode()
+            };
+        }
     }
 }

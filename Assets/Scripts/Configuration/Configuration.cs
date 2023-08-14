@@ -1,22 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Configuration.Indicators;
 using Netherlands3D.Twin.Features;
+using Newtonsoft.Json;
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Configuration
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configuration", fileName = "Configuration", order = 0)]
-    public class Configuration : ScriptableObject
+    public class Configuration : ScriptableObject, IConfiguration
     {
-        [SerializeField] public string title = "Amersfoort";
+        [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
-        public List<Feature> Features = new();
+
+        [JsonProperty(ItemIsReference = true)]
+        [SerializeField] public List<Feature> Features = new();
 
         public string Title
         {
@@ -38,16 +42,43 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        public UnityEvent<Coordinate> OnOriginChanged = new();
-        public UnityEvent<string> OnTitleChanged = new();
-        public UnityEvent<string> OnDossierLoadingStart = new();
+        [JsonIgnore] public UnityEvent<Coordinate> OnOriginChanged = new();
+        [JsonIgnore] public UnityEvent<string> OnTitleChanged = new();
 
-        public bool LoadFromUrl(string url)
+        /// <summary>
+        /// Overwrites the contents of this Scriptable Object with the serialized JSON file at the provided location.
+        /// </summary>
+        public IEnumerator PopulateFromFile(string externalConfigFilePath)
         {
-            if (url == "") return false;
+            Debug.Log($"Attempting to load configuration from ${externalConfigFilePath}");
+            using UnityWebRequest request = UnityWebRequest.Get(externalConfigFilePath);
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log($"Successfully downloaded external config: {externalConfigFilePath}");
+                var json = request.downloadHandler.text;
+                
+                // populate object and when settings are missing, use the defaults from the provided object
+                JsonConvert.PopulateObject(json, this);
+            }
+            else
+            {
+                Debug.LogWarning($"Could not load: {externalConfigFilePath}. Using default config.");
+            }
 
+            yield return null;
+        }
+
+        public bool Populate(Uri url)
+        {
             var queryParameters = new NameValueCollection();
-            ParseQueryString(new Uri(url).Query, queryParameters);
+            url.Query.ParseAsQueryString(queryParameters);
+            
+            return Populate(queryParameters);
+        }
+
+        public bool Populate(NameValueCollection queryParameters)
+        {
             if (UrlContainsConfiguration(queryParameters) == false)
             {
                 return false;
@@ -55,29 +86,75 @@ namespace Netherlands3D.Twin.Configuration
 
             LoadOriginFromString(queryParameters.Get("origin"));
             LoadFeaturesFromString(queryParameters.Get("features"));
-            LoadIndicatorConfiguration(queryParameters);
+            foreach (var feature in Features)
+            {
+                var config = feature.configuration as IConfiguration;
+                config?.Populate(queryParameters);
+            }
 
             return true;
         }
 
-        private void LoadIndicatorConfiguration(NameValueCollection queryParameters)
+        public string ToQueryString()
         {
-            var featureId = "indicators";
-            var indicatorFeature = GetFeatureById(featureId);
-            if (!indicatorFeature) return;
-            
-            var indicatorConfiguration = indicatorFeature.configuration as Indicators.Configuration;
-            if (!indicatorConfiguration) return;
-            
-            indicatorConfiguration.dossierId = queryParameters.Get("indicators.dossier");
-            if (indicatorConfiguration.dossierId == null) return;
-            
-            OnDossierLoadingStart.Invoke(indicatorConfiguration.dossierId);
+            var enabledFeatures = string.Join(
+                ',', 
+                Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id).ToArray()
+            );
+
+            string url = "?";
+            url += $"origin={Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}";
+            url += $"&features={enabledFeatures}";
+            foreach (var feature in Features)
+            {
+                var featureConfiguration = feature.configuration as IConfiguration;
+                if (featureConfiguration == null) continue;
+
+                url += "&" + featureConfiguration.ToQueryString();
+            }
+
+            return url;
         }
 
-        private Feature GetFeatureById(string featureId)
+        public void Populate(JSONNode jsonNode)
         {
-            return Features.FirstOrDefault(feature => string.Equals(feature.Id, featureId));
+            Title = jsonNode["title"];
+            Origin = new Coordinate(
+                jsonNode["origin"]["epsg"],
+                jsonNode["origin"]["x"],
+                jsonNode["origin"]["y"],
+                jsonNode["origin"]["z"]
+            );
+            foreach (var element in jsonNode["features"])
+            {
+                var feature = Features.FirstOrDefault(feature => feature.Id == element.Key);
+                if (!feature) continue;
+
+                feature.Populate(element.Value);
+            }
+        }
+
+        public JSONNode ToJsonNode()
+        {
+            var result = new JSONObject
+            {
+                ["title"] = Title,
+                ["origin"] = new JSONObject()
+                {
+                    ["epsg"] = origin.CoordinateSystem,
+                    ["x"] = origin.Points[0],
+                    ["y"] = origin.Points[1],
+                    ["z"] = origin.Points[2],
+                },
+                ["features"] = new JSONObject()
+            };
+
+            foreach (var feature in Features)
+            {
+                result["features"][feature.Id] = feature.ToJsonNode();
+            }
+
+            return result;
         }
 
         private bool UrlContainsConfiguration(NameValueCollection queryParameters) 
@@ -104,80 +181,6 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var feature in Features)
             {
                 feature.IsEnabled = featureIdentifiers.Contains(feature.Id);
-            }
-        }
-
-        public string GenerateQueryString()
-        {
-            string url = "?";
-            url += $"origin={Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}";
-            url += "&features=";
-            url += String.Join(',', Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id).ToArray());
-
-            return url;
-        }
-
-        /// <see href="https://gist.github.com/ranqn/d966423305ce70cbc320f319d9485fa2" />
-        private void ParseQueryString(string query, NameValueCollection result, Encoding encoding = null)
-        {
-            encoding ??= Encoding.UTF8;
-
-            if (query.Length == 0) return;
-
-            var decodedLength = query.Length;
-            var namePos = 0;
-            var first = true;
-
-            while (namePos <= decodedLength)
-            {
-                int valuePos = -1, valueEnd = -1;
-                for (var q = namePos; q < decodedLength; q++)
-                {
-                    if ((valuePos == -1) && (query[q] == '='))
-                    {
-                        valuePos = q + 1;
-                        continue;
-                    }
-
-                    if (query[q] != '&') continue;
-                    
-                    valueEnd = q;
-                    break;
-                }
-
-                if (first)
-                {
-                    first = false;
-                    if (query[namePos] == '?')
-                        namePos++;
-                }
-
-                string name;
-                if (valuePos == -1)
-                {
-                    name = null;
-                    valuePos = namePos;
-                }
-                else
-                {
-                    name = WWW.UnEscapeURL(query.Substring(namePos, valuePos - namePos - 1), encoding);
-                }
-
-                if (valueEnd < 0)
-                {
-                    namePos = -1;
-                    valueEnd = query.Length;
-                }
-                else
-                {
-                    namePos = valueEnd + 1;
-                }
-
-                var value = WWW.UnEscapeURL(query.Substring(valuePos, valueEnd - valuePos), encoding);
-
-                result.Add(name, value);
-                if (namePos == -1)
-                    break;
             }
         }
     }

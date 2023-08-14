@@ -30,6 +30,3 @@ MonoBehaviour:
   OnTitleChanged:
     m_PersistentCalls:
       m_Calls: []
-  OnDossierLoadingStart:
-    m_PersistentCalls:
-      m_Calls: []

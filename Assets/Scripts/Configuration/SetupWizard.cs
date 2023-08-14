@@ -84,17 +84,17 @@ namespace Netherlands3D.Twin.Configuration
 
         private void UpdateShareUrlWhenFeatureChanges()
         {
-            shareUrlField.text = configuration.GenerateQueryString();
+            shareUrlField.text = configuration.ToQueryString();
         }
 
         private void UpdateShareUrlWhenOriginChanges(Coordinate origin)
         {
-            shareUrlField.text = configuration.GenerateQueryString();
+            shareUrlField.text = configuration.ToQueryString();
         }
 
         private void UpdateShareUrlWhenTitleChanges(string arg0)
         {
-            shareUrlField.text = configuration.GenerateQueryString();
+            shareUrlField.text = configuration.ToQueryString();
         }
 
         private void OnFeatureChanged(Feature availableFeature, bool value)

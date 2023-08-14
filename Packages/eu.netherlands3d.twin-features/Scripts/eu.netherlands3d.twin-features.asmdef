@@ -1,7 +1,9 @@
 {
     "name": "eu.netherlands3d.twin-features",
     "rootNamespace": "Netherlands3D.Twin.Features",
-    "references": [],
+    "references": [
+        "GUID:9ca88277166fea644a31588b4f943acc"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
