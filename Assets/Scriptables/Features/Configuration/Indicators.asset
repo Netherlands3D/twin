@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Indicators
   m_EditorClassIdentifier: 
   dossierId: 
+  OnDossierIdChanged:
+    m_PersistentCalls:
+      m_Calls: []
