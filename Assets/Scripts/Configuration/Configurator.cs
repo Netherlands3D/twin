@@ -63,6 +63,7 @@ namespace Netherlands3D.Twin.Configuration
         [ContextMenu("Write config to json file")]
         private void WriteConfigToJson()
         {
+            #if UNITY_EDITOR
             var filePath = EditorUtility.SaveFilePanel(
                 "Configuration file", 
                 null, 
@@ -78,6 +79,7 @@ namespace Netherlands3D.Twin.Configuration
             var jsonText = configuration.ToJsonNode().ToString();
             File.WriteAllText(filePath, jsonText);
             Debug.Log($"{filePath} created");
+            #endif
         }
 
         public void StartSetup()
