@@ -42,7 +42,12 @@ namespace Netherlands3D.Twin.Configuration
             url = debugUrl;
             #endif
 
-            if (string.IsNullOrEmpty(url) || configuration.Populate(new Uri(url)) == false)
+            if (string.IsNullOrEmpty(url) == false)
+            {
+                configuration.Populate(new Uri(url));
+            }
+
+            if (configuration.ShouldStartSetup)
             {
                 StartSetup();
             }

@@ -1,10 +1,10 @@
 using System.Collections.Specialized;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Features
 {
     public interface IQueryStringMapper
     {
-        bool Populate(NameValueCollection queryParameters);
+        void Populate(NameValueCollection queryParameters);
         string ToQueryString();
     }
 }

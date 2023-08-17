@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Specialized;
-using Newtonsoft.Json;
+using Netherlands3D.Twin.Features;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,23 +24,24 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             }
         }
 
-        public bool Populate(NameValueCollection queryParameters)
+        public void Populate(NameValueCollection queryParameters)
         {
             var id = queryParameters.Get("indicators.dossier");
-            if (id == null) return false;
+            if (id == null) return;
 
+            Debug.Log($"Set dossier id '{id}' from URL");
             DossierId = id;
-            
-            return true;
         }
 
         public string ToQueryString()
         {
-            return $"indicators.dossier=${dossierId}";
+            return $"indicators.dossier={dossierId}";
         }
 
         public void Populate(JSONNode jsonNode)
         {
+            if (string.IsNullOrEmpty(jsonNode["dossierId"])) return;
+
             DossierId = jsonNode["dossierId"];
         }
 

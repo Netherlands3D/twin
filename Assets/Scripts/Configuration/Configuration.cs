@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
-using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,7 +18,6 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
 
-        [JsonProperty(ItemIsReference = true)]
         [SerializeField] public List<Feature> Features = new();
 
         public string Title
@@ -42,15 +40,21 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        [JsonIgnore] public UnityEvent<Coordinate> OnOriginChanged = new();
-        [JsonIgnore] public UnityEvent<string> OnTitleChanged = new();
+        /// <summary>
+        /// By default, we should start the setup wizard to configure the twin, unless configuration was successfully
+        /// loaded from the URL or from the Configuration File.
+        /// </summary>
+        public bool ShouldStartSetup { get; set; } = true;
+
+        public UnityEvent<Coordinate> OnOriginChanged = new();
+        public UnityEvent<string> OnTitleChanged = new();
 
         /// <summary>
         /// Overwrites the contents of this Scriptable Object with the serialized JSON file at the provided location.
         /// </summary>
         public IEnumerator PopulateFromFile(string externalConfigFilePath)
         {
-            Debug.Log($"Attempting to load configuration from ${externalConfigFilePath}");
+            Debug.Log($"Attempting to load configuration from {externalConfigFilePath}");
             using UnityWebRequest request = UnityWebRequest.Get(externalConfigFilePath);
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.Success)
@@ -59,7 +63,8 @@ namespace Netherlands3D.Twin.Configuration
                 var json = request.downloadHandler.text;
                 
                 // populate object and when settings are missing, use the defaults from the provided object
-                JsonConvert.PopulateObject(json, this);
+                Populate(JSON.Parse(json));
+                ShouldStartSetup = false;
             }
             else
             {
@@ -69,30 +74,37 @@ namespace Netherlands3D.Twin.Configuration
             yield return null;
         }
 
-        public bool Populate(Uri url)
+        public void Populate(Uri url)
         {
             var queryParameters = new NameValueCollection();
             url.Query.ParseAsQueryString(queryParameters);
-            
-            return Populate(queryParameters);
+            Populate(queryParameters);
         }
 
-        public bool Populate(NameValueCollection queryParameters)
+        public void Populate(NameValueCollection queryParameters)
         {
-            if (UrlContainsConfiguration(queryParameters) == false)
+            if (UrlContainsConfiguration(queryParameters))
             {
-                return false;
+                ShouldStartSetup = false;
             }
 
-            LoadOriginFromString(queryParameters.Get("origin"));
-            LoadFeaturesFromString(queryParameters.Get("features"));
+            var originFromQueryString = queryParameters.Get("origin");
+            if (string.IsNullOrEmpty(originFromQueryString) == false)
+            {
+                LoadOriginFromString(originFromQueryString);
+            }
+
+            var featuresFromQueryString = queryParameters.Get("features");
+            if (featuresFromQueryString != null)
+            {
+                LoadFeaturesFromString(featuresFromQueryString);
+            }
+
             foreach (var feature in Features)
             {
                 var config = feature.configuration as IConfiguration;
                 config?.Populate(queryParameters);
             }
-
-            return true;
         }
 
         public string ToQueryString()
@@ -118,19 +130,26 @@ namespace Netherlands3D.Twin.Configuration
 
         public void Populate(JSONNode jsonNode)
         {
-            Title = jsonNode["title"];
+            if (jsonNode["title"])
+            {
+                Title = jsonNode["title"];
+            }
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
                 jsonNode["origin"]["y"],
                 jsonNode["origin"]["z"]
             );
+            Debug.Log($"Set origin '{Origin}' from Configuration file");
+
             foreach (var element in jsonNode["features"])
             {
                 var feature = Features.FirstOrDefault(feature => feature.Id == element.Key);
                 if (!feature) continue;
 
                 feature.Populate(element.Value);
+                if (feature.IsEnabled) Debug.Log($"Enabled feature '{feature.Id}' from Configuration file");
             }
         }
 
@@ -173,6 +192,7 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[2].Trim(), out int z);
 
             Origin = new Coordinate(CoordinateSystem.RD, x, y, z);
+            Debug.Log($"Set origin '{Origin}' from URL");
         }
 
         private void LoadFeaturesFromString(string features)
@@ -181,6 +201,7 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var feature in Features)
             {
                 feature.IsEnabled = featureIdentifiers.Contains(feature.Id);
+                if (feature.IsEnabled) Debug.Log($"Enabled feature '{feature.Id}' from URL");
             }
         }
     }

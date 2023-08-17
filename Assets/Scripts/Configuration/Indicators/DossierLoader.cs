@@ -20,6 +20,12 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         private void OnDossierStartLoading(string dossierId)
         {
+            if (string.IsNullOrEmpty(dossierId))
+            {
+                dossier.Close();
+                return;
+            }
+
             StartCoroutine(dossier.Open(dossierId));
         }
 
