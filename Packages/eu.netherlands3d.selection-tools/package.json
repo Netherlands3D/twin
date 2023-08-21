@@ -15,5 +15,6 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
+    "eu.netherlands3d.poly2tri": "2.0.0"
   }
 }
