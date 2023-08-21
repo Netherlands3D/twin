@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
+using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
@@ -77,7 +78,7 @@ namespace Netherlands3D.Twin.Configuration
         public void Populate(Uri url)
         {
             var queryParameters = new NameValueCollection();
-            url.Query.ParseAsQueryString(queryParameters);
+            url.TryParseQueryString(queryParameters);
             Populate(queryParameters);
         }
 

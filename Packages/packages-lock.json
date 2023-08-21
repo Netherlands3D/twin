@@ -317,7 +317,7 @@
         "eu.netherlands3d.filebrowser": "1.3.1",
         "eu.netherlands3d.obj-importer": "1.1.0"
       },
-      "hash": "2a09bb5de76bd66db659283628bce406d7b9debd"
+      "hash": "3bdbd989d9db887a8475d3bddc3d5005243809c2"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
