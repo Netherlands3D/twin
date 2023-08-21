@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 
 namespace Netherlands3D.Twin.Features
@@ -5,6 +6,7 @@ namespace Netherlands3D.Twin.Features
     public interface IQueryStringMapper
     {
         void Populate(NameValueCollection queryParameters);
-        string ToQueryString();
+
+        void AddQueryParameters(UriBuilder urlBuilder);
     }
 }

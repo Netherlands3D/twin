@@ -45,7 +45,13 @@ namespace Netherlands3D.Twin.Configuration
         /// By default, we should start the setup wizard to configure the twin, unless configuration was successfully
         /// loaded from the URL or from the Configuration File.
         /// </summary>
-        public bool ShouldStartSetup { get; set; } = true;
+        private bool shouldStartSetup = true;
+
+        public bool ShouldStartSetup
+        {
+            get => shouldStartSetup;
+            set => shouldStartSetup = value;
+        }
 
         public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
@@ -110,23 +116,25 @@ namespace Netherlands3D.Twin.Configuration
 
         public string ToQueryString()
         {
-            var enabledFeatures = string.Join(
-                ',', 
-                Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id).ToArray()
-            );
+            var uriBuilder = new UriBuilder();
+            AddQueryParameters(uriBuilder);
 
-            string url = "?";
-            url += $"origin={Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}";
-            url += $"&features={enabledFeatures}";
+            return uriBuilder.Uri.Query;
+        }
+
+        public void AddQueryParameters(UriBuilder urlBuilder)
+        {
+            var enabledFeatures = Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id);
+
+            urlBuilder.AddQueryParameter("origin", $"{Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}");
+            urlBuilder.AddQueryParameter("features", string.Join(',', enabledFeatures.ToArray()));
             foreach (var feature in Features)
             {
                 var featureConfiguration = feature.configuration as IConfiguration;
                 if (featureConfiguration == null) continue;
 
-                url += "&" + featureConfiguration.ToQueryString();
+                featureConfiguration.AddQueryParameters(urlBuilder);
             }
-
-            return url;
         }
 
         public void Populate(JSONNode jsonNode)

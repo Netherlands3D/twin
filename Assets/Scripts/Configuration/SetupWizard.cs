@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
@@ -84,17 +85,17 @@ namespace Netherlands3D.Twin.Configuration
 
         private void UpdateShareUrlWhenFeatureChanges()
         {
-            shareUrlField.text = configuration.ToQueryString();
+            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
         }
 
         private void UpdateShareUrlWhenOriginChanges(Coordinate origin)
         {
-            shareUrlField.text = configuration.ToQueryString();
+            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
         }
 
-        private void UpdateShareUrlWhenTitleChanges(string arg0)
+        private void UpdateShareUrlWhenTitleChanges(string title)
         {
-            shareUrlField.text = configuration.ToQueryString();
+            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
         }
 
         private void OnFeatureChanged(Feature availableFeature, bool value)

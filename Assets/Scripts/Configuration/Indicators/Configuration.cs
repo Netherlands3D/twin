@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Features;
+using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,9 +34,9 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             DossierId = id;
         }
 
-        public string ToQueryString()
+        public void AddQueryParameters(UriBuilder urlBuilder)
         {
-            return $"indicators.dossier={dossierId}";
+            urlBuilder.AddQueryParameter("indicators.dossier", dossierId);
         }
 
         public void Populate(JSONNode jsonNode)
