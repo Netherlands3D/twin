@@ -17,6 +17,22 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 - `eu.netherlands3d` and
 - `com.virgis.geojson.net`
 
+### WebGL
+
+When you want to use this package in a build intended for WebGL, do not forgot to add the following to `Assets/link.xml`
+in your project. This package relies on (de)serialisation using JSON.net and when Code Stripping is enabled, the linker
+will otherwise remove all JsonConverters and elements involved in the (de)serialisation of the code.
+
+```xml
+<linker>
+    <!-- Anything that is already in your link.xml -->
+	<assembly fullname="GeoJSON.NET" preserve="all"></assembly>
+	<assembly fullname="eu.netherlands3d.json.Runtime" preserve="all"></assembly>
+</linker>
+```
+
+If you do not have a `link.xml` file in the root of your `Assets` folder, you can create one with the contents above.
+
 ## Usage
 
 To make use of this package, you can follow these steps:
