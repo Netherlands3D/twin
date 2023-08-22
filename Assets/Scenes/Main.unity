@@ -3641,22 +3641,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.67602897
+      value: -0.16985534
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.10268737
+      value: -0.073557116
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7214099
+      value: 0.90179104
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.10958064
+      value: -0.39052728
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -9070,7 +9070,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11794,11 +11794,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ProfileSliceCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 6781047678125791765, guid: 090b07a52e090cc419ef05102073a251,
-        type: 3}
-      propertyPath: m_RendererIndex
-      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6781047678125791768, guid: 090b07a52e090cc419ef05102073a251,
         type: 3}
