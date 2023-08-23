@@ -1860,6 +1860,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561646421}
     m_Modifications:
+    - target: {fileID: 433459257598798700, guid: e17c87634afc1e649a6811acba050edc,
+        type: 3}
+      propertyPath: selectedAreaBounds.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7341232103798297238, guid: e17c87634afc1e649a6811acba050edc,
         type: 3}
       propertyPath: m_RootOrder
@@ -4998,22 +5003,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.30858698
+      value: -0.89663345
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.11986954
+      value: 0.10876102
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.87958306
+      value: 0.42608497
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.34167096
+      value: 0.051683813
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -7109,7 +7114,7 @@ MonoBehaviour:
   brotliExtention: .br
   clickCheckLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   submeshIndex: 0
   applyHideOnReload: 0
   applyOnExistingTiles: 1
@@ -7324,6 +7329,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -7365,7 +7385,7 @@ PrefabInstance:
     - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -220
+      value: -320
       objectReference: {fileID: 0}
     - target: {fileID: 981387617919967929, guid: 794284cea5366d24e953ff15577bf377,
         type: 3}
@@ -10560,11 +10580,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561646421}
     m_Modifications:
-    - target: {fileID: 3940005848846984673, guid: 30feb625b019a6a489c2cc59a88e7580,
-        type: 3}
-      propertyPath: snapshotLayers.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 3940005848846984674, guid: 30feb625b019a6a489c2cc59a88e7580,
         type: 3}
       propertyPath: m_Name
@@ -13737,6 +13752,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 280
+      objectReference: {fileID: 0}
+    - target: {fileID: 6398691408321958462, guid: 34304517148806b41a4cb214886075d3,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6398691408321958462, guid: 34304517148806b41a4cb214886075d3,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6398691408321958462, guid: 34304517148806b41a4cb214886075d3,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6398691408321958462, guid: 34304517148806b41a4cb214886075d3,
         type: 3}
