@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Obj Importer
   m_EditorClassIdentifier: 
   Id: object-importer
-  Caption: Object Importer
+  Caption: Importeer .obj bestanden
+  configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
     m_PersistentCalls:

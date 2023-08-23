@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Neighbourhoods
   m_EditorClassIdentifier: 
   Id: neighbourhoods
-  Caption: Show neighbourhoods
+  Caption: Toon namen van wijken
+  configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
     m_PersistentCalls:

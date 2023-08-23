@@ -10,16 +10,22 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         private void OnEnable()
         {
-            configuration.OnDossierLoadingStart.AddListener(OnDossierStartLoading);
+            configuration.OnDossierIdChanged.AddListener(OnDossierStartLoading);
         }
 
         private void OnDisable()
         {
-            configuration.OnDossierLoadingStart.RemoveListener(OnDossierStartLoading);
+            configuration.OnDossierIdChanged.RemoveListener(OnDossierStartLoading);
         }
 
         private void OnDossierStartLoading(string dossierId)
         {
+            if (string.IsNullOrEmpty(dossierId))
+            {
+                dossier.Close();
+                return;
+            }
+
             StartCoroutine(dossier.Open(dossierId));
         }
 

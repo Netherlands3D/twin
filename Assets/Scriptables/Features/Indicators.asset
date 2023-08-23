@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Traffic Simulation
+  m_Name: Indicators
   m_EditorClassIdentifier: 
-  Id: traffic
-  Caption: Verkeerssimulatie
-  configuration: {fileID: 0}
+  Id: indicators
+  Caption: Indicatoren
+  configuration: {fileID: 11400000, guid: 9649637ffb6f9c24da61c215efe6adaa, type: 2}
   isEnabled: 0
   OnEnable:
     m_PersistentCalls:

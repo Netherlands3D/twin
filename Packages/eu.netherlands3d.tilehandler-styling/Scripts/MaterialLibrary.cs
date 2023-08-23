@@ -45,14 +45,9 @@ namespace Netherlands3D.TileHandler
 		private IEnumerator LoadTextures()
         {
             var texturesFolder = (false/*ApplicationSettings.Instance.IsMobileDevice*/) ? htmlTexturesFolderMobile : htmlTexturesFolderDesktop;
-            var splitTarget = Application.absoluteURL.LastIndexOf('/');
-            var relativeDirectory = "";
-            if (splitTarget != -1)
-            {
-                relativeDirectory = Application.absoluteURL.Substring(0, splitTarget);
-            }
+            var relativeDirectory = Application.dataPath;
 #if UNITY_EDITOR
-            relativeDirectory = $"file:///{Application.dataPath}/WebGLTemplates/Netherlands3D";
+            relativeDirectory = $"file:///{relativeDirectory}/WebGLTemplates/Netherlands3D";
 #endif
 
             foreach (Material material in materialLibrary)

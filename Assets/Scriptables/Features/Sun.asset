@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Sun
   m_EditorClassIdentifier: 
   Id: sun
-  Caption: Sun
+  Caption: Stel de zonnestand en schaduwen in
+  configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
     m_PersistentCalls:
