@@ -92,6 +92,13 @@ namespace Netherlands3D.Twin.Configuration
             SceneManager.LoadScene(setupSceneName, LoadSceneMode.Additive);
         }
 
+        public void RestartSetup()
+        {
+            if (!configuration.ShouldStartSetup) return;
+
+            StartSetup();
+        }
+
         public void CompleteSetup()
         {
             // We assume the Setup Wizard modifies the configuration object; this is merely a hook for the rest of
