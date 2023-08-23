@@ -9,6 +9,12 @@
       },
       "hash": "a7f502e4bba2416411c64b1160dc01d53da75fcd"
     },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.burst": {
       "version": "1.8.4",
       "depth": 1,
@@ -295,6 +301,12 @@
     },
     "eu.netherlands3d.twin-features": {
       "version": "file:eu.netherlands3d.twin-features",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "eu.netherlands3d.ui-toolkit": {
+      "version": "file:eu.netherlands3d.ui-toolkit",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
