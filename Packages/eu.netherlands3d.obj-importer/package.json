@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.obj-importer",
-  "displayName": "Netherlands 3D - Import .obj files",
+  "displayName": "Netherlands3D - Import .obj files",
   "version": "1.1.0",
   "unity": "2022.2",
   "type": "library",
