@@ -321,7 +321,7 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "eu.netherlands3d.ui-toolkit": {
+    "eu.netherlands3d.ui-kit": {
       "version": "file:eu.netherlands3d.ui-toolkit",
       "depth": 0,
       "source": "embedded",
@@ -347,7 +347,7 @@
         "eu.netherlands3d.poly2tri": "2.0.0",
         "eu.netherlands3d.selection-tools": "1.0.1"
       },
-      "hash": "1445d01d31bedda4f11d83e39b71b68a782f5c35"
+      "hash": "c306ad0a1dbf1634c77d918463a04be2df3b0ffb"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",

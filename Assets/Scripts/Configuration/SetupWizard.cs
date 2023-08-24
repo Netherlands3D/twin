@@ -83,6 +83,18 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        public void UpdateStartingPositionWithoutNotify(Coordinate coordinate)
+        {
+            if (coordinate.CoordinateSystem != (int)CoordinateSystem.RD)
+            {
+                coordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+            }
+
+            originXField.SetTextWithoutNotify(coordinate.Points[0].ToString());
+            originYField.SetTextWithoutNotify(coordinate.Points[1].ToString());
+            UpdateShareUrlWhenOriginChanges(coordinate);
+        }
+
         private void UpdateShareUrlWhenFeatureChanges()
         {
             shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());

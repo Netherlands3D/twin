@@ -1,7 +1,7 @@
-﻿{
-  "name": "eu.netherlands3d.ui-toolkit",
+{
+  "name": "eu.netherlands3d.ui-kit",
   "version": "1.0.0",
-  "displayName": "Netherlands3D - UI Toolkit",
+  "displayName": "Netherlands3D - UI Kit",
   "description": "User interface components and utilities for Netherlands3D",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",

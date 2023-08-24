@@ -32,11 +32,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public IEnumerator Execute()
         {
+            configuration.ShouldStartSetup = true;
             OnStartedLoading.Invoke();
             var uri = Application.dataPath + '/' + configFilePath;
             yield return configuration.PopulateFromFile(uri);
 
-            Debug.Log($"Loading configuration from URL");
             var url = Application.absoluteURL;
             #if UNITY_EDITOR
             url = debugUrl;
@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin.Configuration
 
             if (string.IsNullOrEmpty(url) == false)
             {
+                Debug.Log($"Loading configuration from URL '{url}'");
                 configuration.Populate(new Uri(url));
             }
 
