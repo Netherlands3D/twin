@@ -1,6 +1,6 @@
-# {DISPLAY_NAME}
+# Masking
 
-{LONG_DESCRIPTION}
+This package contains tools to do runtime masking of shaders via global shader properties using a moveable dome 
 
 ## Installing
 
@@ -16,4 +16,6 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 
 ## Usage
 
-{USAGE_INFORMATION}
+See the example scene in the package to see a working demo.
+
+
