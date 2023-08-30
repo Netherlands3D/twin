@@ -1,14 +1,18 @@
 {
-  "name": "eu.netherlands3d.{NAME:kebab-case}",
-  "version": "{VERSION}",
-  "displayName": "Netherlands3D - {DISPLAY_NAME}",
-  "description": "{DESCRIPTION}",
+  "name": "eu.netherlands3d.web-cursors",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Web Cursors",
+  "description": "MonoBehaviour and plugin allowing to change system cursor on WebGL applications using jslib plugin",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
-  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
-  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/WebCursors/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/WebCursors/main/LICENSE.txt",
   "keywords": [
-    "digital-twin"
+    "digital-twin",
+	"web",
+	"cursor",
+	"style",
+	"css"
   ],
   "author": {
     "name": "Netherlands3D",
