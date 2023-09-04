@@ -255,7 +255,9 @@
       "version": "file:Masking",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "eu.netherlands3d.web-cursors": "1.0.2"
+      }
     },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
@@ -333,6 +335,13 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "eu.netherlands3d.web-cursors": {
+      "version": "1.0.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "nl.netherlands3d": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
       "depth": 0,
@@ -353,7 +362,7 @@
         "eu.netherlands3d.poly2tri": "2.0.0",
         "eu.netherlands3d.selection-tools": "1.0.1"
       },
-      "hash": "c306ad0a1dbf1634c77d918463a04be2df3b0ffb"
+      "hash": "f9b3a135132b4b6f4ab5b505e8fbd63ea9e35c5d"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
