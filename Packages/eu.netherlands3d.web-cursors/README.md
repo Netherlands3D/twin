@@ -7,7 +7,7 @@ MonoBehaviour and plugin allowing to change system cursor on WebGL applications 
 This package is provided through OpenUPM, to install it using the CLI you can perform the following:
 
 ```bash
-$ openupm add web-cursor
+$ openupm add web-cursors
 ```
 
 or, you have to add `https://package.openupm.com` as a scoped registry with, at least, the following scopes:
