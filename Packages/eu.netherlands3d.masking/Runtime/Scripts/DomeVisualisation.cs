@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Netherlands3D.JavascriptConnection;
 
 namespace Netherlands3D.Masking
 {
@@ -125,6 +126,8 @@ namespace Netherlands3D.Masking
             domeMaterial.color = highlightColor;
 
             dragging.Invoke(true);
+
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -148,8 +151,9 @@ namespace Netherlands3D.Masking
         public void OnEndDrag(PointerEventData eventData)
         {
             isDragging = false;
-
             dragging.Invoke(false);
+
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -199,12 +203,16 @@ namespace Netherlands3D.Masking
         {
             domeMaterial.color = highlightColor;
             hovering = true;
+
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             domeMaterial.color = defaultColor;
             hovering = false;
+
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
         }
     }
 }

@@ -16,10 +16,10 @@ namespace Netherlands3D.Masking
         [SerializeField] private DisappearDome disappearEffect;
         [SerializeField] private float margin;
 
-        [Header("Global masking shader names")]
+        [Header("Global shader settings")]
         [SerializeField] private string sphericalMaskPositionName = "_SphericalMaskPosition";
         [SerializeField] private string sphericalMaskRadiusName = "_SphericalMaskRadius";
-
+        [SerializeField] private bool resetMaskOnDisable = true;
         private int positionPropertyID;
         private int radiusPropertyID;
 
@@ -51,6 +51,11 @@ namespace Netherlands3D.Masking
             // Unsubscribe and disable the click action when the script is disabled
             clickPlacementAction.action.performed -= StartTap;
             clickPlacementAction.action.Disable();
+
+            if(resetMaskOnDisable)
+            {
+                ResetGlobalShaderVariables();
+            }
         }
 
         /// <summary>
@@ -135,6 +140,12 @@ namespace Netherlands3D.Masking
         {
             Shader.SetGlobalVector(positionPropertyID,domeVisualisation.transform.position);
             Shader.SetGlobalFloat(radiusPropertyID,(domeVisualisation.transform.localScale.x/2.0f) + margin);
+        }
+
+        private void ResetGlobalShaderVariables()
+        {
+            Shader.SetGlobalVector(positionPropertyID,Vector3.zero);
+            Shader.SetGlobalFloat(radiusPropertyID,0.0f);
         }
     }
 }
