@@ -343,7 +343,7 @@
       "url": "https://package.openupm.com"
     },
     "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
+      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#main",
       "depth": 0,
       "source": "git",
       "dependencies": {
