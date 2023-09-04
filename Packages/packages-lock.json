@@ -362,7 +362,7 @@
         "eu.netherlands3d.poly2tri": "2.0.0",
         "eu.netherlands3d.selection-tools": "1.0.1"
       },
-      "hash": "f9b3a135132b4b6f4ab5b505e8fbd63ea9e35c5d"
+      "hash": "e593131ccde8099d797f5d9a07253bcac8a02e54"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
