@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.web-cursors",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Netherlands3D - Web Cursors",
   "description": "MonoBehaviour and plugin allowing to change system cursor on WebGL applications using jslib plugin",
   "unity": "2022.2",
