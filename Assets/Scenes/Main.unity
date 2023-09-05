@@ -2604,6 +2604,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipText: Standaard selectie methode
+--- !u!114 &654905167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8972244612468505019, guid: a0805dd2908ed9e4b8e51c7594789d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 654905163}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654905165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &658241423
 GameObject:
   m_ObjectHideFlags: 0
@@ -5219,22 +5231,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.43148905
+      value: 0.11870385
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.124322765
+      value: 0.046692066
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8585829
+      value: 0.9229938
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.24737915
+      value: -0.3630589
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6405,6 +6417,10 @@ MonoBehaviour:
   - name: Importeer .obj bestanden -> ToggleImportFile (GameObject)
     feature: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
     component: {fileID: 215354644}
+    action: 1
+  - name: Doorzicht ondergrond -> ToggleDome (GameObject)
+    feature: {fileID: 11400000, guid: b08b1db87725f0843995bceae5d5aed6, type: 2}
+    component: {fileID: 654905167}
     action: 1
 --- !u!1001 &1578572413
 PrefabInstance:
