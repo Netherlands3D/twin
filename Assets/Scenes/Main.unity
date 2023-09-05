@@ -5231,22 +5231,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.11870385
+      value: -0.38921535
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.046692066
+      value: -0.11955426
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9229938
+      value: 0.87309474
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.3630589
+      value: -0.26818624
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6216,24 +6216,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
-        type: 2}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
@@ -6242,28 +6226,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
-      objectReference: {fileID: 0}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: InvokeStarted
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
-      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
@@ -6286,7 +6255,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3144099969670796679, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1893986263}
+      addedObject: {fileID: 1893986258}
   m_SourcePrefab: {fileID: 100100000, guid: baace213b95c7fb45bd3f3bc71721fcd, type: 3}
 --- !u!4 &1553795473 stripped
 Transform:
@@ -9079,7 +9048,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1553795472}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1893986263
+--- !u!114 &1893986258
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
