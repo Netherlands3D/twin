@@ -8,7 +8,6 @@ namespace Netherlands3D.Masking
     {
         [SerializeField] private DomeVisualisation domeVisualisation;
         [SerializeField] private Transform wordlPositionAnchor;
-        [SerializeField] private Vector3 iconOffset = Vector3.zero;
         [SerializeField] private float scaleMultiplier = 2.0f;
 
         private Vector3 startScale = Vector3.one;
