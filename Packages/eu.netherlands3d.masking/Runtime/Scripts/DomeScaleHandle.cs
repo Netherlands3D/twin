@@ -6,8 +6,8 @@ namespace Netherlands3D.Masking
 {
     public class DomeScaleHandle : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] private DomeVisualisation domeVisualisation;
-        [SerializeField] private Transform wordlPositionAnchor;
+        [SerializeField] private VisualDome domeVisualisation;
+        public Transform wordlPositionAnchor;
         [SerializeField] private float scaleMultiplier = 2.0f;
 
         private Vector3 startScale = Vector3.one;
@@ -81,7 +81,6 @@ namespace Netherlands3D.Masking
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("Ended scaling drag");
             dragging = false;
             onDragChange.Invoke(dragging);
         }

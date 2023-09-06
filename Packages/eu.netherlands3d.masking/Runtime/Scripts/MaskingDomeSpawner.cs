@@ -11,7 +11,6 @@ namespace Netherlands3D.Masking
     {
         [Header("Placement actions")]
         [SerializeField] private InputActionReference clickPlacementAction;
-        private InputSystemUIInputModule inputSystemUIInputModule;
         [SerializeField] private float maxCameraTravelToPlacement = 20.0f; 
         [SerializeField] private DisappearDome disappearEffect;
         [SerializeField] private float margin;
@@ -23,11 +22,10 @@ namespace Netherlands3D.Masking
         private int positionPropertyID;
         private int radiusPropertyID;
 
-        [SerializeField] private DomeVisualisation domeVisualisation;
+        [SerializeField] private VisualDome domeVisualisation;
 
         private Camera mainCamera;
         private Vector3 cameraLookatPosition = Vector3.zero;
-        private Quaternion cameraRotation = Quaternion.identity;
 
         private bool waitForInitialPlacement = false;
 
@@ -70,21 +68,17 @@ namespace Netherlands3D.Masking
         public void SpawnDisappearAnimation()
         {
             var newDisappearEffect = Instantiate(disappearEffect.gameObject,this.transform.parent);
-            var scale = domeVisualisation.transform.localScale;
-            Debug.Log($"{domeVisualisation.transform.localScale}");
             newDisappearEffect.GetComponent<DisappearDome>().DisappearFrom(domeVisualisation.transform.position, domeVisualisation.transform.localScale);
         }
 
         private void StartTap(InputAction.CallbackContext context)
         {
-            Debug.Log("Start");
             cameraLookatPosition = LookPosition();
         }
         private void EndTap(InputAction.CallbackContext context)
         {
             var currentCameraLookatPosition = LookPosition();
             var distanceTraveled = Vector3.Distance(cameraLookatPosition, currentCameraLookatPosition);
-            Debug.Log($"End distanceTraveled {distanceTraveled}"); 
             if(distanceTraveled < maxCameraTravelToPlacement)
             {
                 PlaceDome();
@@ -104,17 +98,18 @@ namespace Netherlands3D.Masking
 
         private void PlaceDome()
         {
-            waitForInitialPlacement = false;
-            domeVisualisation.AllowInteraction = true;
-
             if(!EventSystem.current.IsPointerOverGameObject()){
                 Vector2 pointerPosition = Pointer.current.position.ReadValue();
 
-                SpawnDisappearAnimation();
+                if(!waitForInitialPlacement)
+                    SpawnDisappearAnimation();
 
                 domeVisualisation.MoveToScreenPoint(pointerPosition);
                 domeVisualisation.AnimateIn();
             }
+
+            waitForInitialPlacement = false;
+            domeVisualisation.AllowInteraction = true;
         }      
 
         void Update()

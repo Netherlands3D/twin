@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3144099969670796679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1032.7914, y: 1032.7914, z: 1032.7914}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8088167683218375159}
@@ -172,22 +172,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  appearTime: 0.5
+  appearTime: 0.3
   dragging:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   selected:
     m_PersistentCalls:
       m_Calls: []
@@ -325,7 +313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5439478741716866278}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3535535, y: 0.3535535, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -342,9 +330,8 @@ GameObject:
   m_Component:
   - component: {fileID: 449546233884288424}
   - component: {fileID: 4275165303546903011}
-  - component: {fileID: 5193392103354990261}
   m_Layer: 0
-  m_Name: Masking
+  m_Name: MaskingDomeSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -365,7 +352,7 @@ Transform:
   - {fileID: 6025226737445239483}
   - {fileID: 704520207210357227}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4275165303546903011
 MonoBehaviour:
@@ -389,21 +376,6 @@ MonoBehaviour:
   sphericalMaskRadiusName: _SphericalMaskRadius
   resetMaskOnDisable: 1
   domeVisualisation: {fileID: 2490938990270525891}
---- !u!114 &5193392103354990261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5546791445585588271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cb6afab94bbce746972b7cf4261fc28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 227995b5c76ec204c99f00a265308a86, type: 2}
-  invertBoolean: 0
-  disableAtLateStart: 1
 --- !u!1 &7825413630840843181
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,7 +391,7 @@ GameObject:
   - component: {fileID: 5238539487503809071}
   - component: {fileID: 3044720345821234962}
   m_Layer: 0
-  m_Name: Scale
+  m_Name: ScaleHandle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -497,7 +469,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   domeVisualisation: {fileID: 2490938990270525891}
   wordlPositionAnchor: {fileID: 8088167683218375159}
-  iconOffset: {x: 0.2, y: 0.27, z: 0}
   scaleMultiplier: 1
   onHoveringChange:
     m_PersistentCalls:

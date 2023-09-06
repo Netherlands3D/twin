@@ -6,7 +6,7 @@ using Netherlands3D.JavascriptConnection;
 
 namespace Netherlands3D.Masking
 {
-    public class DomeVisualisation : MonoBehaviour,
+    public class VisualDome : MonoBehaviour,
     IPointerClickHandler,
     IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -55,7 +55,7 @@ namespace Netherlands3D.Masking
         private void Awake()
         {
             mainCamera = Camera.main;
-
+                
             sphereCollider = GetComponent<SphereCollider>();
             meshRenderer = this.GetComponent<MeshRenderer>();
             domeMaterial = meshRenderer.material;
@@ -175,6 +175,8 @@ namespace Netherlands3D.Masking
 
         public Vector3 ScaleByCameraDistance()
         {
+            if(!mainCamera) return Vector3.one;
+
             var distanceScale = Mathf.Max(1.0f, scale * Vector3.Distance(mainCamera.transform.position, transform.position));
             return Vector3.one * distanceScale;
         }
