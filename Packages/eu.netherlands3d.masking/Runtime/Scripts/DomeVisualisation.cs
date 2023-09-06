@@ -15,15 +15,17 @@ namespace Netherlands3D.Masking
     IBeginDragHandler, IDragHandler, IEndDragHandler
     {   
         [SerializeField] private PointerEventData.InputButton dragButton = PointerEventData.InputButton.Left;
-        [SerializeField] private Color highlightColor = Color.yellow;
-        [SerializeField] private Color defaultColor = Color.white;
+        [SerializeField] private Material highlighMaterial;
+        [SerializeField] private Material defaultMaterial;
+        [SerializeField] private Material scaleMaterial;
         private Material domeMaterial;
-
+        private MeshRenderer meshRenderer;
         private Camera mainCamera;
         
         private bool hovering = false;
         private bool isDragging = false;
         private bool hoveringEdge = false;
+        [SerializeField] private float hoveringEdgeThreshold = 0.1f;
         [SerializeField] private float scale = 1.0f;
 
 
@@ -36,6 +38,10 @@ namespace Netherlands3D.Masking
         SphereCollider sphereCollider;
 
         private Vector3 offset;
+        private Vector3 startScale;
+        private Vector3 pointerStartDragPosition;
+        private Vector3 pointerObjectStartPosition;
+        private float startDistance;
 
         [Header("Events")]
         public UnityEvent<bool> dragging = new();
@@ -52,9 +58,13 @@ namespace Netherlands3D.Masking
         }
 
         private void Awake() {
-            sphereCollider = GetComponent<SphereCollider>();
-            sphereCollider.enabled = false;
             mainCamera = Camera.main;
+
+            sphereCollider = GetComponent<SphereCollider>();
+            meshRenderer = this.GetComponent<MeshRenderer>();
+            domeMaterial = meshRenderer.material;
+
+            sphereCollider.enabled = false;
         }
 
         private void Start()
@@ -64,7 +74,6 @@ namespace Netherlands3D.Masking
                 Debug.LogWarning("A PhysicsRaycaster is required  on main Camera in order for the dome to be selectable", this.gameObject);
             }
 
-            domeMaterial = this.GetComponent<MeshRenderer>().material;
         }
 
         public void MoveToScreenPoint(Vector2 screenPoint)
@@ -104,30 +113,32 @@ namespace Netherlands3D.Masking
             animationCoroutine = null;
         }
 
-        private void Update()
-        {
-            //Check if we are hovering edge
-            if(hovering && Pointer.current != null)
-            {
-                Vector2 pointerPosition = Pointer.current.position.ReadValue();
-                var objectPosition = mainCamera.WorldToScreenPoint(this.transform.position);
-            }        
-        }
-
         public void OnBeginDrag(PointerEventData eventData)
         {
             if(eventData.button != dragButton) return;
 
-            DeterminePointerOffset(eventData.position);
+            dragging.Invoke(true);
+
+            DeterminePointerStartOffsets(eventData.position);      
 
             // Set the object as being dragged
             isDragging = true;
-            //Highlight 
-            domeMaterial.color = highlightColor;
+            startScale = this.transform.localScale;
 
-            dragging.Invoke(true);
+            //Check if we are dragging the edge ( so we can scale instead of drag )
+            hoveringEdge = startDistance > hoveringEdgeThreshold;
 
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);
+            if(hoveringEdge)
+            {
+                //Highlight 
+                meshRenderer.material = scaleMaterial;
+                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.ERESIZE);
+                return;
+            }
+
+            //Default to dragging the object    
+            meshRenderer.material = highlighMaterial;
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);            
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -139,7 +150,11 @@ namespace Netherlands3D.Masking
                 // If we are dragging the edge of the dome; scale instead of drag.
                 if(hoveringEdge)
                 {
+                    var pointerViewportPoint = mainCamera.ScreenToViewportPoint(eventData.position);
+                    var distancePointerMoved = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition) / startDistance;
+
                     //Scale
+                    this.transform.localScale = startScale * distancePointerMoved;
                     return;
                 }
 
@@ -159,9 +174,6 @@ namespace Netherlands3D.Masking
         public void OnPointerUp(PointerEventData eventData)
         {
             if(eventData.button != dragButton) return;
-
-            // Update the object's position based on the pointer position
-            transform.position = PointerWorldPosition(eventData.position) - offset;
 
             // Reset the dragging flag
             isDragging = false;
@@ -186,33 +198,45 @@ namespace Netherlands3D.Masking
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if(!isDragging) return;
+
             transform.position = PointerWorldPosition(eventData.position) - offset;
             ScaleByCameraDistance();
 
             AnimateIn();
-
-            domeMaterial.color = highlightColor;
         }
 
-        private void DeterminePointerOffset(Vector3 pointerPosition)
+        private void DeterminePointerStartOffsets(Vector3 pointerPosition)
         {
+            pointerStartDragPosition = mainCamera.ScreenToViewportPoint(pointerPosition);
+            pointerObjectStartPosition = mainCamera.WorldToViewportPoint(transform.position);
+            pointerObjectStartPosition.z = 0; //Remove depth
+
+            startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
+
             offset = PointerWorldPosition(pointerPosition) - this.transform.position;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            domeMaterial.color = highlightColor;
             hovering = true;
 
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            if(!isDragging){
+                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+                meshRenderer.material = highlighMaterial;
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            domeMaterial.color = defaultColor;
             hovering = false;
 
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+
+            if(!isDragging)
+            {
+                meshRenderer.material = defaultMaterial;
+            }
         }
     }
 }

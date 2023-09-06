@@ -119,8 +119,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragButton: 0
-  highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlighMaterial: {fileID: 2100000, guid: b0c33708aa0bbb64eae2fe13eca68228, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5cc6ab78568b33f4a8a7594973a36ea0, type: 2}
+  scaleMaterial: {fileID: 2100000, guid: 97dfbe53cfae1db4cb52a0377b25bc9b, type: 2}
+  hoveringEdgeThreshold: 0.1
   scale: 0.5
   appearAnimationCurve:
     serializedVersion: 2
@@ -173,7 +175,19 @@ MonoBehaviour:
   appearTime: 0.5
   dragging:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   selected:
     m_PersistentCalls:
       m_Calls: []
@@ -233,4 +247,5 @@ MonoBehaviour:
   margin: 0
   sphericalMaskPositionName: _SphericalMaskPosition
   sphericalMaskRadiusName: _SphericalMaskRadius
+  resetMaskOnDisable: 1
   domeVisualisation: {fileID: 2490938990270525891}
