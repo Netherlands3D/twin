@@ -4,15 +4,16 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.JavascriptConnection 
+namespace Netherlands3D.JavascriptConnection
 {
     public class ChangePointerStyleHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "pointer");
 
-        public enum Style{
-            AUTO,    
+        public enum Style
+        {
+            AUTO,
             POINTER,
             TEXT,
             GRAB,
@@ -25,11 +26,11 @@ namespace Netherlands3D.JavascriptConnection
         private Style styleOnHover = Style.POINTER;
         public static Style cursorType = Style.AUTO;
 
-		public Style StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
+        public Style StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
 
-		//We can use a static method here, since we change the style as a whole for the 
-		//entire WebGL canvas. Check out w3schools for more cursor styles: https://www.w3schools.com/cssref/pr_class_cursor.asp
-		public static void ChangeCursor(Style type)
+        //We can use a static method here, since we change the style as a whole for the 
+        //entire WebGL canvas. Check out w3schools for more cursor styles: https://www.w3schools.com/cssref/pr_class_cursor.asp
+        public static void ChangeCursor(Style type)
         {
             cursorType = type;
 
@@ -58,9 +59,9 @@ namespace Netherlands3D.JavascriptConnection
                     cursorString = "progress";
                     break;
             }
-            #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
-            #endif
+#endif
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -74,9 +75,9 @@ namespace Netherlands3D.JavascriptConnection
             ChangeCursor(Style.AUTO);
         }
 
-		public void OnDisable()
-		{
+        public void OnDisable()
+        {
             ChangeCursor(Style.AUTO);
         }
-	}
+    }
 }
