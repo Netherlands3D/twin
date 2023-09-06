@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.JavascriptConnection;
+using Netherlands3D.Twin;
 
 namespace Netherlands3D.Masking
 {
@@ -24,7 +25,6 @@ namespace Netherlands3D.Masking
         
         private bool hovering = false;
         private bool isDragging = false;
-        private bool hoveringEdge = false;
         [SerializeField] private float hoveringEdgeThreshold = 0.1f;
         [SerializeField] private float scale = 1.0f;
 
@@ -38,15 +38,15 @@ namespace Netherlands3D.Masking
         SphereCollider sphereCollider;
 
         private Vector3 offset;
-        private Vector3 startScale;
-        private Vector3 pointerStartDragPosition;
-        private Vector3 pointerObjectStartPosition;
-        private float startDistance;
 
         [Header("Events")]
         public UnityEvent<bool> dragging = new();
         public UnityEvent selected = new();
         public UnityEvent deselected = new();
+        public UnityEvent<bool> onHoveringChange = new();
+
+        [Header("References")]
+        [SerializeField] private DomeScaleHandle scaleHandle;
 
         public bool AllowInteraction
         {
@@ -69,11 +69,10 @@ namespace Netherlands3D.Masking
 
         private void Start()
         {
-            if(!mainCamera.TryGetComponent<PhysicsRaycaster>(out PhysicsRaycaster raycaster))
+            if(!mainCamera.TryGetComponent(out PhysicsRaycaster raycaster))
             {
                 Debug.LogWarning("A PhysicsRaycaster is required  on main Camera in order for the dome to be selectable", this.gameObject);
             }
-
         }
 
         public void MoveToScreenPoint(Vector2 screenPoint)
@@ -119,22 +118,10 @@ namespace Netherlands3D.Masking
 
             dragging.Invoke(true);
 
-            DeterminePointerStartOffsets(eventData.position);      
+            DeterminePointerStartOffset(eventData.position);      
 
             // Set the object as being dragged
             isDragging = true;
-            startScale = this.transform.localScale;
-
-            //Check if we are dragging the edge ( so we can scale instead of drag )
-            hoveringEdge = startDistance > hoveringEdgeThreshold;
-
-            if(hoveringEdge)
-            {
-                //Highlight 
-                meshRenderer.material = scaleMaterial;
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.ERESIZE);
-                return;
-            }
 
             //Default to dragging the object    
             meshRenderer.material = highlighMaterial;
@@ -147,17 +134,6 @@ namespace Netherlands3D.Masking
 
             if (isDragging)
             {
-                // If we are dragging the edge of the dome; scale instead of drag.
-                if(hoveringEdge)
-                {
-                    var pointerViewportPoint = mainCamera.ScreenToViewportPoint(eventData.position);
-                    var distancePointerMoved = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition) / startDistance;
-
-                    //Scale
-                    this.transform.localScale = startScale * distancePointerMoved;
-                    return;
-                }
-
                 // Update the object's position based on the pointer position
                 transform.position = PointerWorldPosition(eventData.position) - offset;
             }
@@ -206,22 +182,17 @@ namespace Netherlands3D.Masking
             AnimateIn();
         }
 
-        private void DeterminePointerStartOffsets(Vector3 pointerPosition)
+        private void DeterminePointerStartOffset(Vector3 pointerPosition)
         {
-            pointerStartDragPosition = mainCamera.ScreenToViewportPoint(pointerPosition);
-            pointerObjectStartPosition = mainCamera.WorldToViewportPoint(transform.position);
-            pointerObjectStartPosition.z = 0; //Remove depth
-
-            startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
-
             offset = PointerWorldPosition(pointerPosition) - this.transform.position;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            hovering = true;
+            ChangeHoverState(true);
 
-            if(!isDragging){
+            if (!isDragging)
+            {
                 ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
                 meshRenderer.material = highlighMaterial;
             }
@@ -229,7 +200,7 @@ namespace Netherlands3D.Masking
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            hovering = false;
+            ChangeHoverState(false);
 
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
 
@@ -237,6 +208,17 @@ namespace Netherlands3D.Masking
             {
                 meshRenderer.material = defaultMaterial;
             }
+        }
+
+        public void ChangeScalingMode(bool scaling)
+        {
+            meshRenderer.material = scaling ? scaleMaterial : defaultMaterial;
+        }
+
+        public void ChangeHoverState(bool hovering)
+        {
+            this.hovering = hovering;
+            onHoveringChange.Invoke(hovering);
         }
     }
 }
