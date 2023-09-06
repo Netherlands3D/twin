@@ -21,7 +21,6 @@ namespace Netherlands3D.Masking
 
         private bool hovering = false;
         private bool isDragging = false;
-        [SerializeField] private float hoveringEdgeThreshold = 0.1f;
         [SerializeField] private float scale = 1.0f;
 
 
@@ -72,6 +71,10 @@ namespace Netherlands3D.Masking
             }
         }
 
+        private void Update() {
+            this.transform.rotation = mainCamera.transform.rotation;
+        }
+
         public void MoveToScreenPoint(Vector2 screenPoint)
         {
             transform.position = PointerWorldPosition(screenPoint);
@@ -80,13 +83,17 @@ namespace Netherlands3D.Masking
 
         public void AnimateIn()
         {
+            InteruptAnimation();
+            animationCoroutine = StartCoroutine(Animate());
+        }
+
+        public void InteruptAnimation()
+        {
             if (animationCoroutine != null)
             {
                 StopCoroutine(animationCoroutine);
             }
-            animationCoroutine = StartCoroutine(Animate());
         }
-
 
         private IEnumerator Animate()
         {
@@ -113,6 +120,8 @@ namespace Netherlands3D.Masking
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (eventData.button != dragButton) return;
+
+            InteruptAnimation();
 
             dragging.Invoke(true);
 

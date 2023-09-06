@@ -7,6 +7,7 @@ namespace Netherlands3D.Masking
     public class DomeScaleHandle : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private DomeVisualisation domeVisualisation;
+        [SerializeField] private Transform wordlPositionAnchor;
         [SerializeField] private Vector3 iconOffset = Vector3.zero;
         [SerializeField] private float scaleMultiplier = 2.0f;
 
@@ -39,13 +40,10 @@ namespace Netherlands3D.Masking
 
         private void Update()
         {
-            var worldPositionDome = mainCamera.WorldToViewportPoint(domeVisualisation.transform.position);
-            worldPositionDome.z = 0;
-
-            var domeScaleInScreen = domeVisualisation.transform.localScale.x / Vector3.Distance(domeVisualisation.transform.position, mainCamera.transform.position);
-
-            rectTransform.anchorMin = worldPositionDome + iconOffset * domeScaleInScreen;
-            rectTransform.anchorMax = worldPositionDome + iconOffset * domeScaleInScreen;
+            var worldAnchorPoint = mainCamera.WorldToViewportPoint(wordlPositionAnchor.position);
+            worldAnchorPoint.z = 0;
+            rectTransform.anchorMin = worldAnchorPoint;
+            rectTransform.anchorMax = worldAnchorPoint;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -62,6 +60,7 @@ namespace Netherlands3D.Masking
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            pointerStartDragPosition = mainCamera.ScreenToViewportPoint(eventData.position);
             pointerObjectStartPosition = mainCamera.WorldToViewportPoint(domeVisualisation.transform.position);
             pointerObjectStartPosition.z = 0; //Remove depth
 
@@ -78,7 +77,7 @@ namespace Netherlands3D.Masking
             var distancePointerMoved = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition) / startDistance;
 
             //Scale
-            domeVisualisation.transform.localScale = startScale * scaleMultiplier * distancePointerMoved;
+            domeVisualisation.transform.localScale = startScale * distancePointerMoved * scaleMultiplier;
         }
 
         public void OnEndDrag(PointerEventData eventData)
