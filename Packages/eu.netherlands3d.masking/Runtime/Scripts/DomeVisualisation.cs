@@ -1,20 +1,16 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using Netherlands3D.JavascriptConnection;
-using Netherlands3D.Twin;
 
 namespace Netherlands3D.Masking
 {
-    public class DomeVisualisation : MonoBehaviour, 
+    public class DomeVisualisation : MonoBehaviour,
     IPointerClickHandler,
-    IPointerUpHandler, IPointerEnterHandler,IPointerExitHandler,
+    IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler
-    {   
+    {
         [SerializeField] private PointerEventData.InputButton dragButton = PointerEventData.InputButton.Left;
         [SerializeField] private Material highlighMaterial;
         [SerializeField] private Material defaultMaterial;
@@ -22,7 +18,7 @@ namespace Netherlands3D.Masking
         private Material domeMaterial;
         private MeshRenderer meshRenderer;
         private Camera mainCamera;
-        
+
         private bool hovering = false;
         private bool isDragging = false;
         [SerializeField] private float hoveringEdgeThreshold = 0.1f;
@@ -57,7 +53,8 @@ namespace Netherlands3D.Masking
             }
         }
 
-        private void Awake() {
+        private void Awake()
+        {
             mainCamera = Camera.main;
 
             sphereCollider = GetComponent<SphereCollider>();
@@ -69,7 +66,7 @@ namespace Netherlands3D.Masking
 
         private void Start()
         {
-            if(!mainCamera.TryGetComponent(out PhysicsRaycaster raycaster))
+            if (!mainCamera.TryGetComponent(out PhysicsRaycaster raycaster))
             {
                 Debug.LogWarning("A PhysicsRaycaster is required  on main Camera in order for the dome to be selectable", this.gameObject);
             }
@@ -80,25 +77,26 @@ namespace Netherlands3D.Masking
             transform.position = PointerWorldPosition(screenPoint);
             ScaleByCameraDistance();
         }
-        
+
         public void AnimateIn()
         {
-            if(animationCoroutine != null)
+            if (animationCoroutine != null)
             {
                 StopCoroutine(animationCoroutine);
             }
             animationCoroutine = StartCoroutine(Animate());
         }
 
-        
+
         private IEnumerator Animate()
         {
             var animationTime = 0.0f;
 
             var targetScale = hovering ? this.transform.localScale : ScaleByCameraDistance();
-            var animationCurve =  hovering ? movedAnimationCurve : appearAnimationCurve;
+            var animationCurve = hovering ? movedAnimationCurve : appearAnimationCurve;
 
-            while(animationTime < appearTime){
+            while (animationTime < appearTime)
+            {
                 animationTime += Time.deltaTime;
                 var curveTime = animationTime / appearTime;
                 var curveValue = animationCurve.Evaluate(curveTime);
@@ -114,23 +112,23 @@ namespace Netherlands3D.Masking
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if(eventData.button != dragButton) return;
+            if (eventData.button != dragButton) return;
 
             dragging.Invoke(true);
 
-            DeterminePointerStartOffset(eventData.position);      
+            DeterminePointerStartOffset(eventData.position);
 
             // Set the object as being dragged
             isDragging = true;
 
             //Default to dragging the object    
             meshRenderer.material = highlighMaterial;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);            
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if(eventData.button != dragButton) return;
+            if (eventData.button != dragButton) return;
 
             if (isDragging)
             {
@@ -149,7 +147,7 @@ namespace Netherlands3D.Masking
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if(eventData.button != dragButton) return;
+            if (eventData.button != dragButton) return;
 
             // Reset the dragging flag
             isDragging = false;
@@ -174,7 +172,7 @@ namespace Netherlands3D.Masking
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(!isDragging) return;
+            if (!isDragging) return;
 
             transform.position = PointerWorldPosition(eventData.position) - offset;
             ScaleByCameraDistance();
@@ -204,7 +202,7 @@ namespace Netherlands3D.Masking
 
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
 
-            if(!isDragging)
+            if (!isDragging)
             {
                 meshRenderer.material = defaultMaterial;
             }

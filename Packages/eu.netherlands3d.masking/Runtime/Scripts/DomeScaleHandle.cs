@@ -1,9 +1,8 @@
-using Netherlands3D.Masking;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Masking
 {
     public class DomeScaleHandle : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
@@ -22,6 +21,7 @@ namespace Netherlands3D.Twin
 
         private float startDistance;
 
+        [Header("Events")]
         public UnityEvent<bool> onHoveringChange = new();
         public UnityEvent<bool> onDragChange = new();
 
@@ -30,20 +30,22 @@ namespace Netherlands3D.Twin
 
         public bool IsHovering { get => hovering; }
 
-        private void Awake() {
+        private void Awake()
+        {
             mainCamera = Camera.main;
             onHoveringChange.Invoke(false);
             rectTransform = GetComponent<RectTransform>();
         }
 
-        private void Update() {
+        private void Update()
+        {
             var worldPositionDome = mainCamera.WorldToViewportPoint(domeVisualisation.transform.position);
             worldPositionDome.z = 0;
 
-            var domeScaleInScreen = domeVisualisation.transform.localScale.x / Vector3.Distance(domeVisualisation.transform.position,mainCamera.transform.position);
+            var domeScaleInScreen = domeVisualisation.transform.localScale.x / Vector3.Distance(domeVisualisation.transform.position, mainCamera.transform.position);
 
             rectTransform.anchorMin = worldPositionDome + iconOffset * domeScaleInScreen;
-			rectTransform.anchorMax = worldPositionDome + iconOffset * domeScaleInScreen;
+            rectTransform.anchorMax = worldPositionDome + iconOffset * domeScaleInScreen;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -76,9 +78,9 @@ namespace Netherlands3D.Twin
             var distancePointerMoved = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition) / startDistance;
 
             //Scale
-            domeVisualisation.transform.localScale = startScale * scaleMultiplier * distancePointerMoved;  
+            domeVisualisation.transform.localScale = startScale * scaleMultiplier * distancePointerMoved;
         }
-         
+
         public void OnEndDrag(PointerEventData eventData)
         {
             Debug.Log("Ended scaling drag");
