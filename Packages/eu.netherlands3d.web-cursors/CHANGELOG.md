@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
+- Changelog up to date
 
-- {NOTE}
+## 2.0.0
+### Added
+- Added all system CSS cursor types
+
+## 1.0.2
+### Fixed
+- matching openupm package name and numbering
+
+## 1.0.1
+### Added
+- Added missing .meta files
+
+## 1.0.0
+### Added
+- Initial monobehaviour and jslib moved from 3DAmsterdam/Netherlands3D
