@@ -683,8 +683,8 @@ MonoBehaviour:
   dossierVisualiser: {fileID: 0}
   nameField: {fileID: 245152110335299521}
   projectAreaNameField: {fileID: 4863429045028810748}
-  MapLayerList: {fileID: 6511763307582547395}
-  MapLayerListItemPrefab: {fileID: 7075544064532675156, guid: 2a92fda52a971904da62d9dc1b1585cb,
+  mapLayerList: {fileID: 6511763307582547395}
+  mapLayerListItemPrefab: {fileID: 7075544064532675156, guid: 2a92fda52a971904da62d9dc1b1585cb,
     type: 3}
 --- !u!114 &809208012151667462
 MonoBehaviour:
