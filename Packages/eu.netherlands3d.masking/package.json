@@ -16,6 +16,7 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
-	  "eu.netherlands3d.web-cursors": "1.0.2"
+    "eu.netherlands3d.web-cursors": "1.0.2",
+    "com.unity.inputsystem": "1.5.1"
   }
 }
