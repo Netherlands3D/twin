@@ -16,12 +16,9 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 
 ## Usage
 
-Add the MaskingDomeSpawner prefab to your scene.
-Click somewhere in the world to move the dome directly to that position.
-Drag the dome, or click on a new position to move it around.
-Drag the scaling handle to resize the dome. (the initial placement scale will be based on camera distance)
+Add the MaskingDomeSpawner prefab to your scene.  Click somewhere in the world to move the dome directly to that position.  Drag the dome, or click on a new position to move it around.  Drag the scaling handle to resize the dome. (the initial placement scale will be based on camera distance)  
 
-Any material using the MaskableTerrain shader will be masked out by the dome.
+Any material using the MaskableTerrain shader will be masked out by the dome. 
 
 If you want to customise or create your own shader the following global shader variables* can be used to set the spherical mask radius and world position:
 

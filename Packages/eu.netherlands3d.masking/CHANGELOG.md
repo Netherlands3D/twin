@@ -11,4 +11,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Masking dome that can be placed, moved and scaled using pointer input
 - ShaderGraph with global variables setting dome masking position and radius
-- 
