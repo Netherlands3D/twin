@@ -1,6 +1,6 @@
 {
     "name": "eu.netherlands3d.masking.Runtime",
-    "rootNamespace": "",
+    "rootNamespace": "Netherlands3D.Masking",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:342dff139556fc14d832ad802c9dafd2"
