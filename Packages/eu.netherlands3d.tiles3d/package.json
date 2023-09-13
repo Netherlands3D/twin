@@ -6,16 +6,12 @@
   "keywords": [
     "netherlands3d",
     "digital twin",
-    "coordinates",
-    "conversion",
-    "CRS",
-    "EPSG",
-    "RD"
+    "3DTiles"
   ],
   "license": "EUPL-1.2",
-  "documentationUrl": "https://github.com/Netherlands3D/Coordinates/blob/main/README.md",
-  "licensesUrl": "https://github.com/Netherlands3D/Coordinates/blob/main/LICENSE.txt",
-  "changelogURL": "https://github.com/Netherlands3D/Coordinates/blob/main/CHANGELOG.md",
+  "documentationUrl": "https://github.com/Netherlands3D/3DTiles/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/3DTiles/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/3DTiles/blob/main/CHANGELOG.md",
   "hideInEditor": false,
   "author": {
     "name": "Netherlands3D",
