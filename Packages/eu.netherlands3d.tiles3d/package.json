@@ -1,19 +1,30 @@
 {
-  "name": "eu.netherlands3d.{NAME:kebab-case}",
-  "version": "{VERSION}",
-  "displayName": "Netherlands3D - {DISPLAY_NAME}",
-  "description": "{DESCRIPTION}",
-  "unity": "2022.2",
-  "documentationUrl": "https://netherlands3d.eu/docs",
-  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
-  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
+  "name": "eu.netherlands3d.tiles3d",
+  "displayName": "Netherlands 3D - 3DTiles",
+  "version": "1.0.0",
+  "type": "library",
   "keywords": [
-    "digital-twin"
+    "netherlands3d",
+    "digital twin",
+    "coordinates",
+    "conversion",
+    "CRS",
+    "EPSG",
+    "RD"
   ],
+  "license": "EUPL-1.2",
+  "documentationUrl": "https://github.com/Netherlands3D/Coordinates/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/Coordinates/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/Coordinates/blob/main/CHANGELOG.md",
+  "hideInEditor": false,
   "author": {
     "name": "Netherlands3D",
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
-  }
+    "nl.netherlands3d": "2.0.0",
+    "eu.netherlands3d.gltfast": "5.0.3",
+    "eu.netherlands3d.coordinates": "1.1.0"
+  },
+  "description": "enables the use of 3DTilesets"
 }

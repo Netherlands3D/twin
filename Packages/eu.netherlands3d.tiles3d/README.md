@@ -1,19 +1,10 @@
-# {DISPLAY_NAME}
+3DTiles
+============
 
-{LONG_DESCRIPTION}
+Using this package it is possible to load 3DTilesets in Unity3D at Runtime.
 
-## Installing
+Requires a gameObject with SetGlobalRDOrigin.cs to create a connection between the real world and the Unity coordinateSystem.
 
-This package is provided through OpenUPM, to install it using the CLI you can perform the following:
+see the SampleScene for how to set it up.
 
-```bash
-$ openupm add {PACKAGE_NAME}
-```
-
-or, you have to add `https://package.openupm.com` as a scoped registry with, at least, the following scopes:
-
-- `eu.netherlands3d`
-
-## Usage
-
-{USAGE_INFORMATION}
+> Important: to be able to load google Earth 3DTiles, you need to install the package from https://github.com/atteneder/DracoUnity.git
