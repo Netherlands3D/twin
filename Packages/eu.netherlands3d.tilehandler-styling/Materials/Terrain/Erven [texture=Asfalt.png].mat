@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Erven [texture=Asfalt.png]
-  m_Shader: {fileID: -6465566751694194690, guid: 17efb6598bde52c45912b9bcf8f60705,
+  m_Shader: {fileID: -6465566751694194690, guid: 253239fa34b3d3c4fb0c4df85dfde8ae,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Begroeid [texture=Begroeid.png]
-  m_Shader: {fileID: -6465566751694194690, guid: cf2b4215c507e8645a9e88e5d6f153b2,
+  m_Shader: {fileID: -6465566751694194690, guid: 27cfcc3023f313c4ca54748761048d28,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
