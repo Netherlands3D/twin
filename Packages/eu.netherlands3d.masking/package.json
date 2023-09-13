@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.masking",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "Netherlands3D - Masking",
   "description": "Realtime masking of materials for use cases like looking at the underground",
   "unity": "2022.2",
