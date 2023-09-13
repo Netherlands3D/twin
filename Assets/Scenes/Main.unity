@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: ceb1e640e6a4fb7448e1c3d4c464d117, type: 3}
   m_Sun: {fileID: 1461716753}
-  m_IndirectSpecularColor: {r: 0.6347352, g: 0.7106859, b: 0.91001236, a: 1}
+  m_IndirectSpecularColor: {r: 0.63477623, g: 0.7107723, b: 0.9100152, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5231,22 +5231,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.38921535
+      value: 0.37477767
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.11955426
+      value: 0.107479915
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.87309474
+      value: 0.8851821
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.26818624
+      value: -0.2538553
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6216,8 +6216,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
+        type: 2}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
@@ -6226,13 +6242,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: InvokeStarted
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
       propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
+      propertyPath: dragging.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2490938990270525891, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
@@ -11780,7 +11811,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998994330860989}
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

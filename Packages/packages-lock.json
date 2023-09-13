@@ -252,11 +252,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.masking": {
-      "version": "file:Masking",
+      "version": "file:C:/Unity/Masking",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {
-        "eu.netherlands3d.web-cursors": "1.0.2"
+        "eu.netherlands3d.web-cursors": "1.0.2",
+        "com.unity.inputsystem": "1.5.1"
       }
     },
     "eu.netherlands3d.obj-importer": {
