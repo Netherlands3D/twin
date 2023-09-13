@@ -339,13 +339,13 @@
     },
     "eu.netherlands3d.web-cursors": {
       "version": "1.0.2",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#main",
+      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
       "depth": 0,
       "source": "git",
       "dependencies": {
