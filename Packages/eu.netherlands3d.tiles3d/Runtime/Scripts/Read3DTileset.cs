@@ -4,7 +4,6 @@ using UnityEngine;
 using SimpleJSON;
 using UnityEngine.Networking;
 using System;
-using Netherlands3D.Core;
 using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
@@ -88,11 +87,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
 
             StartCoroutine(LoadTileset());
             
-            SetGlobalRDOrigin globalOrigin = FindObjectOfType<SetGlobalRDOrigin>();
-            if (globalOrigin != null)
-            {
-                //globalOrigin.relativeOriginChanged.AddListener(RelativeCenterChanged);
-            }
+
         }
 
         private void ExtractDatasetPaths()

@@ -13,7 +13,7 @@ namespace Netherlands3D.Tiles3D
             { "sphere", BoundingVolumeType.Sphere }
         };
 
-        public static Tile ReadTileset(JSONNode rootnode)
+        internal static Tile ReadTileset(JSONNode rootnode)
         {
             Tile root = new Tile();
 
@@ -57,7 +57,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Recursive reading of tile nodes to build the tiles tree
         /// </summary>
-        public static Tile ReadExplicitNode(JSONNode node, Tile tile)
+        internal static Tile ReadExplicitNode(JSONNode node, Tile tile)
         {
 
             tile.boundingVolume = new BoundingVolume();
@@ -89,7 +89,7 @@ namespace Netherlands3D.Tiles3D
             return tile;
         }
 
-        public static void ParseBoundingVolume(Tile tile, JSONNode boundingVolumeNode)
+        internal static void ParseBoundingVolume(Tile tile, JSONNode boundingVolumeNode)
         {
             if (boundingVolumeNode != null)
             {
