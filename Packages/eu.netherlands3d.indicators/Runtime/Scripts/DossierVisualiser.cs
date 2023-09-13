@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
@@ -39,10 +40,21 @@ namespace Netherlands3D.Indicators
             get => selectedArea;
             private set => selectedArea = value;
         }
-        
+
+        public bool IsTransparent
+        {
+            get => isTransparent;
+            set
+            {
+                isTransparent = value;
+                ColorizeAreaMeshes();
+            }
+        }
+
         public UnityEvent<ProjectAreaVisualisation> onAreaVisualised = new();
         public UnityEvent<ProjectAreaVisualisation> onAreaRemoved = new();
         public UnityEvent<ProjectAreaVisualisation> onSelectedArea = new();
+        private bool isTransparent = false;
 
         private void OnEnable()
         {
@@ -220,23 +232,50 @@ namespace Netherlands3D.Indicators
             // Deselect previous area
             if (SelectedArea != null)
             {
-                SelectedArea.Polygons.ForEach(
-                    polygonVisualisation => polygonVisualisation.GetComponent<MeshRenderer>().material = meshMaterial
-                );
+                SelectedArea
+                    .Polygons
+                    .ForEach(polygonVisualisation => ChangeMeshMaterial(polygonVisualisation, meshMaterial));
             }
             
             // Select new area
             SelectedArea = visualisation;
             if (SelectedArea != null)
             {
-                SelectedArea.Polygons.ForEach(
-                    polygonVisualisation => polygonVisualisation.GetComponent<MeshRenderer>().material = selectedMeshMaterial
-                );
+                SelectedArea
+                    .Polygons
+                    .ForEach(polygonVisualisation => ChangeMeshMaterial(polygonVisualisation, selectedMeshMaterial));
             }
             
             onSelectedArea.Invoke(visualisation);
         }
-        
+
+        private void ColorizeAreaMeshes()
+        {
+            Material material = null;
+            foreach (var area in areas)
+            {
+                if (IsTransparent == false)
+                {
+                    material = SelectedArea == area ? selectedMeshMaterial : meshMaterial;
+                }
+
+                area
+                    .Polygons
+                    .ForEach(polygonVisualisation => ChangeMeshMaterial(polygonVisualisation, material));
+            }
+        }
+
+        private void ChangeMeshMaterial(PolygonVisualisation polygonVisualisation, Material material)
+        {
+            if (material == null || IsTransparent)
+            {
+                polygonVisualisation.GetComponent<MeshRenderer>().materials = Array.Empty<Material>();
+                return;
+            }
+
+            polygonVisualisation.GetComponent<MeshRenderer>().material = material;
+        }
+
         private void OnAreaVisualised(ProjectAreaVisualisation projectAreaVisualisation)
         {
             projectAreaVisualisation.Polygons.ForEach(

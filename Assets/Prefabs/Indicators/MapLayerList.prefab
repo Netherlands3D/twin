@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2796954425654255465}
   - component: {fileID: 4578726788748017229}
   - component: {fileID: 7403344188885707571}
+  - component: {fileID: 6889337470636244178}
   m_Layer: 5
   m_Name: MapLayerList
   m_TagString: Untagged
@@ -87,6 +88,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 1
+--- !u!114 &6889337470636244178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065634154560002152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6f3283f5616bb4794538c755eb27cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dossier: {fileID: 11400000, guid: 84a7c9f73f20c8c4ba60ce64ca5ef6d7, type: 2}
+  mapLayerList: {fileID: 7403344188885707571}
+  mapLayerListItemPrefab: {fileID: 7075544064532675156, guid: 2a92fda52a971904da62d9dc1b1585cb,
+    type: 3}
+  onSelectedMapOverlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoadMapOverlayFrame:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselectedMapOverlay:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &8135567614557188090
 PrefabInstance:
   m_ObjectHideFlags: 0
