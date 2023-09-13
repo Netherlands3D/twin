@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: maskdome
   Caption: Doorzicht ondergrond
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
