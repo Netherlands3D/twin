@@ -1,5 +1,10 @@
+using System;
+using System.Linq;
+using Netherlands3D.Indicators.Dossiers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Indicators.UI
@@ -13,6 +18,10 @@ namespace Netherlands3D.Indicators.UI
         [SerializeField] private ToggleGroup mapLayerList;
         [SerializeField] private Toggle mapLayerListItemPrefab;
 
+        public UnityEvent<DataLayer> onSelectedMapOverlay = new();
+        [FormerlySerializedAs("onLoadMapOverlay")] public UnityEvent<Uri> onLoadMapOverlayFrame = new();
+        public UnityEvent onDeselectedMapOverlay = new();
+        
         private void OnEnable()
         {
             if (nameField) nameField.text = dossier.Data.HasValue ? dossier.Data.Value.name : "";
@@ -36,6 +45,7 @@ namespace Netherlands3D.Indicators.UI
             if (!mapLayerList) return;
 
             mapLayerList.transform.ClearAllChildren();
+            onDeselectedMapOverlay.Invoke();
 
             var activeVariant = dossier.ActiveVariant;
             if (activeVariant.HasValue == false) return;
@@ -45,6 +55,23 @@ namespace Netherlands3D.Indicators.UI
                 var listItem = Instantiate(mapLayerListItemPrefab, mapLayerList.transform);
                 listItem.GetComponentInChildren<TMP_Text>().text = dataLayer.Value.name;
                 listItem.group = mapLayerList;
+                listItem.onValueChanged.AddListener(toggledOn =>
+                {
+                    if (toggledOn)
+                    {
+                        onSelectedMapOverlay.Invoke(dataLayer.Value);
+
+                        if (dataLayer.Value.frames.Count == 0) return;
+
+                        // since we do not support multiple frames at the moment, we cheat and always load the first
+                        var firstFrame = dataLayer.Value.frames.First();
+                        onLoadMapOverlayFrame.Invoke(firstFrame.map);
+
+                        return;
+                    }
+
+                    onDeselectedMapOverlay.Invoke();
+                });
             }
         }
     }
