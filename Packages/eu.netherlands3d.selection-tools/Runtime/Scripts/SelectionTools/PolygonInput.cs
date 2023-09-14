@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -47,7 +48,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private float maxSelectionDistanceFromCamera = 10000;
         [SerializeField] private bool snapToStart = true;
         [SerializeField, Tooltip("Closing a polygon shape is required. If set to false, you can output lines.")] private bool requireClosedPolygon = true;
-        [SerializeField, Tooltip("If you click close to the starting point the loop will finish")] private bool closeLoopAtStart = true;
+        [SerializeField, Tooltip("If you click close to the starting point the loop will finish")] private bool closeLoopAtStartPoint = true;
         [SerializeField, Tooltip("Handles allow you to transform the line.")] private bool createHandles = false;
         [SerializeField] private int maxPoints = 1000;
         [SerializeField] private int minPointsToCloseLoop = 3;
@@ -72,14 +73,16 @@ namespace Netherlands3D.SelectionTools
 
         [SerializeField] private LineRenderer polygonLineRenderer;
         [SerializeField] private LineRenderer previewLineRenderer;
-        private List<Vector3> positions = new List<Vector3>();
-        private Vector3 lastAddedPoint = default;
-        private Vector3 selectionStartPosition = default;
-        private Vector3 currentWorldCoordinate = default;
-        private Vector3 previousFrameWorldCoordinate = default;
-        private Vector2 previousFrameScreenCoordinate = default;
-        private Vector3 lastNormal = Vector3.zero;
-        private Plane worldPlane;
+
+        public Vector3 currentWorldCoordinate = default;
+        public List<Vector3> positions = new List<Vector3>();
+
+        protected Vector3 lastAddedPoint = default;
+        protected Vector3 selectionStartPosition = default;
+        protected Vector3 previousFrameWorldCoordinate = default;
+        protected Vector2 previousFrameScreenCoordinate = default;
+        protected Vector3 lastNormal = Vector3.zero;
+        protected Plane worldPlane;
 
         private bool closedLoop = false;
         private bool snappingToStartPoint = false;
@@ -96,11 +99,11 @@ namespace Netherlands3D.SelectionTools
         private List<PolygonDragHandle> handles = new List<PolygonDragHandle>();
 
         [Header("Invoke")]
-        [SerializeField] private UnityEvent<bool> blockCameraDrag;
-        [SerializeField] private UnityEvent<List<Vector3>> createdNewPolygonArea;
+        public UnityEvent<bool> blockCameraDrag;
+        public UnityEvent<List<Vector3>> createdNewPolygonArea;
         [Header("Optional Invoke")]
-        [SerializeField] private UnityEvent<List<Vector3>> editedPolygonArea;
-        [SerializeField, Tooltip("Contains the list of points the line is made of")] private UnityEvent<List<Vector3>> previewLineHasChanged;
+        public UnityEvent<List<Vector3>> editedPolygonArea;
+        [Tooltip("Contains the list of points the line is made of")] public UnityEvent<List<Vector3>> previewLineHasChanged;
 
 
         void Awake()
@@ -144,7 +147,7 @@ namespace Netherlands3D.SelectionTools
         }
 #endif
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (clearOnEnable)
             {
@@ -157,10 +160,10 @@ namespace Netherlands3D.SelectionTools
             escapeAction.canceled += EscapeAction_canceled;
             finishAction.performed += FinishAction_performed;
 
-            polygonSelectionActionMap.Enable();
+            polygonSelectionActionMap.Enable(); //make sure to look at the execution order in case there are multiple Scripts that make use of this ActionMap, OnDisable() of another object might be called after this function, resulting in no inputs being registered
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             blockCameraDrag.Invoke(false);
 
@@ -195,7 +198,7 @@ namespace Netherlands3D.SelectionTools
 
         private void FinishAction_performed(InputAction.CallbackContext obj)
         {
-            FinishPolygon(true);
+            CloseLoop(true);
         }
 
         public void ReselectPolygon(List<Vector3> points)
@@ -215,10 +218,9 @@ namespace Netherlands3D.SelectionTools
             CloseLoop(false);
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            currentWorldCoordinate = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            UpdateCurrentWorldCoordinate();
 
             UpdatePreviewLine();
             pointerRepresentation.position = currentWorldCoordinate;
@@ -243,6 +245,12 @@ namespace Netherlands3D.SelectionTools
                 requireReleaseBeforeRedraw = false;
             }
             previousFrameWorldCoordinate = currentWorldCoordinate;
+        }
+
+        protected virtual void UpdateCurrentWorldCoordinate()
+        {
+            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
+            currentWorldCoordinate = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
         }
 
         /// <summary>
@@ -370,7 +378,7 @@ namespace Netherlands3D.SelectionTools
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            currentWorldCoordinate = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            UpdateCurrentWorldCoordinate();
 
             if (doubleClickToCloseLoop)
             {
@@ -454,7 +462,7 @@ namespace Netherlands3D.SelectionTools
                 lastAddedPoint = pointPosition;
                 if (positions.Count >= maxPoints)
                 {
-                    if (closeLoopAtStart)
+                    if (closeLoopAtStartPoint)
                     {
                         CloseLoop(isNewPolygon);
                     }
@@ -464,7 +472,7 @@ namespace Netherlands3D.SelectionTools
                     }
                 }
 
-                if (closeLoopAtStart && snappingToStartPoint)
+                if (closeLoopAtStartPoint && snappingToStartPoint)
                 {
                     CloseLoop(isNewPolygon);
                 }
@@ -615,10 +623,11 @@ namespace Netherlands3D.SelectionTools
                 MoveAllHandlesToPoint();
             }
 
+            var positionsCopy = new List<Vector3>(positions);
             if (!polygonFinished && invokeNewPolygonEvent && positions.Count > 1)
-                createdNewPolygonArea.Invoke(positions);
+                createdNewPolygonArea.Invoke(positionsCopy);
             else if (positions.Count > 1)
-                editedPolygonArea.Invoke(positions);
+                editedPolygonArea.Invoke(positionsCopy);
 
             polygonFinished = true;
         }
