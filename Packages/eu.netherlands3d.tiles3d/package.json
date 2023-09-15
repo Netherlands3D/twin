@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "eu.netherlands3d.gltfast": "5.0.3",
-    "eu.netherlands3d.coordinates": "1.1.0"
+    "eu.netherlands3d.coordinates": "1.1.1"
   },
   "description": "enables the use of 3DTilesets",
    "samples": [
