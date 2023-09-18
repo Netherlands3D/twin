@@ -2369,6 +2369,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6398691407728572993}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &638315527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6532709492563260061, guid: deb1af9fab305834597d3dd2dd581207,
+    type: 3}
+  m_PrefabInstance: {fileID: 6687181368185672785}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &658241423
 GameObject:
   m_ObjectHideFlags: 0
@@ -5389,42 +5395,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.38053203
+      value: 0.12481028
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.101353996
+      value: 0.043281343
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8882305
+      value: 0.93652385
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.23657854
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.16535579
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.05907078
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.92708355
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.33118618
+      value: -0.324765
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -10369,7 +10355,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 6687181368185672785}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 638315527}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d6a0c7b653b4046873f1178709391ec, type: 3}
@@ -15407,6 +15393,246 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1799500939}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 460259861}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 638315527}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6320741605732776933}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1799500939}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 460259861}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 638315527}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_IsTransparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Load
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_IsTransparent
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Indicators.DossierVisualiser, eu.netherlands3d.indicators.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Indicators.RemoteTextureLoader, eu.netherlands3d.indicators.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Indicators.DossierVisualiser, eu.netherlands3d.indicators.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7394774688067365712, guid: c18057bd7c4172b4c8b2447dbf8456ca,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -15461,176 +15687,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1799500939}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 460259861}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 6320741605732776933}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1799500939}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 460259861}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: set_IsTransparent
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Load
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: set_IsTransparent
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Indicators.DossierVisualiser, eu.netherlands3d.indicators.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Indicators.RemoteTextureLoader, eu.netherlands3d.indicators.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Indicators.DossierVisualiser, eu.netherlands3d.indicators.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onLoadMapOverlayFrame.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7167566248913596962, guid: c18057bd7c4172b4c8b2447dbf8456ca,
-        type: 3}
-      propertyPath: onDeselectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7928023444715516320, guid: c18057bd7c4172b4c8b2447dbf8456ca,
         type: 3}
