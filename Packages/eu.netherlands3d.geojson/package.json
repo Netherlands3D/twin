@@ -1,10 +1,10 @@
 {
   "name": "eu.netherlands3d.geojson",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Netherlands3D - GeoJSON",
-  "description": "Extra GeoJSON-based features for Netherlands3D",
-  "unity": "2022.2",
-  "documentationUrl": "https://netherlands3d.eu/docs",
+  "description": "GeoJSON parsing with extended features for Netherlands3D",
+  "unity": "2021.1",
+  "documentationUrl": "https://raw.githubusercontent.com/Netherlands3D/GeoJSON/main/README.md",
   "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/GeoJSON/main/CHANGELOG.md",
   "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/GeoJSON/main/LICENSE.txt",
   "keywords": [
