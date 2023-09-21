@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Districtnames
   m_EditorClassIdentifier: 
   Id: districts
-  Caption: Show Districts
-  isEnabled: 0
+  Caption: Toon namen van wijken
+  configuration: {fileID: 0}
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
