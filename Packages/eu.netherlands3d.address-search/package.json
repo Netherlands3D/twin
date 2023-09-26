@@ -1,0 +1,19 @@
+{
+  "name": "eu.netherlands3d.{NAME:kebab-case}",
+  "version": "{VERSION}",
+  "displayName": "Netherlands3D - {DISPLAY_NAME}",
+  "description": "{DESCRIPTION}",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+  }
+}
