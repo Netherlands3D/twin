@@ -19,12 +19,24 @@ namespace Netherlands3D.Indicators
 
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
+        public UnityEvent<ProjectArea?> onSelectedProjectArea = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
         public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
 
         public Dossier? Data { get; private set; }
         public Variant? ActiveVariant { get; private set; }
+
+        private ProjectArea? activeProjectArea;
+        public ProjectArea? ActiveProjectArea
+        {
+            get => activeProjectArea;
+            set
+            {
+                onSelectedProjectArea.Invoke(value);
+                activeProjectArea = value;
+            }
+        }
 
         public IEnumerator Open(string dossierId)
         {
@@ -73,6 +85,7 @@ namespace Netherlands3D.Indicators
             onClose.Invoke();
             Data = null;
             SelectVariant(null);
+            ActiveProjectArea = null;
         }
 
         public void SelectVariant(Variant? variant)
