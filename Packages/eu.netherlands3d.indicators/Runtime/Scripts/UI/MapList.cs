@@ -1,12 +1,9 @@
-using TMPro;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
+using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Indicators.UI
@@ -50,12 +47,17 @@ namespace Netherlands3D.Indicators.UI
 
             foreach (var dataLayer in variant.Value.maps)
             {
-                var listItem = Instantiate(mapLayerListItemPrefab, mapLayerList.transform);
-                listItem.GetComponentInChildren<TMP_Text>().text = dataLayer.Value.name;
-                listItem.group = mapLayerList;
-
-                listItem.onValueChanged.AddListener((toggledOn) => OnToggledMapListItem(dataLayer.Value, toggledOn));
+                InstantiateListItem(dataLayer.Value);
             }
+        }
+
+        private void InstantiateListItem(DataLayer dataLayer)
+        {
+            var listItem = Instantiate(mapLayerListItemPrefab, mapLayerList.transform);
+            listItem.GetComponentInChildren<TMP_Text>().text = dataLayer.name;
+            listItem.group = mapLayerList;
+
+            listItem.onValueChanged.AddListener((toggledOn) => OnToggledMapListItem(dataLayer, toggledOn));
         }
 
         private void OnToggledMapListItem(DataLayer dataLayer, bool toggledOn)

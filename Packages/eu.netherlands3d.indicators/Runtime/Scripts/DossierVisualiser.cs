@@ -38,7 +38,11 @@ namespace Netherlands3D.Indicators
         public ProjectAreaVisualisation SelectedArea
         {
             get => selectedArea;
-            private set => selectedArea = value;
+            private set
+            {
+                dossier.ActiveProjectArea = value?.ProjectArea;
+                selectedArea = value;
+            }
         }
 
         public bool IsTransparent
