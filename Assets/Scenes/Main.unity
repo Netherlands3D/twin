@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a451a729b04425863971bc5eea5f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configurator: {fileID: 0}
+  configurator: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
 --- !u!1 &410494642 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4890024140017281850, guid: c18057bd7c4172b4c8b2447dbf8456ca,
@@ -5147,22 +5147,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.32751018
+      value: -0.40239227
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.08450751
+      value: -0.089630075
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9112155
+      value: 0.8892757
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.2351211
+      value: -0.19807997
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -11301,7 +11301,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998994330860989}
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.9999997
   m_NumberOfSteps: 0
   m_OnValueChanged:
