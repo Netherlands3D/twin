@@ -194,6 +194,13 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.address-search": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "eu.netherlands3d.coordinates": {
       "version": "1.1.0",
       "depth": 1,
@@ -209,7 +216,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.geojson": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -298,6 +305,13 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.simplejson": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "eu.netherlands3d.snapshots": {
       "version": "1.0.0",
       "depth": 1,
@@ -366,9 +380,12 @@
         "eu.netherlands3d.poly2tri": "2.0.0",
         "eu.netherlands3d.selection-tools": "1.0.1",
         "eu.netherlands3d.web-cursors": "1.0.2",
-        "eu.netherlands3d.masking": "1.0.2"
+        "eu.netherlands3d.masking": "1.0.2",
+        "eu.netherlands3d.simplejson": "1.0.0",
+        "eu.netherlands3d.address-search": "1.0.0",
+        "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "eb7557cf5cf0e29f6d65431c8c6b7b5ca2640f09"
+      "hash": "515afb8142d8b7cf901cd6a37b430f57755c09ac"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
