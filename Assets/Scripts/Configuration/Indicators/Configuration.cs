@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         public void Populate(NameValueCollection queryParameters)
         {
             var id = queryParameters.Get("indicators.dossier");
-            if (id == null) return;
+            if (string.IsNullOrEmpty(id)) return;
 
             Debug.Log($"Set dossier id '{id}' from URL");
             DossierId = id;
@@ -36,6 +36,8 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
+            if (string.IsNullOrEmpty(dossierId)) return;
+
             urlBuilder.AddQueryParameter("indicators.dossier", dossierId);
         }
 
