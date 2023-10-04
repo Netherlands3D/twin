@@ -41,6 +41,7 @@ jobs:
           targetPlatform: WebGL
           # Temporarily needed to circumvent issues with this action selecting the wrong image for Unity 2022LTS
           customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
+  
 
       # Output
       - uses: actions/upload-artifact@v2
