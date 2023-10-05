@@ -1,1 +1,3 @@
 @import url('variables.uss');
+@import url('common.blocks/inspector/variables.uss');
+@import url('common.blocks/toolbar/variables.uss');

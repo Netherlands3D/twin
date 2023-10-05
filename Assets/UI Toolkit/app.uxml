@@ -1,11 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="toolbar__button" src="project://database/Assets/UI%20Toolkit/common.blocks/toolbar/toolbar__button.uxml?fileID=9197481963319205126&amp;guid=344f4a84d29e1224bad3a64be3d054f0&amp;type=3#toolbar__button" />
     <Style src="project://database/Assets/UI%20Toolkit/app.uss?fileID=7433441132597879392&amp;guid=b28908cfc36129c469584724b5c8816b&amp;type=3#app" />
     <Style src="project://database/Assets/UI%20Toolkit/common.blocks/inspector/inspector.uss?fileID=7433441132597879392&amp;guid=2b26328be533d524c92990c98a94407b&amp;type=3#inspector" />
     <Style src="project://database/Assets/UI%20Toolkit/common.blocks/toolbar/toolbar.uss?fileID=7433441132597879392&amp;guid=6876b6af11224894b73303c0c05ae724&amp;type=3#toolbar" />
     <ui:VisualElement name="main" style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="Inspector" class="inspector" />
-        <ui:VisualElement name="ToolButtons" class="toolbar">
-            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Button" class="toolbar__button" />
+        <ui:VisualElement name="inspector" class="inspector" />
+        <ui:VisualElement name="toolbar" class="toolbar">
+            <ui:Instance template="toolbar__button" name="toolbar__button__select" class="toolbar__button--pointer" />
+            <ui:Instance template="toolbar__button" name="toolbar__button__layers" class="toolbar__button--layers" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

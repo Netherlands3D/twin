@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +6,7 @@ namespace Netherlands3D.Twin.UI
     [RequireComponent(typeof(UIDocument))]
     public class Inspector : MonoBehaviour
     {
-        private const string INSPECTOR_ID = "#Inspector";
+        private const string INSPECTOR_ID = "inspector";
 
         private VisualElement rootVisualElement;
         private VisualElement inspector;

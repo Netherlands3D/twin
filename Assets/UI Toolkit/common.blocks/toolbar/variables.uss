@@ -1,0 +1,11 @@
+:root {
+    --nl3d-metrics-toolbar-width: 66px;
+    --nl3d-metrics-toolbar__button-size: 46px;
+
+    --nl3d-colors-toolbar-bg: var(--nl3d-colors-blue-100);
+    --nl3d-colors-toolbar__button-image-space: var(--nl3d-metrics-spacing-2);
+    --nl3d-colors-toolbar__button-border: var(--nl3d-colors-white);
+    --nl3d-colors-toolbar__button-border-hover: var(--nl3d-colors-blue-700);
+    --nl3d-colors-toolbar__button-bg: var(--nl3d-colors-white);
+    --nl3d-colors-toolbar__button-bg-active: var(--nl3d-colors-blue-700);
+}

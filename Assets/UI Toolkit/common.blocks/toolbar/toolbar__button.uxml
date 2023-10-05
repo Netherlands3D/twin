@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Button" name="toolbar__button" class="toolbar__button">
+        <ui:Image name="toolbar__button-icon" class="toolbar__button-icon"/>
+    </ui:Button>
+</ui:UXML>

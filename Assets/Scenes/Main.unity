@@ -5133,22 +5133,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5599962
+      value: 0.36420515
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.051608156
+      value: 0.07817245
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8233971
+      value: 0.90736645
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.07588267
+      value: -0.1947558
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6736,6 +6736,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1585920527}
   - component: {fileID: 1585920526}
+  - component: {fileID: 1585920529}
+  - component: {fileID: 1585920528}
   m_Layer: 0
   m_Name: UIDocument
   m_TagString: Untagged
@@ -6775,6 +6777,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1585920528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585920525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c8cdc91fc9a74b4a9800e55db31f2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClickedSelectButton:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1585920529}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickedLayersButton:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1585920529}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1585920529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585920525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 434b9882688234547ab2c6d021e595df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1585974257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11317,8 +11373,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998994330860989}
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.9999997
+  m_Value: 1
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -1,0 +1,4 @@
+:root {
+    --nl3d-metrics-inspector-offsetx: -310px;
+    --nl3d-metrics-inspector-width: 300px;
+}
