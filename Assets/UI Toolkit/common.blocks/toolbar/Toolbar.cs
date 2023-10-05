@@ -12,15 +12,25 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent onClickedSelectButton = new();
         public UnityEvent onClickedLayersButton = new();
 
-        private void Start()
+        private void OnEnable()
         {
             var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
             rootVisualElement
                 .Q<VisualElement>(TOOLBAR_BUTTON_SELECT_ID)
-                .RegisterCallback<ClickEvent>(evt => onClickedSelectButton.Invoke());
+                .RegisterCallback<ClickEvent>(InvokeSelectButtonEvent);
             rootVisualElement
                 .Q<VisualElement>(TOOLBAR_BUTTON_LAYERS_ID)
-                .RegisterCallback<ClickEvent>(evt => onClickedLayersButton.Invoke());
+                .RegisterCallback<ClickEvent>(InvokeLayersButtonEvent);
+        }
+
+        private void InvokeSelectButtonEvent(ClickEvent evt)
+        {
+            onClickedSelectButton.Invoke();
+        }
+
+        private void InvokeLayersButtonEvent(ClickEvent evt)
+        {
+            onClickedLayersButton.Invoke();
         }
     }
 }

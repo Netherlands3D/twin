@@ -1,5 +1,7 @@
 :root {
-    --nl3d-metrics-toolbar-width: 66px;
+    --nl3d-metrics-toolbar-offsetx: -96px; /* 66px width + 20px overlap for the bounce effect + 10px to prevent leaking into view */
+    --nl3d-metrics-toolbar-width: 86px; /* 66px width + 20px overlap for the bounce effect */
+    --nl3d-metrics-toolbar-overlap: -20px; /* 66px width + 20px overlap for the bounce effect */
     --nl3d-metrics-toolbar__button-size: 46px;
 
     --nl3d-colors-toolbar-bg: var(--nl3d-colors-blue-100);

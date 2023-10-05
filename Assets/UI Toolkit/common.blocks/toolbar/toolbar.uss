@@ -1,7 +1,25 @@
 .toolbar {
     width: var(--nl3d-metrics-toolbar-width);
+    align-items: flex-start;
+    padding-left: 10px;
+}
+
+.toolbar__bg {
     background-color: var(--nl3d-colors-toolbar-bg);
-    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--nl3d-metrics-toolbar-offsetx);
+    width: var(--nl3d-metrics-toolbar-width);
+    transition-property: left;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-out-back;
+}
+
+.toolbar--open .toolbar__bg {
+    left: var(--nl3d-metrics-toolbar-overlap);
 }
 
 .toolbar__button {

@@ -1,5 +1,5 @@
 .inspector {
-    background-color: white;
+    background-color: var(--nl3d-colors-white);
     flex-grow: 0;
     flex-shrink: 0;
     position: absolute;
@@ -9,7 +9,7 @@
     width: var(--nl3d-metrics-inspector-width);
     transition-property: left;
     transition-duration: 0.4s;
-    transition-timing-function: ease-in-out-cubic;
+    transition-timing-function: ease-out-back;
 }
 
 .inspector--open {

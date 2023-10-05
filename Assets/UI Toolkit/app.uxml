@@ -3,9 +3,10 @@
     <Style src="project://database/Assets/UI%20Toolkit/app.uss?fileID=7433441132597879392&amp;guid=b28908cfc36129c469584724b5c8816b&amp;type=3#app" />
     <Style src="project://database/Assets/UI%20Toolkit/common.blocks/inspector/inspector.uss?fileID=7433441132597879392&amp;guid=2b26328be533d524c92990c98a94407b&amp;type=3#inspector" />
     <Style src="project://database/Assets/UI%20Toolkit/common.blocks/toolbar/toolbar.uss?fileID=7433441132597879392&amp;guid=6876b6af11224894b73303c0c05ae724&amp;type=3#toolbar" />
-    <ui:VisualElement name="main" style="flex-grow: 1; flex-direction: row;">
+    <ui:VisualElement name="main" picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="inspector" class="inspector" />
         <ui:VisualElement name="toolbar" class="toolbar">
+            <ui:VisualElement name="toolbar__bg" class="toolbar__bg" />
             <ui:Instance template="toolbar__button" name="toolbar__button__select" class="toolbar__button--pointer" />
             <ui:Instance template="toolbar__button" name="toolbar__button__layers" class="toolbar__button--layers" />
         </ui:VisualElement>
