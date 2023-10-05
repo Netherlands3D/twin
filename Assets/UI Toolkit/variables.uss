@@ -1,0 +1,23 @@
+:root {
+    --nl3d-metrics-spacing-1: 4px;
+    --nl3d-metrics-spacing-2: 8px;
+    --nl3d-metrics-spacing-3: 12px;
+    --nl3d-metrics-spacing-4: 16px;
+    --nl3d-metrics-spacing-5: 20px;
+    --nl3d-metrics-spacing-6: 24px;
+    --nl3d-metrics-spacing-7: 28px;
+    --nl3d-metrics-spacing-8: 32px;
+    --nl3d-metrics-inspector-offsetx: -310px;
+    --nl3d-metrics-inspector-width: 300px;
+    --nl3d-metrics-toolbar-width: 66px;
+
+    --nl3d-colors-white: rgb(255, 255, 255);
+    --nl3d-colors-offwhite: rgb(229, 235, 242);
+    --nl3d-colors-blue: rgb(0, 70, 153);
+    
+    --nl3d-colors-toolbar-bg: var(--nl3d-colors-offwhite);
+    --nl3d-colors-toolbar__button-border: var(--nl3d-colors-white);
+    --nl3d-colors-toolbar__button-border-hover: var(--nl3d-colors-blue);
+    --nl3d-colors-toolbar__button-bg: var(--nl3d-colors-white);
+    --nl3d-colors-toolbar__button-bg-active: var(--nl3d-colors-blue);
+}

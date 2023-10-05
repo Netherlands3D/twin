@@ -1,0 +1,40 @@
+.toolbar {
+    width: var(--nl3d-metrics-toolbar-width);
+    background-color: var(--nl3d-colors-toolbar-bg);
+    align-items: center;
+    padding-top: var(--nl3d-metrics-spacing-2);
+}
+
+.toolbar__button {
+    width: 46px;
+    height: 46px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: var(--nl3d-colors-toolbar__button-bg);
+    border-color: var(--nl3d-colors-toolbar__button-border);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    transition-property: border-color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.toolbar__button:hover {
+    border-color: var(--nl3d-colors-toolbar__button-border-hover);
+}
+.toolbar__button:active {
+    border-color: var(--nl3d-colors-toolbar__button-border-hover);
+    background-color: var(--nl3d-colors-toolbar__button-bg-active);
+}

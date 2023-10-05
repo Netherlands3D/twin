@@ -1,0 +1,17 @@
+.inspector {
+    background-color: white;
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--nl3d-metrics-inspector-offsetx);
+    width: var(--nl3d-metrics-inspector-width);
+    transition-property: left;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-out-cubic;
+}
+
+.inspector--open {
+    left: 0;
+}
