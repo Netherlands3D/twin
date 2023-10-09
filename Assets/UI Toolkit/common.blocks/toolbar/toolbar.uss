@@ -57,6 +57,20 @@
     background-color: var(--nl3d-colors-toolbar__button-bg-active);
 }
 
+.toolbar__button--active {
+    border-color: var(--nl3d-colors-toolbar__button-border-hover);
+    background-color: var(--nl3d-colors-toolbar__button-bg-active);
+}
+
+.toolbar__button .unity-radio-button__checkmark-background {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 .toolbar__button--pointer .toolbar__button-icon {
     --unity-image: var(--nl3d-icons-pointer);
 }

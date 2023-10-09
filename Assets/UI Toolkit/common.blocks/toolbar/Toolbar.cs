@@ -6,31 +6,60 @@ namespace Netherlands3D.Twin.UI
 {
     public class Toolbar : MonoBehaviour
     {
-        private const string TOOLBAR_BUTTON_SELECT_ID = "toolbar__button__select";
-        private const string TOOLBAR_BUTTON_LAYERS_ID = "toolbar__button__layers";
+        public UnityEvent<string> onActivateTool = new();
+        public UnityEvent<string> onDeactivateTool = new();
 
-        public UnityEvent onClickedSelectButton = new();
-        public UnityEvent onClickedLayersButton = new();
+        private RadioButton activeSelection = null;
 
         private void OnEnable()
         {
             var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
             rootVisualElement
-                .Q<VisualElement>(TOOLBAR_BUTTON_SELECT_ID)
-                .RegisterCallback<ClickEvent>(InvokeSelectButtonEvent);
-            rootVisualElement
-                .Q<VisualElement>(TOOLBAR_BUTTON_LAYERS_ID)
-                .RegisterCallback<ClickEvent>(InvokeLayersButtonEvent);
+                .Query<VisualElement>(classes:"toolbar__button").ToList().ForEach(element =>
+                {
+                    element.RegisterCallback<ClickEvent>(ClickRadioButton);
+                    element.RegisterCallback<ChangeEvent<bool>>(ChangeRadioButton);
+                });
         }
 
-        private void InvokeSelectButtonEvent(ClickEvent evt)
+        private void ClickRadioButton(ClickEvent evt)
         {
-            onClickedSelectButton.Invoke();
+            var clickedRadioButton = evt.target as RadioButton;
+            ToggleRadioButton(clickedRadioButton);
         }
 
-        private void InvokeLayersButtonEvent(ClickEvent evt)
+        private void ChangeRadioButton(ChangeEvent<bool> evt)
         {
-            onClickedLayersButton.Invoke();
+            var radioButton = evt.target as RadioButton;
+            if (radioButton == null) return;
+            if (evt.previousValue == evt.newValue) return;
+
+            var key = radioButton.viewDataKey;
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError("The tool button you just toggled does not have its ViewDataKey set");
+            }
+
+            radioButton.EnableInClassList("toolbar__button--active", evt.newValue);
+            if (evt.newValue)
+            {
+                onActivateTool.Invoke(key);
+            }
+            else
+            {
+                onDeactivateTool.Invoke(key);
+            }
+        }
+
+        private void ToggleRadioButton(RadioButton clickedRadioButton)
+        {
+            activeSelection = activeSelection == clickedRadioButton ? null : clickedRadioButton;
+            
+            // Uncheck the radiobutton if we click on it again
+            if (activeSelection == null)
+            {
+                clickedRadioButton.value = false;
+            }
         }
     }
 }
