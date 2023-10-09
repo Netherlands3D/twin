@@ -1,7 +1,9 @@
 .toolbar {
     width: var(--nl3d-metrics-toolbar-width);
     align-items: flex-start;
+    padding: 0;
     padding-left: 10px;
+    margin: 0;
 }
 
 .toolbar__bg {
@@ -25,24 +27,12 @@
 .toolbar__button {
     width: var(--nl3d-metrics-toolbar__button-size);
     height: var(--nl3d-metrics-toolbar__button-size);
-    margin-top: var(--nl3d-metrics-spacing-2);
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: var(--nl3d-colors-toolbar__button-image-space);
-    padding-right: var(--nl3d-colors-toolbar__button-image-space);
-    padding-bottom: var(--nl3d-colors-toolbar__button-image-space);
-    padding-left: var(--nl3d-colors-toolbar__button-image-space);
+    margin: var(--nl3d-metrics-spacing-2) 0 0;
+    padding: var(--nl3d-colors-toolbar__button-image-space);
     background-color: var(--nl3d-colors-toolbar__button-bg);
     border-color: var(--nl3d-colors-toolbar__button-border);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-left-radius: var(--nl3d-metrics-rounded-lg);
-    border-top-right-radius: var(--nl3d-metrics-rounded-lg);
-    border-bottom-right-radius: var(--nl3d-metrics-rounded-lg);
-    border-bottom-left-radius: var(--nl3d-metrics-rounded-lg);
+    border-width: 1px;
+    border-radius: var(--nl3d-metrics-rounded-lg);
     transition-property: border-color, background-color;
     transition-duration: 0.3s, 0.1s;
     transition-timing-function: ease-in-out, ease-in-out;
