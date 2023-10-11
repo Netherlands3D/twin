@@ -5209,22 +5209,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.31082806
+      value: -0.03342484
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.069441125
+      value: -0.009244833
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.92512053
+      value: 0.9632338
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.2066783
+      value: -0.26641673
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6815,6 +6815,7 @@ GameObject:
   - component: {fileID: 1585920529}
   - component: {fileID: 1585920528}
   - component: {fileID: 1585920530}
+  - component: {fileID: 1585920531}
   m_Layer: 0
   m_Name: UIDocument
   m_TagString: Untagged
@@ -6872,7 +6873,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1585920529}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
         m_MethodName: Open
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6887,7 +6888,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1585920529}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
         m_MethodName: Close
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6908,6 +6909,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434b9882688234547ab2c6d021e595df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  director: {fileID: 1585920531}
+  openingSequence: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
+  closingSequence: {fileID: 11400000, guid: bb70b307eec8db8408cef7249310ef96, type: 2}
 --- !u!114 &1585920530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6920,6 +6924,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd3f0c60922f1b4a9ed734b4a78d8e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!320 &1585920531
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585920525}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 0
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []
 --- !u!1001 &1585974257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11140,7 +11161,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998993892471948}
   m_HandleRect: {fileID: 4484998993892471949}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -11716,8 +11737,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998994330860989}
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

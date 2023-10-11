@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.UI
@@ -6,59 +7,37 @@ namespace Netherlands3D.Twin.UI
     [RequireComponent(typeof(UIDocument))]
     public class Inspector : MonoBehaviour
     {
-        private const string INSPECTOR_ID = "inspector";
-        private const string TOOLBAR_ID = "toolbar";
-
-        private bool opening = false;
-        private bool closing = false;
+        [SerializeField] private PlayableDirector director;
+        [SerializeField] private PlayableAsset openingSequence;
+        [SerializeField] private PlayableAsset closingSequence;
         
-        private VisualElement rootVisualElement;
-        private VisualElement inspector;
-        private VisualElement toolbar;
+        /// <summary>
+        /// Cache for which tool the sidebar is opened, this is used in the Open behaviour to close the
+        /// sidebar before reopening it if a prior tool was opened and the tool differs from the new one.
+        /// </summary>
+        private string openedForTool = null;
 
-        private void OnEnable()
+        public void Open(string tool)
         {
-            rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
-            inspector = rootVisualElement.Q<VisualElement>(INSPECTOR_ID);
-            toolbar = rootVisualElement.Q<VisualElement>(TOOLBAR_ID);
+            if (
+                string.IsNullOrEmpty(openedForTool) == false 
+                && string.Equals(tool, openedForTool) == false
+            ) {
+                Close(openedForTool);
+            }
+
+            openedForTool = tool;
+            director.playableAsset = openingSequence;
+            director.Play();
+        }
+
+        public void Close(string tool)
+        {
+            if (string.Equals(tool, openedForTool) == false) return;
             
-            // Our animation is a two-step process, thus:
-
-            // When opening, the toolbar needs to slide in and after that the sidebar .. 
-            toolbar.RegisterCallback<TransitionEndEvent>(BeginOpeningOfInspector);
-
-            // .. but when closing the sidebar needs to slide in first and after that the toolbar 
-            inspector.RegisterCallback<TransitionEndEvent>(BeginClosingOfToolbar);
-        }
-
-        private void BeginOpeningOfInspector(TransitionEndEvent evt)
-        {
-            if (!opening) return;
-
-            inspector.AddToClassList("inspector--open");
-            opening = false;
-        }
-
-        private void BeginClosingOfToolbar(TransitionEndEvent evt)
-        {
-            if (!closing) return;
-
-            toolbar.RemoveFromClassList("toolbar--open");
-            closing = false;
-        }
-
-        public void Open()
-        {
-            // Open toolbar first
-            opening = true;
-            toolbar.AddToClassList("toolbar--open");
-        }
-
-        public void Close()
-        {
-            // Close sidebar as the first element
-            closing = true;
-            inspector.RemoveFromClassList("inspector--open");
+            director.playableAsset = closingSequence;
+            director.Play();
+            openedForTool = null;
         }
     }
 }

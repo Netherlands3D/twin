@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -14,52 +15,67 @@ namespace Netherlands3D.Twin.UI
         private void OnEnable()
         {
             var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
-            rootVisualElement
-                .Query<VisualElement>(classes:"toolbar__button").ToList().ForEach(element =>
+            List<RadioButton> radioButtons = rootVisualElement
+                .Query<VisualElement>(classes:"toolbar__button")
+                .OfType<RadioButton>()
+                .ToList();
+
+            radioButtons
+                .ForEach(element =>
                 {
-                    element.RegisterCallback<ClickEvent>(ClickRadioButton);
-                    element.RegisterCallback<ChangeEvent<bool>>(ChangeRadioButton);
+                    element.RegisterCallback<ClickEvent>(ToggleRadioButton);
+                    element.RegisterValueChangedCallback(OnRadioButtonChanged);
                 });
         }
 
-        private void ClickRadioButton(ClickEvent evt)
+        private void ToggleRadioButton(ClickEvent evt)
         {
-            var clickedRadioButton = evt.target as RadioButton;
-            ToggleRadioButton(clickedRadioButton);
-        }
-
-        private void ChangeRadioButton(ChangeEvent<bool> evt)
-        {
-            var radioButton = evt.target as RadioButton;
-            if (radioButton == null) return;
-            if (evt.previousValue == evt.newValue) return;
-
-            var key = radioButton.viewDataKey;
-            if (string.IsNullOrEmpty(key))
-            {
-                Debug.LogError("The tool button you just toggled does not have its ViewDataKey set");
-            }
-
-            radioButton.EnableInClassList("toolbar__button--active", evt.newValue);
-            if (evt.newValue)
-            {
-                onActivateTool.Invoke(key);
-            }
-            else
-            {
-                onDeactivateTool.Invoke(key);
-            }
+            ToggleRadioButton(evt.target as RadioButton);
         }
 
         private void ToggleRadioButton(RadioButton clickedRadioButton)
         {
             activeSelection = activeSelection == clickedRadioButton ? null : clickedRadioButton;
             
-            // Uncheck the radiobutton if we click on it again
+            // Uncheck the radiobutton if we click on the same one a second time
             if (activeSelection == null)
             {
                 clickedRadioButton.value = false;
             }
+        }
+
+        private void OnRadioButtonChanged(ChangeEvent<bool> evt)
+        {
+            var radioButton = evt.target as RadioButton;
+            if (radioButton == null) return;
+            if (evt.previousValue == evt.newValue) return;
+
+            var toolIdentifier = ExtractToolIdentifierFromRadioButton(radioButton);
+
+            radioButton.EnableInClassList("toolbar__button--active", evt.newValue);
+            switch (evt.newValue)
+            {
+                case true: onActivateTool.Invoke(toolIdentifier); break;
+                default: onDeactivateTool.Invoke(toolIdentifier); break;
+            }
+        }
+
+        private static string ExtractToolIdentifierFromRadioButton(RadioButton radioButton)
+        {
+            // If it is a template, the parent may contain the correct view data key
+            var toolIdentifier = string.IsNullOrEmpty(radioButton.viewDataKey) == false
+                ? radioButton.viewDataKey
+                : radioButton.parent.viewDataKey;
+
+            if (string.IsNullOrEmpty(toolIdentifier))
+            {
+                Debug.LogError(
+                    "The tool button you just toggled does not have its ViewDataKey set, we expect a code that "
+                    + "signals which tool is associated with this button"
+                );
+            }
+
+            return toolIdentifier;
         }
     }
 }
