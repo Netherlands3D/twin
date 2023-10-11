@@ -37,11 +37,7 @@
             "m_Id": "a37aee4abde04aa2940791e9743689cc"
         }
     ],
-    "m_GroupDatas": [
-        {
-            "m_Id": "4e53bc526d134e949bcc727aa11fae49"
-        }
-    ],
+    "m_GroupDatas": [],
     "m_StickyNoteDatas": [],
     "m_Edges": [
         {
@@ -165,7 +161,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SubGraphOutputNode",
     "m_ObjectId": "47dad44e2a22437397cb4d8d4b1b45d4",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "Output",
     "m_DrawState": {
@@ -192,17 +188,6 @@
         "m_SerializableColors": []
     },
     "IsFirstSlotValid": true
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.GroupData",
-    "m_ObjectId": "4e53bc526d134e949bcc727aa11fae49",
-    "m_Title": "SphereMask",
-    "m_Position": {
-        "x": -1128.6666259765625,
-        "y": -72.0
-    }
 }
 
 {
@@ -235,7 +220,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "65e6408748ad486cbcb4625f3579556c",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -295,7 +280,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SphereMaskNode",
     "m_ObjectId": "731e2b9acc8d44c6b7112f9d18baa22f",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "Sphere Mask",
     "m_DrawState": {
@@ -412,7 +397,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "a37aee4abde04aa2940791e9743689cc",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -448,16 +433,16 @@
     "m_Type": "UnityEditor.ShaderGraph.PositionNode",
     "m_ObjectId": "ace091c18bd94d75924b7494f0e7a195",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "Position",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -927.0,
-            "y": -294.0,
-            "width": 207.99993896484376,
+            "x": -1046.0,
+            "y": -280.0,
+            "width": 208.0,
             "height": 315.0
         }
     },
@@ -599,7 +584,7 @@
     "m_Type": "UnityEditor.ShaderGraph.OneMinusNode",
     "m_ObjectId": "e9a5354073244b42be1d1914703ed4f1",
     "m_Group": {
-        "m_Id": "4e53bc526d134e949bcc727aa11fae49"
+        "m_Id": ""
     },
     "m_Name": "One Minus",
     "m_DrawState": {
