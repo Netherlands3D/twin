@@ -36,12 +36,26 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private string path;
 
+        private void OnEnable()
+        {
+            GeometryColorizer.ColorsChanged.AddListener(PrintColorChanges);
+        }
+
+        private void PrintColorChanges(Dictionary<string, Color> changedColors)
+        {
+            print("frame: " + Time.frameCount);
+            foreach (var kvp in changedColors)
+            {
+                print(kvp.Key + "\t" + kvp.Value);
+            }
+        }
+
         private void Start()
         {
             StartCoroutine(StreamReadCSV(2));
         }
 
-        private IEnumerator StreamReadCSV(int maxParsesPerFrame)
+        public IEnumerator StreamReadCSV(int maxParsesPerFrame)
         {
             var dictionaries = ReadCSVColors(path, maxParsesPerFrame).GetEnumerator();
 
@@ -49,10 +63,7 @@ namespace Netherlands3D.Twin
             {
                 // print("frame: " + Time.frameCount);
                 var dictionary = dictionaries.Current;
-                foreach (var kvp in dictionary)
-                {
-                    print(kvp.Key + "\t" + kvp.Value);
-                }
+                GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
 
                 yield return null;
             }
