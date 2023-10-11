@@ -1,32 +1,103 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using netDxf.Entities;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
+    public class ColorSetLayer
+    {
+        public int PriorityIndex { get; set; }
+        public Dictionary<string, Color> ColorSet { get; set; }
+        public bool Enabled { get; set; } = true;
+
+        public ColorSetLayer(int priorityIndex, Dictionary<string, Color> colorSet)
+        {
+            PriorityIndex = priorityIndex;
+            ColorSet = colorSet;
+        }
+    }
+
+    public enum IndexCollisionAction
+    {
+        Increment,
+        Swap,
+    }
+
     public static class GeometryColorizer
     {
         public static Dictionary<string, Color> PrioritizedColors { get; private set; } = new();
-        private static Dictionary<int, Dictionary<string, Color>> customColors = new();
-        
+        private static List<ColorSetLayer> customColors = new();
+
         public static UnityEvent<Dictionary<string, Color>> ColorsChanged = new();
 
-        //positive number priority is the layer order, negative numbers are reserved for the system to override user settings
+        public static void ReorderColorSet(int oldIndex, int newIndex, IndexCollisionAction collisionAction)
+        {
+            ColorSetLayer oldLayer = customColors[oldIndex];
+
+            ColorSetLayer newLayer = null;
+            if (newIndex >= customColors.Count)
+            {
+                customColors.Add(oldLayer);
+                customColors.RemoveAt(oldIndex);
+                RecalculatePrioritizedColors();
+                return;
+            }
+
+            newLayer = customColors[newIndex];
+
+            switch (collisionAction)
+            {
+                case IndexCollisionAction.Increment:
+                    InsertCustomColorSet(oldLayer.PriorityIndex, oldLayer.ColorSet);
+                    break;
+                case IndexCollisionAction.Swap:
+                    int oldPriorityIndex = oldLayer.PriorityIndex;
+                    int newPriorityIndex = newLayer.PriorityIndex;
+                    oldLayer.PriorityIndex = newPriorityIndex;
+                    newLayer.PriorityIndex = oldPriorityIndex;
+                    break;
+            }
+
+            RecalculatePrioritizedColors();
+        }
+
+        public static void InsertCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
+        {
+            IncrementPriorityIndices(priorityIndex);
+            AddAndMergeCustomColorSet(priorityIndex, colorSet);
+        }
+
+        private static void IncrementPriorityIndices(int fromPriorityIndex)
+        {
+            ColorSetLayer activeLayer = customColors.FirstOrDefault(l => l.PriorityIndex == fromPriorityIndex);
+            while (activeLayer != null)
+            {
+                fromPriorityIndex++;
+                var nextLayer = customColors.FirstOrDefault(l => l.PriorityIndex == fromPriorityIndex); //get next layer before changing current layer to avoid getting it again in the next loop iteration
+
+                activeLayer.PriorityIndex++;
+                activeLayer = nextLayer;
+            }
+        }
+
         public static void AddAndMergeCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
         {
-            if (customColors.ContainsKey(priorityIndex))
+            if (customColors.FirstOrDefault(l => l.PriorityIndex == priorityIndex) != null)
             {
-                var dict = customColors[priorityIndex];
+                var colorSetLayer = customColors[priorityIndex];
                 foreach (var kvp in colorSet)
                 {
-                    dict[kvp.Key] = kvp.Value;
+                    colorSetLayer.ColorSet[kvp.Key] = kvp.Value;
                 }
             }
             else
             {
-                customColors.Add(priorityIndex, colorSet);
+                var newLayer = new ColorSetLayer(priorityIndex, colorSet);
+                customColors.Add(newLayer);
             }
 
             RecalculatePrioritizedColors();
@@ -47,47 +118,38 @@ namespace Netherlands3D.Twin
             ColorsChanged.Invoke(changedColors);
         }
 
-        public static void RemoveCustomColorSet(int priorityIndex)
+        public static void RemoveCustomColorSet(int layerIndex)
         {
-            var changedColors = new Dictionary<string, Color>(customColors[priorityIndex]);
-            customColors.Remove(priorityIndex);
+            var colorSetLayer = customColors[layerIndex];
+
+            var changedColors = new Dictionary<string, Color>(colorSetLayer.ColorSet);
+            customColors.RemoveAt(layerIndex);
             RecalculatePrioritizedColors();
 
             CalculateChangedColors(changedColors);
         }
 
-        private static void RecalculatePriorities()
+        private static void ReorderColorMaps()
         {
-            var keys = new List<int>();
-            foreach (var colorSet in customColors)
-            {
-                keys.Add(colorSet.Key);
-            }
-
-            keys.Sort();
-            var newCollection = new Dictionary<int, Dictionary<string, Color>>();
-            for (var i = 0; i < keys.Count; i++)
-            {
-                var key = keys[i];
-                newCollection[i] = customColors[key];
-            }
-
-            customColors = newCollection;
+            customColors = customColors.OrderBy(layer => layer.PriorityIndex).ToList();
         }
 
         public static int GetLowestPriorityIndex()
         {
-            return customColors.Count;
+            return customColors.Max(l => l.PriorityIndex);
         }
 
         public static void RecalculatePrioritizedColors()
         {
-            RecalculatePriorities();
+            ReorderColorMaps();
             PrioritizedColors = new Dictionary<string, Color>();
             for (var i = customColors.Count - 1; i >= 0; i--)
             {
-                var dict = customColors[i];
-                foreach (var kvp in dict)
+                var layer = customColors[i];
+                if(!layer.Enabled)
+                    continue;
+                
+                foreach (var kvp in layer.ColorSet)
                 {
                     PrioritizedColors[kvp.Key] = kvp.Value;
                 }
