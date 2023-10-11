@@ -42,9 +42,6 @@
             "m_Id": "42f6d847b3f54dd291b2702704a42c0f"
         },
         {
-            "m_Id": "2ac5ce6bac9642e09380311ee27eab20"
-        },
-        {
             "m_Id": "c302a7a66fe84616aa30ecca58cd91fe"
         }
     ],
@@ -1409,31 +1406,6 @@
 }
 
 {
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
-    "m_ObjectId": "2ac5ce6bac9642e09380311ee27eab20",
-    "m_Guid": {
-        "m_GuidSerialized": "5c6db494-dab2-45aa-a5ae-35ad6f4785a7"
-    },
-    "m_Name": "WordSpaceTiling",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "WordSpaceTiling",
-    "m_DefaultReferenceName": "_WORDSPACETILING",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_KeywordType": 0,
-    "m_KeywordDefinition": 0,
-    "m_KeywordScope": 0,
-    "m_KeywordStages": 63,
-    "m_Entries": [],
-    "m_Value": 0,
-    "m_IsEditable": true
-}
-
-{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BooleanMaterialSlot",
     "m_ObjectId": "2c7370841cce4808a852e7d351cdab73",
@@ -1575,7 +1547,7 @@
     "m_Hidden": false,
     "m_Value": {
         "r": 0.0,
-        "g": 0.003921568859368563,
+        "g": 1.0,
         "b": 0.0,
         "a": 0.0
     },
@@ -4954,10 +4926,10 @@
             "m_Id": "a1dd6d6c9af54773864efabea23906bb"
         },
         {
-            "m_Id": "4a60c799f41246bca2c98351e5479a2b"
+            "m_Id": "c302a7a66fe84616aa30ecca58cd91fe"
         },
         {
-            "m_Id": "c302a7a66fe84616aa30ecca58cd91fe"
+            "m_Id": "4a60c799f41246bca2c98351e5479a2b"
         },
         {
             "m_Id": "eaaa022ee41d47208fe0f8dd78045b81"
@@ -4966,10 +4938,16 @@
             "m_Id": "d1924584f9b0482f9cd23546000465b5"
         },
         {
-            "m_Id": "2ac5ce6bac9642e09380311ee27eab20"
+            "m_Id": "6a48ebf448bd4a058ff9d792948cdcbd"
         },
         {
-            "m_Id": "6a48ebf448bd4a058ff9d792948cdcbd"
+            "m_Id": "ac7727db50f540098b2d34a79a0e5e74"
+        },
+        {
+            "m_Id": "23f1de4258bc43b9aadc9953bfba8a70"
+        },
+        {
+            "m_Id": "2fb36bc82f434e18a18c578ded943f6d"
         },
         {
             "m_Id": "42f6d847b3f54dd291b2702704a42c0f"
@@ -4979,15 +4957,6 @@
         },
         {
             "m_Id": "a248442c824848d8850d132b50da5793"
-        },
-        {
-            "m_Id": "23f1de4258bc43b9aadc9953bfba8a70"
-        },
-        {
-            "m_Id": "ac7727db50f540098b2d34a79a0e5e74"
-        },
-        {
-            "m_Id": "2fb36bc82f434e18a18c578ded943f6d"
         }
     ]
 }
