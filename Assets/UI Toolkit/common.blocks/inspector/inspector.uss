@@ -10,6 +10,10 @@
     transition-property: left;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out-back;
+    padding-left: var(--nl3d-metrics-inspector-padding-with-toolbar);
+    padding-right: var(--nl3d-metrics-inspector-padding);
+    padding-top: var(--nl3d-metrics-inspector-padding);
+    padding-bottom: var(--nl3d-metrics-inspector-padding);
 }
 
 .inspector--open {
