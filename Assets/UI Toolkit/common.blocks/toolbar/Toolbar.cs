@@ -7,7 +7,9 @@ namespace Netherlands3D.Twin.UI
 {
     public class Toolbar : MonoBehaviour
     {
+        [SerializeField] private string toolbarName = "toolbar";
         [SerializeField] private List<Tool> tools = new();
+        [SerializeField] private VisualTreeAsset toolButtonAsset;
         public UnityEvent<Tool> onActivateTool = new();
         public UnityEvent<Tool> onDeactivateTool = new();
 
@@ -16,17 +18,17 @@ namespace Netherlands3D.Twin.UI
         private void OnEnable()
         {
             var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
-            List<RadioButton> radioButtons = rootVisualElement
-                .Query<VisualElement>(classes:"toolbar__button")
-                .OfType<RadioButton>()
-                .ToList();
-
-            radioButtons
-                .ForEach(element =>
-                {
-                    element.RegisterCallback<ClickEvent>(ToggleRadioButton);
-                    element.RegisterValueChangedCallback(OnRadioButtonChanged);
-                });
+            var toolbar = rootVisualElement.Q(name: toolbarName);
+            foreach (var tool in tools)
+            {
+                var toolButton = toolButtonAsset.Instantiate();
+                toolButton.AddToClassList("toolbar__button--" + tool.icon);
+                toolButton.viewDataKey = tool.code;
+                var toolButtonRadioButton = toolButton.Q<RadioButton>();
+                toolButtonRadioButton.RegisterCallback<ClickEvent>(ToggleRadioButton);
+                toolButtonRadioButton.RegisterValueChangedCallback(OnRadioButtonChanged);
+                toolbar.Q<GroupBox>().Add(toolButton);
+            }
         }
 
         private void ToggleRadioButton(ClickEvent evt)

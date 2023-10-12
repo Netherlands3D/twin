@@ -5209,22 +5209,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.30132657
+      value: -0.12537849
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.065563194
+      value: -0.033130176
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9295162
+      value: 0.95865214
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.20224586
+      value: -0.2533155
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6867,9 +6867,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c8cdc91fc9a74b4a9800e55db31f2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toolbarName: toolbar
   tools:
   - {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
   - {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  - {fileID: 11400000, guid: 6be0791bb9f9629428cfcb18acb82218, type: 2}
+  toolButtonAsset: {fileID: 9197481963319205126, guid: 344f4a84d29e1224bad3a64be3d054f0,
+    type: 3}
   onActivateTool:
     m_PersistentCalls:
       m_Calls:
