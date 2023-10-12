@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UIKit.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="toolbar__button" src="project://database/Assets/UI%20Toolkit/common.blocks/toolbar/toolbar__button.uxml?fileID=9197481963319205126&amp;guid=344f4a84d29e1224bad3a64be3d054f0&amp;type=3#toolbar__button" />
+    <ui:GroupBox name="toolbar" class="toolbar">
+        <nl3d:Shadow class="toolbar__bg">
+        <ui:VisualElement name="toolbar__bg" class="toolbar__bg-fill"/>
+        </nl3d:Shadow>
+        <ui:Instance template="toolbar__button" name="toolbar__button__select" view-data-key="select" class="toolbar__button--pointer" />
+        <ui:Instance template="toolbar__button" name="toolbar__button__layers" view-data-key="layers" class="toolbar__button--layers" />
+    </ui:GroupBox>
+</ui:UXML>

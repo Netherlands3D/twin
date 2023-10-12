@@ -1,13 +1,15 @@
 :root {
-    --nl3d-metrics-toolbar-offsetx: -96px; /* 66px width + 20px overlap for the bounce effect + 10px to prevent leaking into view */
-    --nl3d-metrics-toolbar-width: 86px; /* 66px width + 20px overlap for the bounce effect */
-    --nl3d-metrics-toolbar-overlap: -20px; /* 66px width + 20px overlap for the bounce effect */
-    --nl3d-metrics-toolbar__button-size: 46px;
+    --nl3d-metrics-toolbar-offsetx: -98px; /* 68px width + 20px overlap for the bounce effect + 10px to prevent leaking into view */
+    --nl3d-metrics-toolbar-width: 88px; /* 68px width + 20px overlap for the bounce effect */
+    --nl3d-metrics-toolbar-overlap: -20px; /* 68px width + 20px overlap for the bounce effect */
+    --nl3d-metrics-toolbar__button-size: var(--nl3d-metrics-spacing-12);
 
     --nl3d-colors-toolbar-bg: var(--nl3d-colors-blue-100);
     --nl3d-colors-toolbar__button-image-space: var(--nl3d-metrics-spacing-2);
-    --nl3d-colors-toolbar__button-border: var(--nl3d-colors-white);
-    --nl3d-colors-toolbar__button-border-hover: var(--nl3d-colors-blue-700);
+    --nl3d-colors-toolbar__button-border: var(--nl3d-colors-blue-200);
+    --nl3d-colors-toolbar__button-border--hover: var(--nl3d-colors-blue-300);
     --nl3d-colors-toolbar__button-bg: var(--nl3d-colors-white);
-    --nl3d-colors-toolbar__button-bg-active: var(--nl3d-colors-blue-700);
+    --nl3d-colors-toolbar__button-bg--active: var(--nl3d-colors-blue-300);
+    --nl3d-colors-toolbar__button-icon: var(--nl3d-colors-blue-900);
+    --nl3d-colors-toolbar__button-icon--active: var(--nl3d-colors-white);
 }

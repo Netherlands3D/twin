@@ -24,3 +24,7 @@ where we use `nl3d` as prefix:
 ```
 --nl3d-{group}-{role_and_control}-{sub_element}-{pseudo_state_sequence}
 ```
+
+Applying the BEM naming conventions also means that a selector within a subfolder of the `common.blocks` folder always
+starts with the name of that block. Thus if there is a folder `common.blocks/inspector` then you know this is all about
+the `inspector` block, and each selector in the USS files starts at least with `inspector`.

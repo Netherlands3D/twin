@@ -8,8 +8,8 @@
     left: var(--nl3d-metrics-inspector-offsetx);
     width: var(--nl3d-metrics-inspector-width);
     transition-property: left;
-    transition-duration: 0.4s;
-    transition-timing-function: ease-out-back;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out-back;
 }
 
 .inspector--open {

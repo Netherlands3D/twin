@@ -5209,22 +5209,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.03342484
+      value: 0.41891882
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.009244833
+      value: 0.068008445
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9632338
+      value: 0.8937722
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.26641673
+      value: -0.14509746
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6867,12 +6867,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c8cdc91fc9a74b4a9800e55db31f2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tools:
+  - {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
+  - {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
   onActivateTool:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1585920529}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
-        m_MethodName: Open
+        m_MethodName: Load
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6887,7 +6890,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1585920529}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
-        m_MethodName: Close
+        m_MethodName: Unload
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6912,6 +6915,7 @@ MonoBehaviour:
   director: {fileID: 1585920531}
   openingSequence: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
   closingSequence: {fileID: 11400000, guid: bb70b307eec8db8408cef7249310ef96, type: 2}
+  switchDelayInSeconds: 0.5
 --- !u!114 &1585920530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11737,7 +11741,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4484998994330860989}
   m_HandleRect: {fileID: 4484998994330860990}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

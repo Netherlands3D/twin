@@ -7,8 +7,9 @@ namespace Netherlands3D.Twin.UI
 {
     public class Toolbar : MonoBehaviour
     {
-        public UnityEvent<string> onActivateTool = new();
-        public UnityEvent<string> onDeactivateTool = new();
+        [SerializeField] private List<Tool> tools = new();
+        public UnityEvent<Tool> onActivateTool = new();
+        public UnityEvent<Tool> onDeactivateTool = new();
 
         private RadioButton activeSelection = null;
 
@@ -50,17 +51,24 @@ namespace Netherlands3D.Twin.UI
             if (radioButton == null) return;
             if (evt.previousValue == evt.newValue) return;
 
-            var toolIdentifier = ExtractToolIdentifierFromRadioButton(radioButton);
+            var tool = ExtractToolFromRadioButton(radioButton);
 
             radioButton.EnableInClassList("toolbar__button--active", evt.newValue);
+            
             switch (evt.newValue)
             {
-                case true: onActivateTool.Invoke(toolIdentifier); break;
-                default: onDeactivateTool.Invoke(toolIdentifier); break;
+                case true: 
+                    onActivateTool.Invoke(tool);
+                    tool.Activate(); 
+                    break;
+                default:
+                    onDeactivateTool.Invoke(tool);
+                    tool.Deactivate();
+                    break;
             }
         }
 
-        private static string ExtractToolIdentifierFromRadioButton(RadioButton radioButton)
+        private Tool ExtractToolFromRadioButton(RadioButton radioButton)
         {
             // If it is a template, the parent may contain the correct view data key
             var toolIdentifier = string.IsNullOrEmpty(radioButton.viewDataKey) == false
@@ -75,7 +83,7 @@ namespace Netherlands3D.Twin.UI
                 );
             }
 
-            return toolIdentifier;
+            return tools.Find(tool => string.Equals(tool.code, toolIdentifier));
         }
     }
 }
