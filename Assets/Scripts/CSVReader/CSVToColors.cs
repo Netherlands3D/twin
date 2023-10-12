@@ -10,6 +10,7 @@ using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using Netherlands3D.Twin;
 using UnityEngine;
+using Netherlands3D.ObjectColoring;
 
 namespace Netherlands3D.Twin
 {
