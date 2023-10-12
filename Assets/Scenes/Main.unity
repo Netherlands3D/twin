@@ -5209,22 +5209,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.12537849
+      value: -0.4851908
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.033130176
+      value: -0.05852254
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.95865214
+      value: 0.8661697
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.2533155
+      value: -0.1044753
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -6916,6 +6916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434b9882688234547ab2c6d021e595df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inspectorClass: inspector
   director: {fileID: 1585920531}
   openingSequence: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
   closingSequence: {fileID: 11400000, guid: bb70b307eec8db8408cef7249310ef96, type: 2}

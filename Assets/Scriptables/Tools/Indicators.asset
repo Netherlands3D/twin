@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
-  m_Name: Panel
+  m_Name: Indicators
   m_EditorClassIdentifier: 
   code: panel
   icon: layers
@@ -20,5 +20,5 @@ MonoBehaviour:
   onDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  inspector: {fileID: 9197481963319205126, guid: 344f4a84d29e1224bad3a64be3d054f0,
+  inspector: {fileID: 9197481963319205126, guid: 80e859df95ebdd3469e318fdeabc0ec1,
     type: 3}

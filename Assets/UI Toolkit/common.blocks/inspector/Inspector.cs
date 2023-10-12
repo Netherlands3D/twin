@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.UI
     [RequireComponent(typeof(UIDocument))]
     public class Inspector : MonoBehaviour
     {
+        [SerializeField] private string inspectorClass = "inspector";
         [SerializeField] private PlayableDirector director;
         [SerializeField] private PlayableAsset openingSequence;
         [SerializeField] private PlayableAsset closingSequence;
@@ -18,6 +19,14 @@ namespace Netherlands3D.Twin.UI
         /// sidebar before reopening it if a prior tool was opened and the tool differs from the new one.
         /// </summary>
         private string openedForTool = null;
+
+        private VisualElement inspector;
+
+        private void OnEnable()
+        {
+            var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
+            inspector = rootVisualElement.Q(classes: inspectorClass);
+        }
 
         public void Load(Tool tool)
         {
@@ -37,9 +46,10 @@ namespace Netherlands3D.Twin.UI
                 yield return new WaitForSeconds(switchDelayInSeconds);
             }
 
+            inspector.Clear();
             if (tool.UsesInspector == false) yield break;
 
-            // TODO: Load inspector contents from tool reference
+            inspector.Add(tool.Inspector.Instantiate());
             
             openedForTool = tool.code;
             director.playableAsset = openingSequence;

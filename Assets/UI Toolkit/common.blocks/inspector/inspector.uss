@@ -1,6 +1,6 @@
 .inspector {
     background-color: var(--nl3d-colors-white);
-    flex-grow: 0;
+    flex-grow: 1;
     flex-shrink: 0;
     position: absolute;
     top: 0;
