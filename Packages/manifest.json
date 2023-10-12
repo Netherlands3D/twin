@@ -12,7 +12,7 @@
     "com.unity.timeline": "1.7.5",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.0",
-    "dev.krajnc.uitoolkittimeline": "git@github.com:mihakrajnc/UITTimeline.git",
+    "dev.krajnc.uitoolkittimeline": "https://github.com/mihakrajnc/UITTimeline.git",
     "eu.netherlands3d.obj-importer": "1.0.0",
     "eu.netherlands3d.transform-handles": "1.0.0",
     "nl.netherlands3d": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",

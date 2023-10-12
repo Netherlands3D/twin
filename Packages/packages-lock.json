@@ -195,7 +195,7 @@
       "url": "https://package.openupm.com"
     },
     "dev.krajnc.uitoolkittimeline": {
-      "version": "git@github.com:mihakrajnc/UITTimeline.git",
+      "version": "https://github.com/mihakrajnc/UITTimeline.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
