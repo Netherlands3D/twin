@@ -3031,7 +3031,7 @@
     "m_Group": {
         "m_Id": "6c25db0c3d0f410fa4bdbe1a7db0fea5"
     },
-    "m_Name": "WorldSpaceTextureTiling",
+    "m_Name": "Twin_WorldSpaceTextureTiling",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -3329,7 +3329,7 @@
     "m_Group": {
         "m_Id": "6c25db0c3d0f410fa4bdbe1a7db0fea5"
     },
-    "m_Name": "WorldSpaceTextureTiling",
+    "m_Name": "Twin_WorldSpaceTextureTiling",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -6280,7 +6280,7 @@
     "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
     "m_ObjectId": "d3da6482afc14b3dad623b837bb74abd",
     "m_Title": "Texture mapping",
-    "m_Content": "Some meshes might not have UV coordinates.\n\nThis shader texturing mode keyword allows two different flavours to deal with this:\n\nSKIP_TEXTURE = Dont use the texture at all, only main color\nUSE_WORLD_SPACE_UV = Use world space tiling over the X and Z axes\nDOUBLE_WORLD_SPACE_UV = Use world space tiling over the X and Z axes\nUSE_MESH_UV = Use the UV's from the mesh\n",
+    "m_Content": "Some meshes might not have UV coordinates.\n\nThis shader texturing mode keyword allows two different flavours to deal with this:\n\nSKIP_TEXTURE = Dont use the texture at all, only main color\nUSE_WORLD_SPACE_UV = Use world space tiling over the X and Z axes\nDOUBLE_WORLD_SPACE_UV = Use world space tiling over the X and Z axes with two textures that can have different mapping ( for close, or far range details )\nUSE_MESH_UV = Use the UV's from the mesh\n",
     "m_TextSize": 0,
     "m_Theme": 0,
     "m_Position": {
