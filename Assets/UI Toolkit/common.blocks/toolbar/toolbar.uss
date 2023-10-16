@@ -19,6 +19,7 @@
     transition-property: left;
     transition-duration: 0.3s;
     transition-timing-function: ease-out;
+    color: rgba(0, 0, 0, .75);
 }
 
 .toolbar__bg-fill {

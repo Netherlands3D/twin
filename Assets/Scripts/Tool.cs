@@ -10,10 +10,14 @@ namespace Netherlands3D.Twin
     public class Tool : ScriptableObject
     {
         public string code;
+        public string icon = "pointer";
         public UnityEvent onActivate = new();
         public UnityEvent onDeactivate = new();
         [SerializeField] private VisualTreeAsset inspector;
-        public bool UsesInspector => inspector != null;
+        
+        public VisualTreeAsset Inspector => inspector;
+        public bool UsesInspector => Inspector != null;
+
 
         public void Activate()
         {

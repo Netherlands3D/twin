@@ -1,4 +1,6 @@
 :root {
     --nl3d-metrics-inspector-offsetx: -460px;
     --nl3d-metrics-inspector-width: 450px;
+    --nl3d-metrics-inspector-padding: var(--nl3d-metrics-spacing-4);
+    --nl3d-metrics-inspector-padding-with-toolbar: 84px; /* 68px toolbar + 16px (spacing-4) for padding */
 }
