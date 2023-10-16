@@ -26,9 +26,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _SUBOBJECT_FILTERING
+  - _TEXTURINGMODE_USE_WORLD_SPACE_UV
+  m_InvalidKeywords:
   - _SUBOBJECTFILTERING
-  - _TEXTURINGMODE_SKIP_TEXTURE
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -83,6 +84,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SecondaryTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -125,26 +130,30 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SUBOBJECTFILTERING: 1
+    - _SUBOBJECT_FILTERING: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _TEXTURINGMODE: 0
+    - _TEXTURINGMODE: 1
     - _VERTEXCOLORING: 0
     - _WORDSPACETILING: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 0.5852002, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DefaultVertexColorID: {r: 0, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HighlightColor: {r: 0, g: 0.32402226, b: 1, a: 1}
+    - _HighlightColor: {r: 0, g: 0.32549024, b: 1, a: 1}
     - _HighlightVertexColorID: {r: 1, g: 0, b: 0, a: 0}
     - _OffsetMainTexture: {r: 0, g: 0, b: 0, a: 0}
+    - _OffsetSecondaryTexture: {r: 0, g: 0, b: 0, a: 0}
+    - _SecondaryHighlightColor: {r: 1, g: 0, b: 0.76776457, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TilingMainTexture: {r: 5, g: 5, b: 0, a: 0}
+    - _TilingMainTexture: {r: 8.52, g: 5, b: 0, a: 0}
+    - _TilingSecondaryTexture: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _TransparentVertexColorID: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
