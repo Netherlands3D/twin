@@ -20,8 +20,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Maskable
-  m_Shader: {fileID: -6465566751694194690, guid: 20099edbaf832aa4da13c0c6bcdb054a, type: 3}
+  m_Name: Example_Maskable
+  m_Shader: {fileID: -6465566751694194690, guid: 92e007cc582b0b249b6243aed362fc0b,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

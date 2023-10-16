@@ -24,7 +24,7 @@ Drag the dome, or click on a new position to move it around.
 
 Drag the scaling handle to resize the dome. (the initial placement scale will be based on camera distance)  
 
-Any material using the MaskableTerrain shader will be masked out by the dome. 
+Any material using the 'SphereMasking' SubGraph will be masked out by the dome. 
 
 ##### Shaders
 
@@ -34,3 +34,5 @@ If you want to customise or create your own shader the following global shader v
 - _SphericalMaskPosition (Vector3)
 
 *Using ShaderGraph, you can untick the 'Exposed' box to make a variable Global (instead of serialized in the editor)
+
+You can use the 'SphereMasking' SubGraph inside your own shader to use the premade spherical masking graph or you can create your own custom shader using the global shader variables as input.

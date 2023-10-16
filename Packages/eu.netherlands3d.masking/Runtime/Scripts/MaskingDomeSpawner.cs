@@ -16,6 +16,7 @@ namespace Netherlands3D.Masking
         [SerializeField] private float margin;
 
         [Header("Global shader settings")]
+        [SerializeField] private string sphericalMaskFeatureKeyword = "_SPHERICAL_MASKING";
         [SerializeField] private string sphericalMaskPositionName = "_SphericalMaskPosition";
         [SerializeField] private string sphericalMaskRadiusName = "_SphericalMaskRadius";
         [SerializeField] private bool resetMaskOnDisable = true;
@@ -37,6 +38,8 @@ namespace Netherlands3D.Masking
         }
 
         private void OnEnable() {
+            Shader.EnableKeyword(sphericalMaskFeatureKeyword);
+
             clickPlacementAction.action.Enable();
             clickPlacementAction.action.started += StartTap;
             clickPlacementAction.action.performed += EndTap;
@@ -46,6 +49,8 @@ namespace Netherlands3D.Masking
 
         private void OnDisable()
         {
+            Shader.DisableKeyword(sphericalMaskFeatureKeyword);
+
             // Unsubscribe and disable the click action when the script is disabled
             clickPlacementAction.action.performed -= StartTap;
             clickPlacementAction.action.Disable();
