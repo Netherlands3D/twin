@@ -44,14 +44,6 @@ jobs:
           customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
 
       # Build and publish Docker Image on main
-      - name: 'Docker: Log in to the Container registry'
-        if: github.ref_name == 'main'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 'Docker: Build and push image'
         if: github.ref_name == 'main'
         uses: docker/build-push-action@v5
@@ -62,8 +54,8 @@ jobs:
           build-args: |
             SOURCE_PATH=build/WebGL/WebGL
           tags: |
-            ${{ github.event.repository.name }}/viewer:${{ steps.buildUnity.outputs.buildVersion }}
-            ${{ github.event.repository.name }}/viewer:latest
+            ${{ GITHUB_REPOSITORY }}:${{ steps.buildUnity.outputs.buildVersion }}
+            ${{ GITHUB_REPOSITORY }}:latest
 
       # Create an artifact in the build pipeline 
       - uses: actions/upload-artifact@v2
