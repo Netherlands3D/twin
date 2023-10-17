@@ -70,23 +70,27 @@ namespace Netherlands3D.Coordinates
 
         public static Quaternion RotationToUp()
         {
-            Vector3 locationVector = new Vector3((float)-relativeCenter.X, (float)relativeCenter.Z, (float)-relativeCenter.Y);
 
-            //Compute the rotation to make the tiles point up on the world up
-            Quaternion flatRotation = Quaternion.FromToRotation(locationVector, Vector3.up);
+            //calculate lattitude and longitude for the origin
+            Vector3WGS wgslocation = ToWGS84(relativeCenter);
 
-            //A long coordinate pointing east
-            var wgs84East = Unity.ToWGS84(Vector3.zero);
-            wgs84East.lon += 0.0001;
-            var ecefEast = EPSG4326.ToECEF(wgs84East); // Use a unit vector pointing in the north direction
 
-            Vector3 northVector = new Vector3((float)-ecefEast.X, (float)ecefEast.Z, (float)-ecefEast.Y) - locationVector;
-            Quaternion northRotation = Quaternion.FromToRotation(northVector, Vector3.right);
+             
 
-            // Combine the two rotations into a single quaternion
-            Quaternion result = northRotation * flatRotation;
+
+            //rotate around the up-axis (=counterclockwise) with an angle of the lattitude
+            //rotate -90 degrees around the up-axis, to make sure east is in the X-direction;
+            Quaternion rotationToEast = Quaternion.AngleAxis( (float)wgslocation.lon - 90, Vector3.up);
+
+
+            Quaternion rotationToFlat = Quaternion.AngleAxis(90 - (float)wgslocation.lat, Vector3.right);
+            Quaternion result = rotationToFlat * rotationToEast;
 
             return result;
+
+
+
+           
         }
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)

@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.coordinates",
-  "displayName": "Netherlands 3D - Coordinates Conversion",
-  "version": "1.1.0",
+  "displayName": "Netherlands3D - Coordinates Conversion",
+  "version": "1.1.1",
   "unity": "2022.2",
   "description": "",
   "type": "library",
