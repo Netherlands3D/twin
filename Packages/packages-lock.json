@@ -194,6 +194,15 @@
       },
       "url": "https://package.openupm.com"
     },
+    "dev.krajnc.uitoolkittimeline": {
+      "version": "https://github.com/mihakrajnc/UITTimeline.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.timeline": "1.6.5"
+      },
+      "hash": "68e9114b94ba4a9123a4612d6fd6ce9fc98a7868"
+    },
     "eu.netherlands3d.address-search": {
       "version": "1.0.0",
       "depth": 1,

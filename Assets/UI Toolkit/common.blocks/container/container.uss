@@ -1,0 +1,4 @@
+.container--horizontal {
+    flex-grow: 1; 
+    flex-direction: row;
+}
