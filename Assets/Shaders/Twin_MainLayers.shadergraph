@@ -5290,7 +5290,7 @@
     "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
     "m_ObjectId": "a7c9fda778514be7802893bd0b5cfe71",
     "m_Title": "Special vertex color IDs",
-    "m_Content": "Alpha 0 has special vertex color IDS:\n\nRED (1,0,0,0) = Hghlight\nGREEN (0,1,0,0) = Secondary highlight\nBLUE (0,0,1,0) = Default material color\nBLACK (0,0,0,0) = Clip transparant ( hide ) ",
+    "m_Content": "Alpha 0 has special vertex color IDS:\n\nRED (1,0,0,0) = Highlight\nGREEN (0,1,0,0) = Secondary highlight\nBLUE (0,0,1,0) = Default material color\nBLACK (0,0,0,0) = Clip transparant ( hide ) ",
     "m_TextSize": 0,
     "m_Theme": 0,
     "m_Position": {
