@@ -66,7 +66,7 @@ jobs:
           build-args: |
             SOURCE_PATH=build/WebGL/WebGL
           tags: |
-            netherlands3d/twin:${{ steps.buildUnity.outputs.buildVersion }}
+#            netherlands3d/twin:${{ steps.buildUnity.outputs.buildVersion }}
             netherlands3d/twin:latest
 
       # Create an artifact in the build pipeline 
