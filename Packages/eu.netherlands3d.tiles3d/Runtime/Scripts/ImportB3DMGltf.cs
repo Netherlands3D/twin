@@ -63,10 +63,30 @@ namespace Netherlands3D.B3DM
                     var memoryStream = new MemoryStream(bytes);
 
                     var b3dm = B3dmReader.ReadB3dm(memoryStream);
-                    bytes = b3dm.GlbData;
 
                     //Optional RTC_CENTER from b3DM header
                     rtcCenter = GetRTCCenter(rtcCenter, b3dm);
+
+                    var batchJson = b3dm.BatchTableJson;
+                    Debug.Log("batchJson " + batchJson);
+                    
+                    var featureJson = b3dm.FeatureTableJson;
+                    Debug.Log("featureJson " + featureJson);
+
+
+                    var parsedJson = JSON.Parse(batchJson);
+                    //get 'height' array from parsedJson
+                    var heightArray = parsedJson["gml:id"].AsArray;
+                    
+                    
+                    Debug.Log("BatchTableBinaryByteLength + " + b3dm.B3dmHeader.BatchTableBinaryByteLength);
+                    Debug.Log("FeatureTableBinaryByteLength + " + b3dm.B3dmHeader.FeatureTableBinaryByteLength);
+                    var batchBin = b3dm.BatchTableBinary;
+
+          
+                    
+  
+                    bytes = b3dm.GlbData;
                 }
 
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
