@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 * ecefRotationToUp gave wrong results when GRoundLevelY in SetGlobalOrigin.cs was not set to 0.
 
+## [1.2.0]
+
+### Added
+
+* Added CoordinateSetup.cs to manipulate the RD-coordinates that correspond to the unity-origin.
+
 ## [1.1.0]
 
 ### Added

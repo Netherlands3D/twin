@@ -38,6 +38,7 @@ To represent a Coordinate in Unity worldspace, it is possible for the RD/EPSG:74
 to translate to and from a Unity Vector3. This is done by taking -respectively- the relativeCenter property from the 
 EPSG4936 or EPSG7415 class use that as the Vector3.Zero in worldspace. The distance in **meters** between that relative 
 center and the given Coordinate is calulated -in meters- and returned as a Vector3 indicating that location.
+To set up the relativeCenter u can use CoordinateSetup.cs on a gameobject.
 
 ```
 $rdCoordinate = CoordinateConverter(coordinate, CoordinateSystem.Unity);
