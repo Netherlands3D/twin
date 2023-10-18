@@ -1,0 +1,93 @@
+.toolbar {
+    width: var(--nl3d-metrics-toolbar-width);
+    align-items: flex-start;
+    padding: 0;
+    padding-left: 10px;
+    margin: 0;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.toolbar__bg {
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--nl3d-metrics-toolbar-offsetx);
+    width: var(--nl3d-metrics-toolbar-width);
+    transition-property: left;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+    color: rgba(0, 0, 0, .75);
+}
+
+.toolbar__bg-fill {
+    background-color: var(--nl3d-colors-toolbar-bg);
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.toolbar--open .toolbar__bg {
+    left: var(--nl3d-metrics-toolbar-overlap);
+}
+
+.toolbar__button {
+    width: var(--nl3d-metrics-toolbar__button-size);
+    height: var(--nl3d-metrics-toolbar__button-size);
+    margin: var(--nl3d-metrics-spacing-2) 0 0;
+    padding: var(--nl3d-colors-toolbar__button-image-space);
+    background-color: var(--nl3d-colors-toolbar__button-bg);
+    border-color: var(--nl3d-colors-toolbar__button-border);
+    border-width: 1.5px;
+    border-bottom-left-radius: var(--nl3d-metrics-rounded-lg);
+    border-bottom-right-radius: var(--nl3d-metrics-rounded-lg);
+    border-top-left-radius: var(--nl3d-metrics-rounded-lg);
+    border-top-right-radius: var(--nl3d-metrics-rounded-lg);
+    transition-property: border-color, background-color;
+    transition-duration: 0.2s, 0.1s;
+    transition-timing-function: ease-in-out, ease-in-out;
+}
+
+.toolbar__button:hover {
+    border-color: var(--nl3d-colors-toolbar__button-border--hover);
+}
+
+.toolbar__button:active {
+    border-color: var(--nl3d-colors-toolbar__button-border--hover);
+    background-color: var(--nl3d-colors-toolbar__button-bg--active);
+}
+
+.toolbar__button--active {
+    border-color: var(--nl3d-colors-toolbar__button-border--hover);
+    background-color: var(--nl3d-colors-toolbar__button-bg--active);
+}
+
+.toolbar__button .unity-radio-button__checkmark-background {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.toolbar__button-icon {
+    --unity-image-tint-color: var(--nl3d-colors-toolbar__button-icon);
+}
+
+.toolbar__button:active .toolbar__button-icon {
+    --unity-image-tint-color: var(--nl3d-colors-toolbar__button-icon--active);
+}
+
+.toolbar__button--active .toolbar__button-icon {
+    --unity-image-tint-color: var(--nl3d-colors-toolbar__button-icon--active);
+}
+
+.toolbar__button--pointer .toolbar__button-icon {
+    --unity-image: var(--nl3d-icons-pointer);
+}
+
+.toolbar__button--layers .toolbar__button-icon {
+    --unity-image: var(--nl3d-icons-layers);
+}

@@ -1,0 +1,38 @@
+/* Variables for the application, names are taken from Tailwind to be more recognizable https://tailwindcss.com/docs */
+:root {
+    /* Common Spacing, Padding & Margin, based around 1REM/16px */
+    /* https://tailwindcss.com/docs/customizing-spacing#default-spacing-scale */
+    --nl3d-metrics-spacing-1: 4px;
+    --nl3d-metrics-spacing-2: 8px;
+    --nl3d-metrics-spacing-3: 12px;
+    --nl3d-metrics-spacing-4: 16px;
+    --nl3d-metrics-spacing-5: 20px;
+    --nl3d-metrics-spacing-6: 24px;
+    --nl3d-metrics-spacing-7: 28px;
+    --nl3d-metrics-spacing-8: 32px;
+    --nl3d-metrics-spacing-9: 36px;
+    --nl3d-metrics-spacing-10: 40px;
+    --nl3d-metrics-spacing-11: 44px;
+    --nl3d-metrics-spacing-12: 48px;
+    --nl3d-metrics-spacing-14: 56px;
+    --nl3d-metrics-spacing-16: 64px;
+    --nl3d-metrics-spacing-20: 80px;
+    --nl3d-metrics-spacing-24: 96px;
+
+    --nl3d-metrics-rounded-sm: 2px;
+    --nl3d-metrics-rounded: 4px;
+    --nl3d-metrics-rounded-lg: 8px;
+    
+    /* Colors are custom picked, but the naming of the variables match Tailwind's hue-shade scheme: https://tailwindcss.com/docs/customizing-colors#default-color-palette */ 
+    --nl3d-colors-white: rgb(255, 255, 255);
+    --nl3d-colors-blue-100: rgb(229, 235, 242);
+    --nl3d-colors-blue-200: rgb(206, 210, 217);
+    --nl3d-colors-blue-300: rgb(113, 130, 150);
+    --nl3d-colors-blue-700: rgb(0, 70, 153);
+    --nl3d-colors-blue-900: rgb(50, 57, 85);
+
+    --nl3d-colors-text: var(--nl3d-colors-blue-900);
+    
+    --nl3d-icons-pointer: url(icons/pointer.png);
+    --nl3d-icons-layers: url(icons/layers.png);
+}

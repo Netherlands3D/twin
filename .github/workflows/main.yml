@@ -1,12 +1,17 @@
 ﻿# Uses https://game.ci/docs/github/getting-started
 name: Actions
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
     name: Build my project ✨
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       # Checkout
       - name: Checkout repository
@@ -23,16 +28,17 @@ jobs:
             Library-
 
       # Test
-#      - name: Run tests
+#      - name: 'Game-CI: Run tests'
 #        uses: game-ci/unity-test-runner@v2
 #        env:
 #          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 #        with:
 #          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # Build
-      - name: Build project
+      # Build Unity project
+      - name: 'Game-CI: Build Unity project'
         uses: game-ci/unity-builder@v2
+        id: buildUnity
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -41,15 +47,37 @@ jobs:
           targetPlatform: WebGL
           # Temporarily needed to circumvent issues with this action selecting the wrong image for Unity 2022LTS
           customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
-  
 
-      # Output
+      - name: 'Docker: Login to GitHub Container Registry'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Build and publish Docker Image on main
+      - name: 'Docker: Build and push image'
+        if: github.ref_name == 'main'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .docker/Dockerfile
+          push: true
+          build-args: |
+            SOURCE_PATH=build/WebGL/WebGL
+          tags: |
+            ghcr.io/netherlands3d/twin:${{ steps.buildUnity.outputs.buildVersion }}
+            ghcr.io/netherlands3d/twin:latest
+
+      # Create an artifact in the build pipeline 
       - uses: actions/upload-artifact@v2
+        name: Upload artifact to build pipeline
         with:
           name: Build
           path: build/WebGL/WebGL
       
       - uses: actions/upload-pages-artifact@v1
+        name: 'Github Pages: prepare artefact for deployment'
         if: github.ref_name == 'main'
         with:
           path: build/WebGL/WebGL

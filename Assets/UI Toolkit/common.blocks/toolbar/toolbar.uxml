@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" nl3d="Netherlands3D.UIKit.UIElements" editor-extension-mode="False">
+    <ui:GroupBox name="toolbar" class="toolbar">
+        <Netherlands3D.UIKit.UIElements.Shadow class="toolbar__bg">
+            <ui:VisualElement name="toolbar__bg" class="toolbar__bg-fill" />
+        </Netherlands3D.UIKit.UIElements.Shadow>
+    </ui:GroupBox>
+</ui:UXML>
