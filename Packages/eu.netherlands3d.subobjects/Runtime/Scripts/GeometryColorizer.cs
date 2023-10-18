@@ -1,14 +1,12 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Linq;
-using Codice.Client.BaseCommands;
-using Codice.CM.Common;
-using netDxf.Entities;
-using Unity.Properties;
+
+
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.ObjectColoring
+namespace Netherlands3D.subobject
 {
     public class ColorSetLayer
     {
@@ -117,7 +115,7 @@ namespace Netherlands3D.ObjectColoring
                 if (changedColorSet[key] == PrioritizedColors[key])
                     changedColors.Add(key, PrioritizedColors[key]);
             }
-
+            Interaction.ApplyColorsToAll(changedColors);
             ColorsChanged.Invoke(changedColors);
         }
 
@@ -161,5 +159,7 @@ namespace Netherlands3D.ObjectColoring
                 }
             }
         }
+
+        
     }
 }

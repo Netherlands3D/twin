@@ -1,6 +1,6 @@
 {
-    "name": "eu.netherlands3d.object-coloring.Runtime",
-    "rootNamespace": "",
+    "name": "eu.netherlands3d.subobject.Runtime",
+    "rootNamespace": "netherlands3d.Subobject",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
