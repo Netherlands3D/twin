@@ -1,6 +1,6 @@
 # CartesianTiles
 
-Loads and unloads datasets in a cartesian coordinateSystem
+Loads and unloads datasets in a cartesian coordinateSystem (local or national coordinate grid)
 
 ## Installing
 
