@@ -1,12 +1,12 @@
 {
-  "name": "eu.netherlands3d.{NAME:kebab-case}",
-  "version": "{VERSION}",
-  "displayName": "Netherlands3D - {DISPLAY_NAME}",
-  "description": "{DESCRIPTION}",
+  "name": "eu.netherlands3d.cartesiantiles",
+  "version": "0.0.1",
+  "displayName": "Netherlands3D - Cartesian Tiles",
+  "description": "Loads and unloads datasets in a cartesian coordinateSystem",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
-  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
-  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/CartesianTiles/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/CartesianTiles/main/LICENSE.txt",
   "keywords": [
     "digital-twin"
   ],
@@ -15,5 +15,13 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
-  }
+    "eu.netherlands3d.coordinates": "1.2.0"
+  },
+  "samples": [
+    {
+      "displayName": "usage CartesianTiles",
+      "description": "using Cartesian Tiles,simple setup",
+      "path": "Samples~/CartesianTileHandler"
+    }
+  ]
 }

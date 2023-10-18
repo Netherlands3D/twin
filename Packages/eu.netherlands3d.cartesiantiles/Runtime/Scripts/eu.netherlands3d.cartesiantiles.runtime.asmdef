@@ -1,0 +1,23 @@
+{
+    "name": "eu.netherlands3d.cartesiantiles.runtime",
+    "rootNamespace": "Netherlands3D.CartesianTiles",
+    "references": [
+        "GUID:19c45768ddcd67943afbf0cb4e4ff0b3",
+        "GUID:7dbd1c4ad5ddd4b76abbd84777b0ba46"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "eu.netherlands3d.object-coloring",
+            "expression": "",
+            "define": "SUBOBJECT"
+        }
+    ],
+    "noEngineReferences": false
+}
