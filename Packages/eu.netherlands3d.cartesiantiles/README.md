@@ -49,6 +49,7 @@ settings:
 DefaultMaterialList; list of materials to be added to each submesh of the newly loaded tile.
 createMeshcollider(bool); if true, adds meshcollider to the tile when it is loaded.
 tileShadowCastingMode; should the tiles cast shadows.
+HasMetaData (only if using netherlands3d.subobject); if true, tries to read the metadata containing the mapping of vertices to identifiers.
 functions:
 - public void AddMeshColliders(Vector3 onlyTileUnderPosition = default), Add meshcollider to all tiles. if a Vector3 is given, only the tile at that position (in X and Z direction) will have a meshcollider added.
 - public void EnableShadows(bool enabled), enable or disable shadowcasting on the tiles.
