@@ -78,13 +78,15 @@ namespace Netherlands3D.Collada
 		/// <summary>
 		/// Write the XML output based on our list of materials and objects+triangles
 		/// </summary>
-		public void Finish()
+		public void Finish(Formatting formatting = Formatting.Indented)
 		{
 			stringWriter = new Utf8StringWriter();
-			writer = new XmlTextWriter(stringWriter);
-			writer.Formatting = Formatting.Indented;
+            writer = new XmlTextWriter(stringWriter)
+            {
+                Formatting = formatting
+            };
 
-			WriteDocumentHeader();
+            WriteDocumentHeader();
 			WriteAssetHeader();
 
 			//Library for material Effects
