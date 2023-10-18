@@ -28,6 +28,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.CartesianTiles
 {
+    [AddComponentMenu("Netherlands3D/CartesianTiles/Tilehandler")]
     public class TileHandler : MonoBehaviour
     {
         /// <summary>

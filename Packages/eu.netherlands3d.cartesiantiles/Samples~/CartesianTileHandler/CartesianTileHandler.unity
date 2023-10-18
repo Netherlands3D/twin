@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 118669626}
   - component: {fileID: 118669627}
   m_Layer: 0
-  m_Name: Layer
+  m_Name: Buildings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,6 +178,13 @@ MonoBehaviour:
     maximumDistance: 6000
     maximumDistanceSquared: 0
     enabled: 1
+  - Description: buildings 2.2
+    geoLOD: 2.2
+    path: https://3d.amsterdam.nl/data/buildings1.1/
+    pathQuery: buildings_{x}_{y}.2.2.bin
+    maximumDistance: 3000
+    maximumDistanceSquared: 0
+    enabled: 1
   pauseLoading: 0
   onLayerEnabled:
     m_PersistentCalls:
@@ -185,8 +192,10 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
+  hasMetaData: 0
+  removeFromID: 
   DefaultMaterialList:
-  - {fileID: 2100000, guid: 520b55f93773d2a4f93cdf0c5f2c42bc, type: 2}
+  - {fileID: 2100000, guid: d65249a1ee6af3740abdeb09aa22c54d, type: 2}
   createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
@@ -237,6 +246,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 118669626}
+  - {fileID: 1334580877}
+  - {fileID: 1138805234}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &437690283
@@ -262,7 +273,7 @@ GameObject:
   - component: {fileID: 1065248550}
   - component: {fileID: 1065248552}
   m_Layer: 0
-  m_Name: RDOrigin_Amsterdam
+  m_Name: CoordinateSystemOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,6 +428,172 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &1138805233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138805234}
+  - component: {fileID: 1138805235}
+  m_Layer: 0
+  m_Name: streetnames
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1138805234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138805233}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 131119361}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1138805235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138805233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isenabled: 1
+  tileSize: 1000
+  layerPriority: 0
+  Datasets:
+  - Description: 
+    geoLOD: 
+    path: 
+    pathQuery: 
+    maximumDistance: 6000
+    maximumDistanceSquared: 0
+    enabled: 1
+  pauseLoading: 0
+  onLayerEnabled:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  textPrefab: {fileID: 8383371600766724334, guid: 59989e8124131874396e065b57bb0cfa, type: 3}
+  geoJsonUrl: https://geodata.nationaalgeoregister.nl/kadastralekaart/wfs/v4_0?service=WFS&version=2.0.0&request=GetFeature&TypeNames=kadastralekaartv4:openbareruimtenaam&&propertyName=plaatsingspunt,tekst,hoek,relatieveHoogteligging,openbareRuimteType&outputformat=geojson&srs=EPSG:28992&bbox=
+  maxSpawnsPerFrame: 100
+  textsAndSizes:
+  - textPropertyName: tekst
+    drawWithSize: 1
+    offset: 10
+  positionSourceType: 0
+  autoOrientationMode: 2
+  drawGeometry: 0
+  lineRenderMaterial: {fileID: 0}
+  lineColor: {r: 0, g: 0, b: 0, a: 0}
+  lineWidth: 5
+  readAngleFromProperty: 1
+  angleProperty: hoek
+  filterUniqueNames: 1
+  textMinDrawDistance: 0
+--- !u!1 &1334580876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1334580877}
+  - component: {fileID: 1334580878}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1334580877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334580876}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 131119361}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1334580878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334580876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isenabled: 1
+  tileSize: 1000
+  layerPriority: 0
+  Datasets:
+  - Description: terrain0
+    geoLOD: lod 0
+    path: https://3d.amsterdam.nl/data/terrain1.1/terrain_{x}-{y}
+    pathQuery: -lod0.bin
+    maximumDistance: 6000
+    maximumDistanceSquared: 0
+    enabled: 1
+  - Description: terrain1
+    geoLOD: lod 1
+    path: https://3d.amsterdam.nl/data/terrain1.1/terrain_{x}-{y}
+    pathQuery: -lod1.bin
+    maximumDistance: 6000
+    maximumDistanceSquared: 0
+    enabled: 1
+  pauseLoading: 0
+  onLayerEnabled:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  hasMetaData: 0
+  removeFromID: 
+  DefaultMaterialList:
+  - {fileID: 2100000, guid: aa0ad45a18bb66e43a8f27e9d439aafd, type: 2}
+  - {fileID: 2100000, guid: bfc465e108e920949bdfa1be3c9bdba2, type: 2}
+  - {fileID: 2100000, guid: aeaa4f028091d9042b8e97f07e7df5a9, type: 2}
+  - {fileID: 2100000, guid: 48b6aabdc97a76547a8ff979253d9aa4, type: 2}
+  - {fileID: 2100000, guid: e27d95a4942388e4cb7d570c9bf9b070, type: 2}
+  - {fileID: 2100000, guid: 741a77b122ab7164781397f90b561bde, type: 2}
+  - {fileID: 2100000, guid: f4f08c6e574aaa34f81eb723f7e86169, type: 2}
+  - {fileID: 2100000, guid: 3fff9292f524d9f419cdb10392f362f7, type: 2}
+  - {fileID: 2100000, guid: fe8229f71a76c924eb8173167653944a, type: 2}
+  - {fileID: 2100000, guid: 84a636d9842722e48b69c3e32dd0387d, type: 2}
+  - {fileID: 2100000, guid: bfc62dbe0f0e1af4896e50f2bd2dfdba, type: 2}
+  - {fileID: 2100000, guid: 9488ce8e4e733f949a3fe6cc884c7a61, type: 2}
+  createMeshcollider: 0
+  tileShadowCastingMode: 1
+  brotliCompressedExtention: .br
 --- !u!114 &942284140042646326
 MonoBehaviour:
   m_ObjectHideFlags: 0

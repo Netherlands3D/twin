@@ -4,7 +4,7 @@ Loads and unloads datasets in a cartesian coordinateSystem (local or national co
 
 ## Installing
 
-This package is provided through OpenUPM, to install it using the CLI you can perform the following:
+This package will be provided through OpenUPM, to install it using the CLI you can perform the following:
 
 ```bash
 $ openupm add netherlands3d.cartesiantiles
@@ -50,5 +50,28 @@ DefaultMaterialList; list of materials to be added to each submesh of the newly 
 createMeshcollider(bool); if true, adds meshcollider to the tile when it is loaded.
 tileShadowCastingMode; should the tiles cast shadows.
 functions:
-- public void AddMeshColliders(Vector3 onlyTileUnderPosition = default), Add meshcollider to all tiles. if a Vector3 is given, only the tile at that postition will have a meshcollider added.
+- public void AddMeshColliders(Vector3 onlyTileUnderPosition = default), Add meshcollider to all tiles. if a Vector3 is given, only the tile at that position (in X and Z direction) will have a meshcollider added.
 - public void EnableShadows(bool enabled), enable or disable shadowcasting on the tiles.
+
+### GeoJSONTextLayer
+layer placing texts in the game, using data from a wfs.
+settings:
+- use only 1 Dataset for this layer, the path and pathQuery values are NOT used.
+- Text Prefab; the prefab containing a TextMeshPro-component that is to be placed at the location of a text.
+- Geo Json Url; the url for the wfs-query, ending with bbox. the correct boundingbox-values will be added when a tile is ready to be loaded.
+- Max Spawns per Frame; maximum number of text to spawn in a single frame, to prevent the frame from taking to long.
+- Texts And Sizes (list); multiple entries are possible.
+	- Text Propert Name; name of the property whose values you want.
+	- Draw With Size; the size the text has to be drawn.
+	- Offset; the offset with wich the text has to be placed. offset is relative to Unity Y=0;
+- Position Source Type; indicate wether the wfs return points or MultiPolygons. When the wfs return MultiPloygons, the text will be placed at its centroid.
+- Auto Orientation Mode; None = place static. Face Camera = text allways rotates to the camera, Auto-Flip = text doesn't rotate but flips when text looks up-side-down in the camera view.
+- Draw Geometry; when the wfs returns MultiPolygons, these can be drawn using LineRenderers.
+- Line Renderer Material; the material used for drawing geometry.
+- Line Color; the color for the drawn geometry;
+- Line Width; the with of the drawn geometry;
+optional settings:
+- read Angle From Property; try to find an angle for the text in the properties and apply this to the text.
+- the name of the property in wich the rotation of the text should be.
+- Filter Unique Names; if true, a text will only be placed once, even if there are multiple instances of the text in de dataset.
+

@@ -14,6 +14,7 @@ using System.Diagnostics;
 
 namespace Netherlands3D.CartesianTiles
 {
+    [AddComponentMenu("Netherlands3D/CartesianTiles/BinaryMeshLayer")]
     public class BinaryMeshLayer : Layer
     {
 #if SUBOBJECT
