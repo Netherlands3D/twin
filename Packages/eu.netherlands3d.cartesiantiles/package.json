@@ -15,7 +15,8 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
-    "eu.netherlands3d.coordinates": "1.2.0"
+    "eu.netherlands3d.coordinates": "1.2.0",
+    "com.unity.textmeshpro": "3.0.6"
   },
   "samples": [
     {
