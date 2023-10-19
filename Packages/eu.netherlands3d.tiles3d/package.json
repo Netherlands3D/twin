@@ -2,6 +2,8 @@
   "name": "eu.netherlands3d.tiles3d",
   "displayName": "Netherlands 3D - 3DTiles",
   "version": "1.0.1",
+  "unity": "2022.2",
+  "description": "enables the use of 3DTilesets",
   "type": "library",
   "keywords": [
     "netherlands3d",
@@ -21,8 +23,7 @@
     "eu.netherlands3d.gltfast": "5.0.3",
     "eu.netherlands3d.coordinates": "1.1.1"
   },
-  "description": "enables the use of 3DTilesets",
-   "samples": [
+  "samples": [
     {
       "displayName": "load 3DTileset",
       "description": "loading google-earth tileset",
