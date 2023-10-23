@@ -1,3 +1,7 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="inspector" class="inspector" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="layers" src="project://database/Assets/UI%20Toolkit/common.blocks/inspector/layers/layers.uxml?fileID=9197481963319205126&amp;guid=972b6d108ed7c43b984e3d526ad78cf3&amp;type=3#layers" />
+    <Style src="project://database/Assets/UI%20Toolkit/common.blocks/inspector/layers/layers.uss?fileID=7433441132597879392&amp;guid=3a8a0bf4fdd734c55b552cab8e42fd1f&amp;type=3#layers" />
+    <ui:VisualElement name="inspector" class="inspector">
+        <ui:Instance template="layers" name="layers" view-data-key="layers" class="layers" />
+    </ui:VisualElement>
 </ui:UXML>

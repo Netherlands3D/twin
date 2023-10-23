@@ -20,5 +20,5 @@ MonoBehaviour:
   onDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  inspector: {fileID: 9197481963319205126, guid: 344f4a84d29e1224bad3a64be3d054f0,
+  inspectorTemplate: {fileID: 9197481963319205126, guid: 972b6d108ed7c43b984e3d526ad78cf3,
     type: 3}

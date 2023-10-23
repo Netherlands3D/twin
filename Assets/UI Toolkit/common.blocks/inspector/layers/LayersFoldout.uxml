@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Foldout text="Layers" name="LayersFoldout" value="true" class="layer" />
+</ui:UXML>

@@ -21,6 +21,8 @@ namespace Netherlands3D.Twin.UI
             var toolbar = rootVisualElement.Q(name: toolbarName);
             foreach (var tool in tools)
             {
+                // UIBehaviour.CreateElement(toolButtonAsset, )
+                
                 var toolButton = toolButtonAsset.Instantiate();
                 toolButton.AddToClassList("toolbar__button--" + tool.icon);
                 toolButton.viewDataKey = tool.code;

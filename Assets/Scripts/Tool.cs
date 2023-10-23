@@ -13,10 +13,11 @@ namespace Netherlands3D.Twin
         public string icon = "pointer";
         public UnityEvent onActivate = new();
         public UnityEvent onDeactivate = new();
-        [SerializeField] private VisualTreeAsset inspector;
+        [SerializeField] private VisualTreeAsset inspectorTemplate;
         
-        public VisualTreeAsset Inspector => inspector;
-        public bool UsesInspector => Inspector != null;
+        public VisualTreeAsset InspectorTemplate => inspectorTemplate;
+        public bool UsesInspector => InspectorTemplate != null;
+        public VisualElement InspectorInstance { get; set; }
 
 
         public void Activate()
@@ -28,5 +29,13 @@ namespace Netherlands3D.Twin
         {
             onDeactivate.Invoke();
         }
+
+        // public override bool Equals(object other)
+        // {
+        //     if (other is not Tool)
+        //         return false;
+        //     
+        //     return ((Tool)other).code == code;
+        // }
     }
 }

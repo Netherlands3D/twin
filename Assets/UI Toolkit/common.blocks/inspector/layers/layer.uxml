@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/common.blocks/inspector/layers/layers.uss?fileID=7433441132597879392&amp;guid=3a8a0bf4fdd734c55b552cab8e42fd1f&amp;type=3#layers" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement name="ParentRow" class="layer-row">
+            <ui:Toggle name="EnabledToggle" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="ColorButton" class="color-bar" style="margin-top: 2px; margin-bottom: 2px;" />
+            <ui:VisualElement name="IndentSpacer" class="indent-spacer" />
+            <ui:Toggle name="FoldoutToggle" />
+            <ui:VisualElement name="Icon" style="flex-grow: 0;" />
+            <ui:Label tabindex="-1" text="Layer" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LayerName" class="layer-name-label" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Content" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>
