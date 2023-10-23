@@ -365,7 +365,7 @@ MonoBehaviour:
   autoOrientationMode: 1
   drawGeometry: 1
   lineRenderMaterial: {fileID: 2100000, guid: ad529133aee112540800b70f212277b5, type: 2}
-  lineColor: {r: 0.8235294, g: 0.39215687, b: 0.19607843, a: 1}
+  lineColor: {r: 0.9245283, g: 0.73061615, b: 0, a: 1}
   lineWidth: 5
   readAngleFromProperty: 0
   angleProperty: hoek
@@ -467,7 +467,7 @@ MonoBehaviour:
   applyHideOnReload: 0
   applyOnExistingTiles: 1
   maxSelectDistance: 8000
-  selectionVertexColor: {r: 0.99215686, g: 1, b: 0, a: 1}
+  selectionVertexColor: {r: 1, g: 0, b: 0, a: 0}
   clickedOnObject: {fileID: 11400000, guid: 4146b375f6ddaf446bf55ba4dbd171ad, type: 2}
   selectedIdsOnClick: {fileID: 11400000, guid: 9fccc0f026026d04bbc9a12ffd985622, type: 2}
   clickedOnPosition: {fileID: 11400000, guid: 1a3fcaa9dcfd1924385e66fd0012b8ba, type: 2}
