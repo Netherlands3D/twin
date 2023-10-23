@@ -118,7 +118,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SPIKE_CLAMPING: 0
-    - _SPIKE_FILTERING: 1
+    - _SPIKE_FILTERING: 0
     - _SUBOBJECT_FILTERING: 0
     - _Smoothness: 0.22
     - _SmoothnessTextureChannel: 0
