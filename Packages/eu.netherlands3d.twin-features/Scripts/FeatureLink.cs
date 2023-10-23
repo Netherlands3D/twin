@@ -10,6 +10,6 @@ namespace Netherlands3D.Twin.Features
         [HideInInspector]
         public string name;
         public Feature feature;
-        public UnityEvent<bool> onFeatureToggle;
+        public UnityEvent<bool> onFeatureToggle = new();
     }
 }
