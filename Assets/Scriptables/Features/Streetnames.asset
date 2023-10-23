@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Streetnames
   m_EditorClassIdentifier: 
   Id: streets
-  Caption: Toon straatnamen
+  Caption: Toon namen van straten
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
