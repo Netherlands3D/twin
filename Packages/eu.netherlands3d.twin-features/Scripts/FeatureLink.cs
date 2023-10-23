@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Features
 {
@@ -9,7 +10,6 @@ namespace Netherlands3D.Twin.Features
         [HideInInspector]
         public string name;
         public Feature feature;
-        public MonoBehaviour component;
-        public FeatureLinkAction action;
+        public UnityEvent<bool> onFeatureToggle;
     }
 }

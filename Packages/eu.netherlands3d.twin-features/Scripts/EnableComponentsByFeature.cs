@@ -7,25 +7,6 @@ namespace Netherlands3D.Twin.Features
     {
         public List<FeatureLink> FeatureLinks = new();
 
-        private void OnValidate()
-        {
-            foreach (var featureLink in FeatureLinks)
-            {
-                var linkFeature = featureLink.feature != null ? featureLink.feature : null;
-                var linkComponent = featureLink.component != null ? featureLink.component : null;
-                featureLink.name = linkFeature?.Caption + " -> " + linkComponent?.name;
-                switch (featureLink.action)
-                {
-                    case FeatureLinkAction.ToggleGameObject:
-                        featureLink.name += " (GameObject)";
-                        break;
-                    case FeatureLinkAction.ToggleComponent:
-                        featureLink.name += $" ({featureLink.component.GetType()})";
-                        break;
-                }
-            }
-        }
-
         private void Awake()
         {
             gameObject.SetActive(false);
@@ -48,29 +29,11 @@ namespace Netherlands3D.Twin.Features
             listener.feature = featureLink.feature;
             listener.OnEnableFeature.AddListener((Feature feature) =>
             {
-                var linkComponent = featureLink.component;
-                switch (featureLink.action)
-                {
-                    case FeatureLinkAction.ToggleGameObject:
-                        linkComponent.gameObject.SetActive(true);
-                        break;
-                    case FeatureLinkAction.ToggleComponent:
-                        linkComponent.enabled = true;
-                        break;
-                }
+                featureLink.onFeatureToggle?.Invoke(true);
             });
             listener.OnDisableFeature.AddListener((Feature feature) =>
             {
-                var linkComponent = featureLink.component;
-                switch (featureLink.action)
-                {
-                    case FeatureLinkAction.ToggleGameObject:
-                        linkComponent.gameObject.SetActive(false);
-                        break;
-                    case FeatureLinkAction.ToggleComponent:
-                        linkComponent.enabled = false;
-                        break;
-                }
+                featureLink.onFeatureToggle?.Invoke(false);
             });
         }
     }
