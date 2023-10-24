@@ -7,7 +7,7 @@ This package contains tools to do runtime masking of shaders via global shader p
 This package is provided through OpenUPM, to install it using the CLI you can perform the following:
 
 ```bash
-$ openupm add masking
+$ openupm add eu.netherlands3d.masking
 ```
 
 or, you have to add `https://package.openupm.com` as a scoped registry with, at least, the following scopes:
