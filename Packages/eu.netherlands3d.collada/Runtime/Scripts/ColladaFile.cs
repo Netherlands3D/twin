@@ -27,8 +27,8 @@ namespace Netherlands3D.Collada
 	public class ColladaFile
 	{
 		[DllImport("__Internal")]
-		private static extern void DownloadFile(byte[] array, int byteLength, string fileName);
-
+        private static extern void DownloadFile(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
+		
 		private XmlTextWriter writer;
 		private StringWriter stringWriter;
 		private List<Material> materials;
@@ -458,7 +458,7 @@ namespace Netherlands3D.Collada
 				byte[] byteArray = Encoding.UTF8.GetBytes(GetColladaXML());
 				stringWriter = null;
 				writer = null;
-				DownloadFile(byteArray, byteArray.Length, Path.GetFileName(filePath));
+				DownloadFile("", "", Path.GetFileName(filePath), byteArray, byteArray.Length);
 			}
 			else
 			{

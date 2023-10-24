@@ -19,5 +19,6 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
+    "eu.netherlands3d.filebrowser": "3.1.0"
   }
 }
