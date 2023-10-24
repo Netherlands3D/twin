@@ -9,6 +9,10 @@ using UnityEngine;
 
 namespace Netherlands3D.Collada
 {
+	/// <summary>
+	/// This class adds encoding override to the StringWriter class, so we can write UTF8 files.
+	/// Collada XML uses UTF8.
+	/// </summary>
 	public sealed class Utf8StringWriter : StringWriter
 	{
 		public override Encoding Encoding => Encoding.UTF8;
@@ -413,6 +417,10 @@ namespace Netherlands3D.Collada
 			writer.WriteEndElement();
 		}
 
+		/// <summary>
+		/// Return the Collada XML document as a string
+		/// </summary>
+		/// <returns></returns>
 		public string GetColladaXML()
 		{
 			return stringWriter.ToString();
@@ -424,6 +432,10 @@ namespace Netherlands3D.Collada
 			finishedDocument = false;
 		}
 
+		/// <summary>
+		/// Save the Collada XML document to a local file
+		/// </summary>
+		/// <param name="filePath"></param>
 		public void Save(string filePath = "")
 		{
 			if(!finishedDocument)
