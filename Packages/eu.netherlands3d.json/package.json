@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Netherlands3D - JSON Extras",
   "description": "A series of extras for working with JSON in the context of Netherlands3D",
   "unity": "2022.2",
