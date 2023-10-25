@@ -274,9 +274,9 @@ namespace Netherlands3D.Coordinates
         /// <returns>true if coordinate is valid</returns>
         public static bool IsValid(Vector3RD coordinate)
         {
-            if (coordinaat.x > -7000 && coordinaat.x < 300000)
+            if (coordinate.x > -7000 && coordinate.x < 300000)
             {
-                if (coordinaat.y > 289000 && coordinaat.y < 629000)
+                if (coordinate.y > 289000 && coordinate.y < 629000)
                 {
                     return true;
                 }
