@@ -123,15 +123,19 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _IncludeInGlobalMask: 1
     - _Metallic: 0.08
     - _OcclusionStrength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _SPIKE_CLAMPING: 0
+    - _SPIKE_FILTERING: 0
     - _SUBOBJECT_FILTERING: 0
     - _Smoothness: 0.13
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpikeClampHeight: 320
     - _SrcBlend: 1
     - _Surface: 0
     - _TEXTURINGMODE: 1
