@@ -66,33 +66,57 @@ namespace Netherlands3D.B3DM
 
                     //Optional RTC_CENTER from b3DM header
                     rtcCenter = GetRTCCenter(rtcCenter, b3dm);
+                    //TODO: Get subobjects from b3dm
 
-                    var batchJson = b3dm.BatchTableJson;
-                    Debug.Log("batchJson " + batchJson);
-                    
-                    var featureJson = b3dm.FeatureTableJson;
-                    Debug.Log("featureJson " + featureJson);
-
-
-                    var parsedJson = JSON.Parse(batchJson);
-                    //get 'height' array from parsedJson
-                    var heightArray = parsedJson["gml:id"].AsArray;
-                    
-                    
-                    Debug.Log("BatchTableBinaryByteLength + " + b3dm.B3dmHeader.BatchTableBinaryByteLength);
-                    Debug.Log("FeatureTableBinaryByteLength + " + b3dm.B3dmHeader.FeatureTableBinaryByteLength);
-                    var batchBin = b3dm.BatchTableBinary;
-
-          
-                    
-  
                     bytes = b3dm.GlbData;
+                }
+                else
+                {
+                    //Try to find EXT_mesh_features extention to log all mesh features
+                    ParseSubObjects(webRequest.downloadHandler.text);
                 }
 
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
             }
 
             webRequest.Dispose();
+        }
+
+        private static void ParseSubObjects(string jsonText)
+        {
+            // Load the glTF file as a JSON object
+            JSONNode gltf = JSON.Parse(jsonText);
+
+            // Get the extensions object
+            JSONNode extensions = gltf["extensions"];
+
+            // Check if the glTF file has the required extensions
+            if (extensions != null && extensions["EXT_mesh_features"] != null && extensions["EXT_instance_features"] != null)
+            {
+                // Get the mesh features object
+                JSONNode meshFeatures = extensions["EXT_mesh_features"];
+
+                // Log all mesh features
+                Debug.Log("Mesh Features:");
+                foreach (KeyValuePair<string, JSONNode> feature in meshFeatures)
+                {
+                    Debug.Log(feature.Key + ": " + feature.Value);
+                }
+
+                // Get the instance features object
+                JSONNode instanceFeatures = extensions["EXT_instance_features"];
+
+                // Log all instance features
+                Debug.Log("Instance Features:");
+                foreach (KeyValuePair<string, JSONNode> feature in instanceFeatures)
+                {
+                    Debug.Log(feature.Key + ": " + feature.Value);
+                }
+            }
+            else
+            {
+                Debug.LogError("glTF file does not have the required extensions: EXT_mesh_features and EXT_instance_features");
+            }
         }
 
         private static double[] GetRTCCenter(double[] rtcCenter, B3dm b3dm)
