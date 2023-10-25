@@ -274,12 +274,14 @@ namespace Netherlands3D.Coordinates
         /// <returns>true if coordinate is valid</returns>
         public static bool IsValid(Vector3RD coordinate)
         {
-            if (coordinate.x < -7000) return false;
-            if (coordinate.x > 300000) return false;
-            if (coordinate.y < 289000) return false;
-            if (coordinate.y > 629000) return false;
-
-            return true;
+            if (coordinaat.x > -7000 && coordinaat.x < 300000)
+            {
+                if (coordinaat.y > 289000 && coordinaat.y < 629000)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static Vector3RD ToVector3RD(this Coordinate coordinate)
