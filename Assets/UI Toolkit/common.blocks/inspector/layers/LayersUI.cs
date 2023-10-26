@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.TileSystem;
 using Netherlands3D.Twin.UI.Inpector.Layers;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -80,53 +79,78 @@ namespace Netherlands3D.Twin.UI.Inpector
         private void OnLayerUIStartDrag(LayerUI2 layer)
         {
             draggingLayer = layer;
+            InitializeDragContainer();
+            DraggingLayerUIElementStyle();
+        }
+
+        private void InitializeDragContainer()
+        {
             dragLayerElement = layerAsset.Instantiate();
             layerInspector.Add(dragLayerElement);
+        }
+
+        private void DraggingLayerUIElementStyle()
+        {
+            // draggingLayer.LayerUIElement
         }
 
         private void Update()
         {
             if (draggingLayer != null)
             {
-                var mousePosition = Pointer.current.position.ReadValue();
-                mousePosition.y = Screen.height - mousePosition.y;
-                // var viewportPosition = Camera.main.ScreenToViewportPoint(mousePosition);
-                // var mousePositionInGameWindow = viewportPosition * new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
-                // print(mousePosition + "\t" + mousePositionInGameWindow);
-                // Vector2 mousePositionInGameWindow = mousePosition - new Vector2(Screen.currentResolution.width - Screen.width, Screen.currentResolution.height - Screen.height);
-                // print(mousePositionInGameWindow);
+                CalculateDragElementPosition();
+                // for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount; i++)
+                // {
+                //     draggingLayer.LayerUIElement.parent[i].Q<Label>().text = GetSiblingIndex(draggingLayer.LayerUIElement.parent[i]).ToString();
+                // }
 
-                // Vector2 windowOffset = new Vector2(Screen.currentResolution.width - Screen.width, Screen.currentResolution.height - Screen.height); // var mousePositionCorrected = GetComponent<UIDocument>().rootVisualElement.WorldToLocal(mousePosition);
-                // var mousePositionCorrected = RuntimePanelUtils.ScreenToPanel(GetComponent<UIDocument>().rootVisualElement.panel, mousePositionInGameWindow);
-                var mousePositionCorrected = RuntimePanelUtils.ScreenToPanel(dragLayerElement.parent.panel, mousePosition);
-                var panelOffset = GetAbsolutePosition(draggingLayer.LayerUIElement);
-                print("test" + panelOffset);
-                var siblingIndex = draggingLayer.LayerUIElement.parent.childCount - 1 - GetSiblingIndex(draggingLayer.LayerUIElement);
-                var heightOffset = siblingIndex * draggingLayer.LayerUIElement.resolvedStyle.height;
-                print( siblingIndex +"\theightoffset " + heightOffset);
-                panelOffset.y += heightOffset;
-                panelOffset += draggingLayer.dragStartOffset;
-                // var mousePositionCorrected = dragLayerElement.parent.WorldToLocal(mousePosition);
-                // var mousePositionCorrected = RuntimePanelUtils.ScreenToPanel(dragLayerElement.parent.panel, mousePosition - windowOffset);
-                // mousePositionCorrected.y -= dragLayerElement.parent.resolvedStyle.top;
-                // Vector2 gameWindowOffset = new Vector2((Screen.currentResolution.width - Screen.width) / 2, (Screen.currentResolution.height - Screen.height) / 2);
-                // Vector2 mousePositionCorrected = new Vector2(mousePosition.x -gameWindowOffset.x, Screen.height - mousePosition.y - gameWindowOffset.y);
-                // dragLayerElement.style.top = mousePositionCorrected.y;
-                // dragLayerElement.style.position = Position.Absolute;
-                // dragLayerElement.style.width = draggingLayer.LayerUIElement.style.width;
-                dragLayerElement.transform.position = mousePositionCorrected - new Vector2(panelOffset.x, panelOffset.y);
-                // dragLayerElement.style.left = mousePositionCorrected.x;
-                // print(mousePosition + "\t" + mousePositionCorrected + "\t" + dragLayerElement.parent.resolvedStyle.top);
+                var oldSiblingIndex = GetSiblingIndex(draggingLayer.LayerUIElement);
+                var newSiblingIndex = CalculateSiblingIndexFromDragElementPosition();
+                // dragLayerElement.Q<Label>().text = "old: " + GetSiblingIndex(draggingLayer.LayerUIElement) + "new: " + newSiblingIndex.ToString();
+
+                if (newSiblingIndex < oldSiblingIndex)
+                    draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
+                else if (newSiblingIndex > oldSiblingIndex)
+                    draggingLayer.LayerUIElement.PlaceInFront(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
 
                 if (!Pointer.current.press.IsPressed())
                 {
-                    draggingLayer.StopDrag();
-                    draggingLayer = null;
-                    layerInspector.Remove(dragLayerElement);
+                    OnDragEnded();
                 }
             }
         }
-        
+
+        private Vector2 CalculateDragElementPosition()
+        {
+            var mousePosition = Pointer.current.position.ReadValue();
+            mousePosition.y = Screen.height - mousePosition.y;
+            var mousePositionCorrected = RuntimePanelUtils.ScreenToPanel(dragLayerElement.parent.panel, mousePosition);
+            var panelOffset = GetAbsolutePosition(draggingLayer.LayerUIElement);
+            var invertedSiblingIndex = draggingLayer.LayerUIElement.parent.childCount - 1 - GetSiblingIndex(draggingLayer.LayerUIElement); // the parent already contains the drag container as a child, but this should not be included in the calculation
+            var heightOffset = invertedSiblingIndex * draggingLayer.LayerUIElement.resolvedStyle.height;
+            panelOffset.y += heightOffset;
+            panelOffset += draggingLayer.dragStartOffset;
+            var dragElementPosition = mousePositionCorrected - new Vector2(panelOffset.x, panelOffset.y);
+            // dragLayerElement.transform.position = mousePositionCorrected - new Vector2(panelOffset.x, panelOffset.y);
+            dragLayerElement.style.top = dragElementPosition.y;
+            return dragElementPosition;
+        }
+
+        public int CalculateSiblingIndexFromDragElementPosition()
+        {
+            var referencePosition = GetAbsolutePosition(dragLayerElement);
+            referencePosition.y -= draggingLayer.LayerUIElement.resolvedStyle.height;
+            for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount - 1; i++)
+            {
+                var siblingPos = GetAbsolutePosition(draggingLayer.LayerUIElement.parent[i]);
+                // print(i + "\t" + siblingPos);
+                if (referencePosition.y < siblingPos.y)
+                    return i;
+            }
+
+            return draggingLayer.LayerUIElement.parent.childCount - 2; // minus 1 for the dragging element, and minus 1 because index is 0 based.
+        }
+
         public static Vector2 GetAbsolutePosition(VisualElement element)
         {
             Vector2 localPosition = element.transform.position;
@@ -134,7 +158,7 @@ namespace Netherlands3D.Twin.UI.Inpector
 
             return absolutePosition;
         }
-        
+
         public static int GetSiblingIndex(VisualElement element)
         {
             VisualElement parent = element.parent;
@@ -149,13 +173,22 @@ namespace Netherlands3D.Twin.UI.Inpector
                     }
                 }
             }
+
             return -1; // Element is not a child of the provided parent.
+        }
+
+        private void OnDragEnded()
+        {
+            draggingLayer.StopDrag();
+            draggingLayer = null;
+            layerInspector.Remove(dragLayerElement);
         }
     }
 
     public class LayerUI2
     {
         public LayerNL3DBase Layer { get; }
+
         public VisualElement LayerUIElement { get; }
         public Toggle EnabledToggle { get; }
         public Toggle FoldoutToggle { get; }
@@ -227,8 +260,6 @@ namespace Netherlands3D.Twin.UI.Inpector
                 IsDragging = true;
                 dragStartOffset = evt.localPosition;
             }
-
-            // Debug.Log("ectpos:" + evt.position);
         }
 
         public void StopDrag() //called in LayersUI because it should also stop dragging if the pointer is released while not on the current layer UI element
