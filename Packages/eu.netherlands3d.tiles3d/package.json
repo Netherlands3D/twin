@@ -18,11 +18,11 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
-    "eu.netherlands3d.gltfast": "5.0.3",
-    "eu.netherlands3d.coordinates": "1.1.1"
+    "eu.netherlands3d.coordinates": "1.1.1",
+    "com.unity.cloud.gltfast": "6.0.1"
   },
   "description": "enables the use of 3DTilesets",
-   "samples": [
+  "samples": [
     {
       "displayName": "load 3DTileset",
       "description": "loading google-earth tileset",
