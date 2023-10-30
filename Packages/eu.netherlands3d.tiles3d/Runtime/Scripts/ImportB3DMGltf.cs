@@ -56,12 +56,12 @@ namespace Netherlands3D.B3DM
             {
                 byte[] bytes = webRequest.downloadHandler.data;
                 var memory = new ReadOnlyMemory<byte>(bytes);
+
                 double[] rtcCenter = null;
 
                 if (url.Contains(".b3dm"))
                 {
                     var memoryStream = new MemoryStream(bytes);
-
                     var b3dm = B3dmReader.ReadB3dm(memoryStream);
 
                     //Optional RTC_CENTER from b3DM header
@@ -69,11 +69,6 @@ namespace Netherlands3D.B3DM
                     //TODO: Get subobjects from b3dm
 
                     bytes = b3dm.GlbData;
-                }
-                else
-                {
-                    //Try to find EXT_mesh_features extention to log all mesh features
-                    ParseSubObjects(webRequest.downloadHandler.text);
                 }
 
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
@@ -193,6 +188,7 @@ namespace Netherlands3D.B3DM
                 var parsedGltf = new ParsedGltf()
                 {
                     gltfImport = gltf,
+                    glbBuffer = glbBuffer,
                     rtcCenter = rtcCenter
                 };
                 callbackGltf?.Invoke(parsedGltf);
@@ -211,5 +207,22 @@ namespace Netherlands3D.B3DM
 public class ParsedGltf
 {
     public GltfImport gltfImport;
+    public byte[] glbBuffer;
     public double[] rtcCenter = null;
+
+    //public EXT_mesh_features extention_EXT_mesh_features;
+
+    public async void SpawnGltfScenes(Transform parent)
+    {
+        if (gltfImport != null)
+        {
+            var scenes = gltfImport.SceneCount;
+
+            for (int i = 0; i < scenes; i++)
+            {
+                await gltfImport.InstantiateSceneAsync(parent, i);
+                var scene = parent.GetChild(0).transform;
+            }
+        }
+    }
 }
