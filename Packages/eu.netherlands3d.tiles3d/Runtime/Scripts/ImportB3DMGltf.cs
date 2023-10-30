@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using GLTFast;
 using System;
 using SimpleJSON;
+using System.Text;
+
 #if UNITY_EDITOR
 using System.IO.Compression;
 #endif
@@ -49,7 +51,7 @@ namespace Netherlands3D.B3DM
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning(url + " -> " +webRequest.error);
+                Debug.LogWarning(url + " -> " + webRequest.error);
                 callbackGltf.Invoke(null);
             }
             else
@@ -225,4 +227,93 @@ public class ParsedGltf
             }
         }
     }
+
+    public void ParseSubObjects()
+    {
+        //Extract json from glb
+        var gltf = ExtractJson(glbBuffer);
+
+        //loop through all primitive attributes
+        var gltfFeatures = JsonUtility.FromJson<GltfFeatures>(gltf);
+        foreach(var primitive in gltfFeatures.primitives)
+        {
+            foreach(var attribute in primitive.attributes)
+            {
+                Debug.Log(attribute.Key + " " + attribute.Value);
+            }
+        }
+    }
+
+    public static string ExtractJson(byte[] glbData)
+    {
+        if (glbData.Length < 12)
+            Debug.Log("GLB file is too short.");
+
+        // Check the magic bytes to ensure it's a GLB file
+        var magicBytes = BitConverter.ToUInt32(glbData, 0);
+        if (magicBytes != 0x46546C67) // "glTF"
+            Debug.Log("Not a valid GLB file.");
+
+        var version = BitConverter.ToUInt32(glbData, 4);
+        var length = BitConverter.ToUInt32(glbData, 8);
+
+        if (version != 2)
+            Debug.Log("Unsupported GLB version.");
+
+        if (glbData.Length != length)
+            Debug.Log("GLB file length does not match the declared length.");
+
+        // Find the JSON chunk
+        var jsonChunkLength = BitConverter.ToUInt32(glbData, 12);
+        if (jsonChunkLength == 0)
+            Debug.Log("JSON chunk is missing.");
+        var jsonChunkOffset = 20; // GLB header (12 bytes) + JSON chunk header (8 bytes)
+
+        // Extract JSON as a string
+        var json = Encoding.UTF8.GetString(glbData, jsonChunkOffset, (int)jsonChunkLength);
+
+        return json;
+    }
 }
+
+[Serializable]
+public class GltfFeatures
+{
+    public Primitive[] primitives { get; set; }
+
+    [Serializable]
+    public class Primitive
+    {
+        public Attributes[] attributes { get; set; }
+        public int[] indices { get; set; }
+        public int mode { get; set; }
+        public Extensions extensions { get; set; }
+    }
+
+    [Serializable]
+    public class Attributes
+    {
+        public int POSITION { get; set; }
+        public int _FEATURE_ID_0 { get; set; }
+    }
+
+    [Serializable]
+    public class Extensions
+    {
+        public ExtMeshFeatures EXT_mesh_features { get; set; }
+    }
+
+    [Serializable]
+    public class ExtMeshFeatures
+    {
+        public List<FeatureIds> featureIds { get; set; }
+    }
+
+    [Serializable]
+    public class FeatureIds
+    {
+        public int featureCount { get; set; }
+        public int attribute { get; set; }
+    }
+}
+
