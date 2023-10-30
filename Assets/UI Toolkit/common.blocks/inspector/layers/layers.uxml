@@ -1,2 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="LayerList" style="flex-grow: 1;" />
+    <ui:VisualElement name="GhostElements" picking-mode="Ignore" style="flex-grow: 1; position: absolute; height: 100%; width: 100%;" />
 </ui:UXML>

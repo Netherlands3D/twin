@@ -60,7 +60,7 @@ namespace Netherlands3D.Twin.UI.Inpector.Layers
             
             textLabel = new Label();
             textLabel.name = "textLabel";
-            textLabel.text = "Layer";
+            // textLabel.text = "Layer";
             parentRow.Add(textLabel);
         }
     }

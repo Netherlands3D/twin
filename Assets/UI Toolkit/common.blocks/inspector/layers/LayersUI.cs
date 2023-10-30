@@ -24,7 +24,8 @@ namespace Netherlands3D.Twin.UI.Inpector
         [SerializeField] private VisualTreeAsset layerAsset;
         [SerializeField] private TileSystem.TileHandler tileHandler;
 
-        private VisualElement layerInspector;
+        private VisualElement layerListContainer;
+        private VisualElement ghostElementContainer;
 
         private LayerUI2 draggingLayer;
         private VisualElement dragLayerElement;
@@ -56,7 +57,8 @@ namespace Netherlands3D.Twin.UI.Inpector
 
         private void OnLayerToolActivated()
         {
-            layerInspector = layerTool.InspectorInstance;
+            layerListContainer = layerTool.InspectorInstance.Q<VisualElement>("LayerList");
+            ghostElementContainer = layerTool.InspectorInstance.Q<VisualElement>("GhostElements");
             foreach (var layer in Layers)
             {
                 AddLayerUI(layer);
@@ -67,7 +69,7 @@ namespace Netherlands3D.Twin.UI.Inpector
         public LayerUI2 AddLayerUI(LayerNL3DBase layer)
         {
             var layerRowTemplate = layerAsset.Instantiate();
-            layerInspector.Add(layerRowTemplate);
+            layerListContainer.Add(layerRowTemplate);
             var ui = new LayerUI2(layer, layerRowTemplate);
             layer.UI = ui;
 
@@ -75,6 +77,7 @@ namespace Netherlands3D.Twin.UI.Inpector
 
             return ui;
         }
+
 
         private void OnLayerUIStartDrag(LayerUI2 layer)
         {
@@ -86,7 +89,7 @@ namespace Netherlands3D.Twin.UI.Inpector
         private void InitializeDragContainer()
         {
             dragLayerElement = layerAsset.Instantiate();
-            layerInspector.Add(dragLayerElement);
+            layerListContainer.Add(dragLayerElement);
         }
 
         private void DraggingLayerUIElementStyle()
@@ -99,25 +102,51 @@ namespace Netherlands3D.Twin.UI.Inpector
             if (draggingLayer != null)
             {
                 CalculateDragElementPosition();
-                // for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount; i++)
-                // {
-                //     draggingLayer.LayerUIElement.parent[i].Q<Label>().text = GetSiblingIndex(draggingLayer.LayerUIElement.parent[i]).ToString();
-                // }
-
-                var oldSiblingIndex = GetSiblingIndex(draggingLayer.LayerUIElement);
-                var newSiblingIndex = CalculateSiblingIndexFromDragElementPosition();
-                // dragLayerElement.Q<Label>().text = "old: " + GetSiblingIndex(draggingLayer.LayerUIElement) + "new: " + newSiblingIndex.ToString();
-
-                if (newSiblingIndex < oldSiblingIndex)
-                    draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
-                else if (newSiblingIndex > oldSiblingIndex)
-                    draggingLayer.LayerUIElement.PlaceInFront(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
+                var potentialNewParent = GetNewParentBasedOnDragPosition(draggingLayer.LayerUIElement.resolvedStyle.height / 2);
+                
+                ShowReorderLine(potentialNewParent == null, CalculateSiblingIndexFromDragElementPosition());
 
                 if (!Pointer.current.press.IsPressed())
                 {
+                    // draggingLayer.Layer.SetParent(potentialNewParent.layout);
+                    if (potentialNewParent != null)
+                    {
+                        print("reparenting");
+                        var parentLayer = Layers.First(layer => layer.UI.LayerUIElement == potentialNewParent);
+                        draggingLayer.Layer.SetParent(parentLayer);
+                        potentialNewParent.style.backgroundColor = new StyleColor(Color.clear);
+                        draggingLayer.UpdateLayerUI();
+                    }
+                    else
+                    {
+                        ReorderLayers();
+                    }
+
+                    ShowReorderLine(false);
                     OnDragEnded();
                 }
             }
+        }
+
+        private void ShowReorderLine(bool show, int behindIndex = 0)
+        {
+            var reorderLine = ghostElementContainer.Q<VisualElement>("ReorderLine");
+            reorderLine.transform.position = new Vector3(0, behindIndex * draggingLayer.LayerUIElement.resolvedStyle.height, 0);
+            reorderLine.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void ReorderLayers()
+        {
+            // var oldSiblingIndex = GetSiblingIndex(draggingLayer.LayerUIElement);
+            var newSiblingIndex = CalculateSiblingIndexFromDragElementPosition();
+
+            draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
+            // if (newSiblingIndex < oldSiblingIndex)
+            //     draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
+            // else if (newSiblingIndex > oldSiblingIndex)
+            //     draggingLayer.LayerUIElement.PlaceInFront(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
+
+            Layers = Layers.OrderBy(layer => GetSiblingIndex(layer.UI.LayerUIElement)).ToList();
         }
 
         private Vector2 CalculateDragElementPosition()
@@ -136,11 +165,37 @@ namespace Netherlands3D.Twin.UI.Inpector
             return dragElementPosition;
         }
 
+        public VisualElement GetNewParentBasedOnDragPosition(float threshold)
+        {
+            var referencePosition = GetAbsolutePosition(dragLayerElement);
+            referencePosition.y -= 0.75f * draggingLayer.LayerUIElement.resolvedStyle.height; //no idea why this should be 0.75
+            referencePosition.y += draggingLayer.dragStartOffset.y;
+
+            VisualElement newParent = null;
+            for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount - 1; i++)
+            {
+                var sibling = draggingLayer.LayerUIElement.parent[i];
+                sibling.style.backgroundColor = new StyleColor(Color.clear);
+                var siblingPos = GetAbsolutePosition(sibling);
+                if (referencePosition.y < siblingPos.y && Mathf.Abs(siblingPos.y - referencePosition.y) < threshold)
+                {
+                    sibling.style.backgroundColor = new StyleColor(Color.cyan);
+                    newParent = sibling;
+                    break;
+                }
+            }
+
+            return newParent;
+        }
+
         public int CalculateSiblingIndexFromDragElementPosition()
         {
             var referencePosition = GetAbsolutePosition(dragLayerElement);
-            referencePosition.y -= draggingLayer.LayerUIElement.resolvedStyle.height;
-            for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount - 1; i++)
+            referencePosition.y -= 0.75f * draggingLayer.LayerUIElement.resolvedStyle.height; //no idea why this should be 0.75
+            referencePosition.y += draggingLayer.dragStartOffset.y;
+            
+            // referencePosition.y -= draggingLayer.LayerUIElement.resolvedStyle.height;
+            for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount; i++)
             {
                 var siblingPos = GetAbsolutePosition(draggingLayer.LayerUIElement.parent[i]);
                 // print(i + "\t" + siblingPos);
@@ -148,7 +203,7 @@ namespace Netherlands3D.Twin.UI.Inpector
                     return i;
             }
 
-            return draggingLayer.LayerUIElement.parent.childCount - 2; // minus 1 for the dragging element, and minus 1 because index is 0 based.
+            return draggingLayer.LayerUIElement.parent.childCount - 1; // minus 1 for the dragging element, and minus 1 because index is 0 based.
         }
 
         public static Vector2 GetAbsolutePosition(VisualElement element)
@@ -181,7 +236,7 @@ namespace Netherlands3D.Twin.UI.Inpector
         {
             draggingLayer.StopDrag();
             draggingLayer = null;
-            layerInspector.Remove(dragLayerElement);
+            layerListContainer.Remove(dragLayerElement);
         }
     }
 
@@ -195,6 +250,7 @@ namespace Netherlands3D.Twin.UI.Inpector
         public Button ColorButton { get; }
         public Label TextLabel { get; }
         public VisualElement childrenContainer { get; }
+        public VisualElement IndentSpacer { get; }
 
         private Vector3 pointerDownPosition;
         private bool pointerDown;
@@ -211,17 +267,18 @@ namespace Netherlands3D.Twin.UI.Inpector
             Layer = layer;
             LayerUIElement = newTemplateInstance;
             EnabledToggle = newTemplateInstance.Q<Toggle>("EnabledToggle");
+            FoldoutToggle = newTemplateInstance.Q<Toggle>("FoldoutToggle");
             ColorButton = newTemplateInstance.Q<Button>("ColorButton");
             TextLabel = newTemplateInstance.Q<Label>("LayerName");
             childrenContainer = newTemplateInstance.Q<VisualElement>("Content");
+            IndentSpacer = newTemplateInstance.Q<VisualElement>("IndentSpacer");
 
             FoldoutToggle.RegisterValueChangedCallback(OnFoldoutToggleValueChanged);
-
-            UpdateLayerUI();
 
             LayerUIElement.RegisterCallback<PointerDownEvent>(OnPointerDown);
             LayerUIElement.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             // LayerUIElement.RegisterCallback<PointerUpEvent>(OnPointerUp);
+            UpdateLayerUI();
         }
 
         private void OnPointerDown(PointerDownEvent evt)
@@ -289,6 +346,13 @@ namespace Netherlands3D.Twin.UI.Inpector
             EnabledToggle.value = Layer.LayerEnabled;
             ColorButton.style.backgroundColor = new StyleColor(Layer.Color);
             TextLabel.text = Layer.Name;
+
+            if (Layer.Parent)
+            {
+                Debug.Log(Layer.Parent);
+                Layer.Parent.UI.childrenContainer.Add(LayerUIElement);
+                IndentSpacer.style.width = Layer.Depth * FoldoutToggle.resolvedStyle.width;
+            }
         }
     }
 }

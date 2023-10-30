@@ -36,6 +36,7 @@ namespace Netherlands3D.Twin.UI.Inpector
 
         public LayerNL3DBase Parent { get; private set; }
         public List<LayerNL3DBase> Children { get; private set; } = new();
+        public int Depth { get; private set; } = 0;
 
 
         protected virtual void OnEnable()
@@ -76,6 +77,8 @@ namespace Netherlands3D.Twin.UI.Inpector
             else
                 newParent.Children.Add(this);
 
+            Depth = Parent.Depth + 1;
+            
             UpdateUI();
         }
 
