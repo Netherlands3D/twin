@@ -5,10 +5,10 @@
             <ui:Toggle name="EnabledToggle" value="true" />
             <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="ColorButton" class="color-bar" style="margin-top: 2px; margin-bottom: 2px;" />
             <ui:VisualElement name="IndentSpacer" class="indent-spacer" />
-            <ui:Toggle name="FoldoutToggle" />
+            <ui:Toggle name="FoldoutToggle" value="true" />
             <ui:VisualElement name="Icon" style="flex-grow: 0;" />
             <ui:Label tabindex="-1" text="Layer" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LayerName" class="layer-name-label" />
         </ui:VisualElement>
-        <ui:VisualElement name="Content" style="flex-grow: 1;" />
+        <ui:VisualElement name="Content" picking-mode="Ignore" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

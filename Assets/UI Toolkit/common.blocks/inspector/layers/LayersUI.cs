@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.UI.Inpector.Layers;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -15,8 +12,11 @@ namespace Netherlands3D.Twin.UI.Inpector
 {
     public class LayersUI : MonoBehaviour
     {
-        public static LayersUI Instance;
-        public static List<LayerNL3DBase> Layers = new List<LayerNL3DBase>();
+        // public static LayersUI Instance;
+        public static List<LayerNL3DBase> AllLayers = new List<LayerNL3DBase>();
+
+        public static List<LayerUI2> LayersVisibleInHierarchy = new List<LayerUI2>();
+        public static List<LayerUI2> SelectedLayers = new();
 
         [SerializeField] private Tool layerTool;
         public Tool LayerTool => layerTool;
@@ -30,10 +30,11 @@ namespace Netherlands3D.Twin.UI.Inpector
         private LayerUI2 draggingLayer;
         private VisualElement dragLayerElement;
 
-        private void Awake()
-        {
-            Instance = this;
-        }
+
+        // private void Awake()
+        // {
+        //     Instance = this;
+        // }
 
         private void OnEnable()
         {
@@ -49,7 +50,7 @@ namespace Netherlands3D.Twin.UI.Inpector
 
         private void OnLayerToolDeactivated()
         {
-            foreach (var layer in Layers)
+            foreach (var layer in AllLayers)
             {
                 layer.UnLinkListeners();
             }
@@ -59,7 +60,7 @@ namespace Netherlands3D.Twin.UI.Inpector
         {
             layerListContainer = layerTool.InspectorInstance.Q<VisualElement>("LayerList");
             ghostElementContainer = layerTool.InspectorInstance.Q<VisualElement>("GhostElements");
-            foreach (var layer in Layers)
+            foreach (var layer in AllLayers)
             {
                 AddLayerUI(layer);
                 layer.LinkListeners();
@@ -74,7 +75,7 @@ namespace Netherlands3D.Twin.UI.Inpector
             layer.UI = ui;
 
             ui.DragStarted.AddListener(OnLayerUIStartDrag);
-
+            LayersVisibleInHierarchy.Add(ui);
             return ui;
         }
 
@@ -97,35 +98,75 @@ namespace Netherlands3D.Twin.UI.Inpector
             // draggingLayer.LayerUIElement
         }
 
+        private VisualElement a;
         private void Update()
         {
+            if (a == null)
+            {
+                a = new();
+                GetComponent<UIDocument>().rootVisualElement.Add(a);
+            }
+            // var mp = CalculateReferencePosition();
+            a.name = "test";
+            a.style.position = Position.Absolute;
+            a.transform.position = Pointer.current.position.ReadValue();
+            a.style.width = 10;
+            a.style.height = 10;
+            a.style.color = Color.green;
+            
             if (draggingLayer != null)
             {
                 CalculateDragElementPosition();
-                var potentialNewParent = GetNewParentBasedOnDragPosition(draggingLayer.LayerUIElement.resolvedStyle.height / 2);
-                
-                ShowReorderLine(potentialNewParent == null, CalculateSiblingIndexFromDragElementPosition());
+                var referencePosition = CalculateReferencePosition();
+                var potentialNewParent = GetNewParentBasedOnDragPosition(referencePosition,draggingLayer.LayerUIElement.resolvedStyle.height / 2);
+
+                ShowReorderLine(potentialNewParent == null, CalculateSiblingIndexFromDragElementPosition(referencePosition));
 
                 if (!Pointer.current.press.IsPressed())
                 {
                     // draggingLayer.Layer.SetParent(potentialNewParent.layout);
                     if (potentialNewParent != null)
                     {
-                        print("reparenting");
-                        var parentLayer = Layers.First(layer => layer.UI.LayerUIElement == potentialNewParent);
-                        draggingLayer.Layer.SetParent(parentLayer);
-                        potentialNewParent.style.backgroundColor = new StyleColor(Color.clear);
-                        draggingLayer.UpdateLayerUI();
+                        var parentLayer = AllLayers.First(layer => layer.UI.LayerUIElement == potentialNewParent);
+                        if (parentLayer != draggingLayer.Layer)
+                        {
+                            // print("reparenting");
+                            // draggingLayer.Layer.SetParent(parentLayer);
+                            // potentialNewParent.style.backgroundColor = StyleKeyword.Null;
+                            // draggingLayer.UpdateLayerUI();
+                        }
                     }
                     else
                     {
-                        ReorderLayers();
+                        ReorderLayers(referencePosition);
                     }
 
                     ShowReorderLine(false);
                     OnDragEnded();
                 }
             }
+
+            //debug area
+            // foreach (var l in AllLayers)
+            // {
+            //     print("--- " + l.name);
+            //     print("parent: " + l.Parent);
+            //     string c = "";
+            //     foreach (var child in l.Children)
+            //     {
+            //         c += child.Name + "\t";
+            //     }
+            //
+            //     print("children: " + c);
+            //     print("---");
+            // }
+
+            // foreach (var layer in LayersVisibleInHierarchy)
+            // {
+            //     print(layer.Layer.name);
+            // }
+            //
+            // print(LayersVisibleInHierarchy.Count);
         }
 
         private void ShowReorderLine(bool show, int behindIndex = 0)
@@ -135,18 +176,33 @@ namespace Netherlands3D.Twin.UI.Inpector
             reorderLine.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private void ReorderLayers()
+        private void ReorderLayers(Vector2 referencePosition)
         {
-            // var oldSiblingIndex = GetSiblingIndex(draggingLayer.LayerUIElement);
-            var newSiblingIndex = CalculateSiblingIndexFromDragElementPosition();
-
+            print("reordering layers");
+            var newSiblingIndex = CalculateSiblingIndexFromDragElementPosition(referencePosition);
+            // if(newSiblingIndex)
             draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
-            // if (newSiblingIndex < oldSiblingIndex)
-            //     draggingLayer.LayerUIElement.PlaceBehind(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
-            // else if (newSiblingIndex > oldSiblingIndex)
-            //     draggingLayer.LayerUIElement.PlaceInFront(draggingLayer.LayerUIElement.parent[newSiblingIndex]);
 
-            Layers = Layers.OrderBy(layer => GetSiblingIndex(layer.UI.LayerUIElement)).ToList();
+            // AllLayers.Remove(draggingLayer.Layer);
+            // var afterLayer = AllLayers.IndexOf(LayersVisibleInHierarchy[newSiblingIndex].Layer);
+            // AllLayers.Insert(afterLayer, draggingLayer.Layer);
+            AllLayers = AllLayers.OrderBy(layer => GetSiblingIndex(layer.UI.LayerUIElement)).ToList();
+
+            //temp debug naming
+            for (var index = 0; index < AllLayers.Count; index++)
+            {
+                var layer = AllLayers[index];
+                if (int.TryParse(layer.name[0].ToString(), out var num))
+                {
+                    layer.Name = index + " " + layer.name.Substring(2, layer.name.Length - 2);
+                }
+                else
+                {
+                    layer.Name = index + " " + layer.Name;
+                }
+
+                layer.UI.UpdateLayerUI();
+            }
         }
 
         private Vector2 CalculateDragElementPosition()
@@ -160,22 +216,19 @@ namespace Netherlands3D.Twin.UI.Inpector
             panelOffset.y += heightOffset;
             panelOffset += draggingLayer.dragStartOffset;
             var dragElementPosition = mousePositionCorrected - new Vector2(panelOffset.x, panelOffset.y);
-            // dragLayerElement.transform.position = mousePositionCorrected - new Vector2(panelOffset.x, panelOffset.y);
             dragLayerElement.style.top = dragElementPosition.y;
             return dragElementPosition;
         }
 
-        public VisualElement GetNewParentBasedOnDragPosition(float threshold)
+        public VisualElement GetNewParentBasedOnDragPosition(Vector2 referencePosition, float threshold)
         {
-            var referencePosition = GetAbsolutePosition(dragLayerElement);
-            referencePosition.y -= 0.75f * draggingLayer.LayerUIElement.resolvedStyle.height; //no idea why this should be 0.75
-            referencePosition.y += draggingLayer.dragStartOffset.y;
+            // var referencePosition = CalculateReferencePosition();
 
             VisualElement newParent = null;
             for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount - 1; i++)
             {
                 var sibling = draggingLayer.LayerUIElement.parent[i];
-                sibling.style.backgroundColor = new StyleColor(Color.clear);
+                sibling.style.backgroundColor = StyleKeyword.Null;
                 var siblingPos = GetAbsolutePosition(sibling);
                 if (referencePosition.y < siblingPos.y && Mathf.Abs(siblingPos.y - referencePosition.y) < threshold)
                 {
@@ -188,22 +241,31 @@ namespace Netherlands3D.Twin.UI.Inpector
             return newParent;
         }
 
-        public int CalculateSiblingIndexFromDragElementPosition()
+        private Vector2 CalculateReferencePosition()
         {
             var referencePosition = GetAbsolutePosition(dragLayerElement);
             referencePosition.y -= 0.75f * draggingLayer.LayerUIElement.resolvedStyle.height; //no idea why this should be 0.75
             referencePosition.y += draggingLayer.dragStartOffset.y;
-            
+            return referencePosition;
             // referencePosition.y -= draggingLayer.LayerUIElement.resolvedStyle.height;
-            for (int i = 0; i < draggingLayer.LayerUIElement.parent.childCount; i++)
+        }
+
+        public int CalculateSiblingIndexFromDragElementPosition(Vector2 referencePosition)
+        {
+            // var referencePosition = CalculateReferencePosition();
+
+            for (int i = 0; i < LayersVisibleInHierarchy.Count; i++)
             {
-                var siblingPos = GetAbsolutePosition(draggingLayer.LayerUIElement.parent[i]);
-                // print(i + "\t" + siblingPos);
+                var siblingPos = GetAbsolutePosition(LayersVisibleInHierarchy[i].LayerUIElement);
                 if (referencePosition.y < siblingPos.y)
+                {
+                    print(i);
                     return i;
+                }
             }
 
-            return draggingLayer.LayerUIElement.parent.childCount - 1; // minus 1 for the dragging element, and minus 1 because index is 0 based.
+            print(LayersVisibleInHierarchy.Count -1);
+            return LayersVisibleInHierarchy.Count -1;
         }
 
         public static Vector2 GetAbsolutePosition(VisualElement element)
@@ -238,6 +300,48 @@ namespace Netherlands3D.Twin.UI.Inpector
             draggingLayer = null;
             layerListContainer.Remove(dragLayerElement);
         }
+
+        public static void SelectOrDeselectLayer(LayerUI2 layer, bool addToSelection)
+        {
+            if (!addToSelection)
+            {
+                foreach (var selectedLayer in SelectedLayers)
+                {
+                    selectedLayer.LayerUIElement.Q<VisualElement>("ParentRow").RemoveFromClassList("Selected");
+                }
+
+                SelectedLayers.Clear();
+            }
+
+            if (SelectedLayers.Contains(layer))
+            {
+                SelectedLayers.Remove(layer);
+                layer.LayerUIElement.Q<VisualElement>("ParentRow").RemoveFromClassList("Selected");
+            }
+            else
+            {
+                SelectedLayers.Add(layer);
+                layer.LayerUIElement.Q<VisualElement>("ParentRow").AddToClassList("Selected");
+            }
+        }
+
+        public static void UpdateCurrentHierarchy(LayerNL3DBase changedLayer, bool childrenVisible)
+        {
+            foreach (var child in changedLayer.Children)
+            {
+                if (childrenVisible && !child.UI.IsVisible)
+                {
+                    var childIndex = LayersVisibleInHierarchy.IndexOf(changedLayer.UI);
+                    LayersVisibleInHierarchy.Insert(childIndex, child.UI);
+                }
+                else if (!childrenVisible && child.UI.IsVisible)
+                {
+                    LayersVisibleInHierarchy.Remove(child.UI);
+                }
+
+                UpdateCurrentHierarchy(child, child.UI.FoldoutToggle.value);
+            }
+        }
     }
 
     public class LayerUI2
@@ -260,6 +364,9 @@ namespace Netherlands3D.Twin.UI.Inpector
         public UnityEvent<LayerUI2> DragStarted = new();
         public UnityEvent<LayerUI2> DragEnded = new();
 
+        public bool IsSelected => LayersUI.SelectedLayers.Contains(this);
+        public bool IsVisible => LayersUI.LayersVisibleInHierarchy.Contains(this);
+
         public Vector2 dragStartOffset { get; private set; }
 
         public LayerUI2(LayerNL3DBase layer, TemplateContainer newTemplateInstance)
@@ -272,21 +379,39 @@ namespace Netherlands3D.Twin.UI.Inpector
             TextLabel = newTemplateInstance.Q<Label>("LayerName");
             childrenContainer = newTemplateInstance.Q<VisualElement>("Content");
             IndentSpacer = newTemplateInstance.Q<VisualElement>("IndentSpacer");
+            newTemplateInstance.Q<VisualElement>("ParentRow").RegisterCallback<PointerEnterEvent>(OnPointerEnter);
 
             FoldoutToggle.RegisterValueChangedCallback(OnFoldoutToggleValueChanged);
 
             LayerUIElement.RegisterCallback<PointerDownEvent>(OnPointerDown);
             LayerUIElement.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             // LayerUIElement.RegisterCallback<PointerUpEvent>(OnPointerUp);
+
             UpdateLayerUI();
+        }
+
+        private void OnPointerEnter(PointerEnterEvent evt)
+        {
+            Debug.Log("pointer enteredn: " + Layer.name);
         }
 
         private void OnPointerDown(PointerDownEvent evt)
         {
-            Debug.Log("pointer down" + Layer.name);
+            Debug.Log("pointer down " + Layer.name);
             pointerDown = true;
             pointerDownPosition = evt.position;
+            LayersUI.SelectOrDeselectLayer(this, GetAddToSelectionKeyIsPressed());
             PointerDown.Invoke(this);
+        }
+
+        private static bool GetAddToSelectionKeyIsPressed()
+        {
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+            {
+                return Keyboard.current.leftCommandKey.IsPressed() || Keyboard.current.rightCommandKey.IsPressed();
+            }
+
+            return Keyboard.current.leftCtrlKey.IsPressed() || Keyboard.current.rightCtrlKey.IsPressed();
         }
 
         private void OnPointerMove(PointerMoveEvent evt)
@@ -338,7 +463,9 @@ namespace Netherlands3D.Twin.UI.Inpector
 
         public void ToggleChildrenVisible(bool visible)
         {
-            childrenContainer.visible = visible;
+            // childrenContainer.visible = visible;
+            childrenContainer.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            LayersUI.UpdateCurrentHierarchy(Layer, visible);
         }
 
         public void UpdateLayerUI()

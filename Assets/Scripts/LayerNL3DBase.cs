@@ -41,12 +41,12 @@ namespace Netherlands3D.Twin.UI.Inpector
 
         protected virtual void OnEnable()
         {
-            LayersUI.Layers.Add(this);
+            LayersUI.AllLayers.Add(this);
         }
 
         protected virtual void OnDisable()
         {
-            LayersUI.Layers.Remove(this);
+            LayersUI.AllLayers.Remove(this);
         }
 
         public void LinkListeners()
@@ -77,9 +77,18 @@ namespace Netherlands3D.Twin.UI.Inpector
             else
                 newParent.Children.Add(this);
 
-            Depth = Parent.Depth + 1;
+            // Depth = Parent.Depth + 1;
+            RecalculateDepthValuesRecursively();
             
+        }
+
+        private void RecalculateDepthValuesRecursively()
+        {
+            Depth = Parent.Depth + 1;
             UpdateUI();
+            
+            foreach (var child in Children)
+                child.RecalculateDepthValuesRecursively();
         }
 
         private void UpdateUI()

@@ -35,3 +35,7 @@
     flex-grow: 0;
     width: 0;
 }
+
+.Selected {
+    background-color: rgb(180, 213, 255);
+}
