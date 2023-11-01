@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using Netherlands3D.Coordinates;
 #if SUBOBJECT
-using Netherlands3D.subobject;
+using Netherlands3D.SubObjects;
 #endif
 using System.Diagnostics;
 
