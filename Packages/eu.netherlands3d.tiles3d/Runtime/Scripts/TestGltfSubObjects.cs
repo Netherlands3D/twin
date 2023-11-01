@@ -8,6 +8,8 @@ public class TestGltfSubObjects : MonoBehaviour
 {
     [SerializeField] string url = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/t/9/179/222.glb";
 
+    [SerializeField] private Material material;
+
     [ContextMenu("Go")]
     public void Go()
     {
@@ -30,8 +32,26 @@ public class TestGltfSubObjects : MonoBehaviour
         //Offset using rtcCenter
         foreach(Transform child in this.transform)
         { 
-            Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0], parsedGltf.rtcCenter[1], parsedGltf.rtcCenter[2]));
-            child.position = unityPosition;
+            if(child.TryGetComponent(out MeshRenderer meshRenderer))
+            {
+                child.transform.position = Vector3.zero;
+                
+                //apply material to all materials
+                meshRenderer.materials = Enumerable.Repeat(material, meshRenderer.materials.Length).ToArray();
+
+                //Get mesh colors
+                var mesh = meshRenderer.GetComponent<MeshFilter>().sharedMesh;
+                                  
+                //Create new color array by using parsedGltf.featureTableFloats for the color id from colorDictionary
+                var newColors = new Color[mesh.vertexCount];
+                for(int i = 0; i < newColors.Length; i++)
+                {
+                    newColors[i] = parsedGltf.uniqueColors[parsedGltf.featureTableFloats[i]];
+                }
+
+                mesh.colors = newColors;
+            }
+            
         }
     }    
 }

@@ -12,6 +12,8 @@ using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
 using Unity.Collections;
+using System.Linq;
+
 
 
 
@@ -181,7 +183,13 @@ public class ParsedGltf
     public byte[] glbBuffer;
     public double[] rtcCenter = null;
 
-    //public EXT_mesh_features extention_EXT_mesh_features;
+    private NativeArray<byte> glbBufferNative;
+    private NativeArray<byte> destination;
+    private NativeSlice<byte> source;
+
+    
+    public  Dictionary<int,Color> uniqueColors = new Dictionary<int, Color>();
+    public List<int> featureTableFloats = new List<int>();
 
     public async void SpawnGltfScenes(Transform parent)
     {
@@ -192,7 +200,6 @@ public class ParsedGltf
             for (int i = 0; i < scenes; i++)
             {
                 await gltfImport.InstantiateSceneAsync(parent, i);
-                var scene = parent.GetChild(0).transform;
             }
         }
     }
@@ -236,27 +243,41 @@ public class ParsedGltf
         var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
         Debug.Log(JsonConvert.SerializeObject(targetBufferView));
+
+        //TODO:Check if bufferView is compressed
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
 
         //featureIdBuffer is now a byte array containing the reference to feature table for all vertices
-
         Debug.Log("featureIdBuffer. same as vertices? " + featureIdBuffer.Length);
 
         //Parse feature table into List<float>
         var stride = targetBufferView.byteStride;
-        var featureTableFloats = new List<float>();
-
+        
         for (int i = 0; i < featureIdBuffer.Length; i += stride)
         {
-            var featureId = BitConverter.ToUInt32(featureIdBuffer, i);
-            featureTableFloats.Add(featureId);
+            var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i);
+            featureTableFloats.Add(featureTableIndex);
+            //Debug.Log("Feature ID: " + featureId); //Big spam
+
+            if(!uniqueColors.ContainsKey((int)featureTableIndex))
+            {
+                uniqueColors.Add((int)featureTableIndex, UnityEngine.Random.ColorHSV());
+                if(i == 0) Debug.Log(featureTableIndex);
+            }
         }
 
+        //TODO; see how to retrieve BAGID string from bufferview
+
+        Debug.Log("min value" + featureTableFloats.Min());
+        Debug.Log("max value" + featureTableFloats.Max());
+
         Debug.Log("featureTableFloats count: " + featureTableFloats.Count);
+        Debug.Log("uniqueColors (buildings) count: " + uniqueColors.Count);
     }
 
     private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)
     {
+        //Because the mesh is compressed, we need to get the buffer and decompress it
         var bufferIndex = bufferView.extensions.EXT_meshopt_compression.buffer; //Ignore multiple buffers for now
         var byteLength = bufferView.extensions.EXT_meshopt_compression.byteLength;
         var byteOffset = bufferView.extensions.EXT_meshopt_compression.byteOffset;
@@ -267,35 +288,34 @@ public class ParsedGltf
         Debug.Log("ByteStride: " + byteStride);
         Debug.Log("Count: " + count);
 
-
         //Create NativeArray from byte[] glbBuffer
-        var glbBufferNative = new NativeArray<byte>(glbBuffer, Allocator.Temp);
-
+        glbBufferNative = new NativeArray<byte>(glbBuffer, Allocator.Persistent);
         Debug.Log("Native buffer length: " + glbBufferNative.Length);
 
         //Create NativeSlice as part of the glbBuffer that the view is covering
-        var source = glbBufferNative.Slice((int)byteOffset, (int)byteLength);
+        source = glbBufferNative.Slice((int)byteOffset, (int)byteLength);
         Debug.Log("Slice length for view region: " + source.Length);
 
         //Create NativeArray to store the decompressed buffer
-        var destination = new NativeArray<byte>(count * byteStride, Allocator.Temp);
+        destination = new NativeArray<byte>(count * byteStride, Allocator.Persistent);
         Debug.Log("Destination decompressed length: " + destination.Length);
-
-        Debug.Log(destination);
 
         //Decompress using meshop decomression
         Debug.Log("Decompressing");
-        Decode.DecodeGltfBufferSync(
+        var success = Decode.DecodeGltfBufferSync(
             destination,
             count,
-            byteStride,
+            byteStride, 
             source,            
             Meshoptimizer.Mode.Attributes,
             Meshoptimizer.Filter.None
         );
+        Debug.Log(success);
 
         Debug.Log("Decompressed");
         return destination.ToArray();
+
+        
     }
 
     public class SimpleTestJSON{
