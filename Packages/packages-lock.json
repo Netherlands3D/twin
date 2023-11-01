@@ -203,8 +203,18 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.cartesiantiles": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "eu.netherlands3d.coordinates": "1.2.0",
+        "com.unity.textmeshpro": "3.0.6"
+      },
+      "url": "https://package.openupm.com"
+    },
     "eu.netherlands3d.coordinates": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -317,6 +327,13 @@
     "eu.netherlands3d.snapshots": {
       "version": "1.0.0",
       "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.subobjects": {
+      "version": "1.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
