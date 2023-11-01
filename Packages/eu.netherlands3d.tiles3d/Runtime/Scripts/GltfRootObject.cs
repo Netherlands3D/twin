@@ -45,7 +45,7 @@ namespace GltfMeshFeatures
     {
         public int buffer { get; set; }
         public int byteLength { get; set; }
-        public EXTMeshoptCompression extensions { get; set; }
+        public Extentions extensions { get; set; }
         public int byteOffset { get; set; }
         public int byteStride { get; set; }
         public int target { get; set; }
@@ -56,6 +56,11 @@ namespace GltfMeshFeatures
     {
         public int byteLength { get; set; }
         public EXTMeshoptCompression extensions { get; set; }
+    }
+
+    [Serializable]
+    public class Extentions{
+        public EXTMeshoptCompression EXT_meshopt_compression { get; set; }
     }
 
     [Serializable]

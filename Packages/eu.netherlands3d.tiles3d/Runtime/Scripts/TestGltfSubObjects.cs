@@ -25,7 +25,6 @@ public class TestGltfSubObjects : MonoBehaviour
         parsedGltf.SpawnGltfScenes(this.transform);
 
         //Check if mesh features addon is used to define subobjects
-        bool has_EXT_mesh_Features = parsedGltf.gltfImport.GetSourceRoot().extensionsUsed.Contains("EXT_mesh_Features");
         parsedGltf.ParseSubObjects();
 
         //Offset using rtcCenter

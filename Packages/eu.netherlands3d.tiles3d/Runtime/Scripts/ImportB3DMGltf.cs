@@ -10,8 +10,8 @@ using System;
 using SimpleJSON;
 using System.Text;
 using Newtonsoft.Json;
+using Meshoptimizer;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 
 
 
@@ -203,17 +203,18 @@ public class ParsedGltf
 
         //Extract json from glb
         var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
-        var gltf = gltfAndBin.Item1;
-        var bin = gltfAndBin.Item2;
+        var gltfJsonText = gltfAndBin.Item1;
+        var binaryBlob = gltfAndBin.Item2;
 
 
-        Debug.Log($"<color=green>{gltf}</color>");
+        Debug.Log($"<color=green>{gltfJsonText}</color>");
         Debug.Log("HOI");
         //loop through all primitive attributes
         
         //var gltfFeatures = JsonUtility.FromJson<GltfMeshFeatures.GltfRootObject>(gltf);
         //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
-        var gltfFeatures = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltf);
+        var gltfFeatures = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
+
         var featureIdBufferViewIndex = 0;
         foreach(var mesh in gltfFeatures.meshes)
         {
@@ -229,29 +230,77 @@ public class ParsedGltf
         //Use feature ID as bufferView index.
         //Parse the bufferView as a feature table
 
-        //Get bufferview (using gltFast accessor to reuse decompression)
-        var accessorCount = gltfFeatures.accessors[featureIdBufferViewIndex].count;
-        Debug.Log("accessorCount: " + accessorCount);
+        //Get bufferview
+        var featureAccessor =  gltfFeatures.accessors[featureIdBufferViewIndex];
+        Debug.Log(JsonConvert.SerializeObject(featureAccessor));
+        var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
+        Debug.Log(JsonConvert.SerializeObject(targetBufferView));
+        var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
 
-        var byteSlice = gltfImport.GetAccessor(featureIdBufferViewIndex).ToArray();
-        Debug.Log("byteSlice.Length: " + byteSlice.Length);
+        //featureIdBuffer is now a byte array containing the reference to feature table for all vertices
 
-        //Convert byteSlice into array of floats without unsafe methods
-        var ids = new int[accessorCount];
-        for (int i = 0; i < accessorCount; i++)
+        Debug.Log("featureIdBuffer. same as vertices? " + featureIdBuffer.Length);
+
+        //Parse feature table into List<float>
+        var stride = targetBufferView.byteStride;
+        var featureTableFloats = new List<float>();
+
+        for (int i = 0; i < featureIdBuffer.Length; i += stride)
         {
-            ids[i] = BitConverter.ToInt32(byteSlice, i * 4);
+            var featureId = BitConverter.ToUInt32(featureIdBuffer, i);
+            featureTableFloats.Add(featureId);
         }
 
-        Debug.Log("ids.Length: " + ids.Length);
-        Debug.Log("byteSlice.Length: " + byteSlice.Length);
-        foreach(var id in ids)
-        {
-            Debug.Log(id);
-        }
-    }    
+        Debug.Log("featureTableFloats count: " + featureTableFloats.Count);
+    }
 
+    private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)
+    {
+        var bufferIndex = bufferView.extensions.EXT_meshopt_compression.buffer; //Ignore multiple buffers for now
+        var byteLength = bufferView.extensions.EXT_meshopt_compression.byteLength;
+        var byteOffset = bufferView.extensions.EXT_meshopt_compression.byteOffset;
+        var byteStride = bufferView.extensions.EXT_meshopt_compression.byteStride;
+        var count = bufferView.extensions.EXT_meshopt_compression.count;
+        Debug.Log("ByteLength: " + byteLength);	
+        Debug.Log("ByteOffset: " + byteOffset);
+        Debug.Log("ByteStride: " + byteStride);
+        Debug.Log("Count: " + count);
+
+
+        //Create NativeArray from byte[] glbBuffer
+        var glbBufferNative = new NativeArray<byte>(glbBuffer, Allocator.Temp);
+
+        Debug.Log("Native buffer length: " + glbBufferNative.Length);
+
+        //Create NativeSlice as part of the glbBuffer that the view is covering
+        var source = glbBufferNative.Slice((int)byteOffset, (int)byteLength);
+        Debug.Log("Slice length for view region: " + source.Length);
+
+        //Create NativeArray to store the decompressed buffer
+        var destination = new NativeArray<byte>(count * byteStride, Allocator.Temp);
+        Debug.Log("Destination decompressed length: " + destination.Length);
+
+        Debug.Log(destination);
+
+        //Decompress using meshop decomression
+        Debug.Log("Decompressing");
+        Decode.DecodeGltfBufferSync(
+            destination,
+            count,
+            byteStride,
+            source,            
+            Meshoptimizer.Mode.Attributes,
+            Meshoptimizer.Filter.None
+        );
+
+        Debug.Log("Decompressed");
+        return destination.ToArray();
+    }
+
+    public class SimpleTestJSON{
+        public int scene { get; set; }
+    }
 
     public static (string, byte[]) ExtractJsonAndBinary(byte[] glbData)
     {
