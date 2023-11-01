@@ -1,12 +1,9 @@
-
 using System.Collections.Generic;
 using System.Linq;
-
-
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.subobject
+namespace Netherlands3D.SubObjects
 {
     public class ColorSetLayer
     {
@@ -17,7 +14,7 @@ namespace Netherlands3D.subobject
         public ColorSetLayer(int priorityIndex, Dictionary<string, Color> colorSet)
         {
             PriorityIndex = priorityIndex;
-            ColorSet = colorSet;
+            ColorSet = new Dictionary<string, Color>(colorSet);
         }
     }
 
@@ -87,12 +84,12 @@ namespace Netherlands3D.subobject
         public static void AddAndMergeCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
         {
             var colorLayer = customColors.FirstOrDefault(layer => layer.PriorityIndex == priorityIndex);
+            
             if (colorLayer != null)
             {
-                var keys = colorSet.Keys.ToList(); // Create a copy of the keys because not doing so causes an InvalidOperationException: Collection was modified; even if it wasn't modified
-                foreach (var key in keys)
+                foreach (var colorPair in colorSet)
                 {
-                    colorLayer.ColorSet[key] = colorSet[key];
+                    colorLayer.ColorSet[colorPair.Key] = colorPair.Value;
                 }
             }
             else
@@ -115,6 +112,7 @@ namespace Netherlands3D.subobject
                 if (changedColorSet[key] == PrioritizedColors[key])
                     changedColors.Add(key, PrioritizedColors[key]);
             }
+
             Interaction.ApplyColorsToAll(changedColors);
             ColorsChanged.Invoke(changedColors);
         }
@@ -159,7 +157,5 @@ namespace Netherlands3D.subobject
                 }
             }
         }
-
-        
     }
 }

@@ -1,6 +1,6 @@
 
 
-namespace Netherlands3D.subobject
+namespace Netherlands3D.SubObjects
 {
     [System.Serializable]
     public class ObjectMappingItem 

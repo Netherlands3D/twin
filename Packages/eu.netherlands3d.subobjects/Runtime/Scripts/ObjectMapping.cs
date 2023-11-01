@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.subobject
+namespace Netherlands3D.SubObjects
 {
     public class ObjectMapping : MonoBehaviour
     {
