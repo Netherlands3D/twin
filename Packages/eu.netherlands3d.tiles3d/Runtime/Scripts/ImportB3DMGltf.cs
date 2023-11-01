@@ -9,6 +9,12 @@ using GLTFast;
 using System;
 using SimpleJSON;
 using System.Text;
+using Newtonsoft.Json;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+
+
+
 
 #if UNITY_EDITOR
 using System.IO.Compression;
@@ -77,43 +83,6 @@ namespace Netherlands3D.B3DM
             }
 
             webRequest.Dispose();
-        }
-
-        private static void ParseSubObjects(string jsonText)
-        {
-            // Load the glTF file as a JSON object
-            JSONNode gltf = JSON.Parse(jsonText);
-
-            // Get the extensions object
-            JSONNode extensions = gltf["extensions"];
-
-            // Check if the glTF file has the required extensions
-            if (extensions != null && extensions["EXT_mesh_features"] != null && extensions["EXT_instance_features"] != null)
-            {
-                // Get the mesh features object
-                JSONNode meshFeatures = extensions["EXT_mesh_features"];
-
-                // Log all mesh features
-                Debug.Log("Mesh Features:");
-                foreach (KeyValuePair<string, JSONNode> feature in meshFeatures)
-                {
-                    Debug.Log(feature.Key + ": " + feature.Value);
-                }
-
-                // Get the instance features object
-                JSONNode instanceFeatures = extensions["EXT_instance_features"];
-
-                // Log all instance features
-                Debug.Log("Instance Features:");
-                foreach (KeyValuePair<string, JSONNode> feature in instanceFeatures)
-                {
-                    Debug.Log(feature.Key + ": " + feature.Value);
-                }
-            }
-            else
-            {
-                Debug.LogError("glTF file does not have the required extensions: EXT_mesh_features and EXT_instance_features");
-            }
         }
 
         private static double[] GetRTCCenter(double[] rtcCenter, B3dm b3dm)
@@ -230,21 +199,61 @@ public class ParsedGltf
 
     public void ParseSubObjects()
     {
-        //Extract json from glb
-        var gltf = ExtractJson(glbBuffer);
+        Debug.Log("Parse subobjects");
 
+        //Extract json from glb
+        var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
+        var gltf = gltfAndBin.Item1;
+        var bin = gltfAndBin.Item2;
+
+
+        Debug.Log($"<color=green>{gltf}</color>");
+        Debug.Log("HOI");
         //loop through all primitive attributes
-        var gltfFeatures = JsonUtility.FromJson<GltfFeatures>(gltf);
-        foreach(var primitive in gltfFeatures.primitives)
+        
+        //var gltfFeatures = JsonUtility.FromJson<GltfMeshFeatures.GltfRootObject>(gltf);
+        //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
+        var gltfFeatures = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltf);
+        var featureIdBufferViewIndex = 0;
+        foreach(var mesh in gltfFeatures.meshes)
         {
-            foreach(var attribute in primitive.attributes)
+            foreach(var primitive in mesh.primitives)
             {
-                Debug.Log(attribute.Key + " " + attribute.Value);
+                Debug.Log("_FEATURE_ID_0 : " + primitive.attributes._FEATURE_ID_0);
+                featureIdBufferViewIndex = primitive.attributes._FEATURE_ID_0;
             }
         }
-    }
 
-    public static string ExtractJson(byte[] glbData)
+        Debug.Log("featureIdBufferViewIndex: " + featureIdBufferViewIndex);
+
+        //Use feature ID as bufferView index.
+        //Parse the bufferView as a feature table
+
+        //Get bufferview (using gltFast accessor to reuse decompression)
+        var accessorCount = gltfFeatures.accessors[featureIdBufferViewIndex].count;
+        Debug.Log("accessorCount: " + accessorCount);
+
+
+        var byteSlice = gltfImport.GetAccessor(featureIdBufferViewIndex).ToArray();
+        Debug.Log("byteSlice.Length: " + byteSlice.Length);
+
+        //Convert byteSlice into array of floats without unsafe methods
+        var ids = new int[accessorCount];
+        for (int i = 0; i < accessorCount; i++)
+        {
+            ids[i] = BitConverter.ToInt32(byteSlice, i * 4);
+        }
+
+        Debug.Log("ids.Length: " + ids.Length);
+        Debug.Log("byteSlice.Length: " + byteSlice.Length);
+        foreach(var id in ids)
+        {
+            Debug.Log(id);
+        }
+    }    
+
+
+    public static (string, byte[]) ExtractJsonAndBinary(byte[] glbData)
     {
         if (glbData.Length < 12)
             Debug.Log("GLB file is too short.");
@@ -272,48 +281,18 @@ public class ParsedGltf
         // Extract JSON as a string
         var json = Encoding.UTF8.GetString(glbData, jsonChunkOffset, (int)jsonChunkLength);
 
-        return json;
+        // Find the binary chunk
+        var binaryChunkLength = length - jsonChunkLength - 28; // 28 = GLB header (12 bytes) + JSON chunk header (8 bytes) + JSON chunk length (4 bytes) + BIN chunk header (8 bytes)
+        if (binaryChunkLength == 0)
+            Debug.Log("BIN chunk is missing.");
+        var binaryChunkOffset = jsonChunkOffset + (int)jsonChunkLength + 8; // JSON chunk header (8 bytes) + JSON chunk length (4 bytes)
+
+        // Extract binary data as a byte array
+        var binaryData = new byte[binaryChunkLength];
+        Buffer.BlockCopy(glbData, binaryChunkOffset, binaryData, 0, (int)binaryChunkLength);
+
+        return (json, binaryData);
     }
 }
 
-[Serializable]
-public class GltfFeatures
-{
-    public Primitive[] primitives { get; set; }
-
-    [Serializable]
-    public class Primitive
-    {
-        public Attributes[] attributes { get; set; }
-        public int[] indices { get; set; }
-        public int mode { get; set; }
-        public Extensions extensions { get; set; }
-    }
-
-    [Serializable]
-    public class Attributes
-    {
-        public int POSITION { get; set; }
-        public int _FEATURE_ID_0 { get; set; }
-    }
-
-    [Serializable]
-    public class Extensions
-    {
-        public ExtMeshFeatures EXT_mesh_features { get; set; }
-    }
-
-    [Serializable]
-    public class ExtMeshFeatures
-    {
-        public List<FeatureIds> featureIds { get; set; }
-    }
-
-    [Serializable]
-    public class FeatureIds
-    {
-        public int featureCount { get; set; }
-        public int attribute { get; set; }
-    }
-}
 

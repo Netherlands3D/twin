@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
@@ -21,16 +22,10 @@ public class TestGltfSubObjects : MonoBehaviour
     /// </summary>
     private void GotGltfContent(ParsedGltf parsedGltf)
     {
-        bool has_EXT_mesh_Features = false;
-        foreach (var extension in parsedGltf.gltfImport.GetSourceRoot().extensionsUsed)
-        {
-            if(extension == "EXT_mesh_Features")
-            {
-                has_EXT_mesh_Features = true;
-            }
-        }
-
         parsedGltf.SpawnGltfScenes(this.transform);
+
+        //Check if mesh features addon is used to define subobjects
+        bool has_EXT_mesh_Features = parsedGltf.gltfImport.GetSourceRoot().extensionsUsed.Contains("EXT_mesh_Features");
         parsedGltf.ParseSubObjects();
 
         //Offset using rtcCenter
@@ -39,7 +34,5 @@ public class TestGltfSubObjects : MonoBehaviour
             Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0], parsedGltf.rtcCenter[1], parsedGltf.rtcCenter[2]));
             child.position = unityPosition;
         }
-    }
-
-    
+    }    
 }
