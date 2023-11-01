@@ -10,7 +10,7 @@ using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using Netherlands3D.Twin;
 using UnityEngine;
-using Netherlands3D.ObjectColoring;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin
 {
@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin
                     hex = "#" + hex;
 
                 var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-                return canParse ? color : Color.black; //todo: default color?
+                return canParse ? color : Interaction.NO_OVERRIDE_COLOR; 
             }
         }
     }
@@ -36,24 +36,11 @@ namespace Netherlands3D.Twin
     public class CSVToColors : MonoBehaviour
     {
         [SerializeField] private string path;
-
-        private void OnEnable()
-        {
-            GeometryColorizer.ColorsChanged.AddListener(PrintColorChanges);
-        }
-
-        private void PrintColorChanges(Dictionary<string, Color> changedColors)
-        {
-            print("frame: " + Time.frameCount);
-            foreach (var kvp in changedColors)
-            {
-                print(kvp.Key + "\t" + kvp.Value);
-            }
-        }
+        [SerializeField] private int maxParsesPerFrame = 100;
 
         private void Start()
         {
-            StartCoroutine(StreamReadCSV(2));
+            StartCoroutine(StreamReadCSV(maxParsesPerFrame));
         }
 
         public IEnumerator StreamReadCSV(int maxParsesPerFrame)
@@ -62,10 +49,10 @@ namespace Netherlands3D.Twin
 
             while (dictionaries.MoveNext())
             {
-                // print("frame: " + Time.frameCount);
+                print("frame: " + Time.frameCount);
                 var dictionary = dictionaries.Current;
+                print(dictionary.Count);
                 GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
-
                 yield return null;
             }
         }
@@ -99,10 +86,9 @@ namespace Netherlands3D.Twin
                 //return the remaining elements of the part not divisible by maxParsesPerFrame 
                 if (dictionary.Count > 0)
                 {
-                    print("remaining: " + dictionary.Count);
                     yield return dictionary;
                 }
-                // return records.ToDictionary(record => record.Id, record => record.Color);
+                // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
             }
         }
     }
