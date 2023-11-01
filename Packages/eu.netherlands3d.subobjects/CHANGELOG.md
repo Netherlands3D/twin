@@ -10,3 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Script that manages different user defined color maps and prioritizes them for object coloring. 
+
+## [1.0.1]
+
+### Fixed
+
+- Changed namespace
+- made no override color a static readonly variable
+- fixed issue where the ColorSetLayer would hold a reference to a temporary variable dictionary instead of a standalone copy
