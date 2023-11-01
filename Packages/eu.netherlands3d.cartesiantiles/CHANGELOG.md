@@ -10,3 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - moved tileHandler and layers to its own repo
+
+## 1.0.1
+
+### fixed
+
+- changed namespace to work with changed namespace of SubObjects package
