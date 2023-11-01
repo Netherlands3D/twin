@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+# Except the .docker and build folder
+!/.docker
+!/Build
+!/build
