@@ -242,7 +242,7 @@ public class ParsedGltf
         var featureAccessor =  gltfFeatures.accessors[featureIdBufferViewIndex];
         var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
-        //TODO:Check if bufferView is compressed
+        //TODO:Check if bufferView is compressed before we try to decompress
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
 
         //Parse feature table into List<float>
