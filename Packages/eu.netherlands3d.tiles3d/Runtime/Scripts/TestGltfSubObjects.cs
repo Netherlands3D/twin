@@ -33,14 +33,6 @@ public class TestGltfSubObjects : MonoBehaviour
         //Offset using rtcCenter
         foreach(Transform child in this.transform)
         { 
-            //List all components on child
-            foreach(var component in child.GetComponents<Component>())
-            {
-                Debug.Log(component.name);
-                //ALso log component type name
-                Debug.Log(component.GetType().Name);
-            }
-
             if(child.TryGetComponent(out MeshRenderer meshRenderer))
             {
                 Debug.Log(meshRenderer.name);
