@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
+
 // using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
@@ -51,21 +52,28 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 Parent.Children.Remove(this);
 
             Parent = newParent;
-            if (childIndex >= 0 && childIndex < newParent.Children.Count)
-                newParent.Children.Insert(childIndex, this);
-            else
-                newParent.Children.Add(this);
+            if (newParent != null)
+            {
+                if (childIndex >= 0 && childIndex < newParent.Children.Count)
+                    newParent.Children.Insert(childIndex, this);
+                else
+                    newParent.Children.Add(this);
+            }
 
             RecalculateDepthValuesRecursively();
         }
 
         private void RecalculateDepthValuesRecursively()
         {
-            Depth = Parent.Depth + 1;
-            UpdateUI();
+            if (Parent)
+                Depth = Parent.Depth + 1;
+            else
+                Depth = 0;
 
             foreach (var child in Children)
                 child.RecalculateDepthValuesRecursively();
+
+            UpdateUI();
         }
 
         private void UpdateUI()
