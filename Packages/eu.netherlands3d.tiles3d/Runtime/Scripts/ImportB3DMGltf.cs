@@ -187,11 +187,15 @@ public class ParsedGltf
     private NativeArray<byte> destination;
     private NativeSlice<byte> source;
 
-    
     public  Dictionary<int,Color> uniqueColors = new Dictionary<int, Color>();
     public List<int> featureTableFloats = new List<int>();
 
-    public async void SpawnGltfScenes(Transform parent)
+    /// <summary>
+    /// Iterate through all scenes and instantiate them
+    /// </summary>
+    /// <param name="parent">Parent spawned scenes to Transform</param>
+    /// <returns>Async Task</returns>
+    public async Task SpawnGltfScenes(Transform parent)
     {
         if (gltfImport != null)
         {
@@ -207,18 +211,15 @@ public class ParsedGltf
     public void ParseSubObjects()
     {
         Debug.Log("Parse subobjects");
-
         //Extract json from glb
         var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
         var gltfJsonText = gltfAndBin.Item1;
         var binaryBlob = gltfAndBin.Item2;
 
+        Debug.Log($"Json: <color=green>{gltfJsonText}</color>");
+        Debug.Log($"Bin length: <color=red>{binaryBlob.Length}</color>");
 
-        Debug.Log($"<color=green>{gltfJsonText}</color>");
-        Debug.Log("HOI");
-        //loop through all primitive attributes
         
-        //var gltfFeatures = JsonUtility.FromJson<GltfMeshFeatures.GltfRootObject>(gltf);
         //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
         var gltfFeatures = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
 
@@ -239,16 +240,10 @@ public class ParsedGltf
 
         //Get bufferview
         var featureAccessor =  gltfFeatures.accessors[featureIdBufferViewIndex];
-        Debug.Log(JsonConvert.SerializeObject(featureAccessor));
         var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
-
-        Debug.Log(JsonConvert.SerializeObject(targetBufferView));
 
         //TODO:Check if bufferView is compressed
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
-
-        //featureIdBuffer is now a byte array containing the reference to feature table for all vertices
-        Debug.Log("featureIdBuffer. same as vertices? " + featureIdBuffer.Length);
 
         //Parse feature table into List<float>
         var stride = targetBufferView.byteStride;
@@ -257,7 +252,6 @@ public class ParsedGltf
         {
             var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i);
             featureTableFloats.Add(featureTableIndex);
-            //Debug.Log("Feature ID: " + featureId); //Big spam
 
             if(!uniqueColors.ContainsKey((int)featureTableIndex))
             {
@@ -267,7 +261,6 @@ public class ParsedGltf
         }
 
         //TODO; see how to retrieve BAGID string from bufferview
-
         Debug.Log("min value" + featureTableFloats.Min());
         Debug.Log("max value" + featureTableFloats.Max());
 
@@ -316,10 +309,6 @@ public class ParsedGltf
         return destination.ToArray();
 
         
-    }
-
-    public class SimpleTestJSON{
-        public int scene { get; set; }
     }
 
     public static (string, byte[]) ExtractJsonAndBinary(byte[] glbData)

@@ -22,9 +22,10 @@ public class TestGltfSubObjects : MonoBehaviour
      /// <summary>
     /// After parsing gltf content spawn gltf scenes
     /// </summary>
-    private void GotGltfContent(ParsedGltf parsedGltf)
+    private async void GotGltfContent(ParsedGltf parsedGltf)
     {
-        parsedGltf.SpawnGltfScenes(this.transform);
+        //Spawn gltf scenes
+        await parsedGltf.SpawnGltfScenes(this.transform);
 
         //Check if mesh features addon is used to define subobjects
         parsedGltf.ParseSubObjects();
@@ -32,8 +33,17 @@ public class TestGltfSubObjects : MonoBehaviour
         //Offset using rtcCenter
         foreach(Transform child in this.transform)
         { 
+            //List all components on child
+            foreach(var component in child.GetComponents<Component>())
+            {
+                Debug.Log(component.name);
+                //ALso log component type name
+                Debug.Log(component.GetType().Name);
+            }
+
             if(child.TryGetComponent(out MeshRenderer meshRenderer))
             {
+                Debug.Log(meshRenderer.name);
                 child.transform.position = Vector3.zero;
                 
                 //apply material to all materials
