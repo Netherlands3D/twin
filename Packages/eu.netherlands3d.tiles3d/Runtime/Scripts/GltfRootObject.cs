@@ -10,7 +10,7 @@ namespace GltfMeshFeatures
         public Asset asset { get; set; }
         public BufferView[] bufferViews { get; set; }
         public Buffer[] buffers { get; set; }
-        public Extensions extensions { get; set; }
+        public Extentions extensions { get; set; }
         public string[] extensionsRequired { get; set; }
         public string[] extensionsUsed { get; set; }
         public Material[] materials { get; set; }
@@ -45,7 +45,7 @@ namespace GltfMeshFeatures
     {
         public int buffer { get; set; }
         public int byteLength { get; set; }
-        public Extentions extensions { get; set; }
+        public BufferViewExtentions extensions { get; set; }
         public int byteOffset { get; set; }
         public int byteStride { get; set; }
         public int target { get; set; }
@@ -60,6 +60,11 @@ namespace GltfMeshFeatures
 
     [Serializable]
     public class Extentions{
+        public EXTStructuralMetadata EXT_structural_metadata { get; set; }
+    }
+
+    [Serializable]
+    public class BufferViewExtentions{
         public EXTMeshoptCompression EXT_meshopt_compression { get; set; }
     }
 
@@ -73,12 +78,6 @@ namespace GltfMeshFeatures
         public int count { get; set; }
         public string mode { get; set; }
         public bool fallback { get; set; }
-    }
-
-    [Serializable]
-    public class Extensions
-    {
-        public EXTStructuralMetadata EXT_structural_metadata { get; set; }
     }
 
     [Serializable]

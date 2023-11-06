@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
@@ -12,15 +11,18 @@ using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
 using Unity.Collections;
-using System.Linq;
-
-
-
 
 
 #if UNITY_EDITOR
 using System.IO.Compression;
+using System.Linq;
+
 #endif
+
+#if SUBOBJECT
+using Netherlands3D.SubObjects;
+#endif
+
 namespace Netherlands3D.B3DM
 {
     public class ImportB3DMGltf
@@ -201,6 +203,7 @@ public class ParsedGltf
         {
             var scenes = gltfImport.SceneCount;
 
+            //Spawn all scenes (InstantiateMainSceneAsync only possible if main scene was referenced in gltf)
             for (int i = 0; i < scenes; i++)
             {
                 await gltfImport.InstantiateSceneAsync(parent, i);
@@ -208,18 +211,17 @@ public class ParsedGltf
         }
     }
 
-    public void ParseSubObjects()
+    /// <summary>
+    /// Parse subobjects from gltf data
+    /// </summary>
+    /// <param name="parent">Parent transform where scenes were spawned in</param>
+    public void ParseSubObjects(Transform parent)
     {
-        Debug.Log("Parse subobjects");
         //Extract json from glb
         var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
         var gltfJsonText = gltfAndBin.Item1;
         var binaryBlob = gltfAndBin.Item2;
 
-        Debug.Log($"Json: <color=green>{gltfJsonText}</color>");
-        Debug.Log($"Bin length: <color=red>{binaryBlob.Length}</color>");
-
-        
         //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
         var gltfFeatures = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
 
@@ -228,17 +230,11 @@ public class ParsedGltf
         {
             foreach(var primitive in mesh.primitives)
             {
-                Debug.Log("_FEATURE_ID_0 : " + primitive.attributes._FEATURE_ID_0);
                 featureIdBufferViewIndex = primitive.attributes._FEATURE_ID_0;
             }
         }
 
-        Debug.Log("featureIdBufferViewIndex: " + featureIdBufferViewIndex);
-
-        //Use feature ID as bufferView index.
-        //Parse the bufferView as a feature table
-
-        //Get bufferview
+        //Use feature ID as bufferView index and get bufferview
         var featureAccessor =  gltfFeatures.accessors[featureIdBufferViewIndex];
         var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
@@ -246,26 +242,69 @@ public class ParsedGltf
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
 
         //Parse feature table into List<float>
-        var stride = targetBufferView.byteStride;
-        
+        Dictionary<int,int> uniqueFeatureIds = new();
+        var stride = targetBufferView.byteStride;  
         for (int i = 0; i < featureIdBuffer.Length; i += stride)
         {
             var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i);
-            featureTableFloats.Add(featureTableIndex);
-
-            if(!uniqueColors.ContainsKey((int)featureTableIndex))
+            if(!uniqueFeatureIds.ContainsKey(featureTableIndex))
             {
-                uniqueColors.Add((int)featureTableIndex, UnityEngine.Random.ColorHSV());
-                if(i == 0) Debug.Log(featureTableIndex);
+                uniqueFeatureIds.Add(featureTableIndex,0);
+            }
+            else
+            {
+                uniqueFeatureIds[featureTableIndex] ++;
             }
         }
 
-        //TODO; see how to retrieve BAGID string from bufferview
-        Debug.Log("min value" + featureTableFloats.Min());
-        Debug.Log("max value" + featureTableFloats.Max());
+        //Retrieve EXT_structural_metadata tables
+        var propertyTables = gltfFeatures.extensions.EXT_structural_metadata.propertyTables;
 
-        Debug.Log("featureTableFloats count: " + featureTableFloats.Count);
-        Debug.Log("uniqueColors (buildings) count: " + uniqueColors.Count);
+        //Now parse the property tables BAGID 
+        var bagIdList = new List<string>();
+        foreach (var propertyTable in propertyTables)
+        {                
+            //Now parse the data from the buffer using stringOffsetType=UINT32, stringOffsets=3 and values=2
+            var bufferViewIndex = propertyTable.properties.bagpandid.values; //Values reference the bufferView index
+            var count = propertyTable.count;
+            var bufferView = gltfFeatures.bufferViews[bufferViewIndex];
+            var stringSpan = bufferView.byteLength / count; //string length in bytes
+
+            //Directly convert the buffer to a list of strings
+            var stringBytesSpan = new Span<byte>(binaryBlob,(int)bufferView.byteOffset,bufferView.byteLength);      
+            for (int i = 0; i < count; i++)
+            {
+                var stringBytesSpanSlice = stringBytesSpan.Slice(i * stringSpan, stringSpan);
+                var stringBytes = stringBytesSpanSlice.ToArray();
+                var stringBytesString = Encoding.ASCII.GetString(stringBytes);
+
+                bagIdList.Add(stringBytesString);
+            }
+            break; //Just support one for now.
+        }
+
+        #if SUBOBJECT   
+        //For each child scene add object mapping component
+        foreach(Transform child in parent)
+        {
+             //Add subobjects to the spawned gameobject
+            ObjectMapping objectMapping = child.gameObject.AddComponent<ObjectMapping>();
+            objectMapping.items = new List<ObjectMappingItem>();
+
+            //For each uniqueFeatureIds, add a subobject
+            foreach(var uniqueFeatureId in uniqueFeatureIds)
+            {
+                var bagId = bagIdList[uniqueFeatureId.Key];
+                var subObject = new ObjectMappingItem()
+                {
+                    objectID = bagId,
+                    firstVertex = uniqueFeatureId.Key,
+                    verticesLength = uniqueFeatureId.Value
+                };
+                objectMapping.items.Add(subObject);
+            }
+        } 
+        #endif
     }
 
     private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)
@@ -307,8 +346,6 @@ public class ParsedGltf
 
         Debug.Log("Decompressed");
         return destination.ToArray();
-
-        
     }
 
     public static (string, byte[]) ExtractJsonAndBinary(byte[] glbData)
