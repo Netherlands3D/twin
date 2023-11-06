@@ -292,16 +292,19 @@ public class ParsedGltf
             objectMapping.items = new List<ObjectMappingItem>();
 
             //For each uniqueFeatureIds, add a subobject
-            foreach(var uniqueFeatureId in uniqueFeatureIds)
+            int offset = 0;
+            for (int i = 0; i < uniqueFeatureIds.Count; i++)
             {
+                var uniqueFeatureId = uniqueFeatureIds.ElementAt(i);
                 var bagId = bagIdList[uniqueFeatureId.Key];
                 var subObject = new ObjectMappingItem()
                 {
                     objectID = bagId,
-                    firstVertex = uniqueFeatureId.Key,
+                    firstVertex = offset,
                     verticesLength = uniqueFeatureId.Value
                 };
                 objectMapping.items.Add(subObject);
+                offset += uniqueFeatureId.Value;
             }
         } 
         #endif

@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
+using Netherlands3D.SubObjects;
 using UnityEngine;
 
 public class TestGltfSubObjects : MonoBehaviour
@@ -18,6 +20,8 @@ public class TestGltfSubObjects : MonoBehaviour
         );
     }
 
+
+
      /// <summary>
     /// After parsing gltf content spawn gltf scenes
     /// </summary>
@@ -29,7 +33,7 @@ public class TestGltfSubObjects : MonoBehaviour
         //Check if mesh features addon is used to define subobjects
         parsedGltf.ParseSubObjects(this.transform);
 
-        //Offset using rtcCenter
+        //Offset so object is in world center
         foreach(Transform child in this.transform)
         { 
             if(child.TryGetComponent(out MeshRenderer meshRenderer))
@@ -38,6 +42,30 @@ public class TestGltfSubObjects : MonoBehaviour
                 
                 //Apply our material to all materials
                 meshRenderer.materials = Enumerable.Repeat(material, meshRenderer.materials.Length).ToArray();
+
+                //Add collider
+                child.gameObject.AddComponent<MeshCollider>();
+                var meshFilter = child.gameObject.GetComponent<MeshFilter>();
+                // Get the source mesh from the source GameObject
+                Mesh sourceMesh = meshFilter.sharedMesh;
+
+                Dictionary<string,Color> randomColors = new();
+
+                if(child.TryGetComponent<ObjectMapping>(out ObjectMapping objectMapping))
+                {
+                    foreach(var item in objectMapping.items)
+                    {
+                        var id = item.objectID;
+                        var vertexStartIndex = item.firstVertex;
+                        var vertexCount = item.verticesLength;
+                        
+                        //add new random color for this object
+                        randomColors.Add(id, Random.ColorHSV());
+                    }
+
+                    //Apply colors to all subobjects
+                    GeometryColorizer.InsertCustomColorSet(0, randomColors);
+                }
             }
         }
     }    
