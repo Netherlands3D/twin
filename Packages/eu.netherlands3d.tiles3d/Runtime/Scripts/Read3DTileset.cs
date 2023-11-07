@@ -32,8 +32,9 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
+#if SUBOBJECT
         public bool parseSubObjects = false;
-
+#endif
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
         public int maximumScreenSpaceError = 5;
@@ -226,11 +227,6 @@ namespace Netherlands3D.Tiles3D
 
         private void RequestContentUpdate(Tile tile)
         {
-            //tile.parent.IncrementLoadingChildren();
-            //foreach (var child in tile.children)
-            //{
-            //    child.IncrementLoadingParents();
-            //}
             if (!tile.content)
             {
                 var newContentGameObject = new GameObject($"{tile.X},{tile.Y},{tile.Z} content");
@@ -241,6 +237,9 @@ namespace Netherlands3D.Tiles3D
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
 
+                #if SUBOBJECT
+                tile.content.parseSubObjects = parseSubObjects;
+                #endif 
                 
                 //Request tile content update via optional prioritiser, or load directly
                 if (usingPrioritiser)
