@@ -105,11 +105,10 @@ namespace Netherlands3D.Tiles3D
             parentTile.isLoading = false;
             if (parsedGltf == null)
             {
-                Debug.Log("failed to download, trying again");
+                Debug.Log("Failed to download, trying again");
                 State = ContentLoadState.NOTLOADING;
                 Load();
                 return;
-
             }
 
             var gltf = parsedGltf.gltfImport;
@@ -120,7 +119,6 @@ namespace Netherlands3D.Tiles3D
 
                 for (int i = 0; i < scenes; i++)
                 {
-
                     await gltf.InstantiateSceneAsync(transform, i);
                     var scene = transform.GetChild(0).transform;
 
@@ -134,8 +132,7 @@ namespace Netherlands3D.Tiles3D
                     else
                     {
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
-                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
-                        scene.position = unityPosition;
+                        scene.SetPositionAndRotation(unityPosition, CoordinateConverter.ecefRotionToUp() * (scene.rotation));
                     }
                 }
 
