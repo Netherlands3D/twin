@@ -177,7 +177,7 @@ namespace GltfMeshFeatures
     {
         public int NORMAL { get; set; }
         public int POSITION { get; set; }
-        public int _FEATURE_ID_0 { get; set; }
+        public int _FEATURE_ID_0 { get; set; } = -1;
     }
 
     [Serializable]

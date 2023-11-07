@@ -233,15 +233,24 @@ public class ParsedGltf
                 featureIdBufferViewIndex = primitive.attributes._FEATURE_ID_0;
             }
         }
+        if(featureIdBufferViewIndex == -1){
+            Debug.LogWarning("_FEATURE_ID_0 was not found in the dataset. This is required to find BAG id's.");
+            return;
+        }
 
         //Use feature ID as bufferView index and get bufferview
         var featureAccessor =  gltfFeatures.accessors[featureIdBufferViewIndex];
         var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
-
-        //TODO:Check if bufferView is compressed before we try to decompress
+        if(targetBufferView.extensions.EXT_meshopt_compression == null)
+        {
+            Debug.LogWarning("No meshopt compression found. This is required to find BAG id's.");
+            return;            
+        }
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
-        if(featureIdBuffer == null || featureIdBuffer.Length == 0)
+        if(featureIdBuffer == null || featureIdBuffer.Length == 0){
+            Debug.LogWarning("Meshopt decompression failed.");
             return;
+        }
 
         //Parse feature table into List<float>
         List<Vector2Int> vertexFeatureIds = new();
@@ -267,9 +276,6 @@ public class ParsedGltf
         }
         //Finish last feature table entry
         vertexFeatureIds.Add(new Vector2Int(currentFeatureTableIndex,vertexCount));
-
-        Debug.Log(vertexFeatureIds.Count + " unique feature ids found");
-        Debug.Log(vertexFeatureIds.Count + " unique feature ids found");
 
         //Retrieve EXT_structural_metadata tables
         var propertyTables = gltfFeatures.extensions.EXT_structural_metadata.propertyTables;
@@ -320,8 +326,10 @@ public class ParsedGltf
                 objectMapping.items.Add(subObject);
                 offset += uniqueFeatureId.y;
             }
-        } 
+        }
+        return;
         #endif
+        Debug.LogWarning("Subobjects are not supported in this build. Please use the Netherlands3D.SubObjects package.");
     }
 
     private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)

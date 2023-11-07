@@ -15,7 +15,6 @@ namespace Netherlands3D.Tiles3D
     [RequireComponent(typeof(ReadSubtree))]
     public class Read3DTileset : MonoBehaviour
     {
-
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
         public string publicKey;
         public string personalKey;

@@ -24,8 +24,6 @@ namespace Netherlands3D.Tiles3D
 
         public UnityEvent onDoneDownloading = new();
 
-        
-
         private GltfImport gltf;
 
         public enum ContentLoadState
@@ -111,51 +109,38 @@ namespace Netherlands3D.Tiles3D
                 State = ContentLoadState.NOTLOADING;
                 Load();
                 return;
-                
-            }
 
-            
+            }
 
             var gltf = parsedGltf.gltfImport;
             if (gltf != null)
             {
-                
                 this.gltf = gltf;
                 var scenes = gltf.SceneCount;
 
-                    for (int i = 0; i < scenes; i++)
-                    {
+                for (int i = 0; i < scenes; i++)
+                {
 
-                        await gltf.InstantiateSceneAsync(transform, i);
-                        var scene = transform.GetChild(0).transform;
-
-                   
-
+                    await gltf.InstantiateSceneAsync(transform, i);
+                    var scene = transform.GetChild(0).transform;
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
-                        if (parsedGltf.rtcCenter != null)
-                        {
-                        scene.rotation = CoordinateConverter.ecefRotionToUp()*(scene.rotation);
+                    if (parsedGltf.rtcCenter != null)
+                    {
+                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
                         scene.position = unityPosition;
-                          
-
-                       
                     }
-                        else
-                        {
+                    else
+                    {
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         scene.position = unityPosition;
-                        
-                        }
-                        
-                       
-
                     }
-                
+                }
+
                 this.gameObject.name = uri;
-                
+
                 foreach (var item in this.gameObject.GetComponentsInChildren<Transform>())
                 {
                     item.gameObject.layer = 11;
@@ -183,17 +168,14 @@ namespace Netherlands3D.Tiles3D
             if (State == ContentLoadState.DOWNLOADING && runningContentRequest != null)
             {
                 StopCoroutine(runningContentRequest);
-
-               
             }
-           
 
             State = ContentLoadState.DOWNLOADED;
 
             if (gltf != null)
             {
                 gltf.Dispose();
-               
+
             }
             Destroy(this.gameObject);
         }
