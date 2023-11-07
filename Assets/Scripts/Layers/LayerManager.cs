@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         // public static List<LayerNL3DBase> AllLayers = new List<LayerNL3DBase>();
         public static LayerUI DraggingLayer { get; set; }
-
         public static List<LayerUI> SelectedLayers { get; set; } = new(); 
         // public static LayerUI OverLayer { get; set; }
 
@@ -36,9 +36,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layerUI.Layer = layer;
                 layer.UI = layerUI;
 
-                layerUI.UpdateLayerUI();
-
                 LayersVisibleInInspector.Add(layerUI);
+                // layerUI.UpdateLayerUI();
+
+                // UnparentedLayers.Add(layerUI);
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform); //not sure why it is needed to manually force a canvas update
