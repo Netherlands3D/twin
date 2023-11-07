@@ -157,7 +157,7 @@ namespace Netherlands3D.Tiles3D
                 int offset = 0;
                 for (int i = 0; i < vertexFeatureIds.Count; i++)
                 {
-                    var uniqueFeatureId = vertexFeatureIds.ElementAt(i);
+                    var uniqueFeatureId = vertexFeatureIds[i];
                     var bagId = bagIdList[uniqueFeatureId.x];
                     var subObject = new ObjectMappingItem()
                     {
