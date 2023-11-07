@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private DragGhost dragGhostPrefab;
 
-        [SerializeField] private DragGhost dragGhost;
+        public DragGhost DragGhost { get; private set; }
         [SerializeField] private RectTransform dragLine;
         public RectTransform DragLine => dragLine;
         
@@ -62,14 +62,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void EndDraglayer()
         {
             DraggingLayer = null;
-            Destroy(dragGhost.gameObject);
+            Destroy(DragGhost.gameObject);
             dragLine.gameObject.SetActive(false);
         }
 
         private void CreateGhost()
         {
-            dragGhost = Instantiate(dragGhostPrefab, transform.parent);
-            dragGhost.Initialize(DragStartOffset);
+            DragGhost = Instantiate(dragGhostPrefab, transform.parent);
+            DragGhost.Initialize(DragStartOffset);
         }
 
         // public void OnLayerEnter(LayerUI hoveringLayer)

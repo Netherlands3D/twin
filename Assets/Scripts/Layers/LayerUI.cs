@@ -1,15 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -21,6 +17,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private VerticalLayoutGroup verticalLayoutGroup;
 
         private LayerManager layerManager;
+        public Transform LayerBaseTransform => layerManager.transform;
 
         [SerializeField] private RectTransform parentRowRectTransform;
         [SerializeField] private Toggle enabledToggle;
@@ -33,8 +30,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private TMP_InputField layerNameField;
         [SerializeField] private RectTransform childrenPanel;
 
+        private LayerUI parentUI;
+        private LayerUI[] childrenUI = Array.Empty<LayerUI>();
+
         private LayerUI layerUnderMouse;
+        private LayerUI reparentLayer;
         private bool draggingLayerShouldBePlacedBeforeOtherLayer;
+
+        public Color Color { get; set; } = Color.blue;
+        public Sprite Icon { get; set; }
+        public int Depth { get; private set; } = 0;
 
         private void Awake()
         {
@@ -48,35 +53,99 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateLayerUI();
         }
 
+        public void SetParent(LayerUI newParent, int childIndex = -1)
+        {
+            if (newParent)
+                print("reparenting " + Layer.name + " to " + newParent.Layer.name);
+            else
+                print("reparenting " + Layer.name + " to null");
+
+            var oldParent = parentUI;
+
+            if (newParent == null)
+                transform.SetParent(LayerBaseTransform);
+            else
+                transform.SetParent(newParent.childrenPanel);
+
+            // if (newParent && childIndex >= 0 && childIndex < newParent.transform.childCount)
+            // {
+            print("setting child index to: " + childIndex);
+            transform.SetSiblingIndex(childIndex);
+            // }
+            // if(newParent ==null && childIndex >=0 )
+
+
+            if (oldParent)
+                oldParent.RecalculateParentAndChildren();
+            if (newParent)
+                newParent.RecalculateParentAndChildren();
+            RecalculateParentAndChildren();
+
+            RecalculateDepthValuesRecursively();
+            RecalculateLayersVisibleInHierarchyAfterReparent(this, newParent, transform.GetSiblingIndex());
+        }
+
+        private void RecalculateParentAndChildren()
+        {
+            parentUI = transform.parent.GetComponentInParent<LayerUI>(); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
+            childrenUI = childrenPanel.GetComponentsInChildren<LayerUI>();
+            // if (parentUI)
+            //     print(Layer.name + " has parent " + parentUI.Layer.name + " and " + childrenUI.Length + " children");
+            // else
+            //     print(Layer.name + " has no parent and " + childrenUI.Length + " children");
+        }
+
+
+        private void RecalculateDepthValuesRecursively()
+        {
+            if (transform.parent != LayerBaseTransform)
+                Depth = parentUI.Depth + 1;
+            else
+                Depth = 0;
+
+            foreach (var child in childrenUI)
+                child.RecalculateDepthValuesRecursively();
+
+            UpdateLayerUI();
+        }
+
         public void UpdateLayerUI()
         {
-            UpdateUIParent();
-
             UpdateName();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
-        }
-
-        private void UpdateUIParent()
-        {
-            if (!Layer.Parent && transform.parent != layerManager.transform)
-            {
-                transform.SetParent(layerManager.transform);
-                RecalculateLayersVisibleInHierarchyAfterReparent(this, transform.GetSiblingIndex());
-            }
-            else if (Layer.Parent && Layer.Parent.UI.childrenPanel != transform.parent)
-            {
-                transform.SetParent(Layer.Parent.UI.childrenPanel);
-                RecalculateLayersVisibleInHierarchyAfterReparent(this, transform.GetSiblingIndex());
-            }
-
             RecalculateIndent();
+
             LayoutRebuilder.ForceRebuildLayoutImmediate(layerManager.transform as RectTransform); //not sure why it is needed to manually force a canvas update
         }
 
-        private void RecalculateLayersVisibleInHierarchyAfterReparent(LayerUI changingLayer, int newSiblingIndex)
+        private void RecalculateLayersVisibleInHierarchyAfterReparent(LayerUI changingLayer, LayerUI newParent, int newSiblingIndex)
         {
             LayerManager.LayersVisibleInInspector.Remove(changingLayer);
+            var newIndex = 0;
+            if (newParent)
+                newIndex += LayerManager.LayersVisibleInInspector.IndexOf(newParent) + 1;
+
+            print("new parentIndex" + newIndex);
+            print("new sibling index " + newSiblingIndex);
+            newIndex += newSiblingIndex;
+            print("new total index " + newIndex);
+
+            if (newIndex < LayerManager.LayersVisibleInInspector.Count)
+                LayerManager.LayersVisibleInInspector.Insert(newIndex, changingLayer);
+            else
+                LayerManager.LayersVisibleInInspector.Add(changingLayer);
+
+            string st = changingLayer.Layer.name;
+            for (var index = 0; index < LayerManager.LayersVisibleInInspector.Count; index++)
+            {
+                var l = LayerManager.LayersVisibleInInspector[index];
+                st += " - " + index + l.Layer.name;
+            }
+
+            print(st);
+
+            return;
 
             // var parentIndex = 0;
             // if (changingLayer.Layer.Parent)
@@ -96,10 +165,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // LayerManager.LayersVisibleInInspector.Insert(newIndex, changingLayer);
             // LayerManager.DraggingLayer.transform.SetSiblingIndex(newIndex);
 
-            foreach (var child in changingLayer.Layer.Children) //recursively recalculate indices of all changed children
-            {
-                RecalculateLayersVisibleInHierarchyAfterReparent(child.UI, child.UI.transform.GetSiblingIndex());
-            }
+            // foreach (Transform child in transform) //recursively recalculate indices of all changed children
+            // {
+            //     RecalculateLayersVisibleInHierarchyAfterReparent(child.GetComponent<LayerUI>(), child.GetSiblingIndex());
+            // }
 
             string s = changingLayer.Layer.name;
             for (var index = 0; index < LayerManager.LayersVisibleInInspector.Count; index++)
@@ -114,7 +183,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateIndent()
         {
             var spacerRectTransform = spacer.transform as RectTransform;
-            spacerRectTransform.sizeDelta = new Vector2(Layer.Depth * indentWidth, spacerRectTransform.sizeDelta.y);
+            spacerRectTransform.sizeDelta = new Vector2(Depth * indentWidth, spacerRectTransform.sizeDelta.y);
         }
 
         private void UpdateName()
@@ -137,7 +206,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateChildPanelHeight()
         {
             var layerHeight = GetComponent<RectTransform>().rect.height;
-            childrenPanel.SetHeight(Layer.Children.Count * layerHeight);
+            childrenPanel.SetHeight(transform.childCount * layerHeight);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -153,24 +222,45 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnEndDrag(PointerEventData eventData)
         {
             if (layerManager.DragLine.gameObject.activeInHierarchy)
-                ReorderLayers(LayerManager.DraggingLayer, layerUnderMouse, draggingLayerShouldBePlacedBeforeOtherLayer);
+            {
+                var newParent = layerUnderMouse.parentUI;
+                var newSiblingIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? layerUnderMouse.transform.GetSiblingIndex() - 1 : layerUnderMouse.transform.GetSiblingIndex();
+                //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
+                if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0) //todo: if layerUnderMouse.ChildrenUI is collapsed, this edge case should fail
+                {
+                    newParent = layerUnderMouse;
+                    newSiblingIndex = 0;
+                }
+            
+                // print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + " layer: " + layerUnderMouse.Layer.name + "new parent" + layerUnderMouse.parentUI.Layer.name);
+                print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + "\t" + newSiblingIndex);
+                SetParent(newParent, newSiblingIndex);
+            }
             else
-                LayerManager.DraggingLayer.Layer.SetParent(layerUnderMouse.Layer);
+            {
+                // print("reparent to :" + layerUnderMouse);
+                SetParent(layerUnderMouse, layerUnderMouse.transform.childCount);
+            }
 
             layerManager.EndDraglayer();
         }
 
         public void OnDrag(PointerEventData eventData) //has to be here or OnBeginDrag and OnEndDrag won't work
         {
-            layerUnderMouse = CalculcateLayerUnderMouse(out float relativeYValue);
-            print(Layer.name + "\t" + layerUnderMouse.Layer.name);
+            var layerAndIndex = CalculateLayerUnderMouse(out float relativeYValue);
+            layerUnderMouse = layerAndIndex.Item1;
+            // print(Layer.name + "\t" + layerUnderMouse.Layer.name);
             if (layerUnderMouse)
             {
                 var hoverTransform = layerUnderMouse.rectTransform; // as RectTransform;
                 var correctedSize2 = hoverTransform.rect.size * hoverTransform.lossyScale;
                 var yValue01 = Mathf.Clamp01(-relativeYValue / correctedSize2.y);
+                
+                //todo: if mouse is fully to the bottom, set parent to null
+                
                 // print(relativeYValue + "\t" + yValue01);
 
+                    //todo: calculate reparent layer and sibling index here instead of in OnEndDrag
                 if (yValue01 < 0.25f)
                 {
                     // print("higher");
@@ -196,59 +286,37 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private LayerUI CalculcateLayerUnderMouse(out float relativeYValue)
+        private (LayerUI, int) CalculateLayerUnderMouse(out float relativeYValue)
         {
-            var mousePos = Pointer.current.position.ReadValue();
+            // var mousePos = Pointer.current.position.ReadValue();
+            var ghostRectTransform = layerManager.DragGhost.GetComponent<RectTransform>();
+            var ghostSize = ghostRectTransform.rect.size * ghostRectTransform.lossyScale;
+            var mousePos = (Vector2)layerManager.DragGhost.transform.position - ghostSize/2;
+            
             for (var i = LayerManager.LayersVisibleInInspector.Count - 1; i >= 0; i--)
             {
                 var layer = LayerManager.LayersVisibleInInspector[i];
                 var correctedSize = layer.rectTransform.rect.size * layer.rectTransform.lossyScale;
                 if (mousePos.y < layer.rectTransform.position.y && mousePos.y >= layer.rectTransform.position.y - correctedSize.y)
                 {
-                    print("between " + layer.Layer.name);
+                    // print("between " + layer.Layer.name);
                     relativeYValue = mousePos.y - layer.rectTransform.position.y;
-                    return layer;
+                    return (layer, i);
                 }
             }
 
             var firstLayer = LayerManager.LayersVisibleInInspector[0];
             if (mousePos.y >= firstLayer.rectTransform.position.y)
             {
-                print("above first");
+                // print("above first");
                 relativeYValue = mousePos.y - firstLayer.rectTransform.position.y;
-                return firstLayer; //above first
+                return (firstLayer, 0); //above first
             }
 
-            print("below last");
+            // print("below last");
             var lastLayer = LayerManager.LayersVisibleInInspector.Last();
             relativeYValue = mousePos.y - lastLayer.rectTransform.position.y;
-            return lastLayer; //below last
-
-
-            // for (var i = 0; i < LayerManager.LayersVisibleInInspector.Count; i++)
-            // {
-            //     var layer = LayerManager.LayersVisibleInInspector[i];
-            //     var correctedSize = layer.rectTransform.rect.size * layer.rectTransform.lossyScale;
-            //     var mouseInRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(layer.rectTransform, mousePos, null, out var localPoint);
-            //
-            //     print(layer.Layer.name + "\t" + layer.rectTransform.transform.position.y + "\t" + mousePos.y);
-            //
-            //     if (i == 0 && localPoint.y > 0)
-            //     {
-            //         print("above first");
-            //         return layer; //above first
-            //     }
-            //
-            //     if (localPoint.y >= 0 && localPoint.y < layer.rectTransform.rect.size.y)
-            //     {
-            //         print(i + " mouse in rect: " + mouseInRect + "\t" + layer.Layer.name);
-            //         return layer;
-            //     }
-            // }
-            //
-            // //below last
-            // print("below last");
-            // return LayerManager.LayersVisibleInInspector.Last();
+            return (lastLayer, LayerManager.LayersVisibleInInspector.Count - 1); //below last
         }
 
         private void ReorderLayers(LayerUI changingLayer, LayerUI relativeTo, bool placeChangingLayerBefore)
@@ -256,11 +324,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (changingLayer == relativeTo)
                 return;
 
-            // LayerManager.LayersVisibleInInspector.Remove(changingLayer);
-
             //check if reorder includes reparent
             var newChildIndex = placeChangingLayerBefore ? relativeTo.transform.GetSiblingIndex() : relativeTo.transform.GetSiblingIndex() + 1;
-            changingLayer.Layer.SetParent(relativeTo.Layer.Parent, newChildIndex);
+            // changingLayer.Layer.SetParent(relativeTo.Layer.Parent, newChildIndex);
+            // changingLayer.SetParent(relativeTo, newChildIndex);
 
             // var relativeToIndex = LayerManager.LayersVisibleInInspector.IndexOf(relativeTo);
             // var newIndex = placeChangingLayerBefore ? relativeToIndex : relativeToIndex + 1;
