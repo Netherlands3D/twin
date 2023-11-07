@@ -16,8 +16,12 @@ using System.IO.Compression;
 #if SUBOBJECT
 #endif
 
-namespace Netherlands3D.B3DM
+namespace Netherlands3D.Tiles3D
 {
+    /// <summary>
+    /// This class helps importing .b3dm, .glb and .gltf files from a URL or local file.
+    /// It extracts the .glb or .gltf from a .b3dm and parses it with GLTFast.
+    /// </summary>
     public class ImportB3DMGltf
     {
         private static CustomCertificateValidation customCertificateHandler = new CustomCertificateValidation();
@@ -59,9 +63,8 @@ namespace Netherlands3D.B3DM
             }
             else
             {
-                byte[] bytes = webRequest.downloadHandler.data;
+                var bytes = webRequest.downloadHandler.data;
                 var memory = new ReadOnlyMemory<byte>(bytes);
-
                 double[] rtcCenter = null;
 
                 if (url.Contains(".b3dm"))
