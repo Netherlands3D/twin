@@ -110,9 +110,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             transform.SetSiblingIndex(siblingIndex);
 
             if (oldParent)
+            {
                 oldParent.RecalculateParentAndChildren();
+            }
             if (newParent)
+            {
                 newParent.RecalculateParentAndChildren();
+                newParent.foldoutToggle.isOn = true;
+            }
             RecalculateParentAndChildren();
 
             RecalculateDepthValuesRecursively();
