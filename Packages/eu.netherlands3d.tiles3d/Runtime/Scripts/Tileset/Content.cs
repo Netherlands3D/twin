@@ -120,7 +120,7 @@ namespace Netherlands3D.Tiles3D
                 for (int i = 0; i < scenes; i++)
                 {
                     await gltf.InstantiateSceneAsync(transform, i);
-                    var scene = transform.GetChild(0).transform;
+                    var scene = transform.GetChild(i).transform;
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
                     if (parsedGltf.rtcCenter != null)
@@ -144,8 +144,10 @@ namespace Netherlands3D.Tiles3D
 
                 //Check if mesh features addon is used to define subobjects
                 #if SUBOBJECT
-                if(parseSubObjects)
-                    parsedGltf.ParseSubObjects(this.transform);
+                if(parseSubObjects){
+                    var scene = transform.GetChild(0).transform;
+                    parsedGltf.ParseSubObjects(scene);
+                }
                 #endif
             }
 
