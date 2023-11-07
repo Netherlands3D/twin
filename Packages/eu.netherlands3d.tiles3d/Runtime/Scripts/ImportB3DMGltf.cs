@@ -240,22 +240,36 @@ public class ParsedGltf
 
         //TODO:Check if bufferView is compressed before we try to decompress
         var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
+        if(featureIdBuffer == null || featureIdBuffer.Length == 0)
+            return;
 
         //Parse feature table into List<float>
-        Dictionary<int,int> uniqueFeatureIds = new();
+        List<Vector2Int> vertexFeatureIds = new();
         var stride = targetBufferView.byteStride;  
+        int currentFeatureTableIndex = -1;
+        int vertexCount = 0;
         for (int i = 0; i < featureIdBuffer.Length; i += stride)
         {
             var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i);
-            if(!uniqueFeatureIds.ContainsKey(featureTableIndex))
+
+            if(currentFeatureTableIndex != featureTableIndex)
             {
-                uniqueFeatureIds.Add(featureTableIndex,0);
+                if(currentFeatureTableIndex != -1)
+                    vertexFeatureIds.Add(new Vector2Int(currentFeatureTableIndex,vertexCount));
+
+                currentFeatureTableIndex = featureTableIndex;
+                vertexCount = 1;
             }
             else
             {
-                uniqueFeatureIds[featureTableIndex] ++;
-            }
+                vertexCount++;
+            }            
         }
+        //Finish last feature table entry
+        vertexFeatureIds.Add(new Vector2Int(currentFeatureTableIndex,vertexCount));
+
+        Debug.Log(vertexFeatureIds.Count + " unique feature ids found");
+        Debug.Log(vertexFeatureIds.Count + " unique feature ids found");
 
         //Retrieve EXT_structural_metadata tables
         var propertyTables = gltfFeatures.extensions.EXT_structural_metadata.propertyTables;
@@ -293,18 +307,18 @@ public class ParsedGltf
 
             //For each uniqueFeatureIds, add a subobject
             int offset = 0;
-            for (int i = 0; i < uniqueFeatureIds.Count; i++)
+            for (int i = 0; i < vertexFeatureIds.Count; i++)
             {
-                var uniqueFeatureId = uniqueFeatureIds.ElementAt(i);
-                var bagId = bagIdList[uniqueFeatureId.Key];
+                var uniqueFeatureId = vertexFeatureIds.ElementAt(i);
+                var bagId = bagIdList[uniqueFeatureId.x];
                 var subObject = new ObjectMappingItem()
                 {
                     objectID = bagId,
                     firstVertex = offset,
-                    verticesLength = uniqueFeatureId.Value
+                    verticesLength = uniqueFeatureId.y
                 };
                 objectMapping.items.Add(subObject);
-                offset += uniqueFeatureId.Value;
+                offset += uniqueFeatureId.y;
             }
         } 
         #endif

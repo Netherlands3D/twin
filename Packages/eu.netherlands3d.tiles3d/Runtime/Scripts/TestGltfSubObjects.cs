@@ -45,10 +45,10 @@ public class TestGltfSubObjects : MonoBehaviour
 
                 //Add collider
                 child.gameObject.AddComponent<MeshCollider>();
+                
                 var meshFilter = child.gameObject.GetComponent<MeshFilter>();
                 // Get the source mesh from the source GameObject
                 Mesh sourceMesh = meshFilter.sharedMesh;
-
                 Dictionary<string,Color> randomColors = new();
 
                 if(child.TryGetComponent<ObjectMapping>(out ObjectMapping objectMapping))
@@ -60,7 +60,8 @@ public class TestGltfSubObjects : MonoBehaviour
                         var vertexCount = item.verticesLength;
                         
                         //add new random color for this object
-                        randomColors.Add(id, Random.ColorHSV());
+                        if(!randomColors.ContainsKey(id))
+                            randomColors.Add(id, Random.ColorHSV());
                     }
 
                     //Apply colors to all subobjects
