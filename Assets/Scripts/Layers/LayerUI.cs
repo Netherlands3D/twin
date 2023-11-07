@@ -7,6 +7,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -31,7 +32,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private Toggle enabledToggle;
         [SerializeField] private Button colorButton;
         [SerializeField] private RectTransform spacer;
-        [SerializeField] private float indentWidth = 30f;
+        [SerializeField] private float indentWidth = 40f;
         [SerializeField] private Toggle foldoutToggle;
         [SerializeField] private Image layerTypeImage;
         [SerializeField] private TMP_Text layerNameText;
@@ -58,6 +59,36 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerManager = GetComponentInParent<LayerManager>();
         }
 
+        private void OnEnable()
+        {
+            foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
+        }
+
+        private void OnDisable()
+        {
+            foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
+        }
+
+        private bool test;
+
+        private void OnFoldoutToggleValueChanged(bool isOn)
+        {
+            UpdateFoldout();
+            // childrenPanel.gameObject.SetActive(isOn);
+            // LayoutRebuilder.ForceRebuildLayoutImmediate(LayerBaseTransform as RectTransform);
+            // LayoutRebuilder.ForceRebuildLayoutImmediate(childrenPanel as RectTransform);
+            // test = true;
+        }
+
+        private void LateUpdate()
+        {
+            if (test)
+            {
+                Canvas.ForceUpdateCanvases();
+                test = false;
+            }
+        }
+
         private void Start()
         {
             UpdateLayerUI();
@@ -65,36 +96,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
-            // if (newParent)
-            //     print("reparenting " + Layer.name + " to " + newParent.Layer.name);
-            // else
-            //     print("reparenting " + Layer.name + " to null");
-
             var oldParent = parentUI;
-            // if (oldParent == null)
-            // {
-            //     LayerManager.UnparentedLayers.Remove(this);
-            // }
 
             if (newParent == null)
             {
                 transform.SetParent(LayerBaseTransform);
-                // LayerManager.UnparentedLayers.Add(this);
-                // LayerManager.UnparentedLayers.Sor((ui)=>ui.transform.GetSiblingIndex());
             }
             else
             {
                 transform.SetParent(newParent.childrenPanel);
             }
 
-
-            // if (newParent && childIndex >= 0 && childIndex < newParent.transform.childCount)
-            // {
-            // print("setting child index to: " + siblingIndex);
             transform.SetSiblingIndex(siblingIndex);
-            // }
-            // if(newParent ==null && childIndex >=0 )
-
 
             if (oldParent)
                 oldParent.RecalculateParentAndChildren();
@@ -103,11 +116,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateParentAndChildren();
 
             RecalculateDepthValuesRecursively();
-            // RecalculateLayersVisibleInHierarchyAfterReparent(this, newParent, transform.GetSiblingIndex());
             RecalculateVisibleHierarchyRecursive();
-
-            // Canvas.ForceUpdateCanvases();
-            // LayoutRebuilder.MarkLayoutForRebuild(layerManager.transform as RectTransform); //not sure why it is needed to manually force a canvas update
         }
 
         private void RecalculateVisibleHierarchyRecursive()
@@ -171,12 +180,35 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
             RecalculateIndent();
+            UpdateFoldout();
             debugIndexText.text = "Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex();
             // print("Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex());
             Canvas.ForceUpdateCanvases();
             // LayoutRebuilder.MarkLayoutForRebuild(transform as RectTransform); //not sure why it is needed to manually force a canvas update
             // LayoutRebuilder.MarkLayoutForRebuild(childrenPanel as RectTransform); //not sure why it is needed to manually force a canvas update
             // LayoutRebuilder.ForceRebuildLayoutImmediate(layerManager.transform as RectTransform); //not sure why it is needed to manually force a canvas update
+        }
+
+        private void UpdateFoldout()
+        {
+            foldoutToggle.gameObject.SetActive(childrenUI.Length > 0);
+            childrenPanel.gameObject.SetActive(foldoutToggle.isOn);
+
+            RebuildChildrenPanelRecursive();
+        }
+        
+        private void RebuildChildrenPanelRecursive()
+        {
+            // print("rebuilding child panel of: " + Layer.name);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(childrenPanel);
+            if (parentUI)
+            {
+                parentUI.RebuildChildrenPanelRecursive();
+            }
+            else
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(LayerBaseTransform as RectTransform);
+            }
         }
 
         private void RecalculateLayersVisibleInHierarchyAfterReparent(LayerUI changingLayer, LayerUI newParent, int newSiblingIndex)
@@ -292,7 +324,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 var newParent = layerUnderMouse.parentUI;
                 var newSiblingIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? layerUnderMouse.transform.GetSiblingIndex() : layerUnderMouse.transform.GetSiblingIndex() + 1;
                 //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
-                if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn) 
+                if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn)
                 {
                     newParent = layerUnderMouse;
                     newSiblingIndex = 0;
@@ -307,10 +339,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 print("reparent " + Layer.name + "to :" + layerUnderMouse.Layer.name + "at index " + layerUnderMouse.childrenPanel.childCount);
                 SetParent(layerUnderMouse, layerUnderMouse.childrenPanel.childCount);
             }
-            
+
             if (layerUnderMouse)
                 layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Default);
-            
+
             layerManager.EndDraglayer();
         }
 

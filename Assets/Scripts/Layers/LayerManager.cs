@@ -37,12 +37,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layer.UI = layerUI;
 
                 LayersVisibleInInspector.Add(layerUI);
-                // layerUI.UpdateLayerUI();
-
-                // UnparentedLayers.Add(layerUI);
             }
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform); //not sure why it is needed to manually force a canvas update
+            // LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform); //not sure why it is needed to manually force a canvas update
             // Canvas.ForceUpdateCanvases(); //not sure why it is needed to manually force a canvas update
         }
 
@@ -72,10 +69,5 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             DragGhost = Instantiate(dragGhostPrefab, transform.parent);
             DragGhost.Initialize(DragStartOffset);
         }
-
-        // public void OnLayerEnter(LayerUI hoveringLayer)
-        // {
-        //     OverLayer = hoveringLayer; //todo: make this still work when not dragging directly over layer
-        // }
     }
 }

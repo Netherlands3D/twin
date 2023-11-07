@@ -735,18 +735,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2397676492417320050}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1768096641797175149}
-  m_Father: {fileID: 6443985419094450393}
+  m_Father: {fileID: 5971628678058090479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2274689754544140435
 MonoBehaviour:
@@ -796,6 +796,42 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!1 &2675011851645387775
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5971628678058090479}
+  m_Layer: 5
+  m_Name: FoldoutToggleParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5971628678058090479
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2675011851645387775}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5307771157851983622}
+  m_Father: {fileID: 6443985419094450393}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 30, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2817464545287598601
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,7 +1185,7 @@ MonoBehaviour:
   enabledToggle: {fileID: 271022142622327280}
   colorButton: {fileID: 7584764445228330592}
   spacer: {fileID: 6333340918868435643}
-  indentWidth: 30
+  indentWidth: 40
   foldoutToggle: {fileID: 2274689754544140435}
   layerTypeImage: {fileID: 1356745287749164724}
   layerNameText: {fileID: 4813776858706825396}
@@ -1440,7 +1476,7 @@ RectTransform:
   - {fileID: 3541242023013306905}
   - {fileID: 5506309447402626777}
   - {fileID: 6333340918868435643}
-  - {fileID: 5307771157851983622}
+  - {fileID: 5971628678058090479}
   - {fileID: 8312362831220139269}
   - {fileID: 3011691865847377540}
   - {fileID: 7499595349914018578}
@@ -1552,7 +1588,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1440, y: 0}
+  m_SizeDelta: {x: 1254, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4836292693583781584
 CanvasRenderer:
