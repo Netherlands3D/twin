@@ -1,9 +1,5 @@
 using GLTFast;
-using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
-
-//using Netherlands3D.Core;
-
 using System;
 using System.Linq;
 using UnityEngine;
