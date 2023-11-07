@@ -32,6 +32,8 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
+        public bool parseSubObjects = false;
+
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
         public int maximumScreenSpaceError = 5;
@@ -60,9 +62,8 @@ namespace Netherlands3D.Tiles3D
             {
                 tilesetUrl = tilesetUrl + "?key=" + personalKey;
             }
-
 #else
-if (string.IsNullOrEmpty(publicKey)==false)
+            if (string.IsNullOrEmpty(publicKey)==false)
             {
             tilesetUrl = tilesetUrl + "?key=" + publicKey;
             }
@@ -83,10 +84,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
             }
 
             ExtractDatasetPaths();
-
             StartCoroutine(LoadTileset());
-            
-
         }
 
         private void ExtractDatasetPaths()
@@ -531,12 +529,9 @@ if (string.IsNullOrEmpty(publicKey)==false)
                         queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(key), Uri.EscapeDataString(value));
                     }
                 }
-            }
-            
+            }   
             return "?" + queryString.ToString();
         }
-
-       
 
         /// <summary>
         /// Screen-space error component calculation.

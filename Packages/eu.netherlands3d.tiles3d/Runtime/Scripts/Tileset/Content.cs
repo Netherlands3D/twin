@@ -17,6 +17,10 @@ namespace Netherlands3D.Tiles3D
     {
         public string uri = "";
 
+        #if SUBOBJECT
+        public bool parseSubObjects = true;
+        #endif
+
         private Coroutine runningContentRequest;
 
         [SerializeField] private Tile parentTile;
@@ -135,13 +139,18 @@ namespace Netherlands3D.Tiles3D
                         scene.SetPositionAndRotation(unityPosition, CoordinateConverter.ecefRotionToUp() * (scene.rotation));
                     }
                 }
-
                 this.gameObject.name = uri;
 
                 foreach (var item in this.gameObject.GetComponentsInChildren<Transform>())
                 {
                     item.gameObject.layer = 11;
                 }
+
+                //Check if mesh features addon is used to define subobjects
+                #if SUBOBJECT
+                if(parseSubObjects)
+                    parsedGltf.ParseSubObjects(this.transform);
+                #endif
             }
 
             State = ContentLoadState.DOWNLOADED;
