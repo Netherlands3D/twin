@@ -64,32 +64,25 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnable()
         {
+            enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
         }
 
+
         private void OnDisable()
         {
+            enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
 
-        private bool test;
+        private void OnEnabledToggleValueChanged(bool isOn)
+        {
+            Layer.LayerEnabled = isOn;
+        }
 
         private void OnFoldoutToggleValueChanged(bool isOn)
         {
             UpdateFoldout();
-            // childrenPanel.gameObject.SetActive(isOn);
-            // LayoutRebuilder.ForceRebuildLayoutImmediate(LayerBaseTransform as RectTransform);
-            // LayoutRebuilder.ForceRebuildLayoutImmediate(childrenPanel as RectTransform);
-            // test = true;
-        }
-
-        private void LateUpdate()
-        {
-            if (test)
-            {
-                Canvas.ForceUpdateCanvases();
-                test = false;
-            }
         }
 
         private void Start()
@@ -195,18 +188,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void UpdateLayerUI()
         {
             // print("updating ui of: " + Layer.name);
-
+            UpdateEnabledToggle();
             UpdateName();
             RecalculateIndent();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
             UpdateFoldout();
-            debugIndexText.text = "Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex();
+            // debugIndexText.text = "Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex();
             // print("Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex());
             Canvas.ForceUpdateCanvases();
             // LayoutRebuilder.MarkLayoutForRebuild(transform as RectTransform); //not sure why it is needed to manually force a canvas update
             // LayoutRebuilder.MarkLayoutForRebuild(childrenPanel as RectTransform); //not sure why it is needed to manually force a canvas update
             // LayoutRebuilder.ForceRebuildLayoutImmediate(layerManager.transform as RectTransform); //not sure why it is needed to manually force a canvas update
+        }
+
+        private void UpdateEnabledToggle()
+        {
+            enabledToggle.SetIsOnWithoutNotify(Layer.LayerEnabled);
         }
 
         private void UpdateFoldout()
@@ -230,7 +228,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 LayoutRebuilder.ForceRebuildLayoutImmediate(LayerBaseTransform as RectTransform);
             }
         }
-        
+
         private void RecalculateIndent()
         {
             var spacerRectTransform = spacer.transform as RectTransform;
@@ -350,7 +348,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             print(s);
         }
-        
+
         public void OnPointerUp(PointerEventData eventData)
         {
             // print("onpointerup");

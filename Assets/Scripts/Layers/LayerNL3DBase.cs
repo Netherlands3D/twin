@@ -25,11 +25,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 UI?.UpdateLayerUI();
             }
         }
-
-        // public LayerNL3DBase Parent { get; private set; }
-        // public List<LayerNL3DBase> Children { get; private set; } = new();
-
-
+        
         protected virtual void OnEnable()
         {
             LayerManager.AllLayers.Add(this);
@@ -41,17 +37,5 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
 
         public abstract void OnLayerEnableChanged(bool value);
-
-        // public void SetParent(LayerUI newParent, int childIndex = -1)
-        // {
-        //     if (newParent == null)
-        //         UI.transform.SetParent(UI.LayerBaseTransform);
-        //     else
-        //         UI.transform.SetParent(newParent.transform);
-        //
-        //     UI.transform.SetSiblingIndex(childIndex);
-        //
-        //     RecalculateDepthValuesRecursively();
-        // }
     }
 }
