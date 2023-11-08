@@ -12,19 +12,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public abstract class LayerNL3DBase : MonoBehaviour
     {
         public LayerUI UI { get; set; }
-
-        private bool layerEnabled = true;
-
-        public bool LayerEnabled
-        {
-            get => layerEnabled;
-            set
-            {
-                layerEnabled = value;
-                OnLayerEnableChanged(value);
-                UI?.UpdateLayerUI();
-            }
-        }
+        public abstract bool IsEnabled { get; set; }
         
         protected virtual void OnEnable()
         {
@@ -35,7 +23,5 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             LayerManager.AllLayers.Remove(this);
         }
-
-        public abstract void OnLayerEnableChanged(bool value);
     }
 }

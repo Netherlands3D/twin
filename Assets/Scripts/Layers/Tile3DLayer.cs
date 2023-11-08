@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.TileSystem;
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
@@ -12,7 +13,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void Awake()
         {
             layer = GetComponent<CartesianTiles.Layer>();
-            LayerEnabled = layer.isEnabled;
+        }
+
+        public override bool IsEnabled
+        {
+            get { return layer.isEnabled; }
+            set
+            {
+                if (layer.isEnabled != value)
+                    layer.isEnabled = value;
+                UI.UpdateLayerUI();
+            }
         }
 
         protected override void OnEnable()
@@ -31,18 +42,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnLayerEnabled()
         {
-            LayerEnabled = true;
+            if (UI)
+                UI.LayerEnabled = true;
         }
 
         private void OnLayerDisabled()
         {
-            LayerEnabled = false;
-        }
-
-        public override void OnLayerEnableChanged(bool value)
-        {
-            if (layer.isEnabled != value)
-                layer.isEnabled = value;
+            if (UI)
+                UI.LayerEnabled = false;
         }
     }
 }
