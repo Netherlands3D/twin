@@ -328,7 +328,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
 
             if (!AddToSelectionModifierKeyIsPressed() && !SequentialSelectionModifierKeyIsPressed())
-                ResetSelectedLayers();
+                LayerManager.DeselectAllLayers();
 
             if (LayerManager.SelectedLayers.Contains(this))
             {
@@ -350,17 +350,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             print(s);
         }
-
-        private void ResetSelectedLayers()
-        {
-            foreach (var selectedLayer in LayerManager.SelectedLayers)
-            {
-                selectedLayer.SetHighlight(InteractionState.Default);
-            }
-
-            LayerManager.SelectedLayers.Clear();
-        }
-
+        
         public void OnPointerUp(PointerEventData eventData)
         {
             // print("onpointerup");
@@ -475,7 +465,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void SetHighlight(InteractionState state)
+        public void SetHighlight(InteractionState state)
         {
             switch (state)
             {
@@ -526,7 +516,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return lastLayer; //below last
         }
 
-        private bool AddToSelectionModifierKeyIsPressed()
+        public static bool AddToSelectionModifierKeyIsPressed()
         {
             if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
             {
@@ -536,7 +526,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return Keyboard.current.ctrlKey.isPressed;
         }
 
-        private bool SequentialSelectionModifierKeyIsPressed()
+        public static bool SequentialSelectionModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
         }

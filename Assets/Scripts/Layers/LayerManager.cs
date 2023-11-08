@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class LayerManager : MonoBehaviour
+    public class LayerManager : MonoBehaviour, IPointerDownHandler
     {
         public static HashSet<LayerNL3DBase> AllLayers = new HashSet<LayerNL3DBase>();
 
@@ -68,6 +69,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             DragGhost = Instantiate(dragGhostPrefab, transform.parent);
             DragGhost.Initialize(DragStartOffset);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
+                DeselectAllLayers();
+        }
+        
+        public static void DeselectAllLayers()
+        {
+            foreach (var selectedLayer in SelectedLayers)
+            {
+                selectedLayer.SetHighlight(InteractionState.Default);
+            }
+
+            SelectedLayers.Clear();
         }
     }
 }
