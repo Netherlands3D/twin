@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public static List<LayerUI> LayersVisibleInInspector = new List<LayerUI>();
 
         // public static List<LayerNL3DBase> AllLayers = new List<LayerNL3DBase>();
-        public static LayerUI DraggingLayer { get; set; }
+        // public static LayerUI DraggingLayer { get; set; }
         public static List<LayerUI> SelectedLayers { get; set; } = new(); 
         // public static LayerUI OverLayer { get; set; }
 
@@ -53,13 +53,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void StartDragLayer(LayerUI layerUI)
         {
-            DraggingLayer = layerUI;
+            // DraggingLayer = layerUI;
             CreateGhost();
         }
 
-        public void EndDraglayer()
+        public void EndDragLayer()
         {
-            DraggingLayer = null;
+            // DraggingLayer = null;
             Destroy(DragGhost.gameObject);
             dragLine.gameObject.SetActive(false);
         }

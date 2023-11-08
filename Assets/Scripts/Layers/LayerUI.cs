@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         Selected
     }
 
-    public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
+    public class LayerUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
     {
         public LayerNL3DBase Layer { get; set; }
 
@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private LayerUI parentUI;
         private LayerUI[] childrenUI = Array.Empty<LayerUI>();
 
-        private LayerUI layerUnderMouse;
+        private static LayerUI layerUnderMouse;
         private LayerUI newParent;
         private int newSiblingIndex;
 
@@ -323,6 +323,55 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             layerManager.DragStartOffset = (Vector2)transform.position - eventData.position;
+            layerUnderMouse = this; //CalculateLayerUnderMouse(out _);
+
+            if (!AddToSelectionModifierKeyIsPressed())
+                ResetSelectedLayers();
+
+            if (LayerManager.SelectedLayers.Contains(this))
+            {
+                LayerManager.SelectedLayers.Remove(this);
+                SetManagedHighlight(this);
+            }
+            else
+            {
+                LayerManager.SelectedLayers.Add(this);
+                SetManagedHighlight(this);
+            }
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            // if()
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            // if (AddToSelectionModifierKeyIsPressed())
+            // {
+            //     return;
+            // }
+            //
+            // ResetSelectedLayers();
+            // if (LayerManager.SelectedLayers.Contains(this))
+            // {
+            //     LayerManager.SelectedLayers.Remove(this);
+            //     SetHighlight(this, InteractionState.Default);
+            // }
+            // else
+            // {
+            //     LayerManager.SelectedLayers.Add(this);
+            //     SetHighlight(this, InteractionState.Selected);
+            // }
+        }
+
+        private void ResetSelectedLayers()
+        {
+            foreach (var selectedLayer in LayerManager.SelectedLayers)
+            {
+                SetManagedHighlight(selectedLayer);
+            }
+            LayerManager.SelectedLayers.Clear();
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -359,20 +408,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             //     // SetParent(layerUnderMouse, layerUnderMouse.childrenPanel.childCount);
             //     SetParent(layerUnderMouse, newSiblingIndex);
             // }
-            SetParent(newParent, newSiblingIndex);
+            foreach (var selectedLayer in LayerManager.SelectedLayers)
+            {
+                selectedLayer.SetParent(newParent, newSiblingIndex);
+            }
 
             if (layerUnderMouse)
-                layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Default);
+                layerUnderMouse.SetManagedHighlight(layerUnderMouse);
 
-            layerManager.EndDraglayer();
+            layerManager.EndDragLayer();
         }
 
         public void OnDrag(PointerEventData eventData) //has to be here or OnBeginDrag and OnEndDrag won't work
         {
             if (layerUnderMouse)
-                layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Default);
-            var layerAndIndex = CalculateLayerUnderMouse(out float relativeYValue);
-            layerUnderMouse = layerAndIndex.Item1;
+                layerUnderMouse.SetManagedHighlight(layerUnderMouse);
+
+
+            layerUnderMouse = CalculateLayerUnderMouse(out float relativeYValue);
             print(layerUnderMouse.Layer.name);
             // layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
             // print(Layer.name + "\t" + layerUnderMouse.Layer.name);
@@ -417,8 +470,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 }
                 else
                 {
-                    print("reparent");
-                    layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
+                    // print("reparent");
+                    layerUnderMouse.SetManagedHighlight(layerUnderMouse);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(false);
 
@@ -429,14 +482,30 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 //if mouse is fully to the bottom, set parent to null
                 if (relativeValue > 1)
                 {
-                    print("newparent null, new child index " + LayerBaseTransform.childCount);
+                    // print("newparent null, new child index " + LayerBaseTransform.childCount);
                     newParent = null;
                     newSiblingIndex = LayerBaseTransform.childCount;
                 }
             }
         }
 
-        private void SetHighlight(LayerUI layer, InteractionState state)
+        private void SetManagedHighlight(LayerUI layer)
+        {
+            var state = InteractionState.Default;
+            if (LayerManager.SelectedLayers.Contains(layer))
+            {
+                state = InteractionState.Selected;
+            }
+            
+            if (layerUnderMouse == layer && layerManager.DragLine.gameObject.activeInHierarchy)
+            {
+                state = InteractionState.Hover;
+            }
+
+            SetHighlightDirect(layer, state);
+        }
+
+        private static void SetHighlightDirect(LayerUI layer, InteractionState state)
         {
             switch (state)
             {
@@ -454,7 +523,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private (LayerUI, int) CalculateLayerUnderMouse(out float relativeYValue)
+        private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
         {
             // var mousePos = Pointer.current.position.ReadValue();
             var ghostRectTransform = layerManager.DragGhost.GetComponent<RectTransform>();
@@ -469,7 +538,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     // print("between " + layer.Layer.name);
                     relativeYValue = mousePos.y - layer.rectTransform.position.y;
-                    return (layer, i);
+                    return layer;
                 }
             }
 
@@ -478,17 +547,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 // print("above first");
                 relativeYValue = mousePos.y - firstLayer.rectTransform.position.y;
-                return (firstLayer, 0); //above first
+                return firstLayer; //above first
             }
 
             // print("below last");
             var lastLayer = LayerManager.LayersVisibleInInspector.Last();
             relativeYValue = mousePos.y - lastLayer.rectTransform.position.y;
-            return (lastLayer, LayerManager.LayersVisibleInInspector.Count - 1); //below last
+            return lastLayer; //below last
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private bool AddToSelectionModifierKeyIsPressed()
         {
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+            {
+                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
+            }
+
+            return Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed;
         }
     }
 }
