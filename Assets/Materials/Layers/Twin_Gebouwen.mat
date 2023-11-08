@@ -115,6 +115,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SPHERICAL_MASKING: 0
+    - _SPIKE_CLAMPING: 0
     - _SUBOBJECT_FILTERING: 1
     - _Shininess: 0
     - _Smoothness: 0.5
@@ -122,6 +123,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecSource: 0
     - _SpecularHighlights: 1
+    - _SpikeClampHeight: 50
     - _SrcBlend: 1
     - _Surface: 0
     - _TEXTURINGMODE: 0
