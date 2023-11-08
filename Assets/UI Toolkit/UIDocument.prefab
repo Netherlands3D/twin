@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7005302908028191460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5564494457910896723}
+  - component: {fileID: 7003073930049211201}
+  - component: {fileID: 3831520575671322479}
+  - component: {fileID: 5807918355199044713}
+  - component: {fileID: 4159710873609846119}
+  - component: {fileID: 227517794551874898}
+  m_Layer: 0
+  m_Name: UIDocument
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5564494457910896723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7003073930049211201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 7d5c5ad343132e84c8eeec0a218d5710, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 607e18c75ec5f0f408ef1022fe4a1485,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!114 &3831520575671322479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 434b9882688234547ab2c6d021e595df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectorClass: inspector
+  director: {fileID: 227517794551874898}
+  openingSequence: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
+  closingSequence: {fileID: 11400000, guid: bb70b307eec8db8408cef7249310ef96, type: 2}
+  switchDelayInSeconds: 0.5
+--- !u!114 &5807918355199044713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c8cdc91fc9a74b4a9800e55db31f2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolbarName: toolbar
+  tools:
+  - {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
+  - {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  - {fileID: 11400000, guid: 6be0791bb9f9629428cfcb18acb82218, type: 2}
+  toolButtonAsset: {fileID: 9197481963319205126, guid: 344f4a84d29e1224bad3a64be3d054f0,
+    type: 3}
+  onActivateTool:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3831520575671322479}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
+        m_MethodName: Load
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDeactivateTool:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3831520575671322479}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Inspector, Assembly-CSharp
+        m_MethodName: Unload
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4159710873609846119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd3f0c60922f1b4a9ed734b4a78d8e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!320 &227517794551874898
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005302908028191460}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: cb022cc48d148b741b93a212b601692d, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 0
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []

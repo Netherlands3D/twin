@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5038910878437262267}
   - component: {fileID: 9143410218283677922}
   m_Layer: 5
-  m_Name: BottomBar
+  m_Name: FooterBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
