@@ -197,9 +197,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // print("updating ui of: " + Layer.name);
 
             UpdateName();
+            RecalculateIndent();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
-            RecalculateIndent();
             UpdateFoldout();
             debugIndexText.text = "Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex();
             // print("Vi: " + LayerManager.LayersVisibleInInspector.IndexOf(this) + "\nSi: " + transform.GetSiblingIndex());
@@ -230,68 +230,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 LayoutRebuilder.ForceRebuildLayoutImmediate(LayerBaseTransform as RectTransform);
             }
         }
-
-        private void RecalculateLayersVisibleInHierarchyAfterReparent(LayerUI changingLayer, LayerUI newParent, int newSiblingIndex)
-        {
-            LayerManager.LayersVisibleInInspector.Remove(changingLayer);
-            var newIndex = 0;
-            if (newParent)
-                newIndex += LayerManager.LayersVisibleInInspector.IndexOf(newParent) + 1;
-
-            print("new parentIndex" + newIndex);
-            print("new sibling index " + newSiblingIndex);
-            newIndex += newSiblingIndex;
-            print("new total index " + newIndex);
-
-            if (newIndex < LayerManager.LayersVisibleInInspector.Count)
-                LayerManager.LayersVisibleInInspector.Insert(newIndex, changingLayer);
-            else
-                LayerManager.LayersVisibleInInspector.Add(changingLayer);
-
-            string st = changingLayer.Layer.name;
-            for (var index = 0; index < LayerManager.LayersVisibleInInspector.Count; index++)
-            {
-                var l = LayerManager.LayersVisibleInInspector[index];
-                st += " - " + index + l.Layer.name;
-            }
-
-            print(st);
-
-            return;
-
-            // var parentIndex = 0;
-            // if (changingLayer.Layer.Parent)
-            //     parentIndex += LayerManager.LayersVisibleInInspector.IndexOf(changingLayer.Layer.Parent.UI);
-
-
-            var relativeToIndex = LayerManager.LayersVisibleInInspector.IndexOf(layerUnderMouse);
-
-            var newVisibleIndex = newSiblingIndex + relativeToIndex + 1;
-            // var newVisibleIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? relativeToIndex : relativeToIndex + 1;
-            print(changingLayer.Layer.name + "\t" + layerUnderMouse.Layer.name + "\t" + draggingLayerShouldBePlacedBeforeOtherLayer + "\t" + newVisibleIndex);
-            LayerManager.LayersVisibleInInspector.Insert(newVisibleIndex, changingLayer);
-            // LayerManager.DraggingLayer.transform.SetSiblingIndex(newSiblingIndex);
-
-            // var newIndex = parentIndex + changingLayer.transform.GetSiblingIndex() + 1; //draggingLayerShouldBePlacedBeforeOtherLayer ? relativeToIndex : relativeToIndex + 1;
-            // print("Visible index of dragged layer after reparent\t" + newIndex);
-            // LayerManager.LayersVisibleInInspector.Insert(newIndex, changingLayer);
-            // LayerManager.DraggingLayer.transform.SetSiblingIndex(newIndex);
-
-            // foreach (Transform child in transform) //recursively recalculate indices of all changed children
-            // {
-            //     RecalculateLayersVisibleInHierarchyAfterReparent(child.GetComponent<LayerUI>(), child.GetSiblingIndex());
-            // }
-
-            string s = changingLayer.Layer.name;
-            for (var index = 0; index < LayerManager.LayersVisibleInInspector.Count; index++)
-            {
-                var l = LayerManager.LayersVisibleInInspector[index];
-                s += " - " + index + l.Layer.name;
-            }
-
-            print(s);
-        }
-
+        
         private void RecalculateIndent()
         {
             var spacerRectTransform = spacer.transform as RectTransform;
@@ -309,8 +248,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
             var width = maxWidth;
             width -= layerNameFieldRectTransform.anchoredPosition.x;
-            width -= verticalLayoutGroup.spacing;
-            width -= parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.right;
+            width -= spacer.rect.width;
+            // width -= verticalLayoutGroup.spacing;
+            width += parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left;
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
             layerNameText.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
@@ -341,7 +281,53 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void ProcessLayerSelection()
         {
-            if (!AddToSelectionModifierKeyIsPressed())
+            if (SequentialSelectionModifierKeyIsPressed() && LayerManager.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            {
+                // add all layers between the currently selected layer and the reference layer
+                var referenceLayer = LayerManager.SelectedLayers.Last(); //last element is always the last selected layer
+                var myIndex = LayerManager.LayersVisibleInInspector.IndexOf(this);
+                var referenceIndex = LayerManager.LayersVisibleInInspector.IndexOf(referenceLayer);
+
+                var startIndex = referenceIndex > myIndex ? myIndex + 1 : referenceIndex + 1;
+                var endIndex = referenceIndex > myIndex ? referenceIndex - 1 : myIndex - 1;
+
+                var addLayers = !LayerManager.SelectedLayers.Contains(this); //add or subtract layers?
+
+                for (int i = startIndex; i <= endIndex; i++)
+                {
+                    var newLayer = LayerManager.LayersVisibleInInspector[i];
+
+                    print("add? " + addLayers + "\t" + newLayer.Layer.name);
+                    if (addLayers && !LayerManager.SelectedLayers.Contains(newLayer))
+                    {
+                        LayerManager.SelectedLayers.Add(newLayer);
+                        newLayer.SetHighlight(InteractionState.Selected);
+                    }
+                    else if (!addLayers && LayerManager.SelectedLayers.Contains(newLayer))
+                    {
+                        LayerManager.SelectedLayers.Remove(newLayer);
+                        newLayer.SetHighlight(InteractionState.Default);
+                    }
+                }
+
+                if (!addLayers)
+                {
+                    LayerManager.SelectedLayers.Remove(referenceLayer);
+                    referenceLayer.SetHighlight(InteractionState.Default);
+
+                    LayerManager.SelectedLayers.Remove(this);
+                    SetHighlight(InteractionState.Default);
+                }
+
+                // if this layer is already selected, remove it so it gets reselected below and thereby ends up at the end of the list as the new reference Layer
+                // if (addLayers)
+                // {
+                //     LayerManager.SelectedLayers.Remove(this);
+                //     referenceLayer.SetHighlight(InteractionState.Default);
+                // }
+            }
+
+            if (!AddToSelectionModifierKeyIsPressed() && !SequentialSelectionModifierKeyIsPressed())
                 ResetSelectedLayers();
 
             if (LayerManager.SelectedLayers.Contains(this))
@@ -354,6 +340,25 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 LayerManager.SelectedLayers.Add(this);
                 SetHighlight(InteractionState.Selected);
             }
+
+            print("new ref layer: " + LayerManager.SelectedLayers.Last().Layer.name);
+            var s = "All selected layers: ";
+            foreach (var l in LayerManager.SelectedLayers)
+            {
+                s += l.Layer.name + "\t";
+            }
+
+            print(s);
+        }
+
+        private void ResetSelectedLayers()
+        {
+            foreach (var selectedLayer in LayerManager.SelectedLayers)
+            {
+                selectedLayer.SetHighlight(InteractionState.Default);
+            }
+
+            LayerManager.SelectedLayers.Clear();
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -369,17 +374,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 ProcessLayerSelection();
             }
-            
-            waitForFullClickToDeselect = false;
-        }
 
-        private void ResetSelectedLayers()
-        {
-            foreach (var selectedLayer in LayerManager.SelectedLayers)
-            {
-                selectedLayer.SetHighlight(InteractionState.Default);
-            }
-            LayerManager.SelectedLayers.Clear();
+            waitForFullClickToDeselect = false;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -403,7 +399,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnDrag(PointerEventData eventData) //has to be here or OnBeginDrag and OnEndDrag won't work
         {
             RemoveHoverHighlight(layerUnderMouse);
-            
+
             layerUnderMouse = CalculateLayerUnderMouse(out float relativeYValue);
             print(layerUnderMouse.Layer.name);
             // layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
@@ -537,7 +533,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
             }
 
-            return Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed;
+            return Keyboard.current.ctrlKey.isPressed;
+        }
+
+        private bool SequentialSelectionModifierKeyIsPressed()
+        {
+            return Keyboard.current.shiftKey.isPressed;
         }
     }
 }
