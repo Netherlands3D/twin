@@ -13,6 +13,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolbarButton_Indicators Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: eb55302accef5dc459fbc63ed090d3aa,
+        type: 2}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258091, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: m_Pivot.x
