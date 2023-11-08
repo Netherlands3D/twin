@@ -32,7 +32,7 @@ PrefabInstance:
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
@@ -44,7 +44,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: eb55302accef5dc459fbc63ed090d3aa,
+      objectReference: {fileID: 11400000, guid: 9fadb27b2d67c1246843b312af7cb31a,
         type: 2}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
@@ -59,7 +59,12 @@ PrefabInstance:
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
+      value: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: Zonnestand
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}

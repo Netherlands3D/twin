@@ -11,7 +11,43 @@ PrefabInstance:
     - target: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: m_Name
-      value: ToolbarButton Variant
+      value: ToolbarButton_Pointer
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 40772dd0cf17ace4db91f85a71835c94,
+        type: 2}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258091, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}

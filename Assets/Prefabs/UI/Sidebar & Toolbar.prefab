@@ -389,7 +389,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8602705730837913984}
   - component: {fileID: 1998873373271355575}
-  - component: {fileID: 900273158942954963}
+  - component: {fileID: 7967018218800692604}
+  - component: {fileID: 2153322825593032273}
   m_Layer: 5
   m_Name: Sidebar & Toolbar
   m_TagString: Untagged
@@ -440,7 +441,47 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &900273158942954963
+--- !u!114 &7967018218800692604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274105367363854950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e0c5bc301d6444a8cc7d3da9ce4b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 9fadb27b2d67c1246843b312af7cb31a, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6319331451848341587}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1998873373271355575}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Open
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2153322825593032273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -452,7 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: eb55302accef5dc459fbc63ed090d3aa, type: 2}
+  onEvent: {fileID: 11400000, guid: 40772dd0cf17ace4db91f85a71835c94, type: 2}
   trigger:
     m_PersistentCalls:
       m_Calls:
@@ -465,7 +506,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Open
+          m_StringArgument: Close
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1324598295901226506
@@ -6316,6 +6357,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3668521903312744392, guid: c917a5f78a8bda54ab5f591f82ecb585,
+        type: 3}
+      propertyPath: m_Size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3668521903312744392, guid: c917a5f78a8bda54ab5f591f82ecb585,
+        type: 3}
+      propertyPath: m_Value
+      value: 0.2248067
+      objectReference: {fileID: 0}
     - target: {fileID: 4140212417836849733, guid: c917a5f78a8bda54ab5f591f82ecb585,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -6385,11 +6436,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996155142956460685, guid: c917a5f78a8bda54ab5f591f82ecb585,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
         type: 3}
       propertyPath: m_Name
       value: BAG
+      objectReference: {fileID: 0}
+    - target: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738221700634465925, guid: c917a5f78a8bda54ab5f591f82ecb585,
         type: 3}
