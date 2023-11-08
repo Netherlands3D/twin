@@ -45,7 +45,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private LayerUI[] childrenUI = Array.Empty<LayerUI>();
 
         private LayerUI layerUnderMouse;
-        private LayerUI reparentLayer;
+        private LayerUI newParent;
+        private int newSiblingIndex;
+
         private bool draggingLayerShouldBePlacedBeforeOtherLayer;
 
         public Color Color { get; set; } = Color.blue;
@@ -96,10 +98,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
+            if (newParent == this)
+                return;
+
             var oldParent = parentUI;
+            var childCountBeforeChange = newParent ? newParent.childrenPanel.childCount : LayerBaseTransform.childCount;
 
             if (newParent == null)
             {
+                // print(Layer.name + " new parent null");
                 transform.SetParent(LayerBaseTransform);
             }
             else
@@ -107,17 +114,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 transform.SetParent(newParent.childrenPanel);
             }
 
-            transform.SetSiblingIndex(siblingIndex);
+            var childCountAfterChange = newParent ? newParent.childrenPanel.childCount : LayerBaseTransform.childCount;
+
+            var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
+            var reorderWithSameParent = oldParent == newParent;
+            if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
+                transform.SetSiblingIndex(siblingIndex);
 
             if (oldParent)
             {
                 oldParent.RecalculateParentAndChildren();
             }
+
             if (newParent)
             {
                 newParent.RecalculateParentAndChildren();
                 newParent.foldoutToggle.isOn = true;
             }
+
             RecalculateParentAndChildren();
 
             RecalculateDepthValuesRecursively();
@@ -201,7 +215,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             RebuildChildrenPanelRecursive();
         }
-        
+
         private void RebuildChildrenPanelRecursive()
         {
             // print("rebuilding child panel of: " + Layer.name);
@@ -318,32 +332,34 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (LayerManager.DraggingLayer == layerUnderMouse)
-            {
-                layerManager.EndDraglayer();
-                return;
-            }
+            // if (LayerManager.DraggingLayer == layerUnderMouse)
+            // {
+            //     layerManager.EndDraglayer();
+            //     return;
+            // }
 
-            if (layerManager.DragLine.gameObject.activeInHierarchy)
-            {
-                var newParent = layerUnderMouse.parentUI;
-                var newSiblingIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? layerUnderMouse.transform.GetSiblingIndex() : layerUnderMouse.transform.GetSiblingIndex() + 1;
-                //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
-                if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn)
-                {
-                    newParent = layerUnderMouse;
-                    newSiblingIndex = 0;
-                }
-
-                // print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + " layer: " + layerUnderMouse.Layer.name + "new parent" + layerUnderMouse.parentUI.Layer.name);
-                print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + "\t" + newSiblingIndex);
-                SetParent(newParent, newSiblingIndex);
-            }
-            else
-            {
-                print("reparent " + Layer.name + "to :" + layerUnderMouse.Layer.name + "at index " + layerUnderMouse.childrenPanel.childCount);
-                SetParent(layerUnderMouse, layerUnderMouse.childrenPanel.childCount);
-            }
+            // if (layerManager.DragLine.gameObject.activeInHierarchy)
+            // {
+            //     // var newParent = layerUnderMouse.parentUI;
+            //     // var newSiblingIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? layerUnderMouse.transform.GetSiblingIndex() : layerUnderMouse.transform.GetSiblingIndex() + 1;
+            //     // //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
+            //     // if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn)
+            //     // {
+            //     //     newParent = layerUnderMouse;
+            //     //     newSiblingIndex = 0;
+            //     // }
+            //
+            //     // print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + " layer: " + layerUnderMouse.Layer.name + "new parent" + layerUnderMouse.parentUI.Layer.name);
+            //     print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + "\t" + newSiblingIndex);
+            //     SetParent(newParent, newSiblingIndex);
+            // }
+            // else
+            // {
+            //     print("reparent " + Layer.name + "to :" + layerUnderMouse.Layer.name + "at index " + layerUnderMouse.childrenPanel.childCount);
+            //     // SetParent(layerUnderMouse, layerUnderMouse.childrenPanel.childCount);
+            //     SetParent(layerUnderMouse, newSiblingIndex);
+            // }
+            SetParent(newParent, newSiblingIndex);
 
             if (layerUnderMouse)
                 layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Default);
@@ -357,19 +373,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Default);
             var layerAndIndex = CalculateLayerUnderMouse(out float relativeYValue);
             layerUnderMouse = layerAndIndex.Item1;
-            layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
+            print(layerUnderMouse.Layer.name);
+            // layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
             // print(Layer.name + "\t" + layerUnderMouse.Layer.name);
             if (layerUnderMouse)
             {
                 var hoverTransform = layerUnderMouse.rectTransform; // as RectTransform;
-                var correctedSize2 = hoverTransform.rect.size * hoverTransform.lossyScale;
-                var yValue01 = Mathf.Clamp01(-relativeYValue / correctedSize2.y);
+                var correctedSize2 = (hoverTransform.rect.size - layerUnderMouse.childrenPanel.rect.size) * hoverTransform.lossyScale;
+                var relativeValue = -relativeYValue / correctedSize2.y;
+                var yValue01 = Mathf.Clamp01(relativeValue);
 
-                //todo: if mouse is fully to the bottom, set parent to null
-
-                // print(relativeYValue + "\t" + yValue01);
-
-                //todo: calculate reparent layer and sibling index here instead of in OnEndDrag
                 if (yValue01 < 0.25f)
                 {
                     print("higher");
@@ -377,6 +390,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     layerManager.DragLine.gameObject.SetActive(true);
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, layerUnderMouse.transform.position.y);
                     // ReorderLayers(LayerManager.OverLayer, false);
+
+                    newParent = layerUnderMouse.parentUI;
+                    newSiblingIndex = layerUnderMouse.transform.GetSiblingIndex();
                 }
                 else if (yValue01 > 0.75f)
                 {
@@ -386,12 +402,36 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     var correctedSize = hoverTransform.rect.size * hoverTransform.lossyScale;
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, layerUnderMouse.transform.position.y) - new Vector2(0, correctedSize.y);
                     // ReorderLayers(LayerManager.OverLayer, true);
+
+                    //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
+                    if (layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn)
+                    {
+                        newParent = layerUnderMouse;
+                        newSiblingIndex = 0;
+                    }
+                    else
+                    {
+                        newParent = layerUnderMouse.parentUI;
+                        newSiblingIndex = layerUnderMouse.transform.GetSiblingIndex() + 1;
+                    }
                 }
                 else
                 {
                     print("reparent");
+                    layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(false);
+
+                    newParent = layerUnderMouse;
+                    newSiblingIndex = layerUnderMouse.childrenPanel.childCount;
+                }
+
+                //if mouse is fully to the bottom, set parent to null
+                if (relativeValue > 1)
+                {
+                    print("newparent null, new child index " + LayerBaseTransform.childCount);
+                    newParent = null;
+                    newSiblingIndex = LayerBaseTransform.childCount;
                 }
             }
         }
