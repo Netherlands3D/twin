@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private int newSiblingIndex;
 
         private bool draggingLayerShouldBePlacedBeforeOtherLayer;
+        private bool waitForFullClickToDeselect;
 
         public Color Color { get; set; } = Color.blue;
         public Sprite Icon { get; set; }
@@ -320,56 +321,63 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             childrenPanel.SetHeight(transform.childCount * layerHeight);
         }
 
+
         public void OnPointerDown(PointerEventData eventData)
         {
             layerManager.DragStartOffset = (Vector2)transform.position - eventData.position;
             layerUnderMouse = this; //CalculateLayerUnderMouse(out _);
 
+            //if the layer under mouse is already selected, this can be the beginning of a drag, so don't deselect anything yet. wait for the pointer up event that is not a drag
+            waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
+            if (LayerManager.SelectedLayers.Contains(this))
+            {
+                waitForFullClickToDeselect = true;
+                // print("maybe start drag");
+                return;
+            }
+
+            ProcessLayerSelection();
+        }
+
+        private void ProcessLayerSelection()
+        {
             if (!AddToSelectionModifierKeyIsPressed())
                 ResetSelectedLayers();
 
             if (LayerManager.SelectedLayers.Contains(this))
             {
                 LayerManager.SelectedLayers.Remove(this);
-                SetManagedHighlight(this);
+                SetHighlight(InteractionState.Default);
             }
             else
             {
                 LayerManager.SelectedLayers.Add(this);
-                SetManagedHighlight(this);
+                SetHighlight(InteractionState.Selected);
             }
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            // if()
+            // print("onpointerup");
+            // waitForFullClickToDeselect = false;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            // if (AddToSelectionModifierKeyIsPressed())
-            // {
-            //     return;
-            // }
-            //
-            // ResetSelectedLayers();
-            // if (LayerManager.SelectedLayers.Contains(this))
-            // {
-            //     LayerManager.SelectedLayers.Remove(this);
-            //     SetHighlight(this, InteractionState.Default);
-            // }
-            // else
-            // {
-            //     LayerManager.SelectedLayers.Add(this);
-            //     SetHighlight(this, InteractionState.Selected);
-            // }
+            // print("processing selection after click: " + waitForFullClickToDeselect);
+            if (waitForFullClickToDeselect)
+            {
+                ProcessLayerSelection();
+            }
+            
+            waitForFullClickToDeselect = false;
         }
 
         private void ResetSelectedLayers()
         {
             foreach (var selectedLayer in LayerManager.SelectedLayers)
             {
-                SetManagedHighlight(selectedLayer);
+                selectedLayer.SetHighlight(InteractionState.Default);
             }
             LayerManager.SelectedLayers.Clear();
         }
@@ -381,50 +389,21 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            // if (LayerManager.DraggingLayer == layerUnderMouse)
-            // {
-            //     layerManager.EndDraglayer();
-            //     return;
-            // }
-
-            // if (layerManager.DragLine.gameObject.activeInHierarchy)
-            // {
-            //     // var newParent = layerUnderMouse.parentUI;
-            //     // var newSiblingIndex = draggingLayerShouldBePlacedBeforeOtherLayer ? layerUnderMouse.transform.GetSiblingIndex() : layerUnderMouse.transform.GetSiblingIndex() + 1;
-            //     // //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
-            //     // if (!draggingLayerShouldBePlacedBeforeOtherLayer && layerUnderMouse.childrenUI.Length > 0 && layerUnderMouse.foldoutToggle.isOn)
-            //     // {
-            //     //     newParent = layerUnderMouse;
-            //     //     newSiblingIndex = 0;
-            //     // }
-            //
-            //     // print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + " layer: " + layerUnderMouse.Layer.name + "new parent" + layerUnderMouse.parentUI.Layer.name);
-            //     print("reorder: before: " + draggingLayerShouldBePlacedBeforeOtherLayer + "\t" + newSiblingIndex);
-            //     SetParent(newParent, newSiblingIndex);
-            // }
-            // else
-            // {
-            //     print("reparent " + Layer.name + "to :" + layerUnderMouse.Layer.name + "at index " + layerUnderMouse.childrenPanel.childCount);
-            //     // SetParent(layerUnderMouse, layerUnderMouse.childrenPanel.childCount);
-            //     SetParent(layerUnderMouse, newSiblingIndex);
-            // }
+            print("onenddrag");
             foreach (var selectedLayer in LayerManager.SelectedLayers)
             {
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
 
-            if (layerUnderMouse)
-                layerUnderMouse.SetManagedHighlight(layerUnderMouse);
+            RemoveHoverHighlight(layerUnderMouse);
 
             layerManager.EndDragLayer();
         }
 
         public void OnDrag(PointerEventData eventData) //has to be here or OnBeginDrag and OnEndDrag won't work
         {
-            if (layerUnderMouse)
-                layerUnderMouse.SetManagedHighlight(layerUnderMouse);
-
-
+            RemoveHoverHighlight(layerUnderMouse);
+            
             layerUnderMouse = CalculateLayerUnderMouse(out float relativeYValue);
             print(layerUnderMouse.Layer.name);
             // layerUnderMouse.SetHighlight(layerUnderMouse, InteractionState.Hover);
@@ -471,7 +450,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 else
                 {
                     // print("reparent");
-                    layerUnderMouse.SetManagedHighlight(layerUnderMouse);
+                    layerUnderMouse.SetHighlight(InteractionState.Hover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(false);
 
@@ -489,34 +468,29 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void SetManagedHighlight(LayerUI layer)
+        private static void RemoveHoverHighlight(LayerUI layer)
         {
-            var state = InteractionState.Default;
-            if (LayerManager.SelectedLayers.Contains(layer))
+            if (layer)
             {
-                state = InteractionState.Selected;
+                var state = InteractionState.Default;
+                if (LayerManager.SelectedLayers.Contains(layer))
+                    state = InteractionState.Selected;
+                layer.SetHighlight(state);
             }
-            
-            if (layerUnderMouse == layer && layerManager.DragLine.gameObject.activeInHierarchy)
-            {
-                state = InteractionState.Hover;
-            }
-
-            SetHighlightDirect(layer, state);
         }
 
-        private static void SetHighlightDirect(LayerUI layer, InteractionState state)
+        private void SetHighlight(InteractionState state)
         {
             switch (state)
             {
                 case InteractionState.Default:
-                    layer.GetComponentInChildren<Image>().color = Color.red;
+                    GetComponentInChildren<Image>().color = Color.red;
                     break;
                 case InteractionState.Hover:
-                    layer.GetComponentInChildren<Image>().color = Color.cyan;
+                    GetComponentInChildren<Image>().color = Color.cyan;
                     break;
                 case InteractionState.Selected:
-                    layer.GetComponentInChildren<Image>().color = Color.blue;
+                    GetComponentInChildren<Image>().color = Color.blue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
