@@ -7,10 +7,6 @@ namespace Netherlands3D.Twin
 {
     public class FolderLayer : LayerNL3DBase
     {
-        public override bool IsActiveInScene { get; }
-
-        public override void SetEnabled(bool isActiveInHierarchy)
-        {
-        }
+        public override bool IsActiveInScene { get; set; }
     }
 }

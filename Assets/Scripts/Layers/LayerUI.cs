@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.interactable = !parentUI || (parentUI && parentUI.IsActiveInHierarchy);
 
-            Layer.SetEnabled(IsActiveInHierarchy);
+            Layer.IsActiveInScene = IsActiveInHierarchy;
             foreach (var child in childrenUI)
                 child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
         }
@@ -137,6 +137,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             RecalculateDepthValuesRecursively();
             RecalculateVisibleHierarchyRecursive();
+            
+            OnEnabledToggleValueChanged(IsActiveInHierarchy);
         }
 
         private void RecalculateVisibleHierarchyRecursive()
