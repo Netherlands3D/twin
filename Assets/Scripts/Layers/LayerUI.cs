@@ -51,16 +51,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private bool draggingLayerShouldBePlacedBeforeOtherLayer;
         private bool waitForFullClickToDeselect;
 
-        // public bool
-        public bool LayerEnabled
+        public bool IsActiveInHierarchy
         {
-            get => Layer.IsEnabled;
-            set
+            get
             {
-                Layer.IsEnabled = value;
-                UpdateLayerUI();
+                if (parentUI)
+                    return enabledToggle.isOn && parentUI.IsActiveInHierarchy;
+                return enabledToggle.isOn;
             }
         }
+
         public Color Color { get; set; } = Color.blue;
         public Sprite Icon { get; set; }
         public int Depth { get; private set; } = 0;
@@ -87,7 +87,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnabledToggleValueChanged(bool isOn)
         {
-            Layer.IsEnabled = isOn;
+            enabledToggle.interactable = !parentUI || (parentUI && parentUI.IsActiveInHierarchy);
+
+            Layer.SetEnabled(IsActiveInHierarchy);
+            foreach (var child in childrenUI)
+                child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
         }
 
         private void OnFoldoutToggleValueChanged(bool isOn)
@@ -98,6 +102,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void Start()
         {
             UpdateLayerUI();
+            enabledToggle.SetIsOnWithoutNotify(Layer.IsActiveInScene); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
         }
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1)
@@ -111,7 +116,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 transform.SetParent(LayerBaseTransform);
             else
                 transform.SetParent(newParent.childrenPanel);
-            
+
             var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
             var reorderWithSameParent = oldParent == newParent;
             if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
@@ -163,7 +168,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             parentUI = transform.parent.GetComponentInParent<LayerUI>(); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
             childrenUI = childrenPanel.GetComponentsInChildren<LayerUI>();
         }
-        
+
         private void RecalculateDepthValuesRecursively()
         {
             if (transform.parent != LayerBaseTransform)
@@ -179,7 +184,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void UpdateLayerUI()
         {
-            UpdateEnabledToggle();
+            // UpdateEnabledToggle(); 
             UpdateName();
             RecalculateIndent();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
@@ -188,11 +193,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Canvas.ForceUpdateCanvases();
         }
 
-        private void UpdateEnabledToggle()
-        {
-            enabledToggle.SetIsOnWithoutNotify(Layer.IsEnabled);
-        }
-        
         private void UpdateFoldout()
         {
             foldoutToggle.gameObject.SetActive(childrenUI.Length > 0);
@@ -316,7 +316,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 SetHighlight(InteractionState.Selected);
             }
         }
-        
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (waitForFullClickToDeselect)

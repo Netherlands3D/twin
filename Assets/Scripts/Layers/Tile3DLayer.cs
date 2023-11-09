@@ -9,21 +9,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class Tile3DLayer : LayerNL3DBase
     {
         private CartesianTiles.Layer layer;
+        public override bool IsActiveInScene => layer.isEnabled;
 
         private void Awake()
         {
             layer = GetComponent<CartesianTiles.Layer>();
-        }
-
-        public override bool IsEnabled
-        {
-            get { return layer.isEnabled; }
-            set
-            {
-                if (layer.isEnabled != value)
-                    layer.isEnabled = value;
-                UI.UpdateLayerUI();
-            }
         }
 
         protected override void OnEnable()
@@ -40,16 +30,21 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.onLayerDisabled.RemoveListener(OnLayerDisabled);
         }
 
+        public override void SetEnabled(bool isActiveInHierarchy)
+        {
+            if (layer.isEnabled != isActiveInHierarchy)
+                layer.isEnabled = isActiveInHierarchy;
+            UI.UpdateLayerUI();
+        }
+
         private void OnLayerEnabled()
         {
-            if (UI)
-                UI.LayerEnabled = true;
+            // IsActiveSelf = true;
         }
 
         private void OnLayerDisabled()
         {
-            if (UI)
-                UI.LayerEnabled = false;
+            // IsActiveSelf = false;
         }
     }
 }

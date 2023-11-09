@@ -6,8 +6,11 @@ using UnityEngine;
 namespace Netherlands3D.Twin
 {
     public class FolderLayer : LayerNL3DBase
-    { 
-        public override bool IsEnabled { get; set; }
-        
+    {
+        public override bool IsActiveInScene { get; }
+
+        public override void SetEnabled(bool isActiveInHierarchy)
+        {
+        }
     }
 }
