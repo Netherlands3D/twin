@@ -20,8 +20,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             layer = GetComponent<CartesianTiles.Layer>();
         }
     }

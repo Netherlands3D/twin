@@ -189,10 +189,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // UpdateEnabledToggle(); 
             UpdateName();
             RecalculateIndent();
+            SetLayerTypeImage();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
             UpdateFoldout();
             Canvas.ForceUpdateCanvases();
+        }
+
+        private void SetLayerTypeImage()
+        {
+            var sprite = layerManager.GetLayerTypeSprite(Layer);
+            layerTypeImage.sprite = sprite;
         }
 
         private void UpdateFoldout()

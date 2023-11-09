@@ -10,17 +10,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public abstract class LayerNL3DBase : MonoBehaviour
     {
         public LayerUI UI { get; set; }
-        
+
         public abstract bool IsActiveInScene { get; set; }
 
-        protected virtual void OnEnable()
+        protected virtual void Awake()
         {
-            LayerManager.AllLayers.Add(this);
+            if (!LayerManager.AllLayers.Contains(this))
+                LayerManager.AddLayer(this);
         }
 
-        protected virtual void OnDisable()
+        protected virtual void OnDestroy()
         {
-            LayerManager.AllLayers.Remove(this);
+            LayerManager.RemoveLayer(this);
         }
     }
 }
