@@ -22,7 +22,7 @@ PrefabInstance:
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
@@ -38,7 +38,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: 30239cdc8728fdd49b01aee52837b460,
+      objectReference: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d,
         type: 2}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
@@ -53,8 +53,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleInspector
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.Tool, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1057364327075258090, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}

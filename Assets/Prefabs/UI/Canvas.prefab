@@ -738,6 +738,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1815030066741937055, guid: 236cefb5ad2ae4947a7e0393033acd79,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 279239176376154958}
     - target: {fileID: 1841426540871605608, guid: 236cefb5ad2ae4947a7e0393033acd79,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2898,6 +2903,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5311439705914412994}
   m_SourcePrefab: {fileID: 100100000, guid: 236cefb5ad2ae4947a7e0393033acd79, type: 3}
+--- !u!95 &279239176376154958 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1998873373271355575, guid: 236cefb5ad2ae4947a7e0393033acd79,
+    type: 3}
+  m_PrefabInstance: {fileID: 1755667401994046457}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2779716770612381317 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4525813747429313916, guid: 236cefb5ad2ae4947a7e0393033acd79,

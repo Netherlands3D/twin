@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
+  m_Name: Tool_Search
+  m_EditorClassIdentifier: 
+  code: 
+  title: Zoeken
+  functionGroups:
+  - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  onActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  onToggleInspector:
+    m_PersistentCalls:
+      m_Calls: []
+  activateToolOnInspectorToggle: 1
+  inspectorPrefab: {fileID: 2485776787059987519, guid: 26acc1a51cea69a408f60ca422a3cb29,
+    type: 3}
