@@ -12,6 +12,12 @@ namespace Netherlands3D.Twin
 
         public Tool Tool { get => tool; private set => tool = value; }
 
+        private void OnValidate() {
+            if(toolbar) return;
+
+            toolbar = GetComponentInParent<Toolbar>();
+        }
+
         public void Toggle()
         {
             Tool.ToggleInspector();
@@ -27,6 +33,7 @@ namespace Netherlands3D.Twin
 
         public void ToggleWithoutNotify(bool active)
         {
+            tool.Open = active;
             enabledObjects.SetActive(active);
             disabledObjects.SetActive(!active);
         }

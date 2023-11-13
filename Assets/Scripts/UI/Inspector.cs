@@ -39,26 +39,27 @@ namespace Netherlands3D.Twin
             //Always recreate content (reopen will cause a 'refresh' of the content)
             ClearContent();
             
-            if(tool.Open)
+            if(tool.Open && tool.InspectorPrefab)
             {
                 animator.SetTrigger("Open");
                 title.text = tool.title;
    
-                if(createAndDestroyContent && currentContent != null)
-                { 
-                    foreach (Transform child in contentPanel)
-                    {
-                        if(child.name == tool.InspectorPrefab.name)
-                        {
-                            currentContent = child.gameObject;
-                            currentContent.SetActive(true);
-                            return;
-                        }
-                    }
+                if(createAndDestroyContent)
+                {
+                    currentContent = Instantiate(tool.InspectorPrefab, contentPanel);
                     return;
                 }
 
-                currentContent = Instantiate(tool.InspectorPrefab, contentPanel);
+                //Enable existing content
+                foreach (Transform child in contentPanel)
+                {
+                    if(child.name == tool.InspectorPrefab.name)
+                    {
+                        currentContent = child.gameObject;
+                        currentContent.SetActive(true);
+                        return;
+                    }
+                }
                 return;
             }
 

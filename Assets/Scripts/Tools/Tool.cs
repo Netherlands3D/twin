@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin
         public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
 
         private bool open = false;
-        public bool Open { get => open; private set => open = value; }
+        public bool Open { get => open; set => open = value; }
 
         public void Activate()
         {
