@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
@@ -98,20 +99,29 @@ namespace Netherlands3D.Indicators
 
         public IEnumerator LoadProjectAreaGeometry(Variant variant)
         {
-            var geometryUrl = variant.geometry;
-            
-            UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            var featureCollection = new FeatureCollection(
+                variant.areas.Select(area => new Feature(area.geometry, null, area.id)).ToList()
+            );
+            if (Data.HasValue)
             {
-                SelectVariant(null);
-                Debug.LogError(www.error);
-                yield break;
+                featureCollection.CRS = Data.Value.crs;
             }
-
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
+            
+            // var geometryUrl = variant.geometry;
+            //
+            // UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
+            // yield return www.SendWebRequest();
+            //
+            // if (www.result != UnityWebRequest.Result.Success)
+            // {
+            //     SelectVariant(null);
+            //     Debug.LogError(www.error);
+            //     yield break;
+            // }
+            //
+            // var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
             onLoadedProjectArea.Invoke(featureCollection);
+            yield return null;
         }
 
         private string AssembleUri(string dossierId)

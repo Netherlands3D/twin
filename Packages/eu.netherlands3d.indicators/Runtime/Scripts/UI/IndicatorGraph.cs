@@ -71,19 +71,20 @@ namespace Netherlands3D.Indicators.UI
 
         private IEnumerator DoRender(ProjectAreaVisualisation visualisation)
         {
-            var url = visualisation.ProjectArea.indicators.graph;
-            onStartedLoading.Invoke(url);
-
-            using UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url);
-            yield return uwr.SendWebRequest();
-
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                onFailedLoading.Invoke(url);
-                yield break;
-            }
-
-            onCompletedLoading.Invoke(DownloadHandlerTexture.GetContent(uwr));
+            yield return null;
+            // var url = visualisation.ProjectArea.indicators.graph;
+            // onStartedLoading.Invoke(url);
+            //
+            // using UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url);
+            // yield return uwr.SendWebRequest();
+            //
+            // if (uwr.result != UnityWebRequest.Result.Success)
+            // {
+            //     onFailedLoading.Invoke(url);
+            //     yield break;
+            // }
+            //
+            // onCompletedLoading.Invoke(DownloadHandlerTexture.GetContent(uwr));
         }
     }
 }

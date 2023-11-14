@@ -43,7 +43,7 @@ namespace Netherlands3D.Indicators.UI
             
             foreach (var indicatorWithValue in selectedProjectArea.indicators.Values)
             {
-                InstantiateListItem(dossierData, indicatorWithValue.Key, indicatorWithValue.Value);
+                InstantiateListItem(dossierData, indicatorWithValue.id, indicatorWithValue.value);
             }
         }
 
