@@ -10294,22 +10294,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.053603914
+      value: 0.19817348
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.009305814
+      value: 0.029281262
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.983804
+      value: 0.96920687
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.1707916
+      value: -0.14320584
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -14168,9 +14168,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 753543407501609544, guid: c18057bd7c4172b4c8b2447dbf8456ca,
         type: 3}
+      propertyPath: dossier
+      value: 
+      objectReference: {fileID: 11400000, guid: e22204500314b63459241cf1914f96a5,
+        type: 2}
+    - target: {fileID: 753543407501609544, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
       propertyPath: dossierVisualiser
       value: 
       objectReference: {fileID: 460259861}
+    - target: {fileID: 1138851414537638915, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: dossier
+      value: 
+      objectReference: {fileID: 11400000, guid: e22204500314b63459241cf1914f96a5,
+        type: 2}
     - target: {fileID: 1681515714972544239, guid: c18057bd7c4172b4c8b2447dbf8456ca,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -14241,6 +14253,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2797694613026304137, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: dossier
+      value: 
+      objectReference: {fileID: 11400000, guid: e22204500314b63459241cf1914f96a5,
+        type: 2}
     - target: {fileID: 2797694613026304137, guid: c18057bd7c4172b4c8b2447dbf8456ca,
         type: 3}
       propertyPath: onSelectedMapOverlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -14760,6 +14778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8953445230585200105, guid: c18057bd7c4172b4c8b2447dbf8456ca,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 36233845822615836, guid: c18057bd7c4172b4c8b2447dbf8456ca, type: 3}

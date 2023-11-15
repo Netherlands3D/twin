@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.Configuration.Indicators
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string dossierId;
+        [SerializeField] private string baseUri;
         
         public UnityEvent<string> OnDossierIdChanged = new();
 
@@ -23,6 +24,12 @@ namespace Netherlands3D.Twin.Configuration.Indicators
                 dossierId = value;
                 OnDossierIdChanged.Invoke(value);
             }
+        }
+
+        public string BaseUri
+        {
+            get => baseUri;
+            set => baseUri = value;
         }
 
         public void Populate(NameValueCollection queryParameters)
@@ -43,15 +50,22 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         public void Populate(JSONNode jsonNode)
         {
-            if (string.IsNullOrEmpty(jsonNode["dossierId"])) return;
+            if (string.IsNullOrEmpty(jsonNode["dossierId"]) == false)
+            {
+                DossierId = jsonNode["dossierId"];
+            }
 
-            DossierId = jsonNode["dossierId"];
+            if (string.IsNullOrEmpty(jsonNode["baseUri"]) == false)
+            {
+                BaseUri = jsonNode["baseUri"];
+            }
         }
 
         public JSONNode ToJsonNode()
         {
             return new JSONObject()
             {
+                ["baseUri"] = baseUri,
                 ["dossierId"] = dossierId
             };
         }

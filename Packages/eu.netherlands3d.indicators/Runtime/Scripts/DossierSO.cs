@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
@@ -15,7 +14,11 @@ namespace Netherlands3D.Indicators
     public class DossierSO : ScriptableObject
     {
         [SerializeField]
-        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using {id} (without spaces).")]
+        [Tooltip("if the DossierUriTemplate contains a variable {baseUri}, it will be replaced by this value.")]
+        public string baseUri = "";
+        
+        [SerializeField]
+        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using a variable {id}, a dynamic base URI can also be injected using the variable {baseUri}.")]
         private string dossierUriTemplate = "";
 
         public UnityEvent<Dossier> onOpen = new();
@@ -29,6 +32,7 @@ namespace Netherlands3D.Indicators
         public Variant? ActiveVariant { get; private set; }
 
         private ProjectArea? activeProjectArea;
+
         public ProjectArea? ActiveProjectArea
         {
             get => activeProjectArea;
@@ -107,26 +111,16 @@ namespace Netherlands3D.Indicators
                 featureCollection.CRS = Data.Value.crs;
             }
             
-            // var geometryUrl = variant.geometry;
-            //
-            // UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
-            // yield return www.SendWebRequest();
-            //
-            // if (www.result != UnityWebRequest.Result.Success)
-            // {
-            //     SelectVariant(null);
-            //     Debug.LogError(www.error);
-            //     yield break;
-            // }
-            //
-            // var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
             onLoadedProjectArea.Invoke(featureCollection);
             yield return null;
         }
 
         private string AssembleUri(string dossierId)
         {
-            return dossierUriTemplate.Replace("{id}", dossierId);
+            return dossierUriTemplate
+                .Replace("{baseUri}", baseUri)
+                .Replace("{id}", dossierId)
+            ;
         }
     }
 }

@@ -26,6 +26,11 @@ namespace Netherlands3D.Twin.Configuration.Indicators
                 return;
             }
 
+            if (string.IsNullOrEmpty(configuration.BaseUri) == false)
+            {
+                dossier.baseUri = configuration.BaseUri;
+            }
+
             StartCoroutine(dossier.Open(dossierId));
         }
 

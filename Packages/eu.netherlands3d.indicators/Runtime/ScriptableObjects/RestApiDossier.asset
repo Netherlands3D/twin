@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 846f48943e3749f79551a8359acd5037, type: 3}
-  m_Name: LocalAzureDossier
+  m_Name: RestApiDossier
   m_EditorClassIdentifier: 
-  dossierUriTemplate: http://localhost:7071/api/v1/indicators/dossier/{id}
+  baseUri: http://localhost:7071/api/v1/indicators
+  dossierUriTemplate: '{baseUri}/dossier/{id}'
   onOpen:
     m_PersistentCalls:
       m_Calls: []
