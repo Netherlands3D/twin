@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private VerticalLayoutGroup verticalLayoutGroup;
 
         private LayerManager layerManager;
-        public Transform LayerBaseTransform => layerManager.transform;
+        public Transform LayerBaseTransform => layerManager.LayerUIContainer;
 
         [SerializeField] private RectTransform parentRowRectTransform;
         [SerializeField] private Toggle enabledToggle;
@@ -416,8 +416,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (referenceLayerUnderMouse)
             {
                 var hoverTransform = referenceLayerUnderMouse.rectTransform; // as RectTransform;
-                var correctedSize2 = (hoverTransform.rect.size - referenceLayerUnderMouse.childrenPanel.rect.size) * hoverTransform.lossyScale;
-                var relativeValue = -relativeYValue / correctedSize2.y;
+                var correctedSize = (hoverTransform.rect.size - referenceLayerUnderMouse.childrenPanel.rect.size) * hoverTransform.lossyScale;
+                var relativeValue = -relativeYValue / correctedSize.y;
                 var yValue01 = Mathf.Clamp01(relativeValue);
 
                 if (yValue01 < 0.25f)
@@ -435,7 +435,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     // print("lower");
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(true);
-                    var correctedSize = hoverTransform.rect.size * hoverTransform.lossyScale;
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y) - new Vector2(0, correctedSize.y);
 
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
