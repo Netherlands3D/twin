@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8312362831220139269}
   - component: {fileID: 1753211659870544598}
   - component: {fileID: 1356745287749164724}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: LayerTypeImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 7499595349914018578}
   - component: {fileID: 3357852825726526997}
   - component: {fileID: 4813776858706825396}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: LayerName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 191186859182100762}
   - component: {fileID: 7280976175294663279}
   - component: {fileID: 7584764445228330592}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ColorButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5307771157851983622}
   - component: {fileID: 2274689754544140435}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: FoldoutToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 1768096641797175149}
   - component: {fileID: 5492913388353196971}
   - component: {fileID: 7660318705326191549}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,7 +500,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3541242023013306905}
   - component: {fileID: 271022142622327280}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: EnableToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -587,7 +587,7 @@ GameObject:
   - component: {fileID: 1244387766270603908}
   - component: {fileID: 1834284588842827015}
   - component: {fileID: 8608496664494539319}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: DragGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +677,7 @@ GameObject:
   - component: {fileID: 5166091550977525044}
   - component: {fileID: 2469329572393680847}
   - component: {fileID: 8158405772721078757}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Checkmark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -753,7 +753,7 @@ GameObject:
   - component: {fileID: 2462973211124624496}
   - component: {fileID: 4084753893581333730}
   - component: {fileID: 1726095202102346883}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ParentRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 6333340918868435643}
   - component: {fileID: 1398713361120275128}
   - component: {fileID: 6619648388491414105}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Spacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -935,7 +935,7 @@ GameObject:
   - component: {fileID: 877195384313118181}
   - component: {fileID: 4903475476654988155}
   - component: {fileID: 3565544863342487734}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Checkmark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1010,7 +1010,7 @@ GameObject:
   - component: {fileID: 5638426200695805335}
   - component: {fileID: 142882106533608071}
   - component: {fileID: 7461294075984601125}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

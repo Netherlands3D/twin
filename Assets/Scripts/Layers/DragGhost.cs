@@ -32,14 +32,5 @@ namespace Netherlands3D.Twin
             var newPos = new Vector2(transform.position.x, pointerPosition.y + DragStartOffset.y);
             transform.position = newPos;
         }
-
-        // public void OnPointerDown(PointerEventData eventData)
-        // {
-        // }        
-        //
-        // public void OnPointerUp(PointerEventData eventData)
-        // {
-        //     Destroy(gameObject);
-        // }
     }
 }
