@@ -29,3 +29,4 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 4890024140017281850, guid: c18057bd7c4172b4c8b2447dbf8456ca,
     type: 3}
+  featurePrefab: {fileID: 0}

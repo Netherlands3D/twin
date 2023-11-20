@@ -19,11 +19,23 @@ namespace Netherlands3D.Twin
         public UnityEvent<Tool> onToggleInspector = new();
         
         [SerializeField] private bool activateToolOnInspectorToggle = true;
+
+        [Header("Content")]
+        [Tooltip("Prefab to show in the UI Inspector when this tool is activated")]
         [SerializeField] private GameObject inspectorPrefab;
+
+        [Tooltip("GameObjects to spawn in the World when this tool is activated")]
+        [SerializeField] private GameObject[] featurePrefabs;
+
         public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
+        public GameObject[] FeaturePrefabs { get => featurePrefabs; private set => featurePrefabs = value; }
 
         private bool open = false;
         public bool Open { get => open; set => open = value; }
+
+        private void Awake() {
+            open = false;
+        }
 
         public void Activate()
         {

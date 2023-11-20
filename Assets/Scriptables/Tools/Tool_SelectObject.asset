@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tool_SelectObject
   m_EditorClassIdentifier: 
   code: select-object
-  title: BAG Informatie
+  title: Object informatie
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
   - {fileID: 11400000, guid: 273b59c4a8f150a4c9eee47e2423c945, type: 2}
@@ -53,3 +53,4 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
     type: 3}
+  featurePrefab: {fileID: 0}
