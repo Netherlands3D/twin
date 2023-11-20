@@ -471,9 +471,9 @@ namespace Netherlands3D.SelectionTools
                     }
                 }
 
-                if (closeLoopAtStartPoint && snappingToStartPoint)
+                if (closeLoopAtStartPoint && snappingToStartPoint && isNewPolygon) //the reselect function should only call CloseLoop() once all the points have been re-added
                 {
-                    CloseLoop(isNewPolygon);
+                    CloseLoop(true);
                 }
             }
 
