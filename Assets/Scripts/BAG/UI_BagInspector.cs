@@ -142,6 +142,7 @@ namespace Netherlands3D.BAG
 		{
 			var requestUrl = geoJsonAddressesRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
+			Debug.Log(requestUrl);
 			yield return webRequest.SendWebRequest();
 
 			if (webRequest.result == UnityWebRequest.Result.Success)
