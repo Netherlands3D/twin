@@ -28,7 +28,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 
-namespace Netherlands3D.SubObjects
+namespace Netherlands3D.BAG
 {
 	/// <summary>
 	/// Loads GeoJSON from an URL using unique ID's, and invoke events for
@@ -52,6 +52,8 @@ namespace Netherlands3D.SubObjects
 		[SerializeField] private RectTransform contentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
+
+		private bool selectionlayerExists = false;
 
 		private void Awake() {
 			addressTemplate.gameObject.SetActive(false);
@@ -92,8 +94,11 @@ namespace Netherlands3D.SubObjects
                 };
 
 				//Interaction.ApplyColors(objectIdAndColor,objectMapping); TODO: Make this method public in SubObjects
-				GeometryColorizer.RemoveCustomColorSet(0);
-				GeometryColorizer.AddAndMergeCustomColorSet(1,objectIdAndColor);
+				if(selectionlayerExists)
+					GeometryColorizer.RemoveCustomColorSet(0);
+
+				selectionlayerExists = true;
+				GeometryColorizer.InsertCustomColorSet(0,objectIdAndColor);
 
                 GetBAGID(id);
                 return;
