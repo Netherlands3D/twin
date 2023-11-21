@@ -125,7 +125,7 @@ namespace Netherlands3D.SubObjects
             customColors.RemoveAt(layerIndex);
             RecalculatePrioritizedColors();
 
-            CalculateChangedColors(changedColors);
+            Interaction.ApplyColorsToAll(PrioritizedColors);
         }
 
         private static void ReorderColorMaps()
