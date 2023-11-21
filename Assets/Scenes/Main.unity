@@ -263,18 +263,6 @@ MonoBehaviour:
   onEvent: {fileID: 11400000, guid: a9024e6972a30fb4cb092ac6c6557c42, type: 2}
   invertBoolean: 0
   disableAtLateStart: 1
---- !u!114 &18486149 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8569328284100663580, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2488954073963816146}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &68587759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4061,6 +4049,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1172131023 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1778881411116242360, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2488954073963816146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1233650385
 GameObject:
   m_ObjectHideFlags: 0
@@ -9096,14 +9090,12 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[1].name
-      value: Toon gebouwen -> Buildings (Netherlands3D.CartesianTiles.BinaryMeshLayer)
-        -> set_isEnabled
+      value: Toon gebouwen -> Buildings () -> set_isEnabled
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[2].name
-      value: Toon het maaiveld -> Terrain (Netherlands3D.CartesianTiles.BinaryMeshLayer)
-        -> set_isEnabled
+      value: Toon het maaiveld -> Terrain () -> set_isEnabled
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -9135,8 +9127,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[8].name
-      value: Toon bomen -> Trees (Netherlands3D.CartesianTiles.BinaryMeshLayer) ->
-        set_isEnabled
+      value: Toon bomen -> Trees (GameObject) -> set_isEnabled
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -9374,7 +9365,7 @@ PrefabInstance:
         type: 3}
       propertyPath: FeatureLinks.Array.data[8].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 18486149}
+      objectReference: {fileID: 1172131023}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[9].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -9533,22 +9524,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.4762834
+      value: -0.17842947
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0010555323
+      value: -0.024659751
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.87928903
+      value: 0.9743821
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0019486673
+      value: -0.13466395
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -16867,7 +16858,7 @@ PrefabInstance:
     - target: {fileID: 3140988318018416562, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.002254972
+      value: -0.000045104556
       objectReference: {fileID: 0}
     - target: {fileID: 3214835052845808948, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}

@@ -92,6 +92,8 @@ namespace Netherlands3D.SubObjects
                 };
 
 				//Interaction.ApplyColors(objectIdAndColor,objectMapping); TODO: Make this method public in SubObjects
+				GeometryColorizer.RemoveCustomColorSet(0);
+				GeometryColorizer.AddAndMergeCustomColorSet(1,objectIdAndColor);
 
                 GetBAGID(id);
                 return;
