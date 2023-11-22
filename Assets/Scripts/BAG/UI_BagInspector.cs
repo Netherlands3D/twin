@@ -28,7 +28,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 
-namespace Netherlands3D.BAG
+namespace Netherlands3D.Interface.BAG
 {
 	/// <summary>
 	/// Loads GeoJSON from an URL using unique ID's, and invoke events for
@@ -59,6 +59,12 @@ namespace Netherlands3D.BAG
 
 		private bool selectionlayerExists = false;
 
+		[Header("Practical information fields")]
+		[SerializeField] private TMP_Text badIdText;
+		[SerializeField] private TMP_Text cityPartText;
+		[SerializeField] private TMP_Text districtText;
+		[SerializeField] private TMP_Text buildYearText;
+
 		private void Awake() {
 			addressTemplate.gameObject.SetActive(false);
 		}
@@ -75,39 +81,33 @@ namespace Netherlands3D.BAG
 		/// <summary>
 		/// Find objectmapping by raycast and get the BAG ID
 		/// </summary>
-        private void FindObjectMapping()
-        {
-            //Raycast from pointer position using main camera
-            var position = Pointer.current.position.ReadValue();
-            RaycastHit[] hits;
+		private void FindObjectMapping()
+		{
+			//Raycast from pointer position using main camera
+			var position = Pointer.current.position.ReadValue();
+			var ray = Camera.main.ScreenPointToRay(position);
+			if (Physics.Raycast(ray, out RaycastHit hit, 100000f))
+			{
+				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
+				if (objectMapping != null)
+				{
+					var hitIndex = hit.triangleIndex;
+					var id = objectMapping.getObjectID(hitIndex);
+					var objectIdAndColor = new Dictionary<string, Color>
+					{
+						{ id, new Color(1, 0, 0, 0) }
+					};
 
-            var ray = Camera.main.ScreenPointToRay(position);
-            hits = Physics.RaycastAll(ray, 100000f);
+					if (selectionlayerExists)
+						GeometryColorizer.RemoveCustomColorSet(0);
 
-            for (int i = 0; i < hits.Length; i++)
-            {
-                var result = hits[i];
-                var objectMapping = result.collider.gameObject.GetComponent<ObjectMapping>();
-                var hitIndex = result.triangleIndex;
-                if (!objectMapping) continue;
+					selectionlayerExists = true;
+					GeometryColorizer.InsertCustomColorSet(0, objectIdAndColor);
 
-                var id = objectMapping.getObjectID(hitIndex);
-				var objectIdAndColor = new Dictionary<string, Color>
-                {
-                    { id, new Color(1, 0, 0, 0) }
-                };
-
-				//Interaction.ApplyColors(objectIdAndColor,objectMapping); TODO: Make this method public in SubObjects
-				if(selectionlayerExists)
-					GeometryColorizer.RemoveCustomColorSet(0);
-
-				selectionlayerExists = true;
-				GeometryColorizer.InsertCustomColorSet(0,objectIdAndColor);
-
-                GetBAGID(id);
-                return;
-            }
-        }
+					GetBAGID(id);
+				}
+			}
+		}
 
         public void GetBAGID(string bagID)
 		{
