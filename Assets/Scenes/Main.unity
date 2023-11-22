@@ -656,7 +656,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[0].name
-      value: Zoeken op adres -> ToggleSearch (GameObject) -> SetActive
+      value: Zoeken op adres -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -690,12 +690,12 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[6].name
-      value: Timeline -> ToggleTimeline (GameObject) -> SetActive
+      value: Timeline -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[7].name
-      value: Verkeerssimulatie -> ToggleImportFile (GameObject) -> SetActive
+      value: Verkeerssimulatie -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -711,18 +711,17 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[10].name
-      value: Stel de zonnestand en schaduwen in -> ToggleSunSettings (GameObject)
-        -> SetActive
+      value: Stel de zonnestand en schaduwen in -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[11].name
-      value: Importeer .obj bestanden -> ToggleImportFile (GameObject) -> SetActive
+      value: Importeer .obj bestanden -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[12].name
-      value: Doorzicht ondergrond -> ToggleDome (GameObject) -> SetActive
+      value: Doorzicht ondergrond -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1057,12 +1056,12 @@ PrefabInstance:
     - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: day
-      value: 8
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: hour
-      value: 9
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1072,7 +1071,7 @@ PrefabInstance:
     - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: minutes
-      value: 59
+      value: 49
       objectReference: {fileID: 0}
     - target: {fileID: 2921212951514727232, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1097,22 +1096,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.18168668
+      value: -0.34238395
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.024573186
+      value: -0.026638577
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9741796
+      value: 0.93635267
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.13175812
+      value: -0.072851256
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -6547,6 +6546,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7572806661504998396, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
