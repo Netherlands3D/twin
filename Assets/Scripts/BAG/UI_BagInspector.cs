@@ -26,39 +26,37 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 
-namespace Netherlands3D.Interface.BAG
+namespace Netherlands3D.Twin.Interface.BAG
 {
-	/// <summary>
-	/// Loads GeoJSON from an URL using unique ID's, and invoke events for
-	/// returned key/value pairs for all properties.
-	/// </summary>
 	public class UI_BagInspector : MonoBehaviour
 	{
-		[SerializeField]
-		private string idReplacementString = "{BagID}";
 
 		[Tooltip("Id replacement string will be replaced")]
 
 		[Header("GeoJSON Data Sources")]
+		[SerializeField] private string idReplacementString = "{BagID}";
 		[SerializeField] private string geoJsonBagRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
-		
-		
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
+		
 		[SerializeField] private UI_Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
 		private Coroutine downloadProcess;
 
-		[SerializeField] private RawImage thumbnail;
+		[SerializeField] private RenderedThumbnail buildingThumbnail;
+
 		[SerializeField] private RectTransform contentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
 
 		private bool selectionlayerExists = false;
+
+		private Vector3 lastWorldClickedPosition;
 
 		[Header("Practical information fields")]
 		[SerializeField] private TMP_Text badIdText;
@@ -93,6 +91,8 @@ namespace Netherlands3D.Interface.BAG
 				if (objectMapping != null)
 				{
 					var hitIndex = hit.triangleIndex;
+					lastWorldClickedPosition = hit.point;
+
 					var id = objectMapping.getObjectID(hitIndex);
 					var objectIdAndColor = new Dictionary<string, Color>
 					{
@@ -110,6 +110,7 @@ namespace Netherlands3D.Interface.BAG
 			}
 		}
 
+
         public void GetBAGID(string bagID)
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
@@ -124,7 +125,6 @@ namespace Netherlands3D.Interface.BAG
 
 				if (downloadProcess != null)			
 					StopCoroutine(downloadProcess);
-
 
 				downloadProcess = StartCoroutine(GetBagIDData(ID));
 			}
@@ -155,7 +155,7 @@ namespace Netherlands3D.Interface.BAG
 		{
 			var requestUrl = geoJsonBagRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
-			Debug.Log(requestUrl);
+
 			yield return webRequest.SendWebRequest();
 
 			if (webRequest.result == UnityWebRequest.Result.Success)
@@ -166,9 +166,14 @@ namespace Netherlands3D.Interface.BAG
 				while (customJsonHandler.GotoNextFeature())
 				{
 					var properties = customJsonHandler.GetProperties();	
+
 					badIdText.text = properties["identificatie"].ToString();	
 					buildYearText.text = properties["bouwjaar"].ToString();	
 					statusText.text = properties["status"].ToString();
+
+					//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+					Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one*50.0f);
+					buildingThumbnail.RenderThumbnail(currentObjectBounds);
 				}
 			}
 			else
