@@ -9748,18 +9748,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2116739921 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1928907654145737600, guid: deb1af9fab305834597d3dd2dd581207,
-    type: 3}
-  m_PrefabInstance: {fileID: 6687181368185672785}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638315527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6a0c7b653b4046873f1178709391ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2141853693 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8972244612468505017, guid: a0805dd2908ed9e4b8e51c7594789d5b,
@@ -10294,22 +10282,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19817348
+      value: 0.14408453
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.029281262
+      value: 0.023019912
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.96920687
+      value: 0.9769082
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.14320584
+      value: -0.15607741
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -10396,7 +10384,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onSelectedArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2116739921}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2265231209749781349, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
@@ -14123,7 +14111,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Indicators
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1928907654145737600, guid: deb1af9fab305834597d3dd2dd581207, type: 3}
+    - {fileID: 17924774906879107, guid: deb1af9fab305834597d3dd2dd581207, type: 3}
+    - {fileID: 8991100596918748226, guid: deb1af9fab305834597d3dd2dd581207, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
