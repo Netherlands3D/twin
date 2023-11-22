@@ -27,3 +27,4 @@ Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (c
 
 * Fixed incorrect function calls with CloseLoop and FinishPolygon.
 * Renamed some variables for clarity 
+* MinPointDistance is now calculated based on handle size for spherical handles
