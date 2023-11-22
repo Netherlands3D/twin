@@ -16,3 +16,14 @@ Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (c
 
 * Removed dependency on Netherlands3D.Core. The extension methods used are added in a temporary script that should be removed when possible to avoid double code.
 * Removed depandency on Poly2Mesh embedded package in Netherlands3D, replaced it with a depencancy on the OpenUPM version of this package.
+
+## [1.1.0]
+
+### Added
+* Unity functions are now overridable
+* Added overridable function to calculate position to be added. 
+
+### Fixed
+
+* Fixed incorrect function calls with CloseLoop and FinishPolygon.
+* Renamed some variables for clarity 
