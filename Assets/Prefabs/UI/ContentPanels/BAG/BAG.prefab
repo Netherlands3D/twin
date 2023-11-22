@@ -95,14 +95,15 @@ MonoBehaviour:
   geoJsonBagRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e
   geoJsonAddressesRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?service=wfs&request=getFeature&version=2.0.0&outputFormat=geojson&typeName=bag:verblijfsobject&filter=%3CFilter%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3Epandidentificatie%3C/PropertyName%3E%3CLiteral%3E{BagID}%3C/Literal%3E%3C/PropertyIsEqualTo%3E%3C/Filter%3E
   removeFromID: NL.IMBAG.Pand.
-  addressTemplate: {fileID: 9177066553198040030}
-  loadingIndicatorPrefab: {fileID: 0}
+  addressTemplate: {fileID: 7766899898881126437}
+  loadingIndicatorPrefab: {fileID: 8319948408523725000, guid: 86adcad0d70ce534ebb23bd5bf66bff4,
+    type: 3}
   thumbnail: {fileID: 6011768274728236466}
   contentRectTransform: {fileID: 4996155142956460685}
   badIdText: {fileID: 3480281518799679887}
-  cityPartText: {fileID: 7565772294244317128}
   districtText: {fileID: 3684285758634712291}
   buildYearText: {fileID: 7452457789583580012}
+  statusText: {fileID: 0}
 --- !u!1 &8460678307647717199
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,8 +146,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 430}
+  m_AnchoredPosition: {x: 0, y: -0.00000028684735}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5019879727507509977
 MonoBehaviour:
@@ -755,7 +756,7 @@ PrefabInstance:
     - target: {fileID: 796563801916862400, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: Stadsdeel
+      value: Status
       objectReference: {fileID: 0}
     - target: {fileID: 4186880582192772001, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -910,7 +911,7 @@ PrefabInstance:
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: Centrum
+      value: Verblijfsobject
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -927,18 +928,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4b8a3735430bf0429d86078c44c0f65, type: 3}
---- !u!114 &7565772294244317128 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
-    type: 3}
-  m_PrefabInstance: {fileID: 1984807725534334271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &9126395324540629301 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7290215288059689994, guid: f4b8a3735430bf0429d86078c44c0f65,
@@ -1746,16 +1735,16 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8328568331393352350}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9177066553198040030 stripped
+--- !u!114 &7766899898881126437 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 922808758654472512, guid: 108ec13b032d41849a5352172dff8449,
+  m_CorrespondingSourceObject: {fileID: 1755443482649391803, guid: 108ec13b032d41849a5352172dff8449,
     type: 3}
   m_PrefabInstance: {fileID: 8328568331393352350}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 65295c8902a42ce4aa3a2dcb1538b9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8620479406286942587
@@ -1874,7 +1863,7 @@ PrefabInstance:
     - target: {fileID: 3809930780254305074, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5600597860905115593, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}

@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -47,7 +48,7 @@ namespace Netherlands3D.Interface.BAG
 		
 		
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
-		[SerializeField] private TMP_Text addressTemplate;
+		[SerializeField] private UI_Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
 		private Coroutine downloadProcess;
@@ -61,9 +62,9 @@ namespace Netherlands3D.Interface.BAG
 
 		[Header("Practical information fields")]
 		[SerializeField] private TMP_Text badIdText;
-		[SerializeField] private TMP_Text cityPartText;
 		[SerializeField] private TMP_Text districtText;
 		[SerializeField] private TMP_Text buildYearText;
+		[SerializeField] private TMP_Text statusText;
 
 		private void Awake() {
 			addressTemplate.gameObject.SetActive(false);
@@ -121,11 +122,11 @@ namespace Netherlands3D.Interface.BAG
 				var ID = bagIDs[0];
 				if(removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
 
-				if (downloadProcess != null)
-				{
+				if (downloadProcess != null)			
 					StopCoroutine(downloadProcess);
-				}
-				downloadProcess = StartCoroutine(GetIDData(ID));
+
+
+				downloadProcess = StartCoroutine(GetBagIDData(ID));
 			}
 		}
 
@@ -138,7 +139,45 @@ namespace Netherlands3D.Interface.BAG
 			dynamicInterfaceItems.Clear();
 		}
 
-		private IEnumerator GetIDData(string bagID)
+		private IEnumerator GetBagIDData(string bagID)
+		{
+			//Get fast bag data
+			var loadingIndicator = Instantiate(loadingIndicatorPrefab, contentRectTransform);
+			yield return GetBAGData(bagID);
+			loadingIndicator.transform.SetAsLastSibling();
+			
+			//Adressess (slower request next)
+			yield return GetAdresses(bagID);
+			Destroy(loadingIndicator);
+		}
+
+		private IEnumerator GetBAGData(string bagID)
+		{
+			var requestUrl = geoJsonBagRequestURL.Replace(idReplacementString, bagID);
+			var webRequest = UnityWebRequest.Get(requestUrl);
+			Debug.Log(requestUrl);
+			yield return webRequest.SendWebRequest();
+
+			if (webRequest.result == UnityWebRequest.Result.Success)
+			{
+				ClearOldItems();
+
+				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+				while (customJsonHandler.GotoNextFeature())
+				{
+					var properties = customJsonHandler.GetProperties();	
+					badIdText.text = properties["identificatie"].ToString();	
+					buildYearText.text = properties["bouwjaar"].ToString();	
+					statusText.text = properties["status"].ToString();	//CHECK
+				}
+			}
+			else
+			{
+				SpawnNewLine("Geen BAG data gevonden");
+			}
+		}
+
+		private IEnumerator GetAdresses(string bagID)
 		{
 			var requestUrl = geoJsonAddressesRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
@@ -151,28 +190,28 @@ namespace Netherlands3D.Interface.BAG
 				
 				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
 				while (customJsonHandler.GotoNextFeature())
-				{
-					var properties = customJsonHandler.GetProperties();
-					foreach (KeyValuePair<string, object> propertyKeyAndValue in properties)
-					{
-						AddPropertyAndValue(propertyKeyAndValue);
-						
-						var spawnedField = Instantiate(addressTemplate, contentRectTransform);
-						spawnedField.gameObject.SetActive(true);
-						dynamicInterfaceItems.Add(spawnedField.gameObject);
-					}
-				}
+                {
+                    var properties = customJsonHandler.GetProperties();
+                    bool gotDistrict = false;
+
+					
+                    //Spawn address
+                    var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
+                    SpawnNewLine(addressText);
+                }
+            }
+			else
+			{
+				SpawnNewLine("Geen adressen gevonden");
 			}
 		}
 
-		private void AddPropertyAndValue(KeyValuePair<string, object> propertyKeyAndValue)
-		{
-            var propertyAndValue = new List<string>
-            {
-                Capacity = 2
-            };
-            propertyAndValue.Add(propertyKeyAndValue.Key);
-			propertyAndValue.Add(propertyKeyAndValue.Value.ToString());
-		}
-	}
+        private void SpawnNewLine(string addressText)
+        {
+            var spawnedField = Instantiate(addressTemplate, contentRectTransform);
+            spawnedField.Set(addressText);
+            spawnedField.gameObject.SetActive(true);
+            dynamicInterfaceItems.Add(spawnedField.gameObject);
+        }
+    }
 }
