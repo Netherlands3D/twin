@@ -26,8 +26,13 @@ namespace Netherlands3D.Twin
 		{
 			if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
 			
-			// Create a temporary rendercamera
-			thumbnailRenderTexture = new RenderTexture((int)thumbnail.rectTransform.rect.width, (int)thumbnail.rectTransform.rect.height, 24);
+            //Root canvas scale to make sure thumbnail rendered texture matches size on screen
+            var scale = thumbnail.canvas.rootCanvas.transform.localScale;     
+            var width = thumbnail.rectTransform.rect.width * scale.x;
+            var height = thumbnail.rectTransform.rect.height * scale.y;
+    
+            // Create new rendertexture and camera
+			thumbnailRenderTexture = new RenderTexture((int)width, (int)height, 24);
 			thumbnailRenderTexture.Create();
 			var temporaryThumbnailCamera = new GameObject("ThumbnailCamera").AddComponent<Camera>();
 			temporaryThumbnailCamera.clearFlags = CameraClearFlags.Color;
