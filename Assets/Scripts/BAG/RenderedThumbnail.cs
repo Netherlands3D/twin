@@ -7,7 +7,6 @@ namespace Netherlands3D.Twin
     public class RenderedThumbnail : MonoBehaviour
     {
         [Header("Thumbnail")]
-		[SerializeField] private int thumbnailRenderWidth = 256;
 		[SerializeField] private UniversalRenderPipelineAsset thumbnailRendererOverride;
         [SerializeField] private RawImage thumbnail;
 
@@ -28,7 +27,7 @@ namespace Netherlands3D.Twin
 			if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
 			
 			// Create a temporary rendercamera
-			thumbnailRenderTexture = new RenderTexture(thumbnailRenderWidth, thumbnailRenderWidth, 24);
+			thumbnailRenderTexture = new RenderTexture((int)thumbnail.rectTransform.rect.width, (int)thumbnail.rectTransform.rect.height, 24);
 			thumbnailRenderTexture.Create();
 			var temporaryThumbnailCamera = new GameObject("ThumbnailCamera").AddComponent<Camera>();
 			temporaryThumbnailCamera.clearFlags = CameraClearFlags.Color;

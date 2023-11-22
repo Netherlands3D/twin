@@ -461,7 +461,7 @@ MonoBehaviour:
   contentPanel: {fileID: 1188660828608492783}
   animator: {fileID: 0}
   title: {fileID: 6319331451848341587}
-  createAndDestroyContent: 0
+  createAndDestroyContent: 1
 --- !u!1 &1836250451346335115
 GameObject:
   m_ObjectHideFlags: 0
