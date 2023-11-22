@@ -705,7 +705,7 @@ PrefabInstance:
     - target: {fileID: 8028583521867663250, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_Name
-      value: KeyAndValue (3)
+      value: 'KeyValuePair: Bouwjaar'
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -906,7 +906,7 @@ PrefabInstance:
     - target: {fileID: 8028583521867663250, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_Name
-      value: KeyAndValue (1)
+      value: 'KeyValuePair: Status'
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -1224,7 +1224,7 @@ PrefabInstance:
     - target: {fileID: 8028583521867663250, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_Name
-      value: KeyAndValue (2)
+      value: 'KeyValuePair: Wijk'
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -1420,7 +1420,7 @@ PrefabInstance:
     - target: {fileID: 8028583521867663250, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_Name
-      value: KeyAndValue
+      value: 'KeyValuePair: BAG ID'
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}

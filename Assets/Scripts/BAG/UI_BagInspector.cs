@@ -168,7 +168,7 @@ namespace Netherlands3D.Interface.BAG
 					var properties = customJsonHandler.GetProperties();	
 					badIdText.text = properties["identificatie"].ToString();	
 					buildYearText.text = properties["bouwjaar"].ToString();	
-					statusText.text = properties["status"].ToString();	//CHECK
+					statusText.text = properties["status"].ToString();
 				}
 			}
 			else
@@ -189,11 +189,16 @@ namespace Netherlands3D.Interface.BAG
 				ClearOldItems();
 				
 				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+				bool gotDistrict = false;
 				while (customJsonHandler.GotoNextFeature())
                 {
                     var properties = customJsonHandler.GetProperties();
-                    bool gotDistrict = false;
 
+					//Use first address result to determine district
+					if(!gotDistrict){
+                    	districtText.text = properties["openbare_ruimte"].ToString();
+						gotDistrict = true;
+					}	
 					
                     //Spawn address
                     var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";

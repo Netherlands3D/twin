@@ -14,6 +14,8 @@ namespace Netherlands3D.Twin
         {
             keyText.text = key;
             valueText.text = value;
+
+            gameObject.name = "KeyValuePair: " + keyText.text;
         }
     }
 }
