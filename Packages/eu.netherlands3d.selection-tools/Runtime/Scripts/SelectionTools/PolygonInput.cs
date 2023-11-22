@@ -1,20 +1,20 @@
 /*
-*  Copyright (C) X Gemeente
-*                X Amsterdam
-*                X Economic Services Departments
-*
-*  Licensed under the EUPL, Version 1.2 or later (the "License");
-*  You may not use this work except in compliance with the License.
-*  You may obtain a copy of the License at:
-*
-*    https://github.com/Amsterdam/3DAmsterdam/blob/master/LICENSE.txt
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" basis,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-*  implied. See the License for the specific language governing
-*  permissions and limitations under the License.
-*/
+ *  Copyright (C) X Gemeente
+ *                X Amsterdam
+ *                X Economic Services Departments
+ *
+ *  Licensed under the EUPL, Version 1.2 or later (the "License");
+ *  You may not use this work except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *    https://github.com/Amsterdam/3DAmsterdam/blob/master/LICENSE.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" basis,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied. See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,7 +51,6 @@ namespace Netherlands3D.SelectionTools
         [SerializeField, Tooltip("Handles allow you to transform the line.")] private bool createHandles = false;
         [SerializeField] private int maxPoints = 1000;
         [SerializeField] private int minPointsToCloseLoop = 3;
-        [SerializeField] private float minPointDistance = 0.1f;
         [SerializeField] private float minDistanceBetweenAutoPoints = 10.0f;
         [SerializeField] private float minDirectionThresholdForAutoPoints = 0.8f;
         [SerializeField] private WindingOrder windingOrder = WindingOrder.CLOCKWISE;
@@ -252,6 +251,17 @@ namespace Netherlands3D.SelectionTools
             currentWorldCoordinate = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
         }
 
+        private float GetMinPointDistance(int handleIndex)
+        {
+            if (handles.Count > handleIndex)
+            {
+                var handle = handles[handleIndex];
+                return handle.transform.lossyScale.magnitude * 0.5f; //todo: This code does not take the handle shape, or handle mesh bounds into account: should replace 0.5f with a multiplication of something like handle.GetComponent<MeshFilter>().mesh.bounds.size.magnitude;
+            }
+
+            return 0;
+        }
+
         /// <summary>
         /// Draw the preview line between last placed point and current pointer position
         /// </summary>
@@ -263,7 +273,7 @@ namespace Netherlands3D.SelectionTools
             snappingToStartPoint = false;
             if (snapToStart && positions.Count > 2)
             {
-                if (Vector3.Distance(currentWorldCoordinate, positions[0]) < minPointDistance)
+                if (Vector3.Distance(currentWorldCoordinate, positions[0]) < GetMinPointDistance(0))
                 {
                     currentWorldCoordinate = positions[0];
                     snappingToStartPoint = true;
@@ -341,10 +351,11 @@ namespace Netherlands3D.SelectionTools
                     return;
                 }
 
-                var lastPointOnTopOfFirst = (Vector3.Distance(positions[0], positions[positions.Count - 1]) < minPointDistance);
+                var lastPointOnTopOfFirst = (Vector3.Distance(positions[0], positions[positions.Count - 1]) < GetMinPointDistance(0));
                 if (lastPointOnTopOfFirst)
                 {
                     Debug.Log("Closing loop by placing last point on first");
+                    snappingToStartPoint = true;
                     positions[positions.Count - 1] = positions[0];
                 }
                 else
@@ -447,7 +458,7 @@ namespace Netherlands3D.SelectionTools
                 Debug.Log("Cant place point. Crossing own line.");
                 return;
             }
-            else if (Vector3.Distance(pointPosition, positions[positions.Count - 1]) < minPointDistance)
+            else if (Vector3.Distance(pointPosition, positions[positions.Count - 1]) < GetMinPointDistance(positions.Count - 1))
             {
                 Debug.Log("Point at same location as previous, skipping this one.");
                 return;
@@ -491,10 +502,7 @@ namespace Netherlands3D.SelectionTools
             lineHandle.pointIndex = positionIndex;
             lineHandle.transform.position = positions[positionIndex];
 
-            lineHandle.pointerDown.AddListener(() =>
-            {
-                blockCameraDrag.Invoke(true);
-            });
+            lineHandle.pointerDown.AddListener(() => { blockCameraDrag.Invoke(true); });
 
             lineHandle.clicked.AddListener(() =>
             {
