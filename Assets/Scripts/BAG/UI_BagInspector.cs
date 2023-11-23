@@ -20,50 +20,49 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 
-namespace Netherlands3D.Interface.BAG
+namespace Netherlands3D.Twin.Interface.BAG
 {
-	/// <summary>
-	/// Loads GeoJSON from an URL using unique ID's, and invoke events for
-	/// returned key/value pairs for all properties.
-	/// </summary>
 	public class UI_BagInspector : MonoBehaviour
 	{
-		[SerializeField]
-		private string idReplacementString = "{BagID}";
 
 		[Tooltip("Id replacement string will be replaced")]
 
 		[Header("GeoJSON Data Sources")]
+		[SerializeField] private string idReplacementString = "{BagID}";
 		[SerializeField] private string geoJsonBagRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
-		
-		
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
-		[SerializeField] private TMP_Text addressTemplate;
+		
+		[SerializeField] private UI_Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
 		private Coroutine downloadProcess;
 
-		[SerializeField] private RawImage thumbnail;
+		[SerializeField] private RenderedThumbnail buildingThumbnail;
+
 		[SerializeField] private RectTransform contentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
 
 		private bool selectionlayerExists = false;
 
+		private Vector3 lastWorldClickedPosition;
+
 		[Header("Practical information fields")]
 		[SerializeField] private TMP_Text badIdText;
-		[SerializeField] private TMP_Text cityPartText;
 		[SerializeField] private TMP_Text districtText;
 		[SerializeField] private TMP_Text buildYearText;
+		[SerializeField] private TMP_Text statusText;
 
 		private void Awake() {
 			addressTemplate.gameObject.SetActive(false);
@@ -92,6 +91,8 @@ namespace Netherlands3D.Interface.BAG
 				if (objectMapping != null)
 				{
 					var hitIndex = hit.triangleIndex;
+					lastWorldClickedPosition = hit.point;
+
 					var id = objectMapping.getObjectID(hitIndex);
 					var objectIdAndColor = new Dictionary<string, Color>
 					{
@@ -109,6 +110,7 @@ namespace Netherlands3D.Interface.BAG
 			}
 		}
 
+
         public void GetBAGID(string bagID)
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
@@ -121,11 +123,10 @@ namespace Netherlands3D.Interface.BAG
 				var ID = bagIDs[0];
 				if(removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
 
-				if (downloadProcess != null)
-				{
+				if (downloadProcess != null)			
 					StopCoroutine(downloadProcess);
-				}
-				downloadProcess = StartCoroutine(GetIDData(ID));
+
+				downloadProcess = StartCoroutine(GetBagIDData(ID));
 			}
 		}
 
@@ -138,7 +139,50 @@ namespace Netherlands3D.Interface.BAG
 			dynamicInterfaceItems.Clear();
 		}
 
-		private IEnumerator GetIDData(string bagID)
+		private IEnumerator GetBagIDData(string bagID)
+		{
+			//Get fast bag data
+			var loadingIndicator = Instantiate(loadingIndicatorPrefab, contentRectTransform);
+			yield return GetBAGData(bagID);
+			loadingIndicator.transform.SetAsLastSibling();
+			
+			//Adressess (slower request next)
+			yield return GetAdresses(bagID);
+			Destroy(loadingIndicator);
+		}
+
+		private IEnumerator GetBAGData(string bagID)
+		{
+			var requestUrl = geoJsonBagRequestURL.Replace(idReplacementString, bagID);
+			var webRequest = UnityWebRequest.Get(requestUrl);
+
+			yield return webRequest.SendWebRequest();
+
+			if (webRequest.result == UnityWebRequest.Result.Success)
+			{
+				ClearOldItems();
+
+				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+				while (customJsonHandler.GotoNextFeature())
+				{
+					var properties = customJsonHandler.GetProperties();	
+
+					badIdText.text = properties["identificatie"].ToString();	
+					buildYearText.text = properties["bouwjaar"].ToString();	
+					statusText.text = properties["status"].ToString();
+
+					//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+					Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one*50.0f);
+					buildingThumbnail.RenderThumbnail(currentObjectBounds);
+				}
+			}
+			else
+			{
+				SpawnNewLine("Geen BAG data gevonden");
+			}
+		}
+
+		private IEnumerator GetAdresses(string bagID)
 		{
 			var requestUrl = geoJsonAddressesRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
@@ -150,29 +194,34 @@ namespace Netherlands3D.Interface.BAG
 				ClearOldItems();
 				
 				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+				bool gotDistrict = false;
 				while (customJsonHandler.GotoNextFeature())
-				{
-					var properties = customJsonHandler.GetProperties();
-					foreach (KeyValuePair<string, object> propertyKeyAndValue in properties)
-					{
-						AddPropertyAndValue(propertyKeyAndValue);
-						
-						var spawnedField = Instantiate(addressTemplate, contentRectTransform);
-						spawnedField.gameObject.SetActive(true);
-						dynamicInterfaceItems.Add(spawnedField.gameObject);
-					}
-				}
+                {
+                    var properties = customJsonHandler.GetProperties();
+
+					//Use first address result to determine district
+					if(!gotDistrict){
+                    	districtText.text = properties["openbare_ruimte"].ToString();
+						gotDistrict = true;
+					}	
+					
+                    //Spawn address
+                    var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
+                    SpawnNewLine(addressText);
+                }
+            }
+			else
+			{
+				SpawnNewLine("Geen adressen gevonden");
 			}
 		}
 
-		private void AddPropertyAndValue(KeyValuePair<string, object> propertyKeyAndValue)
-		{
-            var propertyAndValue = new List<string>
-            {
-                Capacity = 2
-            };
-            propertyAndValue.Add(propertyKeyAndValue.Key);
-			propertyAndValue.Add(propertyKeyAndValue.Value.ToString());
-		}
-	}
+        private void SpawnNewLine(string addressText)
+        {
+            var spawnedField = Instantiate(addressTemplate, contentRectTransform);
+            spawnedField.Set(addressText);
+            spawnedField.gameObject.SetActive(true);
+            dynamicInterfaceItems.Add(spawnedField.gameObject);
+        }
+    }
 }

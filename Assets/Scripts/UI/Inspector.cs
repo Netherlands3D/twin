@@ -41,6 +41,7 @@ namespace Netherlands3D.Twin
             
             if(tool.Open && tool.InspectorPrefab)
             {
+                animator.ResetTrigger("Close");
                 animator.SetTrigger("Open");
                 title.text = tool.title;
    
@@ -63,6 +64,7 @@ namespace Netherlands3D.Twin
                 return;
             }
 
+            animator.ResetTrigger("Open");
             animator.SetTrigger("Close");
         }
 
