@@ -20,7 +20,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
 
-        public RectTransform layerUIContainer;
+        [SerializeField] private RectTransform layerUIContainer;
+        public RectTransform LayerUIContainer => layerUIContainer;
 
         //Drag variables
         [SerializeField] private DragGhost dragGhostPrefab;
@@ -31,7 +32,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool MouseIsOverButton { get; set; }
 
         //Context menu
-        [SerializeField] private RectTransform contextMenu;
+        [SerializeField] private ContextMenuUI contextMenuPrefab;
+        private ContextMenuUI contextMenu;
 
         public static void AddLayer(LayerNL3DBase newLayer)
         {
@@ -50,7 +52,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (!layer.UI)
                 {
-                    var layerUI = Instantiate(LayerUIPrefab, transform);
+                    var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
                     layerUI.Layer = layer;
                     layer.UI = layerUI;
 
@@ -61,33 +63,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnable()
         {
-            // CreateLayerUIsForAllLayers();
             RefreshLayerList();
         }
-
-        // private void OnDisable()
-        // {
-        //     foreach (Transform t in transform)
-        //     {
-        //         Destroy(t.gameObject);
-        //     }
-        // }
-
-        // private void CreateLayerUIsForAllLayers()
-        // {
-        //     print("generating Layer UIs");
-        //     foreach (var layer in AllLayers)
-        //     {
-        //         var layerUI = Instantiate(LayerUIPrefab, transform);
-        //         layerUI.Layer = layer;
-        //         layer.UI = layerUI;
-        //
-        //         LayersVisibleInInspector.Add(layerUI);
-        //     }
-        //
-        //     // LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform); //not sure why it is needed to manually force a canvas update
-        //     // Canvas.ForceUpdateCanvases(); //not sure why it is needed to manually force a canvas update
-        // }
 
         private void OnRectTransformDimensionsChange()
         {
@@ -99,7 +76,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void StartDragLayer(LayerUI layerUI)
         {
-            // DraggingLayer = layerUI;
             CreateGhost();
         }
 
@@ -112,7 +88,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void CreateGhost()
         {
-            DragGhost = Instantiate(dragGhostPrefab, transform.parent);
+            DragGhost = Instantiate(dragGhostPrefab, transform);
             DragGhost.Initialize(DragStartOffset);
         }
 
@@ -169,10 +145,21 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void EnableContextMenu(bool enable, Vector2 position)
+        public void EnableContextMenu(bool enable, Vector2 position = default)
         {
-            contextMenu.gameObject.SetActive(enable);
-            var scaledSize = contextMenu.rect.size * contextMenu.lossyScale;
+            if(contextMenu)
+                Destroy(contextMenu.gameObject); //destroy and reinstantiate to also destroy all active submenus
+            
+            if (enable)
+                contextMenu = Instantiate(contextMenuPrefab, transform);
+            
+            SetContextMenuPosition(position);
+        }
+
+        void SetContextMenuPosition(Vector2 position)
+        {
+            var contextMenuRectTransform = contextMenu.transform as RectTransform;
+            var scaledSize = contextMenuRectTransform.rect.size * contextMenuRectTransform.lossyScale;
             var clampedPositionX = Mathf.Clamp(position.x, 0, Screen.width - scaledSize.x);
             var clampedPositionY = Mathf.Clamp(position.y, scaledSize.y, Screen.height);
             contextMenu.transform.position = new Vector2(clampedPositionX, clampedPositionY);
@@ -180,11 +167,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Update()
         {
+            if(!contextMenu)
+                return;
+            
             var mousePos = Pointer.current.position.ReadValue();
-            var relativePoint = contextMenu.InverseTransformPoint(mousePos);
-            if (Pointer.current.press.wasPressedThisFrame && !contextMenu.rect.Contains(relativePoint))
+            var contextMenuRectTransform = contextMenu.transform as RectTransform;
+            var relativePoint = contextMenuRectTransform.InverseTransformPoint(mousePos);
+            if (Pointer.current.press.wasPressedThisFrame && !ContextMenuUI.OverAnyContextMenuUI)
             {
-                EnableContextMenu(false, mousePos);
+                EnableContextMenu(false);
             }
         }
 
