@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
+  m_Name: Tool_SelectObject
+  m_EditorClassIdentifier: 
+  code: select-object
+  title: Object informatie
+  functionGroups:
+  - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  - {fileID: 11400000, guid: 273b59c4a8f150a4c9eee47e2423c945, type: 2}
+  onActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: f573ae24347db62449f61fc9a3255644, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onDeactivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: f573ae24347db62449f61fc9a3255644, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onToggleInspector:
+    m_PersistentCalls:
+      m_Calls: []
+  activateToolOnInspectorToggle: 1
+  inspectorPrefab: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
+    type: 3}
+  featurePrefab: {fileID: 0}

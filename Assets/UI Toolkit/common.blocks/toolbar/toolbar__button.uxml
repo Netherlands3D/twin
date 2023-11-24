@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:RadioButton class="toolbar__button">
-        <ui:Image name="toolbar__button-icon" class="toolbar__button-icon" />
-    </ui:RadioButton>
-</ui:UXML>
