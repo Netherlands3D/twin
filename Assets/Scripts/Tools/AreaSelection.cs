@@ -47,6 +47,11 @@ namespace Netherlands3D.Twin
 
             OnExportFormatChanged.Invoke(selectedExportFormat);
         }
+        public void SetExportFormat(int format)
+        {
+            //int to enum
+            selectedExportFormat = (ExportFormat)format;
+        }
 
         public void ClearSelection()
         {

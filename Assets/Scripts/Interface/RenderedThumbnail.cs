@@ -7,7 +7,6 @@ namespace Netherlands3D.Twin
     public class RenderedThumbnail : MonoBehaviour
     {
         [Header("Thumbnail")]
-		[SerializeField] private UniversalRenderPipelineAsset thumbnailRendererOverride;
         [SerializeField] private RawImage thumbnail;
 
         [Tooltip("Extra space around the target bounds in the thumbnail")]
@@ -15,6 +14,8 @@ namespace Netherlands3D.Twin
         [SerializeField] private Vector3 cameraRotation = new Vector3(60, 0, 0);
 
         [Tooltip("Check the UniversalRenderPipelineAsset.asset file for the renderer index you want to use")]
+
+		[Header("Rendering")]
 		[SerializeField] private int thumbnailRendererIndex = 2;
 		[SerializeField] private bool orthographic = false;
 		private RenderTexture thumbnailRenderTexture;

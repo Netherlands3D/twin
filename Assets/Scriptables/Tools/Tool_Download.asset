@@ -29,4 +29,4 @@ MonoBehaviour:
   inspectorPrefab: {fileID: 3537603041487147064, guid: 6b9505a13a1cf954b99d6247e15687df,
     type: 3}
   featurePrefabs:
-  - {fileID: 6295639419868117823, guid: 6b23cbc7d2c444ab0b3c9e75fc2f1eec, type: 3}
+  - {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5, type: 3}
