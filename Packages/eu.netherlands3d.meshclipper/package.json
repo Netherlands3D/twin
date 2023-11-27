@@ -1,14 +1,16 @@
 {
-  "name": "eu.netherlands3d.{NAME:kebab-case}",
-  "version": "{VERSION}",
-  "displayName": "Netherlands3D - {DISPLAY_NAME}",
-  "description": "{DESCRIPTION}",
+  "name": "eu.netherlands3d.meshclipper",
+  "version": "0.1.0",
+  "displayName": "Netherlands3D - MeshClipper",
+  "description": "The MeshClipper Package is a script that allows you to cut GameObject meshes into smaller pieces based on a specified Bounds object.",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
   "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
   "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
   "keywords": [
-    "digital-twin"
+    "digital-twin",
+    "netherlands3d",
+    "city"
   ],
   "author": {
     "name": "Netherlands3D",
