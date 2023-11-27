@@ -14,22 +14,11 @@ namespace Netherlands3D.Twin
 
         [Header("Invoke events")]
         public UnityEvent<List<Vector3>> OnSelectionChanged = new();
+        public UnityEvent<ExportFormat> OnExportFormatChanged = new();
         public UnityEvent OnSelectionCleared = new();
 
-        private string currentExportFormat = "dae";
-        [SerializeField] private ExportFormat[] exportFormats = new ExportFormat[]{
-            new("Collada", "dae"),
-            new("AutoCAD DXF", "dxf")
-        };
-        public ExportFormat[] ExportFormats { get => exportFormats; set => exportFormats = value; }
-        public class ExportFormat{
-            public string name;
-            public string extension;
-            public ExportFormat(string name, string extension){
-                this.name = name;
-                this.extension = extension;
-            }
-        }
+        private ExportFormat selectedExportFormat = ExportFormat.Collada;
+
 
         public void SetSelection(List<Vector3> selectedArea)
         {
@@ -40,27 +29,23 @@ namespace Netherlands3D.Twin
 
         public void Download()
         {
-            var exportFormat = Array.Find(exportFormats, format => format.extension == currentExportFormat);
-            if(exportFormat == null){
-                Debug.LogError($"Export format {currentExportFormat} not found in exportFormats");
-                return;
-            }
-            
-            switch(currentExportFormat){
-                case "dae":
-                    //Clip and export to Collada
-
+            switch(selectedExportFormat)
+            {
+                case ExportFormat.Collada:
+                    //Slice and export using collada
                     break;
-                case "dxf":
-                    //Log not implemented warning
-                    Debug.LogWarning($"Export format {currentExportFormat} not implemented yet");
+                case ExportFormat.AutodeskDXF:
+                    //Not implemented yet
+                    Debug.LogError("DXF export is not implemented yet");
                     break;
             }
         }
 
-        public void SetExportFormat(string extension)
+        public void SetExportFormat(ExportFormat format)
         {
-            currentExportFormat = extension;
+            selectedExportFormat = format;
+
+            OnExportFormatChanged.Invoke(selectedExportFormat);
         }
 
         public void ClearSelection()
