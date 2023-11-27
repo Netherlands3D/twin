@@ -269,6 +269,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.meshclipper": {
+      "version": "file:C:/Projects/GemeenteAmsterdam/Solution/Netherlands3D_New/MeshClipper",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
       "depth": 1,
