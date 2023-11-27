@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.MeshClipping
+namespace Netherlands3D.MeshClipping.TriangleClipping
 {
     public class Plane
     {

@@ -1,53 +1,92 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.MeshClipping
 {
     public class MeshClipper
     {
-        private GameObject tile;
-        private Vector3 tileOrigin;
-        private Vector3RD[] rdVertices;
-        private Mesh mesh;
-        private Vector3RD temporaryOrigin;
-        public List<Vector3RD> clippedVerticesRD;
+        private GameObject sourceGameObject;
+        private Mesh sourceMesh;
+        private Vector3 sourceOrigin;
+        private Vector3 boundsOrigin; //Bottom left corner of the bounding box
+        private Vector3[] vertexWorldPositions;
+        public List<Vector3> clippedVertices;
 
-        public void SetGameObject(GameObject tileGameObject)
+        /// <summary>
+        /// Sets the target GameObject
+        /// </summary>
+        /// <param name="sourceGameObject"></param>
+        public void SetGameObject(GameObject sourceGameObject)
         {
-            tile = tileGameObject;
-            mesh = tile.GetComponent<MeshFilter>().sharedMesh;
-            tileOrigin = tile.transform.position;
+            this.sourceGameObject = sourceGameObject;
+            if (!sourceGameObject.TryGetComponent<MeshFilter>(out var meshFilter))
+            {
+                Debug.LogError("MeshFilter not found on GameObject. A meshfilter is required to clip the mesh.");
+            }
+
+            sourceMesh = meshFilter.sharedMesh;
+            sourceOrigin = sourceGameObject.transform.position;
             ReadVertices();
+        }
+
+        /// <summary>
+        /// Return the clipped geometry as a list of triangles
+        /// </summary>
+        /// <returns>A Vector3 list where every 3 items is a single triangle</returns>
+        public List<Vector3> GetTriangles()
+        {
+            return clippedVertices;
+        }
+
+        /// <summary>
+        /// Return the clipped geometry as a mesh
+        /// </summary>
+        /// <returns>A new mesh with the clipped geometry</returns>
+        public Mesh GetTriangleMesh(bool recalculateNormals = false, bool recalculateBounds = false)
+        {
+            var mesh = new Mesh
+            {
+                name = sourceMesh.name + "_clipped"
+            };
+            mesh.SetVertices(clippedVertices);
+            mesh.SetTriangles(Enumerable.Range(0, clippedVertices.Count).ToArray(), 0);
+
+            if(recalculateNormals) mesh.RecalculateNormals();
+            if(recalculateBounds) mesh.RecalculateBounds();
+
+            return mesh;
         }
 
         public void ClipSubMesh(Bounds boundingBox, int subMeshNumber)
         {
-            clippedVerticesRD = new List<Vector3RD>();
-            if (subMeshNumber >= mesh.subMeshCount)
+            clippedVertices = new List<Vector3>();
+            if (subMeshNumber >= sourceMesh.subMeshCount)
             {
                 return;
             }
 
-            int[] indices = mesh.GetIndices(subMeshNumber);
-            temporaryOrigin = new Vector3RD(boundingBox.minX, boundingBox.minY, 0);
+            int[] indices = sourceMesh.GetIndices(subMeshNumber);
+            boundsOrigin = new Vector3(boundingBox.center.x - boundingBox.size.x/2.0f, boundingBox.center.y - boundingBox.size.y/2.0f, boundingBox.center.z - boundingBox.size.z/2.0f);
+
             Vector3 point1;
             Vector3 point2;
             Vector3 point3;
             List<Vector3> clippingPolygon = CreateClippingPolygon(boundingBox);
-            List<Vector3> clippingVectorList = new List<Vector3>();
-            clippingVectorList.Capacity = 3;
+            List<Vector3> clippingVectorList = new(){ Capacity = 3 };
+
             for (int i = 0; i < indices.Length; i += 3)
             {
-                point1 = OffsetRDVertex(rdVertices[indices[i]], temporaryOrigin);
-                point2 = OffsetRDVertex(rdVertices[indices[i + 1]], temporaryOrigin);
-                point3 = OffsetRDVertex(rdVertices[indices[i + 2]], temporaryOrigin);
+                point1 = vertexWorldPositions[indices[i]];
+                point2 = vertexWorldPositions[indices[i + 1]];
+                point3 = vertexWorldPositions[indices[i + 2]];
                 TrianglePosition position = GetTrianglePosition(point1, point2, point3, boundingBox);
                 if (position == TrianglePosition.inside)
                 {
-                    clippedVerticesRD.Add(RestoreRDVertex(point1, temporaryOrigin));
-                    clippedVerticesRD.Add(RestoreRDVertex(point2, temporaryOrigin));
-                    clippedVerticesRD.Add(RestoreRDVertex(point3, temporaryOrigin));
+                    clippedVertices.Add(PointWithBoundsOrigin(point1));
+                    clippedVertices.Add(PointWithBoundsOrigin(point2));
+                    clippedVertices.Add(PointWithBoundsOrigin(point3));
                 }
                 else if (position == TrianglePosition.overlap)
                 {
@@ -57,33 +96,39 @@ namespace Netherlands3D.MeshClipping
                     clippingVectorList.Add(point3);
 
                     List<Vector3> clippedTriangle = TriangleClipping.SutherlandHodgman.ClipPolygon(clippingVectorList, clippingPolygon);
-
                     int vertexcount = clippedTriangle.Count;
                     if (vertexcount < 3)
                     {
                         continue;
                     }
-                    clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[0], temporaryOrigin));
-                    clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[1], temporaryOrigin));
-                    clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[2], temporaryOrigin));
+                    clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[0]));
+                    clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[1]));
+                    clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[2]));
                     // add extra vectors. vector makes a triangle with the first and the previous vector.
                     for (int j = 3; j < vertexcount; j++)
                     {
-                        clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[0], temporaryOrigin));
-                        clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[j - 1], temporaryOrigin));
-                        clippedVerticesRD.Add(RestoreRDVertex(clippedTriangle[j], temporaryOrigin));
+                        clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[0]));
+                        clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[j - 1]));
+                        clippedVertices.Add(PointWithBoundsOrigin(clippedTriangle[j]));
                     }
                 }
             }
         }
 
-        public static List<Vector3> CreateClippingPolygon(RDBoundingBox boundingBox)
+        private Vector3 PointWithBoundsOrigin(Vector3 point)
         {
-            List<Vector3> output = new List<Vector3>(4);
-            output.Add(new Vector3(0, 0, 0));
-            output.Add(new Vector3((float)boundingBox.width, 0, 0));
-            output.Add(new Vector3((float)boundingBox.width, 0, (float)boundingBox.height));
-            output.Add(new Vector3(0, 0, (float)boundingBox.height));
+            return new Vector3(point.x - boundsOrigin.x, point.y - boundsOrigin.y, point.z - boundsOrigin.z);
+        }
+
+        public static List<Vector3> CreateClippingPolygon(Bounds boundingBox)
+        {
+            List<Vector3> output = new(4)
+            {
+                new(0, 0, 0),
+                new(boundingBox.size.x, 0, 0),
+                new(boundingBox.size.x, 0, boundingBox.size.y),
+                new(0, 0, boundingBox.size.y)
+            };
             return output;
         }
 
@@ -93,9 +138,7 @@ namespace Netherlands3D.MeshClipping
         /// <param name="point1">Triangle point position using boundingbox bottomleft as origin</param>
         /// <param name="point2">Triangle point position using boundingbox bottomleft as origin</param>
         /// <param name="point3">Triangle point position using boundingbox bottomleft as origin</param>
-        /// <param name="boundingBox">RD boundingbox</param>
-        /// <returns></returns>
-        public static TrianglePosition GetTrianglePosition(Vector3 point1, Vector3 point2, Vector3 point3, RDBoundingBox boundingBox)
+        public static TrianglePosition GetTrianglePosition(Vector3 point1, Vector3 point2, Vector3 point3, Bounds boundingBox)
         {
             int counter = 0;
             if (PointIsInsideArea(point1, boundingBox)) { counter++; }
@@ -105,9 +148,9 @@ namespace Netherlands3D.MeshClipping
             if (counter == 0)
             {
                 var bbox1 = new Vector3(0, 0, 0);
-                var bbox2 = new Vector3(0, 0, (float)boundingBox.height);
-                var bbox3 = new Vector3((float)boundingBox.width, 0, (float)boundingBox.height);
-                var bbox4 = new Vector3((float)boundingBox.width, 0, 0);
+                var bbox2 = new Vector3(0, 0, boundingBox.size.x);
+                var bbox3 = new Vector3(boundingBox.size.x, 0, boundingBox.size.z);
+                var bbox4 = new Vector3(boundingBox.size.x, 0, 0);
 
                 if (PointIsInTriangle(bbox1, point1, point2, point3)) return TrianglePosition.overlap;
                 if (PointIsInTriangle(bbox2, point1, point2, point3)) return TrianglePosition.overlap;
@@ -136,13 +179,13 @@ namespace Netherlands3D.MeshClipping
             return s > 0 && t > 0 && (s + t) < 2 * a * sign;
         }
 
-        public static bool PointIsInsideArea(Vector3 vector, RDBoundingBox boundingBox)
+        public static bool PointIsInsideArea(Vector3 vector, Bounds boundingBox)
         {
-            if (vector.x < 0 || vector.x > boundingBox.width)
+            if (vector.x < 0 || vector.x > boundingBox.size.x)
             {
                 return false;
             }
-            if (vector.z < 0 || vector.z > boundingBox.height)
+            if (vector.z < 0 || vector.z > boundingBox.size.x)
             {
                 return false;
             }
@@ -151,51 +194,14 @@ namespace Netherlands3D.MeshClipping
 
         private void ReadVertices()
         {
-            Vector3[] verts = mesh.vertices;
-            rdVertices = new Vector3RD[verts.Length];
+            Vector3[] verts = sourceMesh.vertices;
+            vertexWorldPositions = new Vector3[verts.Length];
             for (int i = 0; i < verts.Length; i++)
             {
-                rdVertices[i] = CoordinateConverter.UnitytoRD((verts[i] + tileOrigin));
+                vertexWorldPositions[i] = verts[i] + sourceOrigin;
             }
         }
 
-        private Vector3 OffsetRDVertex(Vector3RD vector, Vector3RD temporaryOrigin)
-        {
-            Vector3 output = new Vector3();
-            output.x = (float)(vector.x - temporaryOrigin.x);
-            output.y = (float)(vector.z);
-            output.z = (float)(vector.y - temporaryOrigin.y);
-            return output;
-        }
-
-        private Vector3RD RestoreRDVertex(Vector3 vector, Vector3RD temporaryOrigin)
-        {
-            Vector3RD output = new Vector3RD();
-            output.x = vector.x + temporaryOrigin.x;
-            output.y = vector.z + temporaryOrigin.y;
-            output.z = vector.y + temporaryOrigin.z;
-            return output;
-        }
-        public struct RDBoundingBox
-        {
-            public double minX;
-            public double minY;
-            public double maxX;
-            public double maxY;
-            public double height;
-            public double width;
-
-            public RDBoundingBox(double bottomLeftX, double bottomLeftY, double topRightX, double topRightY)
-
-            {
-                minX = bottomLeftX;
-                minY = bottomLeftY;
-                maxX = topRightX;
-                maxY = topRightY;
-                height = maxY - minY;
-                width = maxX - minX;
-            }
-        }
         public enum TrianglePosition
         {
             outside,
