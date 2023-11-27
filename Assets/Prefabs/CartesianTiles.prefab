@@ -290,7 +290,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ae4388c306f589642b54e2e6d35f6380, type: 2}
   - {fileID: 2100000, guid: 723d04de06fc6d246b17157d2a8a9e24, type: 2}
   - {fileID: 2100000, guid: 369d289ffdad8ca44ad20d7a077adb12, type: 2}
-  - {fileID: -876546973899608171, guid: c43d943999b82fb4a9b29c6e62a2c801, type: 3}
+  - {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
   createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
