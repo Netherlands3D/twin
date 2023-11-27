@@ -9,22 +9,38 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(fileName = "AreaSelection", menuName = "Netherlands3D/Data/AreaSelection", order = 1)]
     public class AreaSelection : ScriptableObject
     {
-        private List<Vector3> selectedArea = new();
+        private Bounds selectedAreaBounds;
+        private List<Vector3> selectedArea;
         [HideInInspector] public List<Vector3> SelectedArea { get => selectedArea; private set => selectedArea = value; }
+        [HideInInspector] public Bounds SelectedAreaBounds { get => selectedAreaBounds; private set => selectedAreaBounds = value; }
 
         [Header("Invoke events")]
-        public UnityEvent<List<Vector3>> OnSelectionChanged = new();
+        public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
+        public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();
         public UnityEvent<ExportFormat> OnExportFormatChanged = new();
         public UnityEvent OnSelectionCleared = new();
 
         private ExportFormat selectedExportFormat = ExportFormat.Collada;
 
-
-        public void SetSelection(List<Vector3> selectedArea)
+        public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
-            this.SelectedArea = selectedArea;
+            this.SelectedAreaBounds = selectedAreaBounds;
+            OnSelectionAreaBoundsChanged.Invoke(this.SelectedAreaBounds);
+        }
 
-            OnSelectionChanged.Invoke(selectedArea);
+        public void SetSelectionArea(List<Vector3> selectedArea)
+        {
+            var bounds = new Bounds();
+            foreach(var point in selectedArea)
+            {
+                bounds.Encapsulate(point);
+                bounds.Encapsulate(point + Vector3.up);
+            }
+
+            this.SelectedArea = selectedArea;
+            OnSelectionAreaChanged.Invoke(this.SelectedArea);
+
+            SetSelectionAreaBounds(bounds);
         }
 
         public void Download()
@@ -44,7 +60,6 @@ namespace Netherlands3D.Twin
         public void SetExportFormat(ExportFormat format)
         {
             selectedExportFormat = format;
-
             OnExportFormatChanged.Invoke(selectedExportFormat);
         }
         public void SetExportFormat(int format)
@@ -55,7 +70,12 @@ namespace Netherlands3D.Twin
 
         public void ClearSelection()
         {
-            SelectedArea.Clear();
+            selectedAreaBounds = new Bounds(){
+                center = Vector3.zero,
+                size = Vector3.zero
+            };
+            selectedArea.Clear();
+
             OnSelectionCleared.Invoke();
         }
     }

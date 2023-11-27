@@ -29,6 +29,7 @@ namespace Netherlands3D.Twin
 
         public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
         public GameObject[] FeaturePrefabs { get => featurePrefabs; private set => featurePrefabs = value; }
+        private GameObject[] featureInstances;
 
         private bool open = false;
         public bool Open { get => open; set => open = value; }
@@ -45,6 +46,29 @@ namespace Netherlands3D.Twin
         public void Deactivate()
         {
             onDeactivate.Invoke();
+        }
+
+        public GameObject[] SpawnPrefabInstances()
+        {
+            DestroyPrefabInstances();
+
+            featureInstances = new GameObject[featurePrefabs.Length];
+            for (int i = 0; i < featurePrefabs.Length; i++)
+            {
+                featureInstances[i] = Instantiate(featurePrefabs[i]);
+            }
+            return featureInstances;
+        }
+        
+        public void DestroyPrefabInstances()
+        {
+            if (featureInstances != null)
+            {
+                foreach (var instance in featureInstances)
+                {
+                    Destroy(instance);
+                }
+            }
         }
 
         /// <summary>

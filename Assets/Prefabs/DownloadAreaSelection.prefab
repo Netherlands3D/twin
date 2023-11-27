@@ -134,7 +134,19 @@ MonoBehaviour:
     type: 3}
   blockCameraDragging:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   selectedAreaBounds:
     m_PersistentCalls:
       m_Calls:
@@ -153,8 +165,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.AreaSelection, Assembly-CSharp
-        m_MethodName: DownloadAreaAsCollada
-        m_Mode: 1
+        m_MethodName: SetSelectionAreaBounds
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

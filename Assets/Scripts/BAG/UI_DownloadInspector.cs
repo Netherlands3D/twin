@@ -36,26 +36,12 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private RenderedThumbnail renderedThumbnail;
 
 		private void Awake() {
-			areaSelection.OnSelectionChanged.AddListener(OnSelectionChanged);
+			areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
 		}	
 
-		private void OnSelectionChanged(List<Vector3> selectedArea)
+		private void OnSelectionBoundsChanged(Bounds selectedArea)
 		{
-			//Render thumbnail using centroid of selected area
-			if(selectedArea.Count > 0)
-			{
-				//Create bounds object for selected 2D area
-				var bounds = new Bounds(selectedArea[0], Vector3.zero);
-				foreach(var point in selectedArea)
-				{
-					bounds.Encapsulate(point);
-					bounds.Encapsulate(point + Vector3.up);
-				}
-
-				//Render thumbnail
-				renderedThumbnail.RenderThumbnail(bounds);
-			}
+			renderedThumbnail.RenderThumbnail(selectedArea);
 		}
-
     }
 }

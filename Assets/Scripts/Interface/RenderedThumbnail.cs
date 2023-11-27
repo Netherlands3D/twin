@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin
     {
         [Header("Thumbnail")]
         [SerializeField] private RawImage thumbnail;
+        [SerializeField] private GameObject displayIfNoThumbnail;
 
         [Tooltip("Extra space around the target bounds in the thumbnail")]
         [SerializeField] private float margin = 1.5f;
@@ -65,8 +66,18 @@ namespace Netherlands3D.Twin
 			// Set thumbnail texture to rawimage
 			thumbnail.texture = thumbnailRenderTexture;
 
+			if(displayIfNoThumbnail) displayIfNoThumbnail.SetActive(false);
+
             // Cleanup
             Destroy(temporaryThumbnailCamera.gameObject);
+		}
+
+		public void ClearRender()
+		{
+			if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
+			thumbnail.texture = null;
+
+			if(displayIfNoThumbnail) displayIfNoThumbnail.SetActive(true);
 		}
 
         private void OnDestroy() {
