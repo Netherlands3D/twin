@@ -15,7 +15,6 @@ namespace Netherlands3D.Tiles3D
     [RequireComponent(typeof(ReadSubtree))]
     public class Read3DTileset : MonoBehaviour
     {
-
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
         public string publicKey;
         public string personalKey;
@@ -33,6 +32,9 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
+#if SUBOBJECT
+        public bool parseSubObjects = false;
+#endif
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
         public int maximumScreenSpaceError = 5;
@@ -61,9 +63,8 @@ namespace Netherlands3D.Tiles3D
             {
                 tilesetUrl = tilesetUrl + "?key=" + personalKey;
             }
-
 #else
-if (string.IsNullOrEmpty(publicKey)==false)
+            if (string.IsNullOrEmpty(publicKey)==false)
             {
             tilesetUrl = tilesetUrl + "?key=" + publicKey;
             }
@@ -84,10 +85,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
             }
 
             ExtractDatasetPaths();
-
             StartCoroutine(LoadTileset());
-            
-
         }
 
         private void ExtractDatasetPaths()
@@ -229,11 +227,6 @@ if (string.IsNullOrEmpty(publicKey)==false)
 
         private void RequestContentUpdate(Tile tile)
         {
-            //tile.parent.IncrementLoadingChildren();
-            //foreach (var child in tile.children)
-            //{
-            //    child.IncrementLoadingParents();
-            //}
             if (!tile.content)
             {
                 var newContentGameObject = new GameObject($"{tile.X},{tile.Y},{tile.Z} content");
@@ -244,6 +237,9 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
 
+                #if SUBOBJECT
+                tile.content.parseSubObjects = parseSubObjects;
+                #endif 
                 
                 //Request tile content update via optional prioritiser, or load directly
                 if (usingPrioritiser)
@@ -532,12 +528,9 @@ if (string.IsNullOrEmpty(publicKey)==false)
                         queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(key), Uri.EscapeDataString(value));
                     }
                 }
-            }
-            
+            }   
             return "?" + queryString.ToString();
         }
-
-       
 
         /// <summary>
         /// Screen-space error component calculation.
