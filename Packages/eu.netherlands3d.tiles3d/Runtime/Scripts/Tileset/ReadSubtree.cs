@@ -9,39 +9,17 @@ namespace Netherlands3D.Tiles3D
 {
     public class ReadSubtree : MonoBehaviour
     {
-        
-
-        int currentSubtreeLevels;
         public Subtree subtree;
-        public Tile tile;
-        public ImplicitTilingSettings settings;
+        Tile tile;
+        ImplicitTilingSettings settings;
         public string subtreeUrl;
         System.Action<Tile> sendResult;
-        private Tile appendTilesTo;
 
-        public bool isbusy = false;
-
-        public void DownloadSubtree(string url, ImplicitTilingSettings tilingSettings,Tile appendTilesTo, System.Action<Tile> callback)
+        public void DownloadSubtree(string url, ImplicitTilingSettings tilingSettings, System.Action<Tile> callback)
         {
-            isbusy = true;
-            this.appendTilesTo = appendTilesTo;
-
+            settings = tilingSettings;
             sendResult = callback;
             subtreeUrl = url;
-            if (url == "")
-            {
-                Read3DTileset tilesetreader = GetComponent<Read3DTileset>();
-                subtreeUrl = tilesetreader.tilesetUrl.Replace(tilesetreader.tilesetFilename, appendTilesTo.contentUri);
-                                
-            }
-            Debug.Log($"loading subtree: {subtreeUrl}");
-            //currentSubtreeLevels
-            currentSubtreeLevels = settings.subtreeLevels;
-            if (this.appendTilesTo.level + settings.subtreeLevels > settings.availableLevels)
-            {
-                currentSubtreeLevels = settings.availableLevels - this.appendTilesTo.level;
-            }
-
             StartCoroutine(DownloadSubtree());
         }
 
@@ -53,8 +31,6 @@ namespace Netherlands3D.Tiles3D
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(www.error);
-                Debug.Log(subtreeUrl);
-                
             }
             else
             {
@@ -69,30 +45,32 @@ namespace Netherlands3D.Tiles3D
                 using BinaryReader binaryReader = new(fileStream);
 
                 subtree = SubtreeReader.ReadSubtree(binaryReader);
-                
-                // setup rootTile
-                
-                appendTilesTo.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[0]);
 
-                AddChildren(appendTilesTo, 0, 0);
-                Read3DTileset tilesetreader = GetComponent<Read3DTileset>();
-                //tilesetreader.root = tile;
-                appendTilesTo.children.Add(tile);
-                if (sendResult!=null)
+                // setup rootTile
+                tile = new Tile();
+                tile.X = 0;
+                tile.Y = 0;
+                tile.Z = 0;
+                tile.geometricError = settings.geometricError;
+                tile.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[0]);
+
+                tile.boundingVolume = new BoundingVolume
                 {
-                    sendResult(appendTilesTo);
-                }
-                
+                    boundingVolumeType = BoundingVolumeType.Region,
+                    values = settings.boundingRegion
+                };
+
+                AddChildren(tile, 0, 0);
+
+                sendResult(tile);
             }
-            isbusy = false;
-            Debug.Log("subtree loaded");
         }
 
         public void AddChildren(Tile tile, int parentNortonIndex, int LevelStartIndex)
         {
             int localIndex = parentNortonIndex * 4;
-            int levelstart = LevelStartIndex + (int)Mathf.Pow(4, (tile.level-appendTilesTo.level));
-            
+            int levelstart = LevelStartIndex + (int)Mathf.Pow(4, tile.X);
+            int childOne = levelstart + localIndex;
 
             AddChild(tile, localIndex, levelstart, 0);
             AddChild(tile, localIndex, levelstart, 1);
@@ -103,105 +81,62 @@ namespace Netherlands3D.Tiles3D
 
         private void AddChild(Tile parentTile, int localIndex, int LevelStartIndex, int childNumber)
         {
-
-            Tile childTile = new Tile();
-            childTile.parent = parentTile;
-            childTile.transform = parentTile.transform;
-            childTile.level = parentTile.level + 1;
-            childTile.X = parentTile.X * 2 + childNumber % 2;
-            childTile.Y = parentTile.Y * 2;
-            if (childNumber > 1)
+            if (subtree.TileAvailabiltyConstant == 1 || subtree.TileAvailability[localIndex + LevelStartIndex + childNumber])
             {
-                childTile.Y += 1;
-            }
-            childTile.geometricError = parentTile.geometricError / 2f;
-            childTile.boundingVolume = new BoundingVolume();
-            childTile.boundingVolume.boundingVolumeType = parentTile.boundingVolume.boundingVolumeType;
-            childTile.boundingVolume.values = new double[parentTile.boundingVolume.values.Length];
-            double lonMin = parentTile.boundingVolume.values[0];
-            double lonMax = parentTile.boundingVolume.values[2];
-            double lonMid = (lonMin + lonMax) / 2f;
+                Tile childTile = new Tile();
+                childTile.parent = parentTile;
 
-            double latMin = parentTile.boundingVolume.values[1];
-            double latMax = parentTile.boundingVolume.values[3];
-            double latMid = (latMin + latMax) / 2f;
-
-            if (childNumber % 2 == 0)
-            {
-                childTile.boundingVolume.values[0] = lonMin;
-                childTile.boundingVolume.values[2] = lonMid;
-            }
-            else
-            {
-                childTile.boundingVolume.values[0] = lonMid;
-                childTile.boundingVolume.values[2] = lonMax;
-            }
-            if (childNumber < 2)
-            {
-                childTile.boundingVolume.values[1] = latMin;
-                childTile.boundingVolume.values[3] = latMid;
-            }
-            else
-            {
-                childTile.boundingVolume.values[1] = latMid;
-                childTile.boundingVolume.values[3] = latMax;
-            }
-            childTile.boundingVolume.values[4] = parentTile.boundingVolume.values[4];
-            childTile.boundingVolume.values[5] = parentTile.boundingVolume.values[5];
-
-
-
-            // check geometric content
-            if (childTile.level < appendTilesTo.level + currentSubtreeLevels)
-            {
-                childTile.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[localIndex + LevelStartIndex + childNumber]);
-                if (childTile.hascontent)
+                childTile.X = parentTile.X + 1;
+                childTile.Y = parentTile.Y * 2 + childNumber % 2;
+                childTile.Z = parentTile.Z * 2;
+                if (childNumber > 1)
                 {
-                    childTile.contentUri = (settings.contentUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString())); ;
+                    childTile.Z += 1;
                 }
+                childTile.geometricError = parentTile.geometricError / 2f;
 
-            }
+                childTile.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[localIndex + LevelStartIndex + childNumber]);
 
-            // check childTileAvailability
-            if (childTile.level<appendTilesTo.level+currentSubtreeLevels)
-            {
-                if (subtree.TileAvailabiltyConstant == 1 || subtree.TileAvailability[localIndex + LevelStartIndex + childNumber])
+                childTile.boundingVolume = new BoundingVolume();
+                childTile.boundingVolume.boundingVolumeType = parentTile.boundingVolume.boundingVolumeType;
+                childTile.boundingVolume.values = new double[parentTile.boundingVolume.values.Length];
+                double lonMin = parentTile.boundingVolume.values[0];
+                double lonMax = parentTile.boundingVolume.values[2];
+                double lonMid = (lonMin + lonMax) / 2f;
+
+                double latMin = parentTile.boundingVolume.values[1];
+                double latMax = parentTile.boundingVolume.values[3];
+                double latMid = (latMin + latMax) / 2f;
+
+                if (childNumber % 2 == 0)
                 {
+                    childTile.boundingVolume.values[0] = lonMin;
+                    childTile.boundingVolume.values[2] = lonMid;
+                }
+                else
+                {
+                    childTile.boundingVolume.values[0] = lonMid;
+                    childTile.boundingVolume.values[2] = lonMax;
+                }
+                if (childNumber < 2)
+                {
+                    childTile.boundingVolume.values[1] = latMin;
+                    childTile.boundingVolume.values[3] = latMid;
+                }
+                else
+                {
+                    childTile.boundingVolume.values[1] = latMid;
+                    childTile.boundingVolume.values[3] = latMax;
+                }
+                childTile.boundingVolume.values[4] = parentTile.boundingVolume.values[4];
+                childTile.boundingVolume.values[5] = parentTile.boundingVolume.values[5];
 
+                if (childTile.X < settings.subtreeLevels - 1)
+                {
                     AddChildren(childTile, localIndex + childNumber, LevelStartIndex);
                 }
-            }
-
-            //check subtree-availability
-            if (childTile.level == appendTilesTo.level + currentSubtreeLevels)
-            {
-
-            int indexnumber = localIndex + childNumber;
-            bool hasSubtree = true;
-            if (subtree.ChildSubtreeAvailability == null)
-            {
-                hasSubtree = false;
-            }
-            else
-            {
-                hasSubtree = subtree.ChildSubtreeAvailability[indexnumber];
-            }
-            if (hasSubtree)
-            {
-
-                childTile.hascontent = true;
-                childTile.contentUri = (settings.subtreeUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString())); ;
-                Debug.Log("child has subtree");
-
-            }
-
-        }
-
-            if (childTile.hascontent || childTile.children.Count>0)
-            {
                 parentTile.children.Add(childTile);
             }
-            
         }
     }
 }

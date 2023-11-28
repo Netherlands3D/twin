@@ -9,9 +9,9 @@ namespace Netherlands3D.Tiles3D
     public class Tile : IDisposable
     {
         public bool isLoading = false;
-        public int level;
         public int X;
         public int Y;
+        public int Z;
         public bool hascontent;
 
         public int childrenCountDelayingDispose = 0;
@@ -218,24 +218,9 @@ namespace Netherlands3D.Tiles3D
 
         public bool IsInViewFrustrum(Camera ofCamera)
         {
-            if (!boundsAvailable)
-            {
-                if (boundingVolume.values.Length>0)
-                {
-                    CalculateBounds();
-                }
-                else
-                {
-                    return true;
-                }
-                
-            }
-            if (boundsAvailable)
-            {
-                inView = ofCamera.InView(ContentBounds);
-            }
-            
-            
+            if (!boundsAvailable) CalculateBounds();
+
+            inView = ofCamera.InView(ContentBounds);
 
             return inView;
         }

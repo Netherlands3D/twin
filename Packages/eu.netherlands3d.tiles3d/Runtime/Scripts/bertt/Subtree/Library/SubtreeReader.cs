@@ -21,7 +21,6 @@ namespace subtree
             };
 
             var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(subtree.SubtreeJson);
-            
             if (subtreeJsonObject != null)
             {
                 if (subtreeJsonObject.tileAvailability != null && subtreeJsonObject.tileAvailability.bitstream != null)

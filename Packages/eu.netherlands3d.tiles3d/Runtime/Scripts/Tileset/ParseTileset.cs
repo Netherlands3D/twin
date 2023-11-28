@@ -12,14 +12,12 @@ namespace Netherlands3D.Tiles3D
             { "box", BoundingVolumeType.Box },
             { "sphere", BoundingVolumeType.Sphere }
         };
-        
-        
-        internal static ReadSubtree subtreeReader;
+
         internal static Tile ReadTileset(JSONNode rootnode)
         {
             Tile root = new Tile();
-            
-            TilingMethod tilingMethod = TilingMethod.ExplicitTiling;
+
+            TilingMethod tilingMethod = TilingMethod.explicitTiling;
             double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
             JSONNode transformNode = rootnode["transform"];
             if (transformNode != null)
@@ -33,30 +31,22 @@ namespace Netherlands3D.Tiles3D
             JSONNode implicitTilingNode = rootnode["implicitTiling"];
             if (implicitTilingNode != null)
             {
-                tilingMethod = TilingMethod.ImplicitTiling;
+                tilingMethod = TilingMethod.implicitTiling;
             }
 
             //setup location and rotation
             switch (tilingMethod)
             {
-                case TilingMethod.ExplicitTiling:
+                case TilingMethod.explicitTiling:
                     Debug.Log("Explicit tiling");
                     Tile rootTile = new Tile();
                     rootTile.transform = root.transform;
                     root = ReadExplicitNode(rootnode, rootTile);
                     root.screenSpaceError = float.MaxValue;
                     break;
-                case TilingMethod.ImplicitTiling:
-                    Debug.Log("Implicit tiling"); 
-                    rootTile = new Tile();
-                    rootTile.level = 0;
-                    rootTile.X = 0;
-                    rootTile.Y = 0;
-                    rootTile.transform = root.transform;
-                    ReadImplicitTiling(rootnode,rootTile);
-                    
-                    rootTile.transform = root.transform;
-                    root = ReadExplicitNode(rootnode, rootTile);
+                case TilingMethod.implicitTiling:
+                    Debug.Log("Implicit tiling");
+                    //ReadImplicitTiling(rootnode);
                     break;
                 default:
                     break;
@@ -72,8 +62,8 @@ namespace Netherlands3D.Tiles3D
 
             tile.boundingVolume = new BoundingVolume();
             JSONNode boundingVolumeNode = node["boundingVolume"];
-            tile.boundingVolume = ParseBoundingVolume( boundingVolumeNode);
-            tile.CalculateBounds();
+            ParseBoundingVolume(tile, boundingVolumeNode);
+
             tile.geometricError = double.Parse(node["geometricError"].Value);
             tile.refine = node["refine"].Value;
             JSONNode childrenNode = node["children"];
@@ -99,11 +89,10 @@ namespace Netherlands3D.Tiles3D
             return tile;
         }
 
-        internal static BoundingVolume ParseBoundingVolume(JSONNode boundingVolumeNode)
+        internal static void ParseBoundingVolume(Tile tile, JSONNode boundingVolumeNode)
         {
             if (boundingVolumeNode != null)
             {
-                BoundingVolume boundingVolume = new BoundingVolume();
                 foreach (KeyValuePair<string, BoundingVolumeType> kvp in boundingVolumeTypes)
                 {
                     JSONNode volumeNode = boundingVolumeNode[kvp.Key];
@@ -112,20 +101,19 @@ namespace Netherlands3D.Tiles3D
                         int length = GetBoundingVolumeLength(kvp.Value);
                         if (volumeNode.Count == length)
                         {
-                            boundingVolume.values = new double[length];
+                            tile.boundingVolume.values = new double[length];
                             for (int i = 0; i < length; i++)
                             {
-                                boundingVolume.values[i] = volumeNode[i].AsDouble;
+                                tile.boundingVolume.values[i] = volumeNode[i].AsDouble;
                             }
-                            boundingVolume.boundingVolumeType = kvp.Value;
-                            return boundingVolume;
-
+                            tile.boundingVolume.boundingVolumeType = kvp.Value;
+                            break; // Exit the loop after finding the first valid bounding volume
                         }
                     }
                 }
             }
-            return null;
-            
+
+            tile.CalculateBounds();
         }
 
         public static int GetBoundingVolumeLength(BoundingVolumeType type)
@@ -143,67 +131,51 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
-        private static void ReadImplicitTiling(JSONNode rootnode, Tile parentTile)
-        {
-            ImplicitTilingSettings implicitTilingSettings = new ImplicitTilingSettings();
-            string refine = rootnode["refine"].Value;
-            switch (refine)
-            {
-                case "REPLACE":
-                    implicitTilingSettings.refinementType = RefinementType.Replace;
-                    break;
-                case "ADD":
-                    implicitTilingSettings.refinementType = RefinementType.Add;
-                    break;
-                default:
-                    break;
-            }
-            implicitTilingSettings.geometricError = rootnode["geometricError"].AsFloat;
-            implicitTilingSettings.boundingRegion = new double[6];
-            for (int i = 0; i < 6; i++)
-            {
-                implicitTilingSettings.boundingRegion[i] = rootnode["boundingVolume"]["region"][i].AsDouble;
-            }
-            implicitTilingSettings.contentUri = rootnode["content"]["uri"].Value;
-            JSONNode implicitTilingNode = rootnode["implicitTiling"];
-            string subdivisionScheme = implicitTilingNode["subsivisionScheme"].Value;
-            switch (subdivisionScheme)
-            {
-                case "QUADTREE":
-                    implicitTilingSettings.subdivisionScheme = SubdivisionScheme.Quadtree;
-                    break;
-                default:
-                    implicitTilingSettings.subdivisionScheme = SubdivisionScheme.Octree;
-                    break;
-            }
-            implicitTilingSettings.availableLevels = implicitTilingNode["availableLevels"];
-            implicitTilingSettings.subtreeLevels = implicitTilingNode["subtreeLevels"];
-            implicitTilingSettings.subtreeUri = implicitTilingNode["subtrees"]["uri"].Value;
-            subtreeReader.settings = implicitTilingSettings;
-            
+        //private void ReadImplicitTiling(JSONNode rootnode)
+        //{
+        //    implicitTilingSettings = new ImplicitTilingSettings();
+        //    string refine = rootnode["refine"].Value;
+        //    switch (refine)
+        //    {
+        //        case "REPLACE":
+        //            implicitTilingSettings.refinementType = RefinementType.Replace;
+        //            break;
+        //        case "ADD":
+        //            implicitTilingSettings.refinementType = RefinementType.Add;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    implicitTilingSettings.geometricError = rootnode["geometricError"].AsFloat;
+        //    implicitTilingSettings.boundingRegion = new double[6];
+        //    for (int i = 0; i < 6; i++)
+        //    {
+        //        implicitTilingSettings.boundingRegion[i] = rootnode["boundingVolume"]["region"][i].AsDouble;
+        //    }
+        //    implicitTilingSettings.contentUri = rootnode["content"]["uri"].Value;
+        //    JSONNode implicitTilingNode = rootnode["implicitTiling"];
+        //    string subdivisionScheme = implicitTilingNode["subsivisionScheme"].Value;
+        //    switch (subdivisionScheme)
+        //    {
+        //        case "QUADTREE":
+        //            implicitTilingSettings.subdivisionScheme = SubdivisionScheme.Quadtree;
+        //            break;
+        //        default:
+        //            implicitTilingSettings.subdivisionScheme = SubdivisionScheme.Octree;
+        //            break;
+        //    }
+        //    implicitTilingSettings.subtreeLevels = implicitTilingNode["subtreeLevels"];
+        //    implicitTilingSettings.subtreeUri = implicitTilingNode["subtrees"]["uri"].Value;
 
-            Debug.Log("Load subtree: " + "");
-            if (parentTile.level==0)
-            {
-                parentTile.contentUri = implicitTilingSettings.subtreeUri.Replace("{level}", parentTile.level.ToString()).Replace("{x}", parentTile.X.ToString()).Replace("{y}", parentTile.Y.ToString());
-            }
-            subtreeReader.DownloadSubtree("", implicitTilingSettings,parentTile, test);
-        }
 
-        public static void test(Tile tile)
-            {
-            tile.isLoading = false;
-            
-            if (tile.children.Count==1)
-            {
-                tile = tile.children[0];
-                
-            }
-            //Read3DTileset tilesetReader =  subtreeReader.transform.GetComponent<Read3DTileset>();
-            //if (tilesetReader!=null)
-            //{
-            //    tilesetReader.root = tile;
-            //}
-        }
+        //    ReadSubtree subtreeReader = GetComponent<ReadSubtree>();
+        //    string subtreeURL = tilesetUrl.Replace(tilesetFilename, implicitTilingSettings.subtreeUri)
+        //                        .Replace("{level}", "0")
+        //                        .Replace("{x}", "0")
+        //                        .Replace("{y}", "0");
+
+        //    Debug.Log("Load subtree: " + subtreeURL);
+        //    subtreeReader.DownloadSubtree(subtreeURL, implicitTilingSettings, ReturnTiles);
+        //}
     }
 }

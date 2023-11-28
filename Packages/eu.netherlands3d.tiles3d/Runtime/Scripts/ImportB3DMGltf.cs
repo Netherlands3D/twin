@@ -68,8 +68,7 @@ namespace Netherlands3D.B3DM
                     //Optional RTC_CENTER from b3DM header
                     rtcCenter = GetRTCCenter(rtcCenter, b3dm);
                 }
-                
-                //else sdfsdfsdf
+
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
             }
 
