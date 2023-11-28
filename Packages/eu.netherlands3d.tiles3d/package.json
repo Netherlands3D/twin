@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.tiles3d",
   "displayName": "Netherlands 3D - 3DTiles",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "unity": "2022.2",
   "type": "library",
   "keywords": [
@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "eu.netherlands3d.coordinates": "1.1.1",
-    "eu.netherlands3d.gltfast": "5.0.3"
+    "eu.netherlands3d.gltfast": "5.0.3",
+    "com.unity.meshopt.decompress": "0.1.0-preview.5"
   },
   "description": "enables the use of 3DTilesets",
   "samples": [
