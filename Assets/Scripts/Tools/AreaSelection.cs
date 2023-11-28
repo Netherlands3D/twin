@@ -1,15 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using Netherlands3D.Collada;
 using Netherlands3D.MeshClipping;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
+    
     [CreateAssetMenu(fileName = "AreaSelection", menuName = "Netherlands3D/Data/AreaSelection", order = 1)]
     public class AreaSelection : ScriptableObject
     {
+        public class Exporter : MonoBehaviour {};
+
+        [DllImport("__Internal")]
+        private static extern void DownloadFile(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
+
         private Bounds selectedAreaBounds;
         private List<Vector3> selectedArea;
         [HideInInspector] public List<Vector3> SelectedArea { get => selectedArea; private set => selectedArea = value; }
@@ -19,6 +28,8 @@ namespace Netherlands3D.Twin
         public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
         public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();
         public UnityEvent<ExportFormat> OnExportFormatChanged = new();
+        public UnityEvent<float> modelExportProgressChanged = new();
+        public UnityEvent<string> modelExportStatusChanged = new();
         public UnityEvent OnSelectionCleared = new();
 
         private ExportFormat selectedExportFormat = ExportFormat.Collada;
@@ -48,12 +59,16 @@ namespace Netherlands3D.Twin
 
         public void Download()
         {
+            //Spawn exporting progress as monobehaviour to start a coroutine
+            var exportGameObject = new GameObject("Export");
+            var monoBehaviour  = exportGameObject.AddComponent<Exporter>();    
+                          
             switch(selectedExportFormat)
             {
                 case ExportFormat.Collada:
                     //Slice and export using collada
                     Debug.Log("Exporting Collada");
-                    ExportCollada();
+                    monoBehaviour.StartCoroutine(ExportCollada(monoBehaviour.gameObject));
 
                     break;
                 case ExportFormat.AutodeskDXF:
@@ -63,26 +78,81 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void ExportCollada()
+        private IEnumerator ExportCollada(GameObject runner)
         {
+            var colladaFile = new ColladaFile();
             var meshClipper = new MeshClipper();
 
             //Find all gameobjects inside the includedLayers
             var meshFilters = FindObjectsOfType<MeshFilter>();
 
             //check if the meshfilter is inside the included layers
-            var meshes = new List<Mesh>();
+            var meshFiltersInLayers = new List<MeshFilter>();
             foreach (var meshFilter in meshFilters)
             {
                 if (includedLayers == (includedLayers | (1 << meshFilter.gameObject.layer)))
                 {
-                    meshes.Add(meshFilter.sharedMesh);
+                    meshFiltersInLayers.Add(meshFilter);
                 }
             }
 
             //Clip all the included meshfilters and their submeshes
-            
-            
+            for(int i = 0; i < meshFiltersInLayers.Count; i++)
+            {
+                var mesh = meshFiltersInLayers[i].sharedMesh;
+                for(int j = 0; j < mesh.subMeshCount; j++)
+                {
+                    //Fresh start for meshclipper
+                    var meshFilterGameObject = meshFiltersInLayers[i].gameObject;
+
+                    //Set the object name
+                    var subobjectName = meshFilterGameObject.name;
+                    Material material = null;
+                    if(meshFilterGameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
+                    {
+                        material = meshRenderer.sharedMaterials[j];
+                        subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
+                    }
+
+                    meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
+                    meshClipper.ClipSubMesh(selectedAreaBounds, j);
+
+                    colladaFile.AddObjectTriangles(GetDoubleListForVertices(meshClipper.clippedVertices), subobjectName, material);
+                    yield return null;
+                }
+                yield return null;
+            }
+            yield return null;
+
+            //Finish collada file
+            colladaFile.Finish();
+            yield return null;
+
+            //Save the file
+            #if UNITY_EDITOR
+            var localFile = UnityEditor.EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
+            if(localFile.Length > 0)
+            {
+                System.IO.File.WriteAllText(localFile, colladaFile.GetColladaXML());
+            }
+            #elif UNITY_WEBGL
+                byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
+                DownloadFile("", "", Path.GetFileName(filePath), byteArray, byteArray.Length);
+            }
+            #endif
+
+
+            Destroy(runner); 
+        }
+
+        public List<double[]> GetDoubleListForVertices(List<Vector3> vertices)
+        {
+            List<double[]> doubleVertices = new List<double[]>();
+			foreach (Vector3 vert in vertices)
+			{
+				doubleVertices.Add(new double[] { vert.x, vert.z, vert.y });
+			}
+			return doubleVertices;
         }
 
         public void SetExportFormat(ExportFormat format)
@@ -106,5 +176,5 @@ namespace Netherlands3D.Twin
 
             OnSelectionCleared.Invoke();
         }
-    }
+    }    
 }
