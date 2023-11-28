@@ -26,7 +26,7 @@ namespace Netherlands3D.Tiles3D
         public Tile root;
         public double[] transformValues;
 
-        TilingMethod tilingMethod = TilingMethod.explicitTiling;
+        TilingMethod tilingMethod = TilingMethod.ExplicitTiling;
 
         public ImplicitTilingSettings implicitTilingSettings;
 
@@ -50,7 +50,7 @@ namespace Netherlands3D.Tiles3D
         private Quaternion currentCameraRotation;
         private float lastCameraAngle = 60;
 
-        private string tilesetFilename = "tileset.json";
+        internal string tilesetFilename = "tileset.json";
 
         private bool nestedTreeLoaded = false;
 
@@ -220,7 +220,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
             else
             {
                 string jsonstring = www.downloadHandler.text;
-
+                ParseTileset.subtreeReader = GetComponent<ReadSubtree>();
                 JSONNode rootnode = JSON.Parse(jsonstring)["root"];
                root = ParseTileset.ReadTileset(rootnode);
                 
@@ -236,7 +236,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
             //}
             if (!tile.content)
             {
-                var newContentGameObject = new GameObject($"{tile.X},{tile.Y},{tile.Z} content");
+                var newContentGameObject = new GameObject($"{tile.level},{tile.X},{tile.Y} content");
                 newContentGameObject.transform.SetParent(transform, false);
                 newContentGameObject.layer = 11;
                 tile.content = newContentGameObject.AddComponent<Content>();
@@ -415,14 +415,28 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 StartCoroutine(LoadNestedTileset(tile));
                 return;
             }
+            if (tile.isLoading==false && tile.children.Count==0 && tile.contentUri.Contains(".subtree"))
+            {
+                ReadSubtree subtreeReader = GetComponent<ReadSubtree>();
+                if (subtreeReader.isbusy)
+                {
+                    return;
+                }
+                subtreeReader.isbusy = true;
+                tile.isLoading = true;
+               
+                Debug.Log("try to download a subtree");
+                subtreeReader.DownloadSubtree("", implicitTilingSettings,tile, subtreeLoaded);
+                return;
+            }
 
             var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
             CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
             var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
 
-            if (enoughDetail)
+            if (enoughDetail||tile.children.Count==0)
             {
-                var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json");
+                var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json")&& !tile.contentUri.Contains(".subtree");
                 
                 if (Has3DContent)
                 {
@@ -447,10 +461,14 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 LoadInViewRecursively(childTile, currentCamera);
             }
         }
+        public void subtreeLoaded(Tile tile)
+        {
+            tile.parent.isLoading = false;
+        }
 
         private IEnumerator LoadNestedTileset(Tile tile)
         {
-            if (tilingMethod == TilingMethod.explicitTiling)
+            if (tilingMethod == TilingMethod.ExplicitTiling)
             {
                 if (tile.contentUri.Contains(".json") && !tile.nestedTilesLoaded)
                 {
@@ -474,7 +492,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 }
                 tile.isLoading = false;
             }
-            else if (tilingMethod == TilingMethod.implicitTiling)
+            else if (tilingMethod == TilingMethod.ImplicitTiling)
             {
                 //Possible future nested subtree support.
             }
@@ -484,10 +502,10 @@ if (string.IsNullOrEmpty(publicKey)==false)
         {
             var relativeContentUrl = tile.contentUri;
 
-            if (tilingMethod == TilingMethod.implicitTiling)
-            {
-                relativeContentUrl = (implicitTilingSettings.contentUri.Replace("{level}", tile.X.ToString()).Replace("{x}", tile.Y.ToString()).Replace("{y}", tile.Z.ToString()));
-            }
+            //if (tilingMethod == TilingMethod.implicitTiling)
+            //{
+            //    relativeContentUrl = (implicitTilingSettings.contentUri.Replace("{level}", tile.X.ToString()).Replace("{x}", tile.Y.ToString()).Replace("{y}", tile.Z.ToString()));
+            //}
 
             //RDam specific temp fix.
             relativeContentUrl = relativeContentUrl.Replace("../", "");
@@ -564,8 +582,9 @@ if (string.IsNullOrEmpty(publicKey)==false)
 
     public enum TilingMethod
     {
-        explicitTiling,
-        implicitTiling
+        Unknown,
+        ExplicitTiling,
+        ImplicitTiling
     }
 
     public enum RefinementType
@@ -584,6 +603,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
     {
         public RefinementType refinementType;
         public SubdivisionScheme subdivisionScheme;
+        public int availableLevels;
         public int subtreeLevels;
         public string subtreeUri;
         public string contentUri;

@@ -107,9 +107,9 @@ namespace Netherlands3D.Tiles3D
             parentTile.isLoading = false;
             if (parsedGltf == null)
             {
-                Debug.Log("failed to download, trying again");
-                State = ContentLoadState.NOTLOADING;
-                Load();
+                Debug.Log("failed to parse: "+ uri +" , trying again");
+                State = ContentLoadState.DOWNLOADED;
+                //Load();
                 return;
                 
             }
