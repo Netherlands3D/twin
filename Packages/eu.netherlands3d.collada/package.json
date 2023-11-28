@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.collada",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Netherlands3D - Collada Export",
   "description": "StreamWrite a Collada .DAE file export",
   "unity": "2022.2",
