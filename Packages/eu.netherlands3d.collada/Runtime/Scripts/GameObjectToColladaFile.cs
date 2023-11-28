@@ -20,7 +20,12 @@ namespace Netherlands3D.Twin
 
         private void Export(GameObject targetGameObject)
         {
-            var filePath = UnityEditor.EditorUtility.SaveFilePanel("Save Collada File", "", "ColladaExport.dae", "dae");
+            var filePath = "";
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SaveFilePanel("Save Collada File", "", "ColladaExport.dae", "dae");
+            #endif
+            
             if (filePath.Length != 0)
             {
                 // Create a new collada file in memory that we will construct
