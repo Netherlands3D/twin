@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.MeshClipping;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +22,8 @@ namespace Netherlands3D.Twin
         public UnityEvent OnSelectionCleared = new();
 
         private ExportFormat selectedExportFormat = ExportFormat.Collada;
+
+        [SerializeField] private LayerMask includedLayers;
 
         public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
@@ -49,12 +52,37 @@ namespace Netherlands3D.Twin
             {
                 case ExportFormat.Collada:
                     //Slice and export using collada
+                    Debug.Log("Exporting Collada");
+                    ExportCollada();
+
                     break;
                 case ExportFormat.AutodeskDXF:
                     //Not implemented yet
                     Debug.LogError("DXF export is not implemented yet");
                     break;
             }
+        }
+
+        private void ExportCollada()
+        {
+            var meshClipper = new MeshClipper();
+
+            //Find all gameobjects inside the includedLayers
+            var meshFilters = FindObjectsOfType<MeshFilter>();
+
+            //check if the meshfilter is inside the included layers
+            var meshes = new List<Mesh>();
+            foreach (var meshFilter in meshFilters)
+            {
+                if (includedLayers == (includedLayers | (1 << meshFilter.gameObject.layer)))
+                {
+                    meshes.Add(meshFilter.sharedMesh);
+                }
+            }
+
+            //Clip all the included meshfilters and their submeshes
+            
+            
         }
 
         public void SetExportFormat(ExportFormat format)
