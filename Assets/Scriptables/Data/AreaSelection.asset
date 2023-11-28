@@ -12,9 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c18e27ab185a945b034c41e99848c9, type: 3}
   m_Name: AreaSelection
   m_EditorClassIdentifier: 
-  OnSelectionChanged:
+  OnSelectionAreaChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectionAreaBoundsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExportFormatChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  modelExportProgressChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  modelExportStatusChanged:
     m_PersistentCalls:
       m_Calls: []
   OnSelectionCleared:
     m_PersistentCalls:
       m_Calls: []
+  includedLayers:
+    serializedVersion: 2
+    m_Bits: 1216

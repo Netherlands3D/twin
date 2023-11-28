@@ -270,10 +270,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.meshclipper": {
-      "version": "file:C:/Projects/GemeenteAmsterdam/Solution/Netherlands3D_New/MeshClipper",
+      "version": "https://github.com/Netherlands3D/MeshClipper.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "96d578fa6cb4e6f49beb957db9f3d38c51bdbf58"
     },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
