@@ -1,5 +1,9 @@
 using GLTFast;
+using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
+
+//using Netherlands3D.Core;
+
 using System;
 using System.Linq;
 using UnityEngine;
@@ -13,16 +17,14 @@ namespace Netherlands3D.Tiles3D
     {
         public string uri = "";
 
-        #if SUBOBJECT
-        public bool parseSubObjects = true;
-        #endif
-
         private Coroutine runningContentRequest;
 
         [SerializeField] private Tile parentTile;
         public Tile ParentTile { get => parentTile; set => parentTile = value; }
 
         public UnityEvent onDoneDownloading = new();
+
+        
 
         private GltfImport gltf;
 
@@ -94,7 +96,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// After parsing gltf content spawn gltf scenes
         /// </summary>
-        private async void GotGltfContent(ParsedGltf parsedGltf)
+        private async void GotGltfContent(global::ParsedGltf parsedGltf)
         {
             if (State != ContentLoadState.DOWNLOADING)
             {
@@ -105,50 +107,59 @@ namespace Netherlands3D.Tiles3D
             parentTile.isLoading = false;
             if (parsedGltf == null)
             {
-                Debug.Log("Failed to download, trying again");
-                State = ContentLoadState.NOTLOADING;
-                Load();
+                Debug.Log("failed to parse: "+ uri +" , trying again");
+                State = ContentLoadState.DOWNLOADED;
+                //Load();
                 return;
+                
             }
+
+            
 
             var gltf = parsedGltf.gltfImport;
             if (gltf != null)
             {
+                
                 this.gltf = gltf;
                 var scenes = gltf.SceneCount;
 
-                for (int i = 0; i < scenes; i++)
-                {
-                    await gltf.InstantiateSceneAsync(transform, i);
-                    var scene = transform.GetChild(i).transform;
+                    for (int i = 0; i < scenes; i++)
+                    {
+
+                        await gltf.InstantiateSceneAsync(transform, i);
+                        var scene = transform.GetChild(0).transform;
+
+                   
+
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
-                    if (parsedGltf.rtcCenter != null)
-                    {
-                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
+                        if (parsedGltf.rtcCenter != null)
+                        {
+                        scene.rotation = CoordinateConverter.ecefRotionToUp()*(scene.rotation);
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
                         scene.position = unityPosition;
-                    }
-                    else
-                    {
-                        Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
-                        scene.SetPositionAndRotation(unityPosition, CoordinateConverter.ecefRotionToUp() * (scene.rotation));
-                    }
-                }
-                this.gameObject.name = uri;
+                          
 
+                       
+                    }
+                        else
+                        {
+                        Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
+                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
+                        scene.position = unityPosition;
+                        
+                        }
+                        
+                       
+
+                    }
+                
+                this.gameObject.name = uri;
+                
                 foreach (var item in this.gameObject.GetComponentsInChildren<Transform>())
                 {
                     item.gameObject.layer = 11;
                 }
-
-                //Check if mesh features addon is used to define subobjects
-                #if SUBOBJECT
-                if(parseSubObjects){
-                    var scene = transform.GetChild(0).transform;
-                    parsedGltf.ParseSubObjects(scene);
-                }
-                #endif
             }
 
             State = ContentLoadState.DOWNLOADED;
@@ -172,14 +183,17 @@ namespace Netherlands3D.Tiles3D
             if (State == ContentLoadState.DOWNLOADING && runningContentRequest != null)
             {
                 StopCoroutine(runningContentRequest);
+
+               
             }
+           
 
             State = ContentLoadState.DOWNLOADED;
 
             if (gltf != null)
             {
                 gltf.Dispose();
-
+               
             }
             Destroy(this.gameObject);
         }

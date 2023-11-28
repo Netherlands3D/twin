@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Netherlands3D.Tiles3D
 {
-    [System.Serializable]
+   [System.Serializable]
     public class Tile : IDisposable
     {
         public bool isLoading = false;
+        public int level;
         public int X;
         public int Y;
-        public int Z;
         public bool hascontent;
 
         public int childrenCountDelayingDispose = 0;
@@ -33,6 +33,10 @@ namespace Netherlands3D.Tiles3D
 
         public Content content; //Gltf content
 
+
+
+
+
         public int CountLoadingChildren()
         {
             int result = 0;
@@ -51,10 +55,10 @@ namespace Netherlands3D.Tiles3D
                 }
             }
             foreach (var childTile in children)
-            {
-                result += childTile.CountLoadingChildren();
-            }
-
+                {
+                    result += childTile.CountLoadingChildren();
+                }
+            
             return result;
         }
         public int loadedChildren;
@@ -72,13 +76,14 @@ namespace Netherlands3D.Tiles3D
                         {
                             result++;
                         }
+
                     }
                 }
             }
-            foreach (var childTile in children)
-            {
-                result += childTile.CountLoadedChildren();
-            }
+                foreach (var childTile in children)
+                {
+                    result += childTile.CountLoadedChildren();
+                }
             loadedChildren = result;
             return result;
         }
@@ -86,7 +91,7 @@ namespace Netherlands3D.Tiles3D
         public int CountLoadedParents()
         {
             int result = 0;
-            if (parent != null)
+            if (parent !=null)
             {
                 if (parent.content != null)
                 {
@@ -99,8 +104,8 @@ namespace Netherlands3D.Tiles3D
                     }
                 }
             }
-
-            if (parent != null)
+           
+            if (parent !=null)
             {
                 return result + parent.CountLoadedParents();
             }
@@ -176,8 +181,7 @@ namespace Netherlands3D.Tiles3D
 
         public bool ChildrenHaveContent()
         {
-            if (children.Count > 0)
-            {
+            if (children.Count > 0) { 
                 foreach (var child in children)
                 {
                     if (!child.content || child.content.State != Content.ContentLoadState.DOWNLOADED) return false;
@@ -205,11 +209,33 @@ namespace Netherlands3D.Tiles3D
             loaded
         }
 
+       
+       
+
+        
+
+      
+
         public bool IsInViewFrustrum(Camera ofCamera)
         {
-            if (!boundsAvailable) CalculateBounds();
-
-            inView = ofCamera.InView(ContentBounds);
+            if (!boundsAvailable)
+            {
+                if (boundingVolume.values.Length>0)
+                {
+                    CalculateBounds();
+                }
+                else
+                {
+                    return true;
+                }
+                
+            }
+            if (boundsAvailable)
+            {
+                inView = ofCamera.InView(ContentBounds);
+            }
+            
+            
 
             return inView;
         }
@@ -246,8 +272,8 @@ namespace Netherlands3D.Tiles3D
                 case BoundingVolumeType.Sphere:
                     var sphereRadius = boundingVolume.values[0];
                     var sphereCentre = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]));
-                    var sphereMin = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] - sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius));
-                    var sphereMax = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] + sphereRadius, boundingVolume.values[1] + sphereRadius, boundingVolume.values[2] + sphereRadius));
+                    var sphereMin = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]- sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius));
+                    var sphereMax = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]+ sphereRadius, boundingVolume.values[1]+ sphereRadius, boundingVolume.values[2]+ sphereRadius));
                     bounds.size = Vector3.zero;
                     bounds.center = sphereCentre;
                     bounds.Encapsulate(sphereMin);
@@ -275,19 +301,22 @@ namespace Netherlands3D.Tiles3D
         public float getParentSSE()
         {
             float result = 0;
-            if (parent != null)
+            if (parent!=null)
             {
-                if (parent.content != null)
+
+            
+            
+            if (parent.content!=null)
+            {
+                if (parent.content.State==Content.ContentLoadState.DOWNLOADED)
                 {
-                    if (parent.content.State == Content.ContentLoadState.DOWNLOADED)
-                    {
-                        result = parent.screenSpaceError;
-                    }
+                    result = parent.screenSpaceError;
                 }
-                if (result == 0)
-                {
+            }
+            if (result==0)
+            {
                     result = parent.getParentSSE();
-                }
+            }
             }
             return result;
         }

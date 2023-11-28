@@ -1,27 +1,18 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 using System.IO;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using GLTFast;
 using System;
 using SimpleJSON;
-
-
 #if UNITY_EDITOR
 using System.IO.Compression;
-
 #endif
-
-#if SUBOBJECT
-#endif
-
-namespace Netherlands3D.Tiles3D
+namespace Netherlands3D.B3DM
 {
-    /// <summary>
-    /// This class helps importing .b3dm, .glb and .gltf files from a URL or local file.
-    /// It extracts the .glb or .gltf from a .b3dm and parses it with GLTFast.
-    /// </summary>
     public class ImportB3DMGltf
     {
         private static CustomCertificateValidation customCertificateHandler = new CustomCertificateValidation();
@@ -58,27 +49,27 @@ namespace Netherlands3D.Tiles3D
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning(url + " -> " + webRequest.error);
+                Debug.LogWarning(url + " -> " +webRequest.error);
                 callbackGltf.Invoke(null);
             }
             else
             {
-                var bytes = webRequest.downloadHandler.data;
+                byte[] bytes = webRequest.downloadHandler.data;
                 var memory = new ReadOnlyMemory<byte>(bytes);
                 double[] rtcCenter = null;
 
                 if (url.Contains(".b3dm"))
                 {
                     var memoryStream = new MemoryStream(bytes);
+
                     var b3dm = B3dmReader.ReadB3dm(memoryStream);
+                    bytes = b3dm.GlbData;
 
                     //Optional RTC_CENTER from b3DM header
                     rtcCenter = GetRTCCenter(rtcCenter, b3dm);
-                    //TODO: Get subobjects from b3dm
-
-                    bytes = b3dm.GlbData;
                 }
-
+                
+                //else sdfsdfsdf
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
             }
 
@@ -159,10 +150,7 @@ namespace Netherlands3D.Tiles3D
                 var parsedGltf = new ParsedGltf()
                 {
                     gltfImport = gltf,
-                    rtcCenter = rtcCenter,
-#if SUBOBJECT
-                    glbBuffer = glbBuffer //Store the glb buffer for access in subobjects
-#endif
+                    rtcCenter = rtcCenter
                 };
                 callbackGltf?.Invoke(parsedGltf);
             }
@@ -176,4 +164,9 @@ namespace Netherlands3D.Tiles3D
     }
 }
 
-
+[Serializable]
+public class ParsedGltf
+{
+    public GltfImport gltfImport;
+    public double[] rtcCenter = null;
+}
