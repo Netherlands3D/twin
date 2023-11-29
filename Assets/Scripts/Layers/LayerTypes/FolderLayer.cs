@@ -7,6 +7,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class FolderLayer : LayerNL3DBase
     {
-        public override bool IsActiveInScene { get; set; }
+        public override bool IsActiveInScene { get; set; } = true;
     }
 }
