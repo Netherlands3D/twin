@@ -119,7 +119,6 @@ namespace Netherlands3D.Twin
 
                         material = meshRenderer.sharedMaterials[j];
                         subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
-                        Debug.Log(meshFilterGameObject.name,meshFilterGameObject);
                     }
 
                     //Fresh start for meshclipper
@@ -128,7 +127,7 @@ namespace Netherlands3D.Twin
                     meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
                     meshClipper.ClipSubMesh(clipBounds, j);
 
-                    colladaFile.AddObjectTriangles(GetDoubleListForVertices(meshClipper.clippedVertices), subobjectName, material);
+                    colladaFile.AddObjectTriangles(GetColladaVertexCoordinates(meshClipper.clippedVertices), subobjectName, material);
                     yield return null;
                 }
                 yield return null;
@@ -156,14 +155,22 @@ namespace Netherlands3D.Twin
             Destroy(exportRunner); 
         }
 
-        public List<double[]> GetDoubleListForVertices(List<Vector3> vertices)
+        /// <summary>
+        /// Return the list of vertices with Y and Z swapped, and origin in bottomleft of bounds
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <returns></returns>
+        public List<double[]> GetColladaVertexCoordinates(List<Vector3> vertices)
         {
             List<double[]> doubleVertices = new List<double[]>();
-			foreach (Vector3 vert in vertices)
-			{
-				doubleVertices.Add(new double[] { vert.x, vert.z, vert.y });
-			}
-			return doubleVertices;
+
+            // Swap Y and Z
+            foreach (Vector3 vert in vertices)
+            {
+                doubleVertices.Add(new double[] { vert.x, vert.z, vert.y });
+            }
+
+            return doubleVertices;
         }
 
         public void SetExportFormat(ExportFormat format)
