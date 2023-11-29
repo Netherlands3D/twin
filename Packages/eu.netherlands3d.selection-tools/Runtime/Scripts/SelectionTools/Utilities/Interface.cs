@@ -11,7 +11,7 @@ namespace Netherlands3D.SelectionTools
         private static int defaultUILayer = LayerMask.NameToLayer("UI"); 
 
         /// <summary>
-        /// Checks if the pointer is over a GameObject with the UI layer
+        /// Checks if the pointer is over a GameObject that is on the UI layer
         /// </summary>
         /// <param name="pointerId">Pointer or touch ID</param>
         /// <param name="layer">Blocking layer ( defaults to 'UI' layer ). Use LayerMask.NameToLayer("layername") to get layer id.</param>
