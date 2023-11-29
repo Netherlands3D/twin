@@ -18,7 +18,9 @@
 
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace Netherlands3D.SelectionTools
 {
@@ -114,8 +116,11 @@ namespace Netherlands3D.SelectionTools
             var currentWorldCoordinate = GetGridPosition(worldPosition);
             gridHighlight.transform.position = currentWorldCoordinate;
 
-            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
+            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed() )
             {
+                if(Interface.PointerIsOverUI())
+                    return;
+
                 drawingArea = true;
                 blockCameraDragging.Invoke(true);
             }
@@ -131,8 +136,12 @@ namespace Netherlands3D.SelectionTools
             }
         }
 
+        
         private void Tap()
         {
+            if(Interface.PointerIsOverUI())
+                return;
+
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var tappedPosition = GetGridPosition(worldPosition);
@@ -142,6 +151,9 @@ namespace Netherlands3D.SelectionTools
 
         private void StartClick()
         {
+            if(Interface.PointerIsOverUI())
+                return;
+
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             selectionStartPosition = GetGridPosition(worldPosition);
