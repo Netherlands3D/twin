@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,7 @@ namespace Netherlands3D.Twin
         public ContextSubmenuFoldout FoldoutParent { get; set; }
         private static float horizontalOverlap = 3f;
         public static List<ContextMenuUI> ContextMenuUIs = new();
+
         public static bool OverAnyContextMenuUI
         {
             get
@@ -21,6 +23,7 @@ namespace Netherlands3D.Twin
                     if (contextMenuUI.MouseOver)
                         return true;
                 }
+
                 return false;
             }
         }
@@ -47,9 +50,8 @@ namespace Netherlands3D.Twin
             var newPosition = relativeTo.transform.position + offset;
 
             //todo: clamp position within screen bounds if needed
-            
-            transform.position = newPosition;
 
+            transform.position = newPosition;
         }
 
         private bool CalculatePlaceToTheRight()
@@ -63,8 +65,10 @@ namespace Netherlands3D.Twin
                 if (leftPos + width > Screen.width)
                     return false;
             }
+
             return true;
         }
+
         //
         // private void RecalculateSubmenuPosition()
         // {
@@ -85,13 +89,23 @@ namespace Netherlands3D.Twin
         public void CloseBaseMenu()
         {
             var parentMenu = ParentMenu;
-            while (parentMenu.ParentMenu)
+            while (parentMenu?.ParentMenu)
             {
-                if(ParentMenu.ParentMenu)
+                if (ParentMenu.ParentMenu)
                     parentMenu = ParentMenu.ParentMenu;
             }
-            print("base: " + parentMenu.gameObject.name);
-            Destroy(parentMenu.gameObject);
+
+            // print("base: " + parentMenu?.gameObject.name);
+            if (parentMenu)
+                Destroy(parentMenu.gameObject);
+            else
+                Destroy(gameObject);
+        }
+
+        //called by button inspector todo: this should not be here, but I placed it here as a hotfix
+        public void GroupLayers()
+        {
+            GetComponentInParent<LayerManager>().GroupSelectedLayers();
         }
     }
 }

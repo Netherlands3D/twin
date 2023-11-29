@@ -306,7 +306,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     var newLayer = LayerManager.LayersVisibleInInspector[i];
 
-                    print("add? " + addLayers + "\t" + newLayer.Layer.name);
+                    // print("add? " + addLayers + "\t" + newLayer.Layer.name);
                     if (addLayers && !LayerManager.SelectedLayers.Contains(newLayer))
                     {
                         LayerManager.SelectedLayers.Add(newLayer);
