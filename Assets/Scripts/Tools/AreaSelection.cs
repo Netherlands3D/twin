@@ -24,6 +24,9 @@ namespace Netherlands3D.Twin
         [HideInInspector] public List<Vector3> SelectedArea { get => selectedArea; private set => selectedArea = value; }
         [HideInInspector] public Bounds SelectedAreaBounds { get => selectedAreaBounds; private set => selectedAreaBounds = value; }
 
+        [Header("Settings")]
+        [SerializeField] private float minBoundsHeight = 1000.0f; 
+
         [Header("Invoke events")]
         public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
         public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();
@@ -38,6 +41,8 @@ namespace Netherlands3D.Twin
 
         public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
+            selectedAreaBounds.size = new Vector3(selectedAreaBounds.size.x, Mathf.Max(selectedAreaBounds.size.y, minBoundsHeight), selectedAreaBounds.size.z);
+
             this.SelectedAreaBounds = selectedAreaBounds;
             OnSelectionAreaBoundsChanged.Invoke(this.SelectedAreaBounds);
         }
@@ -61,7 +66,7 @@ namespace Netherlands3D.Twin
         {
             //Spawn exporting progress as monobehaviour to start a coroutine
             var exportGameObject = new GameObject("Export");
-            var monoBehaviour  = exportGameObject.AddComponent<Exporter>();    
+            var monoBehaviour = exportGameObject.AddComponent<Exporter>();    
                           
             switch(selectedExportFormat)
             {
@@ -77,7 +82,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private IEnumerator ExportCollada(GameObject runner)
+        private IEnumerator ExportCollada(GameObject exportRunner)
         {
             var colladaFile = new ColladaFile();
             var meshClipper = new MeshClipper();
@@ -95,7 +100,7 @@ namespace Netherlands3D.Twin
                 }
             }
 
-            //Clip all the included meshfilters and their submeshes
+            //Clip all the submeshes found whose object bounds overlap with the selected area bounds
             for(int i = 0; i < meshFiltersInLayers.Count; i++)
             {
                 var mesh = meshFiltersInLayers[i].sharedMesh;
@@ -108,8 +113,15 @@ namespace Netherlands3D.Twin
                     Material material = null;
                     if(meshFilterGameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
                     {
+                        //Make sure renderer overlaps bounds
+                        if(!meshRenderer.bounds.Intersects(selectedAreaBounds))
+                        {
+                            continue;
+                        }
+
                         material = meshRenderer.sharedMaterials[j];
                         subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
+                        Debug.Log(meshFilterGameObject.name,meshFilterGameObject);
                     }
 
                     //Fresh start for meshclipper
@@ -141,7 +153,7 @@ namespace Netherlands3D.Twin
             #endif
 
 
-            Destroy(runner); 
+            Destroy(exportRunner); 
         }
 
         public List<double[]> GetDoubleListForVertices(List<Vector3> vertices)
