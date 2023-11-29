@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Netherlands3D.Collada;
@@ -140,17 +141,15 @@ namespace Netherlands3D.Twin
 
             //Save the file
             #if UNITY_EDITOR
-            var localFile = UnityEditor.EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
-            if(localFile.Length > 0)
-            {
-                System.IO.File.WriteAllText(localFile, colladaFile.GetColladaXML());
-            }
+                var localFile = UnityEditor.EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
+                if(localFile.Length > 0)
+                {
+                    System.IO.File.WriteAllText(localFile, colladaFile.GetColladaXML());
+                }
             #elif UNITY_WEBGL
                 byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
-                DownloadFile("", "", Path.GetFileName(filePath), byteArray, byteArray.Length);
-            }
+                DownloadFile("", "", "Collada.dae", byteArray, byteArray.Length);
             #endif
-
 
             Destroy(exportRunner); 
         }
