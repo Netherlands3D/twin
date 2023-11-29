@@ -40,6 +40,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private float multiplyHighlightScale = 5.0f;
         [SerializeField] private float maxSelectionDistanceFromCamera = 10000;
         [SerializeField] private bool useWorldSpace = false;
+        [SerializeField] private bool blockSelectinStartByUI = true;
 
         private InputAction pointerAction;
         private InputAction tapAction;
@@ -118,7 +119,7 @@ namespace Netherlands3D.SelectionTools
 
             if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed() )
             {
-                if(Interface.PointerIsOverUI())
+                if(blockSelectinStartByUI && Interface.PointerIsOverUI())
                     return;
 
                 drawingArea = true;
@@ -139,7 +140,7 @@ namespace Netherlands3D.SelectionTools
         
         private void Tap()
         {
-            if(Interface.PointerIsOverUI())
+            if(blockSelectinStartByUI && Interface.PointerIsOverUI())
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
@@ -151,7 +152,7 @@ namespace Netherlands3D.SelectionTools
 
         private void StartClick()
         {
-            if(Interface.PointerIsOverUI())
+            if(blockSelectinStartByUI && Interface.PointerIsOverUI())
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();

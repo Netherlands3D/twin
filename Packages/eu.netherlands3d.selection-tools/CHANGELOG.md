@@ -5,26 +5,32 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+### Changed
+
+- UI layer is now blocking the start of an area selection by default
+
 ## [1.0.0]
 
 ### Added
-Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (core and Poly2Mesh) this will be removed in the next update
+- Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (core and Poly2Mesh) this will be removed in the next update
 
 ## [1.0.1]
 
 ### Fixed
 
-* Removed dependency on Netherlands3D.Core. The extension methods used are added in a temporary script that should be removed when possible to avoid double code.
-* Removed depandency on Poly2Mesh embedded package in Netherlands3D, replaced it with a depencancy on the OpenUPM version of this package.
+- Removed dependency on Netherlands3D.Core. The extension methods used are added in a temporary script that should be removed when possible to avoid double code.
+- Removed depandency on Poly2Mesh embedded package in Netherlands3D, replaced it with a depencancy on the OpenUPM version of this package.
 
 ## [1.1.0]
 
 ### Added
-* Unity functions are now overridable
-* Added overridable function to calculate position to be added. 
+- Unity functions are now overridable
+- Added overridable function to calculate position to be added. 
 
 ### Fixed
 
-* Fixed incorrect function calls with CloseLoop and FinishPolygon.
-* Renamed some variables for clarity 
-* MinPointDistance is now calculated based on handle size for spherical handles
+- Fixed incorrect function calls with CloseLoop and FinishPolygon.
+- Renamed some variables for clarity 
+- MinPointDistance is now calculated based on handle size for spherical handles
