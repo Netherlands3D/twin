@@ -67,13 +67,12 @@ namespace Netherlands3D.Twin
             {
                 case ExportFormat.Collada:
                     //Slice and export using collada
-                    Debug.Log("Exporting Collada");
+                    Debug.Log("Exporting Collada of area bounds: " + selectedAreaBounds);
                     monoBehaviour.StartCoroutine(ExportCollada(monoBehaviour.gameObject));
-
                     break;
                 case ExportFormat.AutodeskDXF:
-                    //Not implemented yet
-                    Debug.LogError("DXF export is not implemented yet");
+                    //TODO: DXF export implementation
+                    Debug.Log("Exporting Autodesk DXF of area bounds: " + selectedAreaBounds);
                     break;
             }
         }
@@ -102,7 +101,6 @@ namespace Netherlands3D.Twin
                 var mesh = meshFiltersInLayers[i].sharedMesh;
                 for(int j = 0; j < mesh.subMeshCount; j++)
                 {
-                    //Fresh start for meshclipper
                     var meshFilterGameObject = meshFiltersInLayers[i].gameObject;
 
                     //Set the object name
@@ -114,6 +112,7 @@ namespace Netherlands3D.Twin
                         subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
                     }
 
+                    //Fresh start for meshclipper
                     meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
                     meshClipper.ClipSubMesh(selectedAreaBounds, j);
 
