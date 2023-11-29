@@ -115,7 +115,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 transform.SetParent(LayerBaseTransform);
             else
                 transform.SetParent(newParent.childrenPanel);
-
+            
             var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
             var reorderWithSameParent = oldParent == newParent;
             if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
@@ -428,6 +428,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
                     newParent = referenceLayerUnderMouse.ParentUI;
                     newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
+                    
+                    if (newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
+                        newSiblingIndex--;
                 }
                 else if (yValue01 > 0.75f)
                 {
@@ -446,6 +449,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     {
                         newParent = referenceLayerUnderMouse.ParentUI;
                         newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex() + 1;
+                        if (newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
+                            newSiblingIndex--;
                     }
                 }
                 else
@@ -512,7 +517,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var ghostRectTransform = layerManager.DragGhost.GetComponent<RectTransform>();
             var ghostSize = ghostRectTransform.rect.size * ghostRectTransform.lossyScale;
             var mousePos = (Vector2)layerManager.DragGhost.transform.position - ghostSize / 2;
-
 
             for (var i = LayerManager.LayersVisibleInInspector.Count - 1; i >= 0; i--)
             {
