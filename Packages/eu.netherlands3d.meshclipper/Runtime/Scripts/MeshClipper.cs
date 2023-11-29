@@ -115,19 +115,24 @@ namespace Netherlands3D.MeshClipping
             }
         }
 
+        /// <summary>
+        /// Returns a point with the bounds origin (2D center) as origin
+        /// </summary>
+        /// <param name="point">Original world space point</param>
+        /// <returns>Point converted to coordinate within bounds</returns>
         private Vector3 PointWithBoundsOrigin(Vector3 point)
         {
-            return new Vector3(point.x - boundsOrigin.x, point.y - boundsOrigin.y, point.z - boundsOrigin.z);
+            return new Vector3(point.x - boundsOrigin.x, point.y, point.z - boundsOrigin.z);
         }
 
         public static List<Vector3> CreateClippingPolygon(Bounds boundingBox)
         {
             List<Vector3> output = new(4)
             {
-                new(0, 0, 0),
-                new(boundingBox.size.x, 0, 0),
-                new(boundingBox.size.x, 0, boundingBox.size.y),
-                new(0, 0, boundingBox.size.y)
+                boundingBox.min,
+                new(boundingBox.max.x, 0, boundingBox.min.z),
+                boundingBox.max,
+                new(boundingBox.min.x, 0, boundingBox.max.z)
             };
             return output;
         }
@@ -147,10 +152,10 @@ namespace Netherlands3D.MeshClipping
 
             if (counter == 0)
             {
-                var bbox1 = new Vector3(0, 0, 0);
-                var bbox2 = new Vector3(0, 0, boundingBox.size.x);
-                var bbox3 = new Vector3(boundingBox.size.x, 0, boundingBox.size.z);
-                var bbox4 = new Vector3(boundingBox.size.x, 0, 0);
+                Vector3 bbox1 = boundingBox.min;
+                Vector3 bbox2 = new(boundingBox.max.x, boundingBox.min.y, boundingBox.min.z);
+                Vector3 bbox3 = boundingBox.max;
+                Vector3 bbox4 = new(boundingBox.min.x, boundingBox.max.y, boundingBox.max.z);
 
                 if (PointIsInTriangle(bbox1, point1, point2, point3)) return TrianglePosition.overlap;
                 if (PointIsInTriangle(bbox2, point1, point2, point3)) return TrianglePosition.overlap;
@@ -181,15 +186,7 @@ namespace Netherlands3D.MeshClipping
 
         public static bool PointIsInsideArea(Vector3 vector, Bounds boundingBox)
         {
-            if (vector.x < 0 || vector.x > boundingBox.size.x)
-            {
-                return false;
-            }
-            if (vector.z < 0 || vector.z > boundingBox.size.x)
-            {
-                return false;
-            }
-            return true;
+            return boundingBox.Contains(vector);
         }
 
         private void ReadVertices()
