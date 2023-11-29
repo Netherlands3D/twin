@@ -6,7 +6,6 @@ namespace Netherlands3D.Twin.Configuration
     public class ConfiguratorStarter : MonoBehaviour
     {
         [SerializeField] private Configurator configurator;
-        [SerializeField] private GameObject settingsButton;
 
         /// <summary>
         /// The configuration will affect all systems that first need to be initialized on Start. Because of this,
@@ -29,10 +28,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void AfterLoading(Configuration configuration)
         {
-            if (configuration.ShouldStartSetup)
-            {
-                settingsButton.SetActive(true);
-            }
+            Debug.Log("Finished loading configuration");
         }
     }
 }
