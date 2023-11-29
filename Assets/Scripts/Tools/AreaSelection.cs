@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin
         [HideInInspector] public Bounds SelectedAreaBounds { get => selectedAreaBounds; private set => selectedAreaBounds = value; }
 
         [Header("Settings")]
-        [SerializeField] private float minBoundsHeight = 1000.0f; 
+        [SerializeField] private float minClipBoundsHeight = 1000.0f; 
 
         [Header("Invoke events")]
         public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
@@ -41,8 +41,6 @@ namespace Netherlands3D.Twin
 
         public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
-            selectedAreaBounds.size = new Vector3(selectedAreaBounds.size.x, Mathf.Max(selectedAreaBounds.size.y, minBoundsHeight), selectedAreaBounds.size.z);
-
             this.SelectedAreaBounds = selectedAreaBounds;
             OnSelectionAreaBoundsChanged.Invoke(this.SelectedAreaBounds);
         }
@@ -125,8 +123,10 @@ namespace Netherlands3D.Twin
                     }
 
                     //Fresh start for meshclipper
+                    var clipBounds = selectedAreaBounds;
+                    clipBounds.size = new Vector3(clipBounds.size.x, Mathf.Max(clipBounds.size.y, minClipBoundsHeight), clipBounds.size.z);
                     meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
-                    meshClipper.ClipSubMesh(selectedAreaBounds, j);
+                    meshClipper.ClipSubMesh(clipBounds, j);
 
                     colladaFile.AddObjectTriangles(GetDoubleListForVertices(meshClipper.clippedVertices), subobjectName, material);
                     yield return null;
