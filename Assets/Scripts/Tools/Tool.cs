@@ -60,6 +60,9 @@ namespace Netherlands3D.Twin
             return featureInstances;
         }
         
+        /// <summary>
+        /// Destroy all instances of the prefabs spawned in the world by activating this tool
+        /// </summary>
         public void DestroyPrefabInstances()
         {
             if (featureInstances != null)
@@ -69,6 +72,7 @@ namespace Netherlands3D.Twin
                     Destroy(instance);
                 }
             }
+            featureInstances = null;
         }
 
         /// <summary>
@@ -78,11 +82,17 @@ namespace Netherlands3D.Twin
             Open = !Open;
             onToggleInspector.Invoke(this);
 
+            if(!Open) DestroyPrefabInstances();
+
             if(activateToolOnInspectorToggle){
                 if(open)
+                {
                     Activate();
+                }
                 else
+                {
                     Deactivate();
+                }
             }
         }
     }
