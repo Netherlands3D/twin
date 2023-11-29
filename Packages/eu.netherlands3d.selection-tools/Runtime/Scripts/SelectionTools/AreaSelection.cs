@@ -18,7 +18,9 @@
 
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace Netherlands3D.SelectionTools
 {
@@ -38,6 +40,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private float multiplyHighlightScale = 5.0f;
         [SerializeField] private float maxSelectionDistanceFromCamera = 10000;
         [SerializeField] private bool useWorldSpace = false;
+        [SerializeField] private bool blockSelectionStartByUI = true;
 
         private InputAction pointerAction;
         private InputAction tapAction;
@@ -114,8 +117,11 @@ namespace Netherlands3D.SelectionTools
             var currentWorldCoordinate = GetGridPosition(worldPosition);
             gridHighlight.transform.position = currentWorldCoordinate;
 
-            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
+            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed() )
             {
+                if(blockSelectionStartByUI && Interface.PointerIsOverUI())
+                    return;
+
                 drawingArea = true;
                 blockCameraDragging.Invoke(true);
             }
@@ -131,8 +137,12 @@ namespace Netherlands3D.SelectionTools
             }
         }
 
+        
         private void Tap()
         {
+            if(blockSelectionStartByUI && Interface.PointerIsOverUI())
+                return;
+
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var tappedPosition = GetGridPosition(worldPosition);
@@ -142,6 +152,9 @@ namespace Netherlands3D.SelectionTools
 
         private void StartClick()
         {
+            if(blockSelectionStartByUI && Interface.PointerIsOverUI())
+                return;
+
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             selectionStartPosition = GetGridPosition(worldPosition);
