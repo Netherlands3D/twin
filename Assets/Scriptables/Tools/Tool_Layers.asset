@@ -26,7 +26,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activateToolOnInspectorToggle: 1
-  inspectorPrefab: {fileID: 3537603041487147064, guid: db64a2e9053990d4e911b7c1c31c2b7c,
+  inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
     type: 3}
   featurePrefabs:
   - {fileID: 0}

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
 using TMPro;
@@ -10,6 +11,11 @@ namespace Netherlands3D.Twin.Configuration
 {
     public class SetupWizard : MonoBehaviour
     {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")]
+        private static extern void ReplaceUrl(string url);
+        #endif
+
         [SerializeField] private Configuration configuration;
 
         [Header("References")] 
@@ -85,29 +91,42 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateStartingPositionWithoutNotify(Coordinate coordinate)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.RD)
+            var currentAltitude = configuration.Origin.Points[2];
+            coordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+            
+            // Setting a starting position's altitude to 0 shouldn't happen, if we detect this as an artefact of
+            // the conversion process or an actual intention, we reinstate the original altitude.
+            if (Mathf.Approximately((float)coordinate.Points[2], 0f))
             {
-                coordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+                coordinate.Points[2] = currentAltitude;
             }
 
-            originXField.SetTextWithoutNotify(coordinate.Points[0].ToString());
-            originYField.SetTextWithoutNotify(coordinate.Points[1].ToString());
-            UpdateShareUrlWhenOriginChanges(coordinate);
+            originXField.SetTextWithoutNotify(coordinate.Points[0].ToString(CultureInfo.InvariantCulture));
+            originYField.SetTextWithoutNotify(coordinate.Points[1].ToString(CultureInfo.InvariantCulture));
+            configuration.Origin = coordinate;
         }
 
         private void UpdateShareUrlWhenFeatureChanges()
         {
-            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
+            UpdateShareUrl();
         }
 
         private void UpdateShareUrlWhenOriginChanges(Coordinate origin)
         {
-            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
+            UpdateShareUrl();
         }
 
         private void UpdateShareUrlWhenTitleChanges(string title)
         {
+            UpdateShareUrl();
+        }
+
+        public void UpdateShareUrl()
+        {
             shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            ReplaceUrl($"./{Uri.UnescapeDataString(configuration.ToQueryString())}");
+            #endif
         }
 
         private void OnFeatureChanged(Feature availableFeature, bool value)
