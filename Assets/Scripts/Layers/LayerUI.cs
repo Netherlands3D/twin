@@ -309,23 +309,28 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     // print("add? " + addLayers + "\t" + newLayer.Layer.name);
                     if (addLayers && !LayerManager.SelectedLayers.Contains(newLayer))
                     {
-                        LayerManager.SelectedLayers.Add(newLayer);
-                        newLayer.SetHighlight(InteractionState.Selected);
+                        newLayer.Select();
+                        // LayerManager.SelectedLayers.Add(newLayer);
+                        // newLayer.Layer.OnSelect();
+                        // newLayer.SetHighlight(InteractionState.Selected);
                     }
                     else if (!addLayers && LayerManager.SelectedLayers.Contains(newLayer))
                     {
-                        LayerManager.SelectedLayers.Remove(newLayer);
-                        newLayer.SetHighlight(InteractionState.Default);
+                        newLayer.Deselect();
+                        // LayerManager.SelectedLayers.Remove(newLayer);
+                        // newLayer.Layer.OnDeselect();
+                        // newLayer.SetHighlight(InteractionState.Default);
                     }
                 }
 
                 if (!addLayers)
                 {
-                    LayerManager.SelectedLayers.Remove(referenceLayer);
-                    referenceLayer.SetHighlight(InteractionState.Default);
+                    referenceLayer.Deselect();
+                    // LayerManager.SelectedLayers.Remove(referenceLayer);
+                    // referenceLayer.Layer.OnDeselect();
+                    // referenceLayer.SetHighlight(InteractionState.Default);
 
-                    LayerManager.SelectedLayers.Remove(this);
-                    SetHighlight(InteractionState.Default);
+                    Deselect();
                 }
             }
 
@@ -334,14 +339,29 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             if (LayerManager.SelectedLayers.Contains(this))
             {
-                LayerManager.SelectedLayers.Remove(this);
-                SetHighlight(InteractionState.Default);
+                Deselect();
             }
             else
             {
-                LayerManager.SelectedLayers.Add(this);
-                SetHighlight(InteractionState.Selected);
+                Select();
             }
+        }
+
+        public void Deselect()
+        {
+            LayerManager.SelectedLayers.Remove(this);
+            Layer.OnDeselect();
+            SetHighlight(InteractionState.Default);
+        }
+
+        public void Select(bool deselectOthers = false)
+        {
+            if(deselectOthers)
+                LayerManager.DeselectAllLayers();
+            
+            LayerManager.SelectedLayers.Add(this);
+            Layer.OnSelect();
+            SetHighlight(InteractionState.Selected);
         }
 
         public void OnPointerClick(PointerEventData eventData)

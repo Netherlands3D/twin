@@ -98,6 +98,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foreach (var selectedLayer in SelectedLayers)
             {
                 selectedLayer.SetHighlight(InteractionState.Default);
+                selectedLayer.Layer.OnDeselect();
             }
 
             SelectedLayers.Clear();

@@ -488,7 +488,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8277673045000416409}
   - component: {fileID: 6893890725804379472}
-  - component: {fileID: 352237763082954176}
   m_Layer: 5
   m_Name: Layersinspector
   m_TagString: Untagged
@@ -546,20 +545,6 @@ MonoBehaviour:
   dragLine: {fileID: 3629506645558351958}
   contextMenuPrefab: {fileID: 5342415080518674038, guid: 0534318c8be404c17855151d32cc8dac,
     type: 3}
---- !u!114 &352237763082954176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4151227325010422218}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bc6d05cb91a41aea0148d635f868b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fileOpenEvent: {fileID: 11400000, guid: dafebb0847f3747bab4e54f4e9127f1b, type: 2}
-  fileTypeEvents: []
 --- !u!1 &4745316883066911733
 GameObject:
   m_ObjectHideFlags: 0

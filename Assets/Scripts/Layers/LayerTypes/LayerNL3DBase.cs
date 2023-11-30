@@ -13,6 +13,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public abstract bool IsActiveInScene { get; set; }
 
+        public virtual void OnSelect(){}
+        public virtual void OnDeselect(){}
+
         protected virtual void Awake()
         {
             if (!LayerManager.AllLayers.Contains(this))

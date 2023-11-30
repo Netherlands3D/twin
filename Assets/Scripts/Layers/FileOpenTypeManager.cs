@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.Events;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -50,6 +51,14 @@ namespace Netherlands3D.Twin
             {
                 print("file type " + fileExtension + " does not have an associated processing function");
             }
+        }
+
+        public void AddLayerScriptToObj(GameObject parsedObj)
+        {
+            var objLayer = parsedObj.AddComponent<ObjectLayer>();
+            parsedObj.AddComponent<MeshCollider>();
+            FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
+            objLayer.UI.Select();
         }
     }
 }
