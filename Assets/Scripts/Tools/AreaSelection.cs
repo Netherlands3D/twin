@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
         public class Exporter : MonoBehaviour {};
 
         [DllImport("__Internal")]
-        private static extern void DownloadFile(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
+        private static extern void DownloadFileImmediate(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
 
         private Bounds selectedAreaBounds;
         private List<Vector3> selectedArea;
@@ -148,7 +148,7 @@ namespace Netherlands3D.Twin
                 }
             #elif UNITY_WEBGL
                 byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
-                DownloadFile("", "", "Collada.dae", byteArray, byteArray.Length);
+                DownloadFileImmediate("", "", "Collada.dae", byteArray, byteArray.Length);
             #endif
 
             Destroy(exportRunner); 

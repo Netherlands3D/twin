@@ -5,30 +5,6 @@ namespace Netherlands3D.Twin
 {
     public class Toolbar : MonoBehaviour
     {
-        private void Awake()
-        {
-            EnableToolButtonsByAvailability();
-
-            //Listen to tool availability changes
-            foreach (Transform child in transform)
-            {
-                var toolButton = child.GetComponent<ToolButton>();
-                toolButton.Tool.onAvailabilityChange.AddListener(EnableToolButtonsByAvailability);
-            }
-        }
-
-        /// <summary>
-        /// Enable/disable tool button based on the availability of the tool data (some tools might enable/disable based on feature selection)
-        /// </summary>
-        private void EnableToolButtonsByAvailability(bool available = true)
-        {
-            foreach (Transform child in transform)
-            {
-                var toolButton = child.GetComponent<ToolButton>();
-                toolButton.gameObject.SetActive(toolButton.Tool.Available);
-            }
-        }
-
         /// <summary>
         /// Disable all tools that have a conflicting function group with the given tool, and are activated from this toolbar
         /// </summary>
