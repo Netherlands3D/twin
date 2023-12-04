@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: indicators
   Caption: Indicatoren
   configuration: {fileID: 11400000, guid: 9649637ffb6f9c24da61c215efe6adaa, type: 2}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
