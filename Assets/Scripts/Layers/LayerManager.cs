@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private ContextMenuUI contextMenuPrefab;
         private ContextMenuUI contextMenu;
 
-        public void RefreshLayerList()
+        public void AddMissingLayersToInspector()
         {
             foreach (var layer in LayerData.AllLayers)
             {
@@ -44,20 +44,31 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnable()
         {
-            RefreshLayerList();
-            LayerData.LayerAdded.AddListener(OnLayerChanged);
-            LayerData.LayerDeleted.AddListener(OnLayerChanged);
+            AddMissingLayersToInspector();
+            LayerData.LayerAdded.AddListener(OnLayerAdded);
+            LayerData.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            LayerData.LayerAdded.RemoveListener(OnLayerChanged);
-            LayerData.LayerDeleted.RemoveListener(OnLayerChanged);
+            LayerData.LayerAdded.RemoveListener(OnLayerAdded);
+            LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
 
-        private void OnLayerChanged(LayerNL3DBase layer)
+        private void OnLayerAdded(LayerNL3DBase layer)
         {
-            RefreshLayerList();
+            AddMissingLayersToInspector();
+        }
+
+        private void OnLayerDeleted(LayerNL3DBase layer)
+        {
+            if (LayerData.SelectedLayers.Contains(layer.UI))
+            {
+                layer.OnDeselect();
+                LayerData.SelectedLayers.Remove(layer.UI);
+            }
+
+            Destroy(layer.UI.gameObject);
         }
 
         private void OnRectTransformDimensionsChange()
@@ -107,7 +118,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var newLayer = new GameObject("Folder");
             var folder = newLayer.AddComponent<FolderLayer>();
-            RefreshLayerList();
+            AddMissingLayersToInspector();
             return folder;
         }
 
