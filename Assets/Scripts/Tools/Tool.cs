@@ -48,14 +48,14 @@ namespace Netherlands3D.Twin
             onDeactivate.Invoke();
         }
 
-        public GameObject[] SpawnPrefabInstances()
+        public GameObject[] SpawnPrefabInstances(Transform parent = null)
         {
             DestroyPrefabInstances();
 
             featureInstances = new GameObject[featurePrefabs.Length];
             for (int i = 0; i < featurePrefabs.Length; i++)
             {
-                featureInstances[i] = Instantiate(featurePrefabs[i]);
+                featureInstances[i] = Instantiate(featurePrefabs[i],parent,true);
             }
             return featureInstances;
         }

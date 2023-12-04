@@ -144,7 +144,7 @@ namespace Netherlands3D.Twin
                 var localFile = UnityEditor.EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
                 if(localFile.Length > 0)
                 {
-                    System.IO.File.WriteAllText(localFile, colladaFile.GetColladaXML());
+                    File.WriteAllText(localFile, colladaFile.GetColladaXML());
                 }
             #elif UNITY_WEBGL
                 byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
