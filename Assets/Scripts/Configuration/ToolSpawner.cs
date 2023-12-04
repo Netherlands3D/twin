@@ -7,13 +7,20 @@ namespace Netherlands3D.Twin
 {
     public class ToolSpawner : MonoBehaviour
     {
-        [Header("Spawn these tools their world prefabs when they are opened in the inspector")]
+        [Header("Group these tools their world prefab instances when they are activated")]
         [Tooltip("The tool data object references to listen to")]
         [SerializeField] private Tool[] tools;
 
-        private void Awake() {
+        private void OnEnable() {
+            //If the tool is opened in the inspector, spawn the prefab instances
             foreach(var tool in tools){
                 tool.onToggleInspector.AddListener(OnToggleInspector);
+            }
+        }
+
+        private void OnDisable() {
+            foreach(var tool in tools){
+                tool.onToggleInspector.RemoveListener(OnToggleInspector);
             }
         }
 
@@ -21,7 +28,7 @@ namespace Netherlands3D.Twin
         {
             if(tool.Open)
             {
-                tool.SpawnPrefabInstances();
+                tool.SpawnPrefabInstances(transform);
             }
             else
             {

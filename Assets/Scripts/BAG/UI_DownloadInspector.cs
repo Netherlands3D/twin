@@ -35,9 +35,13 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private AreaSelection areaSelection;
 		[SerializeField] private RenderedThumbnail renderedThumbnail;
 
-		private void Awake() {
+		private void OnEnable() {
 			areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
 		}	
+
+		private void OnDisable() {
+			areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
+		}
 
 		private void OnSelectionBoundsChanged(Bounds selectedArea)
 		{
