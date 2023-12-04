@@ -77,13 +77,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon gebouwen -> null -> set_isEnabled
+  - name: Toon gebouwen -> Buildings (Netherlands3D.CartesianTiles.BinaryMeshLayer)
+      -> set_isEnabled
     feature: {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 7555721977339228734}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -93,14 +94,15 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
-          m_CallState: 2
-  - name: Toon het maaiveld -> null -> set_isEnabled
+          m_CallState: 1
+  - name: Toon het maaiveld -> Terrain (Netherlands3D.CartesianTiles.BinaryMeshLayer)
+      -> set_isEnabled
     feature: {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 4627785368353237123}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -111,13 +113,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon namen van buurten -> null -> set_isEnabled
+  - name: Toon namen van buurten -> NeighbourhoodNames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
+      -> set_isEnabled
     feature: {fileID: 11400000, guid: cd4d713ac36eed3478e85868b1e0e0f9, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 1447055348483514853}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -128,13 +131,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon namen van wijken -> null -> set_isEnabled
+  - name: Toon namen van wijken -> DistrictNames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
+      -> set_isEnabled
     feature: {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 1477014032411085357}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -184,13 +188,13 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon bomen -> null -> set_isEnabled
+  - name: Toon bomen -> Trees (Netherlands3D.CartesianTiles.BinaryMeshLayer) -> set_isEnabled
     feature: {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 8569328284100663580}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -201,13 +205,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon namen van straten -> null -> set_isEnabled
+  - name: Toon namen van straten -> Streetnames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
+      -> set_isEnabled
     feature: {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
     onFeatureToggle:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Netherlands3D.TileSystem.Layer, Netherlands3D.Core.Runtime
+        - m_Target: {fileID: 7955487899575783159}
+          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
           m_MethodName: set_isEnabled
           m_Mode: 0
           m_Arguments:
@@ -1322,12 +1327,84 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea7c180bcbe7b0e4cab6acc5863a9a96, type: 3}
+--- !u!114 &1447055348483514853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4990664270803265294, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1477014032411085357 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4983787096530963654, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4627785368353237123 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1256413983069957736, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4930656928155257700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1530003142245436815, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
     type: 3}
   m_PrefabInstance: {fileID: 5861047450433095403}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7555721977339228734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4147197885830444245, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7955487899575783159 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4553435551921080348, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8569328284100663580 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2862812952149434359, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 5861047450433095403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6251840611060508935
 PrefabInstance:
   m_ObjectHideFlags: 0

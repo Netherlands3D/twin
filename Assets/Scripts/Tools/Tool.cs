@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
 
         public FunctionGroup[] functionGroups;
 
+        public UnityEvent<bool> onAvailabilityChange = new();
         public UnityEvent onActivate = new();
         public UnityEvent onDeactivate = new();
         public UnityEvent<Tool> onToggleInspector = new();
@@ -32,17 +33,37 @@ namespace Netherlands3D.Twin
         private GameObject[] featureInstances;
 
         private bool open = false;
+        private bool available = false;
+
         public bool Open { get => open; set => open = value; }
+        public bool Available { get => available; set => available = value; }
 
         private void Awake() {
             open = false;
         }
 
+        /// <summary>
+        /// Set availability for the user on/off.
+        /// Toolbar will show/hide the buttons for this tool.
+        /// </summary>
+        /// <param name="available">Set to true to show the tool button</param>
+        public void SetAvailability(bool available)
+        {
+            Available = available;
+            onAvailabilityChange.Invoke(available);
+        }
+
+        /// <summary>
+        /// Activate this tool (via menu)
+        /// </summary>
         public void Activate()
         {
             onActivate.Invoke();
         }
 
+        /// <summary>
+        /// Deactivate this tool (via menu)
+        /// </summary>
         public void Deactivate()
         {
             onDeactivate.Invoke();
