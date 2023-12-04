@@ -17,20 +17,21 @@ namespace Netherlands3D.Twin
         public UnityEvent<string> FileReceived;
     }
     
-    public class FileOpenTypeManager : MonoBehaviour
+    [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
+    public class FileTypeAdapter : ScriptableObject
     {
-        [SerializeField] private StringEvent fileOpenEvent;
+        // [SerializeField] private StringEvent fileOpenEvent;
         // [SerializeField] private Dictionary<string, UnityEvent<string>> fileTypeEvents = new();
         [SerializeField] private List<FileTypeEvent> fileTypeEvents;
-        private void OnEnable()
-        {
-            fileOpenEvent.AddListenerStarted(ProcessFile);
-        }
-
-        private void OnDisable()
-        {
-            fileOpenEvent.RemoveListenerStarted(ProcessFile);
-        }
+        // private void OnEnable()
+        // {
+        //     fileOpenEvent.AddListenerStarted(ProcessFile);
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     fileOpenEvent.RemoveListenerStarted(ProcessFile);
+        // }
 
         public void ProcessFile(string file) //todo: this currently does not support multi select
         {
@@ -43,22 +44,16 @@ namespace Netherlands3D.Twin
             
             var fileTypeEvent = fileTypeEvents.FirstOrDefault(fte => fte.Extension == fileExtension);
             
+            Debug.Log("file: " + file);
+            
             if(fileTypeEvent != null)
             {
                 fileTypeEvent.FileReceived.Invoke(file);
             }
             else
             {
-                print("file type " + fileExtension + " does not have an associated processing function");
+                Debug.Log("file type {" + fileExtension + "} does not have an associated processing function");
             }
-        }
-
-        public void AddLayerScriptToObj(GameObject parsedObj)
-        {
-            var objLayer = parsedObj.AddComponent<ObjectLayer>();
-            parsedObj.AddComponent<MeshCollider>();
-            FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
-            objLayer.UI.Select();
         }
     }
 }

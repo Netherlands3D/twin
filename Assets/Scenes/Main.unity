@@ -343,18 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009dfb7b117049a1a3f2a2e9cb4e6db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &492859207 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2488954073963816146}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0fe9131dbc6f194cafdcbab6b6b2a79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &737064765 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8402281604182344385, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -590,7 +578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1236045248}
-  - component: {fileID: 1236045249}
+  - component: {fileID: 1236045250}
   m_Layer: 0
   m_Name: FileOpenManager
   m_TagString: Untagged
@@ -613,7 +601,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1467832460}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1236045249
+--- !u!114 &1236045250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -622,27 +610,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1236045247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bc6d05cb91a41aea0148d635f868b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c832745c104e4a12a7e9dbb741c63ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileOpenEvent: {fileID: 11400000, guid: dafebb0847f3747bab4e54f4e9127f1b, type: 2}
-  fileTypeEvents:
-  - Extension: obj
-    FileReceived:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 492859207}
-          m_TargetAssemblyTypeName: Netherlands3D.ObjImporter.ObjImportManager, eu.netherlands3d.obj-importer.Runtime
-          m_MethodName: ParseFiles
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  maxParsesPerFrame: 100
 --- !u!1 &1430439689 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7776376714737816345, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -768,13 +739,19 @@ PrefabInstance:
     - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1236045249}
+      objectReference: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19,
+        type: 2}
     - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -788,7 +765,7 @@ PrefabInstance:
     - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.FileOpenTypeManager, Assembly-CSharp
+      value: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 211816007635109040, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -868,7 +845,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[0].name
-      value: Zoeken op adres -> ToggleSearch (GameObject) -> SetActive
+      value: Zoeken op adres -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -902,12 +879,12 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[6].name
-      value: Timeline -> ToggleTimeline (GameObject) -> SetActive
+      value: Timeline -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[7].name
-      value: Verkeerssimulatie -> ToggleImportFile (GameObject) -> SetActive
+      value: Verkeerssimulatie -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -923,18 +900,17 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[10].name
-      value: Stel de zonnestand en schaduwen in -> ToggleSunSettings (GameObject)
-        -> SetActive
+      value: Stel de zonnestand en schaduwen in -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[11].name
-      value: Importeer .obj bestanden -> ToggleImportFile (GameObject) -> SetActive
+      value: Importeer .obj bestanden -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[12].name
-      value: Doorzicht ondergrond -> ToggleDome (GameObject) -> SetActive
+      value: Doorzicht ondergrond -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1309,22 +1285,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5135284
+      value: 0.055108525
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.024640447
+      value: 0.007371323
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.85673314
+      value: 0.9896392
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.041108318
+      value: -0.13237427
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1401,6 +1377,11 @@ PrefabInstance:
       propertyPath: lineRenderMaterial
       value: 
       objectReference: {fileID: 2100000, guid: e840858bd2563a640a9d9e31c42cd882, type: 2}
+    - target: {fileID: 7440955795247456447, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9065098773059963892, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: onSelectedArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target

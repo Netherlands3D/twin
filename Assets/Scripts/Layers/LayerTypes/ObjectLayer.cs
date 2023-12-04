@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
+    public class ObjectLayer : LayerNL3DBase, IPointerClickHandler, IDeselectHandler
     {
         public override bool IsActiveInScene
         {
@@ -18,12 +18,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         
         public override void OnSelect()
         {
-            FindObjectOfType<RuntimeTransformHandle>(true).SetTarget(gameObject); //todo remove FindObjectOfType
+            FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include).SetTarget(gameObject);
+            // FindObjectOfType<RuntimeTransformHandle>(true).SetTarget(gameObject); //todo remove FindObjectOfType
         }
 
         public override void OnDeselect()
         {
-            var rth = FindObjectOfType<RuntimeTransformHandle>(true);
+            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);
             if (rth.target == transform)
                 rth.SetTarget(rth.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
         }
@@ -31,6 +32,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerClick(PointerEventData eventData)
         {
             UI.Select(true);
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            print("deselecting " + name);
         }
     }
 }
