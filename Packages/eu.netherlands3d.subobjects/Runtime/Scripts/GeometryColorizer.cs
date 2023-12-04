@@ -81,7 +81,7 @@ namespace Netherlands3D.SubObjects
             }
         }
 
-        public static void AddAndMergeCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
+        public static ColorSetLayer AddAndMergeCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
         {
             var colorLayer = customColors.FirstOrDefault(layer => layer.PriorityIndex == priorityIndex);
             
@@ -94,13 +94,14 @@ namespace Netherlands3D.SubObjects
             }
             else
             {
-                var newLayer = new ColorSetLayer(priorityIndex, colorSet);
-                customColors.Add(newLayer);
+                colorLayer = new ColorSetLayer(priorityIndex, colorSet);
+                customColors.Add(colorLayer);
             }
 
             RecalculatePrioritizedColors();
-
             CalculateChangedColors(colorSet);
+            
+            return colorLayer;
         }
 
         private static void CalculateChangedColors(Dictionary<string, Color> changedColorSet)
