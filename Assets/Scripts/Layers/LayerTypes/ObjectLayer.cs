@@ -1,25 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Events;
-using Netherlands3D.Twin.UI.LayerInspector;
+using System;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class ObjectLayer : LayerNL3DBase, IPointerClickHandler, IDeselectHandler
+    public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
     {
+        private RuntimeTransformHandle transformHandle;
+        public InputAction clickAction;
+
         public override bool IsActiveInScene
         {
             get { return gameObject.activeSelf; }
             set { gameObject.SetActive(value); }
         }
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);//todo remove FindObjectOfType
+        }
+
+        private void OnEnable()
+        {
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClick);
+        }
+
+        private void OnMouseClick()
+        {
+            if (UI.IsSelected)
+            {
+                UI.Deselect();
+            }
+        }
+
         public override void OnSelect()
         {
-            FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include).SetTarget(gameObject);
-            // FindObjectOfType<RuntimeTransformHandle>(true).SetTarget(gameObject); //todo remove FindObjectOfType
+            transformHandle.SetTarget(gameObject);
         }
 
         public override void OnDeselect()
@@ -32,11 +52,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerClick(PointerEventData eventData)
         {
             UI.Select(true);
-        }
-
-        public void OnDeselect(BaseEventData eventData)
-        {
-            print("deselecting " + name);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IDropHandler
     {
         public LayerNL3DBase Layer { get; set; }
+        public bool IsSelected => LayerData.SelectedLayers.Contains(this);
 
         private RectTransform rectTransform;
         private VerticalLayoutGroup verticalLayoutGroup;
