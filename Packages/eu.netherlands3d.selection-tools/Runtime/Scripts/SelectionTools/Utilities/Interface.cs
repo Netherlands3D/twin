@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
 namespace Netherlands3D.SelectionTools
@@ -23,12 +25,38 @@ namespace Netherlands3D.SelectionTools
                 blockingLayer = layer;
 
             InputSystemUIInputModule inputModule = EventSystem.current.currentInputModule as InputSystemUIInputModule;
+        
             var getLastRaycastResult = inputModule.GetLastRaycastResult(pointerId);
             if(!getLastRaycastResult.gameObject)
                 return false;
 
             var gameObjectIsOnUILayer = getLastRaycastResult.gameObject.layer == blockingLayer;
             return gameObjectIsOnUILayer;
+        }
+
+        /// <summary>
+        /// Returns the last raycast result from the InputSystemUIInputModule
+        /// </summary>
+        /// <returns>A GameObject or null</returns>
+        public static GameObject GetLastRaycastResult(int pointerId = 0)
+        {
+            InputSystemUIInputModule inputModule = EventSystem.current.currentInputModule as InputSystemUIInputModule;
+            var getLastRaycastResult = inputModule.GetLastRaycastResult(pointerId);
+            return getLastRaycastResult.gameObject;
+        }
+
+        /// <summary>
+        /// Shortcut method that returns the click InputAction from the InputSystemUIInputModule
+        /// To listen to the click you can do this:
+        /// action.performed += ctx => { Debug.log("Click"); }; 
+        /// </summary>
+        /// <returns>InputAction for the Click action</returns>
+        public static InputAction DefaultClickAction()
+        {
+             InputSystemUIInputModule inputModule = EventSystem.current.currentInputModule as InputSystemUIInputModule;
+             var action = inputModule.actionsAsset.FindActionMap("UI").FindAction("Click");
+            
+             return action;
         }
 
         /// <summary>
