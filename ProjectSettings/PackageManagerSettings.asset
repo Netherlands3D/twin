@@ -34,14 +34,16 @@ MonoBehaviour:
     - com.cdm
     - com.virgis.geojson.net
     - com.atteneder.draco
+    - com.joshclose.csvhelper
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4
-  m_UserSelectedRegistryName: 
+  m_UserSelectedRegistryName: OpenUPM
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -836
-    m_OriginalInstanceId: -838
+    m_UserModificationsInstanceId: -197162
+    m_OriginalInstanceId: -197228
+
   m_LoadAssets: 0

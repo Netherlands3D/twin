@@ -18,6 +18,13 @@
       },
       "hash": "a7f502e4bba2416411c64b1160dc01d53da75fcd"
     },
+    "com.joshclose.csvhelper": {
+      "version": "13.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
