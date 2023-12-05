@@ -710,7 +710,7 @@ PrefabInstance:
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: 1985
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -911,7 +911,7 @@ PrefabInstance:
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: Verblijfsobject
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -1229,7 +1229,7 @@ PrefabInstance:
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: Nieuwmarkt / Lastage
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
@@ -1425,7 +1425,7 @@ PrefabInstance:
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
-      value: 0363100012186092
+      value: Selecteer een pand
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1622,7 +1622,7 @@ PrefabInstance:
     - target: {fileID: 922808758654472512, guid: 108ec13b032d41849a5352172dff8449,
         type: 3}
       propertyPath: m_text
-      value: Address Template
+      value: '-'
       objectReference: {fileID: 0}
     - target: {fileID: 3178374996913622101, guid: 108ec13b032d41849a5352172dff8449,
         type: 3}
@@ -1863,7 +1863,7 @@ PrefabInstance:
     - target: {fileID: 3809930780254305074, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5600597860905115593, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
