@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.subobjects",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "displayName": "Netherlands3D - Subobjects",
   "description": "Package get acces to Subobjects of loaded tiles",
   "unity": "2022.2",

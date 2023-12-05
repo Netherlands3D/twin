@@ -104,17 +104,17 @@ namespace Netherlands3D.SubObjects
             return colorLayer;
         }
 
-        private static void CalculateChangedColors(Dictionary<string, Color> changedColorSet)
+        private static void CalculateChangedColors(Dictionary<string, Color> newColorSet)
         {
             var changedColors = new Dictionary<string, Color>();
-            foreach (var key in changedColorSet.Keys)
+            foreach (var key in newColorSet.Keys)
             {
                 //if the value in the prioritized Colors list is the same as the one we just added, this is a changed color (or this set contains the same color as the previous prioritized color) 
-                if (changedColorSet[key] == PrioritizedColors[key])
+                if (newColorSet[key] == PrioritizedColors[key])
                     changedColors.Add(key, PrioritizedColors[key]);
             }
 
-            Interaction.ApplyColorsToAll(changedColors);
+            Interaction.ApplyColorsToAll(PrioritizedColors);
             ColorsChanged.Invoke(changedColors);
         }
 
