@@ -98,6 +98,7 @@ namespace Netherlands3D.Indicators
 
         public IEnumerator LoadProjectAreaGeometry(Variant variant)
         {
+            Debug.Log("Loading project area geometry for " + variant);
             var geometryUrl = variant.geometry;
             
             UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
@@ -111,6 +112,7 @@ namespace Netherlands3D.Indicators
             }
 
             var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
+            Debug.Log("Loaded project area geometry for " + variant);
             onLoadedProjectArea.Invoke(featureCollection);
         }
 
