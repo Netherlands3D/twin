@@ -1,8 +1,8 @@
 {
-  "name": "eu.netherlands3d.{NAME:kebab-case}",
-  "version": "{VERSION}",
-  "displayName": "Netherlands3D - {DISPLAY_NAME}",
-  "description": "{DESCRIPTION}",
+  "name": "eu.netherlands3d.eventcontainers",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Event Containers",
+  "description": "Simple data payload Event Containers",
   "unity": "2022.2",
   "documentationUrl": "https://netherlands3d.eu/docs",
   "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
