@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bc6d05cb91a41aea0148d635f868b8, type: 3}
+  m_Name: FileTypeAdapter
+  m_EditorClassIdentifier: 
+  fileTypeEvents:
+  - Extension: obj
+    FileReceived:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458, type: 2}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjImportAdapter, Assembly-CSharp
+          m_MethodName: ParseFiles
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Extension: csv
+    FileReceived:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.CSVImportAdapter, Assembly-CSharp
+          m_MethodName: CreateCSVDatasetLayer
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
