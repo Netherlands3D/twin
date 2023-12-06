@@ -82,15 +82,12 @@ namespace Netherlands3D.Tiles3D
             //Use feature ID as bufferView index and get bufferview
             var featureAccessor = gltfFeatures.accessors[featureIdBufferViewIndex];
             var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
-            if (targetBufferView.extensions.EXT_meshopt_compression == null)
-            {
-                Debug.LogWarning("No meshopt compression found. This is required to find BAG id's.");
-                return;
-            }
-            var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
+            var compressed = targetBufferView.extensions.EXT_meshopt_compression != null;
+
+            var featureIdBuffer = GetFeatureBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob, compressed);
             if (featureIdBuffer == null || featureIdBuffer.Length == 0)
             {
-                Debug.LogWarning("Meshopt decompression failed.");
+                Debug.LogWarning("Getting feature buffer failed.");
                 return;
             }
 
@@ -127,7 +124,9 @@ namespace Netherlands3D.Tiles3D
             foreach (var propertyTable in propertyTables)
             {
                 //Now parse the data from the buffer using stringOffsetType=UINT32
-                var bufferViewIndex = propertyTable.properties.bagpandid.values; //Values reference the bufferView index
+                var bagpandid = propertyTable.properties.bagpandid; //Based on PG2B3DM dataset key naming
+                var identificatie = propertyTable.properties.identificatie; //Based on Tyler dataset key naming
+                var bufferViewIndex = (bagpandid != null) ? bagpandid.values : identificatie.values; //Values reference the bufferView index
                 var count = propertyTable.count;
                 var bufferView = gltfFeatures.bufferViews[bufferViewIndex];
                 var stringSpan = bufferView.byteLength / count; //string length in bytes
@@ -174,7 +173,7 @@ namespace Netherlands3D.Tiles3D
             Debug.LogWarning("Subobjects are not supported in this build. Please use the Netherlands3D.SubObjects package.");
         }
 
-        private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)
+        private byte[] GetFeatureBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer, bool decompress)
         {
             //Because the mesh is compressed, we need to get the buffer and decompress it
             var bufferIndex = bufferView.extensions.EXT_meshopt_compression.buffer; //Ignore multiple buffers for now
@@ -188,6 +187,11 @@ namespace Netherlands3D.Tiles3D
 
             //Create NativeSlice as part of the glbBuffer that the view is covering
             source = glbBufferNative.Slice((int)byteOffset, (int)byteLength);
+            if(!decompress)
+            {
+                //Convert slice to byte[] array
+                return source.ToArray();
+            }
 
             //Create NativeArray to store the decompressed buffer
             destination = new NativeArray<byte>(count * byteStride, Allocator.Persistent);
