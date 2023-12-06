@@ -58,6 +58,9 @@ namespace Netherlands3D.Tiles3D
 
         private bool nestedTreeLoaded = false;
 
+        [Header("Optional material override")]
+        public Material materialOverride;
+
         private void Awake()
         {
 #if UNITY_EDITOR
