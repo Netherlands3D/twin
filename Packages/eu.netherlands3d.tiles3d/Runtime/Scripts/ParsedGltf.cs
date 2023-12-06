@@ -172,8 +172,9 @@ namespace Netherlands3D.Tiles3D
                 {
                     var uniqueFeatureId = vertexFeatureIds[i];
                     var bagId = bagIdList[uniqueFeatureId.x];
-                    //Strip all characters except numberrs from bagId
-                    bagId = new string(bagId.Where(c => char.IsDigit(c)).ToArray());
+                    
+                    //Remove any prefixes/additions to the bag id
+                    bagId = Regex.Replace(bagId, "[^0-9]", "");
 
                     var subObject = new ObjectMappingItem()
                     {
