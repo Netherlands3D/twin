@@ -8,20 +8,16 @@ namespace Netherlands3D.Indicators
 {
     public class RemoteTextureLoader : MonoBehaviour
     {
-        public Texture2D fallbackTexture;
-
         public UnityEvent<Texture2D> onTextureLoaded = new();
 
         public void Load(Uri uri)
         {
-            // We always load the fallback immediately, and then start downloading
-            if (fallbackTexture) onTextureLoaded.Invoke(fallbackTexture);
-            
             StartCoroutine(LoadRemoteTexture(uri.ToString()));
         }
 
         private IEnumerator LoadRemoteTexture(string textureUrl)
         {
+            Debug.Log($"Loading remote texture from {textureUrl}");
             var webRequest = UnityWebRequestTexture.GetTexture(textureUrl, false);
             
             yield return webRequest.SendWebRequest();
@@ -35,6 +31,8 @@ namespace Netherlands3D.Indicators
             Texture2D myTexture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
             myTexture.Compress(false);
             myTexture.wrapMode = TextureWrapMode.Clamp;
+            
+            Debug.Log($"Successfully loaded remote texture from {textureUrl}");
 
             onTextureLoaded.Invoke(myTexture);
         }

@@ -631,11 +631,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6637341396108375670, guid: 212a3e5712f4eb94290526f16cf400ec,
         type: 3}
-      propertyPath: onSelectedArea.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6637341396108375670, guid: 212a3e5712f4eb94290526f16cf400ec,
-        type: 3}
       propertyPath: onSelectedArea.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}

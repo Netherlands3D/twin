@@ -24,6 +24,8 @@ namespace Netherlands3D.Indicators
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent<ProjectArea?> onSelectedProjectArea = new();
+        public UnityEvent<DataLayer?> onSelectedDataLayer = new();
+        public UnityEvent<Uri> onLoadMapOverlayFrame = new();
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
         public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
@@ -32,7 +34,6 @@ namespace Netherlands3D.Indicators
         public Variant? ActiveVariant { get; private set; }
 
         private ProjectArea? activeProjectArea;
-
         public ProjectArea? ActiveProjectArea
         {
             get => activeProjectArea;
@@ -40,6 +41,32 @@ namespace Netherlands3D.Indicators
             {
                 onSelectedProjectArea.Invoke(value);
                 activeProjectArea = value;
+            }
+        }
+
+        private DataLayer? selectedDataLayer;
+        public DataLayer? SelectedDataLayer
+        {
+            get => selectedDataLayer;
+            set
+            {
+                // if the given value is not part of the active variant, never mind; that is an illegal action and
+                // we ignore it.
+                if (
+                    ActiveVariant.HasValue == false 
+                    || (value.HasValue && ActiveVariant.Value.maps.ContainsValue(value.Value) == false)
+                ) {
+                    return;
+                }
+
+                onSelectedDataLayer.Invoke(value);
+                selectedDataLayer = value;
+                
+                if (value.HasValue == false || value.Value.frames.Count == 0) return;
+                
+                // since we do not support multiple frames at the moment, we cheat and always load the first
+                var firstFrame = value.Value.frames.First();
+                onLoadMapOverlayFrame.Invoke(firstFrame.map);
             }
         }
 
