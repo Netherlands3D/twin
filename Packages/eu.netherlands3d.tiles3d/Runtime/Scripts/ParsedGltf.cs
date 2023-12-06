@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using GLTFast;
 using System;
+using System.Text.RegularExpressions;
 using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
