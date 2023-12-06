@@ -1,16 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
-using Netherlands3D.Twin;
-using UnityEngine;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.UI.LayerInspector;
+using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
@@ -33,31 +30,66 @@ namespace Netherlands3D.Twin
         }
     }
 
-    public class CSVToColors : MonoBehaviour
+    
+    [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
+    public class CSVImportAdapter : ScriptableObject
     {
-        [SerializeField] private string path;
-        [SerializeField] private int maxParsesPerFrame = 100;
+        private static Transform datasetLayerParent;
 
-        private void Start()
+        static Transform DatasetLayerParent
         {
-            StartCoroutine(StreamReadCSV(maxParsesPerFrame));
+            get
+            {
+                if (!datasetLayerParent)
+                {
+                    datasetLayerParent = new GameObject("DatasetLayers").transform;
+                }
+
+                return datasetLayerParent;
+            }
         }
 
-        public IEnumerator StreamReadCSV(int maxParsesPerFrame)
+        public int maxParsesPerFrame = 100;
+
+        public void CreateCSVDatasetLayer(string file)
+        {
+            // this.path = path;
+            foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
+            {
+                Destroy(existingDatasetLayers.gameObject);
+            }
+            
+            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
+            datasetLayer.transform.SetParent(DatasetLayerParent);
+            // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
+            datasetLayer.UI.Select();
+
+            var fullPath = Path.Combine(Application.persistentDataPath, file);
+            datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+        }
+
+        private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
         {
             var dictionaries = ReadCSVColors(path, maxParsesPerFrame).GetEnumerator();
 
             while (dictionaries.MoveNext())
             {
-                print("frame: " + Time.frameCount);
+                // print("frame: " + Time.frameCount);
                 var dictionary = dictionaries.Current;
-                print(dictionary.Count);
-                GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
+                // print(dictionary.Count);
+                // Debug.Log("pindex: " + layer.PriorityIndex);
+                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
+                var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
+                // Debug.Log(cl.PriorityIndex);
+                layer.ColorSetLayer = cl;
+
                 yield return null;
             }
+
+            // GeometryColorizer.ReorderColorSet(0, 0, IndexCollisionAction.Swap);
         }
 
-        public IEnumerable<Dictionary<string, Color>> ReadCSVColors(string path, int maxParsesPerFrame)
+        private IEnumerable<Dictionary<string, Color>> ReadCSVColors(string path, int maxParsesPerFrame)
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {

@@ -7,6 +7,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Tool tool;   
         [SerializeField] private Toolbar toolbar;
 
+        [Header("Tool button visuals")]
         [SerializeField] private GameObject enabledObjects;
         [SerializeField] private GameObject disabledObjects;
 
@@ -31,11 +32,16 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public void ToggleWithoutNotify(bool active)
+        public void ToggleWithoutNotify(bool active, bool destroySpawnedPrefabs = false)
         {
             tool.Open = active;
             enabledObjects.SetActive(active);
             disabledObjects.SetActive(!active);
+
+            if(destroySpawnedPrefabs)
+            {
+                tool.DestroyPrefabInstances();
+            }
         }
     }
 }

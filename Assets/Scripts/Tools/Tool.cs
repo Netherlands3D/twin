@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
 
         public FunctionGroup[] functionGroups;
 
+        public UnityEvent<bool> onAvailabilityChange = new();
         public UnityEvent onActivate = new();
         public UnityEvent onDeactivate = new();
         public UnityEvent<Tool> onToggleInspector = new();
@@ -29,22 +30,70 @@ namespace Netherlands3D.Twin
 
         public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
         public GameObject[] FeaturePrefabs { get => featurePrefabs; private set => featurePrefabs = value; }
+        private GameObject[] featureInstances;
 
         private bool open = false;
+        private bool available = false;
+
         public bool Open { get => open; set => open = value; }
+        public bool Available { get => available; set => available = value; }
 
         private void Awake() {
             open = false;
         }
 
+        /// <summary>
+        /// Set availability for the user on/off.
+        /// Toolbar will show/hide the buttons for this tool.
+        /// </summary>
+        /// <param name="available">Set to true to show the tool button</param>
+        public void SetAvailability(bool available)
+        {
+            Available = available;
+            onAvailabilityChange.Invoke(available);
+        }
+
+        /// <summary>
+        /// Activate this tool (via menu)
+        /// </summary>
         public void Activate()
         {
             onActivate.Invoke();
         }
 
+        /// <summary>
+        /// Deactivate this tool (via menu)
+        /// </summary>
         public void Deactivate()
         {
             onDeactivate.Invoke();
+        }
+
+        public GameObject[] SpawnPrefabInstances(Transform parent = null)
+        {
+            DestroyPrefabInstances();
+
+            featureInstances = new GameObject[featurePrefabs.Length];
+            for (int i = 0; i < featurePrefabs.Length; i++)
+            {
+                featureInstances[i] = Instantiate(featurePrefabs[i],parent,true);
+            }
+            return featureInstances;
+        }
+        
+        /// <summary>
+        /// Destroy all instances of the prefabs spawned in the world by activating this tool
+        /// </summary>
+        public void DestroyPrefabInstances()
+        {
+            if (featureInstances != null)
+            {
+                foreach (var instance in featureInstances)
+                {
+                    Destroy(instance);
+                }
+            }
+            featureInstances = null;
         }
 
         /// <summary>
@@ -54,11 +103,17 @@ namespace Netherlands3D.Twin
             Open = !Open;
             onToggleInspector.Invoke(this);
 
+            if(!Open) DestroyPrefabInstances();
+
             if(activateToolOnInspectorToggle){
                 if(open)
+                {
                     Activate();
+                }
                 else
+                {
                     Deactivate();
+                }
             }
         }
     }

@@ -7,15 +7,18 @@ namespace Netherlands3D.Twin
     public class RenderedThumbnail : MonoBehaviour
     {
         [Header("Thumbnail")]
-		[SerializeField] private UniversalRenderPipelineAsset thumbnailRendererOverride;
         [SerializeField] private RawImage thumbnail;
+        [SerializeField] private GameObject displayIfNoThumbnail;
 
         [Tooltip("Extra space around the target bounds in the thumbnail")]
         [SerializeField] private float margin = 1.5f;
         [SerializeField] private Vector3 cameraRotation = new Vector3(60, 0, 0);
 
         [Tooltip("Check the UniversalRenderPipelineAsset.asset file for the renderer index you want to use")]
+
+		[Header("Rendering")]
 		[SerializeField] private int thumbnailRendererIndex = 2;
+		[SerializeField] private bool orthographic = false;
 		private RenderTexture thumbnailRenderTexture;
 
         /// <summary>
@@ -35,6 +38,7 @@ namespace Netherlands3D.Twin
 			thumbnailRenderTexture = new RenderTexture((int)width, (int)height, 24);
 			thumbnailRenderTexture.Create();
 			var temporaryThumbnailCamera = new GameObject("ThumbnailCamera").AddComponent<Camera>();
+			temporaryThumbnailCamera.orthographic = orthographic;
 			temporaryThumbnailCamera.clearFlags = CameraClearFlags.Color;
 			temporaryThumbnailCamera.backgroundColor = Color.grey;
 			temporaryThumbnailCamera.enabled = false; // Only render on demand
@@ -49,6 +53,7 @@ namespace Netherlands3D.Twin
 			temporaryThumbnailCamera.transform.position = targetBoundsCenter;
 			temporaryThumbnailCamera.transform.eulerAngles = cameraRotation;
             temporaryThumbnailCamera.transform.Translate(Vector3.back * targetBoundsMaxSize * margin, Space.Self);
+			temporaryThumbnailCamera.orthographicSize = targetBoundsMaxSize * 0.5f * margin;
 
 			// add universal additional camera data, and set target renderer
 			var additionalCameraData = temporaryThumbnailCamera.gameObject.AddComponent<UniversalAdditionalCameraData>();
@@ -61,8 +66,18 @@ namespace Netherlands3D.Twin
 			// Set thumbnail texture to rawimage
 			thumbnail.texture = thumbnailRenderTexture;
 
+			if(displayIfNoThumbnail) displayIfNoThumbnail.SetActive(false);
+
             // Cleanup
             Destroy(temporaryThumbnailCamera.gameObject);
+		}
+
+		public void ClearRender()
+		{
+			if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
+			thumbnail.texture = null;
+
+			if(displayIfNoThumbnail) displayIfNoThumbnail.SetActive(true);
 		}
 
         private void OnDestroy() {

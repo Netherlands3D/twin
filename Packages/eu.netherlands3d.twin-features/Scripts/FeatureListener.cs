@@ -10,6 +10,11 @@ namespace Netherlands3D.Twin.Features
         public UnityEvent<Feature> OnEnableFeature = new ();
         public UnityEvent<Feature> OnDisableFeature = new ();
 
+        private void Awake() {
+            feature.OnEnable.AddListener(EnableFeature);
+            feature.OnDisable.AddListener(DisableFeature);
+        }
+        
         private void OnEnable()
         {
             if (feature.IsEnabled)
@@ -19,10 +24,7 @@ namespace Netherlands3D.Twin.Features
             else
             {
                 DisableFeature();
-            }
-
-            feature.OnEnable.AddListener(EnableFeature);
-            feature.OnDisable.AddListener(DisableFeature);
+            } 
         }
 
         private void EnableFeature()
@@ -35,7 +37,7 @@ namespace Netherlands3D.Twin.Features
             OnDisableFeature.Invoke(feature);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             feature.OnEnable.RemoveListener(EnableFeature);
             feature.OnDisable.RemoveListener(DisableFeature);
