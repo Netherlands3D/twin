@@ -151,6 +151,9 @@ namespace Netherlands3D.B3DM
                 {
                     gltfImport = gltf,
                     rtcCenter = rtcCenter
+#if SUBOBJECT
+                    glbBuffer = glbBuffer //Store the glb buffer for access in subobjects
+#endif
                 };
                 callbackGltf?.Invoke(parsedGltf);
             }
