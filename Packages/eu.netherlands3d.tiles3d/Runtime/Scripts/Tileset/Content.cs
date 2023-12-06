@@ -27,7 +27,7 @@ namespace Netherlands3D.Tiles3D
 
         public UnityEvent onDoneDownloading = new();
 
-        
+        private Material overrideMaterial;
 
         private GltfImport gltf;
 
@@ -83,8 +83,13 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load()
+        public void Load(Material overrideMaterial = null)
         {
+            if(overrideMaterial != null)
+            {
+                this.overrideMaterial = overrideMaterial;
+            }
+
             if (State == ContentLoadState.DOWNLOADING || State == ContentLoadState.DOWNLOADED)
                 return;
 
@@ -118,6 +123,7 @@ namespace Netherlands3D.Tiles3D
             }
 
             var gltf = parsedGltf.gltfImport;
+            var scene = transform;
             if (gltf != null)
             {
                 this.gltf = gltf;
@@ -127,7 +133,7 @@ namespace Netherlands3D.Tiles3D
                 {
 
                     await gltf.InstantiateSceneAsync(transform, i);
-                    var scene = transform.GetChild(0).transform;
+                    scene = transform.GetChild(0).transform;
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
                     if (parsedGltf.rtcCenter != null)
@@ -153,16 +159,30 @@ namespace Netherlands3D.Tiles3D
                 }
 
                 //Check if mesh features addon is used to define subobjects
+
 #if SUBOBJECT
                 if(parseSubObjects){
-                    var scene = transform;
-                    parsedGltf.ParseSubObjects(scene);
+                    parsedGltf.ParseSubObjects(transform);
                 }
 #endif
+
+                if(overrideMaterial != null)
+                {
+                    OverrideAllMaterials(transform);
+                }
             }
 
             State = ContentLoadState.DOWNLOADED;
             onDoneDownloading.Invoke();
+        }
+
+        private void OverrideAllMaterials(Transform parent)
+        {
+            foreach (var renderer in parent.GetComponentsInChildren<Renderer>())
+            {
+                Debug.Log(renderer.gameObject.name, renderer.gameObject);
+                renderer.material = overrideMaterial;
+            }
         }
 
         /// <summary>

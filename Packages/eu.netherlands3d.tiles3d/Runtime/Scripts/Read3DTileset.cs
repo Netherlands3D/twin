@@ -263,7 +263,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 }
                 else
                 {
-                    tile.content.Load();
+                    tile.content.Load(materialOverride);
                 }
             }
         }

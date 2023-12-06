@@ -43,6 +43,12 @@ namespace Netherlands3D.Tiles3D
 
         private bool pauseNewDownloads = false;
 
+        private Material materialOverride;
+
+        private void Awake() {
+            materialOverride = GetComponent<Read3DTileset>().materialOverride;
+        }
+
         public void PauseDownloads(bool paused)
         {
             pauseNewDownloads = paused;
@@ -192,7 +198,7 @@ namespace Netherlands3D.Tiles3D
                 if (!pauseNewDownloads && tile.content && tile.content.State == Content.ContentLoadState.NOTLOADING)
                 {
                     downloadAvailable--;
-                    tile.content.Load();
+                    tile.content.Load(materialOverride);
                     tile.content.onDoneDownloading.AddListener(TileCompletedLoading);
                 }
             }
