@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3507764818320736965}
   - component: {fileID: 4553435551921080348}
+  - component: {fileID: 5508919224732852122}
   m_Layer: 0
   m_Name: Streetnames
   m_TagString: Untagged
@@ -80,6 +81,18 @@ MonoBehaviour:
   angleProperty: hoek
   filterUniqueNames: 1
   textMinDrawDistance: 0
+--- !u!114 &5508919224732852122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357974285549936975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &615420215414367251
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,6 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8296129466038444424}
   - component: {fileID: 4990664270803265294}
+  - component: {fileID: 8575680203888578194}
   m_Layer: 0
   m_Name: NeighbourhoodNames
   m_TagString: Untagged
@@ -214,6 +228,18 @@ MonoBehaviour:
   angleProperty: hoek
   filterUniqueNames: 1
   textMinDrawDistance: 0
+--- !u!114 &8575680203888578194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2723684916881556522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4232718383308019186
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,6 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3254568319621877746}
   - component: {fileID: 1256413983069957736}
+  - component: {fileID: 2993355582062269977}
   m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
@@ -294,6 +321,18 @@ MonoBehaviour:
   createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+--- !u!114 &2993355582062269977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232718383308019186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5330367146774434643
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,6 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7841385481542197004}
   - component: {fileID: 2862812952149434359}
+  - component: {fileID: 5310166737933132171}
   m_Layer: 10
   m_Name: Trees
   m_TagString: Untagged
@@ -363,6 +403,18 @@ MonoBehaviour:
   createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+--- !u!114 &5310166737933132171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330367146774434643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5538989845493688754
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,6 +425,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7896937959155094689}
   - component: {fileID: 4147197885830444245}
+  - component: {fileID: 3335042058279580977}
   m_Layer: 7
   m_Name: Buildings
   m_TagString: Untagged
@@ -439,6 +492,18 @@ MonoBehaviour:
   createMeshcollider: 1
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+--- !u!114 &3335042058279580977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538989845493688754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8780770133851594390
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,6 +514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3957408260704168690}
   - component: {fileID: 4983787096530963654}
+  - component: {fileID: 5304626662500770215}
   m_Layer: 0
   m_Name: DistrictNames
   m_TagString: Untagged
@@ -519,3 +585,15 @@ MonoBehaviour:
   angleProperty: hoek
   filterUniqueNames: 1
   textMinDrawDistance: 0
+--- !u!114 &5304626662500770215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8780770133851594390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
