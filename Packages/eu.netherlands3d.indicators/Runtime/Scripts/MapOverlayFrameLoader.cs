@@ -10,7 +10,7 @@ namespace Netherlands3D.Indicators
         [SerializeField] private GameObject decalProjector;
         [SerializeField] private RemoteTextureLoader textureLoader;
 
-        private void OnEnable()
+        private void Awake()
         {
             dossier.onSelectedDataLayer.AddListener(ToggleProjector);
             dossier.onLoadMapOverlayFrame.AddListener(LoadTexture);
