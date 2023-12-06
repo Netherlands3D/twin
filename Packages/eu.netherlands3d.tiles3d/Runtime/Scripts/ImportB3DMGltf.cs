@@ -11,7 +11,7 @@ using SimpleJSON;
 #if UNITY_EDITOR
 using System.IO.Compression;
 #endif
-namespace Netherlands3D.B3DM
+namespace Netherlands3D.Tiles3D
 {
     public class ImportB3DMGltf
     {
@@ -150,7 +150,10 @@ namespace Netherlands3D.B3DM
                 var parsedGltf = new ParsedGltf()
                 {
                     gltfImport = gltf,
-                    rtcCenter = rtcCenter
+                    rtcCenter = rtcCenter,
+#if SUBOBJECT
+                    glbBuffer = glbBuffer //Store the glb buffer for access in subobjects
+#endif
                 };
                 callbackGltf?.Invoke(parsedGltf);
             }
@@ -162,11 +165,4 @@ namespace Netherlands3D.B3DM
             }
         }
     }
-}
-
-[Serializable]
-public class ParsedGltf
-{
-    public GltfImport gltfImport;
-    public double[] rtcCenter = null;
 }

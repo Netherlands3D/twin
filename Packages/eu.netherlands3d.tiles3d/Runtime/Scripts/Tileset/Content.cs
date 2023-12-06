@@ -1,5 +1,4 @@
 using GLTFast;
-using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
 
 //using Netherlands3D.Core;
@@ -17,6 +16,10 @@ namespace Netherlands3D.Tiles3D
     {
         public string uri = "";
 
+#if SUBOBJECT
+        public bool parseSubObjects = true;
+#endif
+
         private Coroutine runningContentRequest;
 
         [SerializeField] private Tile parentTile;
@@ -24,7 +27,7 @@ namespace Netherlands3D.Tiles3D
 
         public UnityEvent onDoneDownloading = new();
 
-        
+        private Material overrideMaterial;
 
         private GltfImport gltf;
 
@@ -80,8 +83,13 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load()
+        public void Load(Material overrideMaterial = null)
         {
+            if(overrideMaterial != null)
+            {
+                this.overrideMaterial = overrideMaterial;
+            }
+
             if (State == ContentLoadState.DOWNLOADING || State == ContentLoadState.DOWNLOADED)
                 return;
 
@@ -96,7 +104,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// After parsing gltf content spawn gltf scenes
         /// </summary>
-        private async void GotGltfContent(global::ParsedGltf parsedGltf)
+        private async void GotGltfContent(ParsedGltf parsedGltf)
         {
             if (State != ContentLoadState.DOWNLOADING)
             {
@@ -114,56 +122,67 @@ namespace Netherlands3D.Tiles3D
                 
             }
 
-            
-
             var gltf = parsedGltf.gltfImport;
+            var scene = transform;
             if (gltf != null)
             {
-                
                 this.gltf = gltf;
                 var scenes = gltf.SceneCount;
 
-                    for (int i = 0; i < scenes; i++)
-                    {
+                for (int i = 0; i < scenes; i++)
+                {
 
-                        await gltf.InstantiateSceneAsync(transform, i);
-                        var scene = transform.GetChild(0).transform;
-
-                   
-
+                    await gltf.InstantiateSceneAsync(transform, i);
+                    scene = transform.GetChild(0).transform;
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
-                        if (parsedGltf.rtcCenter != null)
-                        {
-                        scene.rotation = CoordinateConverter.ecefRotionToUp()*(scene.rotation);
+                    if (parsedGltf.rtcCenter != null)
+                    {
+                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
                         scene.position = unityPosition;
-                          
-
-                       
                     }
-                        else
-                        {
+                    else
+                    {
                         Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         scene.position = unityPosition;
-                        
-                        }
-                        
-                       
-
                     }
-                
+
+                }
+
                 this.gameObject.name = uri;
                 
                 foreach (var item in this.gameObject.GetComponentsInChildren<Transform>())
                 {
                     item.gameObject.layer = 11;
                 }
+
+                //Check if mesh features addon is used to define subobjects
+
+#if SUBOBJECT
+                if(parseSubObjects){
+                    parsedGltf.ParseSubObjects(transform);
+                }
+#endif
+
+                if(overrideMaterial != null)
+                {
+                    OverrideAllMaterials(transform);
+                }
             }
 
             State = ContentLoadState.DOWNLOADED;
             onDoneDownloading.Invoke();
+        }
+
+        private void OverrideAllMaterials(Transform parent)
+        {
+            foreach (var renderer in parent.GetComponentsInChildren<Renderer>())
+            {
+                Debug.Log(renderer.gameObject.name, renderer.gameObject);
+                renderer.material = overrideMaterial;
+            }
         }
 
         /// <summary>

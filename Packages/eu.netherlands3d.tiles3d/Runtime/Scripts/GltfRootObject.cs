@@ -99,13 +99,14 @@ namespace GltfMeshFeatures
     [Serializable]
     public class Properties
     {
-        public Bagpandid bagpandid { get; set; }
+        public Identification bagpandid { get; set; }
+        public Identification identificatie { get; set; }
         public Bouwjaar bouwjaar { get; set; }
         public Objectid objectid { get; set; }
     }
 
     [Serializable]
-    public class Bagpandid
+    public class Identification
     {
         public string stringOffsetType { get; set; }
         public int stringOffsets { get; set; }

@@ -33,6 +33,10 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
+        #if SUBOBJECT
+        public bool parseSubObjects = false;
+        #endif
+
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
         public int maximumScreenSpaceError = 5;
@@ -53,6 +57,9 @@ namespace Netherlands3D.Tiles3D
         internal string tilesetFilename = "tileset.json";
 
         private bool nestedTreeLoaded = false;
+
+        [Header("Optional material override")]
+        public Material materialOverride;
 
         private void Awake()
         {
@@ -244,7 +251,10 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
 
-                
+                #if SUBOBJECT
+                tile.content.parseSubObjects = parseSubObjects;
+                #endif 
+
                 //Request tile content update via optional prioritiser, or load directly
                 if (usingPrioritiser)
                 {
@@ -253,7 +263,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 }
                 else
                 {
-                    tile.content.Load();
+                    tile.content.Load(materialOverride);
                 }
             }
         }
