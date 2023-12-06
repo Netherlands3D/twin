@@ -17,6 +17,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         Selected
     }
 
+    public enum LayerActiveState
+    {
+        Enabled = 0,
+        Disabled = 1,
+        Mixed = 2,
+        EnabledInDisabled = 3
+    }
+
     public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IDropHandler
     {
         public LayerNL3DBase Layer { get; set; }
@@ -40,6 +48,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private RectTransform childrenPanel;
 
         [SerializeField] private TMP_Text debugIndexText;
+        [SerializeField] private Sprite[] visibilitySprites;
 
         public LayerUI ParentUI { get; private set; }
         public LayerUI[] ChildrenUI { get; private set; } = Array.Empty<LayerUI>();
@@ -60,6 +69,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 return enabledToggle.isOn;
             }
         }
+        
+        public LayerActiveState State { get; set; }
 
         public Color Color { get; set; } = Color.blue;
         public Sprite Icon { get; set; }
@@ -85,13 +96,75 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
 
+        private void RecalculateCurrentTreeStates()
+        {
+            RecalculateState();
+            RecalculateChildrenStates();
+            RecalculateParentStates();
+        }
+
+        private void RecalculateParentStates()
+        {
+            if (ParentUI)
+            {
+                ParentUI.RecalculateState();
+                ParentUI.RecalculateParentStates();
+            }
+        }
+
+        private void RecalculateChildrenStates()
+        {
+            foreach (var child in ChildrenUI)
+            {
+                child.RecalculateState();
+                child.RecalculateChildrenStates();
+            }
+        }
+
         private void OnEnabledToggleValueChanged(bool isOn)
         {
+            RecalculateCurrentTreeStates();
             enabledToggle.interactable = !ParentUI || (ParentUI && ParentUI.IsActiveInHierarchy);
-
             Layer.IsActiveInScene = IsActiveInHierarchy;
+
             foreach (var child in ChildrenUI)
                 child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
+        }
+
+        private void SetVisibilitySprite()
+        {
+            debugIndexText.text = State.ToString();
+            enabledToggle.targetGraphic.GetComponent<Image>().sprite = visibilitySprites[(int)State];
+        }
+
+        private void RecalculateState()
+        {
+            var activeInHierarchy = IsActiveInHierarchy;
+            var activeSelf = enabledToggle.isOn;
+            var allChildrenActive = true;
+            foreach (var child in ChildrenUI)
+            {
+                allChildrenActive &= child.State == LayerActiveState.Enabled;
+            }
+
+            if (!activeSelf)
+            {
+                State = LayerActiveState.Disabled;
+            }
+            else if (activeSelf && !activeInHierarchy)
+            {
+                State = LayerActiveState.EnabledInDisabled;
+            }
+            else if (allChildrenActive)
+            {
+                State = LayerActiveState.Enabled;
+            }
+            else
+            {
+                State = LayerActiveState.Mixed;
+            }
+
+            SetVisibilitySprite();
         }
 
         private void OnFoldoutToggleValueChanged(bool isOn)
@@ -116,7 +189,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 transform.SetParent(LayerBaseTransform);
             else
                 transform.SetParent(newParent.childrenPanel);
-            
+
             var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
             var reorderWithSameParent = oldParent == newParent;
             if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
@@ -357,9 +430,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void Select(bool deselectOthers = false)
         {
-            if(deselectOthers)
+            if (deselectOthers)
                 LayerManager.DeselectAllLayers();
-            
+
             LayerData.SelectedLayers.Add(this);
             Layer.OnSelect();
             SetHighlight(InteractionState.Selected);
@@ -449,7 +522,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
                     newParent = referenceLayerUnderMouse.ParentUI;
                     newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
-                    
+
                     if (newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
                         newSiblingIndex--;
                 }
@@ -520,7 +593,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             switch (state)
             {
                 case InteractionState.Default:
-                    GetComponentInChildren<Image>().color = Color.red;
+                    GetComponentInChildren<Image>().color = Color.white;
                     break;
                 case InteractionState.Hover:
                     GetComponentInChildren<Image>().color = Color.cyan;
