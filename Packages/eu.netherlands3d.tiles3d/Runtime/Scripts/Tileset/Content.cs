@@ -1,5 +1,4 @@
 using GLTFast;
-using Netherlands3D.B3DM;
 using Netherlands3D.Coordinates;
 
 //using Netherlands3D.Core;
@@ -100,7 +99,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// After parsing gltf content spawn gltf scenes
         /// </summary>
-        private async void GotGltfContent(global::ParsedGltf parsedGltf)
+        private async void GotGltfContent(ParsedGltf parsedGltf)
         {
             if (State != ContentLoadState.DOWNLOADING)
             {
@@ -156,7 +155,7 @@ namespace Netherlands3D.Tiles3D
                 //Check if mesh features addon is used to define subobjects
 #if SUBOBJECT
                 if(parseSubObjects){
-                    var scene = transform.GetChild(0).transform;
+                    var scene = transform;
                     parsedGltf.ParseSubObjects(scene);
                 }
 #endif
