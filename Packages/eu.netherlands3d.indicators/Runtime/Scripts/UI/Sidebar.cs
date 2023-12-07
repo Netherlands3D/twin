@@ -6,12 +6,14 @@ namespace Netherlands3D.Indicators.UI
     public class Sidebar : MonoBehaviour
     {
         [SerializeField] private DossierSO dossier;
-        [SerializeField] private DossierVisualiser dossierVisualiser;
         [SerializeField] private TMP_Text nameField;
         [SerializeField] private TMP_Text projectAreaNameField;
 
+        private DossierVisualiser dossierVisualiser;
+
         private void OnEnable()
         {
+            dossierVisualiser = FindObjectOfType<DossierVisualiser>();
             dossierVisualiser.onSelectedArea.AddListener(OnSelectedArea);
 
             if (nameField) nameField.text = dossier.Data.HasValue ? dossier.Data.Value.name : "";
