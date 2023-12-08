@@ -14,34 +14,23 @@ namespace Netherlands3D.Twin
     public class PaletteSwap : MonoBehaviour
     {
         private Image image;
-        // [SerializeField] private List<Color> colors;
         [SerializeField] private ColorPalette palette;
-        [SerializeField] private bool allowRuntimeUpdateChange;
 
         private static readonly int PaletteTex = Shader.PropertyToID("_PaletteTex");
 
         private void Awake()
         {
+            image = GetComponent<Image>();
             UpdatePalette();
         }
 
         private void OnValidate()
         {
-            image = GetComponent<Image>();
-        
-            UpdatePalette();
-        }
-
-        private void Update()
-        {
-            if (!allowRuntimeUpdateChange)
-                return;
-        
-            UpdatePalette();
+            Awake();
         }
 
         public void UpdatePalette()
-        { 
+        {
             image.material.SetTexture(PaletteTex, GetTexture());
         }
 
@@ -60,5 +49,4 @@ namespace Netherlands3D.Twin
             return newTexture;
         }
     }
-
 }
