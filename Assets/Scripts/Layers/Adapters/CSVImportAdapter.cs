@@ -57,6 +57,7 @@ namespace Netherlands3D.Twin
             foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
             {
                 Destroy(existingDatasetLayers.gameObject);
+                Snackbar.Instance.DisplayMessage("CSV bestand vervangen door nieuw gekozen CSV");
             }
             
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
