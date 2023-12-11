@@ -80,11 +80,6 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         public void Populate(JSONNode jsonNode)
         {
-            if (string.IsNullOrEmpty(jsonNode["dossierId"]) == false)
-            {
-                DossierId = jsonNode["dossierId"];
-            }
-
             if (string.IsNullOrEmpty(jsonNode["baseUri"]) == false)
             {
                 BaseUri = jsonNode["baseUri"];
@@ -93,6 +88,12 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             if (string.IsNullOrEmpty(jsonNode["apiKey"]) == false)
             {
                 ApiKey = jsonNode["apiKey"];
+            }
+
+            // The dossier starts loading when setting the DossierId, so make sure this is set last
+            if (string.IsNullOrEmpty(jsonNode["dossierId"]) == false)
+            {
+                DossierId = jsonNode["dossierId"];
             }
         }
 
