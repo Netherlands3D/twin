@@ -1,27 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEditor;
-    using UnityEngine;
-    using UnityEngine.UI;
-
     public class PaletteSwap : MonoBehaviour
     {
-        private Image image;
         [SerializeField] private ColorPalette palette;
+        // [SerializeField] private Texture2D paletteTexture;
+        [SerializeField] private Material material;        
 
         private static readonly int PaletteTex = Shader.PropertyToID("_PaletteTex");
 
         private void Awake()
         {
-            image = GetComponent<Image>();
             UpdatePalette();
+        }
+
+        private void Start()
+        {
+            
         }
 
         private void OnValidate()
@@ -31,15 +30,19 @@ namespace Netherlands3D.Twin
 
         public void UpdatePalette()
         {
-            image.material.SetTexture(PaletteTex, GetTexture());
+            material.SetTexture(PaletteTex, GetTexture());
+            // material.SetTexture(PaletteTex, paletteTexture);
         }
 
         private Texture2D GetTexture()
         {
             Texture2D newTexture = new Texture2D(palette.Colors.Count, 1, TextureFormat.RGBA32, false);
+            print(palette.Colors.Count);
             for (int i = 0; i < palette.Colors.Count; i++)
             {
                 newTexture.SetPixel(i, 0, palette.Colors[i].Color);
+                var x = (float)i/(float)palette.Colors.Count;
+                print(x + "\t" + palette.Colors[i].Name);
             }
 
             newTexture.filterMode = FilterMode.Point;
