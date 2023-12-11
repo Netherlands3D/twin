@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Indicators.Dossiers;
 using Netherlands3D.Indicators.Dossiers.DataLayers;
+using LegendItemData = Netherlands3D.Indicators.Dossiers.DataLayers.LegendItem;
 using UnityEngine;
 
 namespace Netherlands3D.Indicators.UI
 {
     public class Legend : MonoBehaviour
     {
-        [SerializeField] private LegendInterfaceItem legendItemPrefab;
+        [SerializeField] private LegendItem legendItemPrefab;
 
         [Tooltip("Always clear the old items before showing the new ones")]
         [SerializeField] private bool clearOld = true;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Indicators.UI
             ShowItems(dataLayer.legend);
         }
 
-        public void ShowItems(List<LegendItem> items)
+        public void ShowItems(List<LegendItemData> items)
         {
             if(clearOld)
                 ClearItems();

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Indicators.UI
 {
-    public class LegendInterfaceItem : MonoBehaviour
+    public class LegendItem : MonoBehaviour
     {
         [SerializeField] private TMP_Text label;
         [SerializeField] private Image colorLabel;
