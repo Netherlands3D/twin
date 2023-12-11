@@ -31,6 +31,10 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             {
                 dossier.baseUri = configuration.BaseUri;
             }
+            if (string.IsNullOrEmpty(configuration.ApiKey) == false)
+            {
+                dossier.ApiKey = configuration.ApiKey;
+            }
 
             StartCoroutine(dossier.Open(dossierId));
         }

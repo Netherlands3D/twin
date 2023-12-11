@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
+using Netherlands3D.Web;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +21,14 @@ namespace Netherlands3D.Indicators
         [SerializeField]
         [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using a variable {id}, a dynamic base URI can also be injected using the variable {baseUri}.")]
         private string dossierUriTemplate = "";
+
+        [SerializeField]
+        private string apiKey = "";
+        public string ApiKey
+        {
+            get => apiKey;
+            set => apiKey = value;
+        }
 
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
@@ -45,6 +54,7 @@ namespace Netherlands3D.Indicators
         }
 
         private DataLayer? selectedDataLayer;
+
         public DataLayer? SelectedDataLayer
         {
             get => selectedDataLayer;
@@ -66,7 +76,17 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                onLoadMapOverlayFrame.Invoke(firstFrame.map);
+                var firstFrameMap = firstFrame.map;
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    var uriBuilder = new UriBuilder(firstFrameMap);
+                    uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                        ? $"code={apiKey}" 
+                        : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                    firstFrameMap = uriBuilder.Uri;
+                }
+
+                onLoadMapOverlayFrame.Invoke(firstFrameMap);
             }
         }
 
@@ -144,10 +164,20 @@ namespace Netherlands3D.Indicators
 
         private string AssembleUri(string dossierId)
         {
-            return dossierUriTemplate
+            var url = dossierUriTemplate
                 .Replace("{baseUri}", baseUri)
-                .Replace("{id}", dossierId)
-            ;
+                .Replace("{id}", dossierId);
+            
+            if (!string.IsNullOrEmpty(apiKey))
+            {
+                var uriBuilder = new UriBuilder(url);
+                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                    ? $"code={apiKey}" 
+                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                url = uriBuilder.ToString();
+            }
+
+            return url;
         }
     }
 }
