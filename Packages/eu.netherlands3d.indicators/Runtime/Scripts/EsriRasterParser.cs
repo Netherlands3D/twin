@@ -17,7 +17,7 @@ public class EsriRasterParser
         int dataStartIndex = 6;
 
         // Get the number of columns and rows
-        string[] sizeInfo = lines[1].Split(' ');
+        string[] sizeInfo = lines[1].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         int numColumns = int.Parse(sizeInfo[1]);
         int numRows = int.Parse(sizeInfo[3]);
 
@@ -27,7 +27,7 @@ public class EsriRasterParser
         // Parse the data lines
         for (int i = dataStartIndex; i < lines.Length; i++)
         {
-            string[] dataValues = lines[i].Split(' ');
+            string[] dataValues = lines[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int j = 0; j < dataValues.Length; j++)
             {
