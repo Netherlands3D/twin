@@ -1,3 +1,4 @@
+using Netherlands3D.Indicators.Dossiers;
 using TMPro;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace Netherlands3D.Indicators.UI
 
             if (nameField) nameField.text = dossier.Data.HasValue ? dossier.Data.Value.name : "";
             if (projectAreaNameField) projectAreaNameField.text = "Please select a project area.";
+            if (dossier.ActiveProjectArea.HasValue) SetProjectAreaName(dossier.ActiveProjectArea.Value);
         }
 
         private void OnDisable()
@@ -27,7 +29,12 @@ namespace Netherlands3D.Indicators.UI
 
         private void OnSelectedArea(ProjectAreaVisualisation visualisation)
         {
-            if (projectAreaNameField) projectAreaNameField.text = visualisation.ProjectArea.name;
+            SetProjectAreaName(visualisation.ProjectArea);
+        }
+
+        private void SetProjectAreaName(ProjectArea projectArea)
+        {
+            if (projectAreaNameField) projectAreaNameField.text = projectArea.name;
         }
     }
 }
