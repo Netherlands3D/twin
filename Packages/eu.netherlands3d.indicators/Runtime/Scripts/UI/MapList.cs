@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace Netherlands3D.Indicators.UI
 {
@@ -13,6 +15,9 @@ namespace Netherlands3D.Indicators.UI
         [SerializeField] private DossierSO dossier;
         [SerializeField] private ToggleGroup mapLayerList;
         [SerializeField] private Toggle mapLayerListItemPrefab;
+
+        [SerializeField] private UnityEvent<DataLayer> onActivateDataLayer;
+        [SerializeField] private UnityEvent<DataLayer> onDeactivateDataLayer;
 
         private void OnEnable()
         {
@@ -65,7 +70,16 @@ namespace Netherlands3D.Indicators.UI
 
         private void OnToggledMapListItem(DataLayer dataLayer, bool toggledOn)
         {
-            dossier.SelectedDataLayer = toggledOn ? dataLayer : null;
+            DataLayer? toggledDataLayer = toggledOn ? dataLayer : null;
+            dossier.SelectedDataLayer = toggledDataLayer;
+
+            if(toggledDataLayer != null)
+            {
+                onActivateDataLayer.Invoke(dataLayer);
+                return;
+            }
+
+            onDeactivateDataLayer.Invoke(dataLayer);
         }
     }
 }
