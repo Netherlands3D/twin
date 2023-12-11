@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: CSVImportAdapter
   m_EditorClassIdentifier: 
   maxParsesPerFrame: 100
+  csvOverwriteMessageEvent: {fileID: 11400000, guid: c5f4d0ddc383f45dd9b8066329800bea,
+    type: 2}

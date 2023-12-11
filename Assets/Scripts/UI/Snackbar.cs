@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,16 +14,18 @@ namespace Netherlands3D.Twin
         [SerializeField] private Slider slider;
         [SerializeField] private TextMeshProUGUI text;
 
-        public static Snackbar Instance { get; private set; }
+        public StringEvent snackbarMessageEvent;
         private Coroutine activeCoroutine;
 
         private void Awake()
         {
-            if (Instance)
-                Destroy(Instance.gameObject);
-            
-            Instance = this;
             DisableSnackbar();
+            snackbarMessageEvent.AddListenerStarted(DisplayMessage);
+        }
+
+        private void OnDestroy()
+        {
+            snackbarMessageEvent.RemoveListenerStarted(DisplayMessage);
         }
 
         private void OnEnable()
@@ -32,15 +35,31 @@ namespace Netherlands3D.Twin
 
         private void OnDisable()
         {
-            if(activeCoroutine != null)
+            if (activeCoroutine != null)
                 StopCoroutine(activeCoroutine);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            DisplayMessage(text.text);
+        }
+#endif
 
         public void DisplayMessage(string newText)
         {
             DisableSnackbar();
             text.text = newText;
+            RecalculateHeight();    
             gameObject.SetActive(true);
+        }
+
+        private void RecalculateHeight()
+        {
+            var rectTransform = GetComponent<RectTransform>();
+            var margin = text.GetComponent<RectTransform>().anchoredPosition.y;
+            margin = Mathf.Abs(margin);
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, text.preferredHeight + 2 * margin);
         }
 
         private IEnumerator StartTimer()
