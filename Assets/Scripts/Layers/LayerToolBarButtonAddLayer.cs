@@ -7,9 +7,11 @@ namespace Netherlands3D.Twin
 {
     public class LayerToolBarButtonAddLayer : LayerToolBarButtonBase
     {
+        [SerializeField] private AddLayerPanel addLayerPanel;
         public override void ButtonAction()
         {
-            layerManager.EnableContextMenu(true, transform.position);
+            // layerManager.EnableContextMenu(true, transform.position);
+            addLayerPanel.TogglePanel();
         }
 
         public override void OnDrop(PointerEventData eventData)
