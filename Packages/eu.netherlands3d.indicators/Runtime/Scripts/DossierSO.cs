@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
-using Netherlands3D.Web;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,6 +13,22 @@ namespace Netherlands3D.Indicators
     [CreateAssetMenu(menuName = "Netherlands3D/Dossier", fileName = "DossierSO", order = 0)]
     public class DossierSO : ScriptableObject
     {
+        /// <summary>
+        /// We keep track of the current state the Dossier System.
+        ///
+        /// Some elements, such as the sidebar, need to know the latest state of the system because they need to have
+        /// an initial state after being instantiated. The DossierSystemState provides a way to communicate the latest
+        /// state when it comes to loading a dossier.
+        /// </summary>
+        [Serializable]
+        public enum DossierSystemState
+        {
+            Opening,
+            Opened,
+            FailedToOpen,
+            Closed
+        }
+
         [SerializeField]
         [Tooltip("if the DossierUriTemplate contains a variable {baseUri}, it will be replaced by this value.")]
         public string baseUri = "";
@@ -30,6 +45,7 @@ namespace Netherlands3D.Indicators
             set => apiKey = value;
         }
 
+        public UnityEvent onOpening = new();
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent<ProjectArea?> onSelectedProjectArea = new();
@@ -38,6 +54,9 @@ namespace Netherlands3D.Indicators
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
         public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
+        
+        private DossierSystemState dossierSystemState = DossierSystemState.Closed;
+        public DossierSystemState State => dossierSystemState;
 
         public Dossier? Data { get; private set; }
         public Variant? ActiveVariant { get; private set; }
@@ -92,6 +111,8 @@ namespace Netherlands3D.Indicators
 
         public IEnumerator Open(string dossierId)
         {
+            dossierSystemState = DossierSystemState.Opening;
+            onOpening.Invoke();
             string url = AssembleUri(dossierId);
             Debug.Log($"<color=orange>Loading dossier with id {dossierId} from {url}</color>");
             Close();
@@ -102,6 +123,7 @@ namespace Netherlands3D.Indicators
             if (www.result != UnityWebRequest.Result.Success)
             {
                 onFailedToOpen.Invoke();
+                dossierSystemState = DossierSystemState.FailedToOpen;
                 Debug.Log($"<color=red>Failed to load dossier from {url}</color>");
                 Debug.LogError(www.error);
                 yield break;
@@ -120,6 +142,7 @@ namespace Netherlands3D.Indicators
             {
                 Debug.Log($"<color=red>Failed to deserialize dossier from {url}</color>");
                 Debug.LogError(e.Message);
+                dossierSystemState = DossierSystemState.FailedToOpen;
                 onFailedToOpen.Invoke();
                 yield break;
             }
@@ -127,6 +150,7 @@ namespace Netherlands3D.Indicators
             Debug.Log($"<color=green>Loaded dossier with id {dossier.id} from {url}</color>");
 
             Data = dossier;
+            dossierSystemState = DossierSystemState.Opened;
             onOpen.Invoke(dossier);
 
             SelectVariant(dossier.variants.FirstOrDefault());
@@ -135,6 +159,7 @@ namespace Netherlands3D.Indicators
         public void Close()
         {
             onClose.Invoke();
+            dossierSystemState = DossierSystemState.Closed;
             Data = null;
             SelectVariant(null);
             ActiveProjectArea = null;
