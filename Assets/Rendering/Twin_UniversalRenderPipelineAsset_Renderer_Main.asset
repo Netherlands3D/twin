@@ -121,7 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   m_Settings:
-    technique: 2
+    technique: 0
     maxDrawDistance: 30000
     decalLayers: 1
     dBufferSettings:
