@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Events;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -14,18 +12,18 @@ namespace Netherlands3D.Twin
         [SerializeField] private Slider slider;
         [SerializeField] private TextMeshProUGUI text;
 
-        public StringEvent snackbarMessageEvent;
+        public static UnityEvent<string> SnackbarMessageEvent = new();
         private Coroutine activeCoroutine;
 
         private void Awake()
         {
             DisableSnackbar();
-            snackbarMessageEvent.AddListenerStarted(DisplayMessage);
+            SnackbarMessageEvent.AddListener(DisplayMessage);
         }
 
         private void OnDestroy()
         {
-            snackbarMessageEvent.RemoveListenerStarted(DisplayMessage);
+            SnackbarMessageEvent.RemoveListener(DisplayMessage);
         }
 
         private void OnEnable()

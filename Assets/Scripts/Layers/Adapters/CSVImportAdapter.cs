@@ -9,6 +9,7 @@ using Netherlands3D.Events;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -51,7 +52,6 @@ namespace Netherlands3D.Twin
         }
 
         public int maxParsesPerFrame = 100;
-        [SerializeField] private StringEvent csvOverwriteMessageEvent;
 
         public void CreateCSVDatasetLayer(string file)
         {
@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin
             foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
             {
                 Destroy(existingDatasetLayers.gameObject);
-                csvOverwriteMessageEvent.InvokeStarted("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
+                Snackbar.SnackbarMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
             
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
