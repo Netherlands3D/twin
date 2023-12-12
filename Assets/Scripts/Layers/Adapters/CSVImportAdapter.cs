@@ -37,6 +37,7 @@ namespace Netherlands3D.Twin
     public class CSVImportAdapter : ScriptableObject
     {
         private static Transform datasetLayerParent;
+        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new ();
 
         static Transform DatasetLayerParent
         {
@@ -59,7 +60,7 @@ namespace Netherlands3D.Twin
             foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
             {
                 Destroy(existingDatasetLayers.gameObject);
-                Snackbar.SnackbarMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
+                csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
             
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();

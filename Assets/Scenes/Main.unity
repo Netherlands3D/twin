@@ -355,10 +355,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5245771590174106226, guid: c29cb0a38866248d5bc0fd698030e4ed,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 180296258793536150, guid: c29cb0a38866248d5bc0fd698030e4ed,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1679321016}
   m_SourcePrefab: {fileID: 100100000, guid: c29cb0a38866248d5bc0fd698030e4ed, type: 3}
 --- !u!1001 &184687856
 PrefabInstance:
@@ -825,12 +834,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1604550852 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 180296258793536150, guid: c29cb0a38866248d5bc0fd698030e4ed,
+    type: 3}
+  m_PrefabInstance: {fileID: 95336827}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1679321012 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4613295430413550333, guid: c29cb0a38866248d5bc0fd698030e4ed,
     type: 3}
   m_PrefabInstance: {fileID: 95336827}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1679321013 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3216191505279735774, guid: c29cb0a38866248d5bc0fd698030e4ed,
+    type: 3}
+  m_PrefabInstance: {fileID: 95336827}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604550852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8324d57b1db3e4c14a162e4a25028214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1679321016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604550852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e0c5bc301d6444a8cc7d3da9ce4b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1679321013}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Snackbar, Assembly-CSharp
+        m_MethodName: DisplayMessage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1759892628 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4972300510601120780, guid: 9963fec33e379324db2affcb3f83332f,
@@ -1417,22 +1472,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.2449989
+      value: 0.25491285
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.021372337
+      value: 0.021182075
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.96562064
+      value: 0.9634116
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.08423536
+      value: -0.08005504
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}

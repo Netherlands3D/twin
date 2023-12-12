@@ -12,18 +12,11 @@ namespace Netherlands3D.Twin
         [SerializeField] private Slider slider;
         [SerializeField] private TextMeshProUGUI text;
 
-        public static UnityEvent<string> SnackbarMessageEvent = new();
         private Coroutine activeCoroutine;
 
-        private void Awake()
+        private void Start()
         {
             DisableSnackbar();
-            SnackbarMessageEvent.AddListener(DisplayMessage);
-        }
-
-        private void OnDestroy()
-        {
-            SnackbarMessageEvent.RemoveListener(DisplayMessage);
         }
 
         private void OnEnable()
