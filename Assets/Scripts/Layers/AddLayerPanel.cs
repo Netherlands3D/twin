@@ -43,7 +43,6 @@ namespace Netherlands3D.Twin
             if (!isOpen)
                 openHeight = minHeight;
 
-            print(delta);
             if (activeAnimationCoroutine != null)
                 StopCoroutine(activeAnimationCoroutine);
 
