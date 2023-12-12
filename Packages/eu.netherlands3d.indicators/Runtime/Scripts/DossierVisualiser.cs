@@ -5,6 +5,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands.GeoJSON;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Indicators.Dossiers;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,10 @@ namespace Netherlands3D.Indicators
         public List<ProjectAreaVisualisation> Areas => areas;
 
         private FeatureCollection geometry;
+
+        public DossierSO Dossier{
+            get => dossier;
+        }
 
         public FeatureCollection Geometry
         {
@@ -171,8 +176,40 @@ namespace Netherlands3D.Indicators
         {
             var visualisationFromPolygon = CreateVisualisationFromPolygon(polygon);
             visualisationFromPolygon.gameObject.name = $"{projectAreaId}::{polygonIndex}";
-
+            visualisationFromPolygon.gameObject.AddComponent<DossierVisualisationHover>().SetVisualiser(this);            
+            
             return visualisationFromPolygon;
+        }
+
+        public void GetDataValueFromVisualisation(Vector3 worldPosition)
+        {
+            if(dossier.SelectedDataLayer != null && dossier.SelectedDataLayer.Value.frames != null)
+            {
+                //Convert world position to normalised visualisation position
+                var cameraCoordinate = new Coordinate(
+                    CoordinateSystem.Unity,
+                    worldPosition.x, 
+                    worldPosition.y, 
+                    worldPosition.z
+                );
+    
+                var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RD);
+
+                //get normalised position of rd coordinate
+                DataLayer dataLayer = dossier.SelectedDataLayer.Value;
+                var frames = dataLayer.frames;
+                var frame = frames.FirstOrDefault();
+                var mapData = frame.mapData;
+
+                if(mapData != null)
+                {
+                    //Get the bounds from dossier
+                    var bbox = dossier.Data?.bbox;
+
+                    //Check the normalised position of the rd coordinate in the bbox
+                    
+                }
+            }
         }
 
         private PolygonVisualisation CreateVisualisationFromPolygon(Polygon polygon)

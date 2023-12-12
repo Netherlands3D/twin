@@ -1,4 +1,5 @@
 using System.Collections;
+using Netherlands3D.Indicators;
 using Netherlands3D.Indicators.Dossiers;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
@@ -6,15 +7,11 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class DossierVisualisationHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class DossierVisualisationHover : MonoBehaviour, IPointerDownHandler
 {
-    private bool isHovered;
-
-    public UnityEvent<double> onDataSampled;
-
-    private Coroutine hoveringCoroutine;
-
     private InputSystemUIInputModule inputModule;
+
+    private DossierVisualiser visualiser = null;
 
     private void Awake()
     {
@@ -22,19 +19,19 @@ public class DossierVisualisationHover : MonoBehaviour, IPointerEnterHandler, IP
        inputModule = EventSystem.current.currentInputModule as InputSystemUIInputModule;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void SetVisualiser(DossierVisualiser visualiser)
     {
-        isHovered = true;
-
-        if(hoveringCoroutine != null)
-            StopCoroutine(hoveringCoroutine);
-        
-        hoveringCoroutine = StartCoroutine(Hovering());
+        this.visualiser = visualiser;
     }
-
-    public void OnPointerExit(PointerEventData eventData)
+ 
+    public void OnPointerDown(PointerEventData eventData)
     {
-        isHovered = false;
+        if(!visualiser) 
+        {
+            Debug.LogWarning("No visualiser set for this dossier visualisation hover");
+            return;
+        }
+        SampleData();
     }
 
     private void SampleData()
@@ -44,17 +41,8 @@ public class DossierVisualisationHover : MonoBehaviour, IPointerEnterHandler, IP
         {
             var raycastWordPosition = getLastRaycastResult.worldPosition; 
             Debug.Log("Clicked dossier area visualisation at: " + raycastWordPosition);
-
             
-        }
-    }
-
-    private IEnumerator Hovering()
-    {
-        while(isHovered)
-        {
-            SampleData();
-            yield return null;
+            var selectedDataLayer = visualiser.Dossier.SelectedDataLayer;
         }
     }
 }
