@@ -51,6 +51,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnDisable()
         {
+            DeselectAllLayers();
             LayerData.LayerAdded.RemoveListener(OnLayerAdded);
             LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
