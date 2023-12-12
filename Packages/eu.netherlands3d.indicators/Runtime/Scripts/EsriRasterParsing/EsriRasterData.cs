@@ -87,21 +87,12 @@ public class EsriRasterData{
     /// <param name="y">The y coordinate</param>
     public double GetPixelValue(double x, double y)
     {
-        // Get the number of columns and rows
-        int numColumns = rasterData.GetLength(1);
-        int numRows = rasterData.GetLength(0);
+        return rasterData[(int)y, (int)x];
+    }
 
-        // Calculate the pixel coordinates
-        double xPixel = (x - 0) / (1 - 0) * (numColumns - 1);
-        double yPixel = (y - 0) / (1 - 0) * (numRows - 1);
-
-        // Get the pixel coordinates
-        int xPixelInt = (int)Math.Floor(xPixel);
-        int yPixelInt = (int)Math.Floor(yPixel);
-
-        // Get the pixel value
-        double pixelValue = rasterData[yPixelInt, xPixelInt];
-
-        return pixelValue;
+    public double GetValueAtNormalisedLocation(float x, float y)
+    {
+        // Get the pixel value at the given coordinates using x and y, where the locations are normalised between 0 and 1
+        
     }
 }

@@ -14,5 +14,7 @@ namespace Netherlands3D.Indicators.Dossiers.DataLayers
         
         [JsonConverter(typeof(UriConverter))]
         public Uri map;
+
+        public EsriRasterData parsedEsriRasterData;     
     }
 }
