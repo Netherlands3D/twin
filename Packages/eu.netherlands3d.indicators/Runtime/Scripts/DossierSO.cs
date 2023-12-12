@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
 
 namespace Netherlands3D.Indicators
 {
@@ -76,18 +77,44 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                var firstFrameMap = firstFrame.map;
-                if (!string.IsNullOrEmpty(apiKey))
-                {
-                    var uriBuilder = new UriBuilder(firstFrameMap);
-                    uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
-                        ? $"code={apiKey}" 
-                        : string.Concat(uriBuilder.Query, $"&code={apiKey}");
-                    firstFrameMap = uriBuilder.Uri;
-                }
-
-                onLoadMapOverlayFrame.Invoke(firstFrameMap);
+                var firstFrameMapUrl = AppendDossierCodeToURL(firstFrame.map);
+                
+                // We parse the frame map data
+                onLoadMapOverlayFrame.Invoke(firstFrameMapUrl);
             }
+        }
+
+        public Uri AppendDossierCodeToURL(Uri url)
+        {
+            if (!string.IsNullOrEmpty(apiKey))
+            {
+                var uriBuilder = new UriBuilder(url);
+                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                    ? $"code={apiKey}" 
+                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                url = uriBuilder.Uri;
+            }
+
+            return url;
+        }
+
+        public IEnumerator LoadMapDataAsync(Frame frame, string url)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                onFailedToOpen.Invoke();
+                Debug.Log($"<color=red>Failed to load mapdata from {url}</color>");
+                Debug.LogError(www.error);
+                yield break;
+            }
+
+            var mapAsciiData = www.downloadHandler.text;
+            var mapData = new EsriRasterData();
+            mapData.ParseASCII(mapAsciiData);
+            frame.mapData = mapData;             
         }
 
         public IEnumerator Open(string dossierId)

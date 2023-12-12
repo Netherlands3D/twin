@@ -18,6 +18,8 @@ namespace Netherlands3D.Indicators
         [SerializeField] private Material meshMaterial;
         [SerializeField] private Material lineMaterial;
         [SerializeField] private Material selectedMeshMaterial;
+
+        [SerializeField] private GameObject samplePointerVisual;
         [SerializeField] private float meshExtrusionHeight = 10f;
 
         private readonly List<ProjectAreaVisualisation> areas = new();
@@ -176,15 +178,18 @@ namespace Netherlands3D.Indicators
         {
             var visualisationFromPolygon = CreateVisualisationFromPolygon(polygon);
             visualisationFromPolygon.gameObject.name = $"{projectAreaId}::{polygonIndex}";
-            visualisationFromPolygon.gameObject.AddComponent<DossierVisualisationHover>().SetVisualiser(this);            
+            visualisationFromPolygon.gameObject.AddComponent<DossierVisualisationClickHandler>().SetVisualiser(this);            
             
             return visualisationFromPolygon;
         }
 
-        public void GetDataValueFromVisualisation(Vector3 worldPosition)
+        public void MoveSamplePointer(Vector3 worldPosition)
         {
             if(dossier.SelectedDataLayer != null && dossier.SelectedDataLayer.Value.frames != null)
             {
+                samplePointerVisual.SetActive(true);
+                samplePointerVisual.transform.position = worldPosition;
+
                 //Convert world position to normalised visualisation position
                 var cameraCoordinate = new Coordinate(
                     CoordinateSystem.Unity,
@@ -198,17 +203,29 @@ namespace Netherlands3D.Indicators
                 //get normalised position of rd coordinate
                 DataLayer dataLayer = dossier.SelectedDataLayer.Value;
                 var frames = dataLayer.frames;
+                if(frames.Count < 1) 
+                    return;
+
                 var frame = frames.FirstOrDefault();
                 var mapData = frame.mapData;
-
                 if(mapData != null)
                 {
-                    //Get the bounds from dossier
+                    //Get the bounds from our dossier
                     var bbox = dossier.Data?.bbox;
 
                     //Check the normalised position of the rd coordinate in the bbox
-                    
+                    var normalisedX = (float)(rd.Points[0] / (bbox[2] - bbox[0]));
+                    var normalisedY = (float)(rd.Points[1] / (bbox[3] - bbox[1]));
+
+                    // Sample the mapdata using the normalised location
+                    var sampleValueUnderPointer = mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
+
+                    Debug.Log(sampleValueUnderPointer);
                 }
+            }
+            else
+            {
+                samplePointerVisual.gameObject.SetActive(false);
             }
         }
 

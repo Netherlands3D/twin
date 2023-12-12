@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class DossierVisualisationHover : MonoBehaviour, IPointerDownHandler
+public class DossierVisualisationClickHandler : MonoBehaviour, IPointerDownHandler
 {
     private InputSystemUIInputModule inputModule;
 
@@ -42,7 +42,7 @@ public class DossierVisualisationHover : MonoBehaviour, IPointerDownHandler
             var raycastWordPosition = getLastRaycastResult.worldPosition; 
             Debug.Log("Clicked dossier area visualisation at: " + raycastWordPosition);
             
-            var selectedDataLayer = visualiser.Dossier.SelectedDataLayer;
+            this.visualiser.MoveSamplePointer(raycastWordPosition);
         }
     }
 }
