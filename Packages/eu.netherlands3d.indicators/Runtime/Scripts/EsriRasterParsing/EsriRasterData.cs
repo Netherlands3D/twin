@@ -94,8 +94,8 @@ public class EsriRasterData{
     /// <summary>
     /// Return the grid value at a location using normalised (0 to 1) x and y coordinates
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x">Normalised x position</param>
+    /// <param name="y">Normalised y position</param>
     /// <returns></returns>
     public double GetValueAtNormalisedLocation(float x, float y)
     {
