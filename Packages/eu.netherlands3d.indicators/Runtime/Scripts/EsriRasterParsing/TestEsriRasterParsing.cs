@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
 namespace Netherlands3D.Twin
 {
     public class TestEsriRasterParsing : MonoBehaviour
     {
+        #if UNITY_EDITOR
         [ContextMenu("Load local Esri file")]
         void LoadLocalEsriFile()
         {
@@ -34,5 +36,6 @@ namespace Netherlands3D.Twin
                 }
             }
         }
+        #endif
     }
 }
