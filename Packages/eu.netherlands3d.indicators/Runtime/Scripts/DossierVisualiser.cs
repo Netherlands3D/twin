@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
@@ -6,6 +7,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands.GeoJSON;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
 using UnityEngine.Events;
@@ -190,43 +192,47 @@ namespace Netherlands3D.Indicators
                 samplePointerVisual.SetActive(true);
                 samplePointerVisual.transform.position = worldPosition;
 
-                //Convert world position to normalised visualisation position
-                var cameraCoordinate = new Coordinate(
-                    CoordinateSystem.Unity,
-                    worldPosition.x, 
-                    worldPosition.y, 
-                    worldPosition.z
-                );
-    
-                var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RD);
-
-                //get normalised position of rd coordinate
                 DataLayer dataLayer = dossier.SelectedDataLayer.Value;
                 var frames = dataLayer.frames;
                 if(frames.Count < 1) 
                     return;
 
                 var frame = frames.FirstOrDefault();
-                var mapData = frame.mapData;
-                if(mapData != null)
-                {
-                    //Get the bounds from our dossier
-                    var bbox = dossier.Data?.bbox;
-
-                    //Check the normalised position of the rd coordinate in the bbox
-                    var normalisedX = (float)(rd.Points[0] / (bbox[2] - bbox[0]));
-                    var normalisedY = (float)(rd.Points[1] / (bbox[3] - bbox[1]));
-
-                    // Sample the mapdata using the normalised location
-                    var sampleValueUnderPointer = mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
-
-                    Debug.Log(sampleValueUnderPointer);
-                }
+                StartCoroutine(SampleFrameMapDataAtLocation(frame,worldPosition));
             }
             else
             {
                 samplePointerVisual.gameObject.SetActive(false);
             }
+        }
+
+        private IEnumerator SampleFrameMapDataAtLocation(Frame frame, Vector3 worldPosition)
+        {
+            // Load data if not there yet
+            if(frame.mapData == null)
+                yield return dossier.LoadMapDataAsync(frame);
+
+            // Convert world position to normalised visualisation position
+            var cameraCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                worldPosition.x, 
+                worldPosition.y, 
+                worldPosition.z
+            );
+
+            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RD);
+
+            // Get the bounds from our dossier
+            var bbox = dossier.Data?.bbox;
+
+            // Check the normalised position of the rd coordinate in the bbox
+            var normalisedX = (float)(rd.Points[0] / (bbox[2] - bbox[0]));
+            var normalisedY = (float)(rd.Points[1] / (bbox[3] - bbox[1]));
+
+            // Sample the mapdata using the normalised location
+            var sampleValueUnderPointer = frame.mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
+
+            Debug.Log(sampleValueUnderPointer);
         }
 
         private PolygonVisualisation CreateVisualisationFromPolygon(Polygon polygon)

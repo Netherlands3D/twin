@@ -98,15 +98,16 @@ namespace Netherlands3D.Indicators
             return url;
         }
 
-        public IEnumerator LoadMapDataAsync(Frame frame, string url)
+        public IEnumerator LoadMapDataAsync(Frame frame)
         {
-            UnityWebRequest www = UnityWebRequest.Get(url);
+            var uriWithCode = AppendDossierCodeToURL(frame.data);
+            UnityWebRequest www = UnityWebRequest.Get(uriWithCode);
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
                 onFailedToOpen.Invoke();
-                Debug.Log($"<color=red>Failed to load mapdata from {url}</color>");
+                Debug.Log($"<color=red>Failed to load mapdata from {uriWithCode}</color>");
                 Debug.LogError(www.error);
                 yield break;
             }
