@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         Default,
         Hover,
+        DragHover,
         Selected
     }
 
@@ -25,7 +26,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         EnabledInDisabled = 3
     }
 
-    public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IDropHandler
+    public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public LayerNL3DBase Layer { get; set; }
         public bool IsSelected => LayerData.SelectedLayers.Contains(this);
@@ -72,6 +73,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
 
         public LayerActiveState State { get; set; }
+        public InteractionState InteractionState { get; set; }
 
         public Color Color { get; set; } = Color.blue;
         public Sprite Icon { get; set; }
@@ -516,7 +518,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 var yValue01 = Mathf.Clamp01(relativeValue);
 
                 var spacingOffset = -layerVerticalLayoutGroup.spacing / 2 * referenceLayerUnderMouse.transform.lossyScale.y;
-                
+
                 if (yValue01 < 0.25f)
                 {
                     // print("higher than " + referenceLayerUnderMouse.Layer.name);
@@ -555,7 +557,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 else
                 {
                     // print("reparent to " + referenceLayerUnderMouse.Layer.name);
-                    referenceLayerUnderMouse.SetHighlight(InteractionState.Hover);
+                    referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(false);
 
@@ -595,20 +597,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetHighlight(InteractionState state)
         {
-            switch (state)
-            {
-                case InteractionState.Default:
-                    GetComponentInChildren<Image>().sprite = backgroundSprites[0];
-                    break;
-                case InteractionState.Hover:
-                    GetComponentInChildren<Image>().sprite = backgroundSprites[1];
-                    break;
-                case InteractionState.Selected:
-                    GetComponentInChildren<Image>().sprite = backgroundSprites[2];
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            }
+            GetComponentInChildren<Image>().sprite = backgroundSprites[(int)state];
+            // switch (state)
+            // {
+            //     
+            //     
+            //     case InteractionState.Default:
+            //         GetComponentInChildren<Image>().sprite = backgroundSprites[0];
+            //         break;
+            //     case InteractionState.DragHover:
+            //         GetComponentInChildren<Image>().sprite = backgroundSprites[1];
+            //         break;
+            //     case InteractionState.Selected:
+            //         GetComponentInChildren<Image>().sprite = backgroundSprites[2];
+            //         break;
+            //     default:
+            //         throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            // }
         }
 
         private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
@@ -622,7 +627,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 var layer = LayerData.LayersVisibleInInspector[i];
                 var correctedSize = layer.rectTransform.rect.size * layer.rectTransform.lossyScale;
                 correctedSize.y += layerVerticalLayoutGroup.spacing * layer.rectTransform.lossyScale.y;
-                
+
                 if (mousePos.y < layer.rectTransform.position.y && mousePos.y >= layer.rectTransform.position.y - correctedSize.y)
                 {
                     relativeYValue = mousePos.y - layer.rectTransform.position.y;
@@ -656,6 +661,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public static bool SequentialSelectionModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            // var pointerPosition = Pointer.current.position.ReadValue();
+            // var relativePointerPos = parentRowRectTransform.InverseTransformPoint(pointerPosition);
+            // var isInParentRow = parentRowRectTransform.rect.Contains(relativePointerPos);
+            //
+            // print("is in parent row of: " + Layer.name + "\t" + isInParentRow);
+            
+            if (!layerManager.DragGhost && !IsSelected)
+                SetHighlight(InteractionState.Hover);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!IsSelected)
+                SetHighlight(InteractionState.Default);
         }
     }
 }
