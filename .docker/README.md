@@ -32,6 +32,8 @@ digital twin application while offering flexibility through a series of environm
 - `NL3D_OBJECT_IMPORTER`: *true/false, is the importing of .obj files enabled*
 - `NL3D_INDICATORS`: *true/false, is it possible to show Indicator for dossiers*
 - `NL3D_INDICATORS_DOSSIER_ID`: *The default dossier id to show for the indicators feature, can be empty*
+- `NL3D_INDICATORS_API_BASE_URI`: *The API endpoint's base URI used to retrieve the dossier and assets from, example: https://nl3d-backend-provincie-utrecht.azurewebsites.net/api/v1/indicators*
+- `NL3D_INDICATORS_API_KEY`: *The API key used to connect to the API endpoints, this is passed as a "code" query parameter*
 
 **Note:** For detailed information on available environment variables and their impact on the application's behavior,
 refer to the subsequent section in the documentation.

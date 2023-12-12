@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
+using Netherlands3D.Web;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,8 +15,20 @@ namespace Netherlands3D.Indicators
     public class DossierSO : ScriptableObject
     {
         [SerializeField]
-        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using {id} (without spaces).")]
+        [Tooltip("if the DossierUriTemplate contains a variable {baseUri}, it will be replaced by this value.")]
+        public string baseUri = "";
+        
+        [SerializeField]
+        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using a variable {id}, a dynamic base URI can also be injected using the variable {baseUri}.")]
         private string dossierUriTemplate = "";
+
+        [SerializeField]
+        private string apiKey = "";
+        public string ApiKey
+        {
+            get => apiKey;
+            set => apiKey = value;
+        }
 
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
@@ -41,6 +54,7 @@ namespace Netherlands3D.Indicators
         }
 
         private DataLayer? selectedDataLayer;
+
         public DataLayer? SelectedDataLayer
         {
             get => selectedDataLayer;
@@ -62,7 +76,17 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                onLoadMapOverlayFrame.Invoke(firstFrame.map);
+                var firstFrameMap = firstFrame.map;
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    var uriBuilder = new UriBuilder(firstFrameMap);
+                    uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                        ? $"code={apiKey}" 
+                        : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                    firstFrameMap = uriBuilder.Uri;
+                }
+
+                onLoadMapOverlayFrame.Invoke(firstFrameMap);
             }
         }
 
@@ -126,27 +150,34 @@ namespace Netherlands3D.Indicators
 
         public IEnumerator LoadProjectAreaGeometry(Variant variant)
         {
-            Debug.Log("Loading project area geometry for " + variant);
-            var geometryUrl = variant.geometry;
-            
-            UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            var featureCollection = new FeatureCollection(
+                variant.areas.Select(area => new Feature(area.geometry, null, area.id)).ToList()
+            );
+            if (Data.HasValue)
             {
-                SelectVariant(null);
-                Debug.LogError(www.error);
-                yield break;
+                featureCollection.CRS = Data.Value.crs;
             }
-
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
-            Debug.Log("Loaded project area geometry for " + variant);
+            
             onLoadedProjectArea.Invoke(featureCollection);
+            yield return null;
         }
 
         private string AssembleUri(string dossierId)
         {
-            return dossierUriTemplate.Replace("{id}", dossierId);
+            var url = dossierUriTemplate
+                .Replace("{baseUri}", baseUri)
+                .Replace("{id}", dossierId);
+            
+            if (!string.IsNullOrEmpty(apiKey))
+            {
+                var uriBuilder = new UriBuilder(url);
+                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                    ? $"code={apiKey}" 
+                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                url = uriBuilder.ToString();
+            }
+
+            return url;
         }
     }
 }

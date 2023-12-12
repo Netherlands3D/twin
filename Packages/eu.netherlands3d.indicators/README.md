@@ -40,11 +40,11 @@ To make use of this package, you can follow these steps:
 1. Drag the Indicators prefab into your scene
 2. Connect your camera to the `Center On Feature Collection`'s Target Game Object
 
-After that you can start the `Open` coroutine on the Dossier Scriptable Object attached to the `Dossier Listener` with the 
-dossier id of your Indicator provider.
+After that you can start the `Open` coroutine on the Dossier Scriptable Object attached to the `Dossier Listener` with 
+the dossier id of your Indicator provider.
 
-Once the Dossier is loaded, the GeoJSON FeatureCollection describing the dossier's project area boundaries can be fetched 
-using'the Dossier Scriptable Object's `LoadProjectAreaGeometry` coroutine. This coroutine will want a variant of 
+Once the Dossier is loaded, the GeoJSON FeatureCollection describing the dossier's project area boundaries can be 
+fetched using the Dossier Scriptable Object's `LoadProjectAreaGeometry` coroutine. This coroutine will want a variant of 
 the Dossier for which to retrieve the geometry.
 
 ## Configuring a Provider

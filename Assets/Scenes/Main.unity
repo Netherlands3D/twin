@@ -898,6 +898,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2000707295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4860799740062944291, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2009650164 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7555721977339228734, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -991,7 +997,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.size
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1030,7 +1036,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[6].name
-      value: Timeline ->  No listeners
+      value: Timeline -> null -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1066,7 +1072,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[13].name
-      value: Indicatoren ->  No listeners
+      value: Indicatoren -> ToolbarButton_Indicators (GameObject) -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1147,7 +1153,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[13].onFeatureToggle.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1188,6 +1194,11 @@ PrefabInstance:
         type: 3}
       propertyPath: FeatureLinks.Array.data[0].dynamicBool.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FeatureLinks.Array.data[13].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1314,6 +1325,11 @@ PrefabInstance:
       propertyPath: FeatureLinks.Array.data[12].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FeatureLinks.Array.data[13].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2000707295}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FeatureLinks.Array.data[1].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -2102,7 +2118,7 @@ PrefabInstance:
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 45.265
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -2498,6 +2514,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128951383645510816, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: tooltipText
+      value: Gebiedsindicatoren inzien
       objectReference: {fileID: 0}
     - target: {fileID: 1181518341061030922, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -6928,26 +6949,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7572806661504998396, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7591977281591091239, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0

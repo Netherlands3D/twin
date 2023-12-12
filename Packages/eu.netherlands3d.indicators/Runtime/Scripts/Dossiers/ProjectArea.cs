@@ -1,4 +1,5 @@
 ﻿using System;
+using GeoJSON.Net.Geometry;
 using Netherlands3D.Indicators.Dossiers.Indicators;
 
 namespace Netherlands3D.Indicators.Dossiers
@@ -8,6 +9,7 @@ namespace Netherlands3D.Indicators.Dossiers
     {
         public string id;
         public string name;
+        public MultiPolygon geometry;
         public Scores indicators;
     }
 }

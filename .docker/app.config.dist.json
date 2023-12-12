@@ -40,7 +40,9 @@
     "indicators": {
       "enabled": {{NL3D_INDICATORS|default('false')}},
       "configuration": {
-        "dossierId": "{{NL3D_INDICATORS_DOSSIER_ID|default('')}}"
+        "dossierId": "{{NL3D_INDICATORS_DOSSIER_ID|default('')}}",
+        "baseUri": "{{NL3D_INDICATORS_API_BASE_URI|default('')}}",
+        "apiKey": "{{NL3D_INDICATORS_API_KEY|default('')}}"
       }
     }
   }
