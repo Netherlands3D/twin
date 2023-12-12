@@ -1,11 +1,12 @@
 using System;
+using UnityEngine;
 
 public class EsriRasterData{
     public int numColumns = 0;
     public int numRows = 0;
     public double xllcorner = 0;
     public double yllcorner = 0;
-    public double dx = 0;
+    public double dx = 0; 
     public double dy = 0;
     public double cellsize = 0;
     public double nodataValue = 0;
@@ -85,14 +86,22 @@ public class EsriRasterData{
     /// <param name="rasterData">The 2D array of raster data</param>
     /// <param name="x">The x coordinate</param>
     /// <param name="y">The y coordinate</param>
-    public double GetPixelValue(double x, double y)
+    public double GetPixelValue(int x, int y)
     {
-        return rasterData[(int)y, (int)x];
+        return rasterData[y, x];
     }
 
+    /// <summary>
+    /// Return the grid value at a location using normalised (0 to 1) x and y coordinates
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public double GetValueAtNormalisedLocation(float x, float y)
     {
-        // Get the pixel value at the given coordinates using x and y, where the locations are normalised between 0 and 1
-        
+        var targetPixelX = Mathf.RoundToInt(numColumns * x);
+        var targetPixelY = Mathf.RoundToInt(numRows * y);
+
+        return GetPixelValue(targetPixelX,targetPixelY);
     }
 }
