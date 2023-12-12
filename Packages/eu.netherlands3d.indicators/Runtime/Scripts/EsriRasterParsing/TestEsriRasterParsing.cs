@@ -7,11 +7,6 @@ namespace Netherlands3D.Twin
 {
     public class TestEsriRasterParsing : MonoBehaviour
     {
-        void Start()
-        {
-        
-        }
-
         [ContextMenu("Load local Esri file")]
         void LoadLocalEsriFile()
         {
@@ -32,6 +27,7 @@ namespace Netherlands3D.Twin
                     for (int y = 0; y < rasterData.GetLength(1); y++)
                     {
                         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        cube.transform.SetParent(transform);
                         cube.transform.position = new Vector3(x, (float)(rasterData[x, y]), y);
                         cube.transform.localScale = new Vector3(1, (float)(rasterData[x, y]), 1);
                     }
