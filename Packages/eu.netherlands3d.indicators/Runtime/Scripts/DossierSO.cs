@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Text;
 using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
 using Newtonsoft.Json;
@@ -13,6 +14,12 @@ namespace Netherlands3D.Indicators
     [CreateAssetMenu(menuName = "Netherlands3D/Dossier", fileName = "DossierSO", order = 0)]
     public class DossierSO : ScriptableObject
     {
+        [Serializable]
+        public struct ImportRequest
+        {
+            public string iri;
+        }
+
         /// <summary>
         /// We keep track of the current state the Dossier System.
         ///
@@ -23,6 +30,9 @@ namespace Netherlands3D.Indicators
         [Serializable]
         public enum DossierSystemState
         {
+            Importing,
+            ImportingFailed,
+            Imported,
             Opening,
             Opened,
             FailedToOpen,
@@ -35,7 +45,10 @@ namespace Netherlands3D.Indicators
         
         [SerializeField]
         [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using a variable {id}, a dynamic base URI can also be injected using the variable {baseUri}.")]
-        private string dossierUriTemplate = "";
+        private string dossierUriTemplate = "{baseUri}/dossier/{id}";
+
+        [Tooltip("Contains the URI Template where to import a dossier. A dynamic base URI can be injected using the variable {baseUri}.")]
+        [SerializeField] private string importUriTemplate = "{baseUri}/dossiers/import";
 
         [SerializeField]
         private string apiKey = "";
@@ -45,6 +58,9 @@ namespace Netherlands3D.Indicators
             set => apiKey = value;
         }
 
+        public UnityEvent onImporting = new();
+        public UnityEvent onImportingFailed = new();
+        public UnityEvent onImport = new();
         public UnityEvent onOpening = new();
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
@@ -55,6 +71,7 @@ namespace Netherlands3D.Indicators
         public UnityEvent onClose = new();
         public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
         
+        [NonSerialized]
         private DossierSystemState dossierSystemState = DossierSystemState.Closed;
         public DossierSystemState State => dossierSystemState;
 
@@ -109,11 +126,56 @@ namespace Netherlands3D.Indicators
             }
         }
 
+        public IEnumerator Import(string sourceIri)
+        {
+            dossierSystemState = DossierSystemState.Importing;
+            onImporting.Invoke();
+            string url = AssembleImportUri();
+            Debug.Log($"<color=orange>Importing dossier with iri {sourceIri} from {url}</color>");
+
+            yield return SendPostRequestWithJSON(
+                url, 
+                JsonConvert.SerializeObject(new ImportRequest { iri = sourceIri }), 
+                out var www
+            );
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                onImportingFailed.Invoke();
+                dossierSystemState = DossierSystemState.ImportingFailed;
+                Debug.Log($"<color=red>Failed to import dossier from {sourceIri}</color>");
+                Debug.LogError(www.error);
+                Debug.LogError(www.downloadHandler);
+                Debug.LogError(www.downloadHandler.data);
+                yield break;
+            }
+
+            var json = www.downloadHandler.text;
+            Debug.Log($"<color=orange>Received response data when importing dossier</color>");
+            Debug.Log(json);
+            
+            dossierSystemState = DossierSystemState.Imported;
+            // TODO: Update address bar
+            onImport.Invoke(); // TODO: Pass URI or id of imported dossier
+        }
+
+        private UnityWebRequestAsyncOperation SendPostRequestWithJSON(
+            string url, 
+            string requestContent, 
+            out UnityWebRequest www
+        ) {
+            www = new UnityWebRequest(url, "POST");
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(requestContent));
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            return www.SendWebRequest();
+        }
+
         public IEnumerator Open(string dossierId)
         {
             dossierSystemState = DossierSystemState.Opening;
             onOpening.Invoke();
-            string url = AssembleUri(dossierId);
+            string url = AssembleFetchUri(dossierId);
             Debug.Log($"<color=orange>Loading dossier with id {dossierId} from {url}</color>");
             Close();
 
@@ -187,11 +249,28 @@ namespace Netherlands3D.Indicators
             yield return null;
         }
 
-        private string AssembleUri(string dossierId)
+        private string AssembleFetchUri(string dossierId)
         {
             var url = dossierUriTemplate
                 .Replace("{baseUri}", baseUri)
                 .Replace("{id}", dossierId);
+            
+            if (!string.IsNullOrEmpty(apiKey))
+            {
+                var uriBuilder = new UriBuilder(url);
+                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                    ? $"code={apiKey}" 
+                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                url = uriBuilder.ToString();
+            }
+
+            return url;
+        }
+
+        private string AssembleImportUri()
+        {
+            var url = importUriTemplate
+                .Replace("{baseUri}", baseUri);
             
             if (!string.IsNullOrEmpty(apiKey))
             {

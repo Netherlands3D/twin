@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   configurator: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
-  settingsButton: {fileID: 0}
 --- !u!114 &5423417174918695491
 MonoBehaviour:
   m_ObjectHideFlags: 0
