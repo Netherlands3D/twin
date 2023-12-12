@@ -24,7 +24,8 @@ namespace Netherlands3D.Indicators
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Could not download {textureUrl}");
+                Debug.LogError($"Could not download {textureUrl}, result code was {webRequest.result}");
+
                 yield break;
             }
 

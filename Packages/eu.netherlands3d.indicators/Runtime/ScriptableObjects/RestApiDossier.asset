@@ -10,15 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 846f48943e3749f79551a8359acd5037, type: 3}
-  m_Name: TygronGeoShareDossier
+  m_Name: RestAPIDossier
   m_EditorClassIdentifier: 
-  dossierUriTemplate: https://engine.tygron.com/share/{id}/dossier.geojson
+  baseUri: https://nl3d-backend-provincie-utrecht-d.azurewebsites.net/api/v1/indicators
+  dossierUriTemplate: '{baseUri}/dossier/{id}'
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedVariant:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedProjectArea:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedDataLayer:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoadMapOverlayFrame:
     m_PersistentCalls:
       m_Calls: []
   onFailedToOpen:
     m_PersistentCalls:
       m_Calls: []
   onClose:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoadedProjectArea:
     m_PersistentCalls:
       m_Calls: []
