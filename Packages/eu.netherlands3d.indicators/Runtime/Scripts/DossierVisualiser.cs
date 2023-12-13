@@ -128,6 +128,7 @@ namespace Netherlands3D.Indicators
 
         public void Clear()
         {
+            dataValuePin.gameObject.SetActive(false);
             SelectedArea = null;
             foreach (var area in Areas)
             {

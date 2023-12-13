@@ -7,11 +7,12 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHandler
+public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler
 {
     private InputSystemUIInputModule inputModule;
 
     private DossierVisualiser visualiser = null;
+    private bool dragged = false;
 
     private void Awake()
     {
@@ -26,6 +27,12 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHand
  
     public void OnPointerClick(PointerEventData eventData)
     {
+        if(dragged)
+        {
+            dragged = false;
+            return;
+        }
+
         if(!visualiser) 
         {
             Debug.LogWarning("No visualiser set for this dossier visualisation hover");
@@ -45,4 +52,12 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHand
             this.visualiser.MoveSamplePointer(raycastWordPosition);
         }
     }
+
+    //OnDrag required to use OnBeginDrag
+    public void OnDrag(PointerEventData eventData) {}
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        dragged = true;
+    }
+
 }
