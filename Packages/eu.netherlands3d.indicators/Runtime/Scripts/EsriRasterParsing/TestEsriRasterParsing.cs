@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin
                     {
                         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                         cube.transform.SetParent(transform);
-                        cube.transform.position = new Vector3(x, (float)(rasterData[x, y]), y);
+                        cube.transform.position = new Vector3(y, (float)(rasterData[x, y]), x);
                         cube.transform.localScale = new Vector3(1, (float)(rasterData[x, y]), 1);
                     }
                 }

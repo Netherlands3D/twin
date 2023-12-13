@@ -21,7 +21,7 @@ namespace Netherlands3D.Indicators
         [SerializeField] private Material lineMaterial;
         [SerializeField] private Material selectedMeshMaterial;
 
-        [SerializeField] private GameObject samplePointerVisual;
+        [SerializeField] private Pin dataValuePin;
         [SerializeField] private float meshExtrusionHeight = 10f;
 
         private readonly List<ProjectAreaVisualisation> areas = new();
@@ -189,8 +189,8 @@ namespace Netherlands3D.Indicators
         {
             if(dossier.SelectedDataLayer != null && dossier.SelectedDataLayer.Value.frames != null)
             {
-                samplePointerVisual.SetActive(true);
-                samplePointerVisual.transform.position = worldPosition;
+                dataValuePin.gameObject.SetActive(true);
+                dataValuePin.transform.position = worldPosition;
 
                 DataLayer dataLayer = dossier.SelectedDataLayer.Value;
                 var frames = dataLayer.frames;
@@ -202,7 +202,7 @@ namespace Netherlands3D.Indicators
             }
             else
             {
-                samplePointerVisual.gameObject.SetActive(false);
+                dataValuePin.gameObject.SetActive(false);
             }
         }
 
@@ -213,26 +213,43 @@ namespace Netherlands3D.Indicators
                 yield return dossier.LoadMapDataAsync(frame);
 
             // Convert world position to normalised visualisation position
-            var cameraCoordinate = new Coordinate(
+            var targetRDCoordinate = new Coordinate(
                 CoordinateSystem.Unity,
                 worldPosition.x, 
                 worldPosition.y, 
                 worldPosition.z
             );
 
-            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RD);
+            var rd = CoordinateConverter.ConvertTo(targetRDCoordinate, CoordinateSystem.RD);
 
             // Get the bounds from our dossier
             var bbox = dossier.Data?.bbox;
 
+            //convert bbox to RD
+            var bboxMin = new Coordinate(CoordinateSystem.EPSG_3857, bbox[0], bbox[1], 0);
+            var bboxMax = new Coordinate(CoordinateSystem.EPSG_3857, bbox[2], bbox[3], 0);
+
+            //We currently need to do an extra step to unity, because CoordinateConversion does not support EPSG_3857 to RD directly yet.
+            var unityBboxMin = CoordinateConverter.ConvertTo(bboxMin, CoordinateSystem.Unity);
+            var unityBboxMax = CoordinateConverter.ConvertTo(bboxMax, CoordinateSystem.Unity);
+
+            var rdBboxMin = CoordinateConverter.ConvertTo(unityBboxMin, CoordinateSystem.RD);
+            var rdBboxMax = CoordinateConverter.ConvertTo(unityBboxMax, CoordinateSystem.RD);
+
             // Check the normalised position of the rd coordinate in the bbox
-            var normalisedX = (float)(rd.Points[0] / (bbox[2] - bbox[0]));
-            var normalisedY = (float)(rd.Points[1] / (bbox[3] - bbox[1]));
+            var bboxWidth = rdBboxMax.Points[0] - rdBboxMin.Points[0];
+            var bboxHeight = rdBboxMax.Points[1] - rdBboxMin.Points[1];
+            var localX = rd.Points[0]-rdBboxMin.Points[0];
+            var localY = rd.Points[1]-rdBboxMin.Points[1];
+
+            var normalisedX = (float)(localX / bboxWidth);
+            var normalisedY = (float)(localY / bboxHeight);
 
             // Sample the mapdata using the normalised location
             var sampleValueUnderPointer = frame.mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
 
             Debug.Log(sampleValueUnderPointer);
+            dataValuePin.SetLabel(sampleValueUnderPointer.ToString());
         }
 
         private PolygonVisualisation CreateVisualisationFromPolygon(Polygon polygon)

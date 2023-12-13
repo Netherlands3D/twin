@@ -88,19 +88,22 @@ public class EsriRasterData{
     /// <param name="y">The y coordinate</param>
     public double GetPixelValue(int x, int y)
     {
-        return rasterData[y, x];
+        Debug.Log("GetPixelValue: " + x + ", " + y);
+        return rasterData[x, y];
     }
 
     /// <summary>
-    /// Return the grid value at a location using normalised (0 to 1) x and y coordinates
+    /// Return the grid value at a location using normalised (0 to 1) coordinates based on Unity's forward Z facing north
     /// </summary>
     /// <param name="x">Normalised x position</param>
     /// <param name="y">Normalised y position</param>
-    /// <returns></returns>
+    /// <returns>The value of the pixel</returns>
     public double GetValueAtNormalisedLocation(float x, float y)
     {
-        var targetPixelX = Mathf.RoundToInt(numColumns * x);
-        var targetPixelY = Mathf.RoundToInt(numRows * y);
+        var targetPixelX = Mathf.RoundToInt(numRows * (1-y));
+        var targetPixelY = Mathf.RoundToInt(numColumns * x);
+
+        Debug.Log("GetValueAtNormalisedLocation: " + targetPixelX + ", " + targetPixelY);
 
         return GetPixelValue(targetPixelX,targetPixelY);
     }

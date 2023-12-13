@@ -188,7 +188,7 @@ MonoBehaviour:
   lineMaterial: {fileID: 2100000, guid: c9ca3310a0b8542479992bbcbe4800df, type: 2}
   selectedMeshMaterial: {fileID: 2100000, guid: c562d39411dae6b4eb5545f4ddad5a4d,
     type: 2}
-  samplePointerVisual: {fileID: 5023903491974632865}
+  dataValuePin: {fileID: 8752529917682407595}
   meshExtrusionHeight: 10
   onAreaVisualised:
     m_PersistentCalls:
@@ -225,7 +225,7 @@ PrefabInstance:
     - target: {fileID: 239487951821379888, guid: 2d2f2e28f9779fc4c86470e50691ab27,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -577
       objectReference: {fileID: 0}
     - target: {fileID: 239487951821379888, guid: 2d2f2e28f9779fc4c86470e50691ab27,
         type: 3}
@@ -235,7 +235,7 @@ PrefabInstance:
     - target: {fileID: 239487951821379888, guid: 2d2f2e28f9779fc4c86470e50691ab27,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 239487951821379888, guid: 2d2f2e28f9779fc4c86470e50691ab27,
         type: 3}
@@ -272,10 +272,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3940654954012632793, guid: 2d2f2e28f9779fc4c86470e50691ab27,
+        type: 3}
+      propertyPath: m_Name
+      value: PinModel
+      objectReference: {fileID: 0}
     - target: {fileID: 5959560001073260165, guid: 2d2f2e28f9779fc4c86470e50691ab27,
         type: 3}
       propertyPath: m_Name
-      value: SamplePointer
+      value: DataPin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -288,12 +293,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1660950462476006180}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5023903491974632865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5959560001073260165, guid: 2d2f2e28f9779fc4c86470e50691ab27,
+--- !u!114 &8752529917682407595 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7961196679222750095, guid: 2d2f2e28f9779fc4c86470e50691ab27,
     type: 3}
   m_PrefabInstance: {fileID: 1660950462476006180}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e344776fde8f643af3b576190f896c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2726562957860431216
 PrefabInstance:
   m_ObjectHideFlags: 0

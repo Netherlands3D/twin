@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Netherlands3D.Indicators.Dossiers.DataLayers
 {
     [Serializable]
-    public struct Frame
+    public class Frame
     {
         public string label;
 

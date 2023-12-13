@@ -103,6 +103,7 @@ namespace Netherlands3D.Indicators
             var uriWithCode = AppendDossierCodeToURL(frame.data);
             UnityWebRequest www = UnityWebRequest.Get(uriWithCode);
             yield return www.SendWebRequest();
+            Debug.Log($"<color=green>Getting mapdata from {uriWithCode}</color>");
 
             if (www.result != UnityWebRequest.Result.Success)
             {

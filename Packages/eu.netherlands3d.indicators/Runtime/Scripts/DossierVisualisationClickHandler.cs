@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class DossierVisualisationClickHandler : MonoBehaviour, IPointerDownHandler
+public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHandler
 {
     private InputSystemUIInputModule inputModule;
 
@@ -24,17 +24,17 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerDownHandl
         this.visualiser = visualiser;
     }
  
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if(!visualiser) 
         {
             Debug.LogWarning("No visualiser set for this dossier visualisation hover");
             return;
         }
-        SampleData();
+        MovePointer();
     }
 
-    private void SampleData()
+    private void MovePointer()
     {
         var getLastRaycastResult = inputModule.GetLastRaycastResult(0);
         if(getLastRaycastResult.gameObject == this.gameObject)
