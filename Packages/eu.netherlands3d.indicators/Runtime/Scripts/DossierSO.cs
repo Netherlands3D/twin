@@ -133,11 +133,8 @@ namespace Netherlands3D.Indicators
             string url = AssembleImportUri();
             Debug.Log($"<color=orange>Importing dossier with iri {sourceIri} from {url}</color>");
 
-            yield return SendPostRequestWithJSON(
-                url, 
-                JsonConvert.SerializeObject(new ImportRequest { iri = sourceIri }), 
-                out var www
-            );
+            var www = PostAsJson(url, new ImportRequest { iri = sourceIri });
+            yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
@@ -152,21 +149,37 @@ namespace Netherlands3D.Indicators
             Debug.Log($"<color=orange>Received response data when importing dossier</color>");
             Debug.Log(json);
             
+            Dossier dossier;
+            try
+            {
+                dossier = JsonConvert.DeserializeObject<Dossier>(json);
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"<color=red>Failed to deserialize dossier while importing</color>");
+                Debug.LogError(e.Message);
+                dossierSystemState = DossierSystemState.ImportingFailed;
+                onImportingFailed.Invoke();
+                yield break;
+            }
+            
             dossierSystemState = DossierSystemState.Imported;
+            
             // TODO: Update address bar
-            onImport.Invoke(); // TODO: Pass URI or id of imported dossier
+            
+            onImport.Invoke();
+            OpenDossier(dossier);
         }
 
-        private UnityWebRequestAsyncOperation SendPostRequestWithJSON(
-            string url, 
-            string requestContent, 
-            out UnityWebRequest www
-        ) {
-            www = new UnityWebRequest(url, "POST");
+        private UnityWebRequest PostAsJson(string url, object data)
+        {
+            var requestContent = JsonConvert.SerializeObject(data);
+            var www = new UnityWebRequest(url, "POST");
             www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(requestContent));
+            www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
 
-            return www.SendWebRequest();
+            return www;
         }
 
         public IEnumerator Open(string dossierId)
@@ -209,6 +222,11 @@ namespace Netherlands3D.Indicators
 
             Debug.Log($"<color=green>Loaded dossier with id {dossier.id} from {url}</color>");
 
+            OpenDossier(dossier);
+        }
+
+        private void OpenDossier(Dossier dossier)
+        {
             Data = dossier;
             dossierSystemState = DossierSystemState.Opened;
             onOpen.Invoke(dossier);
