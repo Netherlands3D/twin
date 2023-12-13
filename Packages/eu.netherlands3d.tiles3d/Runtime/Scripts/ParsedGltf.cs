@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using GLTFast;
 using System;
+using System.Text.RegularExpressions;
 using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
@@ -82,6 +83,8 @@ namespace Netherlands3D.Tiles3D
             //Use feature ID as bufferView index and get bufferview
             var featureAccessor = gltfFeatures.accessors[featureIdBufferViewIndex];
             var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
+
+            // var compressed = gltfFeatures.extensionsRequired.Contains("EXT_meshopt_compression"); //Needs testing
             var compressed = false;
 
             var featureIdBuffer = GetFeatureBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob, compressed);
@@ -94,16 +97,14 @@ namespace Netherlands3D.Tiles3D
             //Parse feature table into List<float>
             List<Vector2Int> vertexFeatureIds = new();
             var stride = targetBufferView.byteStride;
-            Debug.Log("<color=red>stride: " + stride + "</color>",parent.gameObject);
             int currentFeatureTableIndex = -1;
             int vertexCount = 0;
             int accessorOffset = featureAccessor.byteOffset;
             for (int i = 0; i < featureIdBuffer.Length; i += stride)
             {
-                var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i+accessorOffset); //Kadaster
-                //var featureTableIndex = (int)BitConverter.ToInt32(featureIdBuffer, i);
-                //////
-
+                //TODO: Read componentType from accessor to determine how to read the featureTableIndex
+                var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i+accessorOffset); 
+                
                 if (currentFeatureTableIndex != featureTableIndex)
                 {
                     if (currentFeatureTableIndex != -1)
@@ -119,10 +120,6 @@ namespace Netherlands3D.Tiles3D
             }
             //Finish last feature table entry
             vertexFeatureIds.Add(new Vector2Int(currentFeatureTableIndex, vertexCount));
-            Debug.Log("vertexFeatureIds: " + vertexFeatureIds.Count,parent.gameObject);
-
-            //Find max y of vector2's in vertexFeatureIds
-            Debug.Log("currentFeatureTableIndex: " + currentFeatureTableIndex,parent.gameObject);
 
             //Retrieve EXT_structural_metadata tables
             var propertyTables = gltfFeatures.extensions.EXT_structural_metadata.propertyTables;
@@ -132,8 +129,8 @@ namespace Netherlands3D.Tiles3D
             foreach (var propertyTable in propertyTables)
             {
                 //Now parse the data from the buffer using stringOffsetType=UINT32
-                var bagpandid = propertyTable.properties.bagpandid; //Based on PG2B3DM dataset key naming
-                var identificatie = propertyTable.properties.identificatie; //Based on Tyler dataset key naming
+                var bagpandid = propertyTable.properties.bagpandid; //Based on Tyler dataset key naming
+                var identificatie = propertyTable.properties.identificatie;  //Based on PG2B3DM dataset key naming
 
                 var bufferViewIndex = (bagpandid != null) ? bagpandid.values : identificatie.values; //Values reference the bufferView index
                 var count = propertyTable.count;
@@ -153,10 +150,6 @@ namespace Netherlands3D.Tiles3D
             }
 
 #if SUBOBJECT
-            Debug.Log("Gewoon een een " + parent.name);
-            Debug.Log("vertexFeatureIds" + vertexFeatureIds.Count);
-            Debug.Log("bagIdList" + bagIdList.Count);        
-            Debug.Log(vertexFeatureIds.Count);
 
             foreach (Transform child in parent)
             {
@@ -172,8 +165,9 @@ namespace Netherlands3D.Tiles3D
                 {
                     var uniqueFeatureId = vertexFeatureIds[i];
                     var bagId = bagIdList[uniqueFeatureId.x];
-                    //Strip all characters except numberrs from bagId
-                    bagId = new string(bagId.Where(c => char.IsDigit(c)).ToArray());
+                    
+                    //Remove any prefixes/additions to the bag id
+                    bagId = Regex.Replace(bagId, "[^0-9]", "");
 
                     var subObject = new ObjectMappingItem()
                     {
