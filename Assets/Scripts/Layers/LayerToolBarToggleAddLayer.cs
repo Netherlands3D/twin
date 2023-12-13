@@ -5,13 +5,15 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin
 {
-    public class LayerToolBarButtonAddLayer : LayerToolBarButtonBase
+    public class LayerToolBarToggleAddLayer : LayerToolBarToggleBase
     {
         [SerializeField] private AddLayerPanel addLayerPanel;
-        public override void ButtonAction()
+        public override void ToggleAction(bool isOn)
         {
             // layerManager.EnableContextMenu(true, transform.position);
-            addLayerPanel.TogglePanel();
+            addLayerPanel.TogglePanel(isOn);
+            if (!isOn)
+                EventSystem.current.SetSelectedGameObject(null);
         }
 
         public override void OnDrop(PointerEventData eventData)

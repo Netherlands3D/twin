@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin
         
         public void OnEndDrag(PointerEventData eventData)
         {
-            panel.RecalculateTargetHeight();
+            panel.EndResizeAction();
         }
     }
 }
