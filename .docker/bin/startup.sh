@@ -6,7 +6,7 @@ if [ "${NL3D_CONFIGURATION}" != "false" ]; then
   if [ ! -f app.config.json ]; then
 
     echo "No pre-existing configuration file found, creating a configuration file based on environment variables"
-    cat app.config.dist.json | /envcat -f j2 'NL3D_*' | jq "" > app.config.json
+    cat app.config.dist.json | /envcat -f j2 'NL3D_*' | jq > app.config.json
 
   fi
   
