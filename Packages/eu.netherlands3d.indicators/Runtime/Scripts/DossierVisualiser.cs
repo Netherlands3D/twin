@@ -129,6 +129,7 @@ namespace Netherlands3D.Indicators
         public void Clear()
         {
             dataValuePin.gameObject.SetActive(false);
+
             SelectedArea = null;
             foreach (var area in Areas)
             {
@@ -220,7 +221,6 @@ namespace Netherlands3D.Indicators
                 worldPosition.y, 
                 worldPosition.z
             );
-
             var rd = CoordinateConverter.ConvertTo(targetRDCoordinate, CoordinateSystem.RD);
 
             // Get the bounds from our dossier
@@ -248,8 +248,6 @@ namespace Netherlands3D.Indicators
 
             // Sample the mapdata using the normalised location
             var sampleValueUnderPointer = frame.mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
-
-            Debug.Log(sampleValueUnderPointer);
             dataValuePin.SetLabel(sampleValueUnderPointer.ToString());
         }
 

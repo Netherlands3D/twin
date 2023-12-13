@@ -88,7 +88,6 @@ public class EsriRasterData{
     /// <param name="y">The y coordinate</param>
     public double GetPixelValue(int x, int y)
     {
-        Debug.Log("GetPixelValue: " + x + ", " + y);
         return rasterData[x, y];
     }
 
@@ -102,9 +101,6 @@ public class EsriRasterData{
     {
         var targetPixelX = Mathf.RoundToInt(numRows * (1-y));
         var targetPixelY = Mathf.RoundToInt(numColumns * x);
-
-        Debug.Log("GetValueAtNormalisedLocation: " + targetPixelX + ", " + targetPixelY);
-
         return GetPixelValue(targetPixelX,targetPixelY);
     }
 }

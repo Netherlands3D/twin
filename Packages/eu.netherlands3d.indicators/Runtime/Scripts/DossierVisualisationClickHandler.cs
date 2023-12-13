@@ -24,6 +24,13 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHand
     {
         this.visualiser = visualiser;
     }
+
+    //OnDrag required to use OnBeginDrag
+    public void OnDrag(PointerEventData eventData) {}
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        dragged = true;
+    }
  
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -46,18 +53,8 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHand
         var getLastRaycastResult = inputModule.GetLastRaycastResult(0);
         if(getLastRaycastResult.gameObject == this.gameObject)
         {
-            var raycastWordPosition = getLastRaycastResult.worldPosition; 
-            Debug.Log("Clicked dossier area visualisation at: " + raycastWordPosition);
-            
+            var raycastWordPosition = getLastRaycastResult.worldPosition;            
             this.visualiser.MoveSamplePointer(raycastWordPosition);
         }
     }
-
-    //OnDrag required to use OnBeginDrag
-    public void OnDrag(PointerEventData eventData) {}
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        dragged = true;
-    }
-
 }
