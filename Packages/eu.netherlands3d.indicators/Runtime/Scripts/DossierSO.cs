@@ -145,8 +145,6 @@ namespace Netherlands3D.Indicators
                 dossierSystemState = DossierSystemState.ImportingFailed;
                 Debug.Log($"<color=red>Failed to import dossier from {sourceIri}</color>");
                 Debug.LogError(www.error);
-                Debug.LogError(www.downloadHandler);
-                Debug.LogError(www.downloadHandler.data);
                 yield break;
             }
 
