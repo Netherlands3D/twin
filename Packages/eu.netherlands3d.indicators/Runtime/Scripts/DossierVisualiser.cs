@@ -67,6 +67,7 @@ namespace Netherlands3D.Indicators
         public UnityEvent<ProjectAreaVisualisation> onAreaVisualised = new();
         public UnityEvent<ProjectAreaVisualisation> onAreaRemoved = new();
         public UnityEvent<ProjectAreaVisualisation> onSelectedArea = new();
+        public UnityEvent<double> onReadValueAtLocation = new();
         private bool isTransparent = false;
 
         private void OnEnable()
@@ -248,6 +249,8 @@ namespace Netherlands3D.Indicators
 
             // Sample the mapdata using the normalised location
             var sampleValueUnderPointer = frame.mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
+            onReadValueAtLocation.Invoke(sampleValueUnderPointer);
+            
             dataValuePin.SetLabel(sampleValueUnderPointer.ToString());
         }
 
