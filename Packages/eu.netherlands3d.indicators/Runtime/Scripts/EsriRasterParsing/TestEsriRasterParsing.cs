@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Indicators.Esri
 {
     public class TestEsriRasterParsing : MonoBehaviour
     {

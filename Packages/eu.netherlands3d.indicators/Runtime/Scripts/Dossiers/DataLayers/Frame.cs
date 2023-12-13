@@ -1,4 +1,5 @@
 ﻿using System;
+using Netherlands3D.Indicators.Esri;
 using Netherlands3D.Json.JsonConverters;
 using Newtonsoft.Json;
 
