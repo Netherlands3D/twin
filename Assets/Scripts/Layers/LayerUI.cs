@@ -40,6 +40,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private Toggle enabledToggle;
         [SerializeField] private Button colorButton;
         [SerializeField] private RectTransform spacer;
+        private float spacerStartWidth;
         [SerializeField] private float indentWidth = 40f;
         [SerializeField] private Toggle foldoutToggle;
         [SerializeField] private Image layerTypeImage;
@@ -84,6 +85,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             rectTransform = GetComponent<RectTransform>();
             layerManager = GetComponentInParent<LayerManager>();
             layerVerticalLayoutGroup = layerManager.LayerUIContainer.GetComponent<VerticalLayoutGroup>();
+            spacerStartWidth = spacer.sizeDelta.x;
         }
 
         private void OnEnable()
@@ -303,7 +305,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateIndent()
         {
             var spacerRectTransform = spacer.transform as RectTransform;
-            spacerRectTransform.sizeDelta = new Vector2(Depth * indentWidth, spacerRectTransform.sizeDelta.y);
+            spacerRectTransform.sizeDelta = new Vector2((Depth * indentWidth) + spacerStartWidth, spacerRectTransform.sizeDelta.y);
         }
 
         private void UpdateName()
@@ -670,7 +672,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // var isInParentRow = parentRowRectTransform.rect.Contains(relativePointerPos);
             //
             // print("is in parent row of: " + Layer.name + "\t" + isInParentRow);
-            
+
             if (!layerManager.DragGhost && !IsSelected)
                 SetHighlight(InteractionState.Hover);
         }
