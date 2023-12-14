@@ -520,6 +520,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
                 var spacingOffset = (verticalLayoutGroup.spacing/2 ) * layerManager.DragLine.lossyScale.y;
                 spacingOffset -= layerManager.DragLine.rect.height/2 * layerManager.DragLine.lossyScale.y;
+                float leftOffset =  referenceLayerUnderMouse.parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left + 
+                                    referenceLayerUnderMouse.layerTypeImage.rectTransform.anchoredPosition.x + 
+                                    referenceLayerUnderMouse.layerTypeImage.rectTransform.rect.width * referenceLayerUnderMouse.layerTypeImage.rectTransform.pivot.x;
                 
                 if (yValue01 < 0.25f)
                 {
@@ -527,6 +530,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     draggingLayerShouldBePlacedBeforeOtherLayer = true;
                     layerManager.DragLine.gameObject.SetActive(true);
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y + spacingOffset);
+                    layerManager.DragLine.SetLeft(leftOffset);
                     
                     newParent = referenceLayerUnderMouse.ParentUI;
                     newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
@@ -540,7 +544,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(true);
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y) - new Vector2(0, correctedSize.y - spacingOffset);
-
+                    layerManager.DragLine.SetLeft(leftOffset);
+                    
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
                     if (referenceLayerUnderMouse.ChildrenUI.Length > 0 && referenceLayerUnderMouse.foldoutToggle.isOn)
                     {
