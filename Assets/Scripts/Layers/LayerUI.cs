@@ -174,6 +174,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnFoldoutToggleValueChanged(bool isOn)
         {
             UpdateFoldout();
+            RecalculateVisibleHierarchyRecursive();
         }
 
         private void Start()
