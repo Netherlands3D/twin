@@ -20,13 +20,20 @@ namespace Netherlands3D.Twin.Configuration
         private string setupSceneName;
 
         [SerializeField]
+        [Tooltip("The location where to get the configuration file from")]
+        private string configFilePath = "app.config.json";
+
+        [Header("Debugging Aids")]
+        [SerializeField]
         [Tooltip("In the editor we do not get a URL; with this field you can simulate one. For example: https://netherlands3d.eu/twin/?origin=155000,463000,200&features=terrain,buildings")]
         private string debugUrl = "";
 
         [SerializeField]
-        [Tooltip("The location where to get the configuration file from")]
-        private string configFilePath = "app.config.json";
+        [TextArea(20, 100)]
+        [Tooltip("In the editor we do easily read a config file; with this field you can simulate one.")]
+        private string debugConfig = "";
 
+        [Header("Events")]
         public UnityEvent OnStartedLoading = new();
         public UnityEvent<Configuration> OnLoaded = new();
 
@@ -34,8 +41,19 @@ namespace Netherlands3D.Twin.Configuration
         {
             configuration.ShouldStartSetup = true;
             OnStartedLoading.Invoke();
+            
+            #if UNITY_EDITOR
+            if (string.IsNullOrEmpty(debugConfig) == false)
+            {
+                configuration.Populate(JSON.Parse(debugConfig));
+                configuration.ShouldStartSetup = false;
+            } else {
+            #endif
             var uri = Application.dataPath + '/' + configFilePath;
             yield return configuration.PopulateFromFile(uri);
+            #if UNITY_EDITOR
+            }
+            #endif
 
             var url = Application.absoluteURL;
             #if UNITY_EDITOR

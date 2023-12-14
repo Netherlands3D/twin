@@ -7,16 +7,47 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Indicators.Esri;
 
 namespace Netherlands3D.Indicators
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Dossier", fileName = "DossierSO", order = 0)]
     public class DossierSO : ScriptableObject
     {
+        /// <summary>
+        /// We keep track of the current state the Dossier System.
+        ///
+        /// Some elements, such as the sidebar, need to know the latest state of the system because they need to have
+        /// an initial state after being instantiated. The DossierSystemState provides a way to communicate the latest
+        /// state when it comes to loading a dossier.
+        /// </summary>
+        [Serializable]
+        public enum DossierSystemState
+        {
+            Opening,
+            Opened,
+            FailedToOpen,
+            Closed
+        }
+
         [SerializeField]
-        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using {id} (without spaces).")]
+        [Tooltip("if the DossierUriTemplate contains a variable {baseUri}, it will be replaced by this value.")]
+        public string baseUri = "";
+        
+        [SerializeField]
+        [Tooltip("Contains the URI Template where to find the dossier's JSON file. The dossier id can be inserted using a variable {id}, a dynamic base URI can also be injected using the variable {baseUri}.")]
         private string dossierUriTemplate = "";
 
+        [SerializeField]
+        private string apiKey = "";
+        public string ApiKey
+        {
+            get => apiKey;
+            set => apiKey = value;
+        }
+
+        public UnityEvent onOpening = new();
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
         public UnityEvent<ProjectArea?> onSelectedProjectArea = new();
@@ -25,6 +56,9 @@ namespace Netherlands3D.Indicators
         public UnityEvent onFailedToOpen = new();
         public UnityEvent onClose = new();
         public UnityEvent<FeatureCollection> onLoadedProjectArea = new();
+        
+        private DossierSystemState dossierSystemState = DossierSystemState.Closed;
+        public DossierSystemState State => dossierSystemState;
 
         public Dossier? Data { get; private set; }
         public Variant? ActiveVariant { get; private set; }
@@ -41,6 +75,7 @@ namespace Netherlands3D.Indicators
         }
 
         private DataLayer? selectedDataLayer;
+
         public DataLayer? SelectedDataLayer
         {
             get => selectedDataLayer;
@@ -62,12 +97,50 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                onLoadMapOverlayFrame.Invoke(firstFrame.map);
+                var firstFrameMapUrl = AppendApiKeyToURL(firstFrame.map);
+                
+                // We parse the frame map data
+                onLoadMapOverlayFrame.Invoke(firstFrameMapUrl);
             }
+        }
+
+        private Uri AppendApiKeyToURL(Uri url)
+        {
+            if (string.IsNullOrEmpty(apiKey)) return url;
+
+            var uriBuilder = new UriBuilder(url);
+            uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                ? $"code={apiKey}" 
+                : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+            
+            return uriBuilder.Uri;
+        }
+
+        public IEnumerator LoadMapDataAsync(Frame frame)
+        {
+            var uriWithCode = AppendApiKeyToURL(frame.data);
+            UnityWebRequest www = UnityWebRequest.Get(uriWithCode);
+            yield return www.SendWebRequest();
+            Debug.Log($"<color=green>Getting mapdata from {uriWithCode}</color>");
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                onFailedToOpen.Invoke();
+                Debug.Log($"<color=red>Failed to load mapdata from {uriWithCode}</color>");
+                Debug.LogError(www.error);
+                yield break;
+            }
+
+            var mapAsciiData = www.downloadHandler.text;
+            var mapData = new EsriRasterData();
+            mapData.ParseASCII(mapAsciiData);
+            frame.mapData = mapData;             
         }
 
         public IEnumerator Open(string dossierId)
         {
+            dossierSystemState = DossierSystemState.Opening;
+            onOpening.Invoke();
             string url = AssembleUri(dossierId);
             Debug.Log($"<color=orange>Loading dossier with id {dossierId} from {url}</color>");
             Close();
@@ -78,6 +151,7 @@ namespace Netherlands3D.Indicators
             if (www.result != UnityWebRequest.Result.Success)
             {
                 onFailedToOpen.Invoke();
+                dossierSystemState = DossierSystemState.FailedToOpen;
                 Debug.Log($"<color=red>Failed to load dossier from {url}</color>");
                 Debug.LogError(www.error);
                 yield break;
@@ -96,6 +170,7 @@ namespace Netherlands3D.Indicators
             {
                 Debug.Log($"<color=red>Failed to deserialize dossier from {url}</color>");
                 Debug.LogError(e.Message);
+                dossierSystemState = DossierSystemState.FailedToOpen;
                 onFailedToOpen.Invoke();
                 yield break;
             }
@@ -103,6 +178,7 @@ namespace Netherlands3D.Indicators
             Debug.Log($"<color=green>Loaded dossier with id {dossier.id} from {url}</color>");
 
             Data = dossier;
+            dossierSystemState = DossierSystemState.Opened;
             onOpen.Invoke(dossier);
 
             SelectVariant(dossier.variants.FirstOrDefault());
@@ -111,6 +187,7 @@ namespace Netherlands3D.Indicators
         public void Close()
         {
             onClose.Invoke();
+            dossierSystemState = DossierSystemState.Closed;
             Data = null;
             SelectVariant(null);
             ActiveProjectArea = null;
@@ -126,27 +203,34 @@ namespace Netherlands3D.Indicators
 
         public IEnumerator LoadProjectAreaGeometry(Variant variant)
         {
-            Debug.Log("Loading project area geometry for " + variant);
-            var geometryUrl = variant.geometry;
-            
-            UnityWebRequest www = UnityWebRequest.Get(geometryUrl);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            var featureCollection = new FeatureCollection(
+                variant.areas.Select(area => new Feature(area.geometry, null, area.id)).ToList()
+            );
+            if (Data.HasValue)
             {
-                SelectVariant(null);
-                Debug.LogError(www.error);
-                yield break;
+                featureCollection.CRS = Data.Value.crs;
             }
-
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(www.downloadHandler.text);
-            Debug.Log("Loaded project area geometry for " + variant);
+            
             onLoadedProjectArea.Invoke(featureCollection);
+            yield return null;
         }
 
         private string AssembleUri(string dossierId)
         {
-            return dossierUriTemplate.Replace("{id}", dossierId);
+            var url = dossierUriTemplate
+                .Replace("{baseUri}", baseUri)
+                .Replace("{id}", dossierId);
+            
+            if (!string.IsNullOrEmpty(apiKey))
+            {
+                var uriBuilder = new UriBuilder(url);
+                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                    ? $"code={apiKey}" 
+                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+                url = uriBuilder.ToString();
+            }
+
+            return url;
         }
     }
 }
