@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -35,7 +34,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private LayerManager layerManager;
         public Transform LayerBaseTransform => layerManager.LayerUIContainer;
 
-        private VerticalLayoutGroup layerVerticalLayoutGroup;
+        private VerticalLayoutGroup verticalLayoutGroup;
         [SerializeField] private RectTransform parentRowRectTransform;
         [SerializeField] private Toggle enabledToggle;
         [SerializeField] private Button colorButton;
@@ -84,7 +83,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             rectTransform = GetComponent<RectTransform>();
             layerManager = GetComponentInParent<LayerManager>();
-            layerVerticalLayoutGroup = layerManager.LayerUIContainer.GetComponent<VerticalLayoutGroup>();
+            verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
             spacerStartWidth = spacer.sizeDelta.x;
         }
 
@@ -519,15 +518,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 var relativeValue = -relativeYValue / correctedSize.y;
                 var yValue01 = Mathf.Clamp01(relativeValue);
 
-                var spacingOffset = -layerVerticalLayoutGroup.spacing / 2 * referenceLayerUnderMouse.transform.lossyScale.y;
-
+                var spacingOffset = (verticalLayoutGroup.spacing/2 ) * layerManager.DragLine.lossyScale.y;
+                spacingOffset -= layerManager.DragLine.rect.height/2 * layerManager.DragLine.lossyScale.y;
+                
                 if (yValue01 < 0.25f)
                 {
                     // print("higher than " + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = true;
                     layerManager.DragLine.gameObject.SetActive(true);
-                    layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y - spacingOffset);
-
+                    layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y + spacingOffset);
+                    
                     newParent = referenceLayerUnderMouse.ParentUI;
                     newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
 
@@ -628,7 +628,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 var layer = LayerData.LayersVisibleInInspector[i];
                 var correctedSize = layer.rectTransform.rect.size * layer.rectTransform.lossyScale;
-                correctedSize.y += layerVerticalLayoutGroup.spacing * layer.rectTransform.lossyScale.y;
+                correctedSize.y += verticalLayoutGroup.spacing * layer.rectTransform.lossyScale.y;
 
                 if (mousePos.y < layer.rectTransform.position.y && mousePos.y >= layer.rectTransform.position.y - correctedSize.y)
                 {
