@@ -78,30 +78,28 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                var firstFrameMapUrl = AppendDossierCodeToURL(firstFrame.map);
+                var firstFrameMapUrl = AppendApiKeyToURL(firstFrame.map);
                 
                 // We parse the frame map data
                 onLoadMapOverlayFrame.Invoke(firstFrameMapUrl);
             }
         }
 
-        public Uri AppendDossierCodeToURL(Uri url)
+        private Uri AppendApiKeyToURL(Uri url)
         {
-            if (!string.IsNullOrEmpty(apiKey))
-            {
-                var uriBuilder = new UriBuilder(url);
-                uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
-                    ? $"code={apiKey}" 
-                    : string.Concat(uriBuilder.Query, $"&code={apiKey}");
-                url = uriBuilder.Uri;
-            }
+            if (string.IsNullOrEmpty(apiKey)) return url;
 
-            return url;
+            var uriBuilder = new UriBuilder(url);
+            uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                ? $"code={apiKey}" 
+                : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+            
+            return uriBuilder.Uri;
         }
 
         public IEnumerator LoadMapDataAsync(Frame frame)
         {
-            var uriWithCode = AppendDossierCodeToURL(frame.data);
+            var uriWithCode = AppendApiKeyToURL(frame.data);
             UnityWebRequest www = UnityWebRequest.Get(uriWithCode);
             yield return www.SendWebRequest();
             Debug.Log($"<color=green>Getting mapdata from {uriWithCode}</color>");

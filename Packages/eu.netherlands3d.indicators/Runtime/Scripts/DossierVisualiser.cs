@@ -17,6 +17,7 @@ namespace Netherlands3D.Indicators
     public class DossierVisualiser : MonoBehaviour
     {
         [SerializeField] private DossierSO dossier;
+        [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Material meshMaterial;
         [SerializeField] private Material lineMaterial;
         [SerializeField] private Material selectedMeshMaterial;
@@ -29,9 +30,7 @@ namespace Netherlands3D.Indicators
 
         private FeatureCollection geometry;
 
-        public DossierSO Dossier{
-            get => dossier;
-        }
+        public DossierSO Dossier => dossier;
 
         public FeatureCollection Geometry
         {
@@ -74,7 +73,21 @@ namespace Netherlands3D.Indicators
         {
             onAreaRemoved.AddListener(OnAreaRemoved);
             onAreaVisualised.AddListener(OnAreaVisualised);
+            dossier.onSelectedDataLayer.AddListener(OnSelectedDataLayer);
             UpdateVisualisation();
+        }
+
+        private void OnSelectedDataLayer(DataLayer? dataLayer)
+        {
+            foreach (var area in Areas)
+            {
+                area.Polygons.ForEach(
+                    visualisation =>
+                    {
+                        visualisation.gameObject.GetComponent<MeshRenderer>().enabled = !dataLayer.HasValue;
+                    }
+                );
+            }
         }
 
         private void OnDisable()
@@ -82,6 +95,7 @@ namespace Netherlands3D.Indicators
             HideVisualisation();
             onAreaRemoved.RemoveListener(OnAreaRemoved);
             onAreaVisualised.RemoveListener(OnAreaVisualised);
+            dossier.onSelectedDataLayer.RemoveListener(OnSelectedDataLayer);
         }
 
         public void UpdateVisualisation()
@@ -89,15 +103,9 @@ namespace Netherlands3D.Indicators
             string previouslySelectedAreaId = SelectedArea?.ProjectArea.id;
             Clear();
 
-            if (geometry == null)
-            {
-                return;
-            }
+            if (geometry == null) return;
 
-            if (dossier.ActiveVariant.HasValue == false)
-            {
-                return;
-            }
+            if (dossier.ActiveVariant.HasValue == false) return;
 
             for (var featureIndex = 0; featureIndex < geometry.Features.Count; featureIndex++)
             {
@@ -106,16 +114,15 @@ namespace Netherlands3D.Indicators
                 onAreaVisualised.Invoke(area);
             }
 
+            if (string.IsNullOrEmpty(previouslySelectedAreaId)) return;
+
             // Restore selection
-            if (string.IsNullOrEmpty(previouslySelectedAreaId) == false)
+            var previouslySelectedArea = Areas.FirstOrDefault(
+                visualisation => visualisation.ProjectArea.id == previouslySelectedAreaId
+            );
+            if (previouslySelectedArea != null)
             {
-                var previouslySelectedArea = Areas.FirstOrDefault(
-                    visualisation => visualisation.ProjectArea.id == previouslySelectedAreaId
-                );
-                if (previouslySelectedArea != null)
-                {
-                    SelectArea(previouslySelectedArea);
-                }
+                SelectArea(previouslySelectedArea);
             }
         }
 
@@ -190,23 +197,21 @@ namespace Netherlands3D.Indicators
 
         public void MoveSamplePointer(Vector3 worldPosition)
         {
-            if(dossier.SelectedDataLayer != null && dossier.SelectedDataLayer.Value.frames != null)
-            {
-                dataValuePin.gameObject.SetActive(true);
-                dataValuePin.transform.position = worldPosition;
-
-                DataLayer dataLayer = dossier.SelectedDataLayer.Value;
-                var frames = dataLayer.frames;
-                if(frames.Count < 1) 
-                    return;
-
-                var frame = frames.FirstOrDefault();
-                StartCoroutine(SampleFrameMapDataAtLocation(frame,worldPosition));
-            }
-            else
+            if (dossier.SelectedDataLayer == null || dossier.SelectedDataLayer.Value.frames == null)
             {
                 dataValuePin.gameObject.SetActive(false);
+                return;
             }
+
+            dataValuePin.gameObject.SetActive(true);
+            dataValuePin.transform.position = worldPosition;
+
+            DataLayer dataLayer = dossier.SelectedDataLayer.Value;
+            var frames = dataLayer.frames;
+            if (frames.Count < 1) return;
+
+            var frame = frames.FirstOrDefault();
+            StartCoroutine(SampleFrameMapDataAtLocation(frame, worldPosition));
         }
 
         private IEnumerator SampleFrameMapDataAtLocation(Frame frame, Vector3 worldPosition)
@@ -251,7 +256,7 @@ namespace Netherlands3D.Indicators
             var sampleValueUnderPointer = frame.mapData.GetValueAtNormalisedLocation(normalisedX,normalisedY);
             onReadValueAtLocation.Invoke(sampleValueUnderPointer);
             
-            dataValuePin.SetLabel(sampleValueUnderPointer.ToString());
+            dataValuePin.SetLabel(sampleValueUnderPointer.ToString("0.00"));
         }
 
         private PolygonVisualisation CreateVisualisationFromPolygon(Polygon polygon)
@@ -301,6 +306,9 @@ namespace Netherlands3D.Indicators
 
         private void SelectAreaBasedOnPolygon(PolygonVisualisation visualisation)
         {
+            // If a map overlay is active, do not change the selection of a project area as it will confuse the user
+            if (dossier.SelectedDataLayer.HasValue) return;
+            
             SelectArea(Areas.First(areaVisualisation => areaVisualisation.Polygons.Contains(visualisation)));
         }
 

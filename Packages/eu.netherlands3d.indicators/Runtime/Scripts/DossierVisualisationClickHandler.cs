@@ -51,10 +51,9 @@ public class DossierVisualisationClickHandler : MonoBehaviour, IPointerClickHand
     private void MovePointer()
     {
         var getLastRaycastResult = inputModule.GetLastRaycastResult(0);
-        if(getLastRaycastResult.gameObject == this.gameObject)
-        {
-            var raycastWordPosition = getLastRaycastResult.worldPosition;            
-            this.visualiser.MoveSamplePointer(raycastWordPosition);
-        }
+        if (getLastRaycastResult.gameObject != this.gameObject) return;
+        
+        var worldPosition = getLastRaycastResult.worldPosition;            
+        this.visualiser.MoveSamplePointer(worldPosition);
     }
 }

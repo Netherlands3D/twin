@@ -16,20 +16,7 @@ MonoBehaviour:
   setupSceneName: SetupWizard
   configFilePath: app.config.json
   debugUrl: 
-  debugConfig: "{\r\n  \"title\": \"Provincie Utrecht\",\r\n  \"origin\": {\r\n   
-    \"epsg\": 7415,\r\n    \"x\": 161088,\r\n    \"y\": 503050,\r\n    \"z\": 500\r\n 
-    },\r\n  \"features\": {\r\n    \"terrain\": { \"enabled\": true },\r\n    \"buildings\":
-    { \"enabled\": true },\r\n    \"trees\": { \"enabled\": false },\r\n    \"districts\":
-    { \"enabled\": false },\r\n    \"neighbourhoods\": { \"enabled\": false },\r\n   
-    \"streets\": { \"enabled\": false },\r\n    \"bag\": { \"enabled\": true },\r\n   
-    \"download\": { \"enabled\": false },\r\n    \"sun\": { \"enabled\": false },\r\n   
-    \"timeline\": { \"enabled\": false },\r\n    \"traffic\": { \"enabled\": false
-    },\r\n    \"screenshot\": { \"enabled\": false },\r\n    \"object-importer\":
-    { \"enabled\": false },\r\n    \"indicators\": {\r\n      \"enabled\": true,\r\n     
-    \"configuration\": {\r\n        \"baseUri\": \"https://nl3d-backend-provincie-utrecht-d.azurewebsites.net/api/v1/indicators\",\r\n       
-    \"dossierId\": \"tygron;cHJvdmluY2llLXV0cmVjaHQvbWFqZWxsYWtucF9nZ28=\",\r\n       
-    \"apiKey\": \"moBedtbjCprloiQkiDKz-BbT6VI37XxNr5R2v6zw-z3oAzFuHjxjcA==\"\r\n     
-    }\r\n    }\r\n  }\r\n}"
+  debugConfig: 
   OnStartedLoading:
     m_PersistentCalls:
       m_Calls:
