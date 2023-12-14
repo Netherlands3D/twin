@@ -545,17 +545,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerManager.DragLine.gameObject.SetActive(true);
                     layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.transform.position.y) - new Vector2(0, correctedSize.y - spacingOffset);
-                    layerManager.DragLine.SetLeft(leftOffset);
                     
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
                     if (referenceLayerUnderMouse.ChildrenUI.Length > 0 && referenceLayerUnderMouse.foldoutToggle.isOn)
                     {
                         // print("edge case for: " + referenceLayerUnderMouse.Layer.name);
+                        leftOffset += indentWidth;
+                        layerManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse;
                         newSiblingIndex = 0;
                     }
                     else
                     {
+                        layerManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse.ParentUI;
                         newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex() + 1;
                         if (newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
