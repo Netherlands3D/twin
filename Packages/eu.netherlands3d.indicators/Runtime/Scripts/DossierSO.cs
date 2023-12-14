@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Indicators.Esri;
 
 namespace Netherlands3D.Indicators
 {
@@ -95,18 +97,44 @@ namespace Netherlands3D.Indicators
                 
                 // since we do not support multiple frames at the moment, we cheat and always load the first
                 var firstFrame = value.Value.frames.First();
-                var firstFrameMap = firstFrame.map;
-                if (!string.IsNullOrEmpty(apiKey))
-                {
-                    var uriBuilder = new UriBuilder(firstFrameMap);
-                    uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
-                        ? $"code={apiKey}" 
-                        : string.Concat(uriBuilder.Query, $"&code={apiKey}");
-                    firstFrameMap = uriBuilder.Uri;
-                }
-
-                onLoadMapOverlayFrame.Invoke(firstFrameMap);
+                var firstFrameMapUrl = AppendApiKeyToURL(firstFrame.map);
+                
+                // We parse the frame map data
+                onLoadMapOverlayFrame.Invoke(firstFrameMapUrl);
             }
+        }
+
+        private Uri AppendApiKeyToURL(Uri url)
+        {
+            if (string.IsNullOrEmpty(apiKey)) return url;
+
+            var uriBuilder = new UriBuilder(url);
+            uriBuilder.Query = string.IsNullOrEmpty(uriBuilder.Query) 
+                ? $"code={apiKey}" 
+                : string.Concat(uriBuilder.Query, $"&code={apiKey}");
+            
+            return uriBuilder.Uri;
+        }
+
+        public IEnumerator LoadMapDataAsync(Frame frame)
+        {
+            var uriWithCode = AppendApiKeyToURL(frame.data);
+            UnityWebRequest www = UnityWebRequest.Get(uriWithCode);
+            yield return www.SendWebRequest();
+            Debug.Log($"<color=green>Getting mapdata from {uriWithCode}</color>");
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                onFailedToOpen.Invoke();
+                Debug.Log($"<color=red>Failed to load mapdata from {uriWithCode}</color>");
+                Debug.LogError(www.error);
+                yield break;
+            }
+
+            var mapAsciiData = www.downloadHandler.text;
+            var mapData = new EsriRasterData();
+            mapData.ParseASCII(mapAsciiData);
+            frame.mapData = mapData;             
         }
 
         public IEnumerator Open(string dossierId)
