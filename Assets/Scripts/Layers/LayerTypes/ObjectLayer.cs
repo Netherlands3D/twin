@@ -1,6 +1,7 @@
 using System;
 using RuntimeHandle;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -10,7 +11,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
     {
         private RuntimeTransformHandle transformHandle;
-        public InputAction clickAction;
+        [SerializeField] private UnityEvent<GameObject> objectCreated;
 
         public override bool IsActiveInScene
         {
@@ -27,6 +28,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClick);
+        }
+
+        private void Start()
+        {
+            objectCreated.Invoke(gameObject);
         }
 
         private void OnMouseClick()

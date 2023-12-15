@@ -209,10 +209,26 @@ namespace Netherlands3D.Twin
         
         public void AddLayerScriptToObj(GameObject parsedObj)
         {
+            var spawnPoint = GetSpawnPoint();
+
+            parsedObj.transform.position = spawnPoint;
+            
             var objLayer = parsedObj.AddComponent<ObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
             objLayer.UI.Select();
             CreatedMoveableGameObject.Invoke(parsedObj);
+        }
+
+        private static Vector3 GetSpawnPoint()
+        {
+            var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            var plane = new Plane(Vector3.up, 0);
+            var intersect = plane.Raycast(ray, out float distance);
+            if (!intersect)
+                distance = 10f;
+
+            var spawnPoint = Camera.main.transform.position + Camera.main.transform.forward * distance;
+            return spawnPoint;
         }
     }
 }
