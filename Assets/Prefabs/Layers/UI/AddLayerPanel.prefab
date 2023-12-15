@@ -1137,7 +1137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1548,8 +1548,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4194749933784222526}
   m_HandleRect: {fileID: 1952508586956662896}
   m_Direction: 2
-  m_Value: 1.0000004
-  m_Size: 0.10555556
+  m_Value: 1
+  m_Size: 0.016666668
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1566,6 +1566,7 @@ GameObject:
   - component: {fileID: 7669391784722460519}
   - component: {fileID: 7132862203337170606}
   - component: {fileID: 4768043694966967151}
+  - component: {fileID: 2670768480989047758}
   m_Layer: 5
   m_Name: Dragline
   m_TagString: Untagged
@@ -1644,3 +1645,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 67748899823263108}
+--- !u!114 &2670768480989047758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001956114208038735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfcb34141f592545a0f37a3961cea27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  styleOnHover: 5

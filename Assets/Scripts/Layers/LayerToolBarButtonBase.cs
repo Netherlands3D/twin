@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    [RequireComponent(typeof(Toggle))]
+    [RequireComponent(typeof(Button))]
     public abstract class LayerToolBarButtonBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
         protected LayerManager layerManager;
