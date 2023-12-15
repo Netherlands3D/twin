@@ -746,6 +746,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BottomButtons
       objectReference: {fileID: 0}
+    - target: {fileID: 3316363234580051568, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: layerManager
+      value: 
+      objectReference: {fileID: 284876463517830170}
     - target: {fileID: 6675770584577704250, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -846,6 +851,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7038094414396989272, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: layerManager
+      value: 
+      objectReference: {fileID: 284876463517830170}
     - target: {fileID: 7038094414396989272, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: addLayerPanel

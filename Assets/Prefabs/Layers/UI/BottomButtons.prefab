@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6aa2d0cf04a94d1bb5d5480566b3684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerManager: {fileID: 0}
   addLayerPanel: {fileID: 0}
 --- !u!1 &2194463577234316449
 GameObject:
@@ -392,6 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 576f507b381314e188d53bda6d059fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerManager: {fileID: 0}
 --- !u!1 &4942309985015116834
 GameObject:
   m_ObjectHideFlags: 0

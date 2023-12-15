@@ -11,13 +11,13 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Button))]
     public abstract class LayerToolBarButtonBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        protected LayerManager layerManager;
+        [SerializeField] protected LayerManager layerManager;
         protected Button button;
 
         private void Awake()
         {
             button = GetComponent<Button>();
-            layerManager = GetComponentInParent<LayerManager>();
+            // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()

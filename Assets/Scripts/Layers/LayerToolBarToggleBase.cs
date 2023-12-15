@@ -11,13 +11,13 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public abstract class LayerToolBarToggleBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        protected LayerManager layerManager;
+        [SerializeField] protected LayerManager layerManager;
         protected Toggle toggle;
 
         private void Awake()
         {
             toggle = GetComponent<Toggle>();
-            layerManager = GetComponentInParent<LayerManager>();
+            // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()
