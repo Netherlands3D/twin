@@ -76,5 +76,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         //     if (transform.parent != ParentTransform)
         //         transform.SetParent(ParentTransform);
         // }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer.PriorityIndex);
+        }
     }
 }

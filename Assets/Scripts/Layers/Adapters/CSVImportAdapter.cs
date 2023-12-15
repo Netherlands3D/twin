@@ -58,13 +58,12 @@ namespace Netherlands3D.Twin
             // this.path = path;
             foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
             {
-                Destroy(existingDatasetLayers.gameObject);
+                DestroyImmediate(existingDatasetLayers.gameObject); //have to call DestroyImmediate instead of normal Destroy, because this will call the dataset's OnDestroy() function to clean up the old colors before applying the new ones
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
             
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
             datasetLayer.transform.SetParent(DatasetLayerParent);
-            // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
             datasetLayer.UI.Select();
 
             var fullPath = Path.Combine(Application.persistentDataPath, file);
