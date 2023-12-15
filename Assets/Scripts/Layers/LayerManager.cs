@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -174,6 +175,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Update()
         {
+            if (Keyboard.current.deleteKey.wasPressedThisFrame)
+            {
+                DeleteSelectedLayers();
+            }
+            
             if(!contextMenu)
                 return;
             
@@ -235,6 +241,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool IsDragOnButton()
         {
             return DragGhost && MouseIsOverButton;
+        }
+
+        public void DeleteSelectedLayers()
+        {
+            foreach (var layer in LayerData.SelectedLayers)
+            {
+                Destroy(layer.Layer.gameObject);
+            }
         }
     }
 }

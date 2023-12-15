@@ -365,7 +365,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 ProcessLayerSelection();
             }
 
-            layerManager.EnableContextMenu(true, eventData.position);
+            // layerManager.EnableContextMenu(true, eventData.position);  //disabled context menu until UI is ready
         }
 
         private void ProcessLayerSelection()
@@ -689,6 +689,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if (!IsSelected)
                 SetHighlight(InteractionState.Default);
+        }
+
+        private void OnDestroy()
+        {
+            if(IsSelected)
+                LayerData.SelectedLayers.Remove(this);
+            
+            if(LayerData.LayersVisibleInInspector.Contains(this))
+            {
+                LayerData.LayersVisibleInInspector.Remove(this);
+            }
         }
     }
 }
