@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
     {
         private RuntimeTransformHandle transformHandle;
-        [SerializeField] private UnityEvent<GameObject> objectCreated;
+        [SerializeField] private UnityEvent<GameObject> objectCreated = new();
 
         public override bool IsActiveInScene
         {
