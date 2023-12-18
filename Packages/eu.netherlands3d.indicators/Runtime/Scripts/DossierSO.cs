@@ -60,7 +60,7 @@ namespace Netherlands3D.Indicators
 
         public UnityEvent onImporting = new();
         public UnityEvent onImportingFailed = new();
-        public UnityEvent onImport = new();
+        public UnityEvent<string> onImport = new();
         public UnityEvent onOpening = new();
         public UnityEvent<Dossier> onOpen = new();
         public UnityEvent<Variant?> onSelectedVariant = new();
@@ -165,10 +165,7 @@ namespace Netherlands3D.Indicators
             
             dossierSystemState = DossierSystemState.Imported;
             
-            // TODO: Update address bar
-            
-            onImport.Invoke();
-            OpenDossier(dossier);
+            onImport.Invoke(dossier.id);
         }
 
         private UnityWebRequest PostAsJson(string url, object data)

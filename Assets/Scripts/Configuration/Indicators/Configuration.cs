@@ -83,6 +83,11 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
+            SetDossierIdInQueryParameters(urlBuilder);
+        }
+
+        public void SetDossierIdInQueryParameters(UriBuilder urlBuilder)
+        {
             if (string.IsNullOrEmpty(dossierId)) return;
 
             urlBuilder.AddQueryParameter("indicators.dossier", dossierId);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using Netherlands3D.Twin.Features;
 using SimpleJSON;
 using UnityEditor;
 using UnityEngine;
@@ -9,11 +10,18 @@ using UnityEngine.SceneManagement;
 
 namespace Netherlands3D.Twin.Configuration
 {
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern void ReplaceUrl(string url);
+#endif
+
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configurator", fileName = "Configurator", order = 0)]
     public class Configurator : ScriptableObject
     {
         [SerializeField] 
         private Configuration configuration;
+
+        private Uri uri;
 
         [SerializeField] 
         [Tooltip("The scene with the Setup Wizard that needs to load additively")]
@@ -40,6 +48,9 @@ namespace Netherlands3D.Twin.Configuration
         public IEnumerator Execute()
         {
             configuration.ShouldStartSetup = true;
+            var indicatorsConfiguration = GetFeatureConfigurationOfType<Indicators.Configuration>();
+            indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
+            
             OnStartedLoading.Invoke();
             
             #if UNITY_EDITOR
@@ -49,8 +60,7 @@ namespace Netherlands3D.Twin.Configuration
                 configuration.ShouldStartSetup = false;
             } else {
             #endif
-            var uri = Application.dataPath + '/' + configFilePath;
-            yield return configuration.PopulateFromFile(uri);
+                yield return configuration.PopulateFromFile(Application.dataPath + '/' + configFilePath);
             #if UNITY_EDITOR
             }
             #endif
@@ -63,7 +73,8 @@ namespace Netherlands3D.Twin.Configuration
             if (string.IsNullOrEmpty(url) == false)
             {
                 Debug.Log($"Loading configuration from URL '{url}'");
-                configuration.Populate(new Uri(url));
+                uri = new Uri(url);
+                configuration.Populate(uri);
             }
 
             if (configuration.ShouldStartSetup)
@@ -72,9 +83,31 @@ namespace Netherlands3D.Twin.Configuration
             }
 
             OnLoaded.Invoke(configuration);
+            
+            indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
+
             yield return null;
         }
-        
+
+        private T GetFeatureConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
+        {
+            return configuration
+                .Features
+                .Find(feature => feature.configuration is T)
+                .configuration as T;
+        }
+
+        private void UpdateDossierIdAfterLoading(string dossierId)
+        {
+            var uriBuilder = new UriBuilder(uri); 
+            GetFeatureConfigurationOfType<Indicators.Configuration>().SetDossierIdInQueryParameters(uriBuilder);
+
+            uri = uriBuilder.Uri;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            ReplaceUrl($"./{uri.Query}");
+#endif
+        }
+
         [ContextMenu("Read config from json file")]
         public void ReadConfigFromJson()
         {
