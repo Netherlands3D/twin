@@ -36,6 +36,7 @@ namespace Netherlands3D.Twin
             var spawnPoint = GetSpawnPoint();
             
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.identity);
+            newObject.name = prefab.name;
             var layerComponent = newObject.GetComponent<ObjectLayer>();
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<ObjectLayer>();
