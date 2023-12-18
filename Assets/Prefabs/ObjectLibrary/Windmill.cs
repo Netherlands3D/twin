@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Netherlands3D.T3DPipeline;
-using Netherlands3D.Events;
 
 public enum WindmillStatus
 {
@@ -26,10 +25,6 @@ public class Windmill : MonoBehaviour
     [field:SerializeField]
     public WindmillStatus Status { get; private set; }
 
-
-    [SerializeField]
-    private GameObjectEvent onCityObjectVisualized;
-
     [SerializeField]
     private GameObject windmillBase;
     [SerializeField]
@@ -42,27 +37,13 @@ public class Windmill : MonoBehaviour
     [SerializeField]
     private float rotationSpeed = 10f;
 
-    //float fallbackHeight = 120f;
-    //float fallbackDiameter = 120f;
-
     private void Awake()
     {
         axisBasePosition = windmillAxis.transform.localPosition;
     }
 
-    private void OnEnable()
+    public void InitializeFromCityObject(CityObject cityObject)
     {
-        if (onCityObjectVisualized)
-            onCityObjectVisualized.AddListenerStarted(InitializeFromCityObject);
-    }
-
-    private void InitializeFromCityObject(GameObject obj)
-    {
-        var cityObject = obj.GetComponent<CityObject>();
-        if (!cityObject || obj != transform.parent.gameObject)
-            return;
-
-
         AxisHeight = cityObject.Attributes.First(attribute => attribute.Key == AXIS_HEIGHT_KEY).Value;
         RotorDiameter = cityObject.Attributes.First(attribute => attribute.Key == ROTOR_DIAMETER_KEY).Value;
         Status = ParseStatus(cityObject.Attributes.First(attribute => attribute.Key == STATUS_KEY).Value);
