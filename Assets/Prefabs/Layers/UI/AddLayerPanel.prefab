@@ -612,8 +612,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 9122454854152292716}
   highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
-  selectedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
+  pressedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
   disabledSprite: {fileID: 0}
 --- !u!1 &1484348943550979103
 GameObject:
@@ -1791,8 +1791,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 8822557582047930537}
   highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
-  selectedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
+  pressedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
   disabledSprite: {fileID: 0}
 --- !u!1 &4856620017736838379
 GameObject:
@@ -3482,6 +3482,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 668221889295924775}
   highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
-  selectedSprite: {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
+  pressedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
   disabledSprite: {fileID: 0}
