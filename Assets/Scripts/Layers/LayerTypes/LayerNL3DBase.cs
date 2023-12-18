@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void OnDestroy()
         {
             LayerData.RemoveLayer(this);
-            Destroy(UI.gameObject);
+            UI.DestroyUI();
         }
     }
 }

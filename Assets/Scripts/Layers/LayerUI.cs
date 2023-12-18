@@ -701,5 +701,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 LayerData.LayersVisibleInInspector.Remove(this);
             }
         }
+
+        public void DestroyUI()
+        {
+            Destroy(gameObject);
+        }
     }
 }

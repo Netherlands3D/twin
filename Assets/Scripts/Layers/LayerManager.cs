@@ -175,7 +175,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Update()
         {
-            if (Keyboard.current.deleteKey.wasPressedThisFrame)
+            if (Keyboard.current.deleteKey.wasPressedThisFrame) //todo: replace this with an Action in the InputSystem
             {
                 DeleteSelectedLayers();
             }
