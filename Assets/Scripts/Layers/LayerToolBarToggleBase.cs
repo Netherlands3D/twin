@@ -8,29 +8,29 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    [RequireComponent(typeof(Button))]
-    public abstract class LayerToolBarButtonBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+    [RequireComponent(typeof(Toggle))]
+    public abstract class LayerToolBarToggleBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected LayerManager layerManager;
-        protected Button button;
+        protected Toggle toggle;
 
         private void Awake()
         {
-            button = GetComponent<Button>();
+            toggle = GetComponent<Toggle>();
             // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()
         {
-            button.onClick.AddListener(ButtonAction);
+            toggle.onValueChanged.AddListener(ToggleAction);
         }
 
         private void OnDisable()
         {
-            button.onClick.RemoveListener(ButtonAction);
+            toggle.onValueChanged.RemoveListener(ToggleAction);
         }
 
-        public abstract void ButtonAction();
+        public abstract void ToggleAction(bool isOn);
         public abstract void OnDrop(PointerEventData eventData);
         public void OnPointerEnter(PointerEventData eventData)
         {
