@@ -20,7 +20,6 @@ namespace Netherlands3D.Twin
         private void Awake()
         {
             image = GetComponent<Image>();
-            print(targetSelectable.image);
         }
 
         private void Update()
