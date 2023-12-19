@@ -37,6 +37,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
                     layerUI.Layer = layer;
                     layer.UI = layerUI;
+                    layerUI.gameObject.name = layer.name;
 
                     LayerData.LayersVisibleInInspector.Add(layerUI);
                 }
@@ -69,7 +70,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layer.OnDeselect();
                 LayerData.SelectedLayers.Remove(layer.UI);
             }
-
+            
             Destroy(layer.UI.gameObject);
         }
 
@@ -177,7 +178,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if (Keyboard.current.deleteKey.wasPressedThisFrame) //todo: replace this with an Action in the InputSystem
             {
-                DeleteSelectedLayers();
+                LayerData.DeleteSelectedLayers();
             }
             
             if(!contextMenu)
@@ -241,14 +242,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool IsDragOnButton()
         {
             return DragGhost && MouseIsOverButton;
-        }
-
-        public void DeleteSelectedLayers()
-        {
-            foreach (var layer in LayerData.SelectedLayers)
-            {
-                Destroy(layer.Layer.gameObject);
-            }
         }
     }
 }

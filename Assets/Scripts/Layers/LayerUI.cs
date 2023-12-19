@@ -693,13 +693,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnDestroy()
         {
-            if(IsSelected)
-                LayerData.SelectedLayers.Remove(this);
-            
-            if(LayerData.LayersVisibleInInspector.Contains(this))
-            {
-                LayerData.LayersVisibleInInspector.Remove(this);
-            }
+            // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
+            //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
+
+            LayerData.RemoveUI(this);
         }
 
         public void DestroyUI()

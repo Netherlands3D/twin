@@ -17,7 +17,6 @@ namespace Netherlands3D.Twin
 
         public static void AddLayer(LayerNL3DBase newLayer)
         {
-            Debug.Log("adding " + newLayer.name);
             AllLayers.Add(newLayer);
             LayerAdded.Invoke(newLayer);
         }
@@ -26,6 +25,23 @@ namespace Netherlands3D.Twin
         {
             AllLayers.Remove(layer);
             LayerDeleted.Invoke(layer);
+        }
+
+        public static void DeleteSelectedLayers()
+        {
+            foreach (var layer in SelectedLayers)
+            {
+                GameObject.Destroy(layer.Layer.gameObject);
+            }
+        }
+
+        public static void RemoveUI(LayerUI layerUI)
+        {
+            if (SelectedLayers.Contains(layerUI))
+                SelectedLayers.Remove(layerUI);
+
+            if (LayersVisibleInInspector.Contains(layerUI))
+                LayersVisibleInInspector.Remove(layerUI);
         }
     }
 }
