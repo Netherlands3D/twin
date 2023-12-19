@@ -44,14 +44,16 @@ namespace Netherlands3D.Twin
         {
             targetNumber++;
             targetGameObject.SetActive(false);
-            Transform nextTransform = targetset.transform.GetChild(targetNumber);
-            
-
-            if (nextTransform == null)
+            if (targetNumber>targetset.transform.childCount)
             {
                 onGameFinished.Invoke();
                 return;
             }
+            
+            
+
+
+            Transform nextTransform = targetset.transform.GetChild(targetNumber);
             targetGameObject = nextTransform.gameObject;
             targetPostion = (Vector2)targetGameObject.transform.position;
             targetMargin = targetGameObject.transform.localScale.x;

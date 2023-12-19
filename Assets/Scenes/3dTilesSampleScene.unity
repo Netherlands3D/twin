@@ -143,7 +143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &22453460
 Transform:
   m_ObjectHideFlags: 0
@@ -435,7 +435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &272142294
 Transform:
   m_ObjectHideFlags: 0
@@ -692,7 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
-  publicKey: AIzaSyBvyxiQFUg9KToAvWw_pmKzYIJTQ-JMDPk
+  publicKey: AIzaSyB9FRnque08yX0dkvpi_6jbkpvRJpqtXJE
   personalKey: AIzaSyBvyxiQFUg9KToAvWw_pmKzYIJTQ-JMDPk
   root:
     isLoading: 0
@@ -965,7 +965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &501953941
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,7 +1655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &838797428
 Transform:
   m_ObjectHideFlags: 0
@@ -2822,7 +2822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1577617548
 Transform:
   m_ObjectHideFlags: 0
@@ -2856,7 +2856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1710060861
 Transform:
   m_ObjectHideFlags: 0
@@ -3768,7 +3768,7 @@ MonoBehaviour:
   dragOnPlaneThreshold: 0.5
   dragToMoveCamera: 1
   multiplySpeedBasedOnHeight: 1
-  moveSpeed: 4.29
+  moveSpeed: 2.53
   upAndDownSpeed: 0
   dragSpeed: 1
   easing: 10
