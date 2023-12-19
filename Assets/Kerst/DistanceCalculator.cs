@@ -8,22 +8,63 @@ namespace Netherlands3D.Twin
     public class DistanceCalculator : MonoBehaviour
     {
         Camera camera;
-        public GameObject targetGameObject;
+        public GameObject targetset;
+
+         GameObject targetGameObject;
+        int targetNumber;
         Vector2 targetPostion;
-        public UnityEvent onGameStarted;
+        float targetMargin;
+        public UnityEvent<string> onNewTarget;
         public UnityEvent<float> onDistanceChanged;
+        public UnityEvent onSucces;
+        public UnityEvent onGameFinished;
         // Start is called before the first frame update
         void Start()
         {
             camera = Camera.main;
+            startGame();
+        }
+
+        public void startGame()
+        {
+            targetNumber = 0;
+            targetGameObject = targetset.transform.GetChild(targetNumber).gameObject;
+
+            if (targetGameObject == null)
+            {
+                onGameFinished.Invoke();
+                return;
+            }
             targetPostion = (Vector2)targetGameObject.transform.position;
-            onGameStarted.Invoke();
+            targetMargin = targetGameObject.transform.localScale.x;
+            onNewTarget.Invoke(targetGameObject.name);
+        }
+
+        public void onTargetReached()
+        {
+            targetNumber++;
+            targetGameObject.SetActive(false);
+            targetGameObject = targetset.transform.GetChild(targetNumber).gameObject;
+
+            if (targetGameObject == null)
+            {
+                onGameFinished.Invoke();
+                return;
+            }
+            targetPostion = (Vector2)targetGameObject.transform.position;
+            targetMargin = targetGameObject.transform.localScale.x;
+            onNewTarget.Invoke(targetGameObject.name);
         }
 
         // Update is called once per frame
         void Update()
         {
-            onDistanceChanged.Invoke(calculateDistance());
+            float distance = calculateDistance();
+            onDistanceChanged.Invoke(distance);
+            if (distance< targetMargin)
+            {
+                onSucces.Invoke();
+            }
         }
 
         float calculateDistance()
