@@ -209,6 +209,10 @@ namespace Netherlands3D.Twin
         
         public void AddLayerScriptToObj(GameObject parsedObj)
         {
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+
+            parsedObj.transform.position = spawnPoint;
+            
             var objLayer = parsedObj.AddComponent<ObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
             objLayer.UI.Select();
