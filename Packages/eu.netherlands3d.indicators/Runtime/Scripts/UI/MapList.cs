@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Indicators.Dossiers.DataLayers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace Netherlands3D.Indicators.UI
 {
@@ -14,9 +16,8 @@ namespace Netherlands3D.Indicators.UI
         [SerializeField] private ToggleGroup mapLayerList;
         [SerializeField] private Toggle mapLayerListItemPrefab;
 
-        public UnityEvent<DataLayer> onSelectedMapOverlay = new();
-        public UnityEvent<Uri> onLoadMapOverlayFrame = new();
-        public UnityEvent onDeselectedMapOverlay = new();
+        [SerializeField] private UnityEvent<DataLayer> onActivateDataLayer;
+        [SerializeField] private UnityEvent<DataLayer> onDeactivateDataLayer;
 
         private void OnEnable()
         {
@@ -27,7 +28,11 @@ namespace Netherlands3D.Indicators.UI
         private void OnDisable()
         {
             // Make sure the overlay is cleared when this item is no longer active
-            onDeselectedMapOverlay.Invoke();
+            if (dossier.SelectedDataLayer.HasValue)
+            {
+                OnToggledMapListItem(dossier.SelectedDataLayer.Value, false);
+            }
+
             dossier.onSelectedVariant.RemoveListener(OnSelectedVariant);
         }
 
@@ -41,7 +46,10 @@ namespace Netherlands3D.Indicators.UI
             if (!mapLayerList) return;
 
             mapLayerList.transform.ClearAllChildren();
-            onDeselectedMapOverlay.Invoke();
+            if (dossier.SelectedDataLayer.HasValue)
+            {
+                OnToggledMapListItem(dossier.SelectedDataLayer.Value, false);
+            }
 
             if (variant.HasValue == false) return;
 
@@ -62,19 +70,16 @@ namespace Netherlands3D.Indicators.UI
 
         private void OnToggledMapListItem(DataLayer dataLayer, bool toggledOn)
         {
-            if (!toggledOn)
+            DataLayer? toggledDataLayer = toggledOn ? dataLayer : null;
+            dossier.SelectedDataLayer = toggledDataLayer;
+
+            if(toggledDataLayer != null)
             {
-                onDeselectedMapOverlay.Invoke();
+                onActivateDataLayer.Invoke(dataLayer);
                 return;
             }
 
-            onSelectedMapOverlay.Invoke(dataLayer);
-
-            if (dataLayer.frames.Count == 0) return;
-
-            // since we do not support multiple frames at the moment, we cheat and always load the first
-            var firstFrame = dataLayer.frames.First();
-            onLoadMapOverlayFrame.Invoke(firstFrame.map);
+            onDeactivateDataLayer.Invoke(dataLayer);
         }
     }
 }

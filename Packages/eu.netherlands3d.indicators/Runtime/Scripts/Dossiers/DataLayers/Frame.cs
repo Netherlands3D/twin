@@ -1,11 +1,12 @@
 ﻿using System;
+using Netherlands3D.Indicators.Esri;
 using Netherlands3D.Json.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.Indicators.Dossiers.DataLayers
 {
     [Serializable]
-    public struct Frame
+    public class Frame
     {
         public string label;
 
@@ -14,5 +15,7 @@ namespace Netherlands3D.Indicators.Dossiers.DataLayers
         
         [JsonConverter(typeof(UriConverter))]
         public Uri map;
+
+        [NonSerialized] public EsriRasterData mapData; 
     }
 }

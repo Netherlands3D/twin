@@ -160,5 +160,58 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4780177864409357472}
   m_SourcePrefab: {fileID: 100100000, guid: d802d2d99eb96db41845556a85c935dc, type: 3}
+--- !u!1 &6470450147855937901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 6298050297343127429}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4780177864409357472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6470450147855937901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feature: {fileID: 11400000, guid: 444a73f31e87cd24c949922222c1927e, type: 2}
+  OnEnableFeature:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6470450147855937901}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnDisableFeature:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6470450147855937901}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
