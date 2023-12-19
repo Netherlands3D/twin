@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3354824856556962616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4114483817524287800}
+  - component: {fileID: 386381869955578018}
+  - component: {fileID: 4447745080902320339}
+  m_Layer: 6
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4114483817524287800
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &386381869955578018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isenabled: 1
+  tileSize: 1000
+  layerPriority: 0
+  Datasets:
+  - Description: 
+    geoLOD: 
+    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Terrain_2019_2/Terrain{x}_{y}.1.bin
+    pathQuery: ?sv=2021-12-02&ss=b&srt=sco&sp=r&se=2024-04-14T19:42:33Z&st=2023-04-17T11:42:33Z&spr=https&sig=NAbl2WIj7Uh2A51gaYUfzPeF%2Fj%2F53Zw6P%2F3HwsAWUTo%3D
+    maximumDistance: 10000
+    maximumDistanceSquared: 0
+    enabled: 1
+  pauseLoading: 0
+  onLayerEnabled:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  hasMetaData: 0
+  removeFromID: 
+  DefaultMaterialList:
+  - {fileID: 2100000, guid: 6190c2cc181a6b145b8718f101342891, type: 2}
+  - {fileID: 2100000, guid: 0d648e7b76cfb144db5a03ca3456e3ab, type: 2}
+  - {fileID: 2100000, guid: 9415293c02a80f842994d670a66dc1ef, type: 2}
+  - {fileID: 2100000, guid: 3fefdffb602aea548a54cce8ee8e9a40, type: 2}
+  - {fileID: 2100000, guid: f04cf2fb61774b342a424e0043572dd9, type: 2}
+  - {fileID: 2100000, guid: b92bd5d80503fa349811354c8590bc12, type: 2}
+  - {fileID: 2100000, guid: c133b44751f6b29449e6a0cd385af696, type: 2}
+  - {fileID: 2100000, guid: 33cfde888f0f0de4f8317d8631f554f4, type: 2}
+  - {fileID: 2100000, guid: ae4388c306f589642b54e2e6d35f6380, type: 2}
+  - {fileID: 2100000, guid: 723d04de06fc6d246b17157d2a8a9e24, type: 2}
+  - {fileID: 2100000, guid: 369d289ffdad8ca44ad20d7a077adb12, type: 2}
+  - {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
+  createMeshcollider: 0
+  tileShadowCastingMode: 1
+  brotliCompressedExtention: .br
+--- !u!114 &4447745080902320339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
