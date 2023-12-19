@@ -695,8 +695,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
             //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
-
+            
             LayerData.RemoveUI(this);
+            if(ParentUI)
+                ParentUI.RecalculateParentAndChildren();
+
+            RecalculateDepthValuesRecursively();
+            RecalculateVisibleHierarchyRecursive();
+            
+            RecalculateParentStates();
         }
 
         public void DestroyUI()
