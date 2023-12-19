@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class ObjectPlacementUtility : MonoBehaviour
+    public static class ObjectPlacementUtility
     {
         public static Vector3 GetSpawnPoint()
         {
