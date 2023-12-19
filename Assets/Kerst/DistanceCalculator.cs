@@ -27,14 +27,14 @@ namespace Netherlands3D.Twin
 
         public void startGame()
         {
-            targetNumber = 0;
-            targetGameObject = targetset.transform.GetChild(targetNumber).gameObject;
+            
+            targetGameObject = targetset.transform.GetChild(0).gameObject;
+            
+            camera.transform.position = targetGameObject.transform.position;
+            camera.transform.rotation = targetGameObject.transform.rotation;
 
-            if (targetGameObject == null)
-            {
-                onGameFinished.Invoke();
-                return;
-            }
+            targetNumber = 1;
+            targetGameObject = targetset.transform.GetChild(1).gameObject;
             targetPostion = (Vector2)targetGameObject.transform.position;
             targetMargin = targetGameObject.transform.localScale.x;
             onNewTarget.Invoke(targetGameObject.name);
