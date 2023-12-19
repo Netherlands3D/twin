@@ -175,8 +175,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 263.475, y: -16}
-  m_SizeDelta: {x: 112.83, y: 35.05}
+  m_AnchoredPosition: {x: 154.955, y: -16}
+  m_SizeDelta: {x: 64.990005, y: 16.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2937285081389502834
 CanvasRenderer:
@@ -274,9 +274,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 5
-    m_Right: 5
-    m_Top: 3
-    m_Bottom: 3
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -1039,7 +1039,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 10
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1577,8 +1577,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3149,8 +3149,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56.415, y: -17.525}
-  m_SizeDelta: {x: 102.83, y: 29.05}
+  m_AnchoredPosition: {x: 34.995003, y: -8.475}
+  m_SizeDelta: {x: 59.99, y: 16.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5291005724715917869
 CanvasRenderer:
@@ -3208,8 +3208,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3489,7 +3489,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 120.53, y: 0}
+  m_AnchoredPosition: {x: 78.229996, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
@@ -3636,9 +3636,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 5
-    m_Right: 5
-    m_Top: 3
-    m_Bottom: 3
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -4147,7 +4147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92bdab2759ede47d3a631427080652df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8940871946186639419, guid: 43ac9a52e6a17461881870cac25dd02a, type: 3}
+  prefab: {fileID: 2705356315501710771, guid: 09d06b63f4d4f4eeebece0556bcee0c9, type: 3}
 --- !u!1 &7820966298709415142
 GameObject:
   m_ObjectHideFlags: 0
