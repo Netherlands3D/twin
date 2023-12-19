@@ -4023,7 +4023,7 @@ GameObject:
   - component: {fileID: 2897700439267965218}
   - component: {fileID: 1783627277590105819}
   - component: {fileID: 668221889295924775}
-  - component: {fileID: 804734030541716571}
+  - component: {fileID: 6625877207255576843}
   m_Layer: 5
   m_Name: Windmill Button
   m_TagString: Untagged
@@ -4135,7 +4135,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &804734030541716571
+--- !u!114 &6625877207255576843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
