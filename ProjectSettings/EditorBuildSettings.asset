@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main.unity
     guid: 0376ef8300405754e82a4575ecae3a8b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SetupWizard.unity
     guid: 4f0e55de06e3eae4fb2b8dd879052737
+  - enabled: 1
+    path: Assets/Samples/Netherlands 3D - 3DTiles/1.1.0/load 3DTileset/Scenes/3dTilesSampleScene.unity
+    guid: ffd204bd510bb374787547522c4c5535
   m_configObjects: {}
