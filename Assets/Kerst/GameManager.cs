@@ -17,9 +17,9 @@ namespace Netherlands3D.Twin
         public float gameStartedAt = 0f;
         public GameState gameState = GameState.StartScreen;
         
-        [SerializeField] private UnityEvent<int> onGameStarted;
-        [SerializeField] private UnityEvent onGameFinished;
-        [SerializeField] private UnityEvent onGameRestarted;
+        public UnityEvent<int> onGameStarted;
+        public UnityEvent onGameFinished;
+        public UnityEvent onGameRestarted;
 
         public TimeSpan TimeSinceStart => new (0, 0, (int)(Time.realtimeSinceStartup - gameStartedAt));
         public int RoundedDistance => (int)distanceInKilometers;
