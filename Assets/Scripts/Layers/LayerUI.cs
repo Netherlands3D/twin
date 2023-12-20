@@ -700,9 +700,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if(ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
-            RecalculateDepthValuesRecursively();
-            RecalculateVisibleHierarchyRecursive();
-            
+            RecalculateVisibleHierarchyRecursive(); //still includes this UI (the destroyed one) move this function call to LayerData.RemoveUI?
             RecalculateParentStates();
         }
 

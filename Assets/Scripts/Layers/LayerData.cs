@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,11 +30,43 @@ namespace Netherlands3D.Twin
 
         public static void DeleteSelectedLayers()
         {
-            foreach (var layer in SelectedLayers)
+            var layersToBeDeleted = GetAllNestedChildren(SelectedLayers);
+            foreach (var layer in layersToBeDeleted)
             {
-                GameObject.Destroy(layer.Layer.gameObject);
+                GameObject.Destroy(layer.gameObject);
             }
         }
+
+        // Function to get all nested children from a list of root transforms without duplicates
+        private static List<LayerNL3DBase> GetAllNestedChildren(List<LayerUI> rootTransforms, bool includeParent = true)
+        {
+            List<LayerNL3DBase> allChildren = new List<LayerNL3DBase>();
+            HashSet<LayerNL3DBase> uniqueChildren = new HashSet<LayerNL3DBase>();
+
+            foreach (LayerUI root in rootTransforms)
+            {
+                if (includeParent)
+                    uniqueChildren.Add(root.Layer);
+
+                GetAllNestedChildrenRecursive(root, uniqueChildren);
+            }
+
+            allChildren.AddRange(uniqueChildren);
+            return allChildren;
+        }
+
+        private static void GetAllNestedChildrenRecursive(LayerUI parent, HashSet<LayerNL3DBase> uniqueChildren)
+        {
+            foreach (var child in parent.ChildrenUI)
+            {
+                // Add the current child to the set to ensure uniqueness
+                uniqueChildren.Add(child.Layer);
+
+                // Recursively call the function for each child
+                GetAllNestedChildrenRecursive(child, uniqueChildren);
+            }
+        }
+
 
         public static void RemoveUI(LayerUI layerUI)
         {
