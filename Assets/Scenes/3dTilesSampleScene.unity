@@ -2901,6 +2901,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1588619757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1588619759}
+  - component: {fileID: 1588619758}
+  m_Layer: 0
+  m_Name: targetParty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1588619758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588619757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb52ace502455c4f8513803993809d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sleeVlieger: {fileID: 1626261850}
+--- !u!4 &1588619759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588619757}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.033841252, y: 0.025482059, z: 0.5487399}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1595107275
 GameObject:
   m_ObjectHideFlags: 0
@@ -3089,6 +3134,7 @@ MonoBehaviour:
   - {fileID: 898369452}
   - {fileID: 1365767833}
   targetNumber: 0
+  targetName: 
   targetcount: 0
   onNewTarget:
     m_PersistentCalls:
@@ -3097,6 +3143,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
         m_MethodName: set_text
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6567033620686060367}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.flyingCamera, Assembly-CSharp
+        m_MethodName: pauseFlying
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3125,7 +3183,31 @@ MonoBehaviour:
         m_CallState: 2
   onTargetReached:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1588619758}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.targetSucces, Assembly-CSharp
+        m_MethodName: StartParty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6567033620686060367}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.flyingCamera, Assembly-CSharp
+        m_MethodName: pauseFlying
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onGameFinished:
     m_PersistentCalls:
       m_Calls:
@@ -3668,6 +3750,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2434456769209753049, guid: cb4cd7fe389a6fd4dbe280af5f1ab28e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434456769209753049, guid: cb4cd7fe389a6fd4dbe280af5f1ab28e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434456769209753049, guid: cb4cd7fe389a6fd4dbe280af5f1ab28e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.63
+      objectReference: {fileID: 0}
     - target: {fileID: 4057062693804902104, guid: cb4cd7fe389a6fd4dbe280af5f1ab28e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3955,6 +4052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4eb4396828374468585161cbcd6cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flyingEnabled: 1
   rotationSpeed: 0
   maxRotationSpeed: 1
   angularAcceleration: 0
@@ -4017,12 +4115,12 @@ PrefabInstance:
     - target: {fileID: 1438108797496582400, guid: 9f1a06070e23f804080a93698e535f64,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1023.3
+      value: 1600
       objectReference: {fileID: 0}
     - target: {fileID: 1438108797496582400, guid: 9f1a06070e23f804080a93698e535f64,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1023
+      value: 1600
       objectReference: {fileID: 0}
     - target: {fileID: 1438108797496582400, guid: 9f1a06070e23f804080a93698e535f64,
         type: 3}
@@ -4104,3 +4202,4 @@ SceneRoots:
   - {fileID: 411079223}
   - {fileID: 1626261851}
   - {fileID: 5251175247344284170}
+  - {fileID: 1588619759}

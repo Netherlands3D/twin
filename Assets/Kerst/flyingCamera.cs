@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin
 {
     public class flyingCamera : MonoBehaviour
     {
+        [HideInInspector] public bool flyingEnabled = true;
         [HideInInspector] public float rotationSpeed = 0;
         public float maxRotationSpeed = 1;
         [HideInInspector] public float angularAcceleration = 0;
@@ -37,9 +38,18 @@ namespace Netherlands3D.Twin
             boostTimer = maxBoostTimer;
         }
 
+        public void pauseFlying(bool requstPause)
+        {
+            flyingEnabled = !requstPause;
+        }
+
         // Update is called once per frame
         void Update()
         {
+            if (!flyingEnabled)
+            {
+                return;
+            }
             keyCapture();
             CalculateBoostAndBreak();
             CalculateRotation();
