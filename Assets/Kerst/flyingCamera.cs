@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin
         public float rotationspeed=1;
         public float movespeed=1000;
 
+        public ContextMenuButton leftbutton;
 
         public bool shouldMove = false;
         public bool turnLeft = false;
