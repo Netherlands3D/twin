@@ -2219,6 +2219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1121801653}
+  - component: {fileID: 1121801655}
   - component: {fileID: 1121801652}
   - component: {fileID: 1121801654}
   m_Layer: 0
@@ -2312,7 +2313,19 @@ MonoBehaviour:
         m_CallState: 2
   onGameFinished:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1121801655}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.GameManager, Assembly-CSharp
+        m_MethodName: Finished
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1121801653
 Transform:
   m_ObjectHideFlags: 0
@@ -2341,6 +2354,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1068240051}
+--- !u!114 &1121801655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121801651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0475aaa8af52406598ecaf1a3117bc2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distanceInKilometers: 0
+  gameStartedAt: 0
+  gameState: 0
+  onGameStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1121801652}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.DistanceCalculator, Assembly-CSharp
+        m_MethodName: startGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onGameFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onGameRestarted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1150558578
 GameObject:
   m_ObjectHideFlags: 0

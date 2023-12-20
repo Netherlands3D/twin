@@ -18,11 +18,11 @@ namespace Netherlands3D.Twin
         public UnityEvent<float> onDistanceChanged;
         public UnityEvent onSucces;
         public UnityEvent onGameFinished;
+        
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             camera = Camera.main;
-            startGame();
         }
 
         public void startGame()
