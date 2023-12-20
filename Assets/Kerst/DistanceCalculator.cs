@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,6 +29,7 @@ namespace Netherlands3D.Twin
         public UnityEvent onGameFinished;
         float distanceTravelled;
         Vector3 oldCameraposition;
+        Stopwatch stopwatch;
         // Start is called before the first frame update
         void Awake()
         {
@@ -57,14 +60,23 @@ namespace Netherlands3D.Twin
             targetPostion = targetGameObject.transform.position;
             targetPostion.y = 0;
             targetMargin = targetGameObject.transform.localScale.x;
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
             onNewTarget.Invoke(targetGameObject.name);
         }
 
         public void NextTarget()
         {
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
             isActive = true;
             targetNumber++;
-           
+            if (targetNumber > targetset.transform.childCount-1)
+            {
+                onGameFinished.Invoke();
+                isActive = false;
+                return;
+            }
             targetGameObject = targetset.transform.GetChild(targetNumber).gameObject;
             targetName = targetGameObject.name;
             targetPostion = targetGameObject.transform.position;
@@ -77,7 +89,8 @@ namespace Netherlands3D.Twin
         public void TargetReached()
         {
 
-
+            stopwatch.Stop();
+            stopwatch = null;
             isActive = false;
             targetGameObject.SetActive(false);
             if (targetNumber > targetset.transform.childCount-1)
@@ -96,6 +109,10 @@ namespace Netherlands3D.Twin
             if (isActive == false)
             {
                 return;
+            }
+            if (stopwatch.ElapsedMilliseconds>30000)
+            {
+                targetGameObject.SetActive(true);
             }
             float distance = calculateDistance();
             onDistanceToTargetChanged.Invoke(distance);
