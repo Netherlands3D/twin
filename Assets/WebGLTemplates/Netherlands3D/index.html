@@ -58,6 +58,13 @@
 		  isMobileDevice = true;
           container.className = "unity-mobile";
           config.devicePixelRatio = 2;
+
+          screen.orientation
+              .lock("landscape")
+              .then(() => { console.log(`Locked to "landscape"`); })
+              .catch((error) => { console.error(`${error}`); });
+
+          container.requestFullscreen().catch((error) => { console.error(`${error}`); });
       }
 
       loadingBar.style.display = "block";
