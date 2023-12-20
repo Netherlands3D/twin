@@ -161,9 +161,9 @@ RectTransform:
   - {fileID: 769869578}
   m_Father: {fileID: 77955827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1220, y: -200}
   m_SizeDelta: {x: 1200, y: 472}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2523721
@@ -535,9 +535,9 @@ RectTransform:
   - {fileID: 1509520063}
   m_Father: {fileID: 77955827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2290, y: -50}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &250763631
@@ -1231,9 +1231,9 @@ RectTransform:
   - {fileID: 1595107276}
   m_Father: {fileID: 77955827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1980, y: -50}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &383483416
@@ -2330,9 +2330,9 @@ RectTransform:
   - {fileID: 1259950711}
   m_Father: {fileID: 77955827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 150, y: -50}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &932753559
@@ -3085,9 +3085,9 @@ RectTransform:
   - {fileID: 1225265331}
   m_Father: {fileID: 77955827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 460, y: -50}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1204464910
@@ -3847,7 +3847,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1536853302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5141,6 +5141,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: rendierOverlay
+      objectReference: {fileID: 0}
+    - target: {fileID: 295971819603299414, guid: 9f1a06070e23f804080a93698e535f64,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1438108797496582400, guid: 9f1a06070e23f804080a93698e535f64,
         type: 3}
