@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin
 
          GameObject targetGameObject;
         int targetNumber;
-        Vector2 targetPostion;
+        Vector3 targetPostion;
         float targetMargin;
         public UnityEvent<string> onNewTarget;
         public UnityEvent<float> onDistanceChanged;
@@ -35,7 +35,8 @@ namespace Netherlands3D.Twin
 
             targetNumber = 1;
             targetGameObject = targetset.transform.GetChild(1).gameObject;
-            targetPostion = (Vector2)targetGameObject.transform.position;
+            targetPostion = targetGameObject.transform.position;
+            targetPostion.y = 0;
             targetMargin = targetGameObject.transform.localScale.x;
             onNewTarget.Invoke(targetGameObject.name);
         }
@@ -55,7 +56,9 @@ namespace Netherlands3D.Twin
 
             Transform nextTransform = targetset.transform.GetChild(targetNumber);
             targetGameObject = nextTransform.gameObject;
-            targetPostion = (Vector2)targetGameObject.transform.position;
+            targetPostion = targetGameObject.transform.position;
+            targetPostion.y = 0;
+
             targetMargin = targetGameObject.transform.localScale.x;
             onNewTarget.Invoke(targetGameObject.name);
         }
@@ -73,7 +76,9 @@ namespace Netherlands3D.Twin
 
         float calculateDistance()
         {
-            return Vector2.Distance((Vector2)camera.transform.position, targetPostion);
+            Vector3 campos2D = camera.transform.position;
+            campos2D.y = 0; ;
+            return Vector3.Distance(campos2D, targetPostion);
         }
     }
 }
