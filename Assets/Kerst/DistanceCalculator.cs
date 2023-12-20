@@ -18,10 +18,11 @@ namespace Netherlands3D.Twin
         int targetNumber;
         Vector3 targetPostion;
         float targetMargin;
+        public int targetcount;
         public UnityEvent<string> onNewTarget;
         public UnityEvent<float> onDistanceToTargetChanged;
         public UnityEvent<float> kmTravelled;
-        public UnityEvent onSucces;
+        public UnityEvent<int> onSucces;
         public UnityEvent onGameFinished;
         float distanceTravelled;
         Vector3 oldCameraposition;
@@ -38,6 +39,7 @@ namespace Netherlands3D.Twin
             {
                 targetset = targetLists[targetListID];
             }
+            targetcount = targetset.transform.childCount - 1;
 
             isActive = true;
             distanceTravelled = 0;
@@ -56,9 +58,23 @@ namespace Netherlands3D.Twin
             onNewTarget.Invoke(targetGameObject.name);
         }
 
-        public void onTargetReached()
+        public void NextTarget()
         {
             targetNumber++;
+            Transform nextTransform = targetset.transform.GetChild(targetNumber);
+            targetGameObject = nextTransform.gameObject;
+            targetPostion = targetGameObject.transform.position;
+            targetPostion.y = 0;
+
+            targetMargin = targetGameObject.transform.localScale.x;
+            onNewTarget.Invoke(targetGameObject.name);
+        }
+
+        public void onTargetReached()
+        {
+
+            onSucces.Invoke(targetNumber);
+            
             targetGameObject.SetActive(false);
             if (targetNumber > targetset.transform.childCount)
             {
@@ -67,16 +83,7 @@ namespace Netherlands3D.Twin
                 return;
             }
 
-
-
-
-            Transform nextTransform = targetset.transform.GetChild(targetNumber);
-            targetGameObject = nextTransform.gameObject;
-            targetPostion = targetGameObject.transform.position;
-            targetPostion.y = 0;
-
-            targetMargin = targetGameObject.transform.localScale.x;
-            onNewTarget.Invoke(targetGameObject.name);
+           
         }
 
         // Update is called once per frame
@@ -95,7 +102,7 @@ namespace Netherlands3D.Twin
             kmTravelled.Invoke(distanceTravelled / 1000);
             if (distance < targetMargin)
             {
-                onSucces.Invoke();
+                onTargetReached();
             }
         }
 
