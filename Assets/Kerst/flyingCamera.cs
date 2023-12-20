@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin
 {
     public class flyingCamera : MonoBehaviour
     {
+        [HideInInspector] public bool flyingEnabled = true;
         [HideInInspector] public float rotationSpeed = 0;
         public float maxRotationSpeed = 1;
         [HideInInspector] public float angularAcceleration = 0;
@@ -18,7 +19,7 @@ namespace Netherlands3D.Twin
         public float jerkTime = 0.3f;
 
         public float maxBreakTimer = 5f;
-        float breakTimer;
+        public float breakTimer;
         public float maxBoostTimer = 5f;
         float boostTimer;
         public float boostMultiplier = 2f;
@@ -37,9 +38,18 @@ namespace Netherlands3D.Twin
             boostTimer = maxBoostTimer;
         }
 
+        public void pauseFlying(bool requstPause)
+        {
+            flyingEnabled = !requstPause;
+        }
+
         // Update is called once per frame
         void Update()
         {
+            if (!flyingEnabled)
+            {
+                return;
+            }
             keyCapture();
             CalculateBoostAndBreak();
             CalculateRotation();
@@ -103,17 +113,15 @@ namespace Netherlands3D.Twin
         {
             //turn left
             if (Input.GetKeyDown(KeyCode.LeftArrow)) turnLeft = true;
-
             if (Input.GetKeyUp(KeyCode.LeftArrow)) turnLeft = false;
-
-            if (Input.GetKeyDown(KeyCode.Q)) turnLeft = true;
-            if (Input.GetKeyUp(KeyCode.Q)) turnLeft = false;
+            if (Input.GetKeyDown(KeyCode.A)) turnLeft = true;
+            if (Input.GetKeyUp(KeyCode.A)) turnLeft = false;
 
             //turn right
             if (Input.GetKeyDown(KeyCode.RightArrow)) turnRight = true;
             if (Input.GetKeyUp(KeyCode.RightArrow)) turnRight = false;
-            if (Input.GetKeyDown(KeyCode.E)) turnRight = true;
-            if (Input.GetKeyUp(KeyCode.E)) turnRight = false;
+            if (Input.GetKeyDown(KeyCode.D)) turnRight = true;
+            if (Input.GetKeyUp(KeyCode.D)) turnRight = false;
 
             //move
             if (Input.GetKeyDown(KeyCode.UpArrow)) shouldBoost = true;

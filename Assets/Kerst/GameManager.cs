@@ -26,15 +26,15 @@ namespace Netherlands3D.Twin
 
         private void Start()
         {
-            StartGame();
+            
         }
 
-        public void StartGame()
+        public void StartGame(int scenarioIndex)
         {
             gameStartedAt = Time.realtimeSinceStartup;
             distanceInKilometers = 0;
             gameState = GameState.Playing;
-            onGameStarted.Invoke(0);
+            onGameStarted.Invoke(scenarioIndex);
         }
 
         public void UpdateDistance(float distanceInKilometers)

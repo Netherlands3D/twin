@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,6 +18,7 @@ namespace Netherlands3D.Twin
 
         GameObject targetGameObject;
         public int targetNumber;
+        public string targetName;
         Vector3 targetPostion;
         float targetMargin;
         public int targetcount;
@@ -26,6 +29,7 @@ namespace Netherlands3D.Twin
         public UnityEvent onGameFinished;
         float distanceTravelled;
         Vector3 oldCameraposition;
+        Stopwatch stopwatch;
         // Start is called before the first frame update
         void Awake()
         {
@@ -52,17 +56,29 @@ namespace Netherlands3D.Twin
 
             targetNumber = 1;
             targetGameObject = targetset.transform.GetChild(1).gameObject;
+            targetName = targetGameObject.name;
             targetPostion = targetGameObject.transform.position;
             targetPostion.y = 0;
             targetMargin = targetGameObject.transform.localScale.x;
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
             onNewTarget.Invoke(targetGameObject.name);
         }
 
         public void NextTarget()
         {
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+            isActive = true;
             targetNumber++;
-            Transform nextTransform = targetset.transform.GetChild(targetNumber);
-            targetGameObject = nextTransform.gameObject;
+            if (targetNumber > targetset.transform.childCount-1)
+            {
+                onGameFinished.Invoke();
+                isActive = false;
+                return;
+            }
+            targetGameObject = targetset.transform.GetChild(targetNumber).gameObject;
+            targetName = targetGameObject.name;
             targetPostion = targetGameObject.transform.position;
             targetPostion.y = 0;
 
@@ -73,17 +89,18 @@ namespace Netherlands3D.Twin
         public void TargetReached()
         {
 
-            onTargetReached.Invoke(targetNumber);
-            
+            stopwatch.Stop();
+            stopwatch = null;
+            isActive = false;
             targetGameObject.SetActive(false);
-            if (targetNumber > targetset.transform.childCount)
+            if (targetNumber > targetset.transform.childCount-1)
             {
                 onGameFinished.Invoke();
                 isActive = false;
                 return;
             }
+            onTargetReached.Invoke(targetNumber);
 
-           
         }
 
         // Update is called once per frame
@@ -92,6 +109,10 @@ namespace Netherlands3D.Twin
             if (isActive == false)
             {
                 return;
+            }
+            if (stopwatch.ElapsedMilliseconds>30000)
+            {
+                targetGameObject.SetActive(true);
             }
             float distance = calculateDistance();
             onDistanceToTargetChanged.Invoke(distance);
