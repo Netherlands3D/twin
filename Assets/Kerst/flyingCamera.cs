@@ -8,13 +8,17 @@ namespace Netherlands3D.Twin
 {
     public class flyingCamera : MonoBehaviour
     {
-        public float rotationspeed = 1;
-        public float movespeed = 0;
+        [HideInInspector] public float rotationSpeed = 0;
+        public float maxRotationSpeed = 1;
+        [HideInInspector] public float angularAcceleration = 0;
+        public float rotationJerkTime = 0.2f;
+        [HideInInspector] public float moveSpeed = 0;
         public float maxSpeed = 4000;
-        public float acceleration = 0;
+        [HideInInspector] public float acceleration = 0;
+        public float jerkTime = 0.3f;
+
         public float maxBreakTimer = 5f;
         float breakTimer;
-        public float jerkTime = 0.3f;
 
         public ContextMenuButton leftbutton;
 
@@ -32,15 +36,21 @@ namespace Netherlands3D.Twin
         void Update()
         {
             keyCapture();
+
             if (turnLeft)
             {
-                transform.RotateAround(Vector3.down, Time.deltaTime * rotationspeed);
+                rotationSpeed = Mathf.SmoothDamp(rotationSpeed, -maxRotationSpeed, ref angularAcceleration, rotationJerkTime);
+            }
+            else if (turnRight)
+            {
+                rotationSpeed = Mathf.SmoothDamp(rotationSpeed, maxRotationSpeed, ref angularAcceleration, rotationJerkTime);
+            }
+            else
+            {
+                rotationSpeed = Mathf.SmoothDamp(rotationSpeed, 0, ref angularAcceleration, rotationJerkTime);
             }
 
-            if (turnRight)
-            {
-                transform.RotateAround(Vector3.up, Time.deltaTime * rotationspeed);
-            }
+            transform.RotateAround(Vector3.up, Time.deltaTime * rotationSpeed);
 
             if (shouldBreak && breakTimer > 0)
                 shouldMove = false;
@@ -48,14 +58,14 @@ namespace Netherlands3D.Twin
                 shouldMove = true;
 
             if (shouldMove)
-                movespeed = Mathf.SmoothDamp(movespeed, maxSpeed, ref acceleration, jerkTime);
+                moveSpeed = Mathf.SmoothDamp(moveSpeed, maxSpeed, ref acceleration, jerkTime);
             else
-                movespeed = Mathf.SmoothDamp(movespeed, 0, ref acceleration, jerkTime);
+                moveSpeed = Mathf.SmoothDamp(moveSpeed, 0, ref acceleration, jerkTime);
 
             Vector3 forwardFlat = transform.forward.normalized;
             forwardFlat.y = 0;
 
-            transform.position += forwardFlat * movespeed * Time.deltaTime;
+            transform.position += forwardFlat * moveSpeed * Time.deltaTime;
         }
 
         void keyCapture()
