@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Timers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin
 {
@@ -121,6 +122,14 @@ namespace Netherlands3D.Twin
             distanceTravelled += Vector3.Distance(oldCameraposition, newCameraposition);
             oldCameraposition = newCameraposition;
             kmTravelled.Invoke(distanceTravelled / 1000);
+
+#if UNITY_EDITOR
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                TargetReached();    
+            }
+#endif
+            
             if (distance < targetMargin)
             {
                 TargetReached();
