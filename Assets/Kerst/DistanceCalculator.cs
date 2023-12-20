@@ -7,29 +7,44 @@ namespace Netherlands3D.Twin
 {
     public class DistanceCalculator : MonoBehaviour
     {
-        Camera camera;
-        public GameObject targetset;
 
-         GameObject targetGameObject;
+        public List<GameObject> targetLists = new List<GameObject>();
+
+        bool isActive = false;
+        Camera camera;
+        GameObject targetset;
+
+        GameObject targetGameObject;
         int targetNumber;
         Vector3 targetPostion;
         float targetMargin;
         public UnityEvent<string> onNewTarget;
-        public UnityEvent<float> onDistanceChanged;
+        public UnityEvent<float> onDistanceToTargetChanged;
+        public UnityEvent<float> kmTravelled;
         public UnityEvent onSucces;
         public UnityEvent onGameFinished;
-        
+        float distanceTravelled;
+        Vector3 oldCameraposition;
         // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
             camera = Camera.main;
+            startGame(0);
         }
 
-        public void startGame()
+        public void startGame(int targetListID)
         {
-            
+            if (targetLists.Count > targetListID)
+            {
+                targetset = targetLists[targetListID];
+            }
+
+            isActive = true;
+            distanceTravelled = 0;
+            oldCameraposition = camera.transform.position;
+
             targetGameObject = targetset.transform.GetChild(0).gameObject;
-            
+
             camera.transform.position = targetGameObject.transform.position;
             camera.transform.rotation = targetGameObject.transform.rotation;
 
@@ -45,13 +60,14 @@ namespace Netherlands3D.Twin
         {
             targetNumber++;
             targetGameObject.SetActive(false);
-            if (targetNumber>targetset.transform.childCount)
+            if (targetNumber > targetset.transform.childCount)
             {
                 onGameFinished.Invoke();
+                isActive = false;
                 return;
             }
-            
-            
+
+
 
 
             Transform nextTransform = targetset.transform.GetChild(targetNumber);
@@ -66,9 +82,18 @@ namespace Netherlands3D.Twin
         // Update is called once per frame
         void Update()
         {
+            if (isActive == false)
+            {
+                return;
+            }
             float distance = calculateDistance();
-            onDistanceChanged.Invoke(distance);
-            if (distance< targetMargin)
+            onDistanceToTargetChanged.Invoke(distance);
+            Vector3 newCameraposition = camera.transform.position;
+            newCameraposition.y = 0;
+            distanceTravelled += Vector3.Distance(oldCameraposition, newCameraposition);
+            oldCameraposition = newCameraposition;
+            kmTravelled.Invoke(distanceTravelled / 1000);
+            if (distance < targetMargin)
             {
                 onSucces.Invoke();
             }
