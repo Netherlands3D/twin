@@ -103,17 +103,15 @@ namespace Netherlands3D.Twin
         {
             //turn left
             if (Input.GetKeyDown(KeyCode.LeftArrow)) turnLeft = true;
-
             if (Input.GetKeyUp(KeyCode.LeftArrow)) turnLeft = false;
-
-            if (Input.GetKeyDown(KeyCode.Q)) turnLeft = true;
-            if (Input.GetKeyUp(KeyCode.Q)) turnLeft = false;
+            if (Input.GetKeyDown(KeyCode.A)) turnLeft = true;
+            if (Input.GetKeyUp(KeyCode.A)) turnLeft = false;
 
             //turn right
             if (Input.GetKeyDown(KeyCode.RightArrow)) turnRight = true;
             if (Input.GetKeyUp(KeyCode.RightArrow)) turnRight = false;
-            if (Input.GetKeyDown(KeyCode.E)) turnRight = true;
-            if (Input.GetKeyUp(KeyCode.E)) turnRight = false;
+            if (Input.GetKeyDown(KeyCode.D)) turnRight = true;
+            if (Input.GetKeyUp(KeyCode.D)) turnRight = false;
 
             //move
             if (Input.GetKeyDown(KeyCode.UpArrow)) shouldBoost = true;
