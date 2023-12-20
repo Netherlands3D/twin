@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin
         public float jerkTime = 0.3f;
 
         public float maxBreakTimer = 5f;
-        float breakTimer;
+        public float breakTimer;
         public float maxBoostTimer = 5f;
         float boostTimer;
         public float boostMultiplier = 2f;
