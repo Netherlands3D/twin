@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {
-            if (source.isPlaying && !Input.GetKeyDown(KeyCode.A))
+            if (source.isPlaying)
                 return;
 
             currentPlayIndex++;

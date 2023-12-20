@@ -6,12 +6,11 @@ namespace Netherlands3D.Twin
 {
     public class targetSucces : MonoBehaviour
     {
-
         public DistanceCalculator sleeVlieger;
 
         public void StartParty()
         {
-           
+            GetComponent<AudioSource>().Play();      
             StartCoroutine(party());
         }
 
