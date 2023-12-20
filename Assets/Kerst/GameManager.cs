@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin
         public float gameStartedAt = 0f;
         public GameState gameState = GameState.StartScreen;
         
-        [SerializeField] private UnityEvent onGameStarted;
+        [SerializeField] private UnityEvent<int> onGameStarted;
         [SerializeField] private UnityEvent onGameFinished;
         [SerializeField] private UnityEvent onGameRestarted;
 
@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin
             gameStartedAt = Time.realtimeSinceStartup;
             distanceInKilometers = 0;
             gameState = GameState.Playing;
-            onGameStarted.Invoke();
+            onGameStarted.Invoke(0);
         }
 
         public void UpdateDistance(float distanceInKilometers)

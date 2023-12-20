@@ -15,22 +15,22 @@ namespace Netherlands3D.Twin
         GameObject targetset;
 
         GameObject targetGameObject;
-        int targetNumber;
+        public int targetNumber;
         Vector3 targetPostion;
         float targetMargin;
         public int targetcount;
         public UnityEvent<string> onNewTarget;
         public UnityEvent<float> onDistanceToTargetChanged;
         public UnityEvent<float> kmTravelled;
-        public UnityEvent<int> onSucces;
+        public UnityEvent<int> onTargetReached;
         public UnityEvent onGameFinished;
         float distanceTravelled;
         Vector3 oldCameraposition;
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             camera = Camera.main;
-            startGame(0);
+            //startGame(0);
         }
 
         public void startGame(int targetListID)
@@ -70,10 +70,10 @@ namespace Netherlands3D.Twin
             onNewTarget.Invoke(targetGameObject.name);
         }
 
-        public void onTargetReached()
+        public void TargetReached()
         {
 
-            onSucces.Invoke(targetNumber);
+            onTargetReached.Invoke(targetNumber);
             
             targetGameObject.SetActive(false);
             if (targetNumber > targetset.transform.childCount)
@@ -102,7 +102,7 @@ namespace Netherlands3D.Twin
             kmTravelled.Invoke(distanceTravelled / 1000);
             if (distance < targetMargin)
             {
-                onTargetReached();
+                TargetReached();
             }
         }
 
