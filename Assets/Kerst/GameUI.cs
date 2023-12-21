@@ -6,6 +6,7 @@ namespace Netherlands3D.Twin
 {
     public class GameUI : MonoBehaviour
     {
+        public DistanceCalculator distanceCalculator;
         public GameManager gameManager;
         public TextMeshProUGUI distanceText;
         public TextMeshProUGUI timeText;
@@ -21,8 +22,7 @@ namespace Netherlands3D.Twin
         private void OnGameStarted(int index)
         {
             presents.transform.ClearAllChildren();
-            // TODO: Change this 5 into the number coming from the DistanceCalculator
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < distanceCalculator.targetcount; i++)
             {
                 GameObject.Instantiate(presentPrefab, presents.transform);
             }
