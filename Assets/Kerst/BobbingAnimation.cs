@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
         public float smoothness = 5f; // Adjust this value to control the smoothness of interpolation
         public float horizontalOffsetWhenTurning=5f;
 
-        private Vector3 startPosition;
+        [SerializeField] private RectTransform referencePosition;
         private float randomVerticalOffset;
         private float randomHorizontalOffset;
         private flyingCamera cam;
@@ -25,7 +25,6 @@ namespace Netherlands3D.Twin
         
         private void Start()
         {
-            startPosition = transform.position;
             randomVerticalOffset = Random.Range(0f, 2 * Mathf.PI); // Random vertical offset to avoid synchronization
             randomHorizontalOffset = Random.Range(0f, 2 * Mathf.PI); // Random horizontal offset
 
@@ -45,8 +44,8 @@ namespace Netherlands3D.Twin
             float targetFrequency = applyBoost ? 3f : 1f;
             currentFrequency = Mathf.Lerp(currentFrequency, targetFrequency, elapsedTime / cam.jerkTime);
             
-            float newY = startPosition.y + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
-            float newX = startPosition.x + Mathf.Sin((Time.time + randomHorizontalOffset) * bobbingSpeed * currentFrequency) * horizontalBobbing;
+            float newY = referencePosition.position.y + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
+            float newX = referencePosition.position.x + Mathf.Sin((Time.time + randomHorizontalOffset) * bobbingSpeed * currentFrequency) * horizontalBobbing;
 
             newX += cam.rotationSpeed * horizontalOffsetWhenTurning;
             
