@@ -12,8 +12,7 @@ namespace Netherlands3D.Twin
         public float bobbingSpeed = 2f; // Adjust this value to control the bobbing speed
         public float horizontalBobbing = 2f; // Adjust this value to control the horizontal offset
         public float smoothness = 5f; // Adjust this value to control the smoothness of interpolation
-        float multiplicationFactor = 1f;
-        private float vel;
+        public float horizontalOffsetWhenTurning=5f;
 
         private Vector3 startPosition;
         private float randomVerticalOffset;
@@ -41,16 +40,18 @@ namespace Netherlands3D.Twin
                 frequencyChangeStartTime = Time.time;
             }
             
-            float newY = startPosition.y + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
-            float newX = startPosition.x + Mathf.Sin((Time.time + randomHorizontalOffset) * bobbingSpeed * currentFrequency) * horizontalBobbing;
-
-            Vector3 targetPosition = new Vector3(newX, newY, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothness);
-            
             // Update the frequency smoothly
             float elapsedTime = Time.time - frequencyChangeStartTime;
             float targetFrequency = applyBoost ? 3f : 1f;
             currentFrequency = Mathf.Lerp(currentFrequency, targetFrequency, elapsedTime / cam.jerkTime);
+            
+            float newY = startPosition.y + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
+            float newX = startPosition.x + Mathf.Sin((Time.time + randomHorizontalOffset) * bobbingSpeed * currentFrequency) * horizontalBobbing;
+
+            newX += cam.rotationSpeed * horizontalOffsetWhenTurning;
+            
+            Vector3 targetPosition = new Vector3(newX, newY, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothness);
         }
     }
 }

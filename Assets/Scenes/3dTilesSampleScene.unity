@@ -1964,6 +1964,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 2
   smoothness: 5
+  horizontalOffsetWhenTurning: 320
 --- !u!1 &508436557
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,6 +2132,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 4
   smoothness: 5
+  horizontalOffsetWhenTurning: 160
 --- !u!1 &532835221
 GameObject:
   m_ObjectHideFlags: 0
@@ -2298,6 +2300,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 1
   smoothness: 5
+  horizontalOffsetWhenTurning: 400
 --- !u!1 &601282585 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3731271687272755176, guid: e23519993d5738e418b23dca11d62c89,
@@ -2666,6 +2669,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 5
   smoothness: 5
+  horizontalOffsetWhenTurning: 80
 --- !u!1 &747314631 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3649434548297387695, guid: e23519993d5738e418b23dca11d62c89,
@@ -2764,6 +2768,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 3
   smoothness: 5
+  horizontalOffsetWhenTurning: 240
 --- !u!1 &768071680
 GameObject:
   m_ObjectHideFlags: 0
@@ -5270,6 +5275,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 4
   smoothness: 5
+  horizontalOffsetWhenTurning: 160
 --- !u!1 &1365767833 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 891067030495334907, guid: e23519993d5738e418b23dca11d62c89,
@@ -5505,6 +5511,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 5
   smoothness: 5
+  horizontalOffsetWhenTurning: 80
 --- !u!1 &1427403103
 GameObject:
   m_ObjectHideFlags: 0
@@ -5559,6 +5566,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 1
   smoothness: 5
+  horizontalOffsetWhenTurning: 0
 --- !u!114 &1427403106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5791,6 +5799,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 3
   smoothness: 5
+  horizontalOffsetWhenTurning: 240
 --- !u!1 &1509520062
 GameObject:
   m_ObjectHideFlags: 0
@@ -6404,6 +6413,7 @@ MonoBehaviour:
   bobbingSpeed: 2
   horizontalBobbing: 2
   smoothness: 5
+  horizontalOffsetWhenTurning: 320
 --- !u!1 &1626261848
 GameObject:
   m_ObjectHideFlags: 0
