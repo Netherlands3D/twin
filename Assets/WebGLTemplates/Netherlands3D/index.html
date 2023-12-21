@@ -21,7 +21,7 @@
               </div>
           </div>
           <div id="unity-mobile-warning">
-              Unity WebGL is momenteel niet volledig ondersteund op mobiele apparaten.
+              De kerst special is niet beschikbaar op iOS, kom gerust terug op de PC!
           </div>
       </div>
       <script>
@@ -60,22 +60,27 @@
           config.devicePixelRatio = 2;
       }
 
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-          createUnityInstance(canvas, config, (progress) => {
-              progressBarFull.style.width = 100 * progress + "%";
-          }).then((instance) => {
-              unityInstance = instance;
-              loadingBar.style.display = "none";
-			  loadingBar.remove();	  
-          }).catch((message) => {
-              alert(message);
-          });
-      };
-      document.body.appendChild(script); 
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent) === false) {
+          loadingBar.style.display = "block";
+    
+          var script = document.createElement("script");
+          script.src = loaderUrl;
+          script.onload = () => {
+              createUnityInstance(canvas, config, (progress) => {
+                  progressBarFull.style.width = 100 * progress + "%";
+              }).then((instance) => {
+                  unityInstance = instance;
+                  loadingBar.style.display = "none";
+                  loadingBar.remove();	  
+              }).catch((message) => {
+                  alert(message);
+              });
+          };
+          document.body.appendChild(script);
+      } else {
+          canvas.style.display = "none";
+          mobileWarning.style.display = "block";
+      }
     </script>
   </body>
 </html>
