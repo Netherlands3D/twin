@@ -227,6 +227,7 @@ MonoBehaviour:
   presentPrefab: {fileID: 8365905684912054602, guid: 2d34cef101fc5334994a8e02dd761a9d,
     type: 3}
   solidPresent: {fileID: 21300000, guid: 97efdc74ff9990f4abaabdee450a5a21, type: 3}
+  distanceSlider: {fileID: 990853189}
 --- !u!1 &28785572
 GameObject:
   m_ObjectHideFlags: 0
@@ -5208,9 +5209,9 @@ MonoBehaviour:
   onDistanceToTargetChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 990853189}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
-        m_MethodName: set_value
+      - m_Target: {fileID: 2523723}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.GameUI, Assembly-CSharp
+        m_MethodName: OnDistanceToTargetChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin
         public GameObject presentPrefab;
         public Sprite solidPresent;
 
+        public Slider distanceSlider;
+
         public void OnGameStarted(int index)
         {
             presents.transform.ClearAllChildren();
@@ -24,6 +26,11 @@ namespace Netherlands3D.Twin
             {
                 GameObject.Instantiate(presentPrefab, presents.transform);
             }
+        }
+
+        public void OnDistanceToTargetChanged(float distance)
+        {
+            distanceSlider.value = distanceSlider.maxValue - distance;
         }
 
         public void OnTargetReached(int index)
