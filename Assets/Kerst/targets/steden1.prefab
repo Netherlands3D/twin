@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4781823988582831378}
   - component: {fileID: 3629857772060753852}
   - component: {fileID: 5890192545391720073}
+  - component: {fileID: 5870652814414213388}
   m_Layer: 0
   m_Name: Alkmaar
   m_TagString: Untagged
@@ -107,6 +108,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5870652814414213388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245801759817347726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 81046bfb6f152439fbd28e7e74208db9, type: 3}
 --- !u!1 &4809768268637571724
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +133,7 @@ GameObject:
   - component: {fileID: 7790982505845855402}
   - component: {fileID: 8641173682497781966}
   - component: {fileID: 9132246365255243286}
+  - component: {fileID: 100881827191037610}
   m_Layer: 0
   m_Name: Dokkum
   m_TagString: Untagged
@@ -214,6 +229,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &100881827191037610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4809768268637571724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 28f77d72b43fc4ee9b0eb03dd28dccea, type: 3}
 --- !u!1 &6515064510074703497
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +254,7 @@ GameObject:
   - component: {fileID: 4604095900179835936}
   - component: {fileID: 6003259291807275344}
   - component: {fileID: 8757381163186600185}
+  - component: {fileID: 4657185659080512990}
   m_Layer: 0
   m_Name: Ede
   m_TagString: Untagged
@@ -321,6 +350,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4657185659080512990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6515064510074703497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: e2b9a62cef13141ff951f6c40034f46b, type: 3}
 --- !u!1 &6875151428538848680
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +375,7 @@ GameObject:
   - component: {fileID: 8561063517895799821}
   - component: {fileID: 3442342576083413421}
   - component: {fileID: 2659715715571872149}
+  - component: {fileID: 727529361625838151}
   m_Layer: 0
   m_Name: Bergen op Zoom
   m_TagString: Untagged
@@ -428,6 +471,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &727529361625838151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6875151428538848680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 71e095e987759467f9c14ffd963a30e0, type: 3}
 --- !u!1 &7572964163469953817
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +564,7 @@ GameObject:
   - component: {fileID: 2888679891681359693}
   - component: {fileID: 3476302543745662484}
   - component: {fileID: 6200575681494600297}
+  - component: {fileID: 5088709512142774335}
   m_Layer: 0
   m_Name: Venlo
   m_TagString: Untagged
@@ -603,3 +660,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5088709512142774335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8947219821357420012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 0d31a83c1deb543deba4e43fb5912ef6, type: 3}

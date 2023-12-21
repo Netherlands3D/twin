@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 698107036066742377}
   - component: {fileID: 4515878743224953594}
   - component: {fileID: 8859967045104946410}
+  - component: {fileID: 1245129887716915029}
   m_Layer: 0
   m_Name: Groningen
   m_TagString: Untagged
@@ -138,6 +139,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &1245129887716915029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4179847840653374099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: cd71bcfc563714be9abf1c0f2e6e6483, type: 3}
 --- !u!1 &4485390468164348858
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,6 +164,7 @@ GameObject:
   - component: {fileID: 1416051011449154833}
   - component: {fileID: 3725137656408713613}
   - component: {fileID: 1781434436511867341}
+  - component: {fileID: 7756216625167218459}
   m_Layer: 0
   m_Name: Utrecht
   m_TagString: Untagged
@@ -245,6 +260,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &7756216625167218459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485390468164348858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 1b43c6772877e4a4799809e8af2cc9ae, type: 3}
 --- !u!1 &4544779960716844713
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +285,7 @@ GameObject:
   - component: {fileID: 572584137268792956}
   - component: {fileID: 6065833771285413365}
   - component: {fileID: 5961926548082224478}
+  - component: {fileID: 8433336346529000430}
   m_Layer: 0
   m_Name: Zwolle
   m_TagString: Untagged
@@ -352,6 +381,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &8433336346529000430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4544779960716844713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: bb5f97999d79b4877b057bc92c845ff0, type: 3}
 --- !u!1 &6567571577059674405
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +406,7 @@ GameObject:
   - component: {fileID: 6761485062262449513}
   - component: {fileID: 8112150858486289833}
   - component: {fileID: 4442389635683830566}
+  - component: {fileID: 1509299966342339129}
   m_Layer: 0
   m_Name: Den Bosch
   m_TagString: Untagged
@@ -459,6 +502,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &1509299966342339129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567571577059674405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: f9efb11145a474dd1b753305da7f83a2, type: 3}
 --- !u!1 &6892491411253218020
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +564,7 @@ GameObject:
   - component: {fileID: 9155534152330660801}
   - component: {fileID: 8674704221128825765}
   - component: {fileID: 5160956962381087346}
+  - component: {fileID: 6225020365403383858}
   m_Layer: 0
   m_Name: 'Middelburg '
   m_TagString: Untagged
@@ -603,3 +660,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6225020365403383858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7871033654599388859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 7aa4a16426a244506b5a6c351c2a4ab5, type: 3}

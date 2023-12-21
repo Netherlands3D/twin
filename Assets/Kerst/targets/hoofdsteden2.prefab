@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3853838249822026522}
   - component: {fileID: 1754189543936122902}
   - component: {fileID: 8232006568616198061}
+  - component: {fileID: 7724901548423492374}
   m_Layer: 0
   m_Name: Lelystad
   m_TagString: Untagged
@@ -107,6 +108,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &7724901548423492374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396085554032272417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: a395fb821ff6448e796d125b246f5572, type: 3}
 --- !u!1 &3301660078208253702
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +170,7 @@ GameObject:
   - component: {fileID: 5138182118110135201}
   - component: {fileID: 5751592253959228708}
   - component: {fileID: 3652786245703136576}
+  - component: {fileID: 5794079428349300440}
   m_Layer: 0
   m_Name: Assen
   m_TagString: Untagged
@@ -251,6 +266,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5794079428349300440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3935381598297496227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: a6b555544c47b4219a37cdf4baff25bb, type: 3}
 --- !u!1 &6009086531575955868
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,6 +291,7 @@ GameObject:
   - component: {fileID: 1313526296796201295}
   - component: {fileID: 8938005112209611289}
   - component: {fileID: 519246759668573181}
+  - component: {fileID: 1711778021618923456}
   m_Layer: 0
   m_Name: Maastricht
   m_TagString: Untagged
@@ -358,6 +387,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &1711778021618923456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6009086531575955868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 0f6da4757f6c948c288265fc6f4554e9, type: 3}
 --- !u!1 &7254859316396813120
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +519,7 @@ GameObject:
   - component: {fileID: 576136655197170035}
   - component: {fileID: 2106748810334451567}
   - component: {fileID: 8624439141288646208}
+  - component: {fileID: 4429406137367990224}
   m_Layer: 0
   m_Name: Den Haag
   m_TagString: Untagged
@@ -572,6 +615,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4429406137367990224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571808096048941489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 6fd167359d896495f9ef1a906e63b9bc, type: 3}
 --- !u!1 &8544478234230505397
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,6 +640,7 @@ GameObject:
   - component: {fileID: 2617089536356415033}
   - component: {fileID: 4598424822531525019}
   - component: {fileID: 1407298939936328986}
+  - component: {fileID: 7367082360715808909}
   m_Layer: 0
   m_Name: Leeuwarden
   m_TagString: Untagged
@@ -679,3 +736,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &7367082360715808909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544478234230505397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 2a2e0b7ae05b74d5db4068821e10e97d, type: 3}

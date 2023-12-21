@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 8356570582572256409}
   - component: {fileID: 8611779557374637638}
   - component: {fileID: 7927206277677700929}
+  - component: {fileID: 4234844545899559511}
   m_Layer: 0
   m_Name: Delft
   m_TagString: Untagged
@@ -144,6 +145,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4234844545899559511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248943895125254476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: d215c47dfa5b8401eae8988daab40236, type: 3}
 --- !u!1 &7087791816223222027
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +170,7 @@ GameObject:
   - component: {fileID: 6952474640221152364}
   - component: {fileID: 3138104197452744769}
   - component: {fileID: 2602773666346811511}
+  - component: {fileID: 4207175022168322877}
   m_Layer: 0
   m_Name: Heerlen
   m_TagString: Untagged
@@ -251,6 +266,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4207175022168322877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087791816223222027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 9da7c0de8a0ab41a785864082cf52543, type: 3}
 --- !u!1 &7123381694115176068
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,6 +322,7 @@ GameObject:
   - component: {fileID: 7002005416622891571}
   - component: {fileID: 8599264847596213604}
   - component: {fileID: 7719939701700043180}
+  - component: {fileID: 1140918418548719666}
   m_Layer: 0
   m_Name: Emmen
   m_TagString: Untagged
@@ -389,6 +418,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &1140918418548719666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7336676334447086337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 4dfeb2260d20c48dba696f53cab63caa, type: 3}
 --- !u!1 &7830366397971627029
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +443,7 @@ GameObject:
   - component: {fileID: 8269537599603390139}
   - component: {fileID: 3245549288055332388}
   - component: {fileID: 6287503552505997846}
+  - component: {fileID: 5602510587489812135}
   m_Layer: 0
   m_Name: Goes
   m_TagString: Untagged
@@ -496,6 +539,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5602510587489812135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7830366397971627029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: 9a48f3c20d5e543f6b2d9c4d3f1b3354, type: 3}
 --- !u!1 &8439357182464014230
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +564,7 @@ GameObject:
   - component: {fileID: 4099285436384625391}
   - component: {fileID: 3865885755561399293}
   - component: {fileID: 7353847498089992002}
+  - component: {fileID: 6115760867111825234}
   m_Layer: 0
   m_Name: Winterswijk
   m_TagString: Untagged
@@ -603,3 +660,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6115760867111825234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8439357182464014230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01169131adb8f46729281849192fae8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: bf2358a0ce61d4a3496d83505cda3af6, type: 3}

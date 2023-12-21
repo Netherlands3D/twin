@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +28,7 @@ namespace Netherlands3D.Twin
         public UnityEvent<float> onDistanceToTargetChanged;
         public UnityEvent<float> kmTravelled;
         public UnityEvent<int> onTargetReached;
+        public UnityEvent<Sprite> onTargetReachedSprite;
         public UnityEvent onGameFinished;
         float distanceTravelled;
         Vector3 oldCameraposition;
@@ -36,6 +38,16 @@ namespace Netherlands3D.Twin
         {
             camera = Camera.main;
             //startGame(0);
+        }
+
+        private void OnEnable()
+        {
+            onTargetReachedSprite.AddListener(Test);
+        }
+
+        void Test(Sprite s)
+        {
+            print (s.name);
         }
 
         public void startGame(int targetListID)
@@ -89,10 +101,10 @@ namespace Netherlands3D.Twin
 
         public void TargetReached()
         {
-
             stopwatch.Stop();
             stopwatch = null;
             isActive = false;
+            var sprite = targetGameObject.GetComponent<Target>().Sprite;
             targetGameObject.SetActive(false);
             if (targetNumber > targetset.transform.childCount-1)
             {
@@ -101,7 +113,7 @@ namespace Netherlands3D.Twin
                 return;
             }
             onTargetReached.Invoke(targetNumber);
-
+            onTargetReachedSprite.Invoke(sprite);
         }
 
         // Update is called once per frame
