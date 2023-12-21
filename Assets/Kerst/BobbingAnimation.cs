@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin
         public float horizontalOffsetWhenTurning=5f;
 
         [SerializeField] private RectTransform referencePosition;
+        [SerializeField] private float verticalOffset = 0f;
         private float randomVerticalOffset;
         private float randomHorizontalOffset;
         private flyingCamera cam;
@@ -44,7 +45,7 @@ namespace Netherlands3D.Twin
             float targetFrequency = applyBoost ? 3f : 1f;
             currentFrequency = Mathf.Lerp(currentFrequency, targetFrequency, elapsedTime / cam.jerkTime);
             
-            float newY = referencePosition.position.y + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
+            float newY = referencePosition.position.y + verticalOffset + Mathf.Sin((Time.time + randomVerticalOffset) * bobbingSpeed * currentFrequency) * bobbingHeight;
             float newX = referencePosition.position.x + Mathf.Sin((Time.time + randomHorizontalOffset) * bobbingSpeed * currentFrequency) * horizontalBobbing;
 
             newX += cam.rotationSpeed * horizontalOffsetWhenTurning;
