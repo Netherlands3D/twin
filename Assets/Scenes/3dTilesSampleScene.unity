@@ -6951,6 +6951,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: rendiercam
       objectReference: {fileID: 0}
+    - target: {fileID: 5613766726621830789, guid: cb4cd7fe389a6fd4dbe280af5f1ab28e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
