@@ -230,6 +230,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers()
         {
+            print("adding: " + Layer.name);
             layerManager.LayersVisibleInInspector.Add(this);
             if (foldoutToggle.isOn)
             {
@@ -647,7 +648,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if(ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
-            RecalculateVisibleHierarchyRecursive(); //still includes this UI (the destroyed one) move this function call to LayerData.RemoveUI?
+            // RecalculateVisibleHierarchyRecursive(); //still includes this UI (the destroyed one) move this function call to LayerData.RemoveUI?
             RecalculateParentStates();
         }
 

@@ -8,11 +8,18 @@ namespace Netherlands3D.Twin
     public class ReferenceLayer : LayerNL3DBase
     {
         public ReferencedLayer Reference { get; set; }
-        
+
         public override bool IsActiveInScene
         {
             get => Reference.IsActiveInScene;
             set => Reference.IsActiveInScene = value;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (Reference)
+                Destroy(Reference.gameObject);
         }
     }
 }
