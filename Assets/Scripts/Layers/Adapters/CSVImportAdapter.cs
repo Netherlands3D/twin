@@ -26,49 +26,39 @@ namespace Netherlands3D.Twin
                     hex = "#" + hex;
 
                 var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-                return canParse ? color : Interaction.NO_OVERRIDE_COLOR; 
+                return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
             }
         }
     }
 
-    
+
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
     public class CSVImportAdapter : ScriptableObject
     {
-        private static Transform datasetLayerParent;
-        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new ();
+        // private static Transform datasetLayerParent;
 
-        static Transform DatasetLayerParent
-        {
-            get
-            {
-                if (!datasetLayerParent)
-                {
-                    datasetLayerParent = new GameObject("DatasetLayers").transform;
-                }
-
-                return datasetLayerParent;
-            }
-        }
-
+        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         public int maxParsesPerFrame = 100;
+        private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
         public void CreateCSVDatasetLayer(string file)
         {
             // this.path = path;
-            foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
+            if (activeDatasetLayer)
             {
-                Destroy(existingDatasetLayers.gameObject);
+                Destroy(activeDatasetLayer.gameObject); //todo: temp fix to allow only 1 dataset layer
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
-            
+
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
-            datasetLayer.transform.SetParent(DatasetLayerParent);
+            // datasetLayer.transform.SetParent(DatasetLayerParent);
             // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
             datasetLayer.UI.Select();
 
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+
+            activeDatasetLayer = datasetLayer;
         }
 
         private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)

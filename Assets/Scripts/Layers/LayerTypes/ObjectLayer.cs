@@ -19,10 +19,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set { gameObject.SetActive(value); }
         }
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
-            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);//todo remove FindObjectOfType
+            base.Awake();
+            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+        }
+
+        protected void Start()
+        {
             objectCreated.Invoke(gameObject);
         }
 

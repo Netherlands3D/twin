@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             if (!LayerData.AllLayers.Contains(this))
                 LayerData.AddStandardLayer(this);
@@ -34,6 +34,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void OnDestroy()
         {
             LayerData.RemoveLayer(this);
+            UI.del
         }
 
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
@@ -50,23 +51,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             
             transform.SetSiblingIndex(siblingIndex);
             
-            // if (oldParent)
-            // {
-            //     oldParent.RecalculateParentAndChildren();
-            // }
-            //
-            // if (newParent)
-            // {
-            //     newParent.RecalculateParentAndChildren();
-            //     newParent.foldoutToggle.isOn = true;
-            // }
-            //
-            // RecalculateParentAndChildren();
-            //
             print("setting parent of " + name + " to " + newParentLayer?.name);
             RecalculateCurrentSubTreeDepthValuesRecursively();
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
-            // UI.RecalculateVisibleHierarchyRecursive();
         }
         
         private void RecalculateCurrentSubTreeDepthValuesRecursively()

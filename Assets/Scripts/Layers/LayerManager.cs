@@ -80,27 +80,26 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnable()
         {
-            print(LayerData.Instance.transform.childCount);
-            foreach (Transform t in LayerData.Instance.transform)
-            {
-                print(t.gameObject.name);
-            }
-
             ReconstructHierarchyUIs();
-            LayerData.LayerAdded.AddListener(OnLayerAdded);
+            LayerData.LayerAdded.AddListener(CreateNewUI);
             LayerData.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
             DeselectAllLayers();
-            LayerData.LayerAdded.RemoveListener(OnLayerAdded);
+            LayerData.LayerAdded.RemoveListener(CreateNewUI);
             LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
 
-        private void OnLayerAdded(LayerNL3DBase layer)
+        private void CreateNewUI(LayerNL3DBase layer)
         {
-            // AddMissingLayersToInspector();
+            var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
+            layerUI.Layer = layer;
+            layer.UI = layerUI;
+            layer.UI.SetParent(layer.transform.parent.GetComponent<LayerNL3DBase>()?.UI, layer.transform.GetSiblingIndex());
+
+            LayersVisibleInInspector.Add(layerUI);
         }
 
         private void OnLayerDeleted(LayerNL3DBase layer)
@@ -231,28 +230,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void GroupSelectedLayers()
         {
             var newGroup = CreateFolderLayer();
-            print(newGroup.name);
-            var referenceLayer = SelectedLayers.Last();
-            newGroup.SetParent(referenceLayer.Layer, referenceLayer.transform.GetSiblingIndex());
+            var referenceLayerUI = SelectedLayers.Last();
+            newGroup.SetParent(referenceLayerUI.Layer.transform.parent.GetComponent<LayerNL3DBase>(), referenceLayerUI.transform.GetSiblingIndex());
             SortSelectedLayers();
             foreach (var selectedLayer in SelectedLayers)
             {
-                // var skipReparent = false;
-                // var checkParent = selectedLayer.ParentUI;
-                // while (checkParent != null)
-                // {
-                //     if (SelectedLayers.Contains(checkParent))
-                //     {
-                //         skipReparent = true;
-                //         print("parent " +checkParent.Layer.name + "of " + selectedLayer.Layer.name +" is also selected, skipping");
-                //         break;
-                //     }
-                //     checkParent = checkParent.ParentUI;
-                // }
-                // if(skipReparent)
-                //     continue;
-
-                print("reparenting " + selectedLayer.Layer.name + " to " + newGroup.name);
                 selectedLayer.Layer.SetParent(newGroup);
             }
         }
