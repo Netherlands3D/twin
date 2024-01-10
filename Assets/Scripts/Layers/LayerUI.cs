@@ -344,7 +344,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 ProcessLayerSelection();
             }
 
-            layerManager.EnableContextMenu(true, eventData.position);
+            // layerManager.EnableContextMenu(true, eventData.position);  //disabled context menu until UI is ready
         }
 
         private void ProcessLayerSelection()
@@ -636,6 +636,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if (!IsSelected)
                 SetHighlight(InteractionState.Default);
+        }
+
+        private void OnDestroy()
+        {
+            // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
+            //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
+            
+            LayerData.RemoveUI(this);
+            if(ParentUI)
+                ParentUI.RecalculateParentAndChildren();
+
+            RecalculateVisibleHierarchyRecursive(); //still includes this UI (the destroyed one) move this function call to LayerData.RemoveUI?
+            RecalculateParentStates();
+        }
+
+        public void DestroyUI()
+        {
+            Destroy(gameObject);
         }
     }
 }
