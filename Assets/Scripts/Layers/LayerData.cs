@@ -12,8 +12,6 @@ namespace Netherlands3D.Twin
     {
         public static LayerData Instance { get; private set; }
         public static HashSet<LayerNL3DBase> AllLayers { get; set; } = new HashSet<LayerNL3DBase>();
-        public static List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
-        public static List<LayerUI> SelectedLayers { get; set; } = new();
 
         public static UnityEvent<LayerNL3DBase> LayerAdded = new();
         public static UnityEvent<LayerNL3DBase> LayerDeleted = new();

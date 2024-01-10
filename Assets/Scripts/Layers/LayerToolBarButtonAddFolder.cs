@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
 
         public override void OnDrop(PointerEventData eventData)
         {
-            if (LayerData.SelectedLayers.Count > 0)
+            if (layerManager.SelectedLayers.Count > 0)
                 layerManager.GroupSelectedLayers();
         }
     }

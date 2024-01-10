@@ -9,6 +9,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class LayerManager : MonoBehaviour, IPointerDownHandler
     {
+        public List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
+        public List<LayerUI> SelectedLayers { get; set; } = new();
+        
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
 
@@ -57,7 +60,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
             // layer.SetParent(parent);
 
-            LayerData.LayersVisibleInInspector.Add(layerUI);
+            LayersVisibleInInspector.Add(layerUI);
             foreach (Transform child in layer.transform)
             {
                 if (child == layer.transform)
@@ -102,10 +105,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnLayerDeleted(LayerNL3DBase layer)
         {
-            if (LayerData.SelectedLayers.Contains(layer.UI))
+            if (SelectedLayers.Contains(layer.UI))
             {
                 layer.OnDeselect();
-                LayerData.SelectedLayers.Remove(layer.UI);
+                SelectedLayers.Remove(layer.UI);
             }
 
             Destroy(layer.UI.gameObject);
@@ -113,7 +116,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnRectTransformDimensionsChange()
         {
-            foreach (var layer in LayerData.LayersVisibleInInspector)
+            foreach (var layer in LayersVisibleInInspector)
             {
                 layer.UpdateLayerUI();
             }
@@ -143,15 +146,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 DeselectAllLayers();
         }
 
-        public static void DeselectAllLayers()
+        public void DeselectAllLayers()
         {
-            foreach (var selectedLayer in LayerData.SelectedLayers)
+            foreach (var selectedLayer in SelectedLayers)
             {
                 selectedLayer.SetHighlight(InteractionState.Default);
                 selectedLayer.Layer.OnDeselect();
             }
 
-            LayerData.SelectedLayers.Clear();
+            SelectedLayers.Clear();
         }
 
         public FolderLayer CreateFolderLayer()
@@ -229,10 +232,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var newGroup = CreateFolderLayer();
             print(newGroup.name);
-            var referenceLayer = LayerData.SelectedLayers.Last();
+            var referenceLayer = SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.Layer, referenceLayer.transform.GetSiblingIndex());
             SortSelectedLayers();
-            foreach (var selectedLayer in LayerData.SelectedLayers)
+            foreach (var selectedLayer in SelectedLayers)
             {
                 // var skipReparent = false;
                 // var checkParent = selectedLayer.ParentUI;
@@ -254,20 +257,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public static void SortSelectedLayersByVisibility()
+        public void SortSelectedLayersByVisibility()
         {
-            LayerData.SelectedLayers.Sort((layer1, layer2) => LayerData.LayersVisibleInInspector.IndexOf(layer1).CompareTo(LayerData.LayersVisibleInInspector.IndexOf(layer2)));
+            SelectedLayers.Sort((layer1, layer2) => LayersVisibleInInspector.IndexOf(layer1).CompareTo(LayersVisibleInInspector.IndexOf(layer2)));
         }
 
-        static void SortSelectedLayers()
+        private void SortSelectedLayers()
         {
-            LayerData.SelectedLayers.Sort((ui1, ui2) =>
+            SelectedLayers.Sort((ui1, ui2) =>
             {
                 // Primary sorting by Depth
                 int depthComparison = ui1.Layer.Depth.CompareTo(ui2.Layer.Depth);
 
                 // If depths are the same, use the order as visible in the hierarchy
-                return depthComparison != 0 ? depthComparison : LayerData.LayersVisibleInInspector.IndexOf(ui1).CompareTo(LayerData.LayersVisibleInInspector.IndexOf(ui2));
+                return depthComparison != 0 ? depthComparison : LayersVisibleInInspector.IndexOf(ui1).CompareTo(LayersVisibleInInspector.IndexOf(ui2));
             });
         }
 
