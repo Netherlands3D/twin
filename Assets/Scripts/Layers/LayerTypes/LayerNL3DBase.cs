@@ -11,20 +11,78 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public LayerUI UI { get; set; }
 
+        private LayerNL3DBase ParentLayer { get; set; }
+        private LayerNL3DBase[] ChildrenLayers { get; set; }
+        public int Depth { get; private set; } = 0;
+        
         public abstract bool IsActiveInScene { get; set; }
 
-        public virtual void OnSelect(){}
-        public virtual void OnDeselect(){}
+        public virtual void OnSelect()
+        {
+        }
 
-        protected virtual void Awake()
+        public virtual void OnDeselect()
+        {
+        }
+
+        protected virtual void Start()
         {
             if (!LayerData.AllLayers.Contains(this))
-                LayerData.AddLayer(this);
+                LayerData.AddStandardLayer(this);
         }
 
         protected virtual void OnDestroy()
         {
             LayerData.RemoveLayer(this);
+        }
+
+        public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
+        {
+            if (newParentLayer == this)
+                return;
+            
+            var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
+
+            if (newParentLayer == null)
+                transform.SetParent(LayerData.Instance.transform);
+            else
+                transform.SetParent(newParent);
+            
+            transform.SetSiblingIndex(siblingIndex);
+            
+            // if (oldParent)
+            // {
+            //     oldParent.RecalculateParentAndChildren();
+            // }
+            //
+            // if (newParent)
+            // {
+            //     newParent.RecalculateParentAndChildren();
+            //     newParent.foldoutToggle.isOn = true;
+            // }
+            //
+            // RecalculateParentAndChildren();
+            //
+            print("setting parent of " + name + " to " + newParentLayer?.name);
+            RecalculateCurrentSubTreeDepthValuesRecursively();
+            UI?.SetParent(newParentLayer?.UI, siblingIndex);
+            // UI.RecalculateVisibleHierarchyRecursive();
+        }
+        
+        private void RecalculateCurrentSubTreeDepthValuesRecursively()
+        {
+            if (transform.parent != LayerData.Instance.transform)
+                Depth = transform.parent.GetComponent<LayerNL3DBase>().Depth + 1;
+            else
+                Depth = 0;
+
+            foreach (var child in GetComponentsInChildren<LayerNL3DBase>())
+            {
+                if(child == this)
+                    continue;
+                
+                child.RecalculateCurrentSubTreeDepthValuesRecursively();
+            }
         }
     }
 }

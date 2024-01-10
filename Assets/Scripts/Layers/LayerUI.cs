@@ -77,7 +77,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public Color Color { get; set; } = Color.blue;
         public Sprite Icon { get; set; }
-        public int Depth { get; private set; } = 0;
 
         private void Awake()
         {
@@ -183,43 +182,43 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             enabledToggle.SetIsOnWithoutNotify(Layer.IsActiveInScene); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
         }
 
-        public void SetParent(LayerUI newParent, int siblingIndex = -1)
+        public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
         {
             if (newParent == this)
                 return;
-
+        
             var oldParent = ParentUI;
-
+        
             if (newParent == null)
                 transform.SetParent(LayerBaseTransform);
             else
                 transform.SetParent(newParent.childrenPanel);
-
-            var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
-            var reorderWithSameParent = oldParent == newParent;
-            if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
+        
+            // var parentChanged = oldParent ? transform.parent != oldParent.childrenPanel : transform.parent != LayerBaseTransform;
+            // var reorderWithSameParent = oldParent == newParent;
+            // if (parentChanged || reorderWithSameParent) //if reparent fails, the new siblingIndex is also invalid
                 transform.SetSiblingIndex(siblingIndex);
-
+        
             if (oldParent)
             {
                 oldParent.RecalculateParentAndChildren();
             }
-
+        
             if (newParent)
             {
                 newParent.RecalculateParentAndChildren();
                 newParent.foldoutToggle.isOn = true;
             }
-
+        
             RecalculateParentAndChildren();
-
-            RecalculateDepthValuesRecursively();
+        
+            //RecalculateDepthValuesRecursively();
             RecalculateVisibleHierarchyRecursive();
-
+        
             OnEnabledToggleValueChanged(IsActiveInHierarchy);
         }
 
-        private void RecalculateVisibleHierarchyRecursive()
+        public void RecalculateVisibleHierarchyRecursive()
         {
             LayerData.LayersVisibleInInspector.Clear();
             foreach (Transform unparentedLayer in LayerBaseTransform)
@@ -245,28 +244,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateParentAndChildren()
         {
-            ParentUI = transform.parent.GetComponentInParent<LayerUI>(); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
-            ChildrenUI = childrenPanel.GetComponentsInChildren<LayerUI>();
-        }
-
-        private void RecalculateDepthValuesRecursively()
-        {
-            if (transform.parent != LayerBaseTransform)
-                Depth = ParentUI.Depth + 1;
-            else
-                Depth = 0;
-
-            foreach (var child in ChildrenUI)
-            {
-                child.RecalculateDepthValuesRecursively();
-            }
+            ParentUI = transform.parent.GetComponentInParent<LayerUI>(true); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
+            ChildrenUI = childrenPanel.GetComponentsInChildren<LayerUI>(true);
         }
 
         public void UpdateLayerUI()
         {
             // UpdateEnabledToggle(); 
             UpdateName();
-            RecalculateIndent();
+            RecalculateIndent(Layer.Depth);
             SetLayerTypeImage();
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
@@ -302,10 +288,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void RecalculateIndent()
+        private void RecalculateIndent(int childDepth)
         {
             var spacerRectTransform = spacer.transform as RectTransform;
-            spacerRectTransform.sizeDelta = new Vector2((Depth * indentWidth) + spacerStartWidth, spacerRectTransform.sizeDelta.y);
+            spacerRectTransform.sizeDelta = new Vector2((childDepth * indentWidth) + spacerStartWidth, spacerRectTransform.sizeDelta.y);
         }
 
         private void UpdateName()
@@ -325,13 +311,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
             layerNameText.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
-
-        private void RecalculateChildPanelHeight()
-        {
-            var layerHeight = GetComponent<RectTransform>().rect.height;
-            childrenPanel.SetHeight(transform.childCount * layerHeight);
-        }
-
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -477,7 +456,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
                 foreach (var selectedLayer in LayerData.SelectedLayers)
                 {
-                    selectedLayer.SetParent(newParent, newSiblingIndex);
+                    selectedLayer.Layer.SetParent(newParent?.Layer, newSiblingIndex);
                 }
             }
 
@@ -582,16 +561,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     newSiblingIndex = LayerBaseTransform.childCount;
                 }
             }
-
-            // if (referenceLayerUnderMouse)
-            //     print("ref: " + referenceLayerUnderMouse.Layer.name);
-            // else
-            //     print("ref: null");
-            //
-            // if (newParent)
-            //     print("newparent: " + newParent.Layer.name);
-            // else
-            //     print("newparent: null");
         }
 
         private static void RemoveHoverHighlight(LayerUI layer)
@@ -608,22 +577,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void SetHighlight(InteractionState state)
         {
             GetComponentInChildren<Image>().sprite = backgroundSprites[(int)state];
-            // switch (state)
-            // {
-            //     
-            //     
-            //     case InteractionState.Default:
-            //         GetComponentInChildren<Image>().sprite = backgroundSprites[0];
-            //         break;
-            //     case InteractionState.DragHover:
-            //         GetComponentInChildren<Image>().sprite = backgroundSprites[1];
-            //         break;
-            //     case InteractionState.Selected:
-            //         GetComponentInChildren<Image>().sprite = backgroundSprites[2];
-            //         break;
-            //     default:
-            //         throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            // }
         }
 
         private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
@@ -675,12 +628,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            // var pointerPosition = Pointer.current.position.ReadValue();
-            // var relativePointerPos = parentRowRectTransform.InverseTransformPoint(pointerPosition);
-            // var isInParentRow = parentRowRectTransform.rect.Contains(relativePointerPos);
-            //
-            // print("is in parent row of: " + Layer.name + "\t" + isInParentRow);
-
             if (!layerManager.DragGhost && !IsSelected)
                 SetHighlight(InteractionState.Hover);
         }
