@@ -215,6 +215,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Update()
         {
+            if (Keyboard.current.deleteKey.wasPressedThisFrame)
+            {
+                DeleteSelectedLayers();
+            }
+            
             if (!contextMenu)
                 return;
 
@@ -259,6 +264,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool IsDragOnButton()
         {
             return DragGhost && MouseIsOverButton;
+        }
+        
+        public void DeleteSelectedLayers()
+        {
+            foreach (var layerUI in SelectedLayers)
+            {
+                Destroy(layerUI.Layer.gameObject);
+            }
+        }
+
+        public void RemoveUI(LayerUI layerUI)
+        {
+            if (SelectedLayers.Contains(layerUI))
+                SelectedLayers.Remove(layerUI);
+
+            if (LayersVisibleInInspector.Contains(layerUI))
+                LayersVisibleInInspector.Remove(layerUI);
         }
     }
 }

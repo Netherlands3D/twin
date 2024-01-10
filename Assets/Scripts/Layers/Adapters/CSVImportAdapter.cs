@@ -44,9 +44,9 @@ namespace Netherlands3D.Twin
         public void CreateCSVDatasetLayer(string file)
         {
             // this.path = path;
-            if (activeDatasetLayer)
+            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
             {
-                Destroy(activeDatasetLayer.gameObject); //todo: temp fix to allow only 1 dataset layer
+                DestroyImmediate(activeDatasetLayer.gameObject); //have to call DestroyImmediate instead of normal Destroy, because this will call the dataset's OnDestroy() function to clean up the old colors before applying the new ones
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
 

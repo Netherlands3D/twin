@@ -10,12 +10,12 @@ namespace Netherlands3D.Twin
     {
         public override void ButtonAction()
         {
-            LayerData.DeleteSelectedLayers();
+            layerManager.DeleteSelectedLayers();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            LayerData.DeleteSelectedLayers();
+            layerManager.DeleteSelectedLayers();
         }
     }
 }

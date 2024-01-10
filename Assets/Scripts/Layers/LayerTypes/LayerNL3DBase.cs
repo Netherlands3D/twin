@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void OnDestroy()
         {
             LayerData.RemoveLayer(this);
-            UI.del
+            UI?.DestroyUI();
         }
 
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
