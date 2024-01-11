@@ -128,6 +128,15 @@ namespace Netherlands3D.SubObjects
 
             Interaction.ApplyColorsToAll(PrioritizedColors);
         }
+        
+        public static void RemoveCustomColorSet(ColorSetLayer colorSetLayer)
+        {
+            var changedColors = new Dictionary<string, Color>(colorSetLayer.ColorSet);
+            customColors.Remove(colorSetLayer);
+            RecalculatePrioritizedColors();
+
+            Interaction.ApplyColorsToAll(PrioritizedColors);
+        }
 
         private static void ReorderColorMaps()
         {
