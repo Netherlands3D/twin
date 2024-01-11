@@ -62,16 +62,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private bool draggingLayerShouldBePlacedBeforeOtherLayer;
         private bool waitForFullClickToDeselect;
 
-        public bool IsActiveInHierarchy
-        {
-            get
-            {
-                if (ParentUI)
-                    return enabledToggle.isOn && ParentUI.IsActiveInHierarchy;
-                return enabledToggle.isOn;
-            }
-        }
-
         public LayerActiveState State { get; set; }
         public InteractionState InteractionState { get; set; }
 
@@ -126,12 +116,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnabledToggleValueChanged(bool isOn)
         {
+            Layer.ActiveSelf = isOn;
+            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
             RecalculateCurrentTreeStates();
-            enabledToggle.interactable = !ParentUI || (ParentUI && ParentUI.IsActiveInHierarchy);
-            Layer.IsActiveInScene = IsActiveInHierarchy;
 
-            foreach (var child in ChildrenUI)
-                child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
+            // foreach (var child in ChildrenUI)
+            //     child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
         }
 
         private void SetVisibilitySprite()
@@ -142,19 +132,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateState()
         {
-            var activeInHierarchy = IsActiveInHierarchy;
-            var activeSelf = enabledToggle.isOn;
             var allChildrenActive = true;
             foreach (var child in ChildrenUI)
             {
-                allChildrenActive &= child.State == LayerActiveState.Enabled;
+                allChildrenActive &= child.Layer.ActiveSelf;
             }
-
-            if (!activeSelf)
+            
+            if (!Layer.ActiveSelf)
             {
                 State = LayerActiveState.Disabled;
             }
-            else if (activeSelf && !activeInHierarchy)
+            else if (Layer.ActiveSelf && !Layer.ActiveInHierarchy)
             {
                 State = LayerActiveState.EnabledInDisabled;
             }
@@ -179,7 +167,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void Start()
         {
             UpdateLayerUI();
-            enabledToggle.SetIsOnWithoutNotify(Layer.IsActiveInScene); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
+            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
         }
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
@@ -215,7 +203,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             //RecalculateDepthValuesRecursively();
             RecalculateVisibleHierarchyRecursive();
         
-            OnEnabledToggleValueChanged(IsActiveInHierarchy);
+            RecalculateCurrentTreeStates();
+            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
         }
 
         public void RecalculateVisibleHierarchyRecursive()

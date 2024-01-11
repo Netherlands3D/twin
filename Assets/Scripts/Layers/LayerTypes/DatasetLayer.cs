@@ -11,14 +11,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        public override bool IsActiveInScene
+        // public override bool IsActiveInScene
+        // {
+        //     get { return ColorSetLayer.Enabled; }
+        //     set
+        //     {
+        //         ColorSetLayer.Enabled = value;
+        //         GeometryColorizer.RecalculatePrioritizedColors();
+        //     }
+        // }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            get { return ColorSetLayer.Enabled; }
-            set
-            {
-                ColorSetLayer.Enabled = value;
-                GeometryColorizer.RecalculatePrioritizedColors();
-            }
+            ColorSetLayer.Enabled = activeInHierarchy;
+            GeometryColorizer.RecalculatePrioritizedColors();
         }
 
         protected override void OnDestroy()
@@ -29,9 +35,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetColorSetLayer(ColorSetLayer newColorSetLayer)
         {
-            bool active = newColorSetLayer.Enabled;
+            // bool active = newColorSetLayer.Enabled;
             ColorSetLayer = newColorSetLayer;
-            IsActiveInScene = active;
+            GeometryColorizer.RecalculatePrioritizedColors();
         }
 
         public int PriorityIndex

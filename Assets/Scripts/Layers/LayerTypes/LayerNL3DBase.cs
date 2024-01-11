@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin;
@@ -11,11 +12,59 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public LayerUI UI { get; set; }
 
-        private LayerNL3DBase ParentLayer { get; set; }
-        private LayerNL3DBase[] ChildrenLayers { get; set; }
         public int Depth { get; private set; } = 0;
-        
-        public abstract bool IsActiveInScene { get; set; }
+
+        // public abstract bool IsActiveInScene { get; set; }
+        // public bool ActiveSelf { get; set; } = true;
+        //
+        // public bool IsActiveInHierarchy
+        // {
+        //     get
+        //     {
+        //         if (ParentLayer)
+        //             return ActiveSelf && ParentLayer.IsActiveInHierarchy;
+        //         return ActiveSelf;
+        //     }
+        // }
+
+        public bool ActiveSelf
+        {
+            get { return gameObject.activeSelf; }
+            set
+            {
+                gameObject.SetActive(value);
+                OnLayerActiveInHierarchyChanged(value);
+                foreach (var child in ChildrenLayers)
+                {
+                    child.OnLayerActiveInHierarchyChanged(child.ActiveInHierarchy);
+                }
+            }
+        }
+
+        public bool ActiveInHierarchy
+        {
+            get { return gameObject.activeInHierarchy; }
+        }
+
+        protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
+
+        public LayerNL3DBase ParentLayer => transform.parent.GetComponent<LayerNL3DBase>();
+
+        public LayerNL3DBase[] ChildrenLayers
+        {
+            get
+            {
+                LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
+
+                LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
+                if (selfLayer != null)
+                {
+                    childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
+                }
+
+                return childLayers;
+            }
+        }
 
         public virtual void OnSelect()
         {
@@ -33,8 +82,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnDestroy()
         {
-            UI?.SetParent(null);//unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
-            UI?.DestroyUI(); 
+            UI?.SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
+            UI?.DestroyUI();
             LayerData.RemoveLayer(this);
         }
 
@@ -42,33 +91,33 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if (newParentLayer == this)
                 return;
-            
+
             var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
 
             if (newParentLayer == null)
                 transform.SetParent(LayerData.Instance.transform);
             else
                 transform.SetParent(newParent);
-            
+
             transform.SetSiblingIndex(siblingIndex);
-            
+
             print("setting parent of " + name + " to " + newParentLayer?.name);
             RecalculateCurrentSubTreeDepthValuesRecursively();
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
         }
-        
+
         private void RecalculateCurrentSubTreeDepthValuesRecursively()
         {
             if (transform.parent != LayerData.Instance.transform)
-                Depth = transform.parent.GetComponent<LayerNL3DBase>().Depth + 1;
+                Depth = ParentLayer.Depth + 1;
             else
                 Depth = 0;
 
             foreach (var child in GetComponentsInChildren<LayerNL3DBase>())
             {
-                if(child == this)
+                if (child == this)
                     continue;
-                
+
                 child.RecalculateCurrentSubTreeDepthValuesRecursively();
             }
         }

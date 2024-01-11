@@ -9,10 +9,9 @@ namespace Netherlands3D.Twin
     {
         public ReferencedLayer Reference { get; set; }
 
-        public override bool IsActiveInScene
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            get => Reference.IsActiveInScene;
-            set => Reference.IsActiveInScene = value;
+            Reference.IsActiveInScene = activeInHierarchy;
         }
 
         protected override void OnDestroy()
