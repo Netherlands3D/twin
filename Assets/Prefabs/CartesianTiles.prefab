@@ -93,6 +93,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
 --- !u!1 &615420215414367251
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,6 +243,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
 --- !u!1 &4232718383308019186
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
 --- !u!1 &5330367146774434643
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +424,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
 --- !u!1 &5538989845493688754
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +516,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
 --- !u!1 &8780770133851594390
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,3 +612,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+    type: 3}
+  referenceLayer: {fileID: 0}
