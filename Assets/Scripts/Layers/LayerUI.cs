@@ -52,8 +52,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
 
-        public LayerUI ParentUI { get; private set; }
-        public LayerUI[] ChildrenUI { get; private set; } = Array.Empty<LayerUI>();
+        private LayerUI ParentUI;
+        private LayerUI[] ChildrenUI  = Array.Empty<LayerUI>();
 
         private static LayerUI referenceLayerUnderMouse;
         private static LayerUI newParent;

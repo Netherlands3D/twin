@@ -14,19 +14,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public int Depth { get; private set; } = 0;
 
-        // public abstract bool IsActiveInScene { get; set; }
-        // public bool ActiveSelf { get; set; } = true;
-        //
-        // public bool IsActiveInHierarchy
-        // {
-        //     get
-        //     {
-        //         if (ParentLayer)
-        //             return ActiveSelf && ParentLayer.IsActiveInHierarchy;
-        //         return ActiveSelf;
-        //     }
-        // }
-
         public bool ActiveSelf
         {
             get { return gameObject.activeSelf; }
@@ -48,23 +35,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
 
-        public LayerNL3DBase ParentLayer => transform.parent.GetComponent<LayerNL3DBase>();
+        public LayerNL3DBase ParentLayer { get; private set; }//=> transform.parent.GetComponent<LayerNL3DBase>();
 
-        public LayerNL3DBase[] ChildrenLayers
-        {
-            get
-            {
-                LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
-
-                LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
-                if (selfLayer != null)
-                {
-                    childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
-                }
-
-                return childLayers;
-            }
-        }
+        public LayerNL3DBase[] ChildrenLayers { get; private set; }
 
         public virtual void OnSelect()
         {
@@ -85,6 +58,58 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UI?.SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
             UI?.DestroyUI();
             LayerData.RemoveLayer(this);
+        }
+
+        private void Start()
+        {
+            //for initialization calculate the parent and children here
+            OnTransformParentChanged();
+            OnTransformChildrenChanged();
+        }
+
+        private void OnTransformChildrenChanged()
+        {
+            LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
+
+            LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
+            if (selfLayer != null)
+            {
+                childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
+            }
+
+            foreach (var vc in childLayers)
+            {
+                print(vc.name);
+            }
+            
+            ChildrenLayers = childLayers;
+            print(name + " children changed " + transform.childCount);
+        }
+
+        private void OnTransformParentChanged()
+        {
+            ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
+            print(name + " parent changed to " + ParentLayer?.name);
+        }
+
+        public void RecalculateParentAndChildren()
+        {
+            ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
+            
+            LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
+
+            LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
+            if (selfLayer != null)
+            {
+                childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
+            }
+
+            foreach (var vc in childLayers)
+            {
+                print(vc.name);
+            }
+            
+            ChildrenLayers = childLayers;
         }
 
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
