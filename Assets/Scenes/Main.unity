@@ -785,9 +785,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1786607724481128268, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
+    - target: {fileID: 1786607724481128268, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1794437172495869792, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
     - target: {fileID: 1794437172495869792, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
@@ -858,6 +870,12 @@ PrefabInstance:
       propertyPath: DefaultMaterialList.Array.data[12]
       value: 
       objectReference: {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
+    - target: {fileID: 2100088386198149489, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
     - target: {fileID: 2100088386198149489, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
@@ -1321,6 +1339,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2761955822860159097, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
+    - target: {fileID: 2761955822860159097, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
       value: 1
       objectReference: {fileID: 0}
@@ -1367,22 +1391,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.08564186
+      value: 0.0108147655
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.011430431
+      value: 0.0015108216
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9875037
+      value: 0.9903235
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.13179995
+      value: -0.13834809
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1466,6 +1490,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8708860589399019762, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
+    - target: {fileID: 8708860589399019762, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
       value: 1
       objectReference: {fileID: 0}
@@ -1479,6 +1509,12 @@ PrefabInstance:
       propertyPath: onSelectedArea.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9160018792460055514, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: <LayerTypeSprite>k__BackingField
+      value: 
+      objectReference: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
+        type: 3}
     - target: {fileID: 9160018792460055514, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: <IsReferenceLayer>k__BackingField
