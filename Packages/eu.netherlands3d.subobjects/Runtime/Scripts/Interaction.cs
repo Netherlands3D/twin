@@ -30,7 +30,6 @@ namespace Netherlands3D.SubObjects
 
         internal static void ApplyColorsToAll(Dictionary<string, Color> colorMap)
         {
-            Debug.Log("start coloring all");
             if (mappings == null)
             {
                 return;
@@ -44,13 +43,6 @@ namespace Netherlands3D.SubObjects
 
         private static void ApplyColors(Dictionary<string, Color> colorMap, ObjectMapping mapping)
         {
-            Debug.Log("coloring");
-            Debug.Log("mapcount "+ colorMap.Count);
-            foreach (var map in colorMap)
-            {
-                Debug.Log(map.Key + "\t" + map.Value);
-            }
-
             if (vertexcolors == null)
             {
                 vertexcolors = new List<Color>();
