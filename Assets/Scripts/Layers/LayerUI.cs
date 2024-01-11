@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
 
-        private void RecalculateCurrentTreeStates()
+        public void RecalculateCurrentTreeStates()
         {
             RecalculateState();
             RecalculateChildrenStates();
@@ -190,11 +190,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (oldParent)
             {
                 oldParent.RecalculateParentAndChildren();
+                oldParent.RecalculateCurrentTreeStates();
             }
         
             if (newParent)
             {
                 newParent.RecalculateParentAndChildren();
+                // newParent.RecalculateCurrentTreeStates();
                 newParent.foldoutToggle.isOn = true;
             }
         
@@ -204,7 +206,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateVisibleHierarchyRecursive();
         
             RecalculateCurrentTreeStates();
-            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
+            // enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
         }
 
         public void RecalculateVisibleHierarchyRecursive()
@@ -642,6 +644,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DestroyUI()
         {
+            SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
             Destroy(gameObject);
         }
     }
