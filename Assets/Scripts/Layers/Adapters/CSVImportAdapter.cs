@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Windows.Forms;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
@@ -9,6 +10,7 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
@@ -41,15 +43,8 @@ namespace Netherlands3D.Twin
         public int maxParsesPerFrame = 100;
         private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
-        public void CreateCSVDatasetLayer(string file)
+        public void ParseCSVFile(string file)
         {
-            // this.path = path;
-            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
-            {
-                DestroyImmediate(activeDatasetLayer.gameObject); //have to call DestroyImmediate instead of normal Destroy, because this will call the dataset's OnDestroy() function to clean up the old colors before applying the new ones
-                csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
-            }
-
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
             // datasetLayer.transform.SetParent(DatasetLayerParent);
             // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
@@ -57,7 +52,13 @@ namespace Netherlands3D.Twin
 
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
-
+            
+            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
+            {
+                Destroy(activeDatasetLayer.gameObject);
+                csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
+            }
+            
             activeDatasetLayer = datasetLayer;
         }
 
@@ -71,10 +72,10 @@ namespace Netherlands3D.Twin
                 var dictionary = dictionaries.Current;
                 // print(dictionary.Count);
                 // Debug.Log("pindex: " + layer.PriorityIndex);
-                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
-                var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
+                var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
+                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
                 // Debug.Log(cl.PriorityIndex);
-                layer.ColorSetLayer = cl;
+                layer.SetColorSetLayer(cl);
 
                 yield return null;
             }

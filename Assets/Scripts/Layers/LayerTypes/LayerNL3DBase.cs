@@ -33,8 +33,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnDestroy()
         {
+            UI?.SetParent(null);//unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
+            UI?.DestroyUI(); 
             LayerData.RemoveLayer(this);
-            UI?.DestroyUI();
         }
 
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)

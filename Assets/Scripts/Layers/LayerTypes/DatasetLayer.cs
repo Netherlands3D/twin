@@ -9,20 +9,31 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class DatasetLayer : LayerNL3DBase
     {
-        public ColorSetLayer ColorSetLayer;
+        public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+
         public override bool IsActiveInScene
         {
             get { return ColorSetLayer.Enabled; }
             set
             {
-                if (ColorSetLayer != null)
-                {
-                    ColorSetLayer.Enabled = value;
-                    GeometryColorizer.RecalculatePrioritizedColors();
-                }
+                ColorSetLayer.Enabled = value;
+                GeometryColorizer.RecalculatePrioritizedColors();
             }
         }
-        
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+        }
+
+        public void SetColorSetLayer(ColorSetLayer newColorSetLayer)
+        {
+            bool active = newColorSetLayer.Enabled;
+            ColorSetLayer = newColorSetLayer;
+            IsActiveInScene = active;
+        }
+
         public int PriorityIndex
         {
             get { return transform.GetSiblingIndex(); }
