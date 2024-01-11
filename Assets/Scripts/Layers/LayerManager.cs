@@ -33,27 +33,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            print("base childcount: " + LayerData.Instance.transform.childCount);
             foreach (Transform t in LayerData.Instance.transform)
             {
-                print(t.gameObject.name);
                 var layer = t.GetComponent<LayerNL3DBase>();
-                // if (!layer.UI)
-                // {
                 ConstructHierarchyUIsRecursive(layer, null);
-                // var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
-                // layerUI.Layer = layer;
-                // layer.UI = layerUI;
-                //
-                // LayerData.LayersVisibleInInspector.Add(layerUI);
-                // }
             }
         }
 
         void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
-            print("creating ui for: " + layer.transform.gameObject.name + "\twith parent: " + parent?.name);
-
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layer.UI = layerUI;
@@ -168,9 +156,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case ReferenceLayer _:
+                case ReferencedProxyLayer _:
                     // print("tile layer");
-                    var referenceSprite = ((ReferenceLayer)layer).Reference.LayerTypeSprite;
+                    var referenceSprite = ((ReferencedProxyLayer)layer).Reference.LayerTypeSprite;
                     return referenceSprite == null ? layerTypeSprites[0] : referenceSprite;
                 case FolderLayer _:
                     // print("folder layer");

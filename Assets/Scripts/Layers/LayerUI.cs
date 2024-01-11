@@ -230,7 +230,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers()
         {
-            print("adding: " + Layer.name);
             layerManager.LayersVisibleInInspector.Add(this);
             if (foldoutToggle.isOn)
             {

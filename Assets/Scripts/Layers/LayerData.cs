@@ -26,7 +26,6 @@ namespace Netherlands3D.Twin
 
         public static void AddStandardLayer(LayerNL3DBase newLayer)
         {
-            Debug.Log("adding layer: " + newLayer.name);
             AllLayers.Add(newLayer);
             newLayer.transform.SetParent(Instance.transform);
             LayerAdded.Invoke(newLayer);
@@ -40,11 +39,10 @@ namespace Netherlands3D.Twin
 
         public static void AddReferenceLayer(ReferencedLayer referencedLayer)
         {
-            Debug.Log("adding reference layer: " + referencedLayer.name);
             var referenceLayerObject = new GameObject(referencedLayer.name);
-            var proxyLayer = referenceLayerObject.AddComponent<ReferenceLayer>(); 
+            var proxyLayer = referenceLayerObject.AddComponent<ReferencedProxyLayer>(); 
             proxyLayer.Reference = referencedLayer;
-            referencedLayer.Reference = proxyLayer;
+            referencedLayer.ReferencedProxy = proxyLayer;
         }
     }
 }

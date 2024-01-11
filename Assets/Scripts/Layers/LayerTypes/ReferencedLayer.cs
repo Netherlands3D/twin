@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin
     public abstract class ReferencedLayer : MonoBehaviour
     {
         public abstract bool IsActiveInScene { get; set; }
-        public ReferenceLayer Reference { get; set; }
+        public ReferencedProxyLayer ReferencedProxy { get; set; }
         [field: SerializeField] public Sprite LayerTypeSprite { get; set; }
 
         protected virtual void Start()
@@ -18,8 +18,8 @@ namespace Netherlands3D.Twin
 
         protected virtual void OnDestroy()
         {
-            if (Reference)
-                Destroy(Reference.gameObject);
+            if (ReferencedProxy)
+                Destroy(ReferencedProxy.gameObject);
         }
     }
 }

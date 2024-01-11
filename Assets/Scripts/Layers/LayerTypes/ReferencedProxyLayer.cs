@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class ReferenceLayer : LayerNL3DBase
+    public class ReferencedProxyLayer : LayerNL3DBase
     {
         public ReferencedLayer Reference { get; set; }
 
