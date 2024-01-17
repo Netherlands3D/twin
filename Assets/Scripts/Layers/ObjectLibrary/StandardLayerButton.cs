@@ -40,8 +40,7 @@ namespace Netherlands3D.Twin
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<Tile3DLayer>();
             
-            layerComponent.UI.Select();
-            
+            layerComponent.ReferencedProxy.UI.Select();
         }
     }
 }
