@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using Netherlands3D.Twin.Features;
 using SimpleJSON;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine.SceneManagement;
 namespace Netherlands3D.Twin.Configuration
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configurator", fileName = "Configurator", order = 0)]
-    public class Configurator : ScriptableObject
+    public class Configurator : ScriptableObject, IWindow
     {
         [SerializeField] 
         private Configuration configuration;
@@ -36,6 +37,31 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Events")]
         public UnityEvent OnStartedLoading = new();
         public UnityEvent<Configuration> OnLoaded = new();
+        public UnityEvent OnOpenInterface = new();
+        public UnityEvent OnCloseInterface = new();
+        public UnityEvent OnOpen { get => OnOpenInterface; }
+        public UnityEvent OnClose { get => OnCloseInterface; }
+
+        public bool SetupSceneLoaded { 
+            get{
+                return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
+            } 
+        }
+
+        public bool IsOpen { 
+            get => SetupSceneLoaded; 
+            set
+            {
+                if (value)
+                {
+                    Open();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+        }
 
         public IEnumerator Execute()
         {
@@ -108,19 +134,36 @@ namespace Netherlands3D.Twin.Configuration
 
         public void StartSetup()
         {
-            if (SceneManager.GetSceneByName(setupSceneName).isLoaded)
-            {
-                return;
-            }
-
-            SceneManager.LoadScene(setupSceneName, LoadSceneMode.Additive);
+            Open();
         }
-
+        
         public void RestartSetup()
         {
             if (!configuration.ShouldStartSetup) return;
 
             StartSetup();
+        }
+        
+        public void Open()
+        {
+            if (SetupSceneLoaded)
+            {
+                return;
+            }
+
+            SceneManager.LoadScene(setupSceneName, LoadSceneMode.Additive);
+            OnOpenInterface.Invoke();
+        }
+
+        public void Close()
+        {
+            if (!SetupSceneLoaded)
+            {
+                return;
+            }
+            
+            SceneManager.UnloadSceneAsync(setupSceneName);
+            OnCloseInterface.Invoke();
         }
 
         public void CompleteSetup()
