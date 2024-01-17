@@ -170,6 +170,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             // We assume the Setup Wizard modifies the configuration object; this is merely a hook for the rest of
             // the application to know that we are done.
+            Close();
             OnLoaded.Invoke(configuration);
             SceneManager.UnloadSceneAsync(setupSceneName);
         }

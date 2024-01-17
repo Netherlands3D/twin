@@ -39,22 +39,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: 0fd1a2f97dda2694d855327cefc0238e,
-        type: 2}
+      objectReference: {fileID: 8742376413676437680}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
-      objectReference: {fileID: 0}
-    - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
@@ -184,15 +173,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8198138004752499479}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c515401494f8677479b1fd1a9285560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  onToggleOn:
+  windowData: {fileID: 0}
+  OnWindowToggleOn:
     m_PersistentCalls:
       m_Calls: []
-  onToggleOff:
+  InWindowToggleOff:
     m_PersistentCalls:
       m_Calls: []

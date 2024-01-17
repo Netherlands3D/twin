@@ -199,7 +199,7 @@ PrefabInstance:
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.Boolean, Assembly-CSharp
+      value: Netherlands3D.Twin.WindowToggle, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
@@ -326,6 +326,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6261626048068909832}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6917696287992631139 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3955668625946063979, guid: b9565e5e6806aa84fa4bee3688c5cb46,
+    type: 3}
+  m_PrefabInstance: {fileID: 6261626048068909832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8222931090793477828 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2664015473938025932, guid: b9565e5e6806aa84fa4bee3688c5cb46,
@@ -344,15 +350,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c515401494f8677479b1fd1a9285560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  onToggleOn:
+  windowData: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
+  OnWindowToggleOn:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator,
-          Assembly-CSharp
-        m_MethodName: LoadSetupScene
-        m_Mode: 1
+      - m_Target: {fileID: 6917696287992631139}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -361,14 +366,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onToggleOff:
+      - m_Target: {fileID: 5826180336194892303}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  InWindowToggleOff:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator,
-          Assembly-CSharp
-        m_MethodName: UnloadSetupScene
-        m_Mode: 1
+      - m_Target: {fileID: 6917696287992631139}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 5826180336194892303}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

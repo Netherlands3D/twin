@@ -9,21 +9,57 @@ namespace Netherlands3D.Twin
 {
     public class WindowToggle : MonoBehaviour
     {
-        [SerializeField] bool isOn = false;
+        [Tooltip("A scriptable object with an IWindow interface")]
+        public ScriptableObject windowData;
 
         public UnityEvent OnWindowToggleOn;
         public UnityEvent InWindowToggleOff;
         
         public IWindow window;
 
+        private void Start()
+        {
+            CheckData();
+        }
+
+        private void CheckData(){
+            if(!windowData) return;
+
+            if (windowData is IWindow windowInterface)
+            {
+                window = windowInterface;
+                if (window.IsOpen)
+                {
+                    OnWindowOpen();
+                }
+                else
+                {
+                    OnWindowClose();
+                }
+            }
+            else
+            {
+                windowData = null;
+                Debug.LogError("windowData does not contain a window interface.");
+            }
+        }
+
+        private void OnValidate() {
+            CheckData();
+        }
+
         private void OnEnable() {
-            window.OnOpen.AddListener(OnWindowClose);
-            window.OnClose.AddListener(OnWindowOpen);
+            if(window == null){
+                Debug.LogError("No window set for WindowToggle");
+            }
+
+            window.OnOpen.AddListener(OnWindowOpen);
+            window.OnClose.AddListener(OnWindowClose);
         }
 
         private void OnDisable() {
-            window.OnOpen.RemoveListener(OnWindowClose);
-            window.OnClose.RemoveListener(OnWindowOpen);
+            window.OnOpen.RemoveListener(OnWindowOpen);
+            window.OnClose.RemoveListener(OnWindowClose);
         }
 
         private void OnWindowOpen()
