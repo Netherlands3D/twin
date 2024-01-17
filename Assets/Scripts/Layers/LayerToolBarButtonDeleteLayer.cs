@@ -6,17 +6,16 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin
 {
-    public class LayerToolBarButtonAddFolder : LayerToolBarButtonBase
+    public class LayerToolBarButtonDeleteLayer : LayerToolBarButtonBase
     {
         public override void ButtonAction()
         {
-            layerManager.CreateFolderLayer();
+            layerManager.DeleteSelectedLayers();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            if (layerManager.SelectedLayers.Count > 0)
-                layerManager.GroupSelectedLayers();
+            layerManager.DeleteSelectedLayers();
         }
     }
 }

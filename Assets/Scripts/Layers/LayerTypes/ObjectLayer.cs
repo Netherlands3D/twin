@@ -13,26 +13,26 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private RuntimeTransformHandle transformHandle;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
 
-        public override bool IsActiveInScene
-        {
-            get { return gameObject.activeSelf; }
-            set { gameObject.SetActive(value); }
-        }
+        // public override bool IsActiveInScene
+        // {
+        //     get { return gameObject.activeSelf; }
+        //     set { gameObject.SetActive(value); }
+        // }
 
         protected override void Awake()
         {
             base.Awake();
-            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);//todo remove FindObjectOfType
+            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+        }
+
+        protected void Start()
+        {
+            objectCreated.Invoke(gameObject);
         }
 
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClick);
-        }
-
-        private void Start()
-        {
-            objectCreated.Invoke(gameObject);
         }
 
         private void OnMouseClick()
@@ -41,6 +41,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 UI.Deselect();
             }
+        }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        {
         }
 
         public override void OnSelect()

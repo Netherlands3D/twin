@@ -1,24 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-    public static class LayerData
+    public class LayerData : MonoBehaviour
     {
+        public static LayerData Instance { get; private set; }
         public static HashSet<LayerNL3DBase> AllLayers { get; set; } = new HashSet<LayerNL3DBase>();
-        public static List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
-        public static List<LayerUI> SelectedLayers { get; set; } = new();
 
         public static UnityEvent<LayerNL3DBase> LayerAdded = new();
         public static UnityEvent<LayerNL3DBase> LayerDeleted = new();
 
-        public static void AddLayer(LayerNL3DBase newLayer)
+        private void Awake()
         {
-            Debug.Log("adding " + newLayer.name);
+            if (Instance)
+                Debug.LogError("Another LayerData Object already exists, there should be only one LayerData object. The existing object will be overwritten", Instance.gameObject);
+
+            Instance = this;
+        }
+
+        public static void AddStandardLayer(LayerNL3DBase newLayer)
+        {
             AllLayers.Add(newLayer);
+            newLayer.transform.SetParent(Instance.transform);
             LayerAdded.Invoke(newLayer);
         }
 
@@ -26,6 +35,14 @@ namespace Netherlands3D.Twin
         {
             AllLayers.Remove(layer);
             LayerDeleted.Invoke(layer);
+        }
+
+        public static void AddReferenceLayer(ReferencedLayer referencedLayer)
+        {
+            var referenceLayerObject = new GameObject(referencedLayer.name);
+            var proxyLayer = referenceLayerObject.AddComponent<ReferencedProxyLayer>(); 
+            proxyLayer.Reference = referencedLayer;
+            referencedLayer.ReferencedProxy = proxyLayer;
         }
     }
 }
