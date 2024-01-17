@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Interface;
 using SimpleJSON;
 using UnityEditor;
 using UnityEngine;

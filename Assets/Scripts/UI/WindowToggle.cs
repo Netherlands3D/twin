@@ -5,7 +5,7 @@ using Netherlands3D.Twin.Features;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Interface
 {
     public class WindowToggle : MonoBehaviour
     {
