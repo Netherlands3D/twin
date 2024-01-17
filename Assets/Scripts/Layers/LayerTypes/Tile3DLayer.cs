@@ -26,5 +26,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             base.Start();
             layer = GetComponent<CartesianTiles.Layer>();
         }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GetComponentInParent<CartesianTiles.TileHandler>().RemoveLayer(layer);
+        }
     }
 }

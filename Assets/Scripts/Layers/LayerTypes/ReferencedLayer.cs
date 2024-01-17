@@ -16,6 +16,11 @@ namespace Netherlands3D.Twin
             LayerData.AddReferenceLayer(this);
         }
 
+        public void DestroyLayer()
+        {
+            Destroy(gameObject);
+        }
+        
         protected virtual void OnDestroy()
         {
             if (ReferencedProxy)
