@@ -17,11 +17,6 @@ namespace Netherlands3D.Twin.Interface
         
         public IWindow window;
 
-        private void Start()
-        {
-            CheckData();
-        }
-
         private void CheckData(){
             if(!windowData) return;
 
@@ -49,6 +44,8 @@ namespace Netherlands3D.Twin.Interface
         }
 
         private void OnEnable() {
+            CheckData();
+
             if(window == null){
                 Debug.LogError("No window set for WindowToggle");
             }
