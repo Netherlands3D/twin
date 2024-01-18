@@ -47,12 +47,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
         }
 
-        protected virtual void Awake()
-        {
-            if (!LayerData.AllLayers.Contains(this))
-                LayerData.AddStandardLayer(this);
-        }
-
         protected virtual void OnDestroy()
         {
             UI?.DestroyUI();
@@ -61,6 +55,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Start()
         {
+            if (!LayerData.AllLayers.Contains(this))
+                LayerData.AddStandardLayer(this);
+            
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
             OnTransformChildrenChanged();
