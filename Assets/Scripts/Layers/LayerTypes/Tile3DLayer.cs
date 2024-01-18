@@ -21,9 +21,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
+            // base.Start();
             layer = GetComponent<CartesianTiles.Layer>();
         }
 

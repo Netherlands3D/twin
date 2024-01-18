@@ -174,7 +174,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -215,6 +215,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 512917251017835865}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &512917251017835865
 MonoBehaviour:
@@ -230,6 +242,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 4311489376399559593, guid: cc9d0f9a5a1724c9695a1bef5ecccaec, type: 3}
+  binImage: {fileID: 8463631952808221927}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &337516325763848479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,7 +1948,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5174061027163557126
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2764,7 +2778,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -2805,6 +2819,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6087896330980686885}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &6087896330980686885
 MonoBehaviour:
@@ -2820,6 +2846,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 3712503248906199988, guid: 6915dd70276474a0688a5fb1a9c248c0, type: 3}
+  binImage: {fileID: 6299596264409129907}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &2351970478761942691
 GameObject:
   m_ObjectHideFlags: 0
@@ -4518,7 +4546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6161191638310871250
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5285,7 +5313,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -5326,6 +5354,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7275960957246304947}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &7275960957246304947
 MonoBehaviour:
@@ -5341,6 +5381,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 4137703543855384620, guid: c3ba1b0d37f2843cf973cb1d03a3bd3c, type: 3}
+  binImage: {fileID: 6813433695508858929}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &5026929087009535343
 GameObject:
   m_ObjectHideFlags: 0
@@ -5788,7 +5830,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -5829,6 +5871,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1744337232285236369}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &1744337232285236369
 MonoBehaviour:
@@ -5844,6 +5898,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 2907779477277976049, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
+  binImage: {fileID: 8380527677495646434}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &5273527837389861439
 GameObject:
   m_ObjectHideFlags: 0
@@ -6018,7 +6074,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -6059,6 +6115,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7054131878272847100}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &7054131878272847100
 MonoBehaviour:
@@ -6074,6 +6142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 915834300300047598, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
+  binImage: {fileID: 3798428330896704638}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &5521623188630424549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6541,7 +6611,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7768978512759864423
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6890,7 +6960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &968556795983782875
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7532,7 +7602,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -7573,6 +7643,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6792633624716269715}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.StandardLayerToggle, Assembly-CSharp
+        m_MethodName: ShowBin
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &6792633624716269715
 MonoBehaviour:
@@ -7588,6 +7670,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer: {fileID: 0}
   prefab: {fileID: 3354824856556962616, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
+  binImage: {fileID: 1624517770884592507}
+  hoverSprite: {fileID: 21300000, guid: bdd4015e66ae14ed7ab012be67a7d18f, type: 3}
 --- !u!1 &7213582336454211321
 GameObject:
   m_ObjectHideFlags: 0
@@ -8687,7 +8771,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7285665535340582188
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8974,7 +9058,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4096551003265202448
 RectTransform:
   m_ObjectHideFlags: 0

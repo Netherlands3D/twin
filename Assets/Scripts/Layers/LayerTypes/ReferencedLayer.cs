@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin
         public ReferencedProxyLayer ReferencedProxy { get; set; }
         [field: SerializeField] public Sprite LayerTypeSprite { get; set; }
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             LayerData.AddReferenceLayer(this);
         }
