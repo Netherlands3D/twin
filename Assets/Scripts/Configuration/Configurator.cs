@@ -108,6 +108,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public void StartSetup()
         {
+            if (SceneManager.GetSceneByName(setupSceneName).isLoaded)
+            {
+                return;
+            }
+
             SceneManager.LoadScene(setupSceneName, LoadSceneMode.Additive);
         }
 
