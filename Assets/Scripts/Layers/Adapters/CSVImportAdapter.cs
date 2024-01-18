@@ -9,6 +9,7 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
@@ -26,49 +27,38 @@ namespace Netherlands3D.Twin
                     hex = "#" + hex;
 
                 var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-                return canParse ? color : Interaction.NO_OVERRIDE_COLOR; 
+                return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
             }
         }
     }
 
-    
+
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
     public class CSVImportAdapter : ScriptableObject
     {
-        private static Transform datasetLayerParent;
-        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new ();
+        // private static Transform datasetLayerParent;
 
-        static Transform DatasetLayerParent
-        {
-            get
-            {
-                if (!datasetLayerParent)
-                {
-                    datasetLayerParent = new GameObject("DatasetLayers").transform;
-                }
-
-                return datasetLayerParent;
-            }
-        }
-
+        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         public int maxParsesPerFrame = 100;
+        private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
-        public void CreateCSVDatasetLayer(string file)
+        public void ParseCSVFile(string file)
         {
-            // this.path = path;
-            foreach (Transform existingDatasetLayers in DatasetLayerParent) //todo: temp fix to allow only 1 dataset layer
-            {
-                Destroy(existingDatasetLayers.gameObject);
-                csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
-            }
-            
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
-            datasetLayer.transform.SetParent(DatasetLayerParent);
+            // datasetLayer.transform.SetParent(DatasetLayerParent);
             // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
             datasetLayer.UI.Select();
 
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+            
+            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
+            {
+                Destroy(activeDatasetLayer.gameObject);
+                csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
+            }
+            
+            activeDatasetLayer = datasetLayer;
         }
 
         private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
@@ -81,10 +71,10 @@ namespace Netherlands3D.Twin
                 var dictionary = dictionaries.Current;
                 // print(dictionary.Count);
                 // Debug.Log("pindex: " + layer.PriorityIndex);
-                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
-                var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
+                var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
+                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
                 // Debug.Log(cl.PriorityIndex);
-                layer.ColorSetLayer = cl;
+                layer.SetColorSetLayer(cl);
 
                 yield return null;
             }

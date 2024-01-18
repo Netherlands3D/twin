@@ -43,6 +43,5 @@ namespace Netherlands3D.Twin
             
             layerComponent.UI.Select();
         }
-        
     }
 }
