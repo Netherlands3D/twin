@@ -101,6 +101,7 @@ var WebGLCopyAndPaste = {
         });
       }
     };
+    console.log("Initialised WebGLCopyAndPaste");
   },
 
   passCopyToBrowser: function (stringPtr) {
