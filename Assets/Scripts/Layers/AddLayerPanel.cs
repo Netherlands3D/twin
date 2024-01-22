@@ -23,10 +23,31 @@ namespace Netherlands3D.Twin
         private Coroutine activeAnimationCoroutine;
         [SerializeField] private Toggle toggle;
         private bool isDragging;
-        
+        private ScrollRect scrollRect;
+
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
+            scrollRect = GetComponent<ScrollRect>();
+            targetHeight = defaultOpenHeight;
+        }
+
+        private void OnRectTransformDimensionsChange()
+        {
+            ResetScrollActive();
+        }
+
+        public void ResetScrollActive()
+        {
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(ResetScrollActiveAtEndOfFrame());
+        }
+
+        private IEnumerator ResetScrollActiveAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame(); //wait for the end of the frame, because the layout needs to be updated for this calculation to work
+            var fitsInViewport = scrollRect.viewport.rect.height < scrollRect.content.rect.height;
+            scrollRect.movementType = fitsInViewport ? ScrollRect.MovementType.Elastic : ScrollRect.MovementType.Clamped; //scrollRect.verticalScrollbar.gameObject.activeInHierarchy;
         }
 
         public void TogglePanel(bool open)
@@ -34,9 +55,9 @@ namespace Netherlands3D.Twin
             if (activeAnimationCoroutine != null)
                 StopCoroutine(activeAnimationCoroutine);
 
-            if(isDragging)
+            if (isDragging)
                 return;
-            
+
             activeAnimationCoroutine = StartCoroutine(AnimatePanel(open));
             isOpen = open;
         }
@@ -102,10 +123,11 @@ namespace Netherlands3D.Twin
             {
                 targetHeight = defaultOpenHeight;
                 isOpen = false;
-                
+
                 if (toggle)
                     toggle.isOn = isOpen;
             }
+
             isDragging = false;
         }
     }

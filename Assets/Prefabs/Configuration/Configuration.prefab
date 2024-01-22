@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4801847304374866365}
   - component: {fileID: 5228913028699466694}
   - component: {fileID: 5423417174918695491}
-  - component: {fileID: 7868755896466812087}
   m_Layer: 0
   m_Name: Configuration
   m_TagString: Untagged
@@ -61,32 +60,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
---- !u!114 &7868755896466812087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2990243266735407190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: edc7336c46c449b488d7d3adb5e9ed89, type: 2}
-  trigger:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5228913028699466694}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.ConfiguratorStarter,
-          Assembly-CSharp
-        m_MethodName: ReopenSetup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2

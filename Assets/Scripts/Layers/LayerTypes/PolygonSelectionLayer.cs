@@ -7,6 +7,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class PolygonSelectionLayer : LayerNL3DBase
     {
-        public override bool IsActiveInScene { get; set; }
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
