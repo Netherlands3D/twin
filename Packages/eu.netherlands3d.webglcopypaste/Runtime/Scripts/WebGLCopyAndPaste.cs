@@ -47,11 +47,12 @@ public class WebGLCopyAndPasteAPI
     delegate void StringCallback( string content );
 
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Init()
     {
         if ( !Application.isEditor )
         {
+            Debug.Log("initWebGLCopyAndPaste");
             initWebGLCopyAndPaste(GetClipboard, ReceivePaste );
         }
     }
