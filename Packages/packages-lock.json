@@ -382,11 +382,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.webgl-copy-paste": {
-      "version": "https://github.com/Netherlands3D/WebGLCopyPaste.git",
+      "version": "https://github.com/Netherlands3D/WebGLCopyPaste.git#v1.1.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0c91ca8230900d3d27b6ff7456ad1e107cc2f3ff"
+      "hash": "81b60d6e4a958ca6d9e52fdad174dd7208a75294"
     },
     "nl.netherlands3d": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
