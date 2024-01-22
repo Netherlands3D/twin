@@ -19,4 +19,4 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 
 ## Usage
 
-Add the WebGLCopyAndPaste.cs script to a GameObject in your scene.
+The script will automatically initialize using the RuntimeInitializeOnLoadMethod attribute.
