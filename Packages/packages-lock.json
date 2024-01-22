@@ -381,6 +381,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.webgl-copy-paste": {
+      "version": "https://github.com/Netherlands3D/WebGLCopyPaste.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6aa5b32329d028dbbf0ca0c36a6330b57cc5f65c"
+    },
     "nl.netherlands3d": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
       "depth": 0,
@@ -405,7 +412,7 @@
         "eu.netherlands3d.address-search": "1.0.0",
         "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "9e952c65316e7a2e3358d4ba24ef6aed57b65199"
+      "hash": "78b005aa5062d825d2a1aeac67f6e548eb3d9a03"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
