@@ -34,6 +34,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
 
+//This makes sure the assembly is linked in when built as a player
+[assembly: AlwaysLinkAssembly]
+
 public class WebGLCopyAndPasteAPI
 {
 
