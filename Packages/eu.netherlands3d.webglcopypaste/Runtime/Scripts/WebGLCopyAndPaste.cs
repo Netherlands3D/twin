@@ -55,7 +55,7 @@ public class WebGLCopyAndPasteAPI
     {
         if ( !Application.isEditor )
         {
-            Debug.Log("initWebGLCopyAndPaste");
+            Debug.Log("Start to initialize WebGLCopyAndPaste");
             initWebGLCopyAndPaste(GetClipboard, ReceivePaste );
         }
     }
