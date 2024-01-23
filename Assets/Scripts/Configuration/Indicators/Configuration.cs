@@ -39,6 +39,8 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         private string apiKey = "";
         
         public UnityEvent<string> OnDossierIdChanged = new();
+        public UnityEvent<string> OnApiKeyChanged = new();
+        public UnityEvent<string> OnApiBaseUriChanged = new();
 
         public string DossierId
         {
@@ -53,13 +55,21 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         public string BaseUri
         {
             get => baseUri;
-            set => baseUri = value;
+            set
+            {
+                baseUri = value;
+                OnApiBaseUriChanged.Invoke(value);
+            }
         }
 
         public string ApiKey
         {
             get => apiKey;
-            set => apiKey = value;
+            set
+            {
+                apiKey = value;
+                OnApiKeyChanged.Invoke(value);
+            }
         }
 
         public void Populate(NameValueCollection queryParameters)

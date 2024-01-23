@@ -11,12 +11,26 @@ namespace Netherlands3D.Twin.Configuration.Indicators
 
         private void OnEnable()
         {
+            configuration.OnApiBaseUriChanged.AddListener(OnApiBaseUriChanged);
+            configuration.OnApiKeyChanged.AddListener(OnApiKeyChanged);
             configuration.OnDossierIdChanged.AddListener(OnDossierStartLoading);
         }
 
         private void OnDisable()
         {
             configuration.OnDossierIdChanged.RemoveListener(OnDossierStartLoading);
+            configuration.OnApiKeyChanged.RemoveListener(OnApiKeyChanged);
+            configuration.OnApiBaseUriChanged.RemoveListener(OnApiBaseUriChanged);
+        }
+
+        private void OnApiBaseUriChanged(string baseUri)
+        {
+            dossier.baseUri = configuration.BaseUri;
+        }
+
+        private void OnApiKeyChanged(string apiKey)
+        {
+            dossier.ApiKey = configuration.ApiKey;
         }
 
         private void OnDossierStartLoading(string dossierId)
@@ -25,15 +39,6 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             {
                 dossier.Close();
                 return;
-            }
-
-            if (string.IsNullOrEmpty(configuration.BaseUri) == false)
-            {
-                dossier.baseUri = configuration.BaseUri;
-            }
-            if (string.IsNullOrEmpty(configuration.ApiKey) == false)
-            {
-                dossier.ApiKey = configuration.ApiKey;
             }
 
             StartCoroutine(dossier.Open(dossierId));
