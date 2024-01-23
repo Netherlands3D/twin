@@ -533,6 +533,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                         if (newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
                             newSiblingIndex--;
                     }
+                    
+                    if (relativeValue > 1) // if dragging below last layer, the dragged layer should SetParent to null, and the dragline should indicate that 
+                    {
+                        var defaultLeftOffset = leftOffset - referenceLayerUnderMouse.Layer.Depth * indentWidth;
+                        layerManager.DragLine.SetLeft(defaultLeftOffset);
+                    }
                 }
                 else
                 {
