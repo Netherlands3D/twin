@@ -238,6 +238,7 @@ namespace Netherlands3D.Minimap
         {
             if (dragging) return;
 
+            Debug.Log("Clicked on minimap");
             wmtsMap.ClickedMap(eventData);
         }
 
