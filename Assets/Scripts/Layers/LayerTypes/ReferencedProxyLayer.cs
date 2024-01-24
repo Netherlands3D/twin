@@ -20,5 +20,17 @@ namespace Netherlands3D.Twin
             if (Reference)
                 Destroy(Reference.gameObject);
         }
+
+        public override void OnSelect()
+        {
+            base.OnSelect();
+            Reference.OnSelect();
+        }
+
+        public override void OnDeselect()
+        {
+            base.OnDeselect();
+            Reference.OnDeselect();
+        }
     }
 }

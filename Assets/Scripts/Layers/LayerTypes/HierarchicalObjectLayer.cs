@@ -1,40 +1,45 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin
 {
-    public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
+    public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler
     {
         [SerializeField] private UnityEvent<GameObject> objectCreated = new(); 
-        
-        protected override void Start()
+        public override bool IsActiveInScene
         {
-            base.Start();
+            get => gameObject.activeInHierarchy;
+            set => gameObject.SetActive(value);
+        }
+        
+        private void OnEnable()
+        {
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
+        }
+
+        private void Start()
+        {
             objectCreated.Invoke(gameObject);
         }
 
-        private void OnEnable()
+        private void OnMouseClickNothing()
         {
-            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClick);
-        }
-
-        private void OnMouseClick()
-        {
-            if (UI.IsSelected)
+            if (ReferencedProxy.UI.IsSelected)
             {
-                UI.Deselect();
+                ReferencedProxy.UI.Deselect();
             }
         }
-
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        
+        public void OnPointerClick(PointerEventData eventData)
         {
+            ReferencedProxy.UI.Select(true);
         }
-
+        
         public override void OnSelect()
         {
             var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
@@ -48,9 +53,5 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 rth.SetTarget(rth.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            UI.Select(true);
-        }
     }
 }

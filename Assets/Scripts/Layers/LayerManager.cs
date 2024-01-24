@@ -54,10 +54,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 if (child == layer.transform)
                     continue;
 
-                var layerComponent = child.GetComponent<LayerNL3DBase>(); // account for a layer's internal hierarchy
-                if (!layerComponent)
-                    continue;
-                ConstructHierarchyUIsRecursive(layerComponent, layer);
+                ConstructHierarchyUIsRecursive(child.GetComponent<LayerNL3DBase>(), layer);
             }
         }
 
@@ -162,14 +159,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 case ReferencedProxyLayer _:
                     // print("tile layer");
-                    var referenceSprite = ((ReferencedProxyLayer)layer).Reference.LayerTypeSprite;
-                    return referenceSprite == null ? layerTypeSprites[0] : referenceSprite;
+                    var reference = ((ReferencedProxyLayer)layer).Reference;
+                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     // print("folder layer");
                     return layerTypeSprites[2];
-                case ObjectLayer _:
-                    // print("object layer");
-                    return layerTypeSprites[3];
                 case ObjectScatterLayer _:
                     // print("object scatter layer");
                     return layerTypeSprites[4];
@@ -183,6 +177,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
             }
+        }
+
+        private Sprite GetProxyLayerSprite(ReferencedLayer layer)
+        {
+            switch (layer)
+            {
+                case Tile3DLayer _:
+                    // print("Tile layer");
+                    return layerTypeSprites[1];
+                case HierarchicalObjectLayer _:
+                    // print("object layer");
+                    return layerTypeSprites[3];
+                default:
+                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    return layerTypeSprites[0];
+            }  
         }
 
         public void EnableContextMenu(bool enable, Vector2 position = default)

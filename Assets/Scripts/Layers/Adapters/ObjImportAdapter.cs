@@ -213,7 +213,7 @@ namespace Netherlands3D.Twin
 
             parsedObj.transform.position = spawnPoint;
             
-            parsedObj.AddComponent<ObjectLayer>();
+            parsedObj.AddComponent<HierarchicalObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
             CreatedMoveableGameObject.Invoke(parsedObj);
         }
