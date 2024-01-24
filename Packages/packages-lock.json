@@ -284,11 +284,11 @@
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
     "eu.netherlands3d.minimap": {
-      "version": "https://github.com/Netherlands3D/Minimap.git",
+      "version": "https://github.com/Netherlands3D/Minimap.git#v1.1.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2f8890675543923f3cf2b773c931cc6ec18d39ba"
+      "hash": "5ed4c8b5d6e1d88ce3b5299af80cbfec1ab244ae"
     },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
