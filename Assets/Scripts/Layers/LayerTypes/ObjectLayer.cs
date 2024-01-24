@@ -12,8 +12,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         [SerializeField] private UnityEvent<GameObject> objectCreated = new(); 
         
-        protected void Start()
+        protected override void Start()
         {
+            base.Start();
             objectCreated.Invoke(gameObject);
         }
 

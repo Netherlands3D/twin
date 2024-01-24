@@ -44,20 +44,22 @@ namespace Netherlands3D.Twin
 
         public void ParseCSVFile(string file)
         {
-            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
-            // datasetLayer.transform.SetParent(DatasetLayerParent);
-            // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
-            datasetLayer.UI.Select();
-
-            var fullPath = Path.Combine(Application.persistentDataPath, file);
-            datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
-            
             if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
             {
+                activeDatasetLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
+                activeDatasetLayer.SetColorSetLayer(null);
+                
                 Destroy(activeDatasetLayer.gameObject);
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
             
+            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
+            // datasetLayer.transform.SetParent(DatasetLayerParent);
+            // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
+
+            var fullPath = Path.Combine(Application.persistentDataPath, file);
+            datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+
             activeDatasetLayer = datasetLayer;
         }
 

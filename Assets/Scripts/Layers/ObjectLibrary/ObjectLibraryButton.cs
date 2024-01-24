@@ -39,9 +39,7 @@ namespace Netherlands3D.Twin
             newObject.name = prefab.name;
             var layerComponent = newObject.GetComponent<ObjectLayer>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<ObjectLayer>();
-            
-            layerComponent.UI.Select();
+                newObject.AddComponent<ObjectLayer>();
         }
     }
 }

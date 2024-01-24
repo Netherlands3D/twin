@@ -88,6 +88,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI.SetParent(layer.transform.parent.GetComponent<LayerNL3DBase>()?.UI, layer.transform.GetSiblingIndex());
 
             LayersVisibleInInspector.Add(layerUI);
+            layerUI.Select(true);
         }
 
         private void OnLayerDeleted(LayerNL3DBase layer)
