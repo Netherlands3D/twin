@@ -54,7 +54,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 if (child == layer.transform)
                     continue;
 
-                ConstructHierarchyUIsRecursive(child.GetComponent<LayerNL3DBase>(), layer);
+                var layerComponent = child.GetComponent<LayerNL3DBase>(); // account for a layer's internal hierarchy
+                if (!layerComponent)
+                    continue;
+                ConstructHierarchyUIsRecursive(layerComponent, layer);
             }
         }
 
