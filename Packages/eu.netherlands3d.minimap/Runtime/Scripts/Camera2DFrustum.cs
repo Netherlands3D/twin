@@ -17,7 +17,6 @@
 */
 
 using Netherlands3D.Coordinates;
-using Netherlands3D.Core;
 using UnityEngine;
 
 namespace Netherlands3D.Minimap
@@ -40,8 +39,9 @@ namespace Netherlands3D.Minimap
 		private void DrawCameraFrustumOnMap()
 		{
 			//Get corners
-			Camera.main.GetRDExtent();
-			var cameraCorners = Camera.main.GetWorldSpaceCorners();
+			var mainCamera = Camera.main;
+			CameraExtents.GetRDExtent(mainCamera);
+			var cameraCorners = CameraExtents.GetWorldSpaceCorners(mainCamera);
 
 			if (cameraCorners != null)
 			{
