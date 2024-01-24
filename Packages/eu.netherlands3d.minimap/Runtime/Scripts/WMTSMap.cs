@@ -39,6 +39,11 @@ namespace Netherlands3D.Minimap
         [SerializeField] private UnityEvent<int> onZoom = new();
         [SerializeField] private UnityEvent<Coordinate> onClick = new();
 
+		[Header("Camera")]
+		[SerializeField] private bool moveCameraToClickedLocation = true;
+		[Tooltip("Defaults to Camera.main")]
+		[SerializeField] private Camera cameraMoveTarget;
+
 		/// <summary>
 		/// The current index layer of tile layers
 		/// </summary>
@@ -114,6 +119,8 @@ namespace Netherlands3D.Minimap
 
         private void Awake()
         {
+			if(!cameraMoveTarget) cameraMoveTarget = Camera.main;
+
 			minimapUI = GetComponentInParent<MinimapUI>();
 			rectTransform = GetComponent<RectTransform>();
 			rectTransformMinimapUI = (RectTransform)minimapUI.transform;
@@ -193,10 +200,11 @@ namespace Netherlands3D.Minimap
 			var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
             unityCoordinate.y = Camera.main.transform.position.y;
 
-            onClick.Invoke(rdCoordinate);
-			print(unityCoordinate);
+			if(moveCameraToClickedLocation && cameraMoveTarget){
+				cameraMoveTarget.transform.position = unityCoordinate;	
+			}
 
-			Camera.main.transform.position = unityCoordinate;
+            onClick.Invoke(rdCoordinate);
 		}
 
 		/// <summary>
