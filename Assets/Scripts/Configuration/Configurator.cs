@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.Configuration
     {
         [SerializeField] 
         private Configuration configuration;
+        public Configuration Configuration { get => configuration; }
 
         [SerializeField] 
         [Tooltip("The scene with the Setup Wizard that needs to load additively")]
