@@ -6,9 +6,10 @@ using Netherlands3D.CartesianTiles;
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
     [RequireComponent(typeof(CartesianTiles.Layer))]
-    public class Tile3DLayer : LayerNL3DBase
+    public class Tile3DLayer : ReferencedLayer
     {
         private CartesianTiles.Layer layer;
+        
         public override bool IsActiveInScene
         {
             get => layer.isEnabled;
@@ -16,14 +17,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (layer.isEnabled != value)
                     layer.isEnabled = value;
-                UI.UpdateLayerUI();
+                ReferencedProxy.UI.UpdateLayerUI();
             }
         }
 
-        protected override void Awake()
+        protected void Start()
         {
-            base.Awake();
+            // base.Start();
             layer = GetComponent<CartesianTiles.Layer>();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GetComponentInParent<CartesianTiles.TileHandler>().RemoveLayer(layer);
         }
     }
 }

@@ -35,7 +35,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.CSVImportAdapter, Assembly-CSharp
-          m_MethodName: CreateCSVDatasetLayer
+          m_MethodName: ParseCSVFile
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

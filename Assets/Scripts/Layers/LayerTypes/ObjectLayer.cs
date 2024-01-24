@@ -1,6 +1,7 @@
 using System;
 using RuntimeHandle;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -9,19 +10,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class ObjectLayer : LayerNL3DBase, IPointerClickHandler
     {
-        private RuntimeTransformHandle transformHandle;
-        public InputAction clickAction;
-
-        public override bool IsActiveInScene
+        [SerializeField] private UnityEvent<GameObject> objectCreated = new(); 
+        
+        protected void Start()
         {
-            get { return gameObject.activeSelf; }
-            set { gameObject.SetActive(value); }
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);//todo remove FindObjectOfType
+            objectCreated.Invoke(gameObject);
         }
 
         private void OnEnable()
@@ -37,9 +30,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        {
+        }
+
         public override void OnSelect()
         {
-            transformHandle.SetTarget(gameObject);
+            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            rth.SetTarget(gameObject);
         }
 
         public override void OnDeselect()

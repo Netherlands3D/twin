@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin
 {
-    public class LayerToolBarButtonAddLayer : LayerToolBarButtonBase
+    public class LayerToolBarButtonDeleteLayer : LayerToolBarButtonBase
     {
         public override void ButtonAction()
         {
-            layerManager.EnableContextMenu(true, transform.position);
+            layerManager.DeleteSelectedLayers();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            Debug.LogError("duplicate layer is currently not implemented");
-            throw new System.NotImplementedException();
+            layerManager.DeleteSelectedLayers();
         }
     }
 }

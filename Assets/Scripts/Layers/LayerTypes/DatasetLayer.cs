@@ -9,72 +9,41 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class DatasetLayer : LayerNL3DBase
     {
-        public ColorSetLayer ColorSetLayer;
+        public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        // private static Transform parentTransform;
-        //
-        // public static Transform ParentTransform
+        // public override bool IsActiveInScene
         // {
-        //     get
+        //     get { return ColorSetLayer.Enabled; }
+        //     set
         //     {
-        //         if (!parentTransform)
-        //         {
-        //             var go = new GameObject("Datasets");
-        //             parentTransform = go.transform;
-        //         }
-        //
-        //         return parentTransform;
+        //         ColorSetLayer.Enabled = value;
+        //         GeometryColorizer.RecalculatePrioritizedColors();
         //     }
         // }
 
-        public override bool IsActiveInScene
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            get { return ColorSetLayer.Enabled; }
-            set
-            {
-                ColorSetLayer.Enabled = value;
-                GeometryColorizer.RecalculatePrioritizedColors();
-            }
+            ColorSetLayer.Enabled = activeInHierarchy;
+            GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        // void Test()
-        // {
-        //     foreach (var v in GeometryColorizer.PrioritizedColors)
-        //     {
-        //         print(v.Key + "\t" + v.Value);
-        //     }
-        // }
-        // void Test2()
-        // {
-        //     print("---"+gameObject.name);
-        //     print(ColorSetLayer.PriorityIndex);
-        //     foreach (var v in ColorSetLayer.ColorSet)
-        //     {
-        //         print(v.Key + "\t" + v.Value);
-        //     }
-        //     print("---");
-        // }
-        //
-        // private void Update()
-        // {
-        //     Test2();
-        // }
-        // public Dictionary<string, Color> ColorDataset { get; set; }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+        }
+
+        public void SetColorSetLayer(ColorSetLayer newColorSetLayer)
+        {
+            // bool active = newColorSetLayer.Enabled;
+            ColorSetLayer = newColorSetLayer;
+            GeometryColorizer.RecalculatePrioritizedColors();
+        }
 
         public int PriorityIndex
         {
             get { return transform.GetSiblingIndex(); }
             set { transform.SetSiblingIndex(value); }
         }
-
-        public void OnLayerParentOrOrderChanged()
-        {
-        }
-
-        // private void Start()
-        // {
-        //     if (transform.parent != ParentTransform)
-        //         transform.SetParent(ParentTransform);
-        // }
     }
 }
