@@ -14,14 +14,14 @@ using UnityEngine.SceneManagement;
 
 namespace Netherlands3D.Twin.Configuration
 {
-#if UNITY_WEBGL && !UNITY_EDITOR
-    [DllImport("__Internal")]
-    private static extern void ReplaceUrl(string url);
-#endif
-
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configurator", fileName = "Configurator", order = 0)]
     public class Configurator : ScriptableObject, IWindow
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")]
+        private static extern void ReplaceUrl(string url);
+#endif
+
         [SerializeField] 
         private Configuration configuration;
 
