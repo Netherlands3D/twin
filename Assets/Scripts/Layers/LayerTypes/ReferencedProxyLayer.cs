@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using CsvHelper;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
@@ -12,6 +14,18 @@ namespace Netherlands3D.Twin
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             Reference.IsActiveInScene = activeInHierarchy;
+        }
+
+        private void OnEnable()
+        {
+            if (Reference)
+                Reference.IsActiveInScene = true;
+        }
+
+        private void OnDisable()
+        {
+            if (Reference)
+                Reference.IsActiveInScene = false;
         }
 
         protected override void OnDestroy()

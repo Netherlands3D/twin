@@ -117,13 +117,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnabledToggleValueChanged(bool isOn)
         {
             Layer.ActiveSelf = isOn;
-            // enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
             RecalculateCurrentTreeStates();
-
-            // foreach (var child in ChildrenUI)
-            //     child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
+            SetEnabledToggleInteractiveStateRecursive();
         }
 
+        private void SetEnabledToggleInteractiveStateRecursive()
+        {
+            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
+
+            foreach (var child in ChildrenUI)
+                child.SetEnabledToggleInteractiveStateRecursive();
+        }
+        
         private void SetVisibilitySprite()
         {
             debugIndexText.text = State.ToString();

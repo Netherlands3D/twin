@@ -13,8 +13,12 @@ namespace Netherlands3D.Twin
         [SerializeField] private UnityEvent<GameObject> objectCreated = new(); 
         public override bool IsActiveInScene
         {
-            get => gameObject.activeInHierarchy;
-            set => gameObject.SetActive(value);
+            get => gameObject.activeSelf;
+            set
+            {
+                gameObject.SetActive(value);
+                ReferencedProxy.UI.UpdateLayerUI();
+            }
         }
         
         private void OnEnable()
