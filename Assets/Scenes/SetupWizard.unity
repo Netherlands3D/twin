@@ -449,6 +449,7 @@ GameObject:
   - component: {fileID: 1004450324}
   - component: {fileID: 1004450323}
   - component: {fileID: 1004450322}
+  - component: {fileID: 1004450326}
   m_Layer: 5
   m_Name: SetupWizardCanvas
   m_TagString: Untagged
@@ -539,6 +540,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1004450326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004450321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 178a63e9df3746369b563553f6932c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1004450324}
+  factor: 0.75
 --- !u!1001 &1024413286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3097,10 +3112,10 @@ RectTransform:
   - {fileID: 7321176248660391487}
   m_Father: {fileID: 1004450325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -10, y: -50}
-  m_SizeDelta: {x: 1080, y: 640}
+  m_SizeDelta: {x: -360, y: -170}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &4348167356425740346
 MonoBehaviour:
@@ -3973,7 +3988,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50}
+  m_AnchoredPosition: {x: 50, y: 550}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &6260601659801447564
