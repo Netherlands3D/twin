@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -112,7 +113,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void StartDragLayer(LayerUI layerUI)
         {
-            CreateGhost();
+            CreateGhost(layerUI);
         }
 
         public void EndDragLayer()
@@ -122,10 +123,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             dragLine.gameObject.SetActive(false);
         }
 
-        private void CreateGhost()
+        private void CreateGhost(LayerUI ui)
         {
             DragGhost = Instantiate(dragGhostPrefab, transform);
-            DragGhost.Initialize(DragStartOffset);
+            DragGhost.GetComponent<RectTransform>().SetLeft(layerUIContainer.offsetMin.x);
+            DragGhost.Initialize(DragStartOffset, ui);
         }
 
         public void OnPointerDown(PointerEventData eventData)
