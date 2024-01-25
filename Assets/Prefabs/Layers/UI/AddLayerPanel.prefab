@@ -4376,8 +4376,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 3252261102682250856}
   highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: c7c08f8ece25d4fb9bda6ab15c59e8ef, type: 3}
-  selectedSprite: {fileID: 21300000, guid: c7c08f8ece25d4fb9bda6ab15c59e8ef, type: 3}
+  pressedSprite: {fileID: 21300000, guid: 564f756d525e542b1a8a4e2f0801dabd, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 564f756d525e542b1a8a4e2f0801dabd, type: 3}
   disabledSprite: {fileID: 0}
 --- !u!1 &3671878308759290316
 GameObject:
