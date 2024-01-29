@@ -19,7 +19,6 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Configuration configuration;
 
         [Header("References")] 
-        [SerializeField] private TMP_InputField titleField;
         [SerializeField] private TMP_InputField originXField;
         [SerializeField] private TMP_InputField originYField;
         [SerializeField] private TMP_InputField shareUrlField;
@@ -29,10 +28,7 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Prefab")] [SerializeField] private Toggle featureSelectionPrefab;
 
         private void Start()
-        {
-            titleField.text = configuration.Title;
-            titleField.onValueChanged.AddListener(value => configuration.Title = value);
-            
+        {          
             originXField.text = configuration.Origin.Points[0].ToString(CultureInfo.InvariantCulture);
             originXField.onValueChanged.AddListener(OnOriginXChanged);
 
