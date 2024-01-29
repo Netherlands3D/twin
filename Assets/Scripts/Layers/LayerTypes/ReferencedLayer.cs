@@ -9,11 +9,20 @@ namespace Netherlands3D.Twin
     {
         public abstract bool IsActiveInScene { get; set; }
         public ReferencedProxyLayer ReferencedProxy { get; set; }
-        [field: SerializeField] public Sprite LayerTypeSprite { get; set; }
 
         protected virtual void Awake()
         {
             LayerData.AddReferenceLayer(this);
+        }
+
+        public virtual void OnSelect()
+        {
+            
+        }
+
+        public virtual void OnDeselect()
+        {
+            
         }
 
         public void DestroyLayer()

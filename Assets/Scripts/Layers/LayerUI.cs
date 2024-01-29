@@ -65,8 +65,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public LayerActiveState State { get; set; }
         public InteractionState InteractionState { get; set; }
 
-        public Color Color { get; set; } = Color.blue;
-        public Sprite Icon { get; set; }
+        public Sprite VisibilitySprite => visibilitySprites[(int)State];
+        public Color Color => colorButton.targetGraphic.color;
+        public bool hasChildren => childrenPanel.childCount > 0;
+        public Sprite LayerTypeSprite => layerTypeImage.sprite;
+        public string LayerName => Layer.name;
 
         private void Awake()
         {
@@ -117,17 +120,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnabledToggleValueChanged(bool isOn)
         {
             Layer.ActiveSelf = isOn;
-            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
             RecalculateCurrentTreeStates();
-
-            // foreach (var child in ChildrenUI)
-            //     child.OnEnabledToggleValueChanged(child.IsActiveInHierarchy);
+            SetEnabledToggleInteractiveStateRecursive();
         }
 
+        private void SetEnabledToggleInteractiveStateRecursive()
+        {
+            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
+
+            foreach (var child in ChildrenUI)
+                child.SetEnabledToggleInteractiveStateRecursive();
+        }
+        
         private void SetVisibilitySprite()
         {
             debugIndexText.text = State.ToString();
-            enabledToggle.targetGraphic.GetComponent<Image>().sprite = visibilitySprites[(int)State];
+            enabledToggle.targetGraphic.GetComponent<Image>().sprite = VisibilitySprite;
         }
 
         private void RecalculateState()

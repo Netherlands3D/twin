@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using CsvHelper;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
@@ -14,11 +16,35 @@ namespace Netherlands3D.Twin
             Reference.IsActiveInScene = activeInHierarchy;
         }
 
+        private void OnEnable()
+        {
+            if (Reference)
+                Reference.IsActiveInScene = true;
+        }
+
+        private void OnDisable()
+        {
+            if (Reference)
+                Reference.IsActiveInScene = false;
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
             if (Reference)
                 Destroy(Reference.gameObject);
+        }
+
+        public override void OnSelect()
+        {
+            base.OnSelect();
+            Reference.OnSelect();
+        }
+
+        public override void OnDeselect()
+        {
+            base.OnDeselect();
+            Reference.OnDeselect();
         }
     }
 }
