@@ -194,10 +194,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "file:C:/Projects/GemeenteAmsterdam/Solution/Netherlands3D_New/AddressSearch",
+      "version": "https://github.com/Netherlands3D/AddressSearch.git#v1.1.0",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "96fe76b8c83b52b545ca4e4bf1090cb1b075584e"
     },
     "eu.netherlands3d.cartesiantiles": {
       "version": "1.0.1",
