@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.UI
             outline = GetComponent<Outline>();
             image = GetComponent<Image>();
 
-            tabGroup.Subscribe(this);
+            // tabGroup.Subscribe(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
