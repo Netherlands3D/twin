@@ -238,7 +238,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 }
             }
 
-            if (Layer)
+            if (Layer) // When the layer is deleted, this UI should not update
                 UpdateLayerUI();
         }
 
