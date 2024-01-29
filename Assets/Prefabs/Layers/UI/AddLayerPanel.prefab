@@ -300,15 +300,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -63
-    m_Right: -63
+    m_Left: 63
+    m_Right: 63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: -63, y: 48}
+  m_Spacing: {x: 63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!114 &2719093848719787347
@@ -1809,7 +1809,7 @@ RectTransform:
   m_Father: {fileID: 3096135679824611675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
@@ -1918,8 +1918,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -63
-    m_Right: -63
+    m_Left: 63
+    m_Right: 63
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
@@ -3194,15 +3194,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -63
-    m_Right: -63
+    m_Left: 63
+    m_Right: 63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: -63, y: 48}
+  m_Spacing: {x: 63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!114 &252893499511333722
@@ -6447,15 +6447,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -63
-    m_Right: -63
+    m_Left: 63
+    m_Right: 63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: -63, y: 48}
+  m_Spacing: {x: 63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!114 &3131324055320172064
@@ -7187,7 +7187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 629.23, y: 0}
+  m_AnchoredPosition: {x: 125.229996, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
