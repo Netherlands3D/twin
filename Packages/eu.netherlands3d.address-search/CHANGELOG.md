@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Made moving of main camera optional via serialized boolean
-- Added new event that invokes RD coordinate found after selecting search item
+- Made moving/animating of main camera optional via serialized boolean
+- New event containing RD coordinate of selected search item
 
 ## [1.0.0]
 
