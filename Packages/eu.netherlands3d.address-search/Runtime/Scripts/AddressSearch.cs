@@ -16,34 +16,34 @@ namespace Netherlands3D.AddressSearch
     public class AddressSearch : MonoBehaviour
     {
         private TMP_InputField searchInputField;
-
-        [SerializeField]
+    
         [Tooltip("The WFS endpoint for retrieving BAG information, see: https://www.pdok.nl/geo-services/-/article/basisregistratie-adressen-en-gebouwen-ba-1")]
-        private string bagWfsEndpoint = "https://service.pdok.nl/lv/bag/wfs/v2_0";
-        [SerializeField]
+        [SerializeField] private string bagWfsEndpoint = "https://service.pdok.nl/lv/bag/wfs/v2_0";
+        
         [Tooltip("The endpoint for retrieving suggestions when looking up addresses, see: https://www.pdok.nl/restful-api/-/article/pdok-locatieserver-1")]
-        private string locationSuggestionEndpoint = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest";
-        [SerializeField]
+        [SerializeField] private string locationSuggestionEndpoint = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest";
+        
         [Tooltip("The endpoint for looking up addresses, see: https://www.pdok.nl/restful-api/-/article/pdok-locatieserver-1")]
-        private string locationLookupEndpoint = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup";
-        [SerializeField]
-        private string searchWithinCity = "Amsterdam";
-        [SerializeField]
-        private int charactersNeededBeforeSearch = 2;
-        [SerializeField]
-        private GameObject resultsParent;
+        [SerializeField] private string locationLookupEndpoint = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup";
+        
+        [SerializeField] private string searchWithinCity = "Amsterdam"; 
 
-        [Header("Camera Controls")]
-        [SerializeField]
-        private bool moveCamera = true;
-        [SerializeField]
-        private Camera mainCamera;
-        [SerializeField]
-        private Quaternion targetCameraRotation = Quaternion.Euler(45, 0, 0);
-        [SerializeField]
-        public AnimationCurve cameraMoveCurve;
+        [Tooltip("The type of address to filter on, see: https://www.pdok.nl/restful-api/-/article/pdok-locatieserver-1")]
+        [SerializeField] private string typeFilter = ""; 
+        [SerializeField] private int rows = 5; 
+        [SerializeField] private int charactersNeededBeforeSearch = 2;       
+        [SerializeField] private GameObject resultsParent;
+        [SerializeField] private Button suggestionPrefab;
+
+        [Header("Camera Controls")]   
+        [SerializeField] private bool moveCamera = true;
+        [SerializeField] private bool easeCamera = false;
+        [SerializeField] private Camera mainCamera; 
+        [SerializeField] private Quaternion targetCameraRotation = Quaternion.Euler(45, 0, 0);
+        [SerializeField] public AnimationCurve cameraMoveCurve;
 
         public UnityEvent<bool> onClearButtonToggled = new();
+        public UnityEvent<Coordinate> onCoordinateFound = new();
         public UnityEvent<List<string>> onSelectedBuildings = new();
 
         public string SearchInput { get => searchInputField.text; set => searchInputField.text = Regex.Replace(value, "<.*?>", string.Empty); }
@@ -94,7 +94,10 @@ namespace Netherlands3D.AddressSearch
         IEnumerator FindSearchSuggestions(string searchTerm)
         {
             string urlEncodedSearchTerm = UnityWebRequest.EscapeURL(searchTerm);
-            string url =$"{locationSuggestionEndpoint}?q={urlEncodedSearchTerm}%20and%20{searchWithinCity}{"%20and%20type:adres&rows=5".Replace(REPLACEMENT_STRING, urlEncodedSearchTerm)}";
+
+            var searchWithinQuery = (searchWithinCity.Length>0) ? $"and%20{searchWithinCity}%20" : "";
+            var filterTypeQuery = (typeFilter.Length>0) ? $"and%20type:{typeFilter}" : "";
+            string url =$"{locationSuggestionEndpoint}?q={urlEncodedSearchTerm}%20{searchWithinQuery}{filterTypeQuery}&rows={rows}".Replace(REPLACEMENT_STRING, urlEncodedSearchTerm);
 
             using UnityWebRequest webRequest = UnityWebRequest.Get(url);
             yield return webRequest.SendWebRequest();
@@ -117,6 +120,9 @@ namespace Netherlands3D.AddressSearch
 
                 GenerateResultItem(ID, label);
             }
+
+            if(results.Count > 0)
+                resultsParent.gameObject.SetActive(true);
         }
 
         private void ClearSearchResults()
@@ -125,9 +131,24 @@ namespace Netherlands3D.AddressSearch
             {
                 Destroy(child.gameObject);
             }
+            resultsParent.gameObject.SetActive(false);
         }
 
         private void GenerateResultItem(string ID, string label)
+        {
+            Button buttonObject = (suggestionPrefab != null) ? Instantiate(suggestionPrefab) : GenerateResultButton(label);
+            buttonObject.transform.SetParent(resultsParent.transform);
+            TextMeshProUGUI textObject = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
+            if(textObject == null) {
+                Debug.Log("Make sure your suggestionPrefab ahs a TextMeshProUGUI component");
+                return;
+            }
+            textObject.text = label;
+
+            buttonObject.onClick.AddListener(delegate { GeoDataLookup(ID, label); });
+        }
+
+        private Button GenerateResultButton(string label)
         {
             GameObject suggestion = new GameObject { name = label };
 
@@ -145,7 +166,7 @@ namespace Netherlands3D.AddressSearch
             textObject.margin = new Vector4(10, 10, 10, 10);
 
             Button buttonObject = suggestion.AddComponent<Button>();
-            buttonObject.onClick.AddListener(delegate { GeoDataLookup(ID, label); });
+            return buttonObject;
         }
 
         private void GeoDataLookup(string ID, string label)
@@ -171,18 +192,26 @@ namespace Netherlands3D.AddressSearch
             var results = jsonNode["response"]["docs"];
 
             string centroid = results[0]["centroide_ll"];
+            Debug.Log($"Centroid: {centroid}");
             string residentialObjectID = results[0]["adresseerbaarobject_id"];
+
+            Vector3 targetLocation = ExtractUnityLocation(ref centroid);
+            
+            onCoordinateFound.Invoke(new Coordinate(CoordinateSystem.RD, targetLocation.x, targetLocation.z));
 
             if (moveCamera)
             {
-                Vector3 targetLocation = ExtractUnityLocation(ref centroid);
                 var targetPos = new Vector3(targetLocation.x, 300, targetLocation.z - 300);
+      
+                if(easeCamera){
+                    StartCoroutine(LerpCamera(mainCamera.gameObject, targetPos, targetCameraRotation, 2));
+                    yield return new WaitForSeconds(2);
+                    StartCoroutine(GetBAGID(residentialObjectID));
+                    yield break;
+                }
 
-                StartCoroutine(LerpCamera(mainCamera.gameObject, targetPos, targetCameraRotation, 2));
-                yield return new WaitForSeconds(2);
-            }
-
-            StartCoroutine(GetBAGID(residentialObjectID));
+                mainCamera.gameObject.transform.position = targetPos;
+            }   
         }
 
         private static Vector3 ExtractUnityLocation(ref string locationData)
