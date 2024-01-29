@@ -78,7 +78,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 32
 --- !u!114 &7277439339721911327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6aa2d0cf04a94d1bb5d5480566b3684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerManager: {fileID: 0}
   addLayerPanel: {fileID: 0}
 --- !u!1 &1399862179845526253
 GameObject:
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 32
 --- !u!114 &1006961253930820383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f115abe51da2f4efe86bed81578d5dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerManager: {fileID: 0}
 --- !u!1 &2194463577234316449
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +472,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 32
 --- !u!114 &7524601531950148496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,6 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 576f507b381314e188d53bda6d059fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerManager: {fileID: 0}
 --- !u!1 &4942309985015116834
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,7 +867,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 32
 --- !u!1 &8901738965104430803
 GameObject:
   m_ObjectHideFlags: 0

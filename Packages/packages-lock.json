@@ -283,6 +283,13 @@
       "dependencies": {},
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
+    "eu.netherlands3d.minimap": {
+      "version": "https://github.com/Netherlands3D/Minimap.git#v1.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5ed4c8b5d6e1d88ce3b5299af80cbfec1ab244ae"
+    },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
       "depth": 1,
@@ -412,7 +419,7 @@
         "eu.netherlands3d.address-search": "1.0.0",
         "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "78b005aa5062d825d2a1aeac67f6e548eb3d9a03"
+      "hash": "58930bcaf6cc80a1d1d25354fa8b4827dc258821"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",

@@ -10,17 +10,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class DatasetLayer : LayerNL3DBase
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-
-        // public override bool IsActiveInScene
-        // {
-        //     get { return ColorSetLayer.Enabled; }
-        //     set
-        //     {
-        //         ColorSetLayer.Enabled = value;
-        //         GeometryColorizer.RecalculatePrioritizedColors();
-        //     }
-        // }
-
+        
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             ColorSetLayer.Enabled = activeInHierarchy;
@@ -30,7 +20,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+            RemoveCustomColorSet();
+        }
+
+        public void RemoveCustomColorSet()
+        {
+            if (ColorSetLayer != null)
+                GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
         }
 
         public void SetColorSetLayer(ColorSetLayer newColorSetLayer)

@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerData.RemoveLayer(this);
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             if (!LayerData.AllLayers.Contains(this))
                 LayerData.AddStandardLayer(this);

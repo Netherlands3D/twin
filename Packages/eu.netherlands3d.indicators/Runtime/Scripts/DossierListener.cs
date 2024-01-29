@@ -78,7 +78,7 @@ namespace Netherlands3D.Indicators
             onImportingFailed.Invoke();
         }
 
-        private void OnImport()
+        private void OnImport(string dossierId)
         {
             onImport.Invoke();
         }

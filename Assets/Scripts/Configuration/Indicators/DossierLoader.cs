@@ -14,10 +14,12 @@ namespace Netherlands3D.Twin.Configuration.Indicators
             configuration.OnApiBaseUriChanged.AddListener(OnApiBaseUriChanged);
             configuration.OnApiKeyChanged.AddListener(OnApiKeyChanged);
             configuration.OnDossierIdChanged.AddListener(OnDossierStartLoading);
+            dossier.onImport.AddListener(OnDossierImported);
         }
 
         private void OnDisable()
         {
+            dossier.onImport.RemoveListener(OnDossierImported);
             configuration.OnDossierIdChanged.RemoveListener(OnDossierStartLoading);
             configuration.OnApiKeyChanged.RemoveListener(OnApiKeyChanged);
             configuration.OnApiBaseUriChanged.RemoveListener(OnApiBaseUriChanged);
@@ -31,6 +33,12 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         private void OnApiKeyChanged(string apiKey)
         {
             dossier.ApiKey = configuration.ApiKey;
+        }
+
+        private void OnDossierImported(string dossierId)
+        {
+            // This will trigger the OnDossierStartLoading automatically
+            configuration.DossierId = dossierId;
         }
 
         private void OnDossierStartLoading(string dossierId)

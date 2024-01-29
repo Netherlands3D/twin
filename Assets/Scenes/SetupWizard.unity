@@ -3490,6 +3490,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  moveCameraToClickedLocation: 0
+  cameraMoveTarget: {fileID: 0}
 --- !u!1 &6260601659799651636
 GameObject:
   m_ObjectHideFlags: 0

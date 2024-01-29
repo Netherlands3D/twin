@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Configuration configuration;
 
         [Header("References")] 
+        [SerializeField] private TMP_InputField titleField;
         [SerializeField] private TMP_InputField originXField;
         [SerializeField] private TMP_InputField originYField;
         [SerializeField] private TMP_InputField shareUrlField;
@@ -28,7 +29,10 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Prefab")] [SerializeField] private Toggle featureSelectionPrefab;
 
         private void Start()
-        {          
+        {
+            titleField.text = configuration.Title;
+            titleField.onValueChanged.AddListener(value => configuration.Title = value);
+
             originXField.text = configuration.Origin.Points[0].ToString(CultureInfo.InvariantCulture);
             originXField.onValueChanged.AddListener(OnOriginXChanged);
 
@@ -97,8 +101,10 @@ namespace Netherlands3D.Twin.Configuration
                 coordinate.Points[2] = currentAltitude;
             }
 
-            originXField.SetTextWithoutNotify(coordinate.Points[0].ToString(CultureInfo.InvariantCulture));
-            originYField.SetTextWithoutNotify(coordinate.Points[1].ToString(CultureInfo.InvariantCulture));
+            var roundedCoordinate = new Coordinate(CoordinateSystem.RD, (int)coordinate.Points[0], (int)coordinate.Points[1], (int)coordinate.Points[2]);
+
+            originXField.SetTextWithoutNotify(roundedCoordinate.Points[0].ToString(CultureInfo.InvariantCulture));
+            originYField.SetTextWithoutNotify(roundedCoordinate.Points[1].ToString(CultureInfo.InvariantCulture));
             configuration.Origin = coordinate;
         }
 
@@ -133,13 +139,13 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginYChanged(string value)
         {
             int.TryParse(value, out int y);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, configuration.Origin.Points[0], y, 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, 300);
         }
 
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, configuration.Origin.Points[1], 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], 300);
         }
     }
 }
