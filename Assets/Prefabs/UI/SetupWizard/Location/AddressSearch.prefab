@@ -904,7 +904,7 @@ MonoBehaviour:
   bagWfsEndpoint: https://service.pdok.nl/lv/bag/wfs/v2_0
   locationSuggestionEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest
   locationLookupEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup
-  searchWithinCity: Amsterdam
+  searchWithinCity: 
   charactersNeededBeforeSearch: 2
   resultsParent: {fileID: 3656196940830150253}
   moveCamera: 1
