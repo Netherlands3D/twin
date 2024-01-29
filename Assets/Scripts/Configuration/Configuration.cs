@@ -36,8 +36,9 @@ namespace Netherlands3D.Twin.Configuration
             get => origin;
             set
             {
-                origin = value;
-                OnOriginChanged.Invoke(value);
+                var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.Points[0], (int)value.Points[1], (int)value.Points[2]);
+                origin = roundedValue;
+                OnOriginChanged.Invoke(roundedValue);
             }
         }
 
@@ -126,7 +127,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             var enabledFeatures = Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id);
 
-            urlBuilder.AddQueryParameter("origin", $"{Origin.Points[0]},{origin.Points[1]},{origin.Points[2]}");
+            urlBuilder.AddQueryParameter("origin", $"{(int)Origin.Points[0]},{(int)origin.Points[1]},{(int)origin.Points[2]}");
             urlBuilder.AddQueryParameter("features", string.Join(',', enabledFeatures.ToArray()));
             foreach (var feature in Features)
             {

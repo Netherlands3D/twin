@@ -9,19 +9,19 @@ namespace Netherlands3D.Twin.Configuration.TileHandler
 
         private void OnEnable()
         {
-            configurator.OnLoaded.AddListener(Apply);
+            configurator.Configuration.OnOriginChanged.AddListener(Apply);
         }
 
         private void OnDisable()
         {
-            configurator.OnLoaded.RemoveListener(Apply);
+            configurator.Configuration.OnOriginChanged.RemoveListener(Apply);
         }
 
-        private void Apply(Configuration configuration)
+        private void Apply(Coordinate coordinate)
         {
-            var rdCoordinates = CoordinateConverter.ConvertTo(configuration.Origin, CoordinateSystem.RD);
+            var newCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
             // CoordinateConverter.zeroGroundLevelY = ConfigurationFile.zeroGroundLevelY;
-            EPSG7415.relativeCenter = new Vector2RD(rdCoordinates.Points[0], rdCoordinates.Points[1]);
+            EPSG7415.relativeCenter = new Vector2RD(newCoordinate.Points[0], newCoordinate.Points[1]);
         }
     }
 }

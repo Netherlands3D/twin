@@ -24,6 +24,7 @@ namespace Netherlands3D.Twin.Configuration
 
         [SerializeField] 
         private Configuration configuration;
+        public Configuration Configuration { get => configuration; }
 
         private Uri uri;
 
