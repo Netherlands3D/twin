@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 1004450325}
   - component: {fileID: 1004450324}
   - component: {fileID: 1004450323}
+  - component: {fileID: 1004450326}
   - component: {fileID: 1004450322}
   m_Layer: 5
   m_Name: SetupWizardCanvas
@@ -402,6 +403,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1004450326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004450321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f513f7fb996c4d7392a83bc1ff0f6160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1004450324}
+  factor: 0.75
 --- !u!1001 &1024413286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3114,8 +3129,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator,
-          Assembly-CSharp
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator, Assembly-CSharp
         m_MethodName: CompleteSetup
         m_Mode: 1
         m_Arguments:
