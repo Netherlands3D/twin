@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: buildings
   Title: Toon gebouwen
-  Caption: Toon gebouwen
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

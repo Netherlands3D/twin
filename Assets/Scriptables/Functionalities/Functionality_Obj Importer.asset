@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: object-importer
   Title: Importeer .obj bestanden
-  Caption: Importeer .obj bestanden
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

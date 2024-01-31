@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: trees
   Title: Toon bomen
-  Caption: Toon bomen
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

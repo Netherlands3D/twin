@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: districts
   Title: Toon namen van wijken
-  Caption: Toon namen van wijken
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

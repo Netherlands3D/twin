@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: traffic
   Title: Verkeerssimulatie
-  Caption: Verkeerssimulatie
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

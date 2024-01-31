@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: terrain
   Title: Toon het maaiveld
-  Caption: Toon het maaiveld
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

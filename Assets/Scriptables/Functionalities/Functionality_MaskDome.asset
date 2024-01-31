@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: maskdome
   Title: Doorzicht ondergrond
-  Caption: Doorzicht ondergrond
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: address-search
   Title: Zoeken op adres
-  Caption: Zoeken op adres
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

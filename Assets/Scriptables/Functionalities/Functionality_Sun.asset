@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: sun
   Title: Stel de zonnestand en schaduwen in
-  Caption: Stel de zonnestand en schaduwen in
+  Caption: Vrij beschikbaar
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
