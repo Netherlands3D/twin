@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Configuration
 
         [SerializeField] private GameObject featureList;
 
-        [Header("Prefab")] [SerializeField] private Toggle featureSelectionPrefab;
+        [Header("Prefab")] [SerializeField] private FunctionalitySelection featureSelectionPrefab;
 
         private void Start()
         {
@@ -37,10 +37,10 @@ namespace Netherlands3D.Twin.Configuration
 
             foreach (var availableFeature in configuration.Features)
             {
-                Toggle featureSelection = Instantiate(featureSelectionPrefab, featureList.transform);
-                featureSelection.isOn = availableFeature.IsEnabled;
-                featureSelection.onValueChanged.AddListener(value => OnFeatureChanged(availableFeature, value));
-                featureSelection.GetComponentInChildren<Text>().text = availableFeature.Caption;
+                FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
+                functionalitySelection.Init(availableFeature);
+                
+                functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFeatureChanged(availableFeature, value));
             }
         }
 

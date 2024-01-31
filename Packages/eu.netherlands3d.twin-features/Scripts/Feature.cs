@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Features
     public class Feature : ScriptableObject, ISimpleJsonMapper
     {
         public string Id;
+        public string Title;
         public string Caption;
         public ScriptableObject configuration;
 
