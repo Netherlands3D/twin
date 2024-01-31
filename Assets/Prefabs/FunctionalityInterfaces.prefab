@@ -1944,7 +1944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7495072244176228295}
   m_Layer: 5
-  m_Name: FeatureInterfaces
+  m_Name: FunctionalityInterfaces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

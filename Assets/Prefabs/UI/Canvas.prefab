@@ -48,7 +48,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1057619324132417319}
   m_Layer: 5
-  m_Name: FeatureInterfaces
+  m_Name: FunctionalityInterfaces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
