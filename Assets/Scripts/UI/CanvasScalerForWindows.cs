@@ -14,10 +14,14 @@ namespace Netherlands3D.Twin.UI
     {
         [Tooltip("The Canvas to apply scaling to when running the WebGL application on Windows")]
         [SerializeField] private Canvas canvas;
+        
+        #pragma warning disable 0414
         [Tooltip("The factor to adjust the scaling with on Windows, should generally be .75 to represent the difference between Mac and Windows DPI")]
         [SerializeField] private float factor = 0.75f;
+        #pragma warning restore 0414
+
 #if UNITY_WEBGL && !UNITY_EDITOR
-        private float previousScaleFactor;
+        private float previousScaleFactor = 0f;
 
         [DllImport("__Internal")]
         private static extern bool IsWindowsOS();
@@ -30,8 +34,8 @@ namespace Netherlands3D.Twin.UI
                 canvas = GetComponent<Canvas>();
             }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
             // Adjust the scale only if we're running in a WebGL build on Windows
+#if UNITY_WEBGL && !UNITY_EDITOR
             ScaleCanvasForWindows();
 #endif
         }
@@ -48,7 +52,7 @@ namespace Netherlands3D.Twin.UI
         }
 #endif
 
-        void OnUpdate()
+        private void Update()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             if (Mathf.Approximately(canvas.scaleFactor, previousScaleFactor) == false)
