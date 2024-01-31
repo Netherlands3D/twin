@@ -1,10 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
     public class EnableComponentsByFunctionality : MonoBehaviour
     {
+        [Serializable]
+        public class FunctionalityLink
+        {
+            [HideInInspector]
+            public string name;
+            public Functionality functionality;
+            public UnityEvent<bool> onFunctionalityToggle = new();
+        }
+
         public List<FunctionalityLink> FunctionalityLinks = new();
 
         private void Awake()
@@ -27,15 +39,15 @@ namespace Netherlands3D.Twin.Functionalities
         {
             foreach (var featureLink in FunctionalityLinks)
             {
-                var linkFeature = featureLink.feature != null ? featureLink.feature : null;
+                var linkFeature = featureLink.functionality != null ? featureLink.functionality : null;
                 featureLink.name = linkFeature?.Caption + " -> ";
 
-                int listenerCount = featureLink.onFeatureToggle?.GetPersistentEventCount() ?? 0;
+                int listenerCount = featureLink.onFunctionalityToggle?.GetPersistentEventCount() ?? 0;
                 
                 if (listenerCount == 1)
                 {
-                    var type = featureLink.onFeatureToggle.GetPersistentTarget(0).ToString().Replace("(UnityEngine.", "(");
-                    var methodName = featureLink.onFeatureToggle.GetPersistentMethodName(0);
+                    var type = featureLink.onFunctionalityToggle.GetPersistentTarget(0).ToString().Replace("(UnityEngine.", "(");
+                    var methodName = featureLink.onFunctionalityToggle.GetPersistentMethodName(0);
                     featureLink.name +=  type + " -> " + methodName;
                 }
                 else if (listenerCount > 1)
@@ -51,15 +63,15 @@ namespace Netherlands3D.Twin.Functionalities
 
         private void AddFeatureListenerForLink(FunctionalityLink featureLink)
         {
-            FeatureListener listener = gameObject.AddComponent<FeatureListener>();
-            listener.feature = featureLink.feature;
+            FunctionalityListener listener = gameObject.AddComponent<FunctionalityListener>();
+            listener.functionality = featureLink.functionality;
             listener.OnEnableFeature.AddListener((Functionality feature) =>
             {
-                featureLink.onFeatureToggle?.Invoke(true);
+                featureLink.onFunctionalityToggle?.Invoke(true);
             });
             listener.OnDisableFeature.AddListener((Functionality feature) =>
             {
-                featureLink.onFeatureToggle?.Invoke(false);
+                featureLink.onFunctionalityToggle?.Invoke(false);
             });
         }
     }
