@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using UnityEngine;
 using UnityEngine.Events;
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
-namespace Netherlands3D.Twin.Features
+namespace Netherlands3D.Twin.Functionalities
 {
     [Serializable]
     public class FunctionalityLink
@@ -10,6 +11,8 @@ namespace Netherlands3D.Twin.Features
         [HideInInspector]
         public string name;
         public Functionality feature;
+
+        [FormerlySerializedAs("onFeatureToggle")]
         public UnityEvent<bool> onFeatureToggle = new();
     }
 }

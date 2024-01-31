@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 
-namespace Netherlands3D.Twin.Features
+namespace Netherlands3D.Twin.Functionalities
 {
     public interface IQueryStringMapper
     {

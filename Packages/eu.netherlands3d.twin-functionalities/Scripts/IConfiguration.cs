@@ -1,4 +1,4 @@
-namespace Netherlands3D.Twin.Features
+namespace Netherlands3D.Twin.Functionalities
 {
     public interface IConfiguration : ISimpleJsonMapper, IQueryStringMapper
     {

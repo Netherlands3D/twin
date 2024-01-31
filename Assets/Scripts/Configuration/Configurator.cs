@@ -4,7 +4,7 @@ using System.IO;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #endif
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
 using SimpleJSON;
 using UnityEditor;

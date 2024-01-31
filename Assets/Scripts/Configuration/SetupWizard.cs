@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

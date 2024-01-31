@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Features
+namespace Netherlands3D.Twin.Functionalities
 {
     public class EnableComponentsByFunctionality : MonoBehaviour
     {

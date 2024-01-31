@@ -3524,10 +3524,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8632740765308209879}
     m_Modifications:
+    - target: {fileID: 450654592725986795, guid: 26ac43a71ddcbbe4a9589649fa0fae64,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2393008768298428579, guid: 26ac43a71ddcbbe4a9589649fa0fae64,
         type: 3}
       propertyPath: m_Name
       value: TopRightButtons
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934830835315855495, guid: 26ac43a71ddcbbe4a9589649fa0fae64,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4701849197414473883, guid: 26ac43a71ddcbbe4a9589649fa0fae64,
         type: 3}

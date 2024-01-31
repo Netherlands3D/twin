@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Specialized;
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;

@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Features
+namespace Netherlands3D.Twin.Functionalities
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Twin/Feature", fileName = "Feature", order = 0)]
+    [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
         public string Id;

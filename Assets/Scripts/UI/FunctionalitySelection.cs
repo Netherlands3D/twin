@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
