@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Configuration
             originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onValueChanged.AddListener(OnOriginYChanged);
 
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
                 FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
                 functionalitySelection.Init(availableFeature);
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.AddListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.AddListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
                 availableFeature.OnEnable.AddListener(UpdateShareUrlWhenFeatureChanges);
                 availableFeature.OnDisable.AddListener(UpdateShareUrlWhenFeatureChanges);
@@ -83,7 +83,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.RemoveListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
                 availableFeature.OnEnable.RemoveListener(UpdateShareUrlWhenFeatureChanges);
                 availableFeature.OnDisable.RemoveListener(UpdateShareUrlWhenFeatureChanges);

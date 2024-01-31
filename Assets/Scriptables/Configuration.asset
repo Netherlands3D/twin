@@ -13,21 +13,12 @@ MonoBehaviour:
   m_Name: Configuration
   m_EditorClassIdentifier: 
   title: Lelystad
-  Features:
-  - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
-  - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
-  - {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
-  - {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
-  - {fileID: 11400000, guid: cd4d713ac36eed3478e85868b1e0e0f9, type: 2}
-  - {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
-  - {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
+  Functionalities:
   - {fileID: 11400000, guid: cd3367005c1f1cd4b8de1fd613e311fa, type: 2}
-  - {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
-  - {fileID: 11400000, guid: 42464fdf892b6b245a26a6156b70ed6d, type: 2}
-  - {fileID: 11400000, guid: e649b402ab73d1144a36dfc3d3213136, type: 2}
-  - {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
-  - {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+  - {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
   - {fileID: 11400000, guid: 444a73f31e87cd24c949922222c1927e, type: 2}
+  - {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+  - {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
   OnOriginChanged:
     m_PersistentCalls:
       m_Calls: []

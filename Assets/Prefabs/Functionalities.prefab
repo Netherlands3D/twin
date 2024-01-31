@@ -59,10 +59,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a198db1063e2456aaf9453dd8ac4edcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FeatureLinks:
-  - name: Zoeken op adres -> null -> SetActive
-    feature: {fileID: 11400000, guid: 3684ee2c206979e4783d50e0c07322b3, type: 2}
-    onFeatureToggle:
+  FunctionalityLinks:
+  - name: Vrij beschikbaar -> null -> SetActive
+    functionality: {fileID: 11400000, guid: cd3367005c1f1cd4b8de1fd613e311fa, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
@@ -77,81 +77,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon gebouwen -> Buildings (Netherlands3D.CartesianTiles.BinaryMeshLayer)
-      -> set_isEnabled
-    feature: {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 7555721977339228734}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 1
-  - name: Toon het maaiveld -> Terrain (Netherlands3D.CartesianTiles.BinaryMeshLayer)
-      -> set_isEnabled
-    feature: {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4627785368353237123}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - name: Toon namen van buurten -> NeighbourhoodNames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
-      -> set_isEnabled
-    feature: {fileID: 11400000, guid: cd4d713ac36eed3478e85868b1e0e0f9, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1447055348483514853}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - name: Toon namen van wijken -> DistrictNames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
-      -> set_isEnabled
-    feature: {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1477014032411085357}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - name: Maak screenshots -> null -> SetActive
-    feature: {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
-    onFeatureToggle:
+  - name: Vrij beschikbaar -> null -> SetActive
+    functionality: {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
@@ -166,14 +94,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Timeline ->  No listeners
-    feature: {fileID: 11400000, guid: 42464fdf892b6b245a26a6156b70ed6d, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls: []
-  - name: Verkeerssimulatie -> null -> SetActive
-    feature: {fileID: 11400000, guid: e649b402ab73d1144a36dfc3d3213136, type: 2}
-    onFeatureToggle:
+  - name: Vrij beschikbaar -> null -> SetActive
+    functionality: {fileID: 11400000, guid: 444a73f31e87cd24c949922222c1927e, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
@@ -188,87 +111,188 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Toon bomen -> Trees (Netherlands3D.CartesianTiles.BinaryMeshLayer) -> set_isEnabled
-    feature: {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8569328284100663580}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - name: Toon namen van straten -> Streetnames (Netherlands3D.CartesianTiles.GeoJSONTextLayer)
-      -> set_isEnabled
-    feature: {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
-    onFeatureToggle:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 7955487899575783159}
-          m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
-          m_MethodName: set_isEnabled
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - name: Stel de zonnestand en schaduwen in -> null -> SetActive
-    feature: {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
-    onFeatureToggle:
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Importeer .obj bestanden -> null -> SetActive
-    feature: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
-    onFeatureToggle:
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: Doorzicht ondergrond -> null -> SetActive
-    feature: {fileID: 11400000, guid: b08b1db87725f0843995bceae5d5aed6, type: 2}
-    onFeatureToggle:
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: 'Vrij beschikbaar -> null -> '
+    functionality: {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
+    onFunctionalityToggle:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -1322,84 +1346,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea7c180bcbe7b0e4cab6acc5863a9a96, type: 3}
---- !u!114 &1447055348483514853 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4990664270803265294, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1477014032411085357 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4983787096530963654, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4627785368353237123 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1256413983069957736, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &4930656928155257700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1530003142245436815, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
     type: 3}
   m_PrefabInstance: {fileID: 5861047450433095403}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7555721977339228734 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4147197885830444245, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7955487899575783159 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4553435551921080348, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c2856dffeaeca948ba782e1e480f493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8569328284100663580 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2862812952149434359, guid: ea7c180bcbe7b0e4cab6acc5863a9a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 5861047450433095403}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6251840611060508935
 PrefabInstance:
   m_ObjectHideFlags: 0

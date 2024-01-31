@@ -10,6 +10,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -19,7 +20,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
 
-        [SerializeField] public List<Functionality> Features = new();
+        [SerializeField] public List<Functionality> Functionalities = new();
 
         public string Title
         {
@@ -108,7 +109,7 @@ namespace Netherlands3D.Twin.Configuration
                 LoadFeaturesFromString(featuresFromQueryString);
             }
 
-            foreach (var feature in Features)
+            foreach (var feature in Functionalities)
             {
                 var config = feature.configuration as IConfiguration;
                 config?.Populate(queryParameters);
@@ -125,11 +126,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
-            var enabledFeatures = Features.Where(feature => feature.IsEnabled).Select(feature => feature.Id);
+            var enabledFeatures = Functionalities.Where(feature => feature.IsEnabled).Select(feature => feature.Id);
 
             urlBuilder.AddQueryParameter("origin", $"{(int)Origin.Points[0]},{(int)origin.Points[1]},{(int)origin.Points[2]}");
             urlBuilder.AddQueryParameter("features", string.Join(',', enabledFeatures.ToArray()));
-            foreach (var feature in Features)
+            foreach (var feature in Functionalities)
             {
                 var featureConfiguration = feature.configuration as IConfiguration;
                 if (featureConfiguration == null) continue;
@@ -155,7 +156,7 @@ namespace Netherlands3D.Twin.Configuration
 
             foreach (var element in jsonNode["features"])
             {
-                var feature = Features.FirstOrDefault(feature => feature.Id == element.Key);
+                var feature = Functionalities.FirstOrDefault(feature => feature.Id == element.Key);
                 if (!feature) continue;
 
                 feature.Populate(element.Value);
@@ -178,7 +179,7 @@ namespace Netherlands3D.Twin.Configuration
                 ["features"] = new JSONObject()
             };
 
-            foreach (var feature in Features)
+            foreach (var feature in Functionalities)
             {
                 result["features"][feature.Id] = feature.ToJsonNode();
             }
@@ -208,7 +209,7 @@ namespace Netherlands3D.Twin.Configuration
         private void LoadFeaturesFromString(string features)
         {
             var featureIdentifiers = features.ToLower().Split(',');
-            foreach (var feature in Features)
+            foreach (var feature in Functionalities)
             {
                 feature.IsEnabled = featureIdentifiers.Contains(feature.Id);
                 if (feature.IsEnabled) Debug.Log($"Enabled feature '{feature.Id}' from URL");

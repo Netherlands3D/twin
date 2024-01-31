@@ -122,7 +122,7 @@ namespace Netherlands3D.Twin.Configuration
         private T GetFeatureConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
         {
             return configuration
-                .Features
+                .Functionalities
                 .Find(feature => feature.configuration is T)
                 .configuration as T;
         }
