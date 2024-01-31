@@ -5,6 +5,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Features;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Configuration
@@ -26,6 +27,9 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private GameObject featureList;
 
         [Header("Prefab")] [SerializeField] private FunctionalitySelection featureSelectionPrefab;
+
+        [Header("Events")]
+        public UnityEvent OnSettingsChanged = new UnityEvent();
 
         private void Start()
         {
@@ -131,6 +135,8 @@ namespace Netherlands3D.Twin.Configuration
         private void OnFunctionalityChanged(Functionality availableFunctionality, bool value)
         {
             availableFunctionality.IsEnabled = value;
+
+            OnSettingsChanged.Invoke();
         }
 
         private void OnFunctionalitySelected(Functionality functionality)
@@ -143,12 +149,16 @@ namespace Netherlands3D.Twin.Configuration
         {
             int.TryParse(value, out int y);
             configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, 300);
+
+            OnSettingsChanged.Invoke();
         }
 
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
             configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], 300);
+
+            OnSettingsChanged.Invoke();
         }
     }
 }

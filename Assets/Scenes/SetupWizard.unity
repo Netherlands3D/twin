@@ -1503,7 +1503,7 @@ PrefabInstance:
     - target: {fileID: 5126677324445757005, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00035317917
+      value: 0.00001537159
       objectReference: {fileID: 0}
     - target: {fileID: 5158789987175011053, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
@@ -1618,7 +1618,7 @@ PrefabInstance:
     - target: {fileID: 8461925525370366667, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00020746484
+      value: 0.0008185277
       objectReference: {fileID: 0}
     - target: {fileID: 8908681689294885079, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
@@ -1663,6 +1663,21 @@ MonoBehaviour:
   featureList: {fileID: 7956000945036477466}
   featureSelectionPrefab: {fileID: 1716528719610758314, guid: 4fa44f001b9538b4da031419603bb6a8,
     type: 3}
+  OnSettingsChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Functie voorkeuren succesvol aangepast
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &2398554336193933590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3129,7 +3144,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator, Assembly-CSharp
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Configuration.Configurator,
+          Assembly-CSharp
         m_MethodName: CompleteSetup
         m_Mode: 1
         m_Arguments:
