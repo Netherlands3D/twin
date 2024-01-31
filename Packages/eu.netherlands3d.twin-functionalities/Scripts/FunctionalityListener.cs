@@ -1,23 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
-    public class FeatureListener : MonoBehaviour
+    public class FunctionalityListener : MonoBehaviour
     {
-        public Functionality feature;
+        [FormerlySerializedAs("feature")]
+        public Functionality functionality;
 
         public UnityEvent<Functionality> OnEnableFeature = new ();
         public UnityEvent<Functionality> OnDisableFeature = new ();
 
         private void Awake() {
-            feature.OnEnable.AddListener(EnableFeature);
-            feature.OnDisable.AddListener(DisableFeature);
+            functionality.OnEnable.AddListener(EnableFeature);
+            functionality.OnDisable.AddListener(DisableFeature);
+        }
+
+        private void OnValidate() {
+            if(!GetComponent<EnableComponentsByFunctionality>()) {
+                Debug.LogError("FunctionalityListener should only be added runtime by EnableComponentsByFunctionality", this.gameObject);
+            }
         }
         
         private void OnEnable()
         {
-            if (feature.IsEnabled)
+            if (functionality.IsEnabled)
             {
                 EnableFeature();
             }
@@ -29,18 +37,18 @@ namespace Netherlands3D.Twin.Functionalities
 
         private void EnableFeature()
         {
-            OnEnableFeature.Invoke(feature);
+            OnEnableFeature.Invoke(functionality);
         }
 
         private void DisableFeature()
         {
-            OnDisableFeature.Invoke(feature);
+            OnDisableFeature.Invoke(functionality);
         }
 
         private void OnDestroy()
         {
-            feature.OnEnable.RemoveListener(EnableFeature);
-            feature.OnDisable.RemoveListener(DisableFeature);
+            functionality.OnEnable.RemoveListener(EnableFeature);
+            functionality.OnDisable.RemoveListener(DisableFeature);
         }
     }
 }
