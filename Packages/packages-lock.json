@@ -194,11 +194,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "https://github.com/Netherlands3D/AddressSearch.git",
+      "version": "1.1.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "1ae8f66aa4475859df4710911b745e43e781fe56"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
       "version": "1.0.1",
