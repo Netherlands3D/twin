@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Configuration
             {
                 FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
                 functionalitySelection.Init(availableFeature);
-                
+
                 functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFeatureChanged(availableFeature, value));
             }
         }
@@ -127,7 +127,7 @@ namespace Netherlands3D.Twin.Configuration
             #endif
         }
 
-        private void OnFeatureChanged(Feature availableFeature, bool value)
+        private void OnFeatureChanged(Functionality availableFeature, bool value)
         {
             availableFeature.IsEnabled = value;
         }

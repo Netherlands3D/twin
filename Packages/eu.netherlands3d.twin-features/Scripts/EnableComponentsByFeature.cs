@@ -5,7 +5,7 @@ namespace Netherlands3D.Twin.Features
 {
     public class EnableComponentsByFeature : MonoBehaviour
     {
-        public List<FeatureLink> FeatureLinks = new();
+        public List<FunctionalityLink> FeatureLinks = new();
 
         private void Awake()
         {
@@ -49,15 +49,15 @@ namespace Netherlands3D.Twin.Features
         }
 
 
-        private void AddFeatureListenerForLink(FeatureLink featureLink)
+        private void AddFeatureListenerForLink(FunctionalityLink featureLink)
         {
             FeatureListener listener = gameObject.AddComponent<FeatureListener>();
             listener.feature = featureLink.feature;
-            listener.OnEnableFeature.AddListener((Feature feature) =>
+            listener.OnEnableFeature.AddListener((Functionality feature) =>
             {
                 featureLink.onFeatureToggle?.Invoke(true);
             });
-            listener.OnDisableFeature.AddListener((Feature feature) =>
+            listener.OnDisableFeature.AddListener((Functionality feature) =>
             {
                 featureLink.onFeatureToggle?.Invoke(false);
             });

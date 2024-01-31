@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Indicators
+  m_Name: Functionality_Address Search
   m_EditorClassIdentifier: 
-  Id: indicators
-  Caption: Indicatoren
-  configuration: {fileID: 11400000, guid: 9649637ffb6f9c24da61c215efe6adaa, type: 2}
-  isEnabled: 1
+  Id: address-search
+  Title: Zoeken op adres
+  Caption: Zoeken op adres
+  configuration: {fileID: 0}
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

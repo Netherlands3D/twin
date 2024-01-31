@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: AreaDownload
+  m_Name: Functionality_AreaDownload
   m_EditorClassIdentifier: 
   Id: download
+  Title: Gebied downloaden als 3D model
   Caption: Gebied downloaden als 3D model
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls:

@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Traffic Simulation
+  m_Name: Functionality_Screenshots
   m_EditorClassIdentifier: 
-  Id: traffic
-  Caption: Verkeerssimulatie
+  Id: screenshot
+  Title: Maak screenshots
+  Caption: Maak screenshots
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

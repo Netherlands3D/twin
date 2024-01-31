@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Address Search
+  m_Name: Functionality_Obj Importer
   m_EditorClassIdentifier: 
-  Id: address-search
-  Caption: Zoeken op adres
+  Id: object-importer
+  Title: Importeer .obj bestanden
+  Caption: Importeer .obj bestanden
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

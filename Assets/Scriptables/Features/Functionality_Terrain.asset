@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Districtnames
+  m_Name: Functionality_Terrain
   m_EditorClassIdentifier: 
-  Id: districts
-  Caption: Toon namen van wijken
+  Id: terrain
+  Title: Toon het maaiveld
+  Caption: Toon het maaiveld
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

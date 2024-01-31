@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Sun
+  m_Name: Functionality_Streetnames
   m_EditorClassIdentifier: 
-  Id: sun
-  Caption: Stel de zonnestand en schaduwen in
+  Id: streets
+  Title: Toon namen van straten
+  Caption: Toon namen van straten
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

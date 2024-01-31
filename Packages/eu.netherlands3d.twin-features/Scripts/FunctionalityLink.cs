@@ -5,11 +5,11 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Features
 {
     [Serializable]
-    public class FeatureLink
+    public class FunctionalityLink
     {
         [HideInInspector]
         public string name;
-        public Feature feature;
+        public Functionality feature;
         public UnityEvent<bool> onFeatureToggle = new();
     }
 }

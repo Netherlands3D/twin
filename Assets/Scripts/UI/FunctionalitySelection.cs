@@ -13,11 +13,11 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text caption;
        
-        private Feature feature;
+        private Functionality feature;
         private Toggle toggle;
         public Toggle Toggle { get => toggle; private set => toggle = value; }
        
-        public void Init(Feature feature)
+        public void Init(Functionality feature)
         {
             this.feature = feature;
 

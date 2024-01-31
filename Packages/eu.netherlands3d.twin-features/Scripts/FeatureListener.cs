@@ -5,10 +5,10 @@ namespace Netherlands3D.Twin.Features
 {
     public class FeatureListener : MonoBehaviour
     {
-        public Feature feature;
+        public Functionality feature;
 
-        public UnityEvent<Feature> OnEnableFeature = new ();
-        public UnityEvent<Feature> OnDisableFeature = new ();
+        public UnityEvent<Functionality> OnEnableFeature = new ();
+        public UnityEvent<Functionality> OnDisableFeature = new ();
 
         private void Awake() {
             feature.OnEnable.AddListener(EnableFeature);

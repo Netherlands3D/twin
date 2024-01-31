@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Trees
+  m_Name: Functionality_Sun
   m_EditorClassIdentifier: 
-  Id: trees
-  Caption: Toon bomen
+  Id: sun
+  Title: Stel de zonnestand en schaduwen in
+  Caption: Stel de zonnestand en schaduwen in
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

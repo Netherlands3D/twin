@@ -5,7 +5,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Features
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Feature", fileName = "Feature", order = 0)]
-    public class Feature : ScriptableObject, ISimpleJsonMapper
+    public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
         public string Id;
         public string Title;

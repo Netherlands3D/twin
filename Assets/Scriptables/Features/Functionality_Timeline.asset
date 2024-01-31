@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: MaskDome
+  m_Name: Functionality_Timeline
   m_EditorClassIdentifier: 
-  Id: maskdome
-  Caption: Doorzicht ondergrond
+  Id: timeline
+  Title: Timeline
+  Caption: Timeline
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

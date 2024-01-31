@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Streetnames
+  m_Name: Functionality_MaskDome
   m_EditorClassIdentifier: 
-  Id: streets
-  Caption: Toon namen van straten
+  Id: maskdome
+  Title: Doorzicht ondergrond
+  Caption: Doorzicht ondergrond
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

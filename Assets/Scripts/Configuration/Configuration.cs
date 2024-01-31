@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
 
-        [SerializeField] public List<Feature> Features = new();
+        [SerializeField] public List<Functionality> Features = new();
 
         public string Title
         {
