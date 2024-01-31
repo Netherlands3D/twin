@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Functionalities
             public UnityEvent<bool> onFunctionalityToggle = new();
         }
 
+        [Header("Centralized list with Functionalities and their connections to GameObjects")]
+        [FormerlySerializedAs("FeatureLinks")]
         public List<FunctionalityLink> FunctionalityLinks = new();
 
         private void Awake()

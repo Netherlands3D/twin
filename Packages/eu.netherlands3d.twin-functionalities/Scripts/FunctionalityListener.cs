@@ -13,8 +13,8 @@ namespace Netherlands3D.Twin.Functionalities
         [FormerlySerializedAs("feature")]
         public Functionality functionality;
 
-        public UnityEvent<Functionality> OnEnableFeature = new ();
-        public UnityEvent<Functionality> OnDisableFeature = new ();
+        [HideInInspector] public UnityEvent<Functionality> OnEnableFeature = new ();
+        [HideInInspector] public UnityEvent<Functionality> OnDisableFeature = new ();
 
         private void Awake() {
             functionality.OnEnable.AddListener(EnableFeature);
