@@ -12,10 +12,13 @@ namespace Netherlands3D.Twin.UI
     /// </summary>
     public class CanvasScalerForWindows : MonoBehaviour
     {
-        public Canvas canvas;
-        public float factor = 0.75f;
-
+        [Tooltip("The Canvas to apply scaling to when running the WebGL application on Windows")]
+        [SerializeField] private Canvas canvas;
+        [Tooltip("The factor to adjust the scaling with on Windows, should generally be .75 to represent the difference between Mac and Windows DPI")]
+        [SerializeField] private float factor = 0.75f;
 #if UNITY_WEBGL && !UNITY_EDITOR
+        private float previousScaleFactor;
+
         [DllImport("__Internal")]
         private static extern bool IsWindowsOS();
 #endif
@@ -27,8 +30,8 @@ namespace Netherlands3D.Twin.UI
                 canvas = GetComponent<Canvas>();
             }
 
-            // Adjust the scale only if we're running in a WebGL build on Windows
 #if UNITY_WEBGL && !UNITY_EDITOR
+            // Adjust the scale only if we're running in a WebGL build on Windows
             ScaleCanvasForWindows();
 #endif
         }
@@ -38,11 +41,22 @@ namespace Netherlands3D.Twin.UI
         // The canvas is scaled down by the factor in this class to account for the PPI difference.
         void ScaleCanvasForWindows()
         {
-            Debug.Log("Are we on Windows? " + (IsWindowsOS() ? "Yes" : "No"));
             if (!IsWindowsOS()) return;
 
             canvas.scaleFactor *= factor;
+            previousScaleFactor = canvas.scaleFactor;
         }
 #endif
+
+        void OnUpdate()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if (Mathf.Approximately(canvas.scaleFactor, previousScaleFactor) == false)
+            {
+                Debug.Log("Detected zooming of the canvas, readjusting scale factor");
+                ScaleCanvasForWindows();
+            }
+#endif
+        }
     }
 }
