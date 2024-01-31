@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
 
-        public LayerNL3DBase ParentLayer { get; private set; }//=> transform.parent.GetComponent<LayerNL3DBase>();
+        public LayerNL3DBase ParentLayer { get; private set; } //=> transform.parent.GetComponent<LayerNL3DBase>();
 
         public LayerNL3DBase[] ChildrenLayers { get; private set; }
 
@@ -53,14 +53,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerData.RemoveLayer(this);
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             if (!LayerData.AllLayers.Contains(this))
                 LayerData.AddStandardLayer(this);
-            
+
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
             OnTransformChildrenChanged();
+
+            foreach (var child in ChildrenLayers)
+            {
+                child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
+            }
         }
 
         private void OnTransformChildrenChanged()
@@ -73,11 +78,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
             }
 
-            foreach (var vc in childLayers)
-            {
-                print(vc.name);
-            }
-            
             ChildrenLayers = childLayers;
             UI?.RecalculateCurrentTreeStates();
         }
@@ -86,7 +86,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
         }
-        
+
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
         {
             if (newParentLayer == this)

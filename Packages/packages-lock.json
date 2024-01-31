@@ -194,8 +194,8 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "1.0.0",
-      "depth": 1,
+      "version": "1.1.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
@@ -282,6 +282,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
+    },
+    "eu.netherlands3d.minimap": {
+      "version": "1.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
@@ -412,7 +419,7 @@
         "eu.netherlands3d.address-search": "1.0.0",
         "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "78b005aa5062d825d2a1aeac67f6e548eb3d9a03"
+      "hash": "58930bcaf6cc80a1d1d25354fa8b4827dc258821"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",

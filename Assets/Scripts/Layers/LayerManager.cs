@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -88,6 +89,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI.SetParent(layer.transform.parent.GetComponent<LayerNL3DBase>()?.UI, layer.transform.GetSiblingIndex());
 
             LayersVisibleInInspector.Add(layerUI);
+            layerUI.Select(true);
         }
 
         private void OnLayerDeleted(LayerNL3DBase layer)
@@ -111,7 +113,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void StartDragLayer(LayerUI layerUI)
         {
-            CreateGhost();
+            CreateGhost(layerUI);
         }
 
         public void EndDragLayer()
@@ -121,10 +123,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             dragLine.gameObject.SetActive(false);
         }
 
-        private void CreateGhost()
+        private void CreateGhost(LayerUI ui)
         {
             DragGhost = Instantiate(dragGhostPrefab, transform);
-            DragGhost.Initialize(DragStartOffset);
+            DragGhost.GetComponent<RectTransform>().SetLeft(layerUIContainer.offsetMin.x);
+            DragGhost.Initialize(DragStartOffset, ui);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -158,14 +161,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 case ReferencedProxyLayer _:
                     // print("tile layer");
-                    var referenceSprite = ((ReferencedProxyLayer)layer).Reference.LayerTypeSprite;
-                    return referenceSprite == null ? layerTypeSprites[0] : referenceSprite;
+                    var reference = ((ReferencedProxyLayer)layer).Reference;
+                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     // print("folder layer");
                     return layerTypeSprites[2];
-                case ObjectLayer _:
-                    // print("object layer");
-                    return layerTypeSprites[3];
                 case ObjectScatterLayer _:
                     // print("object scatter layer");
                     return layerTypeSprites[4];
@@ -179,6 +179,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
             }
+        }
+
+        private Sprite GetProxyLayerSprite(ReferencedLayer layer)
+        {
+            switch (layer)
+            {
+                case Tile3DLayer _:
+                    // print("Tile layer");
+                    return layerTypeSprites[1];
+                case HierarchicalObjectLayer _:
+                    // print("object layer");
+                    return layerTypeSprites[3];
+                default:
+                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    return layerTypeSprites[0];
+            }  
         }
 
         public void EnableContextMenu(bool enable, Vector2 position = default)
