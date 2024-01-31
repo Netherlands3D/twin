@@ -4,6 +4,10 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
+    /// <summary>
+    /// This class is used to listen to a Functionality and invoke events when it is enabled or disabled.
+    /// It is added during runtime by EnableComponentsByFunctionality, and should not be added to a GameObject manually.
+    /// </summary>
     public class FunctionalityListener : MonoBehaviour
     {
         [FormerlySerializedAs("feature")]
