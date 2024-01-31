@@ -16,6 +16,9 @@ namespace Netherlands3D.Twin
         private Functionality feature;
         private Toggle toggle;
         public Toggle Toggle { get => toggle; private set => toggle = value; }
+
+        private Button button;
+        public Button Button { get => button; private set => button = value; }
        
         public void Init(Functionality feature)
         {
@@ -26,6 +29,8 @@ namespace Netherlands3D.Twin
 
             Toggle = GetComponent<Toggle>();
             Toggle.isOn = this.feature.IsEnabled;
+
+            Button = GetComponentInChildren<Button>();
         }
     }
 }
