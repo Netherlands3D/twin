@@ -21,8 +21,6 @@ namespace Netherlands3D.Twin.UI
             text = GetComponentInChildren<TextMeshProUGUI>();
             outline = GetComponent<Outline>();
             image = GetComponent<Image>();
-
-            tabGroup.Subscribe(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

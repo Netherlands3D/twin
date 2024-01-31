@@ -37,6 +37,11 @@ namespace Netherlands3D.Twin.UI
             layoutGroup.padding.left = outlineWidth;
             layoutGroup.padding.right = outlineWidth;
             layoutGroup.spacing = outlineWidth + 1;
+
+            foreach (var tabButton in GetComponentsInChildren<TabButton>())
+            {
+                Subscribe(tabButton);
+            }
         }
 
         public void Subscribe(TabButton tabButton)
