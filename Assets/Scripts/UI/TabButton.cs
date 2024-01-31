@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.UI
         private Outline outline;
         private Image image;
 
-        private void Start()
+        private void Awake()
         {
             text = GetComponentInChildren<TextMeshProUGUI>();
             outline = GetComponent<Outline>();
