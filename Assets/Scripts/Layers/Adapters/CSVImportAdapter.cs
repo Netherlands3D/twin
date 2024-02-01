@@ -30,6 +30,16 @@ namespace Netherlands3D.Twin
                 return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
             }
         }
+
+        public IDColor() //needed for CSVHelper to work in a build
+        {
+        }
+        
+        public IDColor(string id, string hexColor)
+        {
+            Id = id;
+            HexColor = hexColor;
+        }
     }
 
 
@@ -42,14 +52,14 @@ namespace Netherlands3D.Twin
 
         public void ParseCSVFile(string file)
         {
-            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
+            if (activeDatasetLayer) //todo: temp fix to allow only 1 dataset layer
             {
                 activeDatasetLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
-                
+
                 Destroy(activeDatasetLayer.gameObject);
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
-            
+
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
@@ -61,7 +71,7 @@ namespace Netherlands3D.Twin
         {
             yield return null; //wait a frame for the created layer to be reparented and set up correctly to ensure the correct priority index
             var dictionaries = ReadCSVColors(path, maxParsesPerFrame).GetEnumerator();
-    
+
             while (dictionaries.MoveNext())
             {
                 var dictionary = dictionaries.Current;
@@ -80,30 +90,32 @@ namespace Netherlands3D.Twin
                 Delimiter = ";"
             };
 
-            var reader = new StreamReader(path);
-            using (var csv = new CsvReader(reader, config))
+            using (var reader = new StreamReader(path))
             {
-                var records = csv.GetRecords<IDColor>().GetEnumerator();
-                var dictionary = new Dictionary<string, Color>();
-
-                while (records.MoveNext())
+                using (var csv = new CsvReader(reader, config))
                 {
-                    var record = records.Current;
-                    dictionary[record.Id] = record.Color;
+                    var records = csv.GetRecords<IDColor>().GetEnumerator();
+                    var dictionary = new Dictionary<string, Color>();
 
-                    if (dictionary.Count >= maxParsesPerFrame)
+                    while (records.MoveNext())
+                    {
+                        var record = records.Current;
+                        dictionary[record.Id] = record.Color;
+
+                        if (dictionary.Count >= maxParsesPerFrame)
+                        {
+                            yield return dictionary;
+                            dictionary.Clear();
+                        }
+                    }
+
+                    //return the remaining elements of the part not divisible by maxParsesPerFrame 
+                    if (dictionary.Count > 0)
                     {
                         yield return dictionary;
-                        dictionary.Clear();
                     }
+                    // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
                 }
-
-                //return the remaining elements of the part not divisible by maxParsesPerFrame 
-                if (dictionary.Count > 0)
-                {
-                    yield return dictionary;
-                }
-                // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
             }
         }
     }
