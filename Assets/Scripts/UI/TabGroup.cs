@@ -29,6 +29,8 @@ namespace Netherlands3D.Twin.UI
         public TabGroupColors colors = new();
         public TabButton selectedTabButton;
 
+        private static int lastSelectedTabIndex = -1;
+
         private void Start()
         {
             var layoutGroup = GetComponent<HorizontalOrVerticalLayoutGroup>();
@@ -42,6 +44,20 @@ namespace Netherlands3D.Twin.UI
             {
                 Subscribe(tabButton);
             }
+
+            RestoreTab();
+        }
+        private void RestoreTab(){
+            if(lastSelectedTabIndex > -1){
+                var lastTab = tabButtons[lastSelectedTabIndex];
+
+                OnTabEnter(lastTab);
+                ActivateTab(lastTab);
+            }
+        }
+
+        private void OnDestroy() {
+            lastSelectedTabIndex = tabButtons.IndexOf(selectedTabButton);
         }
 
         public void Subscribe(TabButton tabButton)

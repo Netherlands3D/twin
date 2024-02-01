@@ -2,9 +2,10 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Features;
+using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Configuration
@@ -25,7 +26,10 @@ namespace Netherlands3D.Twin.Configuration
 
         [SerializeField] private GameObject featureList;
 
-        [Header("Prefab")] [SerializeField] private Toggle featureSelectionPrefab;
+        [Header("Prefab")] [SerializeField] private FunctionalitySelection featureSelectionPrefab;
+
+        [Header("Events")]
+        public UnityEvent OnSettingsChanged = new UnityEvent();
 
         private void Start()
         {
@@ -35,12 +39,13 @@ namespace Netherlands3D.Twin.Configuration
             originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onValueChanged.AddListener(OnOriginYChanged);
 
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
-                Toggle featureSelection = Instantiate(featureSelectionPrefab, featureList.transform);
-                featureSelection.isOn = availableFeature.IsEnabled;
-                featureSelection.onValueChanged.AddListener(value => OnFeatureChanged(availableFeature, value));
-                featureSelection.GetComponentInChildren<Text>().text = availableFeature.Caption;
+                FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
+                functionalitySelection.Init(availableFeature);
+
+                functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFunctionalityChanged(availableFeature, value));
+                functionalitySelection.Button.onClick.AddListener(() => OnFunctionalitySelected(availableFeature));
             }
         }
 
@@ -53,7 +58,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.AddListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.AddListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
                 availableFeature.OnEnable.AddListener(UpdateShareUrlWhenFeatureChanges);
                 availableFeature.OnDisable.AddListener(UpdateShareUrlWhenFeatureChanges);
@@ -78,7 +83,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.RemoveListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Features)
+            foreach (var availableFeature in configuration.Functionalities)
             {
                 availableFeature.OnEnable.RemoveListener(UpdateShareUrlWhenFeatureChanges);
                 availableFeature.OnDisable.RemoveListener(UpdateShareUrlWhenFeatureChanges);
@@ -127,21 +132,33 @@ namespace Netherlands3D.Twin.Configuration
             #endif
         }
 
-        private void OnFeatureChanged(Feature availableFeature, bool value)
+        private void OnFunctionalityChanged(Functionality availableFunctionality, bool value)
         {
-            availableFeature.IsEnabled = value;
+            availableFunctionality.IsEnabled = value;
+
+            OnSettingsChanged.Invoke();
+        }
+
+        private void OnFunctionalitySelected(Functionality functionality)
+        {
+            //TODO: Display information about the functionality
+            Debug.Log("Show information about " + functionality.Title);
         }
 
         private void OnOriginYChanged(string value)
         {
             int.TryParse(value, out int y);
             configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, 300);
+
+            OnSettingsChanged.Invoke();
         }
 
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
             configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], 300);
+
+            OnSettingsChanged.Invoke();
         }
     }
 }

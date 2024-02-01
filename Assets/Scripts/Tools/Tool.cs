@@ -26,11 +26,12 @@ namespace Netherlands3D.Twin
         [SerializeField] private GameObject inspectorPrefab;
 
         [Tooltip("GameObjects to spawn in the World when this tool is activated")]
-        [SerializeField] private GameObject[] featurePrefabs;
+        [FormerlySerializedAs("featurePrefabs")]
+        [SerializeField] private GameObject[] functionalityPrefabs;
 
         public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
-        public GameObject[] FeaturePrefabs { get => featurePrefabs; private set => featurePrefabs = value; }
-        private GameObject[] featureInstances;
+        public GameObject[] FunctionalityPrefabs { get => functionalityPrefabs; private set => functionalityPrefabs = value; }
+        private GameObject[] functionalityInstances;
 
         private bool open = false;
         private bool available = false;
@@ -73,12 +74,12 @@ namespace Netherlands3D.Twin
         {
             DestroyPrefabInstances();
 
-            featureInstances = new GameObject[featurePrefabs.Length];
-            for (int i = 0; i < featurePrefabs.Length; i++)
+            functionalityInstances = new GameObject[functionalityPrefabs.Length];
+            for (int i = 0; i < functionalityPrefabs.Length; i++)
             {
-                featureInstances[i] = Instantiate(featurePrefabs[i],parent,true);
+                functionalityInstances[i] = Instantiate(functionalityPrefabs[i],parent,true);
             }
-            return featureInstances;
+            return functionalityInstances;
         }
         
         /// <summary>
@@ -86,14 +87,14 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void DestroyPrefabInstances()
         {
-            if (featureInstances != null)
+            if (functionalityInstances != null)
             {
-                foreach (var instance in featureInstances)
+                foreach (var instance in functionalityInstances)
                 {
                     Destroy(instance);
                 }
             }
-            featureInstances = null;
+            functionalityInstances = null;
         }
 
         /// <summary>

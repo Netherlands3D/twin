@@ -369,8 +369,8 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.twin-features": {
-      "version": "file:eu.netherlands3d.twin-features",
+    "eu.netherlands3d.twin-functionalities": {
+      "version": "file:eu.netherlands3d.twin-functionalities",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
