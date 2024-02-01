@@ -15,25 +15,20 @@
 *  implied. See the License for the specific language governing
 *  permissions and limitations under the License.
 */
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
-
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
 	public class UI_BagInspector : MonoBehaviour
 	{
+		private const int COLORIZER_PRIORITY = 0;
 
 		[Tooltip("Id replacement string will be replaced")]
 
@@ -63,17 +58,32 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text districtText;
 		[SerializeField] private TMP_Text buildYearText;
 		[SerializeField] private TMP_Text statusText;
+		
+		[SerializeField] private GameObject placeholderPanel;
+		[SerializeField] private GameObject contentPanel;
+		
+		private Camera mainCamera;
+		private CameraInputSystemProvider cameraInputSystemProvider;
 
-		private void Awake() {
+		private void Awake() 
+		{
+			mainCamera = Camera.main;
+			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+
 			addressTemplate.gameObject.SetActive(false);
+			contentPanel.SetActive(false);
+			placeholderPanel.SetActive(true);
 		}
+		
 		private void Update()
         {
             //Listen to Pointer.current click and check what object raycast has clicked
             var click = Pointer.current.press.wasReleasedThisFrame;
-
             if (!click) return;
 
+            // UI should block this
+            if (cameraInputSystemProvider.OverLockingObject) return;
+            
             FindObjectMapping();
         }
 
@@ -82,38 +92,60 @@ namespace Netherlands3D.Twin.Interface.BAG
 		/// </summary>
 		private void FindObjectMapping()
 		{
-			//Raycast from pointer position using main camera
+			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
-			var ray = Camera.main.ScreenPointToRay(position);
-			if (Physics.Raycast(ray, out RaycastHit hit, 100000f))
+			var ray = mainCamera.ScreenPointToRay(position);
+			if (!Physics.Raycast(ray, out RaycastHit hit, 100000f)) return;
+			
+			var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
+			if (!objectMapping)
 			{
-				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-				if (objectMapping != null)
-				{
-					var hitIndex = hit.triangleIndex;
-					lastWorldClickedPosition = hit.point;
-
-					var id = objectMapping.getObjectID(hitIndex);
-					var objectIdAndColor = new Dictionary<string, Color>
-					{
-						{ id, new Color(1, 0, 0, 0) }
-					};
-
-					if (selectionlayerExists)
-						GeometryColorizer.RemoveCustomColorSet(0);
-
-					selectionlayerExists = true;
-					GeometryColorizer.InsertCustomColorSet(0, objectIdAndColor);
-
-					GetBAGID(id);
-				}
+				DeselectBuilding();
+				return;
 			}
+
+			lastWorldClickedPosition = hit.point;
+			SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
+		}
+
+		private void SelectBuildingOnHit(string bagId)
+		{
+			if (selectionlayerExists)
+			{
+				DeselectBuilding();
+			}
+
+			contentPanel.SetActive(true);
+			placeholderPanel.SetActive(false);
+			selectionlayerExists = true;
+
+			GeometryColorizer.InsertCustomColorSet(
+				COLORIZER_PRIORITY, 
+				new Dictionary<string, Color>
+				{
+					{ bagId, new Color(1, 0, 0, 0) }
+				}
+			);
+
+			GetBAGID(bagId);
+		}
+
+		private void DeselectBuilding()
+		{
+			contentPanel.SetActive(false);
+			placeholderPanel.SetActive(true);
+
+			if (selectionlayerExists)
+			{
+				GeometryColorizer.RemoveCustomColorSet(COLORIZER_PRIORITY);
+			}
+
+			selectionlayerExists = false;
 		}
 
 		private void OnDestroy()
 		{
-			if (selectionlayerExists)
-				GeometryColorizer.RemoveCustomColorSet(0);
+			DeselectBuilding();
 		}
 
 		public void GetBAGID(string bagID)
