@@ -27,7 +27,7 @@ namespace Netherlands3D.SubObjects
     public static class GeometryColorizer
     {
         public static Dictionary<string, Color> PrioritizedColors { get; private set; } = new();
-        private static List<ColorSetLayer> customColors = new();
+        public static List<ColorSetLayer> customColors = new();
 
         public static UnityEvent<Dictionary<string, Color>> ColorsChanged = new();
 
@@ -62,10 +62,10 @@ namespace Netherlands3D.SubObjects
             RecalculatePrioritizedColors();
         }
 
-        public static void InsertCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
+        public static ColorSetLayer InsertCustomColorSet(int priorityIndex, Dictionary<string, Color> colorSet)
         {
             IncrementPriorityIndices(priorityIndex);
-            AddAndMergeCustomColorSet(priorityIndex, colorSet);
+            return AddAndMergeCustomColorSet(priorityIndex, colorSet);
         }
 
         private static void IncrementPriorityIndices(int fromPriorityIndex)
@@ -114,28 +114,13 @@ namespace Netherlands3D.SubObjects
                     changedColors.Add(key, PrioritizedColors[key]);
             }
 
-            Interaction.ApplyColorsToAll(PrioritizedColors);
             ColorsChanged.Invoke(changedColors);
-        }
-
-        public static void RemoveCustomColorSet(int layerIndex)
-        {
-            var colorSetLayer = customColors[layerIndex];
-
-            var changedColors = new Dictionary<string, Color>(colorSetLayer.ColorSet);
-            customColors.RemoveAt(layerIndex);
-            RecalculatePrioritizedColors();
-
-            Interaction.ApplyColorsToAll(PrioritizedColors);
         }
         
         public static void RemoveCustomColorSet(ColorSetLayer colorSetLayer)
         {
-            var changedColors = new Dictionary<string, Color>(colorSetLayer.ColorSet);
             customColors.Remove(colorSetLayer);
             RecalculatePrioritizedColors();
-
-            Interaction.ApplyColorsToAll(PrioritizedColors);
         }
 
         private static void ReorderColorMaps()
@@ -166,6 +151,7 @@ namespace Netherlands3D.SubObjects
                     PrioritizedColors[kvp.Key] = kvp.Value;
                 }
             }
+            Interaction.ApplyColorsToAll(PrioritizedColors);
         }
     }
 }

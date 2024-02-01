@@ -5,6 +5,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.0]
+
+### Added/Removed
+
+- Removed function to delete ColorSetLayer by list index. this was confusing since it was not deleting by priorityIndex. Pass the colorset instead to remove a ColorSetLayer.
+- Added return type to InsertColorSetLayer.
+- Made list of custom colors public
+
+### Fixed
+
+- Colors are now applied after recalculating the priorities.
+
 ## [1.2.1]
 
 ### Fixed
