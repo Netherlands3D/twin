@@ -13,6 +13,16 @@ using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
+    
+    public class IDColorMap : ClassMap<IDColor>
+    {
+        public IDColorMap()
+        {
+            Map(m => m.Id).Name("id");
+            Map(m => m.HexColor).Name("hexcolor");
+        }
+    }
+    
     public class IDColor
     {
         [Index(0)] public string Id { get; set; }
@@ -86,10 +96,12 @@ namespace Netherlands3D.Twin
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
-                HasHeaderRecord = false,
+                // HasHeaderRecord = false,
                 Delimiter = ";"
             };
 
+            IDColorMap valuesMap = new IDColorMap();
+            config.RegisterClassMap(valuesMap);
             using (var reader = new StreamReader(path))
             {
                 using (var csv = new CsvReader(reader, config))
