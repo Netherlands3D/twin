@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class DatasetLayer : LayerNL3DBase
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-        
+
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             ColorSetLayer.Enabled = activeInHierarchy;
@@ -40,6 +40,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             get { return transform.GetSiblingIndex(); }
             set { transform.SetSiblingIndex(value); }
+        }
+
+        protected override void OnTransformParentChanged()
+        {
+            base.OnTransformParentChanged();
+            var hierarchyList = LayerData.Instance.transform.GetComponentsInChildren<LayerNL3DBase>();
+            for (var i = 0; i < hierarchyList.Length; i++)
+            {
+                var layer = hierarchyList[i];
+                if (layer is DatasetLayer)
+                {
+                    var datasetLayer = (DatasetLayer)layer;
+                    datasetLayer.ColorSetLayer.PriorityIndex = i;
+                }
+            }
+            GeometryColorizer.RecalculatePrioritizedColors();
         }
     }
 }
