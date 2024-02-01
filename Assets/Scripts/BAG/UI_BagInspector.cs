@@ -110,8 +110,13 @@ namespace Netherlands3D.Twin.Interface.BAG
 			}
 		}
 
+		private void OnDestroy()
+		{
+			if (selectionlayerExists)
+				GeometryColorizer.RemoveCustomColorSet(0);
+		}
 
-        public void GetBAGID(string bagID)
+		public void GetBAGID(string bagID)
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
 		}
