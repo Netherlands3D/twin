@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Configuration
@@ -24,9 +25,11 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private TMP_InputField originYField;
         [SerializeField] private TMP_InputField shareUrlField;
 
-        [SerializeField] private GameObject featureList;
+        [FormerlySerializedAs("featureList")]
+        [SerializeField] private GameObject functionalitiesList;
 
-        [Header("Prefab")] [SerializeField] private FunctionalitySelection featureSelectionPrefab;
+        [FormerlySerializedAs("featureSelectionPrefab")]
+        [Header("Prefab")] [SerializeField] private FunctionalitySelection functionalitySelectionPrefab;
 
         [Header("Events")]
         public UnityEvent OnSettingsChanged = new UnityEvent();
@@ -39,13 +42,13 @@ namespace Netherlands3D.Twin.Configuration
             originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onValueChanged.AddListener(OnOriginYChanged);
 
-            foreach (var availableFeature in configuration.Functionalities)
+            foreach (var availableFunctionality in configuration.Functionalities)
             {
-                FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
-                functionalitySelection.Init(availableFeature);
+                FunctionalitySelection functionalitySelection = Instantiate(functionalitySelectionPrefab, functionalitiesList.transform);
+                functionalitySelection.Init(availableFunctionality);
 
-                functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFunctionalityChanged(availableFeature, value));
-                functionalitySelection.Button.onClick.AddListener(() => OnFunctionalitySelected(availableFeature));
+                functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFunctionalityChanged(availableFunctionality, value));
+                functionalitySelection.Button.onClick.AddListener(() => OnFunctionalitySelected(availableFunctionality));
             }
         }
 
@@ -58,10 +61,10 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.AddListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.AddListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Functionalities)
+            foreach (var availableFunctionality in configuration.Functionalities)
             {
-                availableFeature.OnEnable.AddListener(UpdateShareUrlWhenFeatureChanges);
-                availableFeature.OnDisable.AddListener(UpdateShareUrlWhenFeatureChanges);
+                availableFunctionality.OnEnable.AddListener(UpdateShareUrlWhenFunctionalityChanges);
+                availableFunctionality.OnDisable.AddListener(UpdateShareUrlWhenFunctionalityChanges);
             }
         }
 
@@ -83,10 +86,10 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinates);
             configuration.OnOriginChanged.RemoveListener(UpdateShareUrlWhenOriginChanges);
             configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
-            foreach (var availableFeature in configuration.Functionalities)
+            foreach (var availableFunctionality in configuration.Functionalities)
             {
-                availableFeature.OnEnable.RemoveListener(UpdateShareUrlWhenFeatureChanges);
-                availableFeature.OnDisable.RemoveListener(UpdateShareUrlWhenFeatureChanges);
+                availableFunctionality.OnEnable.RemoveListener(UpdateShareUrlWhenFunctionalityChanges);
+                availableFunctionality.OnDisable.RemoveListener(UpdateShareUrlWhenFunctionalityChanges);
             }
         }
 
@@ -109,7 +112,7 @@ namespace Netherlands3D.Twin.Configuration
             configuration.Origin = coordinate;
         }
 
-        private void UpdateShareUrlWhenFeatureChanges()
+        private void UpdateShareUrlWhenFunctionalityChanges()
         {
             UpdateShareUrl();
         }
@@ -142,7 +145,6 @@ namespace Netherlands3D.Twin.Configuration
         private void OnFunctionalitySelected(Functionality functionality)
         {
             //TODO: Display information about the functionality
-            Debug.Log("Show information about " + functionality.Title);
         }
 
         private void OnOriginYChanged(string value)
