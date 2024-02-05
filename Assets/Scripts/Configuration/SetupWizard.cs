@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Configuration
@@ -26,7 +27,8 @@ namespace Netherlands3D.Twin.Configuration
 
         [SerializeField] private GameObject featureList;
 
-        [Header("Prefab")] [SerializeField] private FunctionalitySelection featureSelectionPrefab;
+        [FormerlySerializedAs("featureSelectionPrefab")]
+        [Header("Prefab")] [SerializeField] private FunctionalitySelection functionalitySelectionPrefab;
 
         [Header("Events")]
         public UnityEvent OnSettingsChanged = new UnityEvent();
@@ -41,7 +43,7 @@ namespace Netherlands3D.Twin.Configuration
 
             foreach (var availableFeature in configuration.Functionalities)
             {
-                FunctionalitySelection functionalitySelection = Instantiate(featureSelectionPrefab, featureList.transform);
+                FunctionalitySelection functionalitySelection = Instantiate(functionalitySelectionPrefab, featureList.transform);
                 functionalitySelection.Init(availableFeature);
 
                 functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFunctionalityChanged(availableFeature, value));
