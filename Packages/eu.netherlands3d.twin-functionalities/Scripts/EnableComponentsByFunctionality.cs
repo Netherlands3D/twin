@@ -24,58 +24,53 @@ namespace Netherlands3D.Twin.Functionalities
         private void Awake()
         {
             gameObject.SetActive(false);
-            try
+
+            foreach (var functionalityLink in FunctionalityLinks)
             {
-                foreach (var functionalityLink in FunctionalityLinks)
-                {
-                    AddFeatureListenerForLink(functionalityLink);
-                }
+                AddFunctionalityListenerForLink(functionalityLink);
             }
-            finally
-            {
-                gameObject.SetActive(true);
-            }
+
+            gameObject.SetActive(true);
         }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            foreach (var featureLink in FunctionalityLinks)
+            foreach (var functionalityLink in FunctionalityLinks)
             {
-                var linkFeature = featureLink.functionality != null ? featureLink.functionality : null;
-                featureLink.name = linkFeature?.Caption + " -> ";
+                var linkFunctionality = functionalityLink.functionality != null ? functionalityLink.functionality : null;
+                functionalityLink.name = linkFunctionality?.Caption + " -> ";
 
-                int listenerCount = featureLink.onFunctionalityToggle?.GetPersistentEventCount() ?? 0;
+                int listenerCount = functionalityLink.onFunctionalityToggle?.GetPersistentEventCount() ?? 0;
                 
                 if (listenerCount == 1)
                 {
-                    var type = featureLink.onFunctionalityToggle.GetPersistentTarget(0).ToString().Replace("(UnityEngine.", "(");
-                    var methodName = featureLink.onFunctionalityToggle.GetPersistentMethodName(0);
-                    featureLink.name +=  type + " -> " + methodName;
+                    var type = functionalityLink.onFunctionalityToggle.GetPersistentTarget(0).ToString().Replace("(UnityEngine.", "(");
+                    var methodName = functionalityLink.onFunctionalityToggle.GetPersistentMethodName(0);
+                    functionalityLink.name +=  type + " -> " + methodName;
                 }
                 else if (listenerCount > 1)
                 {
-                    featureLink.name += " (" + listenerCount + ")";
+                    functionalityLink.name += " (" + listenerCount + ")";
                 }
                 else{
-                    featureLink.name += " No listeners";
+                    functionalityLink.name += " No listeners";
                 }
             }
         }
 #endif
 
-
-        private void AddFeatureListenerForLink(FunctionalityLink featureLink)
+        private void AddFunctionalityListenerForLink(FunctionalityLink functionalityLink)
         {
             FunctionalityListener listener = gameObject.AddComponent<FunctionalityListener>();
-            listener.functionality = featureLink.functionality;
-            listener.OnEnableFeature.AddListener((Functionality feature) =>
+            listener.functionality = functionalityLink.functionality;
+            listener.OnEnableFunctionality.AddListener((Functionality functionality) =>
             {
-                featureLink.onFunctionalityToggle?.Invoke(true);
+                functionalityLink.onFunctionalityToggle?.Invoke(true);
             });
-            listener.OnDisableFeature.AddListener((Functionality feature) =>
+            listener.OnDisableFunctionality.AddListener((Functionality functionality) =>
             {
-                featureLink.onFunctionalityToggle?.Invoke(false);
+                functionalityLink.onFunctionalityToggle?.Invoke(false);
             });
         }
     }

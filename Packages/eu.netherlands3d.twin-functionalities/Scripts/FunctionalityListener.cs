@@ -13,12 +13,12 @@ namespace Netherlands3D.Twin.Functionalities
         [FormerlySerializedAs("feature")]
         public Functionality functionality;
 
-        [HideInInspector] public UnityEvent<Functionality> OnEnableFeature = new ();
-        [HideInInspector] public UnityEvent<Functionality> OnDisableFeature = new ();
+        [HideInInspector] public UnityEvent<Functionality> OnEnableFunctionality = new ();
+        [HideInInspector] public UnityEvent<Functionality> OnDisableFunctionality = new ();
 
         private void Awake() {
-            functionality.OnEnable.AddListener(EnableFeature);
-            functionality.OnDisable.AddListener(DisableFeature);
+            functionality.OnEnable.AddListener(EnableFunctionality);
+            functionality.OnDisable.AddListener(DisableFunctionality);
         }
 
         private void OnValidate() {
@@ -31,28 +31,28 @@ namespace Netherlands3D.Twin.Functionalities
         {
             if (functionality.IsEnabled)
             {
-                EnableFeature();
+                EnableFunctionality();
             }
             else
             {
-                DisableFeature();
+                DisableFunctionality();
             } 
         }
 
-        private void EnableFeature()
+        private void EnableFunctionality()
         {
-            OnEnableFeature.Invoke(functionality);
+            OnEnableFunctionality.Invoke(functionality);
         }
 
-        private void DisableFeature()
+        private void DisableFunctionality()
         {
-            OnDisableFeature.Invoke(functionality);
+            OnDisableFunctionality.Invoke(functionality);
         }
 
         private void OnDestroy()
         {
-            functionality.OnEnable.RemoveListener(EnableFeature);
-            functionality.OnDisable.RemoveListener(DisableFeature);
+            functionality.OnEnable.RemoveListener(EnableFunctionality);
+            functionality.OnDisable.RemoveListener(DisableFunctionality);
         }
     }
 }
