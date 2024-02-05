@@ -145,7 +145,6 @@ namespace Netherlands3D.Twin.Configuration
         private void OnFunctionalitySelected(Functionality functionality)
         {
             //TODO: Display information about the functionality
-            Debug.Log("Show information about " + functionality.Title);
         }
 
         private void OnOriginYChanged(string value)
