@@ -107,6 +107,8 @@ namespace Netherlands3D.Twin
                 {
                     var dictionary = new Dictionary<string, Color>();
                     // var records = csv.GetRecords<IDColor>().GetEnumerator();
+                    csv.Read();
+                    csv.ReadHeader();
                     while (csv.Read())
                     {
                         var id = csv.GetField<string>("Id");
