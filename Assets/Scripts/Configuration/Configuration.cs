@@ -103,15 +103,15 @@ namespace Netherlands3D.Twin.Configuration
                 LoadOriginFromString(originFromQueryString);
             }
 
-            var featuresFromQueryString = queryParameters.Get("features");
-            if (featuresFromQueryString != null)
+            var functionalitiesFromQueryString = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
+            if (functionalitiesFromQueryString != null)
             {
-                LoadFeaturesFromString(featuresFromQueryString);
+                LoadFunctionalitiesFromString(functionalitiesFromQueryString);
             }
 
-            foreach (var feature in Functionalities)
+            foreach (var functionality in Functionalities)
             {
-                var config = feature.configuration as IConfiguration;
+                var config = functionality.configuration as IConfiguration;
                 config?.Populate(queryParameters);
             }
         }
@@ -126,16 +126,15 @@ namespace Netherlands3D.Twin.Configuration
 
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
-            var enabledFeatures = Functionalities.Where(feature => feature.IsEnabled).Select(feature => feature.Id);
+            var enabledfunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
 
             urlBuilder.AddQueryParameter("origin", $"{(int)Origin.Points[0]},{(int)origin.Points[1]},{(int)origin.Points[2]}");
-            urlBuilder.AddQueryParameter("features", string.Join(',', enabledFeatures.ToArray()));
-            foreach (var feature in Functionalities)
+            urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledfunctionalities.ToArray()));
+            foreach (var functionality in Functionalities)
             {
-                var featureConfiguration = feature.configuration as IConfiguration;
-                if (featureConfiguration == null) continue;
+                if (functionality.configuration is not IConfiguration functionalityConfiguration) continue;
 
-                featureConfiguration.AddQueryParameters(urlBuilder);
+                functionalityConfiguration.AddQueryParameters(urlBuilder);
             }
         }
 
@@ -154,13 +153,13 @@ namespace Netherlands3D.Twin.Configuration
             );
             Debug.Log($"Set origin '{Origin}' from Configuration file");
 
-            foreach (var element in jsonNode["features"])
+            foreach (var element in jsonNode["functionalities"])
             {
-                var feature = Functionalities.FirstOrDefault(feature => feature.Id == element.Key);
-                if (!feature) continue;
+                var functionality = Functionalities.FirstOrDefault(functionality => functionality.Id == element.Key);
+                if (!functionality) continue;
 
-                feature.Populate(element.Value);
-                if (feature.IsEnabled) Debug.Log($"Enabled feature '{feature.Id}' from Configuration file");
+                functionality.Populate(element.Value);
+                if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from Configuration file");
             }
         }
 
@@ -176,12 +175,12 @@ namespace Netherlands3D.Twin.Configuration
                     ["y"] = origin.Points[1],
                     ["z"] = origin.Points[2],
                 },
-                ["features"] = new JSONObject()
+                ["functionalities"] = new JSONObject()
             };
 
-            foreach (var feature in Functionalities)
+            foreach (var functionality in Functionalities)
             {
-                result["features"][feature.Id] = feature.ToJsonNode();
+                result["functionalities"][functionality.Id] = functionality.ToJsonNode();
             }
 
             return result;
@@ -190,9 +189,9 @@ namespace Netherlands3D.Twin.Configuration
         private bool UrlContainsConfiguration(NameValueCollection queryParameters) 
         {
             string origin = queryParameters.Get("origin");
-            string features = queryParameters.Get("features");
+            string functionalities = queryParameters.Get("functionalities");
             
-            return origin != null && features != null;
+            return origin != null && functionalities != null;
         }
 
         private void LoadOriginFromString(string origin)
@@ -206,13 +205,13 @@ namespace Netherlands3D.Twin.Configuration
             Debug.Log($"Set origin '{Origin}' from URL");
         }
 
-        private void LoadFeaturesFromString(string features)
+        private void LoadFunctionalitiesFromString(string functionalities)
         {
-            var featureIdentifiers = features.ToLower().Split(',');
-            foreach (var feature in Functionalities)
+            var functionalityIdentifiers = functionalities.ToLower().Split(',');
+            foreach (var functionality in Functionalities)
             {
-                feature.IsEnabled = featureIdentifiers.Contains(feature.Id);
-                if (feature.IsEnabled) Debug.Log($"Enabled feature '{feature.Id}' from URL");
+                functionality.IsEnabled = functionalityIdentifiers.Contains(functionality.Id);
+                if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from URL");
             }
         }
     }
