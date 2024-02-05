@@ -13,45 +13,6 @@ using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
-    // public class IDColorMap : ClassMap<IDColor>
-    // {
-    //     public IDColorMap()
-    //     {
-    //         Map(m => m.Id).Name("id");
-    //         Map(m => m.HexColor).Name("hexcolor");
-    //     }
-    // }
-
-    public class IDColor
-    {
-        public string Id { get; set; }
-        public string HexColor { get; set; }
-
-        public Color Color
-        {
-            get
-            {
-                var hex = HexColor;
-                if (!hex.StartsWith("#"))
-                    hex = "#" + hex;
-
-                var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-                return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
-            }
-        }
-
-        // public IDColor() //needed for CSVHelper to work in a build
-        // {
-        // }
-        //
-        // public IDColor(string id, string hexColor)
-        // {
-        //     Id = id;
-        //     HexColor = hexColor;
-        // }
-    }
-
-
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
     public class CSVImportAdapter : ScriptableObject
     {
@@ -99,17 +60,12 @@ namespace Netherlands3D.Twin
                 Delimiter = ";"
             };
 
-            // IDColorMap valuesMap = new IDColorMap();
-            // config.RegisterClassMap(valuesMap);
             using (var reader = new StreamReader(path))
             {
                 using (var csv = new CsvReader(reader, config))
                 {
                     var dictionary = new Dictionary<string, Color>();
-                    var list = new List<IDColor>();
                     
-                    // var records = csv.GetRecords<IDColor>().GetEnumerator();
-                    Debug.Log("reading header");
                     csv.Read();
                     csv.ReadHeader();
                     while (csv.Read())
@@ -117,16 +73,9 @@ namespace Netherlands3D.Twin
                         var id = csv.GetField<string>("Id");
                         var hexColor = csv.GetField<string>("HexColor");
                         dictionary[id] = ParseHexColor(hexColor);
-                        var item = new IDColor
-                        {
-                            Id = id,
-                            HexColor = hexColor
-                        };
                         
-                        list.Add(item);
                         if (dictionary.Count <= maxParsesPerFrame)
                         {
-                            Debug.Log("listcount: " + list.Count);
                             yield return dictionary;
                             dictionary.Clear();
                         }
@@ -138,19 +87,6 @@ namespace Netherlands3D.Twin
                         }
                         // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
                     }
-
-                    // while (records.MoveNext())
-                    // {
-                    //     var record = records.Current;
-                    //     dictionary[record.Id] = record.Color;
-                    //
-                    //     if (dictionary.Count >= maxParsesPerFrame)
-                    //     {
-                    //         yield return dictionary;
-                    //         dictionary.Clear();
-                    //     }
-                    // }
-
                 }
             }
         }
