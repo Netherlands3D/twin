@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Windows.Forms;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
@@ -106,6 +107,8 @@ namespace Netherlands3D.Twin
                 using (var csv = new CsvReader(reader, config))
                 {
                     var dictionary = new Dictionary<string, Color>();
+                    var list = new List<IDColor>();
+                    
                     // var records = csv.GetRecords<IDColor>().GetEnumerator();
                     csv.Read();
                     csv.ReadHeader();
@@ -114,8 +117,16 @@ namespace Netherlands3D.Twin
                         var id = csv.GetField<string>("Id");
                         var hexColor = csv.GetField<string>("HexColor");
                         dictionary[id] = ParseHexColor(hexColor);
+                        var item = new IDColor
+                        {
+                            Id = id,
+                            HexColor = hexColor
+                        };
+                        
+                        list.Add(item);
                         if (dictionary.Count <= maxParsesPerFrame)
                         {
+                            Debug.Log("listcount: " + list.Count);
                             yield return dictionary;
                             dictionary.Clear();
                         }
