@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    [ExecuteInEditMode]
     public class MinMaxWidth : MonoBehaviour
     {
         [SerializeField] float minWidth = 800.0f;
