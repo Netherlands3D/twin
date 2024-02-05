@@ -27,4 +27,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  maxParsesPerFrame: 100
+  maxParsesPerFrame: 1000
