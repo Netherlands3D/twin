@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Windows.Forms;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
@@ -95,7 +96,7 @@ namespace Netherlands3D.Twin
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
-                // HasHeaderRecord = false,
+                HasHeaderRecord = true,
                 Delimiter = ";"
             };
 
@@ -109,6 +110,7 @@ namespace Netherlands3D.Twin
                     var list = new List<IDColor>();
                     
                     // var records = csv.GetRecords<IDColor>().GetEnumerator();
+                    Debug.Log("reading header");
                     csv.Read();
                     csv.ReadHeader();
                     while (csv.Read())
