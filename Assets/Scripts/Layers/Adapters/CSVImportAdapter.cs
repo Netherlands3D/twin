@@ -13,7 +13,6 @@ using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
-    
     // public class IDColorMap : ClassMap<IDColor>
     // {
     //     public IDColorMap()
@@ -22,7 +21,7 @@ namespace Netherlands3D.Twin
     //         Map(m => m.HexColor).Name("hexcolor");
     //     }
     // }
-    
+
     public class IDColor
     {
         public string Id { get; set; }
@@ -106,29 +105,50 @@ namespace Netherlands3D.Twin
             {
                 using (var csv = new CsvReader(reader, config))
                 {
-                    var records = csv.GetRecords<IDColor>().GetEnumerator();
                     var dictionary = new Dictionary<string, Color>();
-
-                    while (records.MoveNext())
+                    // var records = csv.GetRecords<IDColor>().GetEnumerator();
+                    while (csv.Read())
                     {
-                        var record = records.Current;
-                        dictionary[record.Id] = record.Color;
-
-                        if (dictionary.Count >= maxParsesPerFrame)
+                        var id = csv.GetField<string>("Id");
+                        var hexColor = csv.GetField<string>("HexColor");
+                        dictionary[id] = ParseHexColor(hexColor);
+                        if (dictionary.Count <= maxParsesPerFrame)
                         {
                             yield return dictionary;
                             dictionary.Clear();
                         }
+                        
+                        //return the remaining elements of the part not divisible by maxParsesPerFrame 
+                        if (dictionary.Count > 0)
+                        {
+                            yield return dictionary;
+                        }
+                        // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
                     }
 
-                    //return the remaining elements of the part not divisible by maxParsesPerFrame 
-                    if (dictionary.Count > 0)
-                    {
-                        yield return dictionary;
-                    }
-                    // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
+                    // while (records.MoveNext())
+                    // {
+                    //     var record = records.Current;
+                    //     dictionary[record.Id] = record.Color;
+                    //
+                    //     if (dictionary.Count >= maxParsesPerFrame)
+                    //     {
+                    //         yield return dictionary;
+                    //         dictionary.Clear();
+                    //     }
+                    // }
+
                 }
             }
+        }
+
+        public static Color ParseHexColor(string hex)
+        {
+            if (!hex.StartsWith("#"))
+                hex = "#" + hex;
+
+            var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
+            return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
         }
     }
 }
