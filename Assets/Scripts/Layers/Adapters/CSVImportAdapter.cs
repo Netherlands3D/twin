@@ -25,8 +25,8 @@ namespace Netherlands3D.Twin
     
     public class IDColor
     {
-        [Index(0)] public string Id { get; set; }
-        [Index(1)] public string HexColor { get; set; }
+        public string Id { get; set; }
+        public string HexColor { get; set; }
 
         public Color Color
         {
@@ -41,15 +41,15 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public IDColor() //needed for CSVHelper to work in a build
-        {
-        }
-        
-        public IDColor(string id, string hexColor)
-        {
-            Id = id;
-            HexColor = hexColor;
-        }
+        // public IDColor() //needed for CSVHelper to work in a build
+        // {
+        // }
+        //
+        // public IDColor(string id, string hexColor)
+        // {
+        //     Id = id;
+        //     HexColor = hexColor;
+        // }
     }
 
 
