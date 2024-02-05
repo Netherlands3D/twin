@@ -37,6 +37,7 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             foreach (var featureLink in FunctionalityLinks)
@@ -61,6 +62,7 @@ namespace Netherlands3D.Twin.Functionalities
                 }
             }
         }
+#endif
 
 
         private void AddFeatureListenerForLink(FunctionalityLink featureLink)
