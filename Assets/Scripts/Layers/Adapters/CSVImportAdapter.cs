@@ -14,14 +14,14 @@ using Application = UnityEngine.Application;
 namespace Netherlands3D.Twin
 {
     
-    public class IDColorMap : ClassMap<IDColor>
-    {
-        public IDColorMap()
-        {
-            Map(m => m.Id).Name("id");
-            Map(m => m.HexColor).Name("hexcolor");
-        }
-    }
+    // public class IDColorMap : ClassMap<IDColor>
+    // {
+    //     public IDColorMap()
+    //     {
+    //         Map(m => m.Id).Name("id");
+    //         Map(m => m.HexColor).Name("hexcolor");
+    //     }
+    // }
     
     public class IDColor
     {
@@ -100,8 +100,8 @@ namespace Netherlands3D.Twin
                 Delimiter = ";"
             };
 
-            IDColorMap valuesMap = new IDColorMap();
-            config.RegisterClassMap(valuesMap);
+            // IDColorMap valuesMap = new IDColorMap();
+            // config.RegisterClassMap(valuesMap);
             using (var reader = new StreamReader(path))
             {
                 using (var csv = new CsvReader(reader, config))
