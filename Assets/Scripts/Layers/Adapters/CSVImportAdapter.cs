@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin
                 yield return null;
             }
         }
-
+        
         private IEnumerable<Dictionary<string, Color>> ReadCSVColors(string path, int maxParsesPerFrame)
         {
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin
                 using (var csv = new CsvReader(reader, config))
                 {
                     var dictionary = new Dictionary<string, Color>();
-                    
+
                     csv.Read();
                     csv.ReadHeader();
                     while (csv.Read())
@@ -73,20 +73,20 @@ namespace Netherlands3D.Twin
                         var id = csv.GetField<string>("Id");
                         var hexColor = csv.GetField<string>("HexColor");
                         dictionary[id] = ParseHexColor(hexColor);
-                        
-                        if (dictionary.Count <= maxParsesPerFrame)
+
+                        if (dictionary.Count >= maxParsesPerFrame)
                         {
                             yield return dictionary;
                             dictionary.Clear();
                         }
-                        
-                        //return the remaining elements of the part not divisible by maxParsesPerFrame 
-                        if (dictionary.Count > 0)
-                        {
-                            yield return dictionary;
-                        }
-                        // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
                     }
+
+                    //return the remaining elements of the part not divisible by maxParsesPerFrame 
+                    if (dictionary.Count > 0)
+                    {
+                        yield return dictionary;
+                    }
+                    // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
                 }
             }
         }
