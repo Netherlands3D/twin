@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin
                     csv.ReadHeader();
                     while (csv.Read())
                     {
-                        var id = csv.GetField<string>("Id");
+                        var id = csv.GetField<string>("BagId");
                         var hexColor = csv.GetField<string>("HexColor");
                         dictionary[id] = ParseHexColor(hexColor);
 
