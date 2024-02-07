@@ -284,7 +284,7 @@
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
     "eu.netherlands3d.minimap": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -363,7 +363,7 @@
       "dependencies": {}
     },
     "eu.netherlands3d.transform-handles": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
