@@ -29,11 +29,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
         }
 
-        public void SetColorSetLayer(ColorSetLayer newColorSetLayer)
+        public void SetColorSetLayer(ColorSetLayer newColorSetLayer, bool updateColors = true)
         {
             // bool active = newColorSetLayer.Enabled;
             ColorSetLayer = newColorSetLayer;
-            GeometryColorizer.RecalculatePrioritizedColors();
+            if (updateColors)
+                GeometryColorizer.RecalculatePrioritizedColors();
         }
 
         public int PriorityIndex
@@ -55,6 +56,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     datasetLayer.ColorSetLayer.PriorityIndex = i;
                 }
             }
+
             GeometryColorizer.RecalculatePrioritizedColors();
         }
     }

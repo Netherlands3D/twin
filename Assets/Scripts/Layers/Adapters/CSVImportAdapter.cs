@@ -17,6 +17,7 @@ namespace Netherlands3D.Twin
     public class CSVImportAdapter : ScriptableObject
     {
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
+        [SerializeField] private UnityEvent<float> progressEvent = new();
         public int maxParsesPerFrame = 100;
         private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
@@ -40,53 +41,46 @@ namespace Netherlands3D.Twin
         private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
         {
             yield return null; //wait a frame for the created layer to be reparented and set up correctly to ensure the correct priority index
-            var dictionaries = ReadCSVColors(path, maxParsesPerFrame).GetEnumerator();
-
-            while (dictionaries.MoveNext())
-            {
-                var dictionary = dictionaries.Current;
-                var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
-                layer.SetColorSetLayer(cl);
-
-                yield return null;
-            }
-        }
-        
-        private IEnumerable<Dictionary<string, Color>> ReadCSVColors(string path, int maxParsesPerFrame)
-        {
+            
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 HasHeaderRecord = true,
                 Delimiter = ";"
             };
+            var dictionary = new Dictionary<string, Color>();
 
-            using (var reader = new StreamReader(path))
+            var fileSize = new FileInfo(path).Length;
+            var progress = 0f;
+
+            using var reader = new StreamReader(path);
+            using (var csv = new CsvReader(reader, config))
             {
-                using (var csv = new CsvReader(reader, config))
+                csv.Read();
+                csv.ReadHeader();
+                var count = 0;
+
+                while (csv.Read())
                 {
-                    var dictionary = new Dictionary<string, Color>();
+                    var id = csv.GetField<string>("BagId");
+                    var hexColor = csv.GetField<string>("HexColor");
+                    dictionary[id] = ParseHexColor(hexColor);
+                    count++;
 
-                    csv.Read();
-                    csv.ReadHeader();
-                    while (csv.Read())
+                    if (count >= maxParsesPerFrame)
                     {
-                        var id = csv.GetField<string>("BagId");
-                        var hexColor = csv.GetField<string>("HexColor");
-                        dictionary[id] = ParseHexColor(hexColor);
-
-                        if (dictionary.Count >= maxParsesPerFrame)
-                        {
-                            yield return dictionary;
-                            dictionary.Clear();
-                        }
+                        progress = (float)reader.BaseStream.Position / fileSize;
+                        progressEvent.Invoke(progress);
+                        count = 0;
+                        yield return null;
                     }
+                }
 
-                    //return the remaining elements of the part not divisible by maxParsesPerFrame 
-                    if (dictionary.Count > 0)
-                    {
-                        yield return dictionary;
-                    }
-                    // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
+                //return the remaining elements of the part not divisible by maxParsesPerFrame 
+                if (dictionary.Count > 0)
+                {
+                    var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
+                    layer.SetColorSetLayer(cl, false);
+                    progressEvent.Invoke(1f);
                 }
             }
         }
