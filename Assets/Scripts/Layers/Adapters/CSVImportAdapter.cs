@@ -13,50 +13,25 @@ using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {
-    public class IDColor
-    {
-        [Index(0)] public string Id { get; set; }
-        [Index(1)] public string HexColor { get; set; }
-
-        public Color Color
-        {
-            get
-            {
-                var hex = HexColor;
-                if (!hex.StartsWith("#"))
-                    hex = "#" + hex;
-
-                var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-                return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
-            }
-        }
-    }
-
-
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
     public class CSVImportAdapter : ScriptableObject
     {
-        // private static Transform datasetLayerParent;
-
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
+        [SerializeField] private UnityEvent<float> progressEvent = new();
         public int maxParsesPerFrame = 100;
         private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
         public void ParseCSVFile(string file)
         {
-            if (activeDatasetLayer)//todo: temp fix to allow only 1 dataset layer
+            if (activeDatasetLayer) //todo: temp fix to allow only 1 dataset layer
             {
                 activeDatasetLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
-                activeDatasetLayer.SetColorSetLayer(null);
-                
+
                 Destroy(activeDatasetLayer.gameObject);
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
-            
-            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
-            // datasetLayer.transform.SetParent(DatasetLayerParent);
-            // FindObjectOfType<LayerManager>().RefreshLayerList(); //todo remove findObjectOfType
 
+            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
 
@@ -65,58 +40,58 @@ namespace Netherlands3D.Twin
 
         private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
         {
-            var dictionaries = ReadCSVColors(path, maxParsesPerFrame).GetEnumerator();
-
-            while (dictionaries.MoveNext())
-            {
-                // print("frame: " + Time.frameCount);
-                var dictionary = dictionaries.Current;
-                // print(dictionary.Count);
-                // Debug.Log("pindex: " + layer.PriorityIndex);
-                var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
-                // var cl = GeometryColorizer.AddAndMergeCustomColorSet(GeometryColorizer.GetLowestPriorityIndex(), dictionary);
-                // Debug.Log(cl.PriorityIndex);
-                layer.SetColorSetLayer(cl);
-
-                yield return null;
-            }
-
-            // GeometryColorizer.ReorderColorSet(0, 0, IndexCollisionAction.Swap);
-        }
-
-        private IEnumerable<Dictionary<string, Color>> ReadCSVColors(string path, int maxParsesPerFrame)
-        {
+            yield return null; //wait a frame for the created layer to be reparented and set up correctly to ensure the correct priority index
+            
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
-                HasHeaderRecord = false,
+                HasHeaderRecord = true,
                 Delimiter = ";"
             };
+            var dictionary = new Dictionary<string, Color>();
+
+            var fileSize = new FileInfo(path).Length;
+            var progress = 0f;
 
             using var reader = new StreamReader(path);
             using (var csv = new CsvReader(reader, config))
             {
-                var records = csv.GetRecords<IDColor>().GetEnumerator();
-                var dictionary = new Dictionary<string, Color>();
+                csv.Read();
+                csv.ReadHeader();
+                var count = 0;
 
-                while (records.MoveNext())
+                while (csv.Read())
                 {
-                    var record = records.Current;
-                    dictionary[record.Id] = record.Color;
+                    var id = csv.GetField<string>("BagId");
+                    var hexColor = csv.GetField<string>("HexColor");
+                    dictionary[id] = ParseHexColor(hexColor);
+                    count++;
 
-                    if (dictionary.Count >= maxParsesPerFrame)
+                    if (count >= maxParsesPerFrame)
                     {
-                        yield return dictionary;
-                        dictionary.Clear();
+                        progress = (float)reader.BaseStream.Position / fileSize;
+                        progressEvent.Invoke(progress);
+                        count = 0;
+                        yield return null;
                     }
                 }
 
                 //return the remaining elements of the part not divisible by maxParsesPerFrame 
                 if (dictionary.Count > 0)
                 {
-                    yield return dictionary;
+                    var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
+                    layer.SetColorSetLayer(cl, false);
+                    progressEvent.Invoke(1f);
                 }
-                // return records.ToDictionary(record => record.Id, record => record.Color); //don't return like this, because it will stop the parsing from being spread over multiple frames
             }
+        }
+
+        public static Color ParseHexColor(string hex)
+        {
+            if (!hex.StartsWith("#"))
+                hex = "#" + hex;
+
+            var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
+            return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
         }
     }
 }

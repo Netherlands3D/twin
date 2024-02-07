@@ -64,6 +64,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text buildYearText;
 		[SerializeField] private TMP_Text statusText;
 
+		public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+		
 		private void Awake() {
 			addressTemplate.gameObject.SetActive(false);
 		}
@@ -100,10 +102,10 @@ namespace Netherlands3D.Twin.Interface.BAG
 					};
 
 					if (selectionlayerExists)
-						GeometryColorizer.RemoveCustomColorSet(0);
+						GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
 
 					selectionlayerExists = true;
-					GeometryColorizer.InsertCustomColorSet(0, objectIdAndColor);
+					ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
 
 					GetBAGID(id);
 				}
@@ -113,7 +115,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private void OnDestroy()
 		{
 			if (selectionlayerExists)
-				GeometryColorizer.RemoveCustomColorSet(0);
+				GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
 		}
 
 		public void GetBAGID(string bagID)
