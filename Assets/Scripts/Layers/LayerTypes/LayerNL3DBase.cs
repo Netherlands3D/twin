@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void OnTransformChildrenChanged()
+        protected virtual void OnTransformChildrenChanged()
         {
             LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
 
@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UI?.RecalculateCurrentTreeStates();
         }
 
-        private void OnTransformParentChanged()
+        protected virtual void OnTransformParentChanged()
         {
             ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
         }
