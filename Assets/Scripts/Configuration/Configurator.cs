@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Configuration
 
         [Header("Debugging Aids")]
         [SerializeField]
-        [Tooltip("In the editor we do not get a URL; with this field you can simulate one. For example: https://netherlands3d.eu/twin/?origin=155000,463000,200&features=terrain,buildings")]
+        [Tooltip("In the editor we do not get a URL; with this field you can simulate one. For example: https://netherlands3d.eu/twin/?origin=155000,463000,200&functionalities=terrain,buildings")]
         private string debugUrl = "";
 
         [SerializeField]
@@ -78,7 +78,7 @@ namespace Netherlands3D.Twin.Configuration
         public IEnumerator Execute()
         {
             configuration.ShouldStartSetup = true;
-            var indicatorsConfiguration = GetFeatureConfigurationOfType<Indicators.Configuration>();
+            var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Indicators.Configuration>();
             indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
             
             OnStartedLoading.Invoke();
@@ -119,18 +119,18 @@ namespace Netherlands3D.Twin.Configuration
             yield return null;
         }
 
-        private T GetFeatureConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
+        private T GetFunctionalityConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
         {
             return configuration
                 .Functionalities
-                .Find(feature => feature.configuration is T)
+                .Find(functionality => functionality.configuration is T)
                 .configuration as T;
         }
 
         private void UpdateDossierIdAfterLoading(string dossierId)
         {
             var uriBuilder = new UriBuilder(uri); 
-            GetFeatureConfigurationOfType<Indicators.Configuration>().SetDossierIdInQueryParameters(uriBuilder);
+            GetFunctionalityConfigurationOfType<Indicators.Configuration>().SetDossierIdInQueryParameters(uriBuilder);
 
             uri = uriBuilder.Uri;
 #if UNITY_WEBGL && !UNITY_EDITOR
