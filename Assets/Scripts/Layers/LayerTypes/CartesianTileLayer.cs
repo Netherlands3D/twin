@@ -6,7 +6,7 @@ using Netherlands3D.CartesianTiles;
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
     [RequireComponent(typeof(CartesianTiles.Layer))]
-    public class Tile3DLayer : ReferencedLayer
+    public class CartesianTileLayer : ReferencedLayer
     {
         private CartesianTiles.Layer layer;
         

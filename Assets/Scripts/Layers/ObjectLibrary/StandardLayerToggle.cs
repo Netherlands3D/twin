@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
     {
         private CartesianTiles.TileHandler tileHandler;
         private Toggle toggle;
-        [SerializeField] private Tile3DLayer layer;
+        [SerializeField] private CartesianTileLayer layer;
         [SerializeField] private GameObject prefab;
         [SerializeField] private GameObject binImage;
         [SerializeField] private Sprite hoverSprite;
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin
             defaultSprite = GetComponent<Image>().sprite;
             tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(FindObjectsInactive.Include);
 
-            layer = tileHandler.layers.FirstOrDefault(l => l.name == prefab.name)?.GetComponent<Tile3DLayer>();
+            layer = tileHandler.layers.FirstOrDefault(l => l.name == prefab.name)?.GetComponent<CartesianTileLayer>();
         }
 
         private void OnEnable()
@@ -51,15 +51,15 @@ namespace Netherlands3D.Twin
                 layer.DestroyLayer();
         }
 
-        private Tile3DLayer CreateObject()
+        private CartesianTileLayer CreateObject()
         {
             var newObject = Instantiate(prefab, Vector3.zero, Quaternion.identity, tileHandler.transform);
             newObject.name = prefab.name;
             tileHandler.AddLayer(newObject.GetComponent<CartesianTiles.Layer>());
 
-            var layerComponent = newObject.GetComponent<Tile3DLayer>();
+            var layerComponent = newObject.GetComponent<CartesianTileLayer>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<Tile3DLayer>();
+                layerComponent = newObject.AddComponent<CartesianTileLayer>();
 
             StartCoroutine(SelectAndHoverAtEndOfFrame());//wait until layer and UI are initialized.
             

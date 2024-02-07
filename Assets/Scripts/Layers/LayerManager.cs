@@ -185,7 +185,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case Tile3DLayer _:
+                case CartesianTileLayer _:
                     // print("Tile layer");
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayer _:
