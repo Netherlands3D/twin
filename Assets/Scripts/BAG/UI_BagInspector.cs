@@ -59,6 +59,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text buildYearText;
 		[SerializeField] private TMP_Text statusText;
 
+		public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+
 		[SerializeField] private GameObject placeholderPanel;
 		[SerializeField] private GameObject contentPanel;
 
@@ -137,13 +139,11 @@ namespace Netherlands3D.Twin.Interface.BAG
 			placeholderPanel.SetActive(false);
 			selectionlayerExists = true;
 
-			GeometryColorizer.InsertCustomColorSet(
-				COLORIZER_PRIORITY,
-				new Dictionary<string, Color>
-				{
-					{ bagId, new Color(1, 0, 0, 0) }
-				}
-			);
+			var objectIdAndColor = new Dictionary<string, Color>
+			{
+				{ bagId, new Color(1, 0, 0, 0) }
+			};
+			ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
 
 			GetBAGID(bagId);
 		}
@@ -153,11 +153,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			contentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
 
-			if (selectionlayerExists)
-			{
-				GeometryColorizer.RemoveCustomColorSet(COLORIZER_PRIORITY);
-			}
-
+			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
 			selectionlayerExists = false;
 		}
 
