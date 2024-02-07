@@ -189,7 +189,7 @@ namespace Netherlands3D.Twin.Configuration
         private bool UrlContainsConfiguration(NameValueCollection queryParameters) 
         {
             string origin = queryParameters.Get("origin");
-            string functionalities = queryParameters.Get("functionalities");
+            string functionalities = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
             
             return origin != null && functionalities != null;
         }
