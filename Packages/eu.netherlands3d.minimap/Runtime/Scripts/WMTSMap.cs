@@ -171,9 +171,12 @@ namespace Netherlands3D.Minimap
 			var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * transform.localScale.x;
 			var maxPositionYInUnits = (boundsInMeters.y / startMeterInPixels) * transform.localScale.x;
 
+			var XPadding = rectTransformMinimapUI.sizeDelta.x*0.5f;
+			var YPadding = rectTransformMinimapUI.sizeDelta.y*0.5f;
+
 			this.transform.localPosition = new Vector3(
-				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + rectTransformMinimapUI.sizeDelta.x, 0),
-				Mathf.Clamp(this.transform.localPosition.y, rectTransformMinimapUI.sizeDelta.y, maxPositionYInUnits),
+				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + rectTransformMinimapUI.sizeDelta.x - XPadding, XPadding),
+				Mathf.Clamp(this.transform.localPosition.y, rectTransformMinimapUI.sizeDelta.y - YPadding, maxPositionYInUnits + YPadding),
 				0
 			);
 		}
