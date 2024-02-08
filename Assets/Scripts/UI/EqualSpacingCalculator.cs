@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin
         private void OnValidate()
         {
             Awake();
-            Start();
+            RecalculateAllSpacings();
         }
 #endif
 
@@ -29,10 +29,10 @@ namespace Netherlands3D.Twin
             rt = GetComponent<RectTransform>();
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
-            CalculateSpacing();
-            ApplySpacingToOtherLayoutGroups();
+            yield return new WaitForEndOfFrame(); //wait a frame because not doing so will somehow mess up the layout sometimes
+            RecalculateAllSpacings();
         }
 
         void CalculateSpacing()
@@ -47,13 +47,15 @@ namespace Netherlands3D.Twin
             gridLayoutGroup.spacing = new Vector2(spacingX, gridLayoutGroup.spacing.y);
             gridLayoutGroup.padding.left = Mathf.RoundToInt(spacingX);
             gridLayoutGroup.padding.right = Mathf.RoundToInt(spacingX);
+            
+            // LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
 
         private void ApplySpacingToOtherLayoutGroups()
         {
-            if(additionalLayoutGroups == null)
+            if (additionalLayoutGroups == null)
                 return;
-            
+
             foreach (var layoutGroup in additionalLayoutGroups)
             {
                 layoutGroup.padding.left = Mathf.RoundToInt(Spacing);
@@ -64,6 +66,12 @@ namespace Netherlands3D.Twin
                     ((GridLayoutGroup)layoutGroup).spacing = gridLayoutGroup.spacing;
                 }
             }
+        }
+
+        public void RecalculateAllSpacings()
+        {
+            CalculateSpacing();
+            ApplySpacingToOtherLayoutGroups();
         }
     }
 }
