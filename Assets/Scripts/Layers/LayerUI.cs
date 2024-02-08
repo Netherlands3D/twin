@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -259,6 +260,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateNameWidth(maxWidth);
             UpdateFoldout();
             Canvas.ForceUpdateCanvases();
+            
+            // only show properties button if the layer has any property sections to show
+            var layerWithProperties = Layer as ILayerWithProperties;
+            propertyToggle.gameObject.SetActive(
+                layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
+            );
         }
 
         private void SetLayerTypeImage()

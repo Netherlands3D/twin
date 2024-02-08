@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,7 +9,7 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin
 {
-    public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler
+    public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler, ILayerWithProperties
     {
         [SerializeField] private UnityEvent<GameObject> objectCreated = new(); 
         public override bool IsActiveInScene
@@ -57,5 +58,9 @@ namespace Netherlands3D.Twin
                 rth.SetTarget(rth.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
         }
 
+        public List<GameObject> GetPropertySections()
+        {
+            return new();
+        }
     }
 }
