@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin
             int columnCount = gridLayoutGroup.constraintCount;
             float parentWidth = rt.rect.width;
 
-            float totalCellWidth = gridLayoutGroup.cellSize.x * transform.childCount;
+            float totalCellWidth = gridLayoutGroup.cellSize.x * columnCount;
             float spacingX = (parentWidth - totalCellWidth) / (columnCount + 1);
 
             // Adjust the padding to achieve equal spacing
