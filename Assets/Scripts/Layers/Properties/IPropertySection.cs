@@ -4,6 +4,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public interface IPropertySection
     {
-        void AddToProperties(Properties properties);
+        void AddToProperties(RectTransform properties);
     }
 }

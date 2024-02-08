@@ -6,11 +6,11 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         [SerializeField] private GameObject propertySectionPrefab;
 
-        public void AddToProperties(Properties properties)
+        public void AddToProperties(RectTransform properties)
         {
             if (!propertySectionPrefab) return;
 
-            Instantiate(propertySectionPrefab, transform);
+            Instantiate(propertySectionPrefab, properties);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUI.Layer = layer;
             layer.UI = layerUI;
             layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
-            layerUI.RegisterWithPropertiesPanel(FindObjectOfType<Properties>());
+            layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             LayersVisibleInInspector.Add(layerUI);
 
