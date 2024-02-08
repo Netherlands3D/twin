@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
   m_Layer: 7
-  m_Name: Gebouwen Rotterdam (3D Tiles)
+  m_Name: Gebouwen (3D Tiles)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 690fb5d55d40ee7489dbfcbe44c9f716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesetUrl: https://3dtilesnederland.nl/tiles/1.1/implicit/ommoord/tileset.json
+  tilesetUrl: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json
   publicKey: 
   personalKey: 
   root:
