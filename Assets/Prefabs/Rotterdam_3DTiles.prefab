@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 817150493436941603}
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 7109194962515795805}
+  - component: {fileID: 4142489338678956943}
   m_Layer: 7
   m_Name: Rotterdam_3DTiles
   m_TagString: Untagged
@@ -215,3 +216,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   showPriorityNumbers: 0
   downloadAvailable: 0
+--- !u!114 &4142489338678956943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
