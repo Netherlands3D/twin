@@ -31,12 +31,28 @@ namespace Netherlands3D.Twin
             toggle.isOn = layer != null;
             ShowBin(false);
 
+            LayerData.LayerDeleted.AddListener(OnLayerDeleted);
             toggle.onValueChanged.AddListener(CreateOrDestroyObject);
         }
 
+
         protected virtual void OnDisable()
         {
+            LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
+        }
+        
+        private void OnLayerDeleted(LayerNL3DBase deletedLayer)
+        {
+            if(!toggle.isOn)
+                return;
+            
+            if (deletedLayer == layer.ReferencedProxy)
+            {
+                toggle.onValueChanged.RemoveListener(CreateOrDestroyObject); //the layer was already deleted, it should only update the toggle
+                toggle.isOn = false; //use the regular way instead of SetIsOnWithoutNotify because the toggle graphics should update.
+                toggle.onValueChanged.AddListener(CreateOrDestroyObject);
+            } 
         }
 
         private void CreateOrDestroyObject(bool isOn)
@@ -45,8 +61,6 @@ namespace Netherlands3D.Twin
                 layer = CreateObject();
             else
                 layer.DestroyLayer();
-            
-            print(layer);
         }
 
         private ReferencedLayer CreateObject()

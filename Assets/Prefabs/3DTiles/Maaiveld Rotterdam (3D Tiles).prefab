@@ -163,7 +163,7 @@ MonoBehaviour:
     boundingRegion: []
   tileCount: 0
   nestingDepth: 0
-  parseSubObjects: 1
+  parseSubObjects: 0
   maxScreenHeightInPixels: 1080
   maximumScreenSpaceError: 5
   sseComponent: -1
