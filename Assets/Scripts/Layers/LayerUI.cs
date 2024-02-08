@@ -259,10 +259,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
             UpdateFoldout();
+            UpdatePropertiesToggle();
             Canvas.ForceUpdateCanvases();
-            
+        }
+
+        private void UpdatePropertiesToggle()
+        {
             // only show properties button if the layer has any property sections to show
-            var layerWithProperties = Layer as ILayerWithProperties;
+            var layerProxy = Layer as ReferencedProxyLayer;
+            var layerWithProperties = (layerProxy == null) 
+                ? Layer as ILayerWithProperties 
+                : layerProxy.Reference as ILayerWithProperties;
+
             propertyToggle.gameObject.SetActive(
                 layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
             );
