@@ -9,7 +9,7 @@
     "y": {{NL3D_ORIGIN_Y|default('503050')}},
     "z": {{NL3D_ORIGIN_Z|default('300')}}
   },
-  "features": {
+  "functionalities": {
     "terrain": {
       "enabled": {{NL3D_TERRAIN|default('true')}}
     },
