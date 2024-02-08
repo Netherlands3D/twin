@@ -5,6 +5,7 @@ using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -17,6 +18,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private List<Sprite> layerTypeSprites;
 
         [SerializeField] private RectTransform layerUIContainer;
+        [SerializeField] private ToggleGroup propertyToggles;
+        
         public RectTransform LayerUIContainer => layerUIContainer;
 
         //Drag variables
@@ -43,13 +46,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
-            var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
-            layerUI.Layer = layer;
-            layer.UI = layerUI;
-            layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
-            // layer.SetParent(parent);
-
-            LayersVisibleInInspector.Add(layerUI);
+            InstantiateLayerItem(layer, parent);
             foreach (Transform child in layer.transform)
             {
                 if (child == layer.transform)
@@ -57,6 +54,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
                 ConstructHierarchyUIsRecursive(child.GetComponent<LayerNL3DBase>(), layer);
             }
+        }
+
+        private LayerUI InstantiateLayerItem(LayerNL3DBase layer, LayerNL3DBase parent)
+        {
+            var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
+            layerUI.Layer = layer;
+            layer.UI = layerUI;
+            layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
+            layerUI.SetPropertyToggleGroup(propertyToggles);
+
+            LayersVisibleInInspector.Add(layerUI);
+
+            return layerUI;
         }
 
         private void DestroyAllUIs()
@@ -83,12 +93,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void CreateNewUI(LayerNL3DBase layer)
         {
-            var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
-            layerUI.Layer = layer;
-            layer.UI = layerUI;
-            layer.UI.SetParent(layer.transform.parent.GetComponent<LayerNL3DBase>()?.UI, layer.transform.GetSiblingIndex());
-
-            LayersVisibleInInspector.Add(layerUI);
+            var layerUI = InstantiateLayerItem(layer, layer.transform.parent.GetComponent<LayerNL3DBase>());
             layerUI.Select(true);
         }
 

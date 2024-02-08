@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6392779812401417555}
   - component: {fileID: 5997799103084853726}
   - component: {fileID: 8459111385341633384}
+  - component: {fileID: 4551175843995584254}
   m_Layer: 5
   m_Name: Layers
   m_TagString: Untagged
@@ -177,6 +178,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4551175843995584254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2752428632557324889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 1
 --- !u!1 &4151227325010422218
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +291,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f08423d0fb71848ec9bf1e77397260a2, type: 3}
   - {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
+  propertyToggles: {fileID: 4551175843995584254}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
     type: 3}
   dragLine: {fileID: 3629506645558351958}

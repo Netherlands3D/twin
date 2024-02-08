@@ -51,6 +51,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private Sprite[] visibilitySprites;
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
+        [SerializeField] private Toggle propertyToggle;
 
         private LayerUI ParentUI;
         private LayerUI[] ChildrenUI = Array.Empty<LayerUI>();
@@ -661,6 +662,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
             Destroy(gameObject);
+        }
+
+        public void SetPropertyToggleGroup(ToggleGroup toggleGroup)
+        {
+            propertyToggle.group = toggleGroup;
         }
     }
 }
