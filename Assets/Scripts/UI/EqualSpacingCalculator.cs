@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin
 
         private IEnumerator Start()
         {
-            yield return new WaitForEndOfFrame(); //wait a frame because not doing so will somehow mess up the layout sometimes
+            yield return new WaitForEndOfFrame(); //wait a frame because not doing so will somehow mess up the layout in combination with EnableComponentsByFunctionality
             RecalculateAllSpacings();
         }
 
