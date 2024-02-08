@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -266,14 +267,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void UpdatePropertiesToggle()
         {
             // only show properties button if the layer has any property sections to show
-            var layerProxy = Layer as ReferencedProxyLayer;
-            var layerWithProperties = (layerProxy == null) 
-                ? Layer as ILayerWithProperties 
-                : layerProxy.Reference as ILayerWithProperties;
-
+            var layerWithProperties = TryFindProperties();
             propertyToggle.gameObject.SetActive(
                 layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
             );
+        }
+
+        private ILayerWithProperties TryFindProperties()
+        {
+            var layerProxy = Layer as ReferencedProxyLayer;
+
+            return (layerProxy == null) 
+                ? Layer as ILayerWithProperties 
+                : layerProxy.Reference as ILayerWithProperties;
         }
 
         private void SetLayerTypeImage()
@@ -675,13 +681,34 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DestroyUI()
         {
-            SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
+            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
+            // consequence of Destroying the parent)
+            SetParent(null); 
+            
+            // Make sure to remove the properties when removing the UI
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            
             Destroy(gameObject);
         }
 
-        public void SetPropertyToggleGroup(ToggleGroup toggleGroup)
+        public void RegisterWithPropertiesPanel(Properties propertiesPanel)
         {
-            propertyToggle.group = toggleGroup;
+            propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
+            propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
+        }
+        
+        private void ToggleProperties(bool onOrOff, Properties properties)
+        {
+            var layerWithProperties = TryFindProperties();
+            if (layerWithProperties == null) return; // no properties, no action
+
+            if (!onOrOff)
+            {
+                properties.Hide();
+                return;
+            }
+
+            properties.Show(layerWithProperties);
         }
     }
 }

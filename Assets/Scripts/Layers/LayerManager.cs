@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers.Properties;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -62,7 +63,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUI.Layer = layer;
             layer.UI = layerUI;
             layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
-            layerUI.SetPropertyToggleGroup(propertyToggles);
+            layerUI.RegisterWithPropertiesPanel(FindObjectOfType<Properties>());
 
             LayersVisibleInInspector.Add(layerUI);
 
