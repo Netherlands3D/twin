@@ -22,7 +22,6 @@ namespace Netherlands3D.CartesianTiles
         public string removeFromID;
 #endif
         public List<Material> DefaultMaterialList = new List<Material>();
-        public bool createMeshcollider = false;
         public ShadowCastingMode tileShadowCastingMode = ShadowCastingMode.On;
 
         public string brotliCompressedExtention = ".br";
@@ -30,6 +29,10 @@ namespace Netherlands3D.CartesianTiles
         private GameObject container;
         private Mesh mesh;
         private MeshRenderer meshRenderer;
+
+        [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
+        public bool createMeshcollider = false;
+        public bool CreateMeshColliders { get => createMeshcollider; set => createMeshcollider = value; }
 
         public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
         {
@@ -256,7 +259,7 @@ namespace Netherlands3D.CartesianTiles
             meshRenderer.sharedMaterials = materialList.ToArray();
             meshRenderer.shadowCastingMode = tileShadowCastingMode;
 
-            if (createMeshcollider)
+            if (CreateMeshColliders)
             {
                 container.AddComponent<MeshCollider>().sharedMesh = mesh;
             }
