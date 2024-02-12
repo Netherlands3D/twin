@@ -30,8 +30,9 @@ namespace Netherlands3D.CartesianTiles
         private Mesh mesh;
         private MeshRenderer meshRenderer;
 
+        [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
         public bool createMeshcollider = false;
-        public bool CreateMeshcollider { get => createMeshcollider; set => createMeshcollider = value; }
+        public bool CreateMeshColliders { get => createMeshcollider; set => createMeshcollider = value; }
 
         public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
         {
@@ -258,7 +259,7 @@ namespace Netherlands3D.CartesianTiles
             meshRenderer.sharedMaterials = materialList.ToArray();
             meshRenderer.shadowCastingMode = tileShadowCastingMode;
 
-            if (CreateMeshcollider)
+            if (CreateMeshColliders)
             {
                 container.AddComponent<MeshCollider>().sharedMesh = mesh;
             }
