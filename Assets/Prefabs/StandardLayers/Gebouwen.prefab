@@ -74,7 +74,7 @@ MonoBehaviour:
   removeFromID: 
   DefaultMaterialList:
   - {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
-  createMeshcollider: 1
+  createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
 --- !u!114 &6432123512545269546
@@ -89,5 +89,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
-    type: 3}
