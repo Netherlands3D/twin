@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Maaiveld (3D Tiles)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
