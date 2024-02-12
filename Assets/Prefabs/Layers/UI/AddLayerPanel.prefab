@@ -923,8 +923,11 @@ MonoBehaviour:
   minHeight: 0
   minResizeHeightThreshold: 50
   maxHeight: 350
-  smoothTime: 0.15
+  smoothTime: 1
   toggle: {fileID: 0}
+  OnRectTransformSizeChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &864163037451147846
 GameObject:
   m_ObjectHideFlags: 0
