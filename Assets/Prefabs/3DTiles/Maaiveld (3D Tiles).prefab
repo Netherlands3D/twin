@@ -168,7 +168,7 @@ MonoBehaviour:
   maximumScreenSpaceError: 5
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
-  materialOverride: {fileID: 2100000, guid: b92bd5d80503fa349811354c8590bc12, type: 2}
+  materialOverride: {fileID: 0}
 --- !u!114 &7109194962515795805
 MonoBehaviour:
   m_ObjectHideFlags: 0
