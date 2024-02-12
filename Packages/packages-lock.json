@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "com.atteneder.draco": {
-      "version": "4.1.0",
+      "version": "https://github.com/Netherlands3D/Draco3DWebgl2022.git",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "com.unity.burst": "1.4.11"
       },
-      "url": "https://package.openupm.com"
+      "hash": "c2e0e43a8dfa2fca973ce527b30fd46e3b29b3e7"
     },
     "com.cdm.authentication": {
       "version": "https://github.com/cdmvision/authentication-unity.git#1.1.3",
