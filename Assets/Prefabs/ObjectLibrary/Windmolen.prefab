@@ -305,7 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e337471afc584344a65656412eeba9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 0}
+  propertySectionPrefab: {fileID: 5787589249833195589, guid: 4d2ed55a8b4bec140a8d4a78fa283812,
+    type: 3}
 --- !u!4 &5519362733978732965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1515381833413938221, guid: 93247cb61c38b3843ab17c379a4f0b97,
