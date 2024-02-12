@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +38,8 @@ namespace Netherlands3D.Twin
 
         void CalculateSpacing()
         {
+            // rt.SetRect(0, 0, 16, 16);
+            
             int columnCount = gridLayoutGroup.constraintCount;
             float parentWidth = rt.rect.width;
 
