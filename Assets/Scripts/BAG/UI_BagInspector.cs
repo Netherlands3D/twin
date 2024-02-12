@@ -15,25 +15,20 @@
 *  implied. See the License for the specific language governing
 *  permissions and limitations under the License.
 */
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
-
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
 	public class UI_BagInspector : MonoBehaviour
 	{
+		private const int COLORIZER_PRIORITY = 0;
 
 		[Tooltip("Id replacement string will be replaced")]
 
@@ -42,7 +37,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private string geoJsonBagRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
-		
+
 		[SerializeField] private UI_Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
@@ -65,72 +60,121 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text statusText;
 
 		public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-		
-		private void Awake() {
+
+		[SerializeField] private GameObject placeholderPanel;
+		[SerializeField] private GameObject contentPanel;
+
+		private Camera mainCamera;
+		private CameraInputSystemProvider cameraInputSystemProvider;
+		private bool draggedBeforeRelease = false;
+		private bool waitingForRelease = false;
+
+		private void Awake()
+		{
+			mainCamera = Camera.main;
+			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+
 			addressTemplate.gameObject.SetActive(false);
+			contentPanel.SetActive(false);
+			placeholderPanel.SetActive(true);
 		}
+
 		private void Update()
-        {
-            //Listen to Pointer.current click and check what object raycast has clicked
-            var click = Pointer.current.press.wasReleasedThisFrame;
+		{
+			var click = Pointer.current.press.wasPressedThisFrame;
 
-            if (!click) return;
+			if (click)
+			{
+				waitingForRelease = true;
+				draggedBeforeRelease = false;
+				return;
+			}
 
-            FindObjectMapping();
-        }
+			if (waitingForRelease && !draggedBeforeRelease)
+			{
+				//Check if next release should be ignored ( if we dragged too much )
+				draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0;
+			}
+
+			var released = Pointer.current.press.wasReleasedThisFrame;
+			if (released)
+			{
+				waitingForRelease = false;
+
+				if (draggedBeforeRelease || cameraInputSystemProvider.OverLockingObject) return;
+
+				FindObjectMapping();
+			}
+		}
 
 		/// <summary>
 		/// Find objectmapping by raycast and get the BAG ID
 		/// </summary>
 		private void FindObjectMapping()
 		{
-			//Raycast from pointer position using main camera
+			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
-			var ray = Camera.main.ScreenPointToRay(position);
-			if (Physics.Raycast(ray, out RaycastHit hit, 100000f))
+			var ray = mainCamera.ScreenPointToRay(position);
+			if (!Physics.Raycast(ray, out RaycastHit hit, 100000f)) return;
+
+			var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
+			if (!objectMapping)
 			{
-				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-				if (objectMapping != null)
-				{
-					var hitIndex = hit.triangleIndex;
-					lastWorldClickedPosition = hit.point;
-
-					var id = objectMapping.getObjectID(hitIndex);
-					var objectIdAndColor = new Dictionary<string, Color>
-					{
-						{ id, new Color(1, 0, 0, 0) }
-					};
-
-					if (selectionlayerExists)
-						GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-
-					selectionlayerExists = true;
-					ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
-
-					GetBAGID(id);
-				}
+				DeselectBuilding();
+				return;
 			}
+
+			lastWorldClickedPosition = hit.point;
+			SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
+		}
+
+		private void SelectBuildingOnHit(string bagId)
+		{
+			if (selectionlayerExists)
+			{
+				DeselectBuilding();
+			}
+
+			contentPanel.SetActive(true);
+			placeholderPanel.SetActive(false);
+			selectionlayerExists = true;
+
+			var objectIdAndColor = new Dictionary<string, Color>
+			{
+				{ bagId, new Color(1, 0, 0, 0) }
+			};
+			ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
+
+			GetBAGID(bagId);
+		}
+
+		private void DeselectBuilding()
+		{
+			contentPanel.SetActive(false);
+			placeholderPanel.SetActive(true);
+
+			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+			selectionlayerExists = false;
 		}
 
 		private void OnDestroy()
 		{
-			if (selectionlayerExists)
-				GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+			DeselectBuilding();
 		}
 
 		public void GetBAGID(string bagID)
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
 		}
-		
+
 		private void DownloadGeoJSONProperties(List<string> bagIDs)
 		{
 			if (bagIDs.Count > 0)
 			{
 				var ID = bagIDs[0];
-				if(removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
+				if (removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
 
-				if (downloadProcess != null)			
+				if (downloadProcess != null)
 					StopCoroutine(downloadProcess);
 
 				downloadProcess = StartCoroutine(GetBagIDData(ID));
@@ -152,7 +196,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			var loadingIndicator = Instantiate(loadingIndicatorPrefab, contentRectTransform);
 			yield return GetBAGData(bagID);
 			loadingIndicator.transform.SetAsLastSibling();
-			
+
 			//Adressess (slower request next)
 			yield return GetAdresses(bagID);
 			Destroy(loadingIndicator);
@@ -172,14 +216,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
 				while (customJsonHandler.GotoNextFeature())
 				{
-					var properties = customJsonHandler.GetProperties();	
+					var properties = customJsonHandler.GetProperties();
 
-					badIdText.text = properties["identificatie"].ToString();	
-					buildYearText.text = properties["bouwjaar"].ToString();	
+					badIdText.text = properties["identificatie"].ToString();
+					buildYearText.text = properties["bouwjaar"].ToString();
 					statusText.text = properties["status"].ToString();
 
 					//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-					Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one*50.0f);
+					Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one * 50.0f);
 					buildingThumbnail.RenderThumbnail(currentObjectBounds);
 				}
 			}
@@ -199,36 +243,37 @@ namespace Netherlands3D.Twin.Interface.BAG
 			if (webRequest.result == UnityWebRequest.Result.Success)
 			{
 				ClearOldItems();
-				
+
 				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
 				bool gotDistrict = false;
 				while (customJsonHandler.GotoNextFeature())
-                {
-                    var properties = customJsonHandler.GetProperties();
+				{
+					var properties = customJsonHandler.GetProperties();
 
 					//Use first address result to determine district
-					if(!gotDistrict){
-                    	districtText.text = properties["openbare_ruimte"].ToString();
+					if (!gotDistrict)
+					{
+						districtText.text = properties["openbare_ruimte"].ToString();
 						gotDistrict = true;
-					}	
-					
-                    //Spawn address
-                    var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
-                    SpawnNewLine(addressText);
-                }
-            }
+					}
+
+					//Spawn address
+					var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
+					SpawnNewLine(addressText);
+				}
+			}
 			else
 			{
 				SpawnNewLine("Geen adressen gevonden");
 			}
 		}
 
-        private void SpawnNewLine(string addressText)
-        {
-            var spawnedField = Instantiate(addressTemplate, contentRectTransform);
-            spawnedField.Set(addressText);
-            spawnedField.gameObject.SetActive(true);
-            dynamicInterfaceItems.Add(spawnedField.gameObject);
-        }
-    }
+		private void SpawnNewLine(string addressText)
+		{
+			var spawnedField = Instantiate(addressTemplate, contentRectTransform);
+			spawnedField.Set(addressText);
+			spawnedField.gameObject.SetActive(true);
+			dynamicInterfaceItems.Add(spawnedField.gameObject);
+		}
+	}
 }

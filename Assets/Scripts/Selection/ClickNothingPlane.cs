@@ -7,11 +7,14 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin
 {
-    public class ClickNothingPlane : MonoBehaviour, IPointerClickHandler
+    public class ClickNothingPlane : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginDragHandler
     {
         private Camera mainCam;
         public static UnityEvent ClickedOnNothing = new();
         public int offset = 1000;
+
+        private bool dragged = false;
+
         void Start()
         {
             mainCam = Camera.main;
@@ -21,18 +24,28 @@ namespace Netherlands3D.Twin
         {
             var maxDistance = mainCam.farClipPlane - offset;
             
-            transform.position = mainCam.transform.position + mainCam.transform.forward * maxDistance;
-            transform.rotation = mainCam.transform.rotation;
+            transform.SetPositionAndRotation(mainCam.transform.position + mainCam.transform.forward * maxDistance, mainCam.transform.rotation);
             transform.Rotate(Vector3.right, -90f, Space.Self);
             float planeHeight = Mathf.Tan(Mathf.Deg2Rad * mainCam.fieldOfView / 2f) * 2f * maxDistance;
             float planeWidth = planeHeight * mainCam.aspect;
             transform.localScale = new Vector3(planeWidth, 1f, planeHeight);
-            // transform.localScale = Vector3.one * mainCam.farClipPlane;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if(dragged)
+            {
+                dragged = false;
+                return;
+            }
+
             ClickedOnNothing.Invoke();
         }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            dragged = true;
+        }
+        public void OnDrag(PointerEventData eventData){}
     }
 }
