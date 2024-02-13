@@ -45,6 +45,10 @@ namespace Netherlands3D.Minimap
 		[SerializeField] private Camera cameraMoveTarget;
 
 		/// <summary>
+		/// Cached sizeDelta of the minimap
+		/// </summary>
+		private Vector2 mapSizeDelta;
+		/// <summary>
 		/// The current index layer of tile layers
 		/// </summary>
 		private int layerIndex = 5;
@@ -103,27 +107,30 @@ namespace Netherlands3D.Minimap
 		/// <summary>
 		/// The minimap UI that handles all the UI
 		/// </summary>
-		private MinimapUI minimapUI;
+		private MinimapUI parentMinimapUI;
 		/// <summary>
 		/// The rect transform of the minimap
 		/// </summary>
-		private RectTransform rectTransformMinimapUI;
+		private RectTransform parentUIRectTransform;
 		/// <summary>
 		/// The rect transform
 		/// </summary>
-		private RectTransform rectTransform;
+		private RectTransform mapRectTransform;
 		/// <summary>
 		/// Contains the minimap layers with tiles
 		/// </summary>
 		private Dictionary<int, Dictionary<Vector2, Tile>> tileLayers = new Dictionary<int, Dictionary<Vector2, Tile>>();
 
+		private Vector2 lastMapSizeDelta;
+		private Vector3 lastMinimapPosition;
+
         private void Awake()
         {
 			if(!cameraMoveTarget) cameraMoveTarget = Camera.main;
 
-			minimapUI = GetComponentInParent<MinimapUI>();
-			rectTransform = GetComponent<RectTransform>();
-			rectTransformMinimapUI = (RectTransform)minimapUI.transform;
+			parentMinimapUI = GetComponentInParent<MinimapUI>();
+			parentUIRectTransform = (RectTransform)parentMinimapUI.transform;
+			mapRectTransform = GetComponent<RectTransform>();
         }
 
         private void Start()
@@ -156,10 +163,16 @@ namespace Netherlands3D.Minimap
 
 		private void Update()
 		{
-			Clamp();
+			mapSizeDelta = parentUIRectTransform.sizeDelta;
 
-			//Continiously check if tiles of the active layer identifier should be loaded
-			UpdateLayerTiles(tileLayers[layerIndex]);
+			if (mapSizeDelta != lastMapSizeDelta || transform.localPosition != lastMinimapPosition)
+			{
+				Clamp();
+				UpdateLayerTiles(tileLayers[layerIndex]);
+				lastMapSizeDelta = mapSizeDelta;
+				lastMinimapPosition = transform.localPosition;
+			}
+
 			MovePointer();
 		}
 
@@ -171,12 +184,12 @@ namespace Netherlands3D.Minimap
 			var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * transform.localScale.x;
 			var maxPositionYInUnits = (boundsInMeters.y / startMeterInPixels) * transform.localScale.x;
 
-			var XPadding = rectTransformMinimapUI.sizeDelta.x*0.5f;
-			var YPadding = rectTransformMinimapUI.sizeDelta.y*0.5f;
+			var XPadding = mapSizeDelta.x*0.5f;
+			var YPadding = mapSizeDelta.y*0.5f;
 
 			this.transform.localPosition = new Vector3(
-				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + rectTransformMinimapUI.sizeDelta.x - XPadding, XPadding),
-				Mathf.Clamp(this.transform.localPosition.y, rectTransformMinimapUI.sizeDelta.y - YPadding, maxPositionYInUnits + YPadding),
+				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + mapSizeDelta.x - XPadding, XPadding),
+				Mathf.Clamp(this.transform.localPosition.y, mapSizeDelta.y - YPadding, maxPositionYInUnits + YPadding),
 				0
 			);
 		}
@@ -234,7 +247,7 @@ namespace Netherlands3D.Minimap
 		/// <param name="targetPosition">RD coordinate to place the object</param>
 		public void PositionObjectOnMap(RectTransform targetObject, Vector3RD targetPosition)
 		{
-			targetObject.transform.localScale = Vector3.one / rectTransform.localScale.x;
+			targetObject.transform.localScale = Vector3.one / mapRectTransform.localScale.x;
 			targetObject.transform.localPosition = DeterminePositionOnMap(targetPosition);
 		}
 
@@ -326,7 +339,7 @@ namespace Netherlands3D.Minimap
 
 			if(CenterPointerInView)
 			{
-				this.transform.localPosition = -pointer.localPosition * rectTransform.localScale.x + (Vector3)rectTransformMinimapUI.sizeDelta * 0.5f;
+				this.transform.localPosition = -pointer.localPosition * mapRectTransform.localScale.x + (Vector3)parentUIRectTransform.sizeDelta * 0.5f;
 			}
 		}
 
@@ -356,18 +369,34 @@ namespace Netherlands3D.Minimap
 		/// <param name="tileList"></param>
 		private void UpdateLayerTiles(Dictionary<Vector2, Tile> tileList)
 		{
-			for(int x = 0; x <= boundsTiles.x; x++)
+			mapSizeDelta = parentUIRectTransform.sizeDelta;
+			var localScale = mapRectTransform.localScale;
+			var localPosition = mapRectTransform.transform.localPosition;
+
+
+			var tileSizeX = tileSize * localScale.x;
+			var tileSizeY = tileSize * localScale.y;
+				
+			var startX = Mathf.Max(0, Mathf.FloorToInt(-localPosition.x / tileSizeX));
+			var startY = Mathf.Max(0, Mathf.FloorToInt((localPosition.y-mapSizeDelta.y) / tileSizeY));
+
+			var endX = Mathf.CeilToInt((mapSizeDelta.x - localPosition.x) / tileSizeX);
+			var endY = Mathf.FloorToInt((mapSizeDelta.y + localPosition.y) / tileSizeY);
+
+			var tilesToRemove = new List<Vector2>(tileList.Keys);
+
+			for (int x = startX; x <= endX; x++)
 			{
-				for(int y = 0; y <= boundsTiles.y; y++)
-				{
+				for (int y = startY; y <= endY; y++)
+				{		
 					Vector2 tileKey;
 
-					//Tile position within this container
-					float xPosition = (x * tileSize) - (layerTilesOffset.x * tileSize);
-					float yPosition = -((y * tileSize) - (layerTilesOffset.y * tileSize));
+					// Tile position within this container
+					float tileXPosition = (x * tileSize) - (layerTilesOffset.x * tileSize);
+					float tileYPosition = -((y * tileSize) - (layerTilesOffset.y * tileSize));
 
-					//Origin alignment determines the way we count our grid
-					switch(minimapConfig.TileMatrixSet.minimapOriginAlignment)
+					// Origin alignment determines the way we count our grid
+					switch (minimapConfig.TileMatrixSet.minimapOriginAlignment)
 					{
 						case TileMatrixSet.OriginAlignment.BottomLeft:
 							tileKey = new Vector2(x + tileOffset.x, (float)(divide - 1) - (y + tileOffset.y));
@@ -378,31 +407,22 @@ namespace Netherlands3D.Minimap
 							break;
 					}
 
-					//Tile position to check if they are in viewer
-					float compareXPosition = xPosition * rectTransform.localScale.x + rectTransform.transform.localPosition.x;
-					float compareYPosition = yPosition * rectTransform.localScale.x + rectTransform.transform.localPosition.y;
-
-					//Is this tile within the viewer rectangle?
-					bool xWithinView = (compareXPosition + baseTileSize > 0 && compareXPosition < rectTransformMinimapUI.sizeDelta.x);
-					bool yWithinView = (compareYPosition > 0 && compareYPosition - baseTileSize < rectTransformMinimapUI.sizeDelta.y);
-
-					if(xWithinView && yWithinView)
+					if (!tileList.TryGetValue(tileKey, out var existingTile))
 					{
-						if(!tileList.ContainsKey(tileKey))
-						{
-							var newTileObject = new GameObject();
-							var mapTile = newTileObject.AddComponent<Tile>();
-							mapTile.Initialize(this.transform, layerIndex, tileSize, xPosition, yPosition, tileKey, minimapConfig);
+						var newTileObject = new GameObject();
+						var mapTile = newTileObject.AddComponent<Tile>();
+						mapTile.Initialize(this.transform, layerIndex, tileSize, tileXPosition, tileYPosition, tileKey, minimapConfig);
 
-							tileList.Add(tileKey, mapTile);
-						}
+						tileList.Add(tileKey, mapTile);
 					}
-					else if(tileList.ContainsKey(tileKey))
-					{
-						Destroy(tileList[tileKey].gameObject);
-						tileList.Remove(tileKey);
-					}
+					tilesToRemove.Remove(tileKey);
 				}
+			}
+
+			foreach (var tileKey in tilesToRemove)
+			{
+				Destroy(tileList[tileKey].gameObject);
+				tileList.Remove(tileKey);
 			}
 		}
 	}
