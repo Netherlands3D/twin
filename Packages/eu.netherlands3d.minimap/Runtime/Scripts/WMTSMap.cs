@@ -45,6 +45,10 @@ namespace Netherlands3D.Minimap
 		[SerializeField] private Camera cameraMoveTarget;
 
 		/// <summary>
+		/// Cached sizeDelta of the minimap
+		/// </summary>
+		private Vector2 mapSizeDelta;
+		/// <summary>
 		/// The current index layer of tile layers
 		/// </summary>
 		private int layerIndex = 5;
@@ -156,6 +160,8 @@ namespace Netherlands3D.Minimap
 
 		private void Update()
 		{
+			mapSizeDelta = rectTransformMinimapUI.sizeDelta;
+			
 			Clamp();
 
 			//Continiously check if tiles of the active layer identifier should be loaded
@@ -171,12 +177,12 @@ namespace Netherlands3D.Minimap
 			var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * transform.localScale.x;
 			var maxPositionYInUnits = (boundsInMeters.y / startMeterInPixels) * transform.localScale.x;
 
-			var XPadding = rectTransformMinimapUI.sizeDelta.x*0.5f;
-			var YPadding = rectTransformMinimapUI.sizeDelta.y*0.5f;
+			var XPadding = mapSizeDelta.x*0.5f;
+			var YPadding = mapSizeDelta.y*0.5f;
 
 			this.transform.localPosition = new Vector3(
-				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + rectTransformMinimapUI.sizeDelta.x - XPadding, XPadding),
-				Mathf.Clamp(this.transform.localPosition.y, rectTransformMinimapUI.sizeDelta.y - YPadding, maxPositionYInUnits + YPadding),
+				Mathf.Clamp(this.transform.localPosition.x, maxPositionXInUnits + mapSizeDelta.x - XPadding, XPadding),
+				Mathf.Clamp(this.transform.localPosition.y, mapSizeDelta.y - YPadding, maxPositionYInUnits + YPadding),
 				0
 			);
 		}
@@ -356,7 +362,7 @@ namespace Netherlands3D.Minimap
 		/// <param name="tileList"></param>
 		private void UpdateLayerTiles(Dictionary<Vector2, Tile> tileList)
 		{
-			var mapSizeDelta = rectTransformMinimapUI.sizeDelta;
+			mapSizeDelta = rectTransformMinimapUI.sizeDelta;
 			var localScale = rectTransform.localScale;
 			var localPosition = rectTransform.transform.localPosition;
 
