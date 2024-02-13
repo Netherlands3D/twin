@@ -121,6 +121,9 @@ namespace Netherlands3D.Minimap
 		/// </summary>
 		private Dictionary<int, Dictionary<Vector2, Tile>> tileLayers = new Dictionary<int, Dictionary<Vector2, Tile>>();
 
+		private Vector2 lastMapSizeDelta;
+		private Vector3 lastMinimapPosition;
+
         private void Awake()
         {
 			if(!cameraMoveTarget) cameraMoveTarget = Camera.main;
@@ -161,11 +164,15 @@ namespace Netherlands3D.Minimap
 		private void Update()
 		{
 			mapSizeDelta = rectTransformMinimapUI.sizeDelta;
-			
-			Clamp();
 
-			//Continiously check if tiles of the active layer identifier should be loaded
-			UpdateLayerTiles(tileLayers[layerIndex]);
+			if (mapSizeDelta != lastMapSizeDelta || transform.localPosition != lastMinimapPosition)
+			{
+				Clamp();
+				UpdateLayerTiles(tileLayers[layerIndex]);
+				lastMapSizeDelta = mapSizeDelta;
+				lastMinimapPosition = transform.localPosition;
+			}
+
 			MovePointer();
 		}
 
@@ -366,18 +373,19 @@ namespace Netherlands3D.Minimap
 			var localScale = rectTransform.localScale;
 			var localPosition = rectTransform.transform.localPosition;
 
-			for(int x = 0; x <= boundsTiles.x; x++)
+			var tilesToRemove = new HashSet<Vector2>();
+			for (int x = 0; x <= boundsTiles.x; x++)
 			{
-				for(int y = 0; y <= boundsTiles.y; y++)
+				for (int y = 0; y <= boundsTiles.y; y++)
 				{
 					Vector2 tileKey;
 
-					//Tile position within this container
+					// Tile position within this container
 					float xPosition = (x * tileSize) - (layerTilesOffset.x * tileSize);
 					float yPosition = -((y * tileSize) - (layerTilesOffset.y * tileSize));
 
-					//Origin alignment determines the way we count our grid
-					switch(minimapConfig.TileMatrixSet.minimapOriginAlignment)
+					// Origin alignment determines the way we count our grid
+					switch (minimapConfig.TileMatrixSet.minimapOriginAlignment)
 					{
 						case TileMatrixSet.OriginAlignment.BottomLeft:
 							tileKey = new Vector2(x + tileOffset.x, (float)(divide - 1) - (y + tileOffset.y));
@@ -388,17 +396,17 @@ namespace Netherlands3D.Minimap
 							break;
 					}
 
-					//Tile position to check if they are in viewer
+					// Tile position to check if they are in viewer
 					float compareXPosition = xPosition * localScale.x + localPosition.x;
 					float compareYPosition = yPosition * localScale.x + localPosition.y;
 
-					//Is this tile within the viewer rectangle?
+					// Is this tile within the viewer rectangle?
 					bool xWithinView = (compareXPosition + baseTileSize > 0 && compareXPosition < mapSizeDelta.x);
 					bool yWithinView = (compareYPosition > 0 && compareYPosition - baseTileSize < mapSizeDelta.y);
 
-					if(xWithinView && yWithinView)
+					if (xWithinView && yWithinView)
 					{
-						if(!tileList.ContainsKey(tileKey))
+						if (!tileList.TryGetValue(tileKey, out var existingTile))
 						{
 							var newTileObject = new GameObject();
 							var mapTile = newTileObject.AddComponent<Tile>();
@@ -407,12 +415,17 @@ namespace Netherlands3D.Minimap
 							tileList.Add(tileKey, mapTile);
 						}
 					}
-					else if(tileList.ContainsKey(tileKey))
+					else if (tileList.TryGetValue(tileKey, out var tileToRemove))
 					{
-						Destroy(tileList[tileKey].gameObject);
-						tileList.Remove(tileKey);
+						tilesToRemove.Add(tileKey);
 					}
 				}
+			}
+
+			foreach (var tileKey in tilesToRemove)
+			{
+				Destroy(tileList[tileKey].gameObject);
+				tileList.Remove(tileKey);
 			}
 		}
 	}
