@@ -357,6 +357,9 @@ namespace Netherlands3D.Minimap
 		private void UpdateLayerTiles(Dictionary<Vector2, Tile> tileList)
 		{
 			var mapSizeDelta = rectTransformMinimapUI.sizeDelta;
+			var localScale = rectTransform.localScale;
+			var localPosition = rectTransform.transform.localPosition;
+
 			for(int x = 0; x <= boundsTiles.x; x++)
 			{
 				for(int y = 0; y <= boundsTiles.y; y++)
@@ -380,8 +383,8 @@ namespace Netherlands3D.Minimap
 					}
 
 					//Tile position to check if they are in viewer
-					float compareXPosition = xPosition * rectTransform.localScale.x + rectTransform.transform.localPosition.x;
-					float compareYPosition = yPosition * rectTransform.localScale.x + rectTransform.transform.localPosition.y;
+					float compareXPosition = xPosition * localScale.x + localPosition.x;
+					float compareYPosition = yPosition * localScale.x + localPosition.y;
 
 					//Is this tile within the viewer rectangle?
 					bool xWithinView = (compareXPosition + baseTileSize > 0 && compareXPosition < mapSizeDelta.x);
