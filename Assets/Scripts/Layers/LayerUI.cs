@@ -494,7 +494,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (referenceLayerUnderMouse)
             {
                 var hoverTransform = referenceLayerUnderMouse.rectTransform; // as RectTransform;
-                var correctedSize = (hoverTransform.rect.size - referenceLayerUnderMouse.childrenPanel.rect.size) * hoverTransform.lossyScale;
+                var childPanelHeight = referenceLayerUnderMouse.foldoutToggle.isOn ? referenceLayerUnderMouse.childrenPanel.rect.size : Vector2.zero;
+                var correctedSize = (hoverTransform.rect.size - childPanelHeight) * hoverTransform.lossyScale;
                 var relativeValue = -relativeYValue / correctedSize.y;
                 var yValue01 = Mathf.Clamp01(relativeValue);
 
