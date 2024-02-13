@@ -373,15 +373,17 @@ namespace Netherlands3D.Minimap
 			var localScale = mapRectTransform.localScale;
 			var localPosition = mapRectTransform.transform.localPosition;
 
+
+			var tileSizeX = tileSize * localScale.x;
+			var tileSizeY = tileSize * localScale.y;
+				
+			var startX = Mathf.Max(0, Mathf.FloorToInt(-localPosition.x / tileSizeX));
+			var startY = Mathf.Max(0, Mathf.FloorToInt((localPosition.y-mapSizeDelta.y) / tileSizeY));
+
+			var endX = Mathf.CeilToInt((mapSizeDelta.x - localPosition.x) / tileSizeX);
+			var endY = Mathf.FloorToInt((mapSizeDelta.y + localPosition.y) / tileSizeY);
+
 			var tilesToRemove = new List<Vector2>(tileList.Keys);
-
-			var startX = Mathf.FloorToInt(Mathf.Max(0, -localPosition.x / (tileSize * localScale.x)));
-			var startY = Mathf.FloorToInt(Mathf.Max(0, localPosition.y / (tileSize * localScale.y)));
-
-			var endX = Mathf.CeilToInt((mapSizeDelta.x - localPosition.x) / (tileSize * localScale.x));
-			var endY = Mathf.CeilToInt((mapSizeDelta.y + localPosition.y) / (tileSize * localScale.y));
-
-			Debug.Log("StartX: " + startX + " StartY: " + startY + " EndX: " + endX + " EndY: " + endY);
 
 			for (int x = startX; x <= endX; x++)
 			{
@@ -404,11 +406,6 @@ namespace Netherlands3D.Minimap
 							tileKey = new Vector2(x + tileOffset.x, y + tileOffset.y);
 							break;
 					}
-
-					// Tile position to check if they are in viewer
-					float compareXPosition = tileXPosition * localScale.x + localPosition.x;
-					float compareYPosition = tileYPosition * localScale.x + localPosition.y;
-
 
 					if (!tileList.TryGetValue(tileKey, out var existingTile))
 					{
