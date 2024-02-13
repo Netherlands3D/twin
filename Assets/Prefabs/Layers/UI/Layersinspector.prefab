@@ -452,7 +452,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8277673045000416409}
-  - component: {fileID: 1998528984919783289}
   m_Layer: 5
   m_Name: Layersinspector
   m_TagString: Untagged
@@ -484,36 +483,6 @@ RectTransform:
   m_AnchoredPosition: {x: -12.5, y: 0}
   m_SizeDelta: {x: 25, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1998528984919783289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4151227325010422218}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 4503089938938308058}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.01
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 3
-  m_Viewport: {fileID: 9050801979174979923}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 9125379463251168502}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 1
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4712560978677953182
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +497,8 @@ GameObject:
   - component: {fileID: 4298859177986448089}
   - component: {fileID: 144577590653210800}
   - component: {fileID: 3130464971845449716}
+  - component: {fileID: 1766436085525329931}
+  - component: {fileID: 5255807216009567058}
   m_Layer: 5
   m_Name: LayersPanel
   m_TagString: Untagged
@@ -648,6 +619,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addLayerPanel: {fileID: 312928999670814499}
+--- !u!114 &1766436085525329931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712560978677953182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 4503089938938308058}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.01
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 3
+  m_Viewport: {fileID: 9050801979174979923}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 9125379463251168502}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 1
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &5255807216009567058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712560978677953182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3790799467c1e48d2886a5d54fb7a9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8850691898350666258
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,6 +787,11 @@ PrefabInstance:
     - target: {fileID: 550364512664361664, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 550364512664361664, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 550364512664361664, guid: a1d12948b2baf466d9b8bf9980e98e47,
@@ -1059,6 +1077,11 @@ PrefabInstance:
     - target: {fileID: 4178449457251797047, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4178449457251797047, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4178449457251797047, guid: a1d12948b2baf466d9b8bf9980e98e47,
