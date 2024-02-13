@@ -374,9 +374,14 @@ namespace Netherlands3D.Minimap
 			var localPosition = rectTransform.transform.localPosition;
 
 			var tilesToRemove = new HashSet<Vector2>();
-			for (int x = 0; x <= boundsTiles.x; x++)
+
+			var startX = (int)-tileOffset.x;
+			var startY = (int)-tileOffset.y;
+
+			Debug.Log("StartX: " + startX + " StartY: " + startY);
+			for (int x = startX; x <= boundsTiles.x; x++)
 			{
-				for (int y = 0; y <= boundsTiles.y; y++)
+				for (int y = 0; startY <= boundsTiles.y; y++)
 				{
 					Vector2 tileKey;
 
