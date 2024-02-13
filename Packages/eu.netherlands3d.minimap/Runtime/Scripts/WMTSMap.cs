@@ -356,6 +356,7 @@ namespace Netherlands3D.Minimap
 		/// <param name="tileList"></param>
 		private void UpdateLayerTiles(Dictionary<Vector2, Tile> tileList)
 		{
+			var mapSizeDelta = rectTransformMinimapUI.sizeDelta;
 			for(int x = 0; x <= boundsTiles.x; x++)
 			{
 				for(int y = 0; y <= boundsTiles.y; y++)
@@ -383,8 +384,8 @@ namespace Netherlands3D.Minimap
 					float compareYPosition = yPosition * rectTransform.localScale.x + rectTransform.transform.localPosition.y;
 
 					//Is this tile within the viewer rectangle?
-					bool xWithinView = (compareXPosition + baseTileSize > 0 && compareXPosition < rectTransformMinimapUI.sizeDelta.x);
-					bool yWithinView = (compareYPosition > 0 && compareYPosition - baseTileSize < rectTransformMinimapUI.sizeDelta.y);
+					bool xWithinView = (compareXPosition + baseTileSize > 0 && compareXPosition < mapSizeDelta.x);
+					bool yWithinView = (compareYPosition > 0 && compareYPosition - baseTileSize < mapSizeDelta.y);
 
 					if(xWithinView && yWithinView)
 					{
