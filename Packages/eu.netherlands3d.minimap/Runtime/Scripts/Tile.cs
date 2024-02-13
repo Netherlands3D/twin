@@ -70,7 +70,7 @@ namespace Netherlands3D.Minimap
 			while(TextureTargetRawImage.color.a < 1.0f)
 			{
 				TextureTargetRawImage.color = new Color(TextureTargetRawImage.color.r, TextureTargetRawImage.color.g, TextureTargetRawImage.color.b, TextureTargetRawImage.color.a + fadeSpeed * Time.deltaTime);
-				yield return new WaitForEndOfFrame();
+				yield return null;
 			}
 		}
 
