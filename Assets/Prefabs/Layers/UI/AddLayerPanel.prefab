@@ -114,7 +114,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1259.9844, y: -58}
+  m_AnchoredPosition: {x: 1904, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4675416958352508017
@@ -254,7 +254,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1092352203642877472}
   - component: {fileID: 6279890870373779683}
-  - component: {fileID: 2719093848719787347}
   m_Layer: 5
   m_Name: StandardLayerPanel
   m_TagString: Untagged
@@ -284,8 +283,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1275.9844, y: -204}
-  m_SizeDelta: {x: 2519.9688, y: 272}
+  m_AnchoredPosition: {x: 1920, y: -174}
+  m_SizeDelta: {x: 3808, y: 272}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6279890870373779683
 MonoBehaviour:
@@ -300,31 +299,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 63
-    m_Right: 63
+    m_Left: -63
+    m_Right: -63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: 63, y: 48}
+  m_Spacing: {x: -63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
---- !u!114 &2719093848719787347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337516325763848479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!1 &475649601198728995
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,8 +469,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 67748899823263108}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.AddLayerPanel, Assembly-CSharp
+      - m_Target: {fileID: 1372417627372885277}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AdvancedScrollView, Assembly-CSharp
         m_MethodName: ResetScrollActive
         m_Mode: 1
         m_Arguments:
@@ -534,7 +519,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1910.9688, y: -58}
+  m_AnchoredPosition: {x: 2877, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5276131161280592825
@@ -809,6 +794,7 @@ GameObject:
   - component: {fileID: 1890818014237057293}
   - component: {fileID: 675677739205232157}
   - component: {fileID: 67748899823263108}
+  - component: {fileID: 1372417627372885277}
   m_Layer: 5
   m_Name: AddLayerPanel
   m_TagString: Untagged
@@ -893,10 +879,10 @@ MonoBehaviour:
   m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
-  m_Elasticity: 0.05
+  m_Elasticity: 0.01
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 3
   m_Viewport: {fileID: 7815927442135817875}
   m_HorizontalScrollbar: {fileID: 6951452337475559857}
   m_VerticalScrollbar: {fileID: 4778416693274480372}
@@ -923,8 +909,23 @@ MonoBehaviour:
   minHeight: 0
   minResizeHeightThreshold: 50
   maxHeight: 350
-  smoothTime: 0.15
+  smoothTime: 1
   toggle: {fileID: 0}
+  OnRectTransformSizeChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1372417627372885277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740642816338865571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3790799467c1e48d2886a5d54fb7a9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &864163037451147846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1903,7 +1904,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 32}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &983721342742903452
 MonoBehaviour:
@@ -1918,8 +1919,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 63
-    m_Right: 63
+    m_Left: -63
+    m_Right: -63
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
@@ -2380,7 +2381,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0009022126}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2082632946773052341
@@ -2405,7 +2406,7 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -2718,7 +2719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1910.9688, y: -58}
+  m_AnchoredPosition: {x: 2877, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2071137930874552224
@@ -3148,7 +3149,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1895458396098737140}
   - component: {fileID: 9020626504365162853}
-  - component: {fileID: 252893499511333722}
   m_Layer: 5
   m_Name: ObjectLibraryPanel
   m_TagString: Untagged
@@ -3178,8 +3178,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1275.9844, y: -476}
-  m_SizeDelta: {x: 2519.9688, y: 272}
+  m_AnchoredPosition: {x: 1920, y: -174}
+  m_SizeDelta: {x: 3808, y: 272}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &9020626504365162853
 MonoBehaviour:
@@ -3194,31 +3194,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 63
-    m_Right: 63
+    m_Left: -63
+    m_Right: -63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: 63, y: 48}
+  m_Spacing: {x: -63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
---- !u!114 &252893499511333722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2451208582209453448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!1 &2611303859381672902
 GameObject:
   m_ObjectHideFlags: 0
@@ -3900,7 +3886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 609, y: -58}
+  m_AnchoredPosition: {x: 931, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &58438631003602257
@@ -4642,7 +4628,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 609, y: -190}
+  m_AnchoredPosition: {x: 931, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7107313958872428281
@@ -5253,7 +5239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1259.9844, y: -190}
+  m_AnchoredPosition: {x: 1904, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6421142838901259914
@@ -5558,7 +5544,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1910.9688, y: -190}
+  m_AnchoredPosition: {x: 2877, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6780052492627869093
@@ -5770,7 +5756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1910.9688, y: -190}
+  m_AnchoredPosition: {x: 2877, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8092024801048962551
@@ -6014,7 +6000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 609, y: -190}
+  m_AnchoredPosition: {x: 931, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7360235761031761295
@@ -6432,7 +6418,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 156}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &5215873686392044196
 MonoBehaviour:
@@ -6447,15 +6433,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 63
-    m_Right: 63
+    m_Left: -63
+    m_Right: -63
     m_Top: 16
     m_Bottom: 40
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 84, y: 84}
-  m_Spacing: {x: 63, y: 48}
+  m_Spacing: {x: -63, y: 48}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!114 &3131324055320172064
@@ -7187,7 +7173,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 125.229996, y: 0}
+  m_AnchoredPosition: {x: 951.23, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
@@ -7332,8 +7318,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 67748899823263108}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.AddLayerPanel, Assembly-CSharp
+      - m_Target: {fileID: 1372417627372885277}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AdvancedScrollView, Assembly-CSharp
         m_MethodName: ResetScrollActive
         m_Mode: 1
         m_Arguments:
@@ -7573,7 +7559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 609, y: -58}
+  m_AnchoredPosition: {x: 931, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8242536928929272739
@@ -8090,7 +8076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1259.9844, y: -190}
+  m_AnchoredPosition: {x: 1904, y: -190}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1603371029249259678
@@ -8227,7 +8213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1259.9844, y: -58}
+  m_AnchoredPosition: {x: 1904, y: -58}
   m_SizeDelta: {x: 84, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2897700439267965218
@@ -8523,8 +8509,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 67748899823263108}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.AddLayerPanel, Assembly-CSharp
+      - m_Target: {fileID: 1372417627372885277}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AdvancedScrollView, Assembly-CSharp
         m_MethodName: ResetScrollActive
         m_Mode: 1
         m_Arguments:

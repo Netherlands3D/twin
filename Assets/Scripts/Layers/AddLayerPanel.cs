@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -23,31 +24,13 @@ namespace Netherlands3D.Twin
         private Coroutine activeAnimationCoroutine;
         [SerializeField] private Toggle toggle;
         private bool isDragging;
-        private ScrollRect scrollRect;
+
+        public UnityEvent<float> OnRectTransformSizeChanged = new();
 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
-            scrollRect = GetComponent<ScrollRect>();
             targetHeight = defaultOpenHeight;
-        }
-
-        private void OnRectTransformDimensionsChange()
-        {
-            ResetScrollActive();
-        }
-
-        public void ResetScrollActive()
-        {
-            if (gameObject.activeInHierarchy)
-                StartCoroutine(ResetScrollActiveAtEndOfFrame());
-        }
-
-        private IEnumerator ResetScrollActiveAtEndOfFrame()
-        {
-            yield return new WaitForEndOfFrame(); //wait for the end of the frame, because the layout needs to be updated for this calculation to work
-            var fitsInViewport = scrollRect.viewport.rect.height < scrollRect.content.rect.height;
-            scrollRect.movementType = fitsInViewport ? ScrollRect.MovementType.Elastic : ScrollRect.MovementType.Clamped; //scrollRect.verticalScrollbar.gameObject.activeInHierarchy;
         }
 
         public void TogglePanel(bool open)
@@ -79,39 +62,46 @@ namespace Netherlands3D.Twin
                 toggle.isOn = isOpen;
 
             isDragging = true;
+            OnRectTransformSizeChanged.Invoke(targetHeight);
         }
 
         private IEnumerator AnimatePanel(bool open)
         {
+            float elapsedTime = 0;
             while (true)
             {
                 // var delta = speed * Time.deltaTime;
+                elapsedTime += Time.deltaTime;
                 if (open)
                 {
-                    var newY = Mathf.SmoothDamp(rectTransform.sizeDelta.y, targetHeight, ref currentVelocity, smoothTime);
+                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, targetHeight, elapsedTime/smoothTime);
                     var newSizeDelta = new Vector2(0, newY);
-                    if (newSizeDelta.y > targetHeight)
+                    if (elapsedTime > smoothTime)
                     {
                         rectTransform.sizeDelta = new Vector2(0, targetHeight);
+                        OnRectTransformSizeChanged.Invoke(rectTransform.sizeDelta.y);
                         activeAnimationCoroutine = null;
                         yield break;
                     }
 
                     rectTransform.sizeDelta = newSizeDelta;
+                    OnRectTransformSizeChanged.Invoke(rectTransform.sizeDelta.y);
                     yield return null;
                 }
                 else
                 {
-                    var newY = Mathf.SmoothDamp(rectTransform.sizeDelta.y, minHeight, ref currentVelocity, smoothTime);
+                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, minHeight, elapsedTime/smoothTime);
                     var newSizeDelta = new Vector2(0, newY);
-                    if (newSizeDelta.y < 0)
+                    if (elapsedTime > smoothTime)
                     {
                         rectTransform.sizeDelta = new Vector2(0, minHeight);
+                        OnRectTransformSizeChanged.Invoke(rectTransform.sizeDelta.y);
                         activeAnimationCoroutine = null;
                         yield break;
                     }
 
                     rectTransform.sizeDelta = newSizeDelta;
+                    OnRectTransformSizeChanged.Invoke(rectTransform.sizeDelta.y);
                     yield return null;
                 }
             }
