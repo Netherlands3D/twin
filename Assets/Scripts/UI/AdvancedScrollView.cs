@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin
         {
             yield return new WaitForEndOfFrame(); //wait for the end of the frame, because the layout needs to be updated for this calculation to work
             var fitsInViewport = scrollRect.viewport.rect.height < scrollRect.content.rect.height;
-            scrollRect.movementType = fitsInViewport ? ScrollRect.MovementType.Elastic : ScrollRect.MovementType.Clamped; //scrollRect.verticalScrollbar.gameObject.activeInHierarchy;
+            scrollRect.movementType = fitsInViewport ? ScrollRect.MovementType.Elastic : ScrollRect.MovementType.Clamped;
         }
     }
 }
