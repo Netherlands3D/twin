@@ -30,7 +30,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
-	public class UI_DownloadInspector : MonoBehaviour
+	public class DownloadInspector : MonoBehaviour
 	{
 		[SerializeField] private AreaSelection areaSelection;
 		[SerializeField] private RenderedThumbnail renderedThumbnail;

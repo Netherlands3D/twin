@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 6860502739396848324}
   - component: {fileID: 4191480216153404035}
   m_Layer: 5
-  m_Name: BAG
+  m_Name: BAGInspector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
