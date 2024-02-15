@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -417,6 +418,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
             }
             if (tile.isLoading==false && tile.children.Count==0 && tile.contentUri.Contains(".subtree"))
             {
+                UnityEngine.Debug.Log(tile.contentUri);
                 ReadSubtree subtreeReader = GetComponent<ReadSubtree>();
                 if (subtreeReader.isbusy)
                 {
@@ -608,6 +610,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
         public string subtreeUri;
         public string contentUri;
         public float geometricError;
+        public BoundingVolume boundingVolume;
         public double[] boundingRegion;
     }
 }

@@ -115,39 +115,8 @@ namespace Netherlands3D.Tiles3D
                 childTile.Y += 1;
             }
             childTile.geometricError = parentTile.geometricError / 2f;
-            childTile.boundingVolume = new BoundingVolume();
-            childTile.boundingVolume.boundingVolumeType = parentTile.boundingVolume.boundingVolumeType;
-            childTile.boundingVolume.values = new double[parentTile.boundingVolume.values.Length];
-            double lonMin = parentTile.boundingVolume.values[0];
-            double lonMax = parentTile.boundingVolume.values[2];
-            double lonMid = (lonMin + lonMax) / 2f;
-
-            double latMin = parentTile.boundingVolume.values[1];
-            double latMax = parentTile.boundingVolume.values[3];
-            double latMid = (latMin + latMax) / 2f;
-
-            if (childNumber % 2 == 0)
-            {
-                childTile.boundingVolume.values[0] = lonMin;
-                childTile.boundingVolume.values[2] = lonMid;
-            }
-            else
-            {
-                childTile.boundingVolume.values[0] = lonMid;
-                childTile.boundingVolume.values[2] = lonMax;
-            }
-            if (childNumber < 2)
-            {
-                childTile.boundingVolume.values[1] = latMin;
-                childTile.boundingVolume.values[3] = latMid;
-            }
-            else
-            {
-                childTile.boundingVolume.values[1] = latMid;
-                childTile.boundingVolume.values[3] = latMax;
-            }
-            childTile.boundingVolume.values[4] = parentTile.boundingVolume.values[4];
-            childTile.boundingVolume.values[5] = parentTile.boundingVolume.values[5];
+            childTile.boundingVolume = parentTile.boundingVolume.GetChildBoundingVolume(childNumber,settings.subdivisionScheme);
+           
 
 
 

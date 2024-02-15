@@ -128,7 +128,7 @@ namespace Netherlands3D.Tiles3D
 
                         await gltf.InstantiateSceneAsync(transform, i);
                         var scene = transform.GetChild(0).transform;
-
+                    
                    
 
 

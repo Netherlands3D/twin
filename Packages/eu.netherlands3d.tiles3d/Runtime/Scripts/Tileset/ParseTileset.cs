@@ -49,6 +49,7 @@ namespace Netherlands3D.Tiles3D
                 case TilingMethod.ImplicitTiling:
                     Debug.Log("Implicit tiling"); 
                     rootTile = new Tile();
+                    rootTile = ReadExplicitNode(rootnode, rootTile);
                     rootTile.level = 0;
                     rootTile.X = 0;
                     rootTile.Y = 0;
@@ -56,7 +57,7 @@ namespace Netherlands3D.Tiles3D
                     ReadImplicitTiling(rootnode,rootTile);
                     
                     rootTile.transform = root.transform;
-                    root = ReadExplicitNode(rootnode, rootTile);
+                    root = rootTile;
                     break;
                 default:
                     break;
@@ -159,11 +160,8 @@ namespace Netherlands3D.Tiles3D
                     break;
             }
             implicitTilingSettings.geometricError = rootnode["geometricError"].AsFloat;
-            implicitTilingSettings.boundingRegion = new double[6];
-            for (int i = 0; i < 6; i++)
-            {
-                implicitTilingSettings.boundingRegion[i] = rootnode["boundingVolume"]["region"][i].AsDouble;
-            }
+           
+            
             implicitTilingSettings.contentUri = rootnode["content"]["uri"].Value;
             JSONNode implicitTilingNode = rootnode["implicitTiling"];
             string subdivisionScheme = implicitTilingNode["subsivisionScheme"].Value;
@@ -176,6 +174,7 @@ namespace Netherlands3D.Tiles3D
                     implicitTilingSettings.subdivisionScheme = SubdivisionScheme.Octree;
                     break;
             }
+            implicitTilingSettings.boundingVolume = ParseBoundingVolume(rootnode["boundingVolume"]);
             implicitTilingSettings.availableLevels = implicitTilingNode["availableLevels"];
             implicitTilingSettings.subtreeLevels = implicitTilingNode["subtreeLevels"];
             implicitTilingSettings.subtreeUri = implicitTilingNode["subtrees"]["uri"].Value;
@@ -199,8 +198,8 @@ namespace Netherlands3D.Tiles3D
                 tile = tile.children[0];
                 
             }
-            //Read3DTileset tilesetReader =  subtreeReader.transform.GetComponent<Read3DTileset>();
-            //if (tilesetReader!=null)
+            //Read3DTileset tilesetReader = subtreeReader.transform.GetComponent<Read3DTileset>();
+            //if (tilesetReader != null)
             //{
             //    tilesetReader.root = tile;
             //}
