@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using GLTFast;
 using System;
+using System.Text.RegularExpressions;
 using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
@@ -82,15 +83,14 @@ namespace Netherlands3D.Tiles3D
             //Use feature ID as bufferView index and get bufferview
             var featureAccessor = gltfFeatures.accessors[featureIdBufferViewIndex];
             var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
-            if (targetBufferView.extensions.EXT_meshopt_compression == null)
-            {
-                Debug.LogWarning("No meshopt compression found. This is required to find BAG id's.");
-                return;
-            }
-            var featureIdBuffer = GetDecompressedBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob);
+
+            // var compressed = gltfFeatures.extensionsRequired.Contains("EXT_meshopt_compression"); //Needs testing
+            var compressed = false;
+
+            var featureIdBuffer = GetFeatureBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob, compressed);
             if (featureIdBuffer == null || featureIdBuffer.Length == 0)
             {
-                Debug.LogWarning("Meshopt decompression failed.");
+                Debug.LogWarning("Getting feature buffer failed.");
                 return;
             }
 
@@ -99,10 +99,12 @@ namespace Netherlands3D.Tiles3D
             var stride = targetBufferView.byteStride;
             int currentFeatureTableIndex = -1;
             int vertexCount = 0;
+            int accessorOffset = featureAccessor.byteOffset;
             for (int i = 0; i < featureIdBuffer.Length; i += stride)
             {
-                var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i);
-
+                //TODO: Read componentType from accessor to determine how to read the featureTableIndex
+                var featureTableIndex = (int)BitConverter.ToSingle(featureIdBuffer, i+accessorOffset); 
+                
                 if (currentFeatureTableIndex != featureTableIndex)
                 {
                     if (currentFeatureTableIndex != -1)
@@ -127,7 +129,10 @@ namespace Netherlands3D.Tiles3D
             foreach (var propertyTable in propertyTables)
             {
                 //Now parse the data from the buffer using stringOffsetType=UINT32
-                var bufferViewIndex = propertyTable.properties.bagpandid.values; //Values reference the bufferView index
+                var bagpandid = propertyTable.properties.bagpandid; //Based on Tyler dataset key naming
+                var identificatie = propertyTable.properties.identificatie;  //Based on PG2B3DM dataset key naming
+
+                var bufferViewIndex = (bagpandid != null) ? bagpandid.values : identificatie.values; //Values reference the bufferView index
                 var count = propertyTable.count;
                 var bufferView = gltfFeatures.bufferViews[bufferViewIndex];
                 var stringSpan = bufferView.byteLength / count; //string length in bytes
@@ -139,17 +144,18 @@ namespace Netherlands3D.Tiles3D
                     var stringBytesSpanSlice = stringBytesSpan.Slice(i * stringSpan, stringSpan);
                     var stringBytes = stringBytesSpanSlice.ToArray();
                     var stringBytesString = Encoding.ASCII.GetString(stringBytes);
-
                     bagIdList.Add(stringBytesString);
                 }
                 break; //Just support one for now.
             }
 
 #if SUBOBJECT
-            //For each child scene add object mapping component
+
             foreach (Transform child in parent)
             {
+                Debug.Log(child.name,child.gameObject);
                 //Add subobjects to the spawned gameobject
+                child.gameObject.AddComponent<MeshCollider>();
                 ObjectMapping objectMapping = child.gameObject.AddComponent<ObjectMapping>();
                 objectMapping.items = new List<ObjectMappingItem>();
 
@@ -159,6 +165,10 @@ namespace Netherlands3D.Tiles3D
                 {
                     var uniqueFeatureId = vertexFeatureIds[i];
                     var bagId = bagIdList[uniqueFeatureId.x];
+                    
+                    //Remove any prefixes/additions to the bag id
+                    bagId = Regex.Replace(bagId, "[^0-9]", "");
+
                     var subObject = new ObjectMappingItem()
                     {
                         objectID = bagId,
@@ -174,20 +184,26 @@ namespace Netherlands3D.Tiles3D
             Debug.LogWarning("Subobjects are not supported in this build. Please use the Netherlands3D.SubObjects package.");
         }
 
-        private byte[] GetDecompressedBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer)
+        private byte[] GetFeatureBuffer(GltfMeshFeatures.Buffer[] buffers, GltfMeshFeatures.BufferView bufferView, byte[] glbBuffer, bool decompress)
         {
             //Because the mesh is compressed, we need to get the buffer and decompress it
-            var bufferIndex = bufferView.extensions.EXT_meshopt_compression.buffer; //Ignore multiple buffers for now
-            var byteLength = bufferView.extensions.EXT_meshopt_compression.byteLength;
-            var byteOffset = bufferView.extensions.EXT_meshopt_compression.byteOffset;
-            var byteStride = bufferView.extensions.EXT_meshopt_compression.byteStride;
-            var count = bufferView.extensions.EXT_meshopt_compression.count;
+            var byteLength = decompress ? bufferView.extensions.EXT_meshopt_compression.byteLength : bufferView.byteLength;
+            var byteOffset = decompress ? bufferView.extensions.EXT_meshopt_compression.byteOffset : bufferView.byteOffset;
 
             //Create NativeArray from byte[] glbBuffer
             glbBufferNative = new NativeArray<byte>(glbBuffer, Allocator.Persistent);
 
             //Create NativeSlice as part of the glbBuffer that the view is covering
             source = glbBufferNative.Slice((int)byteOffset, (int)byteLength);
+            if(!decompress)
+            {
+                //Convert slice to byte[] array
+                Debug.Log("Use buffer directly");
+                return source.ToArray();
+            }
+            Debug.Log("Decompress buffer");
+            var byteStride = bufferView.extensions.EXT_meshopt_compression.byteStride;
+            var count = bufferView.extensions.EXT_meshopt_compression.count;   
 
             //Create NativeArray to store the decompressed buffer
             destination = new NativeArray<byte>(count * byteStride, Allocator.Persistent);
