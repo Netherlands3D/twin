@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class UI_KeyValuePair : MonoBehaviour
+    public class KeyValuePair : MonoBehaviour
     {
         [SerializeField] private TMP_Text keyText;
         [SerializeField] private TMP_Text valueText;
