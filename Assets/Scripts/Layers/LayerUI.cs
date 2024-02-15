@@ -191,7 +191,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 transform.SetParent(newParent.childrenPanel);
 
-            print("reparenting : " + siblingIndex);
             transform.SetSiblingIndex(siblingIndex);
 
             if (oldParent)
