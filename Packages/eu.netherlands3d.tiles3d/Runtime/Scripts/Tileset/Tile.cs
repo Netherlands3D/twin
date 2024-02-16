@@ -246,31 +246,23 @@ namespace Netherlands3D.Tiles3D
             {
                 case BoundingVolumeType.Box:
                     //TODO: proper Box bounding calculation
-                    var boxCenter = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]));
-                    //var xAxis = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]));
-                    //var yAxis = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]));
-                    //var zAxis = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]));
-
-                    //var xAxisExt = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] + boundingVolume.values[3], boundingVolume.values[1] + boundingVolume.values[4], boundingVolume.values[2] + boundingVolume.values[5]));
-                    //var yAxisExt = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] + boundingVolume.values[6], boundingVolume.values[1] + boundingVolume.values[7], boundingVolume.values[2] + boundingVolume.values[8]));
-                    //var zAxisExt = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] + boundingVolume.values[9], boundingVolume.values[1] + boundingVolume.values[10], boundingVolume.values[2] + boundingVolume.values[11]));
-
-                    //var xAxisExtInv = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] - boundingVolume.values[3], boundingVolume.values[1] - boundingVolume.values[4], boundingVolume.values[2] - boundingVolume.values[5]));
-                    //var yAxisExtInv = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] - boundingVolume.values[6], boundingVolume.values[1] - boundingVolume.values[7], boundingVolume.values[2] - boundingVolume.values[8]));
-                    //var zAxisExtInv = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0] - boundingVolume.values[9], boundingVolume.values[1] - boundingVolume.values[10], boundingVolume.values[2] - boundingVolume.values[11]));
-
-                    var toprightX = boundingVolume.values[0] + boundingVolume.values[3] + boundingVolume.values[6] + boundingVolume.values[9];
-                    var toprightY = boundingVolume.values[1] + boundingVolume.values[4] + boundingVolume.values[7] + boundingVolume.values[10];
-                    var toprightZ = boundingVolume.values[2] + boundingVolume.values[5] + boundingVolume.values[8] + boundingVolume.values[11];
-
-                    var bottomleftX = boundingVolume.values[0] - boundingVolume.values[3] - boundingVolume.values[6] - boundingVolume.values[9];
-                    var bottomleftY = boundingVolume.values[1] - boundingVolume.values[4] - boundingVolume.values[7] - boundingVolume.values[10];
-                    var bottomleftZ = boundingVolume.values[2] - boundingVolume.values[5] - boundingVolume.values[8] - boundingVolume.values[11];
+                    
+                    Coordinate boxCenterEcef = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]);
+                    Coordinate Xaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]);
+                    Coordinate Yaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]);
+                    Coordinate Zaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]);
 
                     bounds.size = Vector3.zero;
-                    bounds.center = boxCenter;
-                    bounds.Encapsulate(CoordinateConverter.ECEFToUnity(new Vector3ECEF(toprightX,toprightY,toprightZ)));
-                    bounds.Encapsulate(CoordinateConverter.ECEFToUnity(new Vector3ECEF(bottomleftX, bottomleftY, bottomleftZ)));
+                    bounds.center = CoordinateConverter.ConvertTo(boxCenterEcef,CoordinateSystem.Unity).ToVector3();
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef +Xaxis+Yaxis+Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef +Xaxis+Yaxis-Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef + Xaxis - Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef + Xaxis - Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis + Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis + Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
+                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
+
                     //bounds.Encapsulate(zAxisExt);
                     //bounds.Encapsulate(xAxisExtInv);
                     //bounds.Encapsulate(yAxisExtInv);
