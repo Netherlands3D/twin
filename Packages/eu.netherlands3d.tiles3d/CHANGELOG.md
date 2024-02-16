@@ -4,11 +4,18 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+## [1.2.1] - 16-02-2024
+
+### Fixed
+
+- fix calculating unitybounds from boudingVolumeType Box.
+- fix reading subdivisionSceme
+
 ## [1.2.0] - 16-02-2024
 
 ### Added
 
-- added support for boudingVolummeType Box in combination with Implicit Tiling
+- added support for boudingVolumeType Box in combination with Implicit Tiling
 
 ## [1.1.0] - 28-11-2023
 
