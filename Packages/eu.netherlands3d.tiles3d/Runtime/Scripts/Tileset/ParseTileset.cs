@@ -164,7 +164,7 @@ namespace Netherlands3D.Tiles3D
             
             implicitTilingSettings.contentUri = rootnode["content"]["uri"].Value;
             JSONNode implicitTilingNode = rootnode["implicitTiling"];
-            string subdivisionScheme = implicitTilingNode["subsivisionScheme"].Value;
+            string subdivisionScheme = implicitTilingNode["subdivisionScheme"].Value;
             switch (subdivisionScheme)
             {
                 case "QUADTREE":
