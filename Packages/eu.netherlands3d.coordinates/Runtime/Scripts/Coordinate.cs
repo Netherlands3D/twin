@@ -51,5 +51,52 @@ namespace Netherlands3D.Coordinates
             CoordinateSystem = coordinateSystem;
             Points = points;
         }
+
+        public static Coordinate operator +(Coordinate a, Coordinate b)
+        {
+            int maxcoordinatecount = a.Points.Length;
+            int mincoordinatecount = b.Points.Length;
+            Coordinate longestCoordainte = a;
+            if (b.Points.Length>maxcoordinatecount)
+            {
+                maxcoordinatecount = b.Points.Length;
+                mincoordinatecount = a.Points.Length;
+                longestCoordainte = b;
+            }
+            double[] points = new double[maxcoordinatecount];
+            for (int i = 0; i < mincoordinatecount; i++)
+            {
+                points[i] = a.Points[i] + b.Points[i];
+            }
+            for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
+            {
+                points[i] = longestCoordainte.Points[i];
+            }
+            return new Coordinate(a.CoordinateSystem, points);
+        }
+        public static Coordinate operator -(Coordinate a, Coordinate b)
+        {
+            int maxcoordinatecount = a.Points.Length;
+            int mincoordinatecount = b.Points.Length;
+            Coordinate longestCoordainte = a;
+            double remainMultiplier = 1;
+            if (b.Points.Length > maxcoordinatecount)
+            {
+                maxcoordinatecount = b.Points.Length;
+                mincoordinatecount = a.Points.Length;
+                longestCoordainte = b;
+                remainMultiplier = -1;
+            }
+            double[] points = new double[maxcoordinatecount];
+            for (int i = 0; i < mincoordinatecount; i++)
+            {
+                points[i] = a.Points[i] - b.Points[i];
+            }
+            for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
+            {
+                points[i] = longestCoordainte.Points[i]*remainMultiplier;
+            }
+            return new Coordinate(a.CoordinateSystem, points);
+        }
     }
 }
