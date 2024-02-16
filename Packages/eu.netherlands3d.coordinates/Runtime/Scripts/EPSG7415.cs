@@ -100,7 +100,7 @@ namespace Netherlands3D.Coordinates
             Vector3WGS output = new Vector3WGS();
             output.lon = lon;
             output.lat = lat;
-
+            output.h = nap+RDCorrection(lon, lat, "Z", RDCorrectionZ);
             //output height missing
             return output;
         }
@@ -145,11 +145,11 @@ namespace Netherlands3D.Coordinates
             double rowHeight = (Ymax - Ymin) / sizeY;
             double locationY = (long)Math.Floor((y - Ymin) / rowHeight);
 
-            if (locationX < Xmin || locationX > Xmax)
+            if (x < Xmin || x > Xmax)
             {
                 return value;
             }
-            if (locationY < Ymin || locationY > Ymax)
+            if (y < Ymin || y > Ymax)
             {
                 return value;
             }
