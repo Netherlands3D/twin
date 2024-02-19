@@ -52,9 +52,13 @@ namespace Netherlands3D.Twin.Configuration
         public bool ShouldStartSetup
         {
             get => shouldStartSetup;
-            set => shouldStartSetup = value;
+            set{
+                shouldStartSetup = value;
+                OnShouldStartSetupChanged.Invoke();
+            }
         }
 
+        public UnityEvent OnShouldStartSetupChanged = new();
         public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
 
