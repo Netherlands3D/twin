@@ -101,7 +101,6 @@ GameObject:
   - component: {fileID: 4567236183040430189}
   - component: {fileID: 8612115766732982784}
   - component: {fileID: 2255234672255247488}
-  - component: {fileID: 742183966315533752}
   - component: {fileID: 797915757257290819}
   m_Layer: 5
   m_Name: Text (TMP)
@@ -230,20 +229,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &742183966315533752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 506923744691797846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &797915757257290819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8461925525370366667}
   - component: {fileID: 5917254537132755462}
-  - component: {fileID: 635969343117528540}
+  - component: {fileID: 2019879628035939720}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -457,7 +442,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &635969343117528540
+--- !u!114 &2019879628035939720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -795,6 +780,7 @@ MonoBehaviour:
   watermark: {fileID: 6254386140383449619}
   placeHolderText: Kies welke functionaliteit wel of niet actief moet zijn om de
     gebruikerservaring te maken die jij nodig hebt.
+  scrollRectText: {fileID: 6517556796696564916}
 --- !u!1 &5632017525148474081
 GameObject:
   m_ObjectHideFlags: 0

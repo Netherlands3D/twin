@@ -15,6 +15,17 @@ MonoBehaviour:
   Id: bag
   Title: BAG informatie ophalen van panden
   Caption: Vrij beschikbaar
+  Description: Duis accumsan elit suscipit erat finibus, laoreet varius nunc rhoncus.
+    Praesent interdum cursus metus id dignissim. Nunc iaculis enim ac congue condimentum.
+    Quisque convallis tellus vitae scelerisque venenatis. Phasellus congue libero
+    id eleifend molestie. Aliquam eget quam ut augue interdum elementum. Sed varius
+    at lectus consequat faucibus. Phasellus eu ullamcorper erat. Quisque in lectus
+    pellentesque, facilisis neque ac, pharetra lectus. Suspendisse potenti. Aenean
+    eros lorem, imperdiet nec sapien et, venenatis suscipit lorem. Suspendisse faucibus
+    velit vel turpis finibus gravida. Etiam eget metus non nulla rutrum varius rhoncus
+    id nibh. Mauris dictum ornare magna, ut tristique ante posuere in. Integer feugiat
+    vulputate metus, et hendrerit lorem interdum rutrum. Nullam consectetur, mi non
+    hendrerit varius, ipsum erat lobortis eros, quis finibus nibh tellus sed arcu.
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

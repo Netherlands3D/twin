@@ -27,6 +27,7 @@ namespace Netherlands3D.Twin.Configuration
 
         [FormerlySerializedAs("featureList")]
         [SerializeField] private GameObject functionalitiesList;
+        [SerializeField] private FunctionalitiesPane functionalitiesPane;
 
         [FormerlySerializedAs("featureSelectionPrefab")]
         [Header("Prefab")] [SerializeField] private FunctionalitySelection functionalitySelectionPrefab;
@@ -144,7 +145,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void OnFunctionalitySelected(Functionality functionality)
         {
-            //TODO: Display information about the functionality
+            functionalitiesPane.ShowInformation(functionality);
         }
 
         private void OnOriginYChanged(string value)

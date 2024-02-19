@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: districts
   Title: Toon namen van wijken
   Caption: Vrij beschikbaar
+  Description: 
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

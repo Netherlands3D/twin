@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: buildings
   Title: Toon gebouwen
   Caption: Vrij beschikbaar
+  Description: 
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

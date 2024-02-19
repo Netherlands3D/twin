@@ -10,6 +10,9 @@ namespace Netherlands3D.Twin.Functionalities
         public string Id;
         public string Title;
         public string Caption;
+
+        [TextArea(3, 10)]
+        public string Description;
         public ScriptableObject configuration;
 
         [SerializeField] private bool isEnabled;
