@@ -181,7 +181,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 8, z: 0, w: 8}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -335,6 +335,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Separator
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185805118046072282, guid: a749cb9d42ad4b5489f430dfcb454d20,
+        type: 3}
+      propertyPath: m_PreferredHeight
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9204275914798513982, guid: a749cb9d42ad4b5489f430dfcb454d20,
         type: 3}
