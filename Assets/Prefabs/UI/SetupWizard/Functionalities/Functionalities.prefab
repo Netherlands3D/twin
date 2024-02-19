@@ -780,7 +780,7 @@ MonoBehaviour:
   watermark: {fileID: 6254386140383449619}
   placeHolderText: Kies welke functionaliteit wel of niet actief moet zijn om de
     gebruikerservaring te maken die jij nodig hebt.
-  scrollRectText: {fileID: 6517556796696564916}
+  scrollRectText: {fileID: 5079928904066865702}
 --- !u!1 &5632017525148474081
 GameObject:
   m_ObjectHideFlags: 0
