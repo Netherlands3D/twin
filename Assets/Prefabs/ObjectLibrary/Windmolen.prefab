@@ -173,6 +173,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6327966342072211590, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: axisHeight
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327966342072211590, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: defaultHeight
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327966342072211590, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: rotorDiameter
+      value: 54.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327966342072211590, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: defaultDiameter
+      value: 54.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8601746673670394497, guid: 93247cb61c38b3843ab17c379a4f0b97,
         type: 3}
       propertyPath: m_LocalPosition.x
