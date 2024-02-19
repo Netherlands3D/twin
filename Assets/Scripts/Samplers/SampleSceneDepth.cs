@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -23,6 +24,9 @@ namespace Netherlands3D.Twin
         private Transform testTarget;
 
         [SerializeField] private float padding = 1.0f;
+
+        [Header("Events")]
+        [SerializeField] private UnityEvent<Vector3> OnDepthSampled;
 
         void Start()
         {
@@ -48,16 +52,18 @@ namespace Netherlands3D.Twin
             //We will only render on demand using camera.Render()
             depthCamera.enabled = false; 
 
-            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGB24, false);
-
-            testTarget = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
-            testTarget.transform.parent = depthCamera.transform;
+            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.R8, false);
         }
 
         private void Update()
         {
-            if(Input.GetMouseButton(0))
-            GetDepthFromCamera(Input.mousePosition);
+            screenPoint = Input.mousePosition;
+
+            //Rotate sampler camera to match main camera, and lookat the screen position
+            depthCamera.transform.SetPositionAndRotation(mainCamera.transform.position, mainCamera.transform.rotation);        
+            depthCamera.transform.LookAt(mainCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, mainCamera.nearClipPlane)));
+
+            GetDepthFromCamera(screenPoint);
         }
 
         private void OnDrawGizmos() {
@@ -71,12 +77,6 @@ namespace Netherlands3D.Twin
         public void GetDepthFromCamera(Vector3 screenPosition)
         {
             screenPoint = screenPosition;
-
-            //Shift camera matrix so the rendered area is centered on the screenposition
-            depthCamera.transform.SetPositionAndRotation(mainCamera.transform.position, mainCamera.transform.rotation);        
-
-            //Look at the screen position with our orto sampler camera
-            depthCamera.transform.LookAt(mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, mainCamera.nearClipPlane)));
 
             //Read pixels from the depth texture
             depthCamera.Render();
@@ -95,13 +95,16 @@ namespace Netherlands3D.Twin
                 }
             }  
 
+            //Move far clip plane according to camera height to maintain a consistent depth value
+            depthCamera.farClipPlane = depthCamera.transform.position.y * 2.0f;
+
             //Use camera near and far to determine totalDepth value
             totalDepth = Mathf.Lerp(depthCamera.nearClipPlane, depthCamera.farClipPlane, totalDepth / (samplerTexture.width * samplerTexture.height));
            
-            var worldPoint = mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, totalDepth - depthCamera.nearClipPlane));
-            testTarget.position = worldPoint;
+            var worldPoint = mainCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, totalDepth));
 
-            Debug.Log($"Depth at screen position {screenPosition} is {totalDepth} units away from camera");
+            OnDepthSampled.Invoke(worldPoint);
+            Debug.Log($"Depth at screen position {screenPoint} is {totalDepth} units away from camera");
         }
     }
 }
