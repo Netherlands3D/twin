@@ -19,9 +19,9 @@ namespace Netherlands3D.Twin.Configuration
             configuration.OnShouldStartSetupChanged.RemoveListener(OnShouldStartSetupChanged);
         }
 
-        private void OnShouldStartSetupChanged()
+        private void OnShouldStartSetupChanged(bool shouldStartSetup)
         {
-            gameObject.SetActive(configuration.ShouldStartSetup);
+            gameObject.SetActive(shouldStartSetup);
         }
     }
 }
