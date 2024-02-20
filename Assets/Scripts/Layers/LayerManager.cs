@@ -225,7 +225,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Update()
         {
-            if (Keyboard.current.deleteKey.wasPressedThisFrame)
+            if (Keyboard.current.deleteKey.wasPressedThisFrame && !EventSystem.current.currentSelectedGameObject)
             {
                 DeleteSelectedLayers();
             }
