@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
+        [SerializeField] private bool allowUserSettings = true;
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
 
         [SerializeField] public List<Functionality> Functionalities = new();
@@ -43,6 +44,15 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        
+        public bool AllowUserSettings { 
+            get => allowUserSettings; 
+            set{
+                allowUserSettings = value;
+                OnAllowUserSettingsChanged.Invoke(allowUserSettings);   
+            }
+        }
+
         /// <summary>
         /// By default, we should start the setup wizard to configure the twin, unless configuration was successfully
         /// loaded from the URL or from the Configuration File.
@@ -58,6 +68,7 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        public UnityEvent<bool> OnAllowUserSettingsChanged = new();
         public UnityEvent<bool> OnShouldStartSetupChanged = new();
         public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
@@ -149,6 +160,11 @@ namespace Netherlands3D.Twin.Configuration
                 Title = jsonNode["title"];
             }
 
+            if(jsonNode["allowUserSettings"])
+            {
+                AllowUserSettings = jsonNode["allowUserSettings"];
+            }
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
@@ -172,6 +188,7 @@ namespace Netherlands3D.Twin.Configuration
             var result = new JSONObject
             {
                 ["title"] = Title,
+                ["allowUserSettings"] = AllowUserSettings,
                 ["origin"] = new JSONObject()
                 {
                     ["epsg"] = origin.CoordinateSystem,
