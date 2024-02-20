@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 669998098775430263}
   - component: {fileID: 1811041811788367721}
-  - component: {fileID: 5970698326126549438}
   - component: {fileID: 6667151011380368307}
   - component: {fileID: 7073721482847640295}
   m_Layer: 0
-  m_Name: DepthCamera
+  m_Name: OpticalRaycaster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,14 +85,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5970698326126549438
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5830911274202297391}
-  m_Enabled: 1
 --- !u!114 &6667151011380368307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b28267e61a547643a0f7f83319d6cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
   depthCamera: {fileID: 1811041811788367721}
-  depthTexture: {fileID: 8400000, guid: e4924a2b6411f0b4ca70f6fdf09c5f93, type: 2}
-  padding: 1
+  OnDepthSampled:
+    m_PersistentCalls:
+      m_Calls: []

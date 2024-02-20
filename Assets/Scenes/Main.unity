@@ -669,12 +669,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 767208733}
   m_PrefabAsset: {fileID: 0}
---- !u!20 &767208739 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
-    type: 3}
-  m_PrefabInstance: {fileID: 767208733}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &829986190
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,50 +1022,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1811041811788367721, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: orthographic
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5830911274202297391, guid: ee361773856b5e0419afdbf630604742,
         type: 3}
       propertyPath: m_Name
-      value: DepthCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 767208739}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1320642951}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_position
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.Transform, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: OpticalRaycaster
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1741,22 +1695,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.2245153
+      value: -0.07716839
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.047220465
+      value: -0.018400874
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.952487
+      value: 0.9696624
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.2003288
+      value: -0.23121691
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -2393,7 +2347,7 @@ PrefabInstance:
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 45.265
       objectReference: {fileID: 0}
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
