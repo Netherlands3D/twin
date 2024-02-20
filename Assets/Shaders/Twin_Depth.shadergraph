@@ -298,10 +298,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -745.0000610351563,
-            "y": 152.0,
+            "x": -575.0,
+            "y": 196.0,
             "width": 145.0,
-            "height": 112.00003051757813
+            "height": 112.0
         }
     },
     "m_Slots": [
@@ -421,8 +421,8 @@
     "m_ObjectId": "6852693119eb46e29687439d544e4ec6",
     "m_Title": "Only use red channel (x) for depth",
     "m_Position": {
-        "x": -770.0000610351563,
-        "y": 93.00000762939453
+        "x": -600.0,
+        "y": 137.0
     }
 }
 
@@ -438,10 +438,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -475.0000305175781,
-            "y": 152.0,
+            "x": -305.0,
+            "y": 196.0,
             "width": 128.0,
-            "height": 125.00003051757813
+            "height": 125.0
         }
     },
     "m_Slots": [

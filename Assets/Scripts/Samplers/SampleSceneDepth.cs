@@ -96,12 +96,18 @@ namespace Netherlands3D.Twin
             }  
             totalDepth /= (samplerTexture.width * samplerTexture.height);
 
+           
+#if UNITY_EDITOR || !UNITY_WEBGL
+            //OpenGL raw depth value is inverted
+            totalDepth = 1-totalDepth;
+#endif
+
             //Move far clip plane according to camera height to maintain a consistent depth value
             depthCamera.farClipPlane = depthCamera.transform.position.y * 3.0f;
 
             //Use camera near and far to determine totalDepth value
-            totalDepth = Mathf.Lerp(depthCamera.farClipPlane,depthCamera.nearClipPlane, totalDepth);
-           
+            totalDepth = Mathf.Lerp(depthCamera.nearClipPlane,depthCamera.farClipPlane, totalDepth);
+
             var worldPoint = depthCamera.transform.position + depthCamera.transform.forward * totalDepth;
 
             OnDepthSampled.Invoke(worldPoint);
