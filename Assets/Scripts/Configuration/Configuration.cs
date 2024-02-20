@@ -44,13 +44,15 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        
+        /// <summary>
+        /// By default, the options to change settings are enabled for the user.
+        /// The configuration file can disable this.
+        /// </summary>
         public bool AllowUserSettings { 
             get => allowUserSettings; 
             set{
                 allowUserSettings = value;
                 OnAllowUserSettingsChanged.Invoke(allowUserSettings);   
-                Debug.Log("Disabled user settings");
             }
         }
 
