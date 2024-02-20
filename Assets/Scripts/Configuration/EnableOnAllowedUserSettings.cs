@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Configuration configuration;
 
         private void Awake() {
-            //Configuration is not yet loaded in Awake, so we determine our active state using a persistent listener
+            //The active state will be determined by our configuration file. (Configuration load is later than Awake)
             configuration.OnAllowUserSettingsChanged.AddListener(OnAllowUserSettingsChanged);
             gameObject.SetActive(false);
         }

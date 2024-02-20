@@ -50,6 +50,7 @@ namespace Netherlands3D.Twin.Configuration
             set{
                 allowUserSettings = value;
                 OnAllowUserSettingsChanged.Invoke(allowUserSettings);   
+                Debug.Log("Disabled user settings");
             }
         }
 
@@ -160,11 +161,11 @@ namespace Netherlands3D.Twin.Configuration
                 Title = jsonNode["title"];
             }
 
-            if(jsonNode["allowUserSettings"])
+            if(jsonNode["allowUserSettings"] != null)
             {
-                AllowUserSettings = jsonNode["allowUserSettings"];
+                AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
             }
-
+            
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
