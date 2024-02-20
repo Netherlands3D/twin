@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
-        [SerializeField] private bool allowUserSettings = true;
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
 
         [SerializeField] public List<Functionality> Functionalities = new();
@@ -48,6 +47,7 @@ namespace Netherlands3D.Twin.Configuration
         /// By default, the options to change settings are enabled for the user.
         /// The configuration file can disable this.
         /// </summary>
+        private bool allowUserSettings = true;
         public bool AllowUserSettings
         {
             get => allowUserSettings;
@@ -63,7 +63,6 @@ namespace Netherlands3D.Twin.Configuration
         /// loaded from the URL or from the Configuration File.
         /// </summary>
         private bool shouldStartSetup = true;
-
         public bool ShouldStartSetup
         {
             get => shouldStartSetup;
