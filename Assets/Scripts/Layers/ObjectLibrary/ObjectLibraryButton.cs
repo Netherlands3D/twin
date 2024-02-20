@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin
 
         private void CreateObject()
         {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+            var spawnPoint = ObjectPlacementUtility.GetOpticalRaycasterSpawnPoint();  
             
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.identity);
             newObject.name = prefab.name;

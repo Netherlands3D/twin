@@ -35,24 +35,24 @@ namespace Netherlands3D.Twin
             Destroy(samplerTexture);
         }
 
-        public Vector3 GetCameraDepthAtScreenPoint(Camera camera, Vector3 screenPoint)
+        public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
         {
             //Align and rotate sampler camera to look at screenpoint
             depthCamera.transform.position = camera.transform.position;      
             depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
 
-            return GetSamplerCameraDepth();
+            return GetSamplerCameraWorldPoint();
         }
 
-        public Vector3 GetDepthFromWorldPoint(Vector3 worldPoint, Vector3 direction)
+        public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
         {
             //Align depth camera 
-            depthCamera.transform.SetPositionAndRotation(worldPoint, Quaternion.LookRotation(direction));
+            depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
 
-            return GetSamplerCameraDepth();
+            return GetSamplerCameraWorldPoint();
         }
 
-        public Vector3 GetSamplerCameraDepth()
+        public Vector3 GetSamplerCameraWorldPoint()
         {
             //Read pixels from the depth texture
             depthCamera.Render();
