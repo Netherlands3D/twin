@@ -11,9 +11,8 @@ namespace Netherlands3D.Twin.Configuration
 
         private void Awake()
         {
-            //The active state will be determined by our configuration file. (Configuration load is later than Awake)
             configuration.OnAllowUserSettingsChanged.AddListener(OnAllowUserSettingsChanged);
-            gameObject.SetActive(false);
+            gameObject.SetActive(configuration.AllowUserSettings);
         }
 
         private void OnDestroy()
@@ -23,6 +22,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void OnAllowUserSettingsChanged(bool userSettingsAllowed)
         {
+            Debug.Log($"User settings allowed: {userSettingsAllowed}");
             gameObject.SetActive(userSettingsAllowed);
         }
     }
