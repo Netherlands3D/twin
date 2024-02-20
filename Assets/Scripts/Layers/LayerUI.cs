@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +53,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private Sprite[] visibilitySprites;
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
+        [SerializeField] private Toggle propertyToggle;
 
         private LayerUI ParentUI;
         private LayerUI[] ChildrenUI = Array.Empty<LayerUI>();
@@ -257,7 +260,26 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
             RecalculateNameWidth(maxWidth);
             UpdateFoldout();
+            UpdatePropertiesToggle();
             Canvas.ForceUpdateCanvases();
+        }
+
+        private void UpdatePropertiesToggle()
+        {
+            // only show properties button if the layer has any property sections to show
+            var layerWithProperties = TryFindProperties();
+            propertyToggle.gameObject.SetActive(
+                layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
+            );
+        }
+
+        private ILayerWithProperties TryFindProperties()
+        {
+            var layerProxy = Layer as ReferencedProxyLayer;
+
+            return (layerProxy == null) 
+                ? Layer as ILayerWithProperties 
+                : layerProxy.Reference as ILayerWithProperties;
         }
 
         private void SetLayerTypeImage()
@@ -494,7 +516,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (referenceLayerUnderMouse)
             {
                 var hoverTransform = referenceLayerUnderMouse.rectTransform; // as RectTransform;
-                var correctedSize = (hoverTransform.rect.size - referenceLayerUnderMouse.childrenPanel.rect.size) * hoverTransform.lossyScale;
+                var childPanelHeight = referenceLayerUnderMouse.foldoutToggle.isOn ? referenceLayerUnderMouse.childrenPanel.rect.size : Vector2.zero;
+                var correctedSize = (hoverTransform.rect.size - childPanelHeight) * hoverTransform.lossyScale;
                 var relativeValue = -relativeYValue / correctedSize.y;
                 var yValue01 = Mathf.Clamp01(relativeValue);
 
@@ -659,8 +682,34 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DestroyUI()
         {
-            SetParent(null); //unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a consequence of Destroying the parent) 
+            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
+            // consequence of Destroying the parent)
+            SetParent(null); 
+            
+            // Make sure to remove the properties when removing the UI
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            
             Destroy(gameObject);
+        }
+
+        public void RegisterWithPropertiesPanel(Properties propertiesPanel)
+        {
+            propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
+            propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
+        }
+        
+        private void ToggleProperties(bool onOrOff, Properties properties)
+        {
+            var layerWithProperties = TryFindProperties();
+            if (layerWithProperties == null) return; // no properties, no action
+
+            if (!onOrOff)
+            {
+                properties.Hide();
+                return;
+            }
+
+            properties.Show(layerWithProperties);
         }
     }
 }
