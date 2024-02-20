@@ -3,6 +3,7 @@
 {%- else -%}
 {
   "title": "{{NL3D_TITLE|default('')}}",
+  "allowUserSettings" : {{NL3D_ALLOW_USER_SETTINGS|default('false')}},
   "origin": {
     "epsg": {{NL3D_ORIGIN_EPGS|default('7415')}},
     "x": {{NL3D_ORIGIN_X|default('161088')}},
