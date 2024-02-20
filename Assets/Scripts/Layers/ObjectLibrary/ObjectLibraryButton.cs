@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin
             {
                 //Retrieve spawnpoint from optical raycaster a few frames in a row to make sure the depth texture is updated
                 var frames = 3;
-                var centerOfViewport = new Vector3(Screen.width * 0.65f, Screen.height / 2, 0);
+                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height / 2, 0);
                 for (int i = 0; i < frames; i++)
                 {
                     yield return new WaitForEndOfFrame();
