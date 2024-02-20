@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.address-search",
   "displayName": "Netherlands3D - Address Search",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "unity": "2021.1",
   "description": "An auto-completing dropdown that can find and select Dutch addresses and locations",
   "type": "library",
