@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Configuration
                 OnTitleChanged.Invoke(value);
             }
         }
-        
+
         public Coordinate Origin
         {
             get => origin;
@@ -48,11 +48,13 @@ namespace Netherlands3D.Twin.Configuration
         /// By default, the options to change settings are enabled for the user.
         /// The configuration file can disable this.
         /// </summary>
-        public bool AllowUserSettings { 
-            get => allowUserSettings; 
-            set{
+        public bool AllowUserSettings
+        {
+            get => allowUserSettings;
+            set
+            {
                 allowUserSettings = value;
-                OnAllowUserSettingsChanged.Invoke(allowUserSettings);   
+                OnAllowUserSettingsChanged.Invoke(allowUserSettings);
             }
         }
 
@@ -65,7 +67,8 @@ namespace Netherlands3D.Twin.Configuration
         public bool ShouldStartSetup
         {
             get => shouldStartSetup;
-            set{
+            set
+            {
                 shouldStartSetup = value;
                 OnShouldStartSetupChanged.Invoke(shouldStartSetup);
             }
@@ -88,7 +91,7 @@ namespace Netherlands3D.Twin.Configuration
             {
                 Debug.Log($"Successfully downloaded external config: {externalConfigFilePath}");
                 var json = request.downloadHandler.text;
-                
+
                 // populate object and when settings are missing, use the defaults from the provided object
                 Populate(JSON.Parse(json));
                 ShouldStartSetup = false;
@@ -163,11 +166,11 @@ namespace Netherlands3D.Twin.Configuration
                 Title = jsonNode["title"];
             }
 
-            if(jsonNode["allowUserSettings"] != null)
+            if (jsonNode["allowUserSettings"] != null)
             {
                 AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
             }
-            
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
@@ -210,11 +213,11 @@ namespace Netherlands3D.Twin.Configuration
             return result;
         }
 
-        private bool UrlContainsConfiguration(NameValueCollection queryParameters) 
+        private bool UrlContainsConfiguration(NameValueCollection queryParameters)
         {
             string origin = queryParameters.Get("origin");
             string functionalities = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
-            
+
             return origin != null && functionalities != null;
         }
 

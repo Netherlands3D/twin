@@ -9,13 +9,15 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Disable this GameObject if user settings are disabled in the configuration file")]
         [SerializeField] private Configuration configuration;
 
-        private void Awake() {
+        private void Awake()
+        {
             //The active state will be determined by our configuration file. (Configuration load is later than Awake)
             configuration.OnAllowUserSettingsChanged.AddListener(OnAllowUserSettingsChanged);
             gameObject.SetActive(false);
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             configuration.OnAllowUserSettingsChanged.RemoveListener(OnAllowUserSettingsChanged);
         }
 
