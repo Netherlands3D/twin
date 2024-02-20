@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration
 {
-    public class UserSettingsEnabledFromConfigFile : MonoBehaviour
+    public class EnableOnAllowedUserSettings : MonoBehaviour
     {
         [Header("Disable this GameObject if user settings are disabled in the configuration file")]
         [SerializeField] private Configuration configuration;
