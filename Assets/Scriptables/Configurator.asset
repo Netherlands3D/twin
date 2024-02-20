@@ -16,7 +16,7 @@ MonoBehaviour:
   setupSceneName: SetupWizard
   configFilePath: app.config.json
   debugUrl: 
-  debugConfig: '{"allowUserSettings":true}'
+  debugConfig: 
   OnStartedLoading:
     m_PersistentCalls:
       m_Calls:
