@@ -46,13 +46,13 @@ namespace Netherlands3D.Twin
             depthCamera.farClipPlane = 1000.0f;
             depthCamera.nearClipPlane = 0.3f;
             depthCamera.fieldOfView = 1.0f;
-            depthCamera.orthographic = false;
+            depthCamera.orthographic = true;
             depthCamera.aspect = 1.0f;
 
             //We will only render on demand using camera.Render()
             depthCamera.enabled = false; 
 
-            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.R8, false);
+            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.R16, false);
         }
 
         private void Update()
@@ -94,14 +94,15 @@ namespace Netherlands3D.Twin
                     totalDepth += samplerTexture.GetPixel(x, y).r;
                 }
             }  
+            totalDepth /= (samplerTexture.width * samplerTexture.height);
 
             //Move far clip plane according to camera height to maintain a consistent depth value
-            depthCamera.farClipPlane = depthCamera.transform.position.y * 2.0f;
+            depthCamera.farClipPlane = depthCamera.transform.position.y * 3.0f;
 
             //Use camera near and far to determine totalDepth value
-            totalDepth = Mathf.Lerp(depthCamera.nearClipPlane, depthCamera.farClipPlane, totalDepth / (samplerTexture.width * samplerTexture.height));
+            totalDepth = Mathf.Lerp(depthCamera.farClipPlane,depthCamera.nearClipPlane, totalDepth);
            
-            var worldPoint = mainCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, totalDepth));
+            var worldPoint = depthCamera.transform.position + depthCamera.transform.forward * totalDepth;
 
             OnDepthSampled.Invoke(worldPoint);
             Debug.Log($"Depth at screen position {screenPoint} is {totalDepth} units away from camera");
