@@ -35,32 +35,43 @@ namespace Netherlands3D.Twin
             Destroy(samplerTexture);
         }
 
+        /// <summary>
+        /// Only use this method if it is used continiously in Update.
+        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
+        /// in a Coroutine with a WaitForEndOfFrame between every step.
+        /// </summary>
+        /// <returns></returns>
         public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
         {
-            //Align and rotate sampler camera to look at screenpoint
-            depthCamera.transform.position = camera.transform.position;      
-            depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
-
-            return GetSamplerCameraWorldPoint();
+            AlignDepthCameraToScreenPoint(camera, screenPoint);
+            RenderDepthCamera();
+            
+            return GetDepthCameraWorldPoint();
         }
 
         public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
         {
-            //Align depth camera 
-            depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
+            AlignDepthCameraFromPositionToDirection(position, direction);
+            RenderDepthCamera();
 
-            return GetSamplerCameraWorldPoint();
+            return GetDepthCameraWorldPoint();
         }
 
-        public Vector3 GetSamplerCameraWorldPoint()
+        public void AlignDepthCameraToScreenPoint(Camera camera, Vector3 screenPoint)
         {
-            //Read pixels from the depth texture
-            depthCamera.Render();
-            RenderTexture.active = depthCamera.targetTexture;
-            samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
-            samplerTexture.Apply();
-            RenderTexture.active = null;
+            //Align and rotate sampler camera to look at screenpoint
+            depthCamera.transform.position = camera.transform.position;
+            depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
+        }
 
+        public void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
+        {
+            //Align depth camera 
+            depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
+        }
+
+        public Vector3 GetDepthCameraWorldPoint()
+        {
             CalculateAverageDepth();
 
 #if UNITY_EDITOR || !UNITY_WEBGL
@@ -78,6 +89,16 @@ namespace Netherlands3D.Twin
             OnDepthSampled.Invoke(worldPoint);
 
             return worldPoint;
+        }
+
+        public void RenderDepthCamera()
+        {
+            //Read pixels from the depth texture
+            depthCamera.Render();
+            RenderTexture.active = depthCamera.targetTexture;
+            samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
+            samplerTexture.Apply();
+            RenderTexture.active = null;
         }
 
         /// <summary>

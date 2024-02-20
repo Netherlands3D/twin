@@ -33,13 +33,34 @@ namespace Netherlands3D.Twin
 
         private void CreateObject()
         {
-            var spawnPoint = ObjectPlacementUtility.GetOpticalRaycasterSpawnPoint();  
-            
+            StartCoroutine(CreateObjectCoroutine());
+        }
+
+        private IEnumerator CreateObjectCoroutine()
+        {
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();            
+
+            var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+            if(opticalRaycaster)
+            {
+                //Retrieve spawnpoint from optical raycaster a few frames in a row to make sure the depth texture is updated
+                var frames = 3;
+                var centerOfViewport = new Vector3(Screen.width * 0.65f, Screen.height / 2, 0);
+                for (int i = 0; i < frames; i++)
+                {
+                    yield return new WaitForEndOfFrame();
+                    spawnPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport);
+                }
+            }
+
+
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.identity);
             newObject.name = prefab.name;
             var layerComponent = newObject.GetComponent<HierarchicalObjectLayer>();
             if (!layerComponent)
                 newObject.AddComponent<HierarchicalObjectLayer>();
+
+            yield return null;
         }
     }
 }

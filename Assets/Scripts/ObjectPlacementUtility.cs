@@ -17,19 +17,5 @@ namespace Netherlands3D.Twin
             var spawnPoint = Camera.main.transform.position + Camera.main.transform.forward * distance;
             return spawnPoint;
         }
-
-        public static Vector3 GetOpticalRaycasterSpawnPoint()
-        {
-            var raycaster = Object.FindAnyObjectByType<OpticalRaycaster>();
-            if(raycaster != null)
-            {
-                return raycaster.GetWorldPointAtCameraScreenPoint(Camera.main, new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            }
-            else
-            {
-                Debug.LogWarning("No OpticalRaycaster found in the scene, falling back to default spawn point");
-                return GetSpawnPoint();
-            }
-        }
     }
 }
