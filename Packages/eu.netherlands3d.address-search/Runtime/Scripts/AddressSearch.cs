@@ -197,7 +197,7 @@ namespace Netherlands3D.AddressSearch
 
             Vector3 targetLocation = ExtractUnityLocation(ref centroid);
             
-            onCoordinateFound.Invoke(new Coordinate(CoordinateSystem.RD, targetLocation.x, targetLocation.z));
+            onCoordinateFound.Invoke(new Coordinate(CoordinateSystem.Unity, targetLocation.x, targetLocation.z, 0));
 
             if (moveCamera)
             {
