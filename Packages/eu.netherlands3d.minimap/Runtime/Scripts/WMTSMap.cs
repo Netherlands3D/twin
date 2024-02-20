@@ -36,8 +36,8 @@ namespace Netherlands3D.Minimap
 		[SerializeField] private MinimapConfig minimapConfig;
 
         [Header("Events")]
-        [SerializeField] private UnityEvent<int> onZoom = new();
-        [SerializeField] private UnityEvent<Coordinate> onClick = new();
+        public UnityEvent<int> onZoom = new();
+        public UnityEvent<Coordinate> onClick = new();
 
 		[Header("Camera")]
 		[SerializeField] private bool moveCameraToClickedLocation = true;

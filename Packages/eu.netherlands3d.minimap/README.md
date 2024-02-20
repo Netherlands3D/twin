@@ -18,3 +18,16 @@ or, you have to add `https://package.openupm.com` as a scoped registry with, at 
 
 Place the minimap prefab in a canvas.
 Scriptable objects can be swapped/created to create new WMTS services.
+
+## Events - WMTSMap
+
+The `WMTSMap` class features two events: `onZoom` and `onClick`.
+
+### onZoom
+
+This event is triggered when the user performs a zoom action.
+
+### onClick
+
+This event is triggered when a user clicks on a location on the minimap. The event returns the coordinates of the
+clicked location in the Rijksdriehoekformaat coordinate system.
