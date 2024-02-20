@@ -23,7 +23,6 @@ namespace Netherlands3D.Twin.Configuration
         [Header("References")] 
         [SerializeField] private TMP_InputField originXField;
         [SerializeField] private TMP_InputField originYField;
-        [SerializeField] private TMP_InputField shareUrlField;
 
         [FormerlySerializedAs("featureList")]
         [SerializeField] private GameObject functionalitiesList;
@@ -70,9 +69,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void ValidateRdCoordinates(Coordinate coordinates)
         {
-            // TODO: IsValid is broken.. whoops!
-            // var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
-            var validRdCoordinates = true;
+            var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
@@ -129,9 +126,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateShareUrl()
         {
-            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
+            var queryString = Uri.UnescapeDataString(configuration.ToQueryString());
+            Debug.Log("Update queryString to " + queryString);
+
             #if UNITY_WEBGL && !UNITY_EDITOR
-            ReplaceUrl($"./{Uri.UnescapeDataString(configuration.ToQueryString())}");
+            ReplaceUrl($"./{queryString}");
             #endif
         }
 
