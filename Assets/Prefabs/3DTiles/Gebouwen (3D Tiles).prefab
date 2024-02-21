@@ -94,6 +94,9 @@ MonoBehaviour:
     subtreeUri: 
     contentUri: 
     geometricError: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
     boundingRegion: []
   subtreeUrl: 
   isbusy: 0
@@ -160,10 +163,13 @@ MonoBehaviour:
     subtreeUri: 
     contentUri: 
     geometricError: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
     boundingRegion: []
   tileCount: 0
   nestingDepth: 0
-  parseSubObjects: 1
+  parseSubObjects: 0
   maxScreenHeightInPixels: 1080
   maximumScreenSpaceError: 5
   sseComponent: -1
