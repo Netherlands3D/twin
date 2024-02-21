@@ -1,18 +1,17 @@
-using Netherlands3D.Windmills;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class HierarchicalObjectPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        [SerializeField] private WindmillPropertySection propertySectionPrefab;
+        [SerializeField] private AbstractHierarchicalObjectPropertySection propertySectionPrefab;
 
         public void AddToProperties(RectTransform properties)
         {
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Windmill = GetComponent<Windmill>();
+            settings.Layer = GetComponent<HierarchicalObjectLayer>();
         }
     }
 }

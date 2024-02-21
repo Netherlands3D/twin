@@ -1,10 +1,5 @@
-using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
