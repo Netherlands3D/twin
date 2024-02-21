@@ -47,6 +47,8 @@ namespace Netherlands3D.Twin.Configuration
             addressSearchField.onCoordinateFound.AddListener(UpdateStartingPositionWithoutNotify);
             minimap.onClick.AddListener(UpdateStartingPositionWithoutNotify);
 
+            UpdateStartingPositionWithoutNotify(configuration.Origin);
+
             foreach (var availableFunctionality in configuration.Functionalities)
             {
                 FunctionalitySelection functionalitySelection = Instantiate(functionalitySelectionPrefab, functionalitiesList.transform);
