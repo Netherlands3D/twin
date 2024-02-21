@@ -79,8 +79,9 @@ namespace Netherlands3D.Twin
             totalDepth = 1 - totalDepth;
 #endif
 
-            //Move far clip plane according to camera height to maintain precision
-            depthCamera.farClipPlane = depthCamera.transform.position.y * 2.0f;
+            //Move far clip plane according to camera height to maintain precision (min 100m far clip plane)
+            var clipRangeTotal = Mathf.Max(depthCamera.transform.position.y * 2.0f, 100.0f);
+            depthCamera.farClipPlane = clipRangeTotal;
 
             //Use camera near and far to determine totalDepth value
             totalDepth = Mathf.Lerp(depthCamera.nearClipPlane, depthCamera.farClipPlane, totalDepth);
