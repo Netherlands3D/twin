@@ -26,7 +26,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
-	public class UI_BagInspector : MonoBehaviour
+	public class BagInspector : MonoBehaviour
 	{
 		private const int COLORIZER_PRIORITY = 0;
 
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
 
-		[SerializeField] private UI_Line addressTemplate;
+		[SerializeField] private Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
 		private Coroutine downloadProcess;
