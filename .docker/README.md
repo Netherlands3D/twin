@@ -21,6 +21,7 @@ digital twin application while offering flexibility through a series of environm
 - `NL3D_ORIGIN_X`: *The starting position's X coordinate when starting the application, in Rijksdriehoekformaat*
 - `NL3D_ORIGIN_Y`: *The starting position's Y coordinate when starting the application, in Rijksdriehoekformaat*
 - `NL3D_ORIGIN_Z`: *The starting position's elevation of the camera when starting the application, ranging from 0 to 1400*
+- `NL3D_ALLOW_USER_SETTINGS`: *true/false, allow viewer user to change settings*
 - `NL3D_TERRAIN`: *true/false, is the Terrain feature enabled*
 - `NL3D_BUILDINGS`: *true/false, is the Buildings feature enabled*
 - `NL3D_STREETS`: *true/false, is the Streets feature enabled*
@@ -81,6 +82,10 @@ following section detailing each environment variable and its influence on the a
 ### NL3D_ORIGIN_Z
 
 *The starting position's elevation of the camera when starting the application, ranging from 0 to 1400*
+
+### NL3D_ALLOW_USER_SETTINGS
+
+*true/false, allow viewer user to change settings*
 
 ### NL3D_TERRAIN
 

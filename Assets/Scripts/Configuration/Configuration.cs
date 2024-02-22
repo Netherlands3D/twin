@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Configuration
                 OnTitleChanged.Invoke(value);
             }
         }
-        
+
         public Coordinate Origin
         {
             get => origin;
@@ -44,17 +44,37 @@ namespace Netherlands3D.Twin.Configuration
         }
 
         /// <summary>
+        /// By default, the options to change settings are enabled for the user.
+        /// The configuration file can disable this.
+        /// </summary>
+        private bool allowUserSettings = true;
+        public bool AllowUserSettings
+        {
+            get => allowUserSettings;
+            set
+            {
+                allowUserSettings = value;
+                OnAllowUserSettingsChanged.Invoke(allowUserSettings);
+            }
+        }
+
+        /// <summary>
         /// By default, we should start the setup wizard to configure the twin, unless configuration was successfully
         /// loaded from the URL or from the Configuration File.
         /// </summary>
         private bool shouldStartSetup = true;
-
         public bool ShouldStartSetup
         {
             get => shouldStartSetup;
-            set => shouldStartSetup = value;
+            set
+            {
+                shouldStartSetup = value;
+                OnShouldStartSetupChanged.Invoke(shouldStartSetup);
+            }
         }
 
+        public UnityEvent<bool> OnAllowUserSettingsChanged = new();
+        public UnityEvent<bool> OnShouldStartSetupChanged = new();
         public UnityEvent<Coordinate> OnOriginChanged = new();
         public UnityEvent<string> OnTitleChanged = new();
 
@@ -70,7 +90,7 @@ namespace Netherlands3D.Twin.Configuration
             {
                 Debug.Log($"Successfully downloaded external config: {externalConfigFilePath}");
                 var json = request.downloadHandler.text;
-                
+
                 // populate object and when settings are missing, use the defaults from the provided object
                 Populate(JSON.Parse(json));
                 ShouldStartSetup = false;
@@ -145,6 +165,11 @@ namespace Netherlands3D.Twin.Configuration
                 Title = jsonNode["title"];
             }
 
+            if (jsonNode["allowUserSettings"] != null)
+            {
+                AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
+            }
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
@@ -168,6 +193,7 @@ namespace Netherlands3D.Twin.Configuration
             var result = new JSONObject
             {
                 ["title"] = Title,
+                ["allowUserSettings"] = AllowUserSettings,
                 ["origin"] = new JSONObject()
                 {
                     ["epsg"] = origin.CoordinateSystem,
@@ -186,11 +212,11 @@ namespace Netherlands3D.Twin.Configuration
             return result;
         }
 
-        private bool UrlContainsConfiguration(NameValueCollection queryParameters) 
+        private bool UrlContainsConfiguration(NameValueCollection queryParameters)
         {
             string origin = queryParameters.Get("origin");
             string functionalities = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
-            
+
             return origin != null && functionalities != null;
         }
 
