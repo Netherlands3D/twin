@@ -18,8 +18,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
-        [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 161088, 503050, 300);
-
+        [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 155207,462945, 300);
         [SerializeField] public List<Functionality> Functionalities = new();
 
         public string Title
