@@ -15,7 +15,13 @@ MonoBehaviour:
   Id: 
   Title: 
   Caption: 
-  Description: 
+  Description: '<b>Tonen van voorgedefinieerde 3D objecten in de viewer.</b>
+
+
+    Een
+    aantal voorgedefinieerde objecten kunnen in de viewer worden geladen. Denk aan
+    windmolens of verschillende type bomen. Objecten kunnen op willekeurige locaties
+    geplaatst worden en bij sommige objecten zijn extra instellingen mogelijk.'
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
