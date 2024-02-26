@@ -8,9 +8,15 @@ namespace Netherlands3D.Twin.Functionalities
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
         public string Id;
+
+        [Tooltip("Functionality button title")]
         public string Title;
+
+        [Tooltip("Functionality button caption")]
         public string Caption;
 
+        [Tooltip("The header above the description")]
+        public string Header;
         [TextArea(5, 10)]
         public string Description;
         public ScriptableObject configuration;

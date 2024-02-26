@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: object-importer
   Title: Importeer .obj bestanden
-  Caption: Vrij beschikbaar
-  Description: "<b>Eigen .OBJ bestanden inporteren en tonen in de 3D viewer.</b>\n\nMaak
-    het mogelijk jouw eigen .obj objecten in de 3D wereld te plaatsen. Je kunt ook
-    direct een .mtl bestand toevoegen om materialen te koppelen. Zorg dat het 3D
-    model aan de volgende eisen voldoet:\n\n- Wavefront OBJ formaat\n- Maximaal 300MB
-    bestandsgrootte\n- Triangulated faces\n\n<b>Vanuit SketchUp:</b>\nFile > Export
-    > 3D Model\nSelecteer OBJ File (*.obj)\n\n- Zorg dat 'Triangulate all faces'
-    is aangevinkt onder Options\n- Zorg dat 'Swap YZ co\xF6rdinates' is aangevinkt
+  Caption: 
+  Header: Eigen .OBJ bestanden tonen in de 3D viewer
+  Description: "Maak het mogelijk jouw eigen .obj objecten in de 3D wereld te plaatsen.
+    Je kunt ook direct een .mtl bestand toevoegen om materialen te koppelen. Zorg
+    dat het 3D model aan de volgende eisen voldoet:\n\n- Wavefront OBJ formaat\n-
+    Maximaal 300MB bestandsgrootte\n- Triangulated faces\n\n<b>Vanuit SketchUp:</b>\nFile
+    > Export > 3D Model\nSelecteer OBJ File (*.obj)\n\n- Zorg dat 'Triangulate all
+    faces' is aangevinkt onder Options\n- Zorg dat 'Swap YZ co\xF6rdinates' is aangevinkt
     onder Options"
   configuration: {fileID: 0}
   isEnabled: 1

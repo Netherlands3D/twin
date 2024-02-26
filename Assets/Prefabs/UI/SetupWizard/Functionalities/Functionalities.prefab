@@ -123,10 +123,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8461925525370366667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 568.8889, y: -45}
-  m_SizeDelta: {x: 1097.7778, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8612115766732982784
 CanvasRenderer:
@@ -413,7 +413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000037172747}
+  m_AnchoredPosition: {x: 0, y: 0.000017426777}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5917254537132755462
@@ -684,7 +684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000006686416}
+  m_AnchoredPosition: {x: 0, y: -0.000017650129}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5158789987175011053
@@ -776,11 +776,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e50a74c87d9da0d4b9ecccd3894c5624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headerText: {fileID: 2621613477106064862}
   descriptionText: {fileID: 2255234672255247488}
   watermark: {fileID: 6254386140383449619}
-  placeHolderText: Kies welke functionaliteit wel of niet actief moet zijn om de
-    gebruikerservaring te maken die jij nodig hebt.
+  placeholderHeaderText: Stel je eigen Netherlands3D samen!
+  placeHolderDescriptionText: Kies welke functionaliteit wel of niet actief moet
+    zijn om de gebruikerservaring te maken die jij nodig hebt.
   scrollRectText: {fileID: 5079928904066865702}
+  functionalitiesListContent: {fileID: 3437690106649523712}
+  functionalitySelectionPrefab: {fileID: 1716528719610758314, guid: 4fa44f001b9538b4da031419603bb6a8,
+    type: 3}
 --- !u!1 &5632017525148474081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1581,12 +1586,12 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9995014
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1742,7 +1747,7 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9996406
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}

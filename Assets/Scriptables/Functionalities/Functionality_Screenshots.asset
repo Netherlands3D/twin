@@ -14,13 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: screenshot
   Title: Maak screenshots
-  Caption: Vrij beschikbaar
-  Description: '<b>Maak hoog-resolutie schermafbeeldingen.</b>
-
-
-    Naast het maken
-    van schermafbeeldingen met verschillende resolutie, is het ook mogelijk verschillende
-    onderdelen uit de interface wel of niet op te nemen in de afbeelding.'
+  Caption: 
+  Header: Maak hoog-resolutie schermafbeeldingen
+  Description: Naast het maken van schermafbeeldingen met verschillende resolutie,
+    is het ook mogelijk verschillende onderdelen uit de interface wel of niet op
+    te nemen in de afbeelding.
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
