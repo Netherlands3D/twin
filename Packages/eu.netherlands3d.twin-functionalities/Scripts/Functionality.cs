@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Functionalities
         public string Title;
         public string Caption;
 
-        [TextArea(3, 10)]
+        [TextArea(5, 10)]
         public string Description;
         public ScriptableObject configuration;
 
