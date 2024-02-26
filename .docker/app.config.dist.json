@@ -17,31 +17,31 @@
     "buildings": {
       "enabled": {{NL3D_BUILDINGS|default('true')}}
     },
-	"trees": {
+	  "trees": {
       "enabled": {{NL3D_TREES|default('true')}}
     },
     "streets": {
       "enabled": {{NL3D_STREETS|default('true')}}
     },
-	"neighbourhoods": {
+	  "neighbourhoods": {
       "enabled": {{NL3D_NEIGHBOURHOODS|default('true')}}
     },
-	"districts": {
+	  "districts": {
       "enabled": {{NL3D_DISTRICTS|default('true')}}
     },
-	"building-information": {
+	  "building-information": {
       "enabled": {{NL3D_BUILDING_INFORMATION|default('true')}}
     },
-	"download": {
+	  "download": {
       "enabled": {{NL3D_DOWNLOAD|default('true')}}
     },
-	"screenshot": {
+	  "screenshot": {
       "enabled": {{NL3D_SCREENSHOT|default('true')}}
     },
-	"object-importer": {
+	  "object-importer": {
       "enabled": {{NL3D_OBJECT_IMPORTER|default('true')}}
     },
-	"indicators": {
+	  "indicators": {
       "enabled": {{NL3D_INDICATORS|default('false')}},
       "configuration": {
         "dossierId": "{{NL3D_INDICATORS_DOSSIER_ID|default('')}}",
@@ -49,7 +49,7 @@
         "apiKey": "{{NL3D_INDICATORS_API_KEY|default('')}}"
       }
     },
-	"csv-coloring": {
+	  "csv-coloring": {
       "enabled": {{NL3D_CSV_COLORING|default('true')}}
     },
     "sun": {
