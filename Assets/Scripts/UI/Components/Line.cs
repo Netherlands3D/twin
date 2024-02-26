@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class UI_Line : MonoBehaviour
+    public class Line : MonoBehaviour
     {
         [SerializeField] private TMP_Text text;
 
