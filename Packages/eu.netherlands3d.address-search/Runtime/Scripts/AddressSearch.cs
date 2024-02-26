@@ -137,7 +137,7 @@ namespace Netherlands3D.AddressSearch
         private void GenerateResultItem(string ID, string label)
         {
             Button buttonObject = (suggestionPrefab != null) ? Instantiate(suggestionPrefab) : GenerateResultButton(label);
-            buttonObject.transform.SetParent(resultsParent.transform);
+            buttonObject.transform.SetParent(resultsParent.transform, false);
             TextMeshProUGUI textObject = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
             if(textObject == null) {
                 Debug.Log("Make sure your suggestionPrefab ahs a TextMeshProUGUI component");
