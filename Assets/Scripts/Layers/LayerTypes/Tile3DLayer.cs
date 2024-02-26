@@ -16,5 +16,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
+
+        private void Start()
+        {
+            print("test " + GetType());
+        }
     }
 }
