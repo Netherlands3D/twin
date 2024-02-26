@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set
             {
                 gameObject.SetActive(value);
-                ReferencedProxy.UI.UpdateLayerUI();
+                ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
     }

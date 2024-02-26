@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (layer.isEnabled != value)
                     layer.isEnabled = value;
-                ReferencedProxy.UI.UpdateLayerUI();
+                ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
 
