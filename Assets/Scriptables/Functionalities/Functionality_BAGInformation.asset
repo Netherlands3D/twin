@@ -19,7 +19,7 @@ MonoBehaviour:
     tussen pandobjecten in de 3D viewer en administratieve data uit de Basisadministratie
     Adressen en Gebouwen (BAG) waardoor het mogelijk is gedetailleerde informatie
     over het pand, enkele pandkenmerken en de adressen daarbinnen op te vragen. 
-    \n\nBron: PDOK\nDatum: live"
+    \n\n<i>\nBron: PDOK\nDatum: live\n</I>"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

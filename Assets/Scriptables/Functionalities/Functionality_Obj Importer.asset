@@ -22,7 +22,7 @@ MonoBehaviour:
     bestandsgrootte\n- Triangulated faces\n\n<b>Vanuit SketchUp:</b>\nFile > Export
     > 3D Model\nSelecteer OBJ File (*.obj)\n\n- Zorg dat 'Triangulate all faces'
     is aangevinkt onder Options\n- Zorg dat 'Swap YZ co\xF6rdinates' is aangevinkt
-    onder Options\""
+    onder Options"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
