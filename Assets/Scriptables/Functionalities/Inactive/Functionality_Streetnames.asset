@@ -15,6 +15,21 @@ MonoBehaviour:
   Id: streets
   Title: Toon namen van straten
   Caption: Vrij beschikbaar
+  Description: '<b>Alle straatnamen van Nederland</b>
+
+
+    Deze kaartlaag toont
+    alle straatnamen van Nederland. Afhankelijk van het zoomniveau worden straatnamen
+    weergegeven.
+
+
+    <i>
+
+    Bron: PDOK
+
+    Datum: live
+
+    </i>'
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

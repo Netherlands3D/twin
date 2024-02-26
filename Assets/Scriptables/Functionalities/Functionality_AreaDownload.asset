@@ -15,17 +15,13 @@ MonoBehaviour:
   Id: download
   Title: Gebied downloaden als 3D model
   Caption: Vrij beschikbaar
-  Description: Mauris consequat, purus non iaculis volutpat, mauris nibh dignissim
-    risus, eu blandit libero risus vel urna. Donec fringilla, sem id eleifend tincidunt,
-    magna nisl auctor ex, non porttitor magna nisl vel diam. Maecenas lacinia ultricies
-    quam, nec lacinia urna mollis et. Sed dapibus sapien ut mauris consequat luctus.
-    Vivamus nec varius nisl. Nullam sit amet nibh et neque auctor ultricies nec ut
-    magna. Curabitur efficitur malesuada odio in pretium. Lorem ipsum dolor sit amet,
-    consectetur adipiscing elit. Fusce cursus quam nec auctor luctus. Integer porta
-    auctor ex, eu facilisis eros tristique eu. Nunc ut finibus nisl, at dignissim
-    purus. Vestibulum luctus laoreet quam, ut suscipit sem sodales et. Nunc fringilla
-    ipsum nec sem porttitor viverra. Vivamus imperdiet, tortor suscipit cursus hendrerit,
-    ligula dolor tempus felis, eget cursus ante quam at orci.
+  Description: '<b>Downloaden van 3D objecten.</b>
+
+
+    Maakt het mogelijk alle
+    3D objecten uit de viewer te downloaden als losse 3D Collada DAE objecten (per
+    kaartlaag). Downloaden kan per tegel van 100x100m met een maximum van 16 tegels
+    tegelijk.'
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

@@ -15,6 +15,14 @@ MonoBehaviour:
   Id: indicators
   Title: Indicatoren
   Caption: Vrij beschikbaar
+  Description: '<b>Zichtbaar maken van dossiers uit de Tygron applicatie.</b>
+
+    <i>NB.
+    Tygron inlog vereist</i>
+
+
+    Maakt het mogelijk dossiers vanuit Tygron in te
+    laden en de indicatoren in de 3D viewer weer te geven.'
   configuration: {fileID: 11400000, guid: 9649637ffb6f9c24da61c215efe6adaa, type: 2}
   isEnabled: 1
   OnEnable:

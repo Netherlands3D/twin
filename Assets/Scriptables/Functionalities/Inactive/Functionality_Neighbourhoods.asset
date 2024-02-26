@@ -15,6 +15,21 @@ MonoBehaviour:
   Id: neighbourhoods
   Title: Toon namen van buurten
   Caption: Vrij beschikbaar
+  Description: '<b>Alle buurtnamen van Nederland</b>
+
+
+    Deze kaartlaag toont alle
+    buurtnamen van Nederland. Afhankelijk van het zoomniveau worden buurtnamen weergegeven.
+
+
+    <i>
+
+    Bron:
+    PDOK
+
+    Datum: live
+
+    </i>'
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

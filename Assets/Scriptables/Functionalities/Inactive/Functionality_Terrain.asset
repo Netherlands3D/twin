@@ -15,6 +15,14 @@ MonoBehaviour:
   Id: terrain
   Title: Toon het maaiveld
   Caption: Vrij beschikbaar
+  Description: "<b>Toont het 3D maaiveld voor heel Nederland.</b>\n\r\nMet maaiveld,
+    ofwel het 'oppervlak waarop we lopen' is weergegeven als 3D terrein. \nVoor het
+    tonen van dit terrein is gebruik gemaakt van de 3D Basisvoorziening van het Kadaster.
+    \n\nVisueel onderscheiden zijn gebouwen, terreinonderdelen (zoals wegen, groenvlakken
+    en water) en bruggen, waarbij de gebouwen niet als 3D objecten worden getoond
+    in deze laag. \nOp enkele onderdelen is een geometrische versimpeling toegepast
+    om het maaiveld sneller in de viewer te tonen.\r\n\r\n<i>\nBron: <link=https://www.geonovum.nl/geo-standaarden/3d-omgevingsinformatie/productbeschrijving-3d-basisvoorziening><u><color=blue>3D
+    Basisvoorziening</color></u></link>\r\nDatum: 2020\r\nActualisatie: Jaarlijks\n</i>"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
