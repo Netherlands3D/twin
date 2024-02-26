@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Functionality_AreaDownload
   m_EditorClassIdentifier: 
   Id: download
-  Title: Downloaden van een gebied
+  Title: Downloaden 3D gebied
   Caption: Collada
   Header: Downloaden van 3D gebied
   Description: Maakt het mogelijk alle 3D modellen uit de viewer te downloaden als

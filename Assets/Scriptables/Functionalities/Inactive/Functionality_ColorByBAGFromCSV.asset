@@ -20,9 +20,9 @@ MonoBehaviour:
     BAG-Pand id's en een kolom kenmerken. De BAG Pand id's uit de CSV worden gebruikt
     om een koppeling met de 3D BAG panden uit de viewer te maken om vervolgens het
     bijbehorende kenmerk te gebruiken om panden te kleuren. Aan elk onderscheidend
-    kenmerk wordt een kleur toegewezen welke zichtbaar wordt gemaakt in de viewer."
+    kenmerk wordt een kleur toegewezen welke zichtbaar wordt gemaakt in de viewer.
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
