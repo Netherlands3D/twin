@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
@@ -6,7 +5,6 @@ using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -19,7 +17,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private List<Sprite> layerTypeSprites;
 
         [SerializeField] private RectTransform layerUIContainer;
-        [SerializeField] private ToggleGroup propertyToggles;
         
         public RectTransform LayerUIContainer => layerUIContainer;
 
