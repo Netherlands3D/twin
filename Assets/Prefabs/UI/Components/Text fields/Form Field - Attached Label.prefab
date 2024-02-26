@@ -97,6 +97,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4283775282
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
+        type: 3}
       propertyPath: m_VerticalAlignment
       value: 512
       objectReference: {fileID: 0}
@@ -232,32 +237,42 @@ PrefabInstance:
     - target: {fileID: 156553241542023444, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -28
+      value: -22
       objectReference: {fileID: 0}
     - target: {fileID: 156553241542023444, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 14
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_fontSize
       value: 13.2
       objectReference: {fileID: 0}
+    - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_fontSizeMax
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 730003109258751551, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -28
+      value: -22
       objectReference: {fileID: 0}
     - target: {fileID: 730003109258751551, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 14
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_fontSize
       value: 13.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_fontSizeMax
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -297,7 +312,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}

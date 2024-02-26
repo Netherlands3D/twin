@@ -29,6 +29,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 layer = value;
                 UpdatePositionFields();
+                UpdateRotationFields();
+                UpdateScalingFields();
             }
         }
         
@@ -37,12 +39,23 @@ namespace Netherlands3D.Twin.Layers.Properties
             position.xField.onSubmit.AddListener(OnPositionChanged);
             position.yField.onSubmit.AddListener(OnPositionChanged);
             position.zField.onSubmit.AddListener(OnPositionChanged);
+            rotation.xField.onSubmit.AddListener(OnRotationChanged);
+            rotation.yField.onSubmit.AddListener(OnRotationChanged);
+            rotation.zField.onSubmit.AddListener(OnRotationChanged);
+            scale.xField.onSubmit.AddListener(OnScaleChanged);
+            scale.yField.onSubmit.AddListener(OnScaleChanged);
+            scale.zField.onSubmit.AddListener(OnScaleChanged);
         }
 
         private void Update()
         {
-            UpdatePositionFields();
-            UpdateRotationFields();
+            if (layer.transform.hasChanged)
+            {
+                UpdatePositionFields();
+                UpdateRotationFields();
+                UpdateScalingFields();
+                Layer.transform.hasChanged = false;
+            }
         }
 
         private void OnPositionChanged(string axisValue)
@@ -53,24 +66,51 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             var rdCoordinate = new Coordinate(CoordinateSystem.RD, x, y, z);
 
-            var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.RD).ToVector3();
+            var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
 
             layer.transform.position = unityCoordinate;
+        }
+        
+        private void OnRotationChanged(string axisValue)
+        {
+            float.TryParse(rotation.xField.text, out var x);
+            float.TryParse(rotation.yField.text, out var y);
+            float.TryParse(rotation.zField.text, out var z);
+
+            layer.transform.eulerAngles = new Vector3(x, y, z);
+        }
+        
+        private void OnScaleChanged(string axisValue)
+        {
+            float.TryParse(scale.xField.text, out var x);
+            float.TryParse(scale.yField.text, out var y);
+            float.TryParse(scale.zField.text, out var z);
+
+            layer.transform.localScale = new Vector3(x, y, z);
         }
         
         private void UpdatePositionFields()
         {
             var rdCoordinate = ConvertLayerPositionToRd(layer);
-            position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("N0", CultureInfo.InvariantCulture));
-            position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("N0", CultureInfo.InvariantCulture));
-            position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("N0", CultureInfo.InvariantCulture));
+            position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
+            position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
+            position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));
         }
 
         private void UpdateRotationFields()
         {
-            position.xField.SetTextWithoutNotify(transform.eulerAngles.x.ToString("N2", CultureInfo.InvariantCulture));
-            position.yField.SetTextWithoutNotify(transform.eulerAngles.y.ToString("N2", CultureInfo.InvariantCulture));
-            position.zField.SetTextWithoutNotify(transform.eulerAngles.z.ToString("N2", CultureInfo.InvariantCulture));
+            var eulerAngles = layer.transform.localEulerAngles;
+            rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
+            rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
+            rotation.zField.SetTextWithoutNotify(eulerAngles.z.ToString("0.00", CultureInfo.InvariantCulture));
+        }
+
+        private void UpdateScalingFields()
+        {
+            var localScale = layer.transform.localScale;
+            scale.xField.SetTextWithoutNotify(localScale.x.ToString("0.00", CultureInfo.InvariantCulture));
+            scale.yField.SetTextWithoutNotify(localScale.y.ToString("0.00", CultureInfo.InvariantCulture));
+            scale.zField.SetTextWithoutNotify(localScale.z.ToString("0.00", CultureInfo.InvariantCulture));
         }
 
         private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayer origin)
