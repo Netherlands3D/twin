@@ -72,7 +72,6 @@ namespace Netherlands3D.Twin.Configuration
 
         private void OnFunctionalitySelected(Functionality functionality)
         {
-            Debug.Log("Selected functionality: " + functionality.Title);
             ShowInformation(functionality);
             Selected.Invoke(functionality);
         }
@@ -85,7 +84,6 @@ namespace Netherlands3D.Twin.Configuration
 
         private void Deselect()
         {
-            Debug.Log("Deselected functionality");
             ShowInformation(null);
             Deselected.Invoke();
         }
