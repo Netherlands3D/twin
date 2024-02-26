@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             foreach (var layer in LayersVisibleInInspector)
             {
-                layer.UpdateLayerUI();
+                layer.MarkLayerUIAsDirty();
             }
         }
 
