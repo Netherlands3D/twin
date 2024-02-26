@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class CartesianTileLayer : ReferencedLayer
     {
         private CartesianTiles.Layer layer;
-
+        
         public override bool IsActiveInScene
         {
             get => layer.isEnabled;
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (layer.isEnabled != value)
                     layer.isEnabled = value;
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
+                ReferencedProxy.UI.UpdateLayerUI();
             }
         }
 

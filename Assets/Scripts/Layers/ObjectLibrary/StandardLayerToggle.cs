@@ -1,12 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
@@ -17,13 +11,9 @@ namespace Netherlands3D.Twin
         protected override void Awake()
         {
             base.Awake();
-            tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(
-                FindObjectsInactive.Include
-            );
+            tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(FindObjectsInactive.Include);
 
-            layer = tileHandler.layers
-                .FirstOrDefault(l => l.name == prefab.name)
-                ?.GetComponent<Tile3DLayer>();
+            layer = tileHandler.layers.FirstOrDefault(l => l.name == prefab.name)?.GetComponent<Tile3DLayer>();
         }
 
         private void OnEnable()
@@ -49,12 +39,7 @@ namespace Netherlands3D.Twin
 
         private Tile3DLayer CreateObject()
         {
-            var newObject = Instantiate(
-                prefab,
-                Vector3.zero,
-                Quaternion.identity,
-                tileHandler.transform
-            );
+            var newObject = Instantiate(prefab, Vector3.zero, Quaternion.identity, tileHandler.transform);
             newObject.name = prefab.name;
             tileHandler.AddLayer(newObject.GetComponent<CartesianTiles.Layer>());
 
@@ -62,14 +47,14 @@ namespace Netherlands3D.Twin
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<Tile3DLayer>();
 
-            StartCoroutine(SelectAndHoverAtEndOfFrame()); //wait until layer and UI are initialized.
-
+            StartCoroutine(SelectAndHoverAtEndOfFrame());//wait until layer and UI are initialized.
+            
             return layerComponent;
         }
 
         private IEnumerator SelectAndHoverAtEndOfFrame()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame(); 
             layer.ReferencedProxy.UI.Select();
             HighlightLayer(true);
             layer.ReferencedProxy.name = prefab.name;

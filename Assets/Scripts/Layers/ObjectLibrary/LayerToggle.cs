@@ -12,21 +12,12 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField]
-        protected Transform layerParent;
+        [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
-
-        [SerializeField]
-        protected ReferencedLayer layer;
-
-        [SerializeField]
-        protected GameObject prefab;
-
-        [SerializeField]
-        protected GameObject binImage;
-
-        [SerializeField]
-        protected Sprite hoverSprite;
+        [SerializeField] protected ReferencedLayer layer;
+        [SerializeField] protected GameObject prefab;
+        [SerializeField] protected GameObject binImage;
+        [SerializeField] protected Sprite hoverSprite;
         protected Sprite defaultSprite;
 
         protected virtual void Awake()
@@ -44,23 +35,24 @@ namespace Netherlands3D.Twin
             toggle.onValueChanged.AddListener(CreateOrDestroyObject);
         }
 
+
         protected virtual void OnDisable()
         {
             LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
-
+        
         private void OnLayerDeleted(LayerNL3DBase deletedLayer)
         {
-            if (!toggle.isOn)
+            if(!toggle.isOn)
                 return;
-
+            
             if (deletedLayer == layer.ReferencedProxy)
             {
                 toggle.onValueChanged.RemoveListener(CreateOrDestroyObject); //the layer was already deleted, it should only update the toggle
                 toggle.isOn = false; //use the regular way instead of SetIsOnWithoutNotify because the toggle graphics should update.
                 toggle.onValueChanged.AddListener(CreateOrDestroyObject);
-            }
+            } 
         }
 
         private void CreateOrDestroyObject(bool isOn)
@@ -91,7 +83,7 @@ namespace Netherlands3D.Twin
             layer.ReferencedProxy.UI.Select();
             HighlightLayer(true);
             layer.ReferencedProxy.name = prefab.name;
-            layer.ReferencedProxy.UI.MarkLayerUIAsDirty();
+            layer.ReferencedProxy.UI.UpdateLayerUI();
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
