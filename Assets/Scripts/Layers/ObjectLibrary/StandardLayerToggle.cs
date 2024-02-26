@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin
             layer.ReferencedProxy.UI.Select();
             HighlightLayer(true);
             layer.ReferencedProxy.name = prefab.name;
-            layer.ReferencedProxy.UI.UpdateLayerUI();
+            layer.ReferencedProxy.UI.MarkLayerUIAsDirty();
         }
 
         public void OnPointerEnter(PointerEventData eventData)

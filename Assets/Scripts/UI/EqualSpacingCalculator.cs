@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +27,9 @@ namespace Netherlands3D.Twin
             rt = GetComponent<RectTransform>();
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitForEndOfFrame();
             CalculateSpacing();
             ApplySpacingToOtherLayoutGroups();
         }
