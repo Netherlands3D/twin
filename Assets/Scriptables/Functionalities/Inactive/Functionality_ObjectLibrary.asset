@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_ObjectLibrary
   m_EditorClassIdentifier: 
-  Id: 
+  Id: object-library
   Title: Objectenbibliotheek
   Caption: 
   Header: Tonen van voorgedefinieerde 3D objecten in de viewer
@@ -20,7 +20,7 @@ MonoBehaviour:
     Denk aan windmolens of verschillende type bomen. Objecten kunnen op willekeurige
     locaties geplaatst worden en bij sommige objecten zijn extra instellingen mogelijk.
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

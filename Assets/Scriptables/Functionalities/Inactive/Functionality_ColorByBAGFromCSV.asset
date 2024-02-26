@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_ColorByBAGFromCSV
   m_EditorClassIdentifier: 
-  Id: color-by-bag-from-csv
+  Id: csv-coloring
   Title: Gebouwen kleuren
   Caption: Op basis van BAG id
   Header: Kleur gebouwen op basis van kenmerk

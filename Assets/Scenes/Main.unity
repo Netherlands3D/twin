@@ -783,6 +783,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1763029095 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9055551517361465030, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2000707295 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4860799740062944291, guid: 9963fec33e379324db2affcb3f83332f,
@@ -900,7 +906,7 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1016,28 +1022,39 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[0].name
-      value: Vrij beschikbaar -> ToolbarButton_Download (GameObject) -> SetActive
+      value: Collada -> ToolbarButton_Download (GameObject) -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[1].name
-      value: Vrij beschikbaar -> ToolbarButton_Pointer (GameObject) -> SetActive
+      value: ' -> ToolbarButton_Pointer (GameObject) -> SetActive'
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[2].name
-      value: Vrij beschikbaar -> ToolbarButton_Indicators (GameObject) -> SetActive
+      value: Tygron -> ToolbarButton_Indicators (GameObject) -> SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[3].name
-      value: Vrij beschikbaar -> ButtonSmall_Camera (GameObject) -> SetActive
+      value: ' -> ButtonSmall_Camera (GameObject) -> SetActive'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].name
+      value: ' -> Minimap (GameObject) -> SetActive'
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[3].functionality
       value: 
       objectReference: {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845,
+        type: 2}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].functionality
+      value: 
+      objectReference: {fileID: 11400000, guid: 3da8bf8309a3baa4da8b4dba6d2283d9,
         type: 2}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1321,6 +1338,11 @@ PrefabInstance:
       objectReference: {fileID: 1759892628}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1763029095}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
       propertyPath: FeatureLinks.Array.data[1].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Netherlands3D.CartesianTiles.Layer, eu.netherlands3d.cartesiantiles.runtime
       objectReference: {fileID: 0}
@@ -1356,12 +1378,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
       propertyPath: FeatureLinks.Array.data[13].onFeatureToggle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[3].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -1402,6 +1434,11 @@ PrefabInstance:
     - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: FunctionalityLinks.Array.data[3].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332358024489349196, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: FunctionalityLinks.Array.data[4].onFunctionalityToggle.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2761955822860159097, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -1452,22 +1489,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.055247907
+      value: -0.25659132
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0143462755
+      value: -0.056663636
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.96632195
+      value: 0.942158
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.25092572
+      value: -0.20805886
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}

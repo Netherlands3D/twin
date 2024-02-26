@@ -17,11 +17,40 @@
     "buildings": {
       "enabled": {{NL3D_BUILDINGS|default('true')}}
     },
-    "streets": {
-      "enabled": {{NL3D_STREETS|default('false')}}
+	"trees": {
+      "enabled": {{NL3D_TREES|default('true')}}
     },
-    "trees": {
-      "enabled": {{NL3D_TREES|default('false')}}
+    "streets": {
+      "enabled": {{NL3D_STREETS|default('true')}}
+    },
+	"neighbourhoods": {
+      "enabled": {{NL3D_NEIGHBOURHOODS|default('true')}}
+    },
+	"districts": {
+      "enabled": {{NL3D_DISTRICTS|default('true')}}
+    },
+	"building-information": {
+      "enabled": {{NL3D_BUILDING_INFORMATION|default('true')}}
+    },
+	"download": {
+      "enabled": {{NL3D_DOWNLOAD|default('true')}}
+    },
+	"screenshot": {
+      "enabled": {{NL3D_SCREENSHOT|default('true')}}
+    },
+	"object-importer": {
+      "enabled": {{NL3D_OBJECT_IMPORTER|default('true')}}
+    },
+	"indicators": {
+      "enabled": {{NL3D_INDICATORS|default('false')}},
+      "configuration": {
+        "dossierId": "{{NL3D_INDICATORS_DOSSIER_ID|default('')}}",
+        "baseUri": "{{NL3D_INDICATORS_API_BASE_URI|default('')}}",
+        "apiKey": "{{NL3D_INDICATORS_API_KEY|default('')}}"
+      }
+    },
+	"csv-coloring": {
+      "enabled": {{NL3D_CSV_COLORING|default('true')}}
     },
     "sun": {
       "enabled": {{NL3D_SUN|default('false')}}
@@ -31,20 +60,6 @@
     },
     "traffic": {
       "enabled": {{NL3D_TRAFFIC|default('false')}}
-    },
-    "screenshot": {
-      "enabled": {{NL3D_SCREENSHOT|default('false')}}
-    },
-    "object-importer": {
-      "enabled": {{NL3D_OBJECT_IMPORTER|default('false')}}
-    },
-    "indicators": {
-      "enabled": {{NL3D_INDICATORS|default('false')}},
-      "configuration": {
-        "dossierId": "{{NL3D_INDICATORS_DOSSIER_ID|default('')}}",
-        "baseUri": "{{NL3D_INDICATORS_API_BASE_URI|default('')}}",
-        "apiKey": "{{NL3D_INDICATORS_API_KEY|default('')}}"
-      }
     }
   }
 }
