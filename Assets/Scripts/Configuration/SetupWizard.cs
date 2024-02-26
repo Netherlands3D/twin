@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Minimap;
 using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
@@ -23,7 +24,8 @@ namespace Netherlands3D.Twin.Configuration
         [Header("References")] 
         [SerializeField] private TMP_InputField originXField;
         [SerializeField] private TMP_InputField originYField;
-        [SerializeField] private TMP_InputField shareUrlField;
+        [SerializeField] private AddressSearch.AddressSearch addressSearchField;
+        [SerializeField] private WMTSMap minimap;
 
         [FormerlySerializedAs("featureList")]
         [SerializeField] private GameObject functionalitiesList;
@@ -41,6 +43,11 @@ namespace Netherlands3D.Twin.Configuration
 
             originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onValueChanged.AddListener(OnOriginYChanged);
+
+            addressSearchField.onCoordinateFound.AddListener(UpdateStartingPositionWithoutNotify);
+            minimap.onClick.AddListener(UpdateStartingPositionWithoutNotify);
+
+            configuration.OnOriginChanged.Invoke(configuration.Origin);
 
             foreach (var availableFunctionality in configuration.Functionalities)
             {
@@ -70,9 +77,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void ValidateRdCoordinates(Coordinate coordinates)
         {
-            // TODO: IsValid is broken.. whoops!
-            // var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
-            var validRdCoordinates = true;
+            var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
@@ -96,20 +101,35 @@ namespace Netherlands3D.Twin.Configuration
         public void UpdateStartingPositionWithoutNotify(Coordinate coordinate)
         {
             var currentAltitude = configuration.Origin.Points[2];
-            coordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+            var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+
+            // if Coordinate is 2D, make sure it is 3D
+            if (convertedCoordinate.Points.Length == 2)
+            {
+                convertedCoordinate = new Coordinate(
+                    convertedCoordinate.CoordinateSystem, 
+                    convertedCoordinate.Points[0], 
+                    convertedCoordinate.Points[1],
+                    currentAltitude
+                );
+            }
             
             // Setting a starting position's altitude to 0 shouldn't happen, if we detect this as an artefact of
             // the conversion process or an actual intention, we reinstate the original altitude.
-            if (Mathf.Approximately((float)coordinate.Points[2], 0f))
-            {
-                coordinate.Points[2] = currentAltitude;
+            if (Mathf.Approximately((float)convertedCoordinate.Points[2], 0f)) {
+                convertedCoordinate.Points[2] = currentAltitude;
             }
 
-            var roundedCoordinate = new Coordinate(CoordinateSystem.RD, (int)coordinate.Points[0], (int)coordinate.Points[1], (int)coordinate.Points[2]);
+            var roundedCoordinate = new Coordinate(
+                convertedCoordinate.CoordinateSystem, 
+                (int)convertedCoordinate.Points[0], 
+                (int)convertedCoordinate.Points[1], 
+                (int)convertedCoordinate.Points[2]
+            );
 
             originXField.SetTextWithoutNotify(roundedCoordinate.Points[0].ToString(CultureInfo.InvariantCulture));
             originYField.SetTextWithoutNotify(roundedCoordinate.Points[1].ToString(CultureInfo.InvariantCulture));
-            configuration.Origin = coordinate;
+            configuration.Origin = convertedCoordinate;
         }
 
         private void UpdateShareUrlWhenFunctionalityChanges()
@@ -129,9 +149,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateShareUrl()
         {
-            shareUrlField.text = Uri.UnescapeDataString(configuration.ToQueryString());
+            var queryString = Uri.UnescapeDataString(configuration.ToQueryString());
+            Debug.Log("Update queryString to " + queryString);
+
             #if UNITY_WEBGL && !UNITY_EDITOR
-            ReplaceUrl($"./{Uri.UnescapeDataString(configuration.ToQueryString())}");
+            ReplaceUrl($"./{queryString}");
             #endif
         }
 

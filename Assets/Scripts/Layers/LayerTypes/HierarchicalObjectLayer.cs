@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
             set
             {
                 gameObject.SetActive(value);
-                ReferencedProxy.UI.UpdateLayerUI();
+                ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
         
