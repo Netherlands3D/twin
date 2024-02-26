@@ -103,6 +103,10 @@ following section detailing each environment variable and its influence on the a
 
 *true/false, is the Trees feature enabled*
 
+### NL3D_NEIGHBOURHOODS`
+
+*true/false, is the Neighbourhoods feature enabled*
+
 ### NL3D_SUN`
 
 *true/false, is the Sun and Shadows feature enabled*
