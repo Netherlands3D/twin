@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7510894024108783277}
   - component: {fileID: 389928214506134641}
   - component: {fileID: 1401077752366897546}
+  - component: {fileID: 4219097030820919585}
   m_Layer: 0
   m_Name: Zwarte els
   m_TagString: Untagged
@@ -107,3 +108,17 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &4219097030820919585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4459058518115681934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 2755653616641964639, guid: f079940d3ad621f4084d969e86da56ff,
+    type: 3}
