@@ -1214,8 +1214,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 02a156bd7b363440fab221037cc5aef2, type: 3}
   - {fileID: 21300000, guid: 730d7bdcdd4a2446dbe4df81938266f4, type: 3}
   - {fileID: 21300000, guid: b6c64162c3e9c4e6ea68a7f37a4bcdee, type: 3}
-  test: {fileID: 0}
-  test2: {fileID: 0}
+  propertyToggle: {fileID: 1850104207184435544}
 --- !u!114 &1244387766270603908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,6 +1492,7 @@ RectTransform:
   - {fileID: 8312362831220139269}
   - {fileID: 3011691865847377540}
   - {fileID: 7499595349914018578}
+  - {fileID: 5525388472463666520}
   m_Father: {fileID: 8734394992167256324}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
