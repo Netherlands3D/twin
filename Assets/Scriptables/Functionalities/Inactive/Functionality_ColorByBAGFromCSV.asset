@@ -15,15 +15,12 @@ MonoBehaviour:
   Id: color-by-bag-from-csv
   Title: Gebouwen kleuren
   Caption: Op basis van BAG id
-  Description: '<b>Kleur gebouwen op basis van kenmerk.</b>
-
-
-    Maakt het mogelijk
-    een CSV bestand in te laden met daarin een kolom BAG-Pand id''s en een kolom
-    kenmerken. De BAG Pand id''s uit de CSV worden gebruikt om een koppeling met
-    de 3D BAG panden uit de viewer te maken om vervolgens het bijbehorende kenmerk
-    te gebruiken om panden te kleuren. Aan elk onderscheidend kenmerk wordt een kleur
-    toegewezen welke zichtbaar wordt gemaakt in de viewer."'
+  Header: Kleur gebouwen op basis van kenmerk
+  Description: Maakt het mogelijk een CSV bestand in te laden met daarin een kolom
+    BAG-Pand id's en een kolom kenmerken. De BAG Pand id's uit de CSV worden gebruikt
+    om een koppeling met de 3D BAG panden uit de viewer te maken om vervolgens het
+    bijbehorende kenmerk te gebruiken om panden te kleuren. Aan elk onderscheidend
+    kenmerk wordt een kleur toegewezen welke zichtbaar wordt gemaakt in de viewer."
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

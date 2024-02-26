@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Functionality_Trees
   m_EditorClassIdentifier: 
   Id: trees
-  Title: Toon bomen
-  Caption: Vrij beschikbaar
-  Description: "<b>Alle bomen en bospercelen uit de BGT.</b>\n\nDeze kaartlaag toont
-    alle individuele bomen en bospercelen van Nederland voor zover ze in de Basiskaart
-    Grootschalige Topografie (BGT) zijn opgenomen. Binnen bospercelen wordt onderscheid
-    gemaakt in loofbossen, naaldbossen en gemengde bossen, welke met een willekeurige
-    hoogte en locatie zijn geplaatst. Bomen worden als 2D objecten op 3 vlakken geprojecteerd,
-    waardoor het lijkt alsof ze 3D objecten zijn. \n\n<i>\nBron: Basiskaart Grootschalige
-    Topografie (BGT)\nDatum: december 2023 \nActualisatie: jaarlijks\n</i>"
+  Title: Bomen en bospercelen
+  Caption: 
+  Header: Alle bomen en bospercelen uit de BGT
+  Description: "Deze kaartlaag toont alle individuele bomen en bospercelen van Nederland
+    voor zover ze in de Basiskaart Grootschalige Topografie (BGT) zijn opgenomen.
+    Binnen bospercelen wordt onderscheid gemaakt in loofbossen, naaldbossen en gemengde
+    bossen, welke met een willekeurige hoogte en locatie zijn geplaatst. Bomen worden
+    als 2D objecten op 3 vlakken geprojecteerd, waardoor het lijkt alsof ze 3D objecten
+    zijn. \n\n<i>\nBron: Basiskaart Grootschalige Topografie (BGT)\nDatum: december
+    2023 \nActualisatie: jaarlijks\n</i>"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

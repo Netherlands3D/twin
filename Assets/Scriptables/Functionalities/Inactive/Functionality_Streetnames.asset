@@ -13,21 +13,19 @@ MonoBehaviour:
   m_Name: Functionality_Streetnames
   m_EditorClassIdentifier: 
   Id: streets
-  Title: Toon namen van straten
-  Caption: Vrij beschikbaar
-  Description: '<b>Alle straatnamen van Nederland</b>
-
-
-    Deze kaartlaag toont
-    alle straatnamen van Nederland. Afhankelijk van het zoomniveau worden straatnamen
-    weergegeven.
+  Title: Straatnamen
+  Caption: 
+  Header: Alle straatnamen van Nederland
+  Description: 'Deze kaartlaag toont alle straatnamen van Nederland. Afhankelijk
+    van het zoomniveau worden straatnamen weergegeven.
 
 
     <i>
 
     Bron: PDOK
 
-    Datum: live
+    Datum:
+    live
 
     </i>'
   configuration: {fileID: 0}

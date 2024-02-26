@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Functionality_AreaDownload
   m_EditorClassIdentifier: 
   Id: download
-  Title: Gebied downloaden
+  Title: Downloaden van een gebied
   Caption: Collada
-  Header: Downloaden van 3D objecten
-  Description: Maakt het mogelijk alle 3D objecten uit de viewer te downloaden als
+  Header: Downloaden van 3D gebied
+  Description: Maakt het mogelijk alle 3D modellen uit de viewer te downloaden als
     losse 3D Collada DAE objecten (per kaartlaag). Downloaden kan per tegel van 100x100m
     met een maximum van 16 tegels tegelijk.
   configuration: {fileID: 0}

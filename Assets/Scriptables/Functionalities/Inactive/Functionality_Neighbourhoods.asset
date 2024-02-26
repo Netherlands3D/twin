@@ -13,21 +13,19 @@ MonoBehaviour:
   m_Name: Functionality_Neighbourhoods
   m_EditorClassIdentifier: 
   Id: neighbourhoods
-  Title: Toon namen van buurten
-  Caption: Vrij beschikbaar
-  Description: '<b>Alle buurtnamen van Nederland</b>
-
-
-    Deze kaartlaag toont alle
-    buurtnamen van Nederland. Afhankelijk van het zoomniveau worden buurtnamen weergegeven.
+  Title: Buurtnamen
+  Caption: 
+  Header: Alle buurtnamen van Nederland
+  Description: 'Deze kaartlaag toont alle buurtnamen van Nederland. Afhankelijk van
+    het zoomniveau worden buurtnamen weergegeven.
 
 
     <i>
 
-    Bron:
-    PDOK
+    Bron: PDOK
 
-    Datum: live
+    Datum:
+    live
 
     </i>'
   configuration: {fileID: 0}

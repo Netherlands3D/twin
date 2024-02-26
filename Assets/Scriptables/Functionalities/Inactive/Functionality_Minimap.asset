@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Functionality_Minimap
   m_EditorClassIdentifier: 
   Id: 
-  Title: 
+  Title: Minimap
   Caption: 
-  Description: "<b>Snelle navigatie via minimap.</b>\n\nEr wordt een minimap getoond
-    waarin je als gebruiker snel naar een andere locatie kunt navigeren. \nBinnen
-    de minimap geeft een selectiegebied of 'field of sight' aan welk deel van Nederland
-    in het hoofdscherm in 3D wordt weergegeven."
+  Header: Snelle navigatie via minimap
+  Description: "Er wordt een minimap getoond waarin je als gebruiker snel naar een
+    andere locatie kunt navigeren. \nBinnen de minimap geeft een selectiegebied of
+    'field of sight' aan welk deel van Nederland in het hoofdscherm in 3D wordt weergegeven."
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
