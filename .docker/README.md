@@ -100,42 +100,54 @@ following section detailing each environment variable and its influence on the a
 
 *true/false, is the Buildings feature enabled*
 
+### NL3D_TREES
+
+*true/false, is the Trees feature enabled*
+
 ### NL3D_STREETS
 
 *true/false, is the Streets feature enabled*
 
-### NL3D_TREES`
-
-*true/false, is the Trees feature enabled*
-
-### NL3D_NEIGHBOURHOODS`
+### NL3D_NEIGHBOURHOODS
 
 *true/false, is the Neighbourhoods feature enabled*
 
-### NL3D_SUN`
+### NL3D_DISTRICTS
 
-*true/false, is the Sun and Shadows feature enabled*
+*true/false, is the Districts feature enabled*
 
-### NL3D_TIMELINE`
+### NL3D_BUILDING_INFORMATION
 
-*true/false, is the Timeline feature enabled*
+*true/false, is the Building BAG information feature enabled*
 
-### NL3D_TRAFFIC`
-
-*true/false, is the Traffic Simulation feature enabled*
-
-### NL3D_SCREENSHOT`
+### NL3D_SCREENSHOT
 
 *true/false, is the screenshotting feature enabled*
 
-### NL3D_OBJECT_IMPORTER`
+### NL3D_OBJECT_IMPORTER
 
 *true/false, is the importing of .obj files enabled*
 
-### NL3D_INDICATORS`
+### NL3D_INDICATORS
 
 *true/false, is it possible to show Indicator for dossiers*
 
-### NL3D_INDICATORS_DOSSIER_ID`
+### NL3D_INDICATORS_DOSSIER_ID
 
 *The default dossier id to show for the indicators feature, can be empty*
+
+### NL3D_CSV_COLORING
+
+*true/false, is the building coloring by csv import feature enabled*
+
+### NL3D_SUN
+
+*true/false, is the Sun and Shadows feature enabled*
+
+### NL3D_TIMELINE
+
+*true/false, is the Timeline feature enabled*
+
+### NL3D_TRAFFIC
+
+*true/false, is the Traffic Simulation feature enabled*
