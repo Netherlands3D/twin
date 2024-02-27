@@ -109,8 +109,8 @@ MonoBehaviour:
       - m_Target: {fileID: 6432123512545269546}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
           Assembly-CSharp
-        m_MethodName: set_IsActiveInScene
-        m_Mode: 6
+        m_MethodName: EnableFromFunctionality
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -125,8 +125,8 @@ MonoBehaviour:
       - m_Target: {fileID: 6432123512545269546}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
           Assembly-CSharp
-        m_MethodName: set_IsActiveInScene
-        m_Mode: 6
+        m_MethodName: DisableFromFunctionality
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

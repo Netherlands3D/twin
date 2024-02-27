@@ -117,7 +117,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Buildings
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6533123463239516954, guid: cc9d0f9a5a1724c9695a1bef5ecccaec, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -413,6 +414,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trees
       objectReference: {fileID: 0}
+    - target: {fileID: 4004104331541800533, guid: 6915dd70276474a0688a5fb1a9c248c0,
+        type: 3}
+      propertyPath: OnEnableFunctionality.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004104331541800533, guid: 6915dd70276474a0688a5fb1a9c248c0,
+        type: 3}
+      propertyPath: OnDisableFunctionality.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004104331541800533, guid: 6915dd70276474a0688a5fb1a9c248c0,
+        type: 3}
+      propertyPath: OnEnableFunctionality.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnableFromFunctionality
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004104331541800533, guid: 6915dd70276474a0688a5fb1a9c248c0,
+        type: 3}
+      propertyPath: OnDisableFunctionality.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DisableFromFunctionality
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -487,7 +508,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 901653408368542401, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

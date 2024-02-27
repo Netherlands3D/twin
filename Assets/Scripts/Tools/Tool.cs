@@ -117,5 +117,27 @@ namespace Netherlands3D.Twin
                 }
             }
         }
+
+        public void OpenInspector()
+        {
+            if(Open) return;
+
+            Open = true;
+            onToggleInspector.Invoke(this);
+        }
+
+        public void CloseInspector()
+        {
+            if(!Open) return;
+
+            Open = false;
+            onToggleInspector.Invoke(this);
+
+            DestroyPrefabInstances();
+
+            if(activateToolOnInspectorToggle){
+                Deactivate();
+            }
+        }
     }
 }
