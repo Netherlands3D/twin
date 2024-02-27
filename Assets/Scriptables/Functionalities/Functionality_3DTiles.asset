@@ -26,7 +26,7 @@ MonoBehaviour:
     <color=blue><u><link=https://www.ogc.org/standard/3dtiles/>Meer
     informatie over OGC standaard ''3D Tiles''</link></u></color>'
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
