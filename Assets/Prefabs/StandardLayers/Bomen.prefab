@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1634243888683479019}
   - component: {fileID: 6757356103537766160}
   - component: {fileID: 3732835547605356908}
+  - component: {fileID: 4004104331541800533}
   m_Layer: 10
   m_Name: Bomen
   m_TagString: Untagged
@@ -82,5 +83,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <LayerTypeSprite>k__BackingField: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25,
-    type: 3}
+--- !u!114 &4004104331541800533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712503248906199988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionality: {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3732835547605356908}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
+          Assembly-CSharp
+        m_MethodName: set_IsActiveInScene
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3732835547605356908}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
+          Assembly-CSharp
+        m_MethodName: set_IsActiveInScene
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
