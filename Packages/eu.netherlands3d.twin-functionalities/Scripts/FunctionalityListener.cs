@@ -13,18 +13,12 @@ namespace Netherlands3D.Twin.Functionalities
         [FormerlySerializedAs("feature")]
         public Functionality functionality;
 
-        [HideInInspector] public UnityEvent<Functionality> OnEnableFunctionality = new ();
-        [HideInInspector] public UnityEvent<Functionality> OnDisableFunctionality = new ();
+        public UnityEvent<Functionality> OnEnableFunctionality = new ();
+        public UnityEvent<Functionality> OnDisableFunctionality = new ();
 
         private void Awake() {
             functionality.OnEnable.AddListener(EnableFunctionality);
             functionality.OnDisable.AddListener(DisableFunctionality);
-        }
-
-        private void OnValidate() {
-            if(!GetComponent<EnableComponentsByFunctionality>()) {
-                Debug.LogError("FunctionalityListener should only be added runtime by EnableComponentsByFunctionality", this.gameObject);
-            }
         }
         
         private void OnEnable()
