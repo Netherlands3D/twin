@@ -12,12 +12,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         
         public override bool IsActiveInScene
         {
-            get => layer.isEnabled;
+            get
+            {
+                return (layer && layer.isEnabled);
+            }
             set
             {
-                if (layer.isEnabled != value)
+                if (layer && layer.isEnabled != value)
                     layer.isEnabled = value;
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
+
+                if(ReferencedProxy && ReferencedProxy.UI)
+                    ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
 
