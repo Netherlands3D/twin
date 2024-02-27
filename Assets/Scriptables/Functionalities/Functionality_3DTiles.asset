@@ -14,7 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 3dtiles
   Title: 3D Tiles (Beta)
-  Caption: 3D Tilesets inladen (Beta)
+  Caption: BETA
+  Header: 3D Tilesets inladen
+  Description: 'Maakt het mogelijk om 3D Tiles lagen toe te voegen vanuit het basislagen
+    menu.
+
+
+    <i>Let op; deze functionaliteit is nog in BETA.</i>'
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:
