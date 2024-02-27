@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             foreach (var layer in LayersVisibleInInspector)
             {
-                layer.UpdateLayerUI();
+                layer.MarkLayerUIAsDirty();
             }
         }
 
@@ -191,7 +191,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case Tile3DLayer _:
+                case CartesianTileLayer _:
+                    // print("Tile layer");
+                    return layerTypeSprites[1];
+                case Tile3DLayer2 _:
                     // print("Tile layer");
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayer _:
