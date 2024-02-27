@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 4567236183040430189}
   - component: {fileID: 8612115766732982784}
   - component: {fileID: 2255234672255247488}
+  - component: {fileID: 797915757257290819}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -228,6 +229,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &797915757257290819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506923744691797846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecaf11444375b354a9c61d667b493b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1826629063939572732
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8461925525370366667}
   - component: {fileID: 5917254537132755462}
-  - component: {fileID: 635969343117528540}
+  - component: {fileID: 2019879628035939720}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -400,7 +413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.06917287}
+  m_AnchoredPosition: {x: 0, y: 0.000017426777}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5917254537132755462
@@ -429,7 +442,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &635969343117528540
+--- !u!114 &2019879628035939720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -671,7 +684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.092757605}
+  m_AnchoredPosition: {x: 0, y: -0.000017650129}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5158789987175011053
@@ -723,6 +736,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 542491431112943606}
+  - component: {fileID: 3747633660876111960}
   m_Layer: 5
   m_Name: Functionalities
   m_TagString: Untagged
@@ -750,6 +764,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &3747633660876111960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200366544004268749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e50a74c87d9da0d4b9ecccd3894c5624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerText: {fileID: 2621613477106064862}
+  descriptionText: {fileID: 2255234672255247488}
+  watermark: {fileID: 6254386140383449619}
+  placeholderHeaderText: Stel je eigen Netherlands3D samen!
+  placeHolderDescriptionText: Kies welke functionaliteit wel of niet actief moet
+    zijn om de gebruikerservaring te maken die jij nodig hebt.
+  scrollRectText: {fileID: 5079928904066865702}
+  functionalitiesListContent: {fileID: 3437690106649523712}
+  functionalitySelectionPrefab: {fileID: 1716528719610758314, guid: 4fa44f001b9538b4da031419603bb6a8,
+    type: 3}
 --- !u!1 &5632017525148474081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,12 +1586,12 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 0.99969614
+      value: 0.9995014
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1711,7 +1747,7 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 0.9997767
+      value: 0.9996406
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}

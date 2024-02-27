@@ -15,6 +15,19 @@ MonoBehaviour:
   Id: districts
   Title: Toon namen van wijken
   Caption: Vrij beschikbaar
+  Description: '<b>Alle wijknamen van Nederland</b>
+
+
+    Deze kaartlaag toont alle
+    wijknamen van Nederland. Afhankelijk van het zoomniveau worden wijknamen weergegeven.
+
+
+    <i>
+
+    Bron:
+    PDOK
+
+    Datum: live</i>'
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

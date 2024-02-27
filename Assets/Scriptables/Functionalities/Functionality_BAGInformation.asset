@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: Functionality_BAGInformation
   m_EditorClassIdentifier: 
   Id: bag
-  Title: BAG informatie ophalen van panden
-  Caption: Vrij beschikbaar
+  Title: BAG informatie ophalen
+  Caption: 
+  Header: BAG pand- en adresinformatie opvragen
+  Description: "Maakt een koppeling tussen pandobjecten in de 3D viewer en administratieve
+    data uit de Basisadministratie Adressen en Gebouwen (BAG) waardoor het mogelijk
+    is gedetailleerde informatie over het pand, enkele pandkenmerken en de adressen
+    daarbinnen op te vragen.  \n\n<i>\nBron: PDOK\nDatum: live\n</I>"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

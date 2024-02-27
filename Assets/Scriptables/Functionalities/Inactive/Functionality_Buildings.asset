@@ -15,6 +15,13 @@ MonoBehaviour:
   Id: buildings
   Title: Toon gebouwen
   Caption: Vrij beschikbaar
+  Description: "<b>Toont alle gebouwen van Nederland.</b>\n\nAlle objecten op de
+    laag 'Gebouwen' komen uit de 3D BAG, een jaarlijks geactualiseerde dataset van
+    alle gebouwen in Nederland. De set is ontwikkeld door de de 3D geoinformatie
+    onderzoeksgroep van de Technische Universiteit Delft. Aan het gebruik van de
+    3D BAG zitten <link=https://docs.3dbag.nl/nl/><u><color=blue>voorwaarden</color></u></link>.
+    \n\n<i>\nBron: <link=https://docs.3dbag.nl/nl/><u><color=blue>3D BAG</color></u></link>\nDatum:
+    2023\nActualisatie: Jaarlijks\n</i>"
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
