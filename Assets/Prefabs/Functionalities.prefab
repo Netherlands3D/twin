@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &655776049567972843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9043962494800117598}
+  m_Layer: 0
+  m_Name: 3DTiles
+  m_TagString: 3DTileParent
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9043962494800117598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655776049567972843}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919916255551741050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2921212951514727232
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,6 +76,7 @@ Transform:
   - {fileID: 7440955795247456445}
   - {fileID: 4515907520926526781}
   - {fileID: 4930656928155257700}
+  - {fileID: 9043962494800117598}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2332358024489349196
@@ -1502,22 +1534,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5289843
+      value: 0.41331974
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.13457006
+      value: 0.25021896
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8120304
+      value: 0.7489767
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.20657507
+      value: -0.45342174
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -1542,27 +1574,27 @@ PrefabInstance:
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: day
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: hour
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: year
-      value: 2023
-      objectReference: {fileID: 0}
-    - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
-        type: 3}
-      propertyPath: month
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
+      propertyPath: year
+      value: 2024
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
+        type: 3}
+      propertyPath: month
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
+        type: 3}
       propertyPath: minutes
-      value: 44
+      value: 38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

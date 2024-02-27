@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin
         private void OnValidate()
         {
             Awake();
-            Start();
+            RecalculateAllSpacings();
         }
 #endif
 
@@ -39,20 +39,22 @@ namespace Netherlands3D.Twin
             int columnCount = gridLayoutGroup.constraintCount;
             float parentWidth = rt.rect.width;
 
-            float totalCellWidth = gridLayoutGroup.cellSize.x * transform.childCount;
+            float totalCellWidth = gridLayoutGroup.cellSize.x * columnCount;
             float spacingX = (parentWidth - totalCellWidth) / (columnCount + 1);
 
             // Adjust the padding to achieve equal spacing
             gridLayoutGroup.spacing = new Vector2(spacingX, gridLayoutGroup.spacing.y);
             gridLayoutGroup.padding.left = Mathf.RoundToInt(spacingX);
             gridLayoutGroup.padding.right = Mathf.RoundToInt(spacingX);
+            
+            // LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
 
         private void ApplySpacingToOtherLayoutGroups()
         {
-            if(additionalLayoutGroups == null)
+            if (additionalLayoutGroups == null)
                 return;
-            
+
             foreach (var layoutGroup in additionalLayoutGroups)
             {
                 layoutGroup.padding.left = Mathf.RoundToInt(Spacing);
@@ -63,6 +65,12 @@ namespace Netherlands3D.Twin
                     ((GridLayoutGroup)layoutGroup).spacing = gridLayoutGroup.spacing;
                 }
             }
+        }
+
+        public void RecalculateAllSpacings()
+        {
+            CalculateSpacing();
+            ApplySpacingToOtherLayoutGroups();
         }
     }
 }
