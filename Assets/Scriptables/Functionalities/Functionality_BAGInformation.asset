@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Functionality_BAGInformation
   m_EditorClassIdentifier: 
   Id: bag
-  Title: BAG informatie ophalen
+  Title: Gebouw informatie
   Caption: 
   Header: BAG pand- en adresinformatie opvragen
   Description: "Maakt een koppeling tussen pandobjecten in de 3D viewer en administratieve

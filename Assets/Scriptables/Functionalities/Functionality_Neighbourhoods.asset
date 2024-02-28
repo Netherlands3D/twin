@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_Districtnames
+  m_Name: Functionality_Neighbourhoods
   m_EditorClassIdentifier: 
-  Id: districts
-  Title: Toon namen van wijken
-  Caption: Vrij beschikbaar
-  Description: '<b>Alle wijknamen van Nederland</b>
-
-
-    Deze kaartlaag toont alle
-    wijknamen van Nederland. Afhankelijk van het zoomniveau worden wijknamen weergegeven.
+  Id: neighbourhoods
+  Title: Buurtnamen
+  Caption: 
+  Header: Alle buurtnamen van Nederland
+  Description: 'Deze kaartlaag toont alle buurtnamen van Nederland. Afhankelijk van
+    het zoomniveau worden buurtnamen weergegeven.
 
 
     <i>
 
-    Bron:
-    PDOK
+    Bron: PDOK
 
-    Datum: live</i>'
+    Datum:
+    live
+
+    </i>'
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

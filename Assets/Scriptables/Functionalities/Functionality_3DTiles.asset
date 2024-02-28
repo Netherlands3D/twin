@@ -13,14 +13,18 @@ MonoBehaviour:
   m_Name: Functionality_3DTiles
   m_EditorClassIdentifier: 
   Id: 3dtiles
-  Title: 3D Tiles (Beta)
+  Title: 3D Tiles
   Caption: BETA
-  Header: 3D Tilesets inladen
-  Description: 'Maakt het mogelijk om 3D Tiles lagen toe te voegen vanuit het basislagen
-    menu.
+  Header: 3D Tilesets inladen (BETA)
+  Description: 'Maakt het mogelijk om gebouwen en maaiveld 3D Tiles lagen toe te
+    voegen.
 
 
-    <i>Let op; deze functionaliteit is nog in BETA.</i>'
+    <i>Let op; deze functionaliteit is nog in ontwikkeling.</i>
+
+
+    <color=blue><u><link=https://www.ogc.org/standard/3dtiles/>Meer
+    informatie over OGC standaard ''3D Tiles''</link></u></color>'
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

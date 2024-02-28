@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 2538691044118113909}
   - component: {fileID: 4663457136142956979}
   m_Layer: 5
-  m_Name: Location
+  m_Name: LocationPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -898,6 +898,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StartPosition
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447594426167943005, guid: eae009ca96714d7478c1439359bc382e,
+        type: 3}
+      propertyPath: moveCamera
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6371483133221958879, guid: eae009ca96714d7478c1439359bc382e,
         type: 3}

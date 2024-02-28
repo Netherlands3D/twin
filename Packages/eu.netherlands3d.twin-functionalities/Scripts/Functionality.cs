@@ -59,5 +59,11 @@ namespace Netherlands3D.Twin.Functionalities
                 ["configuration"] = (configuration as IConfiguration)?.ToJsonNode()
             };
         }
+
+        private void OnValidate() {
+            if(string.IsNullOrEmpty(Id)) {
+                Id = Title.ToLower().Replace(" ", "-");
+            }
+        }
     }
 }

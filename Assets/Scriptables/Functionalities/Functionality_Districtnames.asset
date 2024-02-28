@@ -10,18 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_ObjectLibrary
+  m_Name: Functionality_Districtnames
   m_EditorClassIdentifier: 
-  Id: 
-  Title: 
+  Id: districts
+  Title: Wijknamen
   Caption: 
-  Description: '<b>Tonen van voorgedefinieerde 3D objecten in de viewer.</b>
+  Header: Alle wijknamen van Nederland
+  Description: 'Deze kaartlaag toont alle wijknamen van Nederland. Afhankelijk van
+    het zoomniveau worden wijknamen weergegeven.
 
 
-    Een
-    aantal voorgedefinieerde objecten kunnen in de viewer worden geladen. Denk aan
-    windmolens of verschillende type bomen. Objecten kunnen op willekeurige locaties
-    geplaatst worden en bij sommige objecten zijn extra instellingen mogelijk.'
+    <i>
+
+    Bron: PDOK
+
+    Datum:
+    live</i>'
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

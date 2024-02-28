@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_Minimap
+  m_Name: Functionality_ObjectLibrary
   m_EditorClassIdentifier: 
-  Id: 
-  Title: 
+  Id: object-library
+  Title: Objectenbibliotheek
   Caption: 
-  Description: "<b>Snelle navigatie via minimap.</b>\n\nEr wordt een minimap getoond
-    waarin je als gebruiker snel naar een andere locatie kunt navigeren. \nBinnen
-    de minimap geeft een selectiegebied of 'field of sight' aan welk deel van Nederland
-    in het hoofdscherm in 3D wordt weergegeven."
+  Header: Tonen van voorgedefinieerde 3D objecten in de viewer
+  Description: Een aantal voorgedefinieerde objecten kunnen in de viewer worden geladen.
+    Denk aan windmolens of verschillende type bomen. Objecten kunnen op willekeurige
+    locaties geplaatst worden en bij sommige objecten zijn extra instellingen mogelijk.
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

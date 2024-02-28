@@ -8,24 +8,31 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class CartesianTileLayer : ReferencedLayer
     {
         private CartesianTiles.Layer layer;
+        private CartesianTiles.TileHandler tileHandler;
         
         public override bool IsActiveInScene
         {
-            get => layer.isEnabled;
+            get
+            {
+                return (layer && layer.isEnabled);
+            }
             set
             {
-                if (layer.isEnabled != value)
+                if (layer && layer.isEnabled != value)
                     layer.isEnabled = value;
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
+
+                if(ReferencedProxy && ReferencedProxy.UI)
+                    ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
 
         protected override void Awake()
         {
             base.Awake();
-            var tileHandler = GetComponentInParent<CartesianTiles.TileHandler>();
+            tileHandler = GetComponentInParent<CartesianTiles.TileHandler>();
             layer = GetComponent<CartesianTiles.Layer>();
-            tileHandler.AddLayer(GetComponent<CartesianTiles.Layer>());
+
+            tileHandler.AddLayer(layer);
         }
 
         protected override void OnDestroy()
