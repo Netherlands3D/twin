@@ -39,10 +39,6 @@ namespace Netherlands3D.Twin
         public bool Open { get => open; set => open = value; }
         public bool Available { get => available; set => available = value; }
 
-        private void Awake() {
-            open = false;
-        }
-
         /// <summary>
         /// Set availability for the user on/off.
         /// Toolbar will show/hide the buttons for this tool.

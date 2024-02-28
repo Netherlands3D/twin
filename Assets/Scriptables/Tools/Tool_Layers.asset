@@ -16,6 +16,9 @@ MonoBehaviour:
   title: Lagen
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  onAvailabilityChange:
+    m_PersistentCalls:
+      m_Calls: []
   onActivate:
     m_PersistentCalls:
       m_Calls: []
@@ -28,7 +31,7 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
     type: 3}
-  featurePrefabs:
+  functionalityPrefabs:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
