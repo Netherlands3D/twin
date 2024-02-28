@@ -6879,7 +6879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &456071679684997950
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7048,7 +7048,7 @@ MonoBehaviour:
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6508115695025736262}
+      - m_Target: {fileID: 5111211642961566395}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -7063,7 +7063,7 @@ MonoBehaviour:
   OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6508115695025736262}
+      - m_Target: {fileID: 5111211642961566395}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6

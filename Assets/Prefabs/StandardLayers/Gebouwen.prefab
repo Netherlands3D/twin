@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1917550957201454778}
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
-  - component: {fileID: 6533123463239516954}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -90,48 +89,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6533123463239516954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4311489376399559593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  functionality: {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6432123512545269546}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
-          Assembly-CSharp
-        m_MethodName: EnableFromFunctionality
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6432123512545269546}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.LayerInspector.CartesianTileLayer,
-          Assembly-CSharp
-        m_MethodName: DisableFromFunctionality
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
