@@ -32,7 +32,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
         {
-            polygonSelected.Invoke(this);
+            UI?.Select(true); //if the UI exists it will call polygonSelected.Invoke twice, but this is more readable
+            polygonSelected.Invoke(this); 
         }
 
         public void SetPolygon(List<Vector3> solidPolygon)
