@@ -32,8 +32,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
         {
-            UI?.Select(true); //if the UI exists it will call polygonSelected.Invoke twice, but this is more readable
-            polygonSelected.Invoke(this); 
+            if(UI)
+                UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
         }
 
         public void SetPolygon(List<Vector3> solidPolygon)

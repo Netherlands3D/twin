@@ -10,8 +10,6 @@ namespace Netherlands3D.Twin
 {
     public class PolygonInputToLayer : MonoBehaviour
     {
-        public static PolygonInputToLayer Instance;
-
         [Header("Polygon settings")] [SerializeField]
         private float polygonExtrusionHeight = 0.1f;
 
@@ -24,19 +22,6 @@ namespace Netherlands3D.Twin
         [SerializeField] private BoolEvent enablePolygonInputEvent;
         [SerializeField] private Vector3ListEvent polygonCreatedEvent;
         [SerializeField] private Vector3ListEvent polygonEditedEvent;
-
-        public PolygonInput PolygonInput => polygonInput;
-        
-        private void Awake()
-        {
-            if (Instance)
-            {
-                Debug.LogError("An Instance of PolygonInputLayer already exists. There should only be one PolygonInputToLayer object", gameObject);
-                return;
-            }
-
-            Instance = this;
-        }
 
         private void OnEnable()
         {
@@ -64,7 +49,6 @@ namespace Netherlands3D.Twin
         public void EnablePolygonInput(bool isOn)
         {
             enablePolygonInputEvent.InvokeStarted(isOn);
-            // polygonInput.gameObject.SetActive(isOn);
         }
 
         private void ReselectPolygon(PolygonSelectionLayer layer)
