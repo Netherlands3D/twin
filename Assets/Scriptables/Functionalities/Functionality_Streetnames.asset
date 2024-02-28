@@ -10,13 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_Neighbourhoods
+  m_Name: Functionality_Streetnames
   m_EditorClassIdentifier: 
-  Id: neighbourhoods
-  Title: Toon namen van buurten
-  Caption: Vrij beschikbaar
+  Id: streets
+  Title: Straatnamen
+  Caption: 
+  Header: Alle straatnamen van Nederland
+  Description: 'Deze kaartlaag toont alle straatnamen van Nederland. Afhankelijk
+    van het zoomniveau worden straatnamen weergegeven.
+
+
+    <i>
+
+    Bron: PDOK
+
+    Datum:
+    live
+
+    </i>'
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

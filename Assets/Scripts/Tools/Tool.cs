@@ -39,10 +39,6 @@ namespace Netherlands3D.Twin
         public bool Open { get => open; set => open = value; }
         public bool Available { get => available; set => available = value; }
 
-        private void Awake() {
-            open = false;
-        }
-
         /// <summary>
         /// Set availability for the user on/off.
         /// Toolbar will show/hide the buttons for this tool.
@@ -115,6 +111,28 @@ namespace Netherlands3D.Twin
                 {
                     Deactivate();
                 }
+            }
+        }
+
+        public void OpenInspector()
+        {
+            if(Open) return;
+
+            Open = true;
+            onToggleInspector.Invoke(this);
+        }
+
+        public void CloseInspector()
+        {
+            if(!Open) return;
+
+            Open = false;
+            onToggleInspector.Invoke(this);
+
+            DestroyPrefabInstances();
+
+            if(activateToolOnInspectorToggle){
+                Deactivate();
             }
         }
     }

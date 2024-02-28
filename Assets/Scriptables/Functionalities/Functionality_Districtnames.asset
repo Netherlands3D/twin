@@ -13,10 +13,21 @@ MonoBehaviour:
   m_Name: Functionality_Districtnames
   m_EditorClassIdentifier: 
   Id: districts
-  Title: Toon namen van wijken
-  Caption: Vrij beschikbaar
+  Title: Wijknamen
+  Caption: 
+  Header: Alle wijknamen van Nederland
+  Description: 'Deze kaartlaag toont alle wijknamen van Nederland. Afhankelijk van
+    het zoomniveau worden wijknamen weergegeven.
+
+
+    <i>
+
+    Bron: PDOK
+
+    Datum:
+    live</i>'
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

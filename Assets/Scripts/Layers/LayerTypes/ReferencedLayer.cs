@@ -12,18 +12,12 @@ namespace Netherlands3D.Twin
 
         protected virtual void Awake()
         {
-            LayerData.AddReferenceLayer(this);
+            CreateProxy();
         }
 
-        public virtual void OnSelect()
-        {
-            
-        }
+        public virtual void OnSelect() {}
 
-        public virtual void OnDeselect()
-        {
-            
-        }
+        public virtual void OnDeselect(){}
 
         public void DestroyLayer()
         {
@@ -32,8 +26,20 @@ namespace Netherlands3D.Twin
         
         protected virtual void OnDestroy()
         {
+            DestroyProxy();
+        }
+
+        public virtual void CreateProxy()
+        {
+            LayerData.AddReferenceLayer(this);
+        }
+
+        public virtual void DestroyProxy()
+        {
             if (ReferencedProxy)
+            {
                 Destroy(ReferencedProxy.gameObject);
+            }
         }
     }
 }

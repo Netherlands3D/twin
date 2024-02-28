@@ -10,11 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_Streetnames
+  m_Name: Functionality_ObjectLibrary
   m_EditorClassIdentifier: 
-  Id: streets
-  Title: Toon namen van straten
-  Caption: Vrij beschikbaar
+  Id: object-library
+  Title: Objectenbibliotheek
+  Caption: 
+  Header: Tonen van voorgedefinieerde 3D objecten in de viewer
+  Description: Een aantal voorgedefinieerde objecten kunnen in de viewer worden geladen.
+    Denk aan windmolens of verschillende type bomen. Objecten kunnen op willekeurige
+    locaties geplaatst worden en bij sommige objecten zijn extra instellingen mogelijk.
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

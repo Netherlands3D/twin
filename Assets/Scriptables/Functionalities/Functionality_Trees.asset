@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
+  m_Name: Functionality_Trees
+  m_EditorClassIdentifier: 
+  Id: trees
+  Title: Bomen en bospercelen
+  Caption: 
+  Header: Alle bomen en bospercelen uit de BGT
+  Description: "Deze kaartlaag toont alle individuele bomen en bospercelen van Nederland
+    voor zover ze in de Basiskaart Grootschalige Topografie (BGT) zijn opgenomen.
+    Binnen bospercelen wordt onderscheid gemaakt in loofbossen, naaldbossen en gemengde
+    bossen, welke met een willekeurige hoogte en locatie zijn geplaatst. Bomen worden
+    als 2D objecten op 3 vlakken geprojecteerd, waardoor het lijkt alsof ze 3D objecten
+    zijn. \n\n<i>\nBron: Basiskaart Grootschalige Topografie (BGT)\nDatum: december
+    2023 \nActualisatie: jaarlijks\n</i>"
+  configuration: {fileID: 0}
+  isEnabled: 1
+  OnEnable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisable:
+    m_PersistentCalls:
+      m_Calls: []
