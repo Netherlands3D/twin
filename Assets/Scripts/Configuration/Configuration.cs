@@ -258,6 +258,6 @@ namespace Netherlands3D.Twin.Configuration
             }
             Functionalities = uniqueFunctionalities;
         }
-    }
 #endif
+    }
 }
