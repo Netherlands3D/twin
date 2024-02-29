@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -10,7 +8,6 @@ using Netherlands3D.Coordinates;
 #if SUBOBJECT
 using Netherlands3D.SubObjects;
 #endif
-using System.Diagnostics;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -41,8 +38,7 @@ namespace Netherlands3D.CartesianTiles
             switch (action)
             {
                 case TileAction.Create:
-                    Tile newTile = CreateNewTile(tileKey);
-                    tiles.Add(tileKey, newTile);
+                    tiles.Add(tileKey, CreateNewTile(tileKey));
                     break;
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;
@@ -54,51 +50,46 @@ namespace Netherlands3D.CartesianTiles
                     InteruptRunningProcesses(tileKey);
                     RemoveGameObjectFromTile(tileKey);
                     tiles.Remove(tileKey);
-                    callback(tileChange);
+                    callback?.Invoke(tileChange);
                     return;
-                default:
-                    break;
             }
             tiles[tileKey].runningCoroutine = StartCoroutine(DownloadBinaryMesh(tileChange, callback));
         }
 
         private Tile CreateNewTile(Vector2Int tileKey)
         {
-            Tile tile = new Tile();
-            tile.unityLOD = 0;
-            tile.tileKey = tileKey;
-            tile.layer = transform.gameObject.GetComponent<Layer>();
-
-
-            return tile;
+            return new Tile
+            {
+                unityLOD = 0,
+                tileKey = tileKey,
+                layer = this
+            };
         }
+
         private void RemoveGameObjectFromTile(Vector2Int tileKey)
         {
-            if (tiles.ContainsKey(tileKey))
-            {
-                Tile tile = tiles[tileKey];
-                if (tile == null)
-                {
-                    return;
-                }
-                if (tile.gameObject == null)
-                {
-                    return;
-                }
-                string meshname = tile.gameObject.GetComponent<MeshFilter>().sharedMesh.name;
-                MeshFilter mf = tile.gameObject.GetComponent<MeshFilter>();
-                if (mf != null)
-                {
-                    Destroy(tile.gameObject.GetComponent<MeshFilter>().sharedMesh);
-                }
-                Destroy(tiles[tileKey].gameObject);
-            }
+            if (!tiles.TryGetValue(tileKey, out var tile)) return;
+
+            var tileGameObject = tile.gameObject;
+            if (!tileGameObject) return;
+            
+            RemoveGameObject(tileGameObject);
         }
-        
+
+        private static void RemoveGameObject(GameObject tileGameObject)
+        {
+            MeshFilter mf = tileGameObject.GetComponent<MeshFilter>();
+            if (mf) {
+                Destroy(mf.sharedMesh);
+            }
+            Destroy(tileGameObject);
+        }
+
         private IEnumerator DownloadBinaryMesh(TileChange tileChange, System.Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
-            int index = tiles[tileKey].unityLOD;
+            var tile = tiles[tileKey];
+            int index = tile.unityLOD;
             string url = Datasets[index].path;
             if (Datasets[index].path.StartsWith("https://") || Datasets[index].path.StartsWith("file://"))
             {
@@ -116,46 +107,52 @@ namespace Netherlands3D.CartesianTiles
 			webRequest.SetRequestHeader("Accept-Encoding", "br");
 #endif
 
-            tiles[tileKey].runningWebRequest = webRequest;
+            tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
 
             if (!tiles.ContainsKey(tileKey)) yield break;
 
-            tiles[tileKey].runningWebRequest = null;
+            tile.runningWebRequest = null;
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 RemoveGameObjectFromTile(tileKey);
-                callback(tileChange);
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+
+            byte[] results = webRequest.downloadHandler.data;
+
+            yield return new WaitUntil(() => pauseLoading == false);
+            GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
+            
+            if (!newGameobject)
+            {
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+
+            if (tiles.TryGetValue(tileKey, out tile))
+            {
+                if (tile.gameObject) RemoveGameObject(tile.gameObject);
+
+                tile.gameObject = newGameobject;
+                
+#if SUBOBJECT
+                if (hasMetaData)
+                {
+                    yield return StartCoroutine(LoadMetaData(newGameobject, url));
+                }
+#endif
             }
             else
             {
-                byte[] results = webRequest.downloadHandler.data;
-
-                yield return new WaitUntil(() => pauseLoading == false);
-                GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
-                if (newGameobject != null)
-                {
-#if SUBOBJECT
-                    if (hasMetaData)
-                    {
-                        yield return StartCoroutine(LoadMetaData(newGameobject, url));
-                    }
-#endif
-
-                    tiles[tileKey].gameObject = newGameobject;
-
-                        callback(tileChange);
-                    
-                }
-                else
-                {
-                    callback(tileChange);
-                }
+                // Tile was destroyed in the mean time.. destroy this game object too then.
+                RemoveGameObject(newGameobject);
             }
+
+            callback?.Invoke(tileChange);
         }
-
-
 
 #if SUBOBJECT
         private IEnumerator LoadMetaData(GameObject gameObject, string geometryUrl)
@@ -185,6 +182,9 @@ namespace Netherlands3D.CartesianTiles
 
         private void ReadMetaDataFile(byte[] results, GameObject gameobject)
         {
+            // The gameobject could be destroyed in the mean time
+            if (!gameobject) return;
+    
             ObjectMapping objectMapping = gameobject.AddComponent<ObjectMapping>();
             objectMapping.items = new List<ObjectMappingItem>();
             using (var stream = new MemoryStream(results))
