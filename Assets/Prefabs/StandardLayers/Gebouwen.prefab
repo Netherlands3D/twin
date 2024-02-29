@@ -51,7 +51,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Buildings.2.2/Buildings{x}_{y}.1.2.bin
+    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Buildings_2023/Buildings{x}_{y}.2.2.bin
     pathQuery: ?sv=2021-12-02&ss=b&srt=sco&sp=r&se=2024-04-14T19:42:33Z&st=2023-04-17T11:42:33Z&spr=https&sig=NAbl2WIj7Uh2A51gaYUfzPeF%2Fj%2F53Zw6P%2F3HwsAWUTo%3D
     maximumDistance: 10000
     maximumDistanceSquared: 0
