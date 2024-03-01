@@ -112,16 +112,6 @@ namespace Netherlands3D.CartesianTiles
 
         private float groundLevelClipRange = 1000;
 
-        //[Header("Optional events")]
-        //[SerializeField]
-        //private Vector2IntEvent tileCreatedEvent;
-        //[SerializeField]
-        //private Vector2IntEvent tileUpgradeEvent;
-        //[SerializeField]
-        //private Vector2IntEvent tileDowngradeEvent;
-        //[SerializeField]
-        //private Vector2IntEvent tileDestroyedEvent;
-
         void Start()
         {
             layers = GetComponentsInChildren<Layer>(false).ToList();
@@ -150,11 +140,10 @@ namespace Netherlands3D.CartesianTiles
             layers.Add(layer);
             GetTilesizes();
         }
+
         public void RemoveLayer(Layer layer)
         {
-
             int layerIndex = layers.IndexOf(layer);
-
 
             // add all existing tiles to pending destroy
             int tilesizeIndex = tileSizes.IndexOf(layer.tileSize);
@@ -176,8 +165,6 @@ namespace Netherlands3D.CartesianTiles
             }
             InstantlyStartRemoveChanges();
             layers.Remove(layer);
-
-
         }
 
         private void CacheCameraFrustum()
@@ -218,13 +205,8 @@ namespace Netherlands3D.CartesianTiles
             {
                 TileChange highestPriorityTileChange = GetHighestPriorityTileChange();
                 Vector3Int tilekey = new Vector3Int(highestPriorityTileChange.X, highestPriorityTileChange.Y, highestPriorityTileChange.layerIndex);
-                if (activeTileChanges.ContainsKey(tilekey) == false)
-                {
-                    activeTileChanges.Add(tilekey, highestPriorityTileChange);
-                    pendingTileChanges.Remove(highestPriorityTileChange);
-                    layers[highestPriorityTileChange.layerIndex].HandleTile(highestPriorityTileChange, TileHandled);
-                }
-                else if (activeTileChanges.TryGetValue(tilekey, out TileChange existingTileChange))
+                
+                if (activeTileChanges.TryGetValue(tilekey, out TileChange existingTileChange))
                 {
                     //Change running tile changes to more important ones
                     Debug.Log("Upgrading existing");
@@ -233,6 +215,12 @@ namespace Netherlands3D.CartesianTiles
                         activeTileChanges[tilekey] = highestPriorityTileChange;
                         pendingTileChanges.Remove(highestPriorityTileChange);
                     }
+                }
+                else
+                {
+                    activeTileChanges.Add(tilekey, highestPriorityTileChange);
+                    pendingTileChanges.Remove(highestPriorityTileChange);
+                    layers[highestPriorityTileChange.layerIndex].HandleTile(highestPriorityTileChange, TileHandled);
                 }
             }
         }
@@ -243,7 +231,7 @@ namespace Netherlands3D.CartesianTiles
             for (int i = removeChanges.Length - 1; i >= 0; i--)
             {
                 var removeChange = removeChanges[i];
-                layers[removeChange.layerIndex].HandleTile(removeChange, TileRemoved);
+                layers[removeChange.layerIndex].HandleTile(removeChange);
                 pendingTileChanges.Remove(removeChange);
 
                 //Abort all tilechanges with the same key
@@ -259,7 +247,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 var runningChange = changes[i];
                 layers[removeChange.layerIndex].InteruptRunningProcesses(new Vector2Int(removeChange.X, removeChange.Y));
-                layers[removeChange.layerIndex].HandleTile(removeChange, TileRemoved);
+                layers[removeChange.layerIndex].HandleTile(removeChange);
                 activeTileChanges.Remove(runningChange.Key);
             }
         }
@@ -271,45 +259,14 @@ namespace Netherlands3D.CartesianTiles
             {
                 var runningChange = changes[i];
                 layers[removeChange.layerIndex].InteruptRunningProcesses(new Vector2Int(removeChange.X, removeChange.Y));
-                layers[removeChange.layerIndex].HandleTile(removeChange, TileRemoved);
+                layers[removeChange.layerIndex].HandleTile(removeChange);
                 pendingTileChanges.Remove(runningChange);
             }
         }
 
         public void TileHandled(TileChange handledTileChange)
         {
-            InvokeTileChangeEvent(handledTileChange);
-
             activeTileChanges.Remove(new Vector3Int(handledTileChange.X, handledTileChange.Y, handledTileChange.layerIndex));
-        }
-
-        private void InvokeTileChangeEvent(TileChange handledTileChange)
-        {
-            //switch (handledTileChange.action)
-            //{
-            //    case TileAction.Create:
-            //        if (tileCreatedEvent)
-            //            tileCreatedEvent.InvokeStarted(new Vector2Int(handledTileChange.X, handledTileChange.Y));
-            //        break;
-            //    case TileAction.Downgrade:
-            //        if (tileDowngradeEvent)
-            //            tileDowngradeEvent.InvokeStarted(new Vector2Int(handledTileChange.X, handledTileChange.Y));
-            //        break;
-            //    case TileAction.Upgrade:
-            //        if (tileUpgradeEvent)
-            //            tileUpgradeEvent.InvokeStarted(new Vector2Int(handledTileChange.X, handledTileChange.Y));
-            //        break;
-            //    case TileAction.Remove:
-            //        if (tileDestroyedEvent)
-            //            tileDestroyedEvent.InvokeStarted(new Vector2Int(handledTileChange.X, handledTileChange.Y));
-            //        break;
-            //}
-        }
-
-        public void TileRemoved(TileChange handledTileChange)
-        {
-            //if (tileDestroyedEvent)
-            //    tileDestroyedEvent.InvokeStarted(new Vector2Int(handledTileChange.X, handledTileChange.Y));
         }
 
         /// <summary>
@@ -529,9 +486,7 @@ namespace Netherlands3D.CartesianTiles
 
         private void AddTileChange(TileChange tileChange, int layerIndex)
         {
-
             //don't add a tilechange if the tile has an active tilechange already
-
             Vector3Int activekey = new Vector3Int(tileChange.X, tileChange.Y, tileChange.layerIndex);
             if (activeTileChanges.ContainsKey(activekey) && tileChange.action != TileAction.Remove)
             {
@@ -622,13 +577,10 @@ namespace Netherlands3D.CartesianTiles
             return priority;
         }
 
-        Layer layer;
-        List<Vector3Int> neededTiles;
-        List<Vector2Int> neededTileKeys = new List<Vector2Int>();
-        TileChange tileChange;
-
         private void RemoveOutOfViewTiles()
         {
+            Layer layer = null;
+            
             for (int layerIndex = 0; layerIndex < layers.Count; layerIndex++)
             {
                 // create a list of tilekeys for the tiles that are within the viewrange
@@ -637,40 +589,39 @@ namespace Netherlands3D.CartesianTiles
                 {
                     continue;
                 }
-                if (layer.gameObject.activeSelf == false) { continue; }
-                if (layer.isEnabled == false)
-                {
-                    continue;
-                }
+
+                if (layer.gameObject.activeSelf == false) continue;
+                if (layer.isEnabled == false) continue;
+                
                 int tilesizeIndex = tileSizes.IndexOf(layer.tileSize);
-                neededTiles = tileDistances[tilesizeIndex];
-                neededTileKeys.Clear();
-                neededTileKeys.Capacity = neededTiles.Count;
-                foreach (var neededTile in neededTiles)
-                {
-                    //tileKey.x = neededTile.x;
-                    //tileKey.y = neededTile.y;
-                    neededTileKeys.Add(new Vector2Int(neededTile.x, neededTile.y));
-                }
-                //activeTiles = layer.tiles.Keys.ToArray();
-                //activeTiles = new List<Vector2Int>(layer.tiles.Keys);
+                var neededTiles = tileDistances[tilesizeIndex];
+
+                var neededTileKeys = new HashSet<Vector2Int>(
+                    neededTiles.Select(neededTile => new Vector2Int(neededTile.x, neededTile.y))
+                );
+
                 // check for each active tile if the key is in the list of tilekeys within the viewrange
                 foreach (var kvp in layer.tiles)
                 {
-                    if (neededTileKeys.Contains(kvp.Key) == false) // if the tile is not within the viewrange, set it up for removal
-                    {
-                        tileChange = new TileChange();
-                        tileChange.action = TileAction.Remove;
-                        tileChange.X = kvp.Key.x;
-                        tileChange.Y = kvp.Key.y;
-                        tileChange.layerIndex = layerIndex;
-                        tileChange.priorityScore = int.MaxValue; // set the priorityscore to maximum
-                        AddTileChange(tileChange, layerIndex);
-                    }
+                    if (neededTileKeys.Contains(kvp.Key)) continue; 
+                    
+                    // if the tile is not within the viewrange, set it up for removal
+                    AddTileChange(
+                        new TileChange
+                        {
+                            action = TileAction.Remove,
+                            X = kvp.Key.x,
+                            Y = kvp.Key.y,
+                            layerIndex = layerIndex,
+                            priorityScore = int.MaxValue // set the priorityscore to maximum
+                        }, 
+                        layerIndex
+                    );
                 }
 
             }
         }
+
         private TileChange GetHighestPriorityTileChange()
         {
             TileChange highestPriorityTileChange = pendingTileChanges[0];
@@ -687,14 +638,8 @@ namespace Netherlands3D.CartesianTiles
             return highestPriorityTileChange;
         }
     }
+
     [Serializable]
-   
-
-   
-   
-  
-
-
     public enum LODCalculationMethod
     {
         Auto,
