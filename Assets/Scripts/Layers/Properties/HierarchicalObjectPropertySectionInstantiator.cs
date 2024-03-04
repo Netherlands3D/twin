@@ -6,6 +6,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         [SerializeField] private AbstractHierarchicalObjectPropertySection propertySectionPrefab;
 
+        public AbstractHierarchicalObjectPropertySection PropertySectionPrefab
+        {
+            get => propertySectionPrefab;
+            set => propertySectionPrefab = value;
+        }
+
         public void AddToProperties(RectTransform properties)
         {
             if (!propertySectionPrefab) return;
