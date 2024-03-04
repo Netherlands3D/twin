@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: address-search
   Title: Zoeken op adres
   Caption: Vrij beschikbaar
+  Description: 
   configuration: {fileID: 0}
   isEnabled: 0
   OnEnable:

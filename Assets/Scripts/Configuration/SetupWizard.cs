@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -26,12 +27,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private TMP_InputField originYField;
         [SerializeField] private AddressSearch.AddressSearch addressSearchField;
         [SerializeField] private WMTSMap minimap;
-
-        [FormerlySerializedAs("featureList")]
-        [SerializeField] private GameObject functionalitiesList;
-
-        [FormerlySerializedAs("featureSelectionPrefab")]
-        [Header("Prefab")] [SerializeField] private FunctionalitySelection functionalitySelectionPrefab;
+        [SerializeField] private FunctionalitiesPane functionalitiesPane;
 
         [Header("Events")]
         public UnityEvent OnSettingsChanged = new UnityEvent();
@@ -49,14 +45,8 @@ namespace Netherlands3D.Twin.Configuration
 
             configuration.OnOriginChanged.Invoke(configuration.Origin);
 
-            foreach (var availableFunctionality in configuration.Functionalities)
-            {
-                FunctionalitySelection functionalitySelection = Instantiate(functionalitySelectionPrefab, functionalitiesList.transform);
-                functionalitySelection.Init(availableFunctionality);
-
-                functionalitySelection.Toggle.onValueChanged.AddListener(value => OnFunctionalityChanged(availableFunctionality, value));
-                functionalitySelection.Button.onClick.AddListener(() => OnFunctionalitySelected(availableFunctionality));
-            }
+            functionalitiesPane.Init(configuration.Functionalities);
+            functionalitiesPane.Toggled.AddListener(functionality => OnSettingsChanged.Invoke());
         }
 
         /// <summary>
@@ -155,18 +145,6 @@ namespace Netherlands3D.Twin.Configuration
             #if UNITY_WEBGL && !UNITY_EDITOR
             ReplaceUrl($"./{queryString}");
             #endif
-        }
-
-        private void OnFunctionalityChanged(Functionality availableFunctionality, bool value)
-        {
-            availableFunctionality.IsEnabled = value;
-
-            OnSettingsChanged.Invoke();
-        }
-
-        private void OnFunctionalitySelected(Functionality functionality)
-        {
-            //TODO: Display information about the functionality
         }
 
         private void OnOriginYChanged(string value)

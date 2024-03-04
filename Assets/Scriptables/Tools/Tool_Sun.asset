@@ -18,6 +18,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f443a08a9cf0b1640bf676a9b943f0f8, type: 2}
   - {fileID: 11400000, guid: 273b59c4a8f150a4c9eee47e2423c945, type: 2}
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  onAvailabilityChange:
+    m_PersistentCalls:
+      m_Calls: []
   onActivate:
     m_PersistentCalls:
       m_Calls: []
@@ -30,5 +33,5 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 4173332915424425295, guid: 900f940be532c7b4dad81abc9e18beb9,
     type: 3}
-  featurePrefab: {fileID: 3455653236978720193, guid: 4ba44a31ba5f45f42b49235f06111c10,
-    type: 3}
+  functionalityPrefabs: []
+  open: 0

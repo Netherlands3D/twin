@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
+  m_Name: Functionality_ColorByBAGFromCSV
+  m_EditorClassIdentifier: 
+  Id: csv-coloring
+  Title: Gebouwen kleuren
+  Caption: Op basis van BAG id
+  Header: Kleur gebouwen op basis van kenmerk
+  Description: Maakt het mogelijk een CSV bestand in te laden met daarin een kolom
+    BAG-Pand id's en een kolom kenmerken. De BAG Pand id's uit de CSV worden gebruikt
+    om een koppeling met de 3D BAG panden uit de viewer te maken om vervolgens het
+    bijbehorende kenmerk te gebruiken om panden te kleuren. Aan elk onderscheidend
+    kenmerk wordt een kleur toegewezen welke zichtbaar wordt gemaakt in de viewer.
+  configuration: {fileID: 0}
+  isEnabled: 1
+  OnEnable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisable:
+    m_PersistentCalls:
+      m_Calls: []

@@ -24,17 +24,22 @@ digital twin application while offering flexibility through a series of environm
 - `NL3D_ALLOW_USER_SETTINGS`: *true/false, allow viewer user to change settings*
 - `NL3D_TERRAIN`: *true/false, is the Terrain feature enabled*
 - `NL3D_BUILDINGS`: *true/false, is the Buildings feature enabled*
-- `NL3D_STREETS`: *true/false, is the Streets feature enabled*
 - `NL3D_TREES`: *true/false, is the Trees feature enabled*
-- `NL3D_SUN`: *true/false, is the Sun and Shadows feature enabled*
-- `NL3D_TIMELINE`: *true/false, is the Timeline feature enabled*
-- `NL3D_TRAFFIC`: *true/false, is the Traffic Simulation feature enabled*
+- `NL3D_STREETS`: *true/false, is the Streets feature enabled*
+- `NL3D_NEIGHBOURHOODS`: *true/false, is the Neighbourhoods feature enabled*
+- `NL3D_DISTRICTS`: *true/false, is the Districts feature enabled*
+- `NL3D_BUILDING_INFORMATION`: *true/false, is the Building information feature enabled*
+- `NL3D_DOWNLOAD`: *true/false, is the Download area feature enabled*
 - `NL3D_SCREENSHOT`: *true/false, is the screenshotting feature enabled*
 - `NL3D_OBJECT_IMPORTER`: *true/false, is the importing of .obj files enabled*
 - `NL3D_INDICATORS`: *true/false, is it possible to show Indicator for dossiers*
 - `NL3D_INDICATORS_DOSSIER_ID`: *The default dossier id to show for the indicators feature, can be empty*
 - `NL3D_INDICATORS_API_BASE_URI`: *The API endpoint's base URI used to retrieve the dossier and assets from, example: https://nl3d-backend-provincie-utrecht.azurewebsites.net/api/v1/indicators*
 - `NL3D_INDICATORS_API_KEY`: *The API key used to connect to the API endpoints, this is passed as a "code" query parameter*
+- `NL3D_CSV_COLORING`: *true/false, is the coloring of buildsings using CSV feature is enabled*
+- `NL3D_SUN`: *true/false, is the Sun and Shadows feature enabled*
+- `NL3D_TIMELINE`: *true/false, is the Timeline feature enabled*
+- `NL3D_TRAFFIC`: *true/false, is the Traffic Simulation feature enabled*
 
 **Note:** For detailed information on available environment variables and their impact on the application's behavior,
 refer to the subsequent section in the documentation.
@@ -95,38 +100,54 @@ following section detailing each environment variable and its influence on the a
 
 *true/false, is the Buildings feature enabled*
 
+### NL3D_TREES
+
+*true/false, is the Trees feature enabled*
+
 ### NL3D_STREETS
 
 *true/false, is the Streets feature enabled*
 
-### NL3D_TREES`
+### NL3D_NEIGHBOURHOODS
 
-*true/false, is the Trees feature enabled*
+*true/false, is the Neighbourhoods feature enabled*
 
-### NL3D_SUN`
+### NL3D_DISTRICTS
 
-*true/false, is the Sun and Shadows feature enabled*
+*true/false, is the Districts feature enabled*
 
-### NL3D_TIMELINE`
+### NL3D_BUILDING_INFORMATION
 
-*true/false, is the Timeline feature enabled*
+*true/false, is the Building BAG information feature enabled*
 
-### NL3D_TRAFFIC`
-
-*true/false, is the Traffic Simulation feature enabled*
-
-### NL3D_SCREENSHOT`
+### NL3D_SCREENSHOT
 
 *true/false, is the screenshotting feature enabled*
 
-### NL3D_OBJECT_IMPORTER`
+### NL3D_OBJECT_IMPORTER
 
 *true/false, is the importing of .obj files enabled*
 
-### NL3D_INDICATORS`
+### NL3D_INDICATORS
 
 *true/false, is it possible to show Indicator for dossiers*
 
-### NL3D_INDICATORS_DOSSIER_ID`
+### NL3D_INDICATORS_DOSSIER_ID
 
 *The default dossier id to show for the indicators feature, can be empty*
+
+### NL3D_CSV_COLORING
+
+*true/false, is the building coloring by csv import feature enabled*
+
+### NL3D_SUN
+
+*true/false, is the Sun and Shadows feature enabled*
+
+### NL3D_TIMELINE
+
+*true/false, is the Timeline feature enabled*
+
+### NL3D_TRAFFIC
+
+*true/false, is the Traffic Simulation feature enabled*

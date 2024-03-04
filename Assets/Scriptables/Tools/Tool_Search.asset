@@ -16,6 +16,9 @@ MonoBehaviour:
   title: Zoeken
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  onAvailabilityChange:
+    m_PersistentCalls:
+      m_Calls: []
   onActivate:
     m_PersistentCalls:
       m_Calls: []
@@ -28,4 +31,5 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 2485776787059987519, guid: 26acc1a51cea69a408f60ca422a3cb29,
     type: 3}
-  featurePrefab: {fileID: 0}
+  functionalityPrefabs: []
+  open: 0

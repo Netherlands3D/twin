@@ -16,6 +16,9 @@ MonoBehaviour:
   title: Downloaden brondata
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  onAvailabilityChange:
+    m_PersistentCalls:
+      m_Calls: []
   onActivate:
     m_PersistentCalls:
       m_Calls: []
@@ -28,5 +31,6 @@ MonoBehaviour:
   activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 3537603041487147064, guid: 6b9505a13a1cf954b99d6247e15687df,
     type: 3}
-  featurePrefabs:
+  functionalityPrefabs:
   - {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5, type: 3}
+  open: 0
