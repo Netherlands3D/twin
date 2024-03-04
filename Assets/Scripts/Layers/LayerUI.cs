@@ -667,9 +667,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
 
             properties.Show(layerWithProperties);
-            
-            // To prevent confusion with the user, also immediately select this layer.
-            Select(true);
+
+            if (!IsSelected)
+            {
+                // To prevent confusion with the user, also immediately select this layer.
+                Select(true);
+            }
         }
     }
 }
