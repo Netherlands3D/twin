@@ -36,11 +36,18 @@ namespace Netherlands3D.SelectionTools
             IGNORE
         }
 
-        [Header("Input")]
+        public enum DrawMode
+        {
+            CreateAndEdit,
+            Create,
+            Edit
+        }
+
+        [Header("Input")] 
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputActionMap polygonSelectionActionMap;
 
-        [Header("Settings")]
+        [Header("Settings")] 
         [SerializeField] Color lineColor = Color.red;
         [SerializeField] Color closedLoopLineColor = Color.red;
         [SerializeField] private float lineWidthMultiplier = 10.0f;
@@ -60,6 +67,8 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private bool displayLineUntilRedraw = true;
         [SerializeField] private bool clearOnEnable = false;
         [SerializeField] private LayerMask lockInputLayers = 32; //UI layer 5th bit is a 1
+        [SerializeField] private DrawMode mode = DrawMode.CreateAndEdit;
+        public DrawMode Mode => mode;
 
         private InputAction pointerAction;
         private InputAction tapAction;
@@ -93,16 +102,19 @@ namespace Netherlands3D.SelectionTools
         private float lastTapTime = 0;
 
         [SerializeField] private Transform pointerRepresentation;
+        public bool showPointerInEditMode = false;
+        public bool showPointerInCreateMode = true;
+        public bool showPointerInCreateAndEditMode = true;
         [SerializeField] private PolygonDragHandle handleTemplate;
         private List<PolygonDragHandle> handles = new List<PolygonDragHandle>();
 
-        [Header("Invoke")]
+        [Header("Invoke")] 
         public UnityEvent<bool> blockCameraDrag;
         public UnityEvent<List<Vector3>> createdNewPolygonArea;
-        [Header("Optional Invoke")]
+        [Header("Optional Invoke")] 
         public UnityEvent<List<Vector3>> editedPolygonArea;
-        [Tooltip("Contains the list of points the line is made of")] public UnityEvent<List<Vector3>> previewLineHasChanged;
 
+        [Tooltip("Contains the list of points the line is made of")] public UnityEvent<List<Vector3>> previewLineHasChanged;
 
         void Awake()
         {
@@ -142,6 +154,8 @@ namespace Netherlands3D.SelectionTools
                 Debug.Log("Disabled double click to close loop. This is not allowed in combination with handles.");
                 doubleClickToCloseLoop = false;
             }
+
+            SetDrawMode(mode); //set pointer active according to mode
         }
 #endif
 
@@ -201,6 +215,12 @@ namespace Netherlands3D.SelectionTools
 
         public void ReselectPolygon(List<Vector3> points)
         {
+            if (mode == DrawMode.Create)
+            {
+                Debug.LogWarning("PolygonInput is in create mode, cannot reselect polygon in edit mode.", gameObject);
+                return;
+            }
+
             ClearPolygon(true);
             for (int i = 0; i < points.Count; i++)
             {
@@ -213,6 +233,7 @@ namespace Netherlands3D.SelectionTools
 
                 AddPoint(point, false);
             }
+
             CloseLoop(false);
         }
 
@@ -221,7 +242,9 @@ namespace Netherlands3D.SelectionTools
             UpdateCurrentWorldCoordinate();
 
             UpdatePreviewLine();
-            pointerRepresentation.position = currentWorldCoordinate;
+
+            if (pointerRepresentation)
+                pointerRepresentation.position = currentWorldCoordinate;
 
             if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
             {
@@ -242,6 +265,7 @@ namespace Netherlands3D.SelectionTools
             {
                 requireReleaseBeforeRedraw = false;
             }
+
             previousFrameWorldCoordinate = currentWorldCoordinate;
         }
 
@@ -382,6 +406,12 @@ namespace Netherlands3D.SelectionTools
 
         private void Tap()
         {
+            if (mode == DrawMode.Edit)
+            {
+                Debug.LogWarning("PolygonInput is in edit mode, cannot Add a new point in edit mode.", gameObject);
+                return;
+            }
+
             var pointerRaycastResult = EventSystem.current.GetComponent<InputSystemUIInputModule>().GetLastRaycastResult(0);
 
             if (pointerRaycastResult.gameObject && pointerRaycastResult.gameObject.IsInLayerMask(lockInputLayers))
@@ -434,6 +464,7 @@ namespace Netherlands3D.SelectionTools
             {
                 if (handle) Destroy(handle.gameObject);
             }
+
             handles.Clear();
         }
 
@@ -630,13 +661,33 @@ namespace Netherlands3D.SelectionTools
                 MoveAllHandlesToPoint();
             }
 
+            if (mode == DrawMode.Create)
+                mode = DrawMode.Edit;
+
             var positionsCopy = new List<Vector3>(positions);
             if (!polygonFinished && invokeNewPolygonEvent && positions.Count > 1)
                 createdNewPolygonArea.Invoke(positionsCopy);
             else if (positions.Count > 1)
                 editedPolygonArea.Invoke(positionsCopy);
-
             polygonFinished = true;
+        }
+
+        public void SetDrawMode(DrawMode mode)
+        {
+            this.mode = mode;
+
+            switch (mode)
+            {
+                case DrawMode.Edit:
+                    pointerRepresentation.gameObject.SetActive(showPointerInEditMode);
+                    break;
+                case DrawMode.Create:
+                    pointerRepresentation.gameObject.SetActive(showPointerInCreateMode);
+                    break;
+                case DrawMode.CreateAndEdit:
+                    pointerRepresentation.gameObject.SetActive(showPointerInCreateAndEditMode);
+                    break;
+            }
         }
     }
 }
