@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797703249402195975}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6456176726394300739}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &754318239332368446
 MeshFilter:
@@ -159,13 +159,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5104559107588721066}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6456176726394300739}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &2223956127966259139
 LineRenderer:
@@ -296,6 +296,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6456176726394300766}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -305,7 +306,6 @@ Transform:
   - {fileID: 73934922147045399}
   - {fileID: 3720652376840383288}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &6456176726394300736
 LineRenderer:
@@ -423,23 +423,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0e5a1aab0d69a4fb6831b226ee84c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d, type: 3}
-  polygonReselectionInput: {fileID: 11400000, guid: 5b96feff55d584cff9829cd46c04b21a, type: 2}
-  blockCameraDrag: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
-  createdNewPolygonArea: {fileID: 0}
-  editedPolygonArea: {fileID: 11400000, guid: 6040433f915cd4f0eaae4862785c42f7, type: 2}
-  previewLineHasChanged: {fileID: 0}
+  inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
+    type: 3}
   lineColor: {r: 1, g: 0.7202714, b: 0, a: 1}
   closedLoopLineColor: {r: 0, g: 1, b: 0, a: 1}
   lineWidthMultiplier: 1
   maxSelectionDistanceFromCamera: 10000
   snapToStart: 1
   requireClosedPolygon: 1
-  closeLoopAtStart: 1
+  closeLoopAtStartPoint: 1
   createHandles: 1
   maxPoints: 1000
   minPointsToCloseLoop: 3
-  minPointDistance: 2
   minDistanceBetweenAutoPoints: 1
   minDirectionThresholdForAutoPoints: 0.9
   windingOrder: 1
@@ -451,10 +446,27 @@ MonoBehaviour:
   lockInputLayers:
     serializedVersion: 2
     m_Bits: 32
+  mode: 0
   polygonLineRenderer: {fileID: 6456176726394300736}
   previewLineRenderer: {fileID: 2223956127966259139}
+  currentWorldCoordinate: {x: 0, y: 0, z: 0}
+  positions: []
   pointerRepresentation: {fileID: 73934922147045399}
+  showPointerInEditMode: 0
+  showPointerInCreateMode: 1
   handleTemplate: {fileID: 5260422523492998488}
+  blockCameraDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  createdNewPolygonArea:
+    m_PersistentCalls:
+      m_Calls: []
+  editedPolygonArea:
+    m_PersistentCalls:
+      m_Calls: []
+  previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6914965596010975751
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +490,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6914965596010975751}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -485,7 +498,6 @@ Transform:
   m_Children:
   - {fileID: 2946012741922835652}
   m_Father: {fileID: 6456176726394300739}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8732571059078716029
 GameObject:
@@ -512,13 +524,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8732571059078716029}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 73934922147045399}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2615214459203822393
 MeshFilter:
