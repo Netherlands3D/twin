@@ -36,11 +36,17 @@ namespace Netherlands3D.SelectionTools
             IGNORE
         }
 
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
+        public enum DrawMode
+        {
+            CreateAndEdit,
+            Create,
+            Edit
+        }
+
+        [Header("Input")] [SerializeField] private InputActionAsset inputActionAsset;
         private InputActionMap polygonSelectionActionMap;
 
-        [Header("Settings")]
+        [Header("Settings")] 
         [SerializeField] Color lineColor = Color.red;
         [SerializeField] Color closedLoopLineColor = Color.red;
         [SerializeField] private float lineWidthMultiplier = 10.0f;
@@ -60,6 +66,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private bool displayLineUntilRedraw = true;
         [SerializeField] private bool clearOnEnable = false;
         [SerializeField] private LayerMask lockInputLayers = 32; //UI layer 5th bit is a 1
+        [field: SerializeField] public DrawMode mode = DrawMode.CreateAndEdit;
 
         private InputAction pointerAction;
         private InputAction tapAction;
@@ -102,7 +109,6 @@ namespace Netherlands3D.SelectionTools
         [Header("Optional Invoke")]
         public UnityEvent<List<Vector3>> editedPolygonArea;
         [Tooltip("Contains the list of points the line is made of")] public UnityEvent<List<Vector3>> previewLineHasChanged;
-
 
         void Awake()
         {
@@ -201,6 +207,12 @@ namespace Netherlands3D.SelectionTools
 
         public void ReselectPolygon(List<Vector3> points)
         {
+            if (mode == DrawMode.Create)
+            {
+                Debug.LogWarning("PolygonInput is in create mode, cannot reselect polygon in edit mode.", gameObject);
+                return;
+            }
+
             ClearPolygon(true);
             for (int i = 0; i < points.Count; i++)
             {
@@ -213,6 +225,7 @@ namespace Netherlands3D.SelectionTools
 
                 AddPoint(point, false);
             }
+
             CloseLoop(false);
         }
 
@@ -242,6 +255,7 @@ namespace Netherlands3D.SelectionTools
             {
                 requireReleaseBeforeRedraw = false;
             }
+
             previousFrameWorldCoordinate = currentWorldCoordinate;
         }
 
@@ -382,6 +396,12 @@ namespace Netherlands3D.SelectionTools
 
         private void Tap()
         {
+            if (mode == DrawMode.Edit)
+            {
+                Debug.LogWarning("PolygonInput is in edit mode, cannot Add a new point in edit mode.", gameObject);
+                return;
+            }
+
             var pointerRaycastResult = EventSystem.current.GetComponent<InputSystemUIInputModule>().GetLastRaycastResult(0);
 
             if (pointerRaycastResult.gameObject && pointerRaycastResult.gameObject.IsInLayerMask(lockInputLayers))
@@ -434,6 +454,7 @@ namespace Netherlands3D.SelectionTools
             {
                 if (handle) Destroy(handle.gameObject);
             }
+
             handles.Clear();
         }
 
@@ -630,13 +651,20 @@ namespace Netherlands3D.SelectionTools
                 MoveAllHandlesToPoint();
             }
 
+            if (mode == DrawMode.Create)
+                mode = DrawMode.Edit;
+            
             var positionsCopy = new List<Vector3>(positions);
             if (!polygonFinished && invokeNewPolygonEvent && positions.Count > 1)
                 createdNewPolygonArea.Invoke(positionsCopy);
             else if (positions.Count > 1)
                 editedPolygonArea.Invoke(positionsCopy);
-
             polygonFinished = true;
+        }
+
+        public void SetDrawMode(DrawMode mode)
+        {
+            this.mode = mode;
         }
     }
 }
