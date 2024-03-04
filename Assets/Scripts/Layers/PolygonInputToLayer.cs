@@ -49,9 +49,8 @@ namespace Netherlands3D.Twin
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
-            print("reselect? " + polygonInput.mode);
 
-            if (polygonInput.mode == PolygonInput.DrawMode.Create)
+            if (polygonInput.Mode == PolygonInput.DrawMode.Create)
                 return;
 
             activeLayer = layer;

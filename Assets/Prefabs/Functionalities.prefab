@@ -63,6 +63,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6372084430124044627}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.PolygonInputToLayer, Assembly-CSharp
+        m_MethodName: SetPolygonInputModeToCreate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onTrue:
     m_PersistentCalls:
       m_Calls: []
@@ -775,6 +787,11 @@ PrefabInstance:
       value: PolygonSelection
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914965596010975751, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1604,22 +1621,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.12475671
+      value: -0.5946296
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.11233439
+      value: -0.26892328
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7325893
+      value: 0.6903716
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.65964365
+      value: -0.3122229
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -1649,7 +1666,7 @@ PrefabInstance:
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: hour
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -1664,7 +1681,7 @@ PrefabInstance:
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: minutes
-      value: 3
+      value: 55
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
