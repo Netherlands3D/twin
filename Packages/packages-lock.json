@@ -201,14 +201,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.1",
+      "version": "https://github.com/Netherlands3D/CartesianTiles.git#bugfix/null-check-callbacks",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.2.0",
         "com.unity.textmeshpro": "3.0.6"
       },
-      "url": "https://package.openupm.com"
+      "hash": "90c7771e49c0b829514265d0a372381fe8fa46c3"
     },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",
