@@ -33,12 +33,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnEnable()
         {
-            ClickNothingPlane.ClickedOnNothing.AddListener(OnPolygonDeselected);
+            ClickNothingPlane.ClickedOnNothing.AddListener(DeselectPolygon);
         }
 
         private void OnDisable()
         {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnPolygonDeselected);
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(DeselectPolygon);
         }
 
         private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
         }
 
-        private void OnPolygonDeselected()
+        public void DeselectPolygon()
         {
             if (UI && UI.IsSelected)
                 UI.Deselect(); // processes OnDeselect as well
@@ -94,6 +94,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             base.OnDeselect();
             polygonSelected.Invoke(null);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            PolygonVisualisation.reselectVisualisedPolygon.RemoveListener(OnPolygonVisualisationSelected);
+            Destroy(PolygonVisualisation.gameObject);
         }
     }
 }

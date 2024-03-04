@@ -67,6 +67,9 @@ namespace Netherlands3D.Twin
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
+            if(activeLayer)
+                activeLayer.DeselectPolygon(); 
+            
             polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
     }
