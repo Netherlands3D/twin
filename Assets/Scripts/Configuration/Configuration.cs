@@ -239,25 +239,5 @@ namespace Netherlands3D.Twin.Configuration
                 if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from URL");
             }
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            RemoveDuplicateFunctionalities();
-        }
-        private void RemoveDuplicateFunctionalities()
-        {
-            
-            var uniqueFunctionalities = new List<Functionality>();
-            foreach (var functionality in Functionalities)
-            {
-                if (!uniqueFunctionalities.Contains(functionality))
-                {
-                    uniqueFunctionalities.Add(functionality);
-                }
-            }
-            Functionalities = uniqueFunctionalities;
-        }
-#endif
     }
 }
