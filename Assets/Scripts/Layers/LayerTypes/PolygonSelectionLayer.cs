@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
@@ -30,10 +31,28 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
         }
 
+        private void OnEnable()
+        {
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnPolygonDeselected);
+        }
+
+        private void OnDisable()
+        {
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnPolygonDeselected);
+        }
+
         private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
         {
-            if(UI)
+            if (UI)
                 UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
+        }
+
+        private void OnPolygonDeselected()
+        {
+            if (UI && UI.IsSelected)
+                UI.Deselect(); // processes OnDeselect as well
+            else
+                OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
         }
 
         public void SetPolygon(List<Vector3> solidPolygon)
@@ -73,6 +92,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public override void OnDeselect()
         {
+            base.OnDeselect();
             polygonSelected.Invoke(null);
         }
     }

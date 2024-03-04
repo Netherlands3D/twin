@@ -19,7 +19,8 @@ namespace Netherlands3D.Twin
         private PolygonSelectionLayer activeLayer;
 
         [SerializeField] private PolygonInput polygonInput;
-        [SerializeField] private BoolEvent enablePolygonInputEvent;
+
+        // [SerializeField] private BoolEvent enablePolygonInputEvent;
         [SerializeField] private Vector3ListEvent polygonCreatedEvent;
         [SerializeField] private Vector3ListEvent polygonEditedEvent;
 
@@ -41,27 +42,33 @@ namespace Netherlands3D.Twin
             var layerComponent = newObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
-            layerComponent.polygonSelected.AddListener(ReselectPolygon);
+            layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
 
             activeLayer = layerComponent;
         }
 
-        public void EnablePolygonInput(bool isOn)
+        private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
-            enablePolygonInputEvent.InvokeStarted(isOn);
-        }
+            print("reselect? " + polygonInput.mode);
 
-        private void ReselectPolygon(PolygonSelectionLayer layer)
-        {
-            EnablePolygonInput(layer != null);
+            if (polygonInput.mode == PolygonInput.DrawMode.Create)
+                return;
+
             activeLayer = layer;
             if (layer)
                 polygonInput.ReselectPolygon(layer.Polygon.SolidPolygon.ToVector3List());
+            else
+                polygonInput.ReselectPolygon(new List<Vector3>()); //acts as a deselect
         }
-        
+
         public void UpdateLayer(List<Vector3> editedPolygon)
         {
             activeLayer.SetPolygon(editedPolygon);
+        }
+
+        public void SetPolygonInputModeToCreate(bool isCreateMode)
+        {
+            polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
     }
 }
