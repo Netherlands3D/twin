@@ -130,17 +130,15 @@ namespace Netherlands3D.CartesianTiles
 					break;
 				case TileAction.Upgrade:
 					tiles[tileKey].unityLOD++;
-					//callback(tileChange);
 					break;
 				case TileAction.Downgrade:
 					tiles[tileKey].unityLOD--;
-					//callback(tileChange);
 					break;
 				case TileAction.Remove:
 					InteruptRunningProcesses(tileKey);
 					RemoveGameObjectFromTile(tileKey);
 					tiles.Remove(tileKey);
-					callback(tileChange);
+					callback?.Invoke(tileChange);
 					return;
 				default:
 					break;
@@ -316,7 +314,7 @@ namespace Netherlands3D.CartesianTiles
 				}
 				yield return null;
 			}
-			callback(tileChange);
+			callback?.Invoke(tileChange);
 		}
 	}
 }
