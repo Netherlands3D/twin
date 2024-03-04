@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1917550957201454778}
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
+  - component: {fileID: 6531086895741313930}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -74,9 +75,9 @@ MonoBehaviour:
   removeFromID: 
   DefaultMaterialList:
   - {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
-  createMeshcollider: 1
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+  createMeshcollider: 0
 --- !u!114 &6432123512545269546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,3 +90,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6531086895741313930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6933c8b43545e4d4c8d27daab5976e53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolThatEnablesColliders: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad,
+    type: 2}

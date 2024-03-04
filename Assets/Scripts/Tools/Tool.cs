@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin
         public GameObject[] FunctionalityPrefabs { get => functionalityPrefabs; private set => functionalityPrefabs = value; }
         private GameObject[] functionalityInstances;
 
-        private bool open = false;
+        [SerializeField] private bool open = false;
         private bool available = false;
 
         public bool Open { get => open; set => open = value; }
