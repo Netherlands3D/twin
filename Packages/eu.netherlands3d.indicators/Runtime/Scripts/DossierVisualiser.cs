@@ -84,7 +84,8 @@ namespace Netherlands3D.Indicators
                 area.Polygons.ForEach(
                     visualisation =>
                     {
-                        visualisation.gameObject.GetComponent<MeshRenderer>().enabled = !dataLayer.HasValue;
+                        var meshRenderer = visualisation.gameObject.GetComponent<MeshRenderer>();
+                        meshRenderer.enabled = !dataLayer.HasValue;
                     }
                 );
             }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1917550957201454778}
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
-  - component: {fileID: 2850510308120911695}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -52,7 +51,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Buildings.2.2/Buildings{x}_{y}.1.2.bin
+    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Buildings_2023/Buildings{x}_{y}.2.2.bin
     pathQuery: ?sv=2021-12-02&ss=b&srt=sco&sp=r&se=2024-04-14T19:42:33Z&st=2023-04-17T11:42:33Z&spr=https&sig=NAbl2WIj7Uh2A51gaYUfzPeF%2Fj%2F53Zw6P%2F3HwsAWUTo%3D
     maximumDistance: 10000
     maximumDistanceSquared: 0
@@ -75,9 +74,9 @@ MonoBehaviour:
   removeFromID: 
   DefaultMaterialList:
   - {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
+  createMeshcollider: 1
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
-  createMeshcollider: 0
 --- !u!114 &6432123512545269546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,37 +89,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2850510308120911695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4311489376399559593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: f573ae24347db62449f61fc9a3255644, type: 2}
-  onTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5658425303180220110}
-        m_TargetAssemblyTypeName: Netherlands3D.CartesianTiles.BinaryMeshLayer, eu.netherlands3d.cartesiantiles.runtime
-        m_MethodName: set_CreateMeshColliders
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTrue:
-    m_PersistentCalls:
-      m_Calls: []
-  onFalse:
-    m_PersistentCalls:
-      m_Calls: []
