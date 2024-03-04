@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foreach (var selectedLayer in SelectedLayers.ToList())
             {
                 selectedLayer.Deselect();
-            }E
+            }
         }
 
         public FolderLayer CreateFolderLayer()
