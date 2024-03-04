@@ -155,7 +155,7 @@ namespace Netherlands3D.SelectionTools
                 doubleClickToCloseLoop = false;
             }
 
-            SetDrawMode(mode);
+            SetDrawMode(mode); //set pointer active according to mode
         }
 #endif
 
