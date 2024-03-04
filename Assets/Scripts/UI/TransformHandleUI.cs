@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using RuntimeHandle;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -18,7 +14,6 @@ namespace Netherlands3D.Twin
         private void OnDisable()
         {
             ui.SetActive(false);
-
         }
     }
 }
