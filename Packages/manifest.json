@@ -26,7 +26,7 @@
     "eu.netherlands3d.transform-handles": "1.0.1",
     "eu.netherlands3d.web-cursors": "2.0.0",
     "eu.netherlands3d.webgl-copy-paste": "1.1.0",
-    "nl.netherlands3d": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
+    "nl.netherlands3d": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.2.0",
     "nl.netherlands3d.authentication": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
