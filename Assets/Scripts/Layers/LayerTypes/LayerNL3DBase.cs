@@ -98,6 +98,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             RecalculateCurrentSubTreeDepthValuesRecursively();
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
+
+            OnLayerActiveInHierarchyChanged(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
         }
 
         private void RecalculateCurrentSubTreeDepthValuesRecursively()
