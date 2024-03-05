@@ -1,5 +1,138 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &566949862427943552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5356120492737783712}
+  - component: {fileID: 7844050375335836372}
+  - component: {fileID: 6562649301780415454}
+  - component: {fileID: 6372084430124044627}
+  m_Layer: 0
+  m_Name: PolygonSelection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5356120492737783712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566949862427943552}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9021542733149231248}
+  m_Father: {fileID: 3919916255551741050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7844050375335836372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566949862427943552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 205a5bc34432740a38a860c6a7a17733, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9021542733149231245}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6372084430124044627}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.PolygonInputToLayer, Assembly-CSharp
+        m_MethodName: SetPolygonInputModeToCreate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6562649301780415454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566949862427943552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 030d68968a84647ae8d3129f06405c26, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6372084430124044627}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.PolygonInputToLayer, Assembly-CSharp
+        m_MethodName: SetPolygonInputModeToCreate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6372084430124044627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566949862427943552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonExtrusionHeight: 10
+  polygonMeshMaterial: {fileID: 2100000, guid: 44d459479e0340446b1215b3f6901764, type: 2}
+  polygonInput: {fileID: 9021542733149231250}
+  polygonCreatedEvent: {fileID: 11400000, guid: 777e7bc0e0d3e4c4496e3278d9b50a7c,
+    type: 2}
+  polygonEditedEvent: {fileID: 11400000, guid: 6040433f915cd4f0eaae4862785c42f7, type: 2}
 --- !u!1 &655776049567972843
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,6 +208,7 @@ Transform:
   - {fileID: 4515907520926526781}
   - {fileID: 4930656928155257700}
   - {fileID: 9043962494800117598}
+  - {fileID: 5356120492737783712}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &585138335645146675
@@ -144,6 +278,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PolygonSelection
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195754652070294141, guid: 7c3c4264d32c09948869a4e1bed2785c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -485,6 +624,206 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2436765824969178498}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2641932755444543955
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5356120492737783712}
+    m_Modifications:
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
+        type: 2}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 6040433f915cd4f0eaae4862785c42f7,
+        type: 2}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 777e7bc0e0d3e4c4496e3278d9b50a7c,
+        type: 2}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_Name
+      value: PolygonSelection
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914965596010975751, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6821fcd3220974e36a98cc56d26f905d, type: 3}
+--- !u!1 &9021542733149231245 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2641932755444543955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9021542733149231248 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6456176726394300739, guid: 6821fcd3220974e36a98cc56d26f905d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2641932755444543955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9021542733149231250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2641932755444543955}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021542733149231245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e0e5a1aab0d69a4fb6831b226ee84c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3307531243189754756
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1202,22 +1541,22 @@ PrefabInstance:
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.6287662
+      value: -0.63450307
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.2090253
+      value: -0.19577648
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7107296
+      value: 0.7144775
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747148, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.23627299
+      value: -0.22045265
       objectReference: {fileID: 0}
     - target: {fileID: 7539193515803747149, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
@@ -1262,7 +1601,7 @@ PrefabInstance:
     - target: {fileID: 8864515628194110769, guid: 4ba44a31ba5f45f42b49235f06111c10,
         type: 3}
       propertyPath: minutes
-      value: 43
+      value: 53
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
