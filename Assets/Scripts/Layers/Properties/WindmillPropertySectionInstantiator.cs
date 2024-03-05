@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySection
+    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private WindmillPropertySection propertySectionPrefab;
 

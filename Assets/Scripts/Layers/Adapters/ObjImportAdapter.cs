@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,28 +10,18 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
     public class ObjImportAdapter : ScriptableObject
     {
-     [Header("Required input")]
-        [SerializeField] Material baseMaterial;
+        [Header("Required input")]
+        [SerializeField] private Material baseMaterial;
 
         [Header("Settings")]
-        [SerializeField] bool createSubMeshes = false;
+        [SerializeField] private bool createSubMeshes = false;
+        [Tooltip("The default properties section to show when opening the property panel of a layer")]
+        [SerializeField] private AbstractHierarchicalObjectPropertySection defaultPropertySection;
         
-        [Header("Result")] public UnityEvent<GameObject> CreatedMoveableGameObject;
-        // public UnityEvent<GameObject> CreatedImmoveableGameObject;
+        [Header("Result")] public UnityEvent<GameObject> CreatedMoveableGameObject = new();
 
-        // [Header("Progress")][SerializeField] UnityEvent<bool> busy;
-        // public UnityEvent<string> currentActivity;
-        // public UnityEvent<string> currentAction;
-        // public UnityEvent<float> progressPercentage;
-
-
-        // [Header("Alerts and errors")]
-        // public UnityEvent<string> alertmessage;
-        // public UnityEvent<string> errormessage;
-
-        string objFileName = "";
-
-        string objfilename
+        private string objFileName = "";
+        private string objfilename
         {
             get { return objFileName; }
             set
@@ -42,30 +33,21 @@ namespace Netherlands3D.Twin
             }
         }
 
-        string mtlFileName = "";
-
-        string mtlfilename
+        private string mtlFileName = "";
+        private string mtlfilename
         {
-            get { return mtlFileName; }
-            set { mtlFileName = value; }
+            get => mtlFileName;
+            set => mtlFileName = value;
         }
 
-
-
-        string imgFileName = "";
-
-        string imgfilename
+        private string imgFileName = "";
+        private string imgfilename
         {
-            get { return imgFileName; }
-            set
-            {
-                imgFileName = value;
-
-                //if (ReceivedImageFilename) ReceivedImageFilename.InvokeStarted(System.IO.Path.GetFileName(imgFileName));
-            }
+            get => imgFileName;
+            set => imgFileName = value;
         }
 
-        ObjImporter.ObjImporter importer;
+        private ObjImporter.ObjImporter importer;
 
         public void ParseFiles(string value)
         {
@@ -101,36 +83,11 @@ namespace Netherlands3D.Twin
 
             if (objfilename != "")
             {
-
                 OnStartImporting();
-
             }
         }
 
-        void OnOBJFileReceived(string value)
-        {
-            objfilename = value;
-        }
-
-        void OnMTLFileReceived(string value)
-        {
-            mtlfilename = value;
-        }
-
-        public void SetImageFile(string value)
-        {
-            imgfilename = value;
-        }
-
-
-
-        public void Cancel()
-        {
-            // BroadcastMessage("Cancel");
-            // currentActivity.Invoke("cancelling the import");
-        }
-
-        void OnStartImporting()
+        private void OnStartImporting()
         {
             ConnectToImporter();
 
@@ -140,78 +97,36 @@ namespace Netherlands3D.Twin
 
             importer.BaseMaterial = baseMaterial;
             importer.createSubMeshes = createSubMeshes;
-            // busy.Invoke(true);
             importer.StartImporting(OnOBJImported);
         }
 
-        void OnOBJImported(GameObject returnedGameObject)
+        private void OnOBJImported(GameObject returnedGameObject)
         {
-            // bool canBemoved = importer.createdGameobjectIsMoveable;
-
-            // busy.Invoke(false);
-
-
             objfilename = string.Empty;
             mtlfilename = string.Empty;
             imgfilename = string.Empty;
 
             if (importer != null) Destroy(importer.gameObject);
-
-            // if (canBemoved)
-            // {
-                AddLayerScriptToObj(returnedGameObject);
-                // }
-                // else
-                // {
-                //     CreatedImmoveableGameObject.Invoke(returnedGameObject);
-                // }
+            AddLayerScriptToObj(returnedGameObject);
         }
 
-        void ConnectToImporter()
+        private void ConnectToImporter()
         {
             if (importer != null) Destroy(importer.gameObject);
 
             importer = new GameObject().AddComponent<ObjImporter.ObjImporter>();
-            // give the importer handles for progress- and errormessaging
-            importer.currentActivity = BroadcastCurrentActivity;
-            importer.currentAction = BroadcastCurrentAction;
-            importer.progressPercentage = BroadcastProgressPercentage;
-            importer.alertmessage = BroadcastAlertmessage;
-            importer.errormessage = BroadcastErrormessage;
 
             Debug.Log("Connected to new ObjImporter");
         }
 
-        void BroadcastCurrentActivity(string value)
-        {
-            // currentActivity.Invoke(value);
-        }
-
-        void BroadcastCurrentAction(string value)
-        {
-            // currentAction.Invoke(value);
-        }
-
-        void BroadcastProgressPercentage(float value)
-        {
-            // progressPercentage.Invoke(value);
-        }
-
-        void BroadcastAlertmessage(string value)
-        {
-            // alertmessage.Invoke(value);
-        }
-
-        void BroadcastErrormessage(string value)
-        {
-            // errormessage.Invoke(value);
-        }
-        
-        public void AddLayerScriptToObj(GameObject parsedObj)
+        private void AddLayerScriptToObj(GameObject parsedObj)
         {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
 
             parsedObj.transform.position = spawnPoint;
+            
+            var instantiator = parsedObj.AddComponent<HierarchicalObjectPropertySectionInstantiator>();
+            instantiator.PropertySectionPrefab = defaultPropertySection;
             
             parsedObj.AddComponent<HierarchicalObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
