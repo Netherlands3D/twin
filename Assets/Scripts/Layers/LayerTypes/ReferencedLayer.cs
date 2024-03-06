@@ -41,5 +41,15 @@ namespace Netherlands3D.Twin
                 Destroy(ReferencedProxy.gameObject);
             }
         }
+
+        public virtual void OnProxyTransformChildrenChanged()
+        {
+            //called when the Proxy's children change            
+        }
+
+        public virtual void OnProxyTransformParentChanged()
+        {
+            //called when the Proxy's parent changes            
+        }
     }
 }

@@ -161,7 +161,7 @@ public class CompoundPolygon
 
     public static List<Vector2> AddRandomOffset(List<Vector2> points, float gridCellSize, float randomness)
     {
-        List<Vector2> adjustedPoints = new List<Vector2>();
+        List<Vector2> adjustedPoints = new List<Vector2>(points.Count);
 
         foreach (Vector2 point in points)
         {
@@ -178,14 +178,17 @@ public class CompoundPolygon
         return adjustedPoints;
     }
 
-    public static void PrunePointsWithPolygon(List<Vector2> points, CompoundPolygon polygon, bool pruneOutside = true)
+    public static List<Vector2> PrunePointsWithPolygon(List<Vector2> points, CompoundPolygon polygon, bool pruneInside = false)
     {
+        var prunedList = new List<Vector2>(points.Count);
         for (int i = points.Count - 1; i >= 0; i--)
         {
             var point = points[i];
-            if (IsPointInPolygon(point, polygon) ^ pruneOutside) //logical xor to flip the result if the inside points shouls be pruned instead of the outside points
-                points.RemoveAt(i);
+            if (IsPointInPolygon(point, polygon) ^ pruneInside) //logical xor to flip the result if the inside points should be pruned instead of the outside points
+                prunedList.Add(point);
         }
+
+        return prunedList;
     }
 
     public static List<Vector2> GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle)
@@ -194,27 +197,38 @@ public class CompoundPolygon
 
         var gridPoints = GenerateGridPoints(polygon, cellSize, angle);
         var scatterPoints = AddRandomOffset(gridPoints, cellSize, scatter);
-        PrunePointsWithPolygon(scatterPoints, polygon);
-        return scatterPoints;
+        return PrunePointsWithPolygon(scatterPoints, polygon);
     }
 
     public static bool IsPointInPolygon(Vector2 point, CompoundPolygon compoundPolygon)
     {
         //Vector2[] solidPolygon = compoundPolygon.SolidPolygon;
-        List<Vector2[]> holes = compoundPolygon.Holes;
-
+        // List<Vector2[]> holes = compoundPolygon.Holes;
+        
         if (!PolygonCalculator.ContainsPoint(compoundPolygon.SolidPolygon, point))
         {
             return false;
         }
 
-        foreach (Vector2[] hole in holes)
+        for (int i = 1; i < compoundPolygon.Paths.Count; i++) // skip creating garbage if there are no holes
         {
-            if (PolygonCalculator.ContainsPoint(hole, point))
+            if (PolygonCalculator.ContainsPoint(compoundPolygon.Paths[i], point))
             {
                 return false;
             }
         }
+
+        
+        // if (compoundPolygon.Paths.Count > 1) // skip creating garbage if there are no holes
+        // {
+            // foreach (Vector2[] hole in compoundPolygon.Holes)
+            // {
+            //     if (PolygonCalculator.ContainsPoint(hole, point))
+            //     {
+            //         return false;
+            //     }
+            // }
+        // }
 
         return true;
     }

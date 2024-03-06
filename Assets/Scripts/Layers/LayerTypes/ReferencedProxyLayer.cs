@@ -46,5 +46,17 @@ namespace Netherlands3D.Twin
             base.OnDeselect();
             Reference.OnDeselect();
         }
+
+        protected override void OnTransformChildrenChanged()
+        {
+            base.OnTransformChildrenChanged();
+            Reference.OnProxyTransformChildrenChanged();
+        }
+
+        protected override void OnTransformParentChanged()
+        {
+            base.OnTransformParentChanged();
+            Reference.OnProxyTransformParentChanged();
+        }
     }
 }

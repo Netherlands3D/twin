@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.UI.LayerInspector;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,7 +26,7 @@ namespace Netherlands3D.Twin
                 ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
-        
+
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
@@ -49,12 +50,18 @@ namespace Netherlands3D.Twin
                 ReferencedProxy.UI.Deselect();
             }
         }
-        
+
+        public override void OnProxyTransformParentChanged()
+        {
+            if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
+                ConvertToScatterLayer();
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             ReferencedProxy.UI.Select(true);
         }
-        
+
         public override void OnSelect()
         {
             var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
@@ -71,6 +78,19 @@ namespace Netherlands3D.Twin
         public List<IPropertySection> GetPropertySections()
         {
             return propertySections;
+        }
+
+        public void ConvertToScatterLayer()
+        {
+            print("converting to scatter layer");
+            var scatterLayer = new GameObject(name + "_Scatter");
+            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
+
+            var mesh = GetComponent<MeshFilter>().mesh; //todo: make this work with hierarchical meshes?
+            var material = GetComponent<MeshRenderer>().material; //todo: make this work with hierarchical meshes?
+            layerComponent.Initialize(ReferencedProxy.ParentLayer as PolygonSelectionLayer, mesh, material);
+
+            Destroy(gameObject);
         }
     }
 }

@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c30f6b4876ba03445baeab4781dd6102, type: 2}
   - {fileID: 11400000, guid: 4e07fc00264c6b94db5ffc72212554f4, type: 2}
   - {fileID: 11400000, guid: d76c6c074df09ad46afce819b1434c5c, type: 2}
+  - {fileID: 11400000, guid: f7c1180b6597944babd6e53d0f2e295e, type: 2}
   m_DefaultRendererIndex: 0
   m_RequireDepthTexture: 1
   m_RequireOpaqueTexture: 0
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_AdditionalLightsShadowResolutionTierHigh: 512
   m_ReflectionProbeBlending: 0
   m_ReflectionProbeBoxProjection: 0
-  m_ShadowDistance: 1950
+  m_ShadowDistance: 1951.5647
   m_ShadowCascadeCount: 1
   m_Cascade2Split: 0
   m_Cascade3Split: {x: 0.1, y: 0.3}

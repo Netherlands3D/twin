@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private Material polygonMeshMaterial;
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
+        public UnityEvent polygonChanged = new();
 
         public void Initialize(List<Vector3> solidPolygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
@@ -66,6 +67,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 PolygonVisualisation.UpdateVisualisation(solidPolygon);
             else
                 PolygonVisualisation = CreatePolygonMesh(solidPolygon, polygonExtrusionHeight, polygonMeshMaterial);
+            
+            polygonChanged.Invoke();
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)

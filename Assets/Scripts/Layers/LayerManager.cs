@@ -172,9 +172,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case FolderLayer _:
                     // print("folder layer");
                     return layerTypeSprites[2];
-                case ObjectScatterLayer _:
-                    // print("object scatter layer");
-                    return layerTypeSprites[4];
                 case DatasetLayer _:
                     // print("dataset layer");
                     return layerTypeSprites[5];
@@ -200,6 +197,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case HierarchicalObjectLayer _:
                     // print("object layer");
                     return layerTypeSprites[3];
+                case ObjectScatterLayer _:
+                    // print("object scatter layer");
+                    return layerTypeSprites[4];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
