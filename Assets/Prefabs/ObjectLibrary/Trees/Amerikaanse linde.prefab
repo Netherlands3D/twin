@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5862764184642994096
+--- !u!1 &4719628269577861061
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8699527710199513864}
-  - component: {fileID: 8373204312373019516}
-  - component: {fileID: 5882979804315178889}
-  - component: {fileID: -245332181238952691}
-  - component: {fileID: 4775273902216997001}
+  - component: {fileID: 9145687947966511665}
+  - component: {fileID: 3404637967420376140}
+  - component: {fileID: 4756202189963352626}
   m_Layer: 0
   m_Name: Amerikaanse linde
   m_TagString: Untagged
@@ -20,37 +18,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8699527710199513864
+--- !u!4 &9145687947966511665
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5862764184642994096}
+  m_GameObject: {fileID: 4719628269577861061}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000008146034, y: 0.000000021855698, z: 0.000000029802317,
-    w: 1}
-  m_LocalPosition: {x: -21, y: 0, z: -1.0094794}
-  m_LocalScale: {x: 5, y: 7, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: -4.015783e-18, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 8699527710199513864}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8373204312373019516
+--- !u!33 &3404637967420376140
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5862764184642994096}
+  m_GameObject: {fileID: 4719628269577861061}
   m_Mesh: {fileID: 8576257900391263397, guid: c2c36cc9781e646d1975d7f93ab43575, type: 3}
---- !u!23 &5882979804315178889
+--- !u!23 &4756202189963352626
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5862764184642994096}
+  m_GameObject: {fileID: 4719628269577861061}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -86,6 +83,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5862764184642994096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8699527710199513864}
+  - component: {fileID: -245332181238952691}
+  - component: {fileID: 4775273902216997001}
+  m_Layer: 0
+  m_Name: Amerikaanse linde
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8699527710199513864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5862764184642994096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.00000008146034, y: 0.000000021855698, z: 0.000000029802317,
+    w: 1}
+  m_LocalPosition: {x: -21, y: 0, z: -1.0094794}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9145687947966511665}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &-245332181238952691
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -105,10 +137,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25
-  m_Height: 1
+  m_Radius: 1.38
+  m_Height: 4.91
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 2.37, z: 0}
 --- !u!114 &4775273902216997001
 MonoBehaviour:
   m_ObjectHideFlags: 0
