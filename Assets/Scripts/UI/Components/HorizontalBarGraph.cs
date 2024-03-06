@@ -24,10 +24,23 @@ namespace Netherlands3D.Twin.UIs
         private string label = "";
         [SerializeField] private float value = 0.0f;
 
+        public Color DefaultGreen = new(0.0f, 0.8f, 0.0f);
+        public Color DefaultYellow = new(0.8f, 0.8f, 0.0f);
+        public Color DefaultRed = new(0.8f, 0.0f, 0.0f);
+
+
         public void SetLabel(string label)
         {
             this.label = label;
             labelText.text = label;
+        }
+
+        public void SetBarColor(Color color)
+        {
+            if(barFill.TryGetComponent(out Image image))
+                image.color = color;
+            else
+                Debug.LogError("No Image component found on barFill. Unable to set color.");
         }
 
         public void SetValue(float value , bool updateFill = true)
