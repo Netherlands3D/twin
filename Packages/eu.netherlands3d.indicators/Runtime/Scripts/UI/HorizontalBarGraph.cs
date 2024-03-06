@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Globalization;
 
-namespace Netherlands3D.Twin.UIs
+namespace Netherlands3D.Indicators.UI
 {
     public class HorizontalBarGraph : MonoBehaviour
     {
         [SerializeField] private RectTransform barContainer;
         [SerializeField] private RectTransform barFill;
+        [SerializeField] private Slider bar;
         [SerializeField] private TMP_Text labelText;
         [SerializeField] private TMP_Text valueText;
         [SerializeField] private Button informationButton;
@@ -18,8 +20,8 @@ namespace Netherlands3D.Twin.UIs
         [SerializeField] private float maxValue = 10;
 
         public Button InformationButton { get => informationButton; }
-        public float MaxValue { get => maxValue; set => maxValue = value; }
         public float MinValue { get => minValue; set => minValue = value; }
+        public float MaxValue { get => maxValue; set => maxValue = value; }
 
         private string label = "";
         [SerializeField] private float value = 0.0f;
@@ -32,7 +34,7 @@ namespace Netherlands3D.Twin.UIs
         public void SetLabel(string label)
         {
             this.label = label;
-            labelText.text = label;
+            labelText.text = this.label;
         }
 
         public void SetBarColor(Color color)
@@ -46,28 +48,17 @@ namespace Netherlands3D.Twin.UIs
         public void SetValue(float value , bool updateFill = true)
         {
             this.value = value;
-            valueText.text = value.ToString();
+            valueText.text = value.ToString("0.00", CultureInfo.InvariantCulture);
 
             if(updateFill){
-                var normalisedValue = (this.value - minValue) / (maxValue - minValue);
+                var normalisedValue = Mathf.InverseLerp(minValue, maxValue, value);
                 SetFill(normalisedValue);
             }
         }
 
         public void SetFill(float value)
         {
-            var padFromRight = barContainer.rect.width * (Mathf.Clamp(value,0,1)-1);
-            barFill.sizeDelta = new Vector2(padFromRight, barFill.sizeDelta.y);
-            barFill.pivot = new Vector2(0, 0.5f);
+            bar.value = value;
         }
-
-#if UNITY_EDITOR
-        public void OnValidate()
-        {
-
-            if(Application.isPlaying)
-                SetValue(value,true);
-        }
-#endif
     }
 }

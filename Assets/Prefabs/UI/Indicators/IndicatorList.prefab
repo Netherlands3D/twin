@@ -86,5 +86,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dossier: {fileID: 11400000, guid: 84a7c9f73f20c8c4ba60ce64ca5ef6d7, type: 2}
   indicatorList: {fileID: 9086583617812213764}
-  indicatorListItemPrefab: {fileID: 1383583762763481912, guid: 48d4b0f8372e10849a2548a74228fba3,
+  indicatorListItemPrefab: {fileID: 4896612403185376144, guid: 48d4b0f8372e10849a2548a74228fba3,
     type: 3}
