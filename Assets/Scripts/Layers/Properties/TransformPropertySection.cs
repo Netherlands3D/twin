@@ -22,6 +22,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private SetOfXYZ rotation = new();
         [SerializeField] private SetOfXYZ scale = new();
 
+        private const string percentageCharacter = "%";
+
         public override HierarchicalObjectLayer Layer
         {
             get => layer;
@@ -82,11 +84,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.text, out var x);
-            float.TryParse(scale.yField.text, out var y);
-            float.TryParse(scale.zField.text, out var z);
+            float.TryParse(scale.xField.text.Replace(percentageCharacter,""), out var x);
+            float.TryParse(scale.yField.text.Replace(percentageCharacter,""), out var y);
+            float.TryParse(scale.zField.text.Replace(percentageCharacter,""), out var z);
 
-            layer.transform.localScale = new Vector3(x, y, z);
+            layer.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
         }
         
         private void UpdatePositionFields()
@@ -108,9 +110,14 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void UpdateScalingFields()
         {
             var localScale = layer.transform.localScale;
-            scale.xField.SetTextWithoutNotify(localScale.x.ToString("0.00", CultureInfo.InvariantCulture));
-            scale.yField.SetTextWithoutNotify(localScale.y.ToString("0.00", CultureInfo.InvariantCulture));
-            scale.zField.SetTextWithoutNotify(localScale.z.ToString("0.00", CultureInfo.InvariantCulture));
+
+            var xPercentage = localScale.x * 100;
+            var yPercentage = localScale.y * 100;
+            var zPercentage = localScale.z * 100;
+
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
         }
 
         private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayer origin)
