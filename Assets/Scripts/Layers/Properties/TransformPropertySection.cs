@@ -38,15 +38,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private void Awake()
         {
-            position.xField.onSubmit.AddListener(OnPositionChanged);
-            position.yField.onSubmit.AddListener(OnPositionChanged);
-            position.zField.onSubmit.AddListener(OnPositionChanged);
-            rotation.xField.onSubmit.AddListener(OnRotationChanged);
-            rotation.yField.onSubmit.AddListener(OnRotationChanged);
-            rotation.zField.onSubmit.AddListener(OnRotationChanged);
-            scale.xField.onSubmit.AddListener(OnScaleChanged);
-            scale.yField.onSubmit.AddListener(OnScaleChanged);
-            scale.zField.onSubmit.AddListener(OnScaleChanged);
+            position.xField.onEndEdit.AddListener(OnPositionChanged);
+            position.yField.onEndEdit.AddListener(OnPositionChanged);
+            position.zField.onEndEdit.AddListener(OnPositionChanged);
+            rotation.xField.onEndEdit.AddListener(OnRotationChanged);
+            rotation.yField.onEndEdit.AddListener(OnRotationChanged);
+            rotation.zField.onEndEdit.AddListener(OnRotationChanged);        
+            scale.xField.onValueChanged.AddListener(OnScaleChanged);
+            scale.yField.onValueChanged.AddListener(OnScaleChanged);
+            scale.zField.onValueChanged.AddListener(OnScaleChanged);
         }
 
         private void Update()
@@ -88,6 +88,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(scale.yField.text.Replace(percentageCharacter,""), out var y);
             float.TryParse(scale.zField.text.Replace(percentageCharacter,""), out var z);
 
+            UpdateScalingFields();
+
             layer.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
         }
         
@@ -115,9 +117,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             var yPercentage = localScale.y * 100;
             var zPercentage = localScale.z * 100;
 
-            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0.00", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
         }
 
         private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayer origin)
