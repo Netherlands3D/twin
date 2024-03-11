@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Audo draw is now disabled in edit mode
+- Auto draw is now disabled in edit mode
 
 
 [2.2.0]
