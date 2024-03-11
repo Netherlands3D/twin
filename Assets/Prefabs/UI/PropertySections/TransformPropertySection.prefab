@@ -1835,12 +1835,12 @@ MonoBehaviour:
     zField: {fileID: 3991614295002112775}
   rotation:
     xField: {fileID: 2017360283520801205}
-    yField: {fileID: 8289484169969439642}
-    zField: {fileID: 8751850658600289211}
+    yField: {fileID: 8751850658600289211}
+    zField: {fileID: 8289484169969439642}
   scale:
     xField: {fileID: 4661823936093606243}
-    yField: {fileID: 1257882925733847773}
-    zField: {fileID: 2705432219899204502}
+    yField: {fileID: 2705432219899204502}
+    zField: {fileID: 1257882925733847773}
 --- !u!224 &3964240960759765200 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
