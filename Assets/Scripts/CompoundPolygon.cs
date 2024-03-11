@@ -82,9 +82,8 @@ public class CompoundPolygon
     }
 
 
-    private static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
+    public static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
     {
-        List<Vector2> points = new List<Vector2>();
         var bounds = compoundPolygon.Bounds;
 
         // Increase the bounds size to ensure coverage after rotation
@@ -101,9 +100,20 @@ public class CompoundPolygon
 
         Vector2 rotationCenter = new Vector2(expandedBounds.center.x, expandedBounds.center.z);
 
-        for (float x = bottomLeft.x; x <= expandedBounds.max.x; x += cellSize)
+        // Calculate the number of iterations for x and y
+        int numXIterations = Mathf.CeilToInt((expandedBounds.max.x - bottomLeft.x) / cellSize);
+        int numYIterations = Mathf.CeilToInt((expandedBounds.max.z - bottomLeft.y) / cellSize);
+
+        // Calculate the capacity based on the number of iterations
+        int estimatedCapacity = numXIterations * numYIterations;
+        var points = new List<Vector2>(estimatedCapacity);
+
+        var maxX = expandedBounds.max.x;
+        var maxZ = expandedBounds.max.z;
+        
+        for (float x = bottomLeft.x; x <= maxX; x += cellSize)
         {
-            for (float y = bottomLeft.y; y <= expandedBounds.max.z; y += cellSize)
+            for (float y = bottomLeft.y; y <= maxZ; y += cellSize)
             {
                 // Translate point relative to rotation center
                 float translatedX = x - rotationCenter.x;
@@ -121,6 +131,7 @@ public class CompoundPolygon
                 points.Add(rotatedPoint);
             }
         }
+
         return points;
     }
 
@@ -197,14 +208,15 @@ public class CompoundPolygon
 
         var gridPoints = GenerateGridPoints(polygon, cellSize, angle);
         var scatterPoints = AddRandomOffset(gridPoints, cellSize, scatter);
-        return PrunePointsWithPolygon(scatterPoints, polygon);
+        // return PrunePointsWithPolygon(scatterPoints, polygon);
+        return scatterPoints;
     }
 
     public static bool IsPointInPolygon(Vector2 point, CompoundPolygon compoundPolygon)
     {
         //Vector2[] solidPolygon = compoundPolygon.SolidPolygon;
         // List<Vector2[]> holes = compoundPolygon.Holes;
-        
+
         if (!PolygonCalculator.ContainsPoint(compoundPolygon.SolidPolygon, point))
         {
             return false;
@@ -217,18 +229,6 @@ public class CompoundPolygon
                 return false;
             }
         }
-
-        
-        // if (compoundPolygon.Paths.Count > 1) // skip creating garbage if there are no holes
-        // {
-            // foreach (Vector2[] hole in compoundPolygon.Holes)
-            // {
-            //     if (PolygonCalculator.ContainsPoint(hole, point))
-            //     {
-            //         return false;
-            //     }
-            // }
-        // }
 
         return true;
     }

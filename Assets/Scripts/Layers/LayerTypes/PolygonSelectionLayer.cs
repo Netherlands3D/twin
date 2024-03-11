@@ -69,6 +69,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 PolygonVisualisation = CreatePolygonMesh(solidPolygon, polygonExtrusionHeight, polygonMeshMaterial);
             
             polygonChanged.Invoke();
+//todo: remove this, it is only for debugging
+ScatterMap.Instance.GenerateScatterPoints(Polygon, 0.01f, 0, 0);
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
@@ -76,6 +78,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
+            
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Polygons");
             // PolygonVisualisation.transform.SetParent(transform);
             return polygonVisualisation;
         }

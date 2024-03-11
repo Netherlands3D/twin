@@ -51,7 +51,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateScatterMatrices()
         {
-            var scatterPoints = CompoundPolygon.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
+            var scatterPoints = ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
+            // var scatterPoints = CompoundPolygon.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
             var batchCount = (scatterPoints.Count / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var remainder = scatterPoints.Count % 1023;
 
@@ -63,10 +64,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 matrixBatches[i] = new Matrix4x4[arraySize];
                 for (int j = 0; j < arraySize; j++)
                 {
-                    var pos = new Vector3(scatterPoints[1023 * i + j].x, 10, scatterPoints[1023 * i + j].y); //todo: use optical raycaster to determine y of entire polygon
+                    // var pos = new Vector3(scatterPoints[1023 * i + j].x, 10, scatterPoints[1023 * i + j].y); //todo: use optical raycaster to determine y of entire polygon
+                    var pos = scatterPoints[1023 * i + j];
                     var rot = Quaternion.identity;
                     var scale = settings.GenerateRandomScale();
-                    matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale);
+                    matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale*10);
                 }
             }
         }
