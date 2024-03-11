@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Indicators.Dossiers.Indicators;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace Netherlands3D.Indicators.UI
     {
         [SerializeField] private DossierSO dossier;
         [SerializeField] private VerticalLayoutGroup indicatorList;
-        [SerializeField] private GameObject indicatorListItemPrefab;
+        [SerializeField] private HorizontalBarGraph indicatorListItemPrefab;
 
         private void OnEnable()
         {
@@ -43,20 +44,29 @@ namespace Netherlands3D.Indicators.UI
             
             foreach (var indicatorWithValue in selectedProjectArea.indicators.Values)
             {
-                InstantiateListItem(dossierData, indicatorWithValue.id, indicatorWithValue.value);
+                InstantiateListItem(dossierData, indicatorWithValue.id, indicatorWithValue.value, indicatorWithValue.alertLevel);
             }
         }
 
-        private void InstantiateListItem(Dossier dossierData, string indicatorId, float indicatorValue)
+        private void InstantiateListItem(Dossier dossierData, string indicatorId, float indicatorValue, IndicatorAlertLevel alertLevel)
         {
             var listItem = Instantiate(indicatorListItemPrefab, indicatorList.transform);
-
-            var labelTextField = listItem.GetComponentsInChildren<TMP_Text>().First();
             var indicatorDefinition = dossierData.indicators.Find(indicator => indicator.id == indicatorId);
-            labelTextField.text = indicatorDefinition.name;
 
-            var valueTextField = listItem.GetComponentsInChildren<TMP_Text>().Last();
-            valueTextField.text = indicatorValue.ToString("0.00", CultureInfo.InvariantCulture);
+            listItem.SetLabel(indicatorDefinition.name);
+            listItem.SetValue(indicatorValue, true);
+            switch (alertLevel)
+            {
+                case IndicatorAlertLevel.OK:
+                    listItem.SetBarColor(listItem.DefaultGreen);
+                    break;
+                case IndicatorAlertLevel.WARNING:
+                    listItem.SetBarColor(listItem.DefaultYellow);
+                    break;
+                case IndicatorAlertLevel.ALERT:
+                    listItem.SetBarColor(listItem.DefaultRed);
+                    break;
+            }
         }
     }
 }
