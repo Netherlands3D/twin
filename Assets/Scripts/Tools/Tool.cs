@@ -67,22 +67,6 @@ namespace Netherlands3D.Twin
             onAvailabilityChange.Invoke(available);
         }
 
-        /// <summary>
-        /// Activate this tool (via menu)
-        /// </summary>
-        public void Activate()
-        {
-            onOpen.Invoke();
-        }
-
-        /// <summary>
-        /// Deactivate this tool (via menu)
-        /// </summary>
-        public void Deactivate()
-        {
-            onClose.Invoke();
-        }
-
         public GameObject[] SpawnPrefabInstances(Transform parent = null)
         {
             DestroyPrefabInstances();
