@@ -15,8 +15,8 @@ namespace Netherlands3D.Twin
         private void Awake() {
             binaryMeshLayer = GetComponent<BinaryMeshLayer>();
 
-            toolThatEnablesColliders.onActivate.AddListener(EnableColliders);
-            toolThatEnablesColliders.onDeactivate.AddListener(DisableColliders);    
+            toolThatEnablesColliders.onOpen.AddListener(EnableColliders);
+            toolThatEnablesColliders.onClose.AddListener(DisableColliders);    
 
             if(toolThatEnablesColliders.Open) {
                 EnableColliders();

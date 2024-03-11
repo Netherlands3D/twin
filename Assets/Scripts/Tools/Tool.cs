@@ -15,11 +15,13 @@ namespace Netherlands3D.Twin
         public FunctionGroup[] functionGroups;
 
         public UnityEvent<bool> onAvailabilityChange = new();
-        public UnityEvent onActivate = new();
-        public UnityEvent onDeactivate = new();
+
+        [FormerlySerializedAs("onActivate")]
+        public UnityEvent onOpen = new();
+
+        [FormerlySerializedAs("onDeactivate")]
+        public UnityEvent onClose = new();
         public UnityEvent<Tool> onToggleInspector = new();
-        
-        [SerializeField] private bool activateToolOnInspectorToggle = true;
 
         [Header("Content")]
         [Tooltip("Prefab to show in the UI Inspector when this tool is activated")]
@@ -36,7 +38,22 @@ namespace Netherlands3D.Twin
         [SerializeField] private bool open = false;
         private bool available = false;
 
-        public bool Open { get => open; set => open = value; }
+        public bool Open { 
+            get{
+                return open;
+            }
+            set{
+                open = value;
+                if(open)
+                {
+                    onOpen.Invoke();
+                }
+                else{
+                    onClose.Invoke();
+                }
+            }
+        }
+        
         public bool Available { get => available; set => available = value; }
 
         /// <summary>
@@ -55,7 +72,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void Activate()
         {
-            onActivate.Invoke();
+            onOpen.Invoke();
         }
 
         /// <summary>
@@ -63,7 +80,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void Deactivate()
         {
-            onDeactivate.Invoke();
+            onClose.Invoke();
         }
 
         public GameObject[] SpawnPrefabInstances(Transform parent = null)
@@ -101,17 +118,6 @@ namespace Netherlands3D.Twin
             onToggleInspector.Invoke(this);
 
             if(!Open) DestroyPrefabInstances();
-
-            if(activateToolOnInspectorToggle){
-                if(open)
-                {
-                    Activate();
-                }
-                else
-                {
-                    Deactivate();
-                }
-            }
         }
 
         public void OpenInspector()
@@ -130,10 +136,6 @@ namespace Netherlands3D.Twin
             onToggleInspector.Invoke(this);
 
             DestroyPrefabInstances();
-
-            if(activateToolOnInspectorToggle){
-                Deactivate();
-            }
         }
     }
 }
