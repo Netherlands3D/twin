@@ -44,6 +44,11 @@ namespace RuntimeHandle
 
         [SerializeField] private bool disableWhenNoTarget;
 
+        public Color xColor = Color.red;
+        public Color yColor = Color.green;
+        public Color zColor = Color.blue;
+        public Color allAxisColor = Color.white;
+
         void Start()
         {
             if (handleCamera == null)
@@ -65,13 +70,13 @@ namespace RuntimeHandle
             switch (type)
             {
                 case HandleType.POSITION:
-                    _positionHandle = gameObject.AddComponent<PositionHandle>().Initialize(this);
+                    _positionHandle = gameObject.AddComponent<PositionHandle>().Initialize(this,xColor,yColor,zColor);
                     break;
                 case HandleType.ROTATION:
-                    _rotationHandle = gameObject.AddComponent<RotationHandle>().Initialize(this);
+                    _rotationHandle = gameObject.AddComponent<RotationHandle>().Initialize(this, xColor, yColor, zColor);
                     break;
                 case HandleType.SCALE:
-                    _scaleHandle = gameObject.AddComponent<ScaleHandle>().Initialize(this);
+                    _scaleHandle = gameObject.AddComponent<ScaleHandle>().Initialize(this, xColor, yColor, zColor, allAxisColor);
                     break;
             }
         }

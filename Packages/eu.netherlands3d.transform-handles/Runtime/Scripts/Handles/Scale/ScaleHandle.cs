@@ -13,7 +13,7 @@ namespace RuntimeHandle
         protected List<ScaleAxis> _axes;
         protected ScaleGlobal _globalAxis;
         
-        public ScaleHandle Initialize(RuntimeTransformHandle p_parentTransformHandle)
+        public ScaleHandle Initialize(RuntimeTransformHandle p_parentTransformHandle, Color xColor, Color yColor, Color zColor, Color allColor)
         {
             _parentTransformHandle = p_parentTransformHandle;
             transform.SetParent(_parentTransformHandle.transform, false);
@@ -22,20 +22,20 @@ namespace RuntimeHandle
             
             if (_parentTransformHandle.axes == HandleAxes.X || _parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.XZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<ScaleAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.right, Color.red));
+                    .Initialize(_parentTransformHandle, Vector3.right, xColor));
             
             if (_parentTransformHandle.axes == HandleAxes.Y || _parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<ScaleAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.up, Color.green));
+                    .Initialize(_parentTransformHandle, Vector3.up, yColor));
 
             if (_parentTransformHandle.axes == HandleAxes.Z || _parentTransformHandle.axes == HandleAxes.XZ || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<ScaleAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.forward, Color.blue));
+                    .Initialize(_parentTransformHandle, Vector3.forward, zColor));
 
             if (_parentTransformHandle.axes != HandleAxes.X && _parentTransformHandle.axes != HandleAxes.Y && _parentTransformHandle.axes != HandleAxes.Z)
             {
                 _globalAxis = new GameObject().AddComponent<ScaleGlobal>()
-                    .Initialize(_parentTransformHandle, HandleBase.GetVectorFromAxes(_parentTransformHandle.axes), Color.white);
+                    .Initialize(_parentTransformHandle, HandleBase.GetVectorFromAxes(_parentTransformHandle.axes), allColor);
                 
                 _globalAxis.InteractionStart += OnGlobalInteractionStart;
                 _globalAxis.InteractionUpdate += OnGlobalInteractionUpdate;
