@@ -51,8 +51,8 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Terrain_2019_2/Terrain{x}_{y}.1.bin
-    pathQuery: ?sv=2021-12-02&ss=b&srt=sco&sp=r&se=2024-04-14T19:42:33Z&st=2023-04-17T11:42:33Z&spr=https&sig=NAbl2WIj7Uh2A51gaYUfzPeF%2Fj%2F53Zw6P%2F3HwsAWUTo%3D
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019/Terrain{x}_{y}.1.bin
+    pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
     enabled: 1
@@ -78,9 +78,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 723d04de06fc6d246b17157d2a8a9e24, type: 2}
   - {fileID: 2100000, guid: 369d289ffdad8ca44ad20d7a077adb12, type: 2}
   - {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
-  createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+  createMeshcollider: 0
 --- !u!114 &4447745080902320339
 MonoBehaviour:
   m_ObjectHideFlags: 0
