@@ -246,16 +246,7 @@ namespace Netherlands3D.SelectionTools
             if (pointerRepresentation)
                 pointerRepresentation.position = currentWorldCoordinate;
 
-            if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
-            {
-                autoDrawPolygon = true;
-                blockCameraDrag.Invoke(true);
-            }
-            else if (autoDrawPolygon && !clickAction.IsPressed())
-            {
-                autoDrawPolygon = false;
-                blockCameraDrag.Invoke(false);
-            }
+            DetermineIfShouldAutoDraw();
 
             if (!requireReleaseBeforeRedraw && autoDrawPolygon)
             {
@@ -267,6 +258,32 @@ namespace Netherlands3D.SelectionTools
             }
 
             previousFrameWorldCoordinate = currentWorldCoordinate;
+        }
+
+        private void DetermineIfShouldAutoDraw()
+        {
+            if (mode == DrawMode.Edit) //dont auto draw in edit mode
+            {
+                if (autoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
+                {
+                    autoDrawPolygon = false;
+                    blockCameraDrag.Invoke(false);
+                }
+
+                return;
+            }
+            
+            //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
+            if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
+            {
+                autoDrawPolygon = true;
+                blockCameraDrag.Invoke(true);
+            }
+            else if (autoDrawPolygon && !clickAction.IsPressed()) // reset auto draw mode
+            {
+                autoDrawPolygon = false;
+                blockCameraDrag.Invoke(false);
+            }
         }
 
         protected virtual void UpdateCurrentWorldCoordinate()
