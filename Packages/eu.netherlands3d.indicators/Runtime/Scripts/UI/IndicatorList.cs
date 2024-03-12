@@ -52,7 +52,7 @@ namespace Netherlands3D.Indicators.UI
         {
             var listItem = Instantiate(indicatorListItemPrefab, indicatorList.transform);
             var indicatorDefinition = dossierData.indicators.Find(indicator => indicator.id == indicatorId);
-
+            listItem.name = $"{indicatorId}: {indicatorDefinition.name}";
             listItem.SetLabel(indicatorDefinition.name);
             listItem.SetValue(indicatorValue, true);
             switch (alertLevel)
