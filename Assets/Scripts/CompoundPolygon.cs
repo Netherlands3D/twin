@@ -84,13 +84,18 @@ public class CompoundPolygon
 
     public static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
     {
+        return GenerateGridPoints(compoundPolygon, cellSize, angle, out _);
+    }
+    
+    public static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle, out Bounds expandedBounds)
+    {
         var bounds = compoundPolygon.Bounds;
 
         // Increase the bounds size to ensure coverage after rotation
         float diagonalLength = bounds.size.magnitude;
         float expandedBoundsSizeSide = diagonalLength;
         var expandedBoundsSize = new Vector3(expandedBoundsSizeSide, bounds.size.y, expandedBoundsSizeSide);
-        var expandedBounds = new Bounds(bounds.center, expandedBoundsSize);
+        expandedBounds = new Bounds(bounds.center, expandedBoundsSize);
 
         Vector2 bottomLeft = new Vector2(expandedBounds.center.x, expandedBounds.center.z) - new Vector2(expandedBounds.extents.x, expandedBounds.extents.z);
 

@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             
             polygonChanged.Invoke();
 //todo: remove this, it is only for debugging
-ScatterMap.Instance.GenerateScatterPoints(Polygon, 0.01f, 0, 0);
+ScatterMap.Instance.GenerateScatterPoints(Polygon, 0.01f, 0, 0, null);
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)

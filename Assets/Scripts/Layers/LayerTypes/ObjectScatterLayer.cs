@@ -51,13 +51,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateScatterMatrices()
         {
-            var scatterPoints = ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
+            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle, ProcessScatterPoints);
+        }
+
+        private void ProcessScatterPoints(List<Vector3> scatterPoints)
+        {
             // var scatterPoints = CompoundPolygon.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
             var batchCount = (scatterPoints.Count / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var remainder = scatterPoints.Count % 1023;
 
-            print( scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
+            print(scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
             matrixBatches = new Matrix4x4[batchCount][];
+
+            var meshOriginOffset = 0;//todo mesh.bounds.extents.y;
+            print("offset: " + meshOriginOffset);
             for (int i = 0; i < batchCount; i++)
             {
                 var arraySize = i == batchCount - 1 ? remainder : 1023;
@@ -65,10 +72,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 for (int j = 0; j < arraySize; j++)
                 {
                     // var pos = new Vector3(scatterPoints[1023 * i + j].x, 10, scatterPoints[1023 * i + j].y); //todo: use optical raycaster to determine y of entire polygon
-                    var pos = scatterPoints[1023 * i + j];
+                    var scale = settings.GenerateRandomScale() * 10;
+                    var pos = scatterPoints[1023 * i + j] + new Vector3(0, meshOriginOffset * scale.y, 0);
                     var rot = Quaternion.identity;
-                    var scale = settings.GenerateRandomScale();
-                    matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale*10);
+                    matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale);
                 }
             }
         }
