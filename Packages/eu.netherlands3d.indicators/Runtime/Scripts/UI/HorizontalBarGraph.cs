@@ -56,6 +56,17 @@ namespace Netherlands3D.Indicators.UI
             }
         }
 
+        public void SetInformationButtonURL(string url)
+        {
+            if(string.IsNullOrEmpty(url))
+            {
+                informationButton.gameObject.SetActive(false);
+                return;    
+            }
+            
+            informationButton.onClick.AddListener(() => Application.OpenURL(url));
+        }
+
         public void SetFill(float value)
         {
             bar.value = value;

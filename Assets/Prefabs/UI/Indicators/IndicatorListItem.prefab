@@ -219,7 +219,7 @@ MonoBehaviour:
   bar: {fileID: 570313339550393014}
   labelText: {fileID: 2817908787221722749}
   valueText: {fileID: 1225315705873912947}
-  informationButton: {fileID: 0}
+  informationButton: {fileID: 355644462963419581}
   minValue: 0
   maxValue: 10
   value: 6.44
@@ -442,7 +442,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 0
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1093693256988253357}
   m_FillRect: {fileID: 7585573630653958952}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
@@ -640,19 +640,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8706162855691591609}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1961731509560109091
 MonoBehaviour:
   m_ObjectHideFlags: 0
