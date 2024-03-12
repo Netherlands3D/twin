@@ -516,6 +516,11 @@ PrefabInstance:
       objectReference: {fileID: 8289484169969439642}
     - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 2538422659025745415}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 3991614295002112775}
@@ -710,6 +715,21 @@ PrefabInstance:
       propertyPath: m_fontSizeMin
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 8751850658600289211}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 1257882925733847773}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 2538422659025745415}
     - target: {fileID: 3852244505954252403, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
       propertyPath: m_text
@@ -908,6 +928,11 @@ PrefabInstance:
       objectReference: {fileID: 2017360283520801205}
     - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 2705432219899204502}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 3183134990437864043}
@@ -1102,6 +1127,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 8751850658600289211}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 3183134990437864043}
     - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnRight
