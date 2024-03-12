@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering;
@@ -91,7 +90,7 @@ namespace Netherlands3D.Twin
         private IEnumerator GenerateScatterPointsCoroutine(CompoundPolygon polygon, float density, float scatter, float angle, System.Action<List<Vector3>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
-            
+
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygon, cellSize, angle, out var gridBounds);
             //todo: rotate grid in the transform matrix after generation?
 
@@ -100,11 +99,11 @@ namespace Netherlands3D.Twin
             AlignCameraToPolygon(depthCamera, gridBounds);
             RenderDepthCamera();
             yield return new WaitForEndOfFrame(); //wait for rendering to complete
+            RenderDepthCamera(); //don't know why it is needed to render twice, but not doing so causes unexpected behaviour
+            yield return new WaitForEndOfFrame(); //wait for rendering to complete
 
-            //convert points from world space to uv space
-            var gridPointsUVSpace = ConvertToUVSpace(gridPoints, polygon.Bounds.center, GridSampleSize); //points outside of the texture bounds will be <0 or >=1, these need to be ignored to avoid a multitude of points being generated near the edges
-            //sample texture at uv points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
-            var offsetPoints = AddSampledRandomOffsetAndSampleHeight(gridPoints, gridPointsUVSpace, scatter, cellSize);
+            //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
+            var offsetPoints = AddSampledRandomOffsetAndSampleHeight(gridPoints, gridBounds, GridSampleSize, scatter, cellSize);
             //todo somehow sample random scale?
 
             onPointsGeneratedCallback?.Invoke(offsetPoints);
@@ -112,88 +111,35 @@ namespace Netherlands3D.Twin
 
         public GameObject testSphere;
 
-        private List<Vector3> AddSampledRandomOffsetAndSampleHeight(List<Vector2> worldPoints, Vector2[] gridPointsUVSpace, float randomness, float gridCellSize)
+        private List<Vector3> AddSampledRandomOffsetAndSampleHeight(List<Vector2> worldPoints, Bounds bounds , float gridSampleSize, float randomness, float gridCellSize)
         {
             var points = new List<Vector3>(worldPoints.Count);
-            var parent = new GameObject("testSpheres").transform;
-            for (int i = 0; i < gridPointsUVSpace.Length; i++)
+            // var parent = new GameObject("testSpheres").transform;
+            var boundsCenter2D = new Vector2(bounds.center.x, bounds.center.z);
+            var boundsExtents2D = new Vector2(bounds.extents.x, bounds.extents.z);
+            var pointSamplePositionOffset = -boundsCenter2D + boundsExtents2D;
+            for (int i = 0; i < worldPoints.Count; i++)
             {
-                var uv = gridPointsUVSpace[i];
-                if (uv.x < 0 || uv.y >= 1 || uv.y < 0 || uv.y >= 1)
-                {
-                    print("uv out of bounds");
-                    continue;
-                }
-
-                var colorSample = ReadPixelFromTexture(samplerTexture, uv);
-
+                var worldPointInPixelSpace = (worldPoints[i] +pointSamplePositionOffset) * gridSampleSize;
+                var colorSample = samplerTexture.GetPixel(Mathf.FloorToInt(worldPointInPixelSpace.x), Mathf.FloorToInt(worldPointInPixelSpace.y));
                 float randomOffsetX = (colorSample.r - 0.5f) * randomness * gridCellSize;
                 float randomOffsetY = (colorSample.g - 0.5f) * randomness * gridCellSize;
                 var offset = new Vector2(randomOffsetX, randomOffsetY);
-                var offsetUV = uv + new Vector2(colorSample.r, colorSample.g) * gridCellSize;
-                var newColorSample = ReadPixelFromTexture(samplerTexture, offsetUV);
+                // var offsetUV = uv + new Vector2(colorSample.r, colorSample.g) * gridCellSize;
+                // var newColorSample = ReadPixelFromTexture(samplerTexture, offsetUV);
 
-                if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
+                if (colorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
                     continue;
 
                 var originalWorldPoint = worldPoints[i];
                 var offsetPoint = new Vector3(originalWorldPoint.x /*+ offset.x*/, colorSample.b, originalWorldPoint.y /*+ offset.y*/);
 
-                var debug = Instantiate(testSphere, offsetPoint, quaternion.identity, parent);
+                // var debug = Instantiate(testSphere, offsetPoint, quaternion.identity, parent);
 
                 points.Add(offsetPoint);
             }
 
             return points;
-        }
-
-        private static Color ReadPixelFromTexture(Texture2D texture, Vector2 normalizedCoordinates)
-        {
-            int x = Mathf.FloorToInt(normalizedCoordinates.x * texture.width);
-            int y = Mathf.FloorToInt(normalizedCoordinates.y * texture.height);
-
-            return texture.GetPixel(x, y);
-        }
-
-        // private List<Vector3> AddSampledRandomOffsetAndSampleHeight(List<Vector2> worldPoints, Vector3 polygonBoundsCenter, Vector2[] gridPointsUVSpace, float randomness, float gridCellSize)
-        // {
-        //     var points = new List<Vector3>(worldPoints.Count);
-        //     for (int i = 0; i < gridPointsUVSpace.Length; i++)
-        //     {
-        //         var uv = gridPointsUVSpace[i];
-        //         var colorSample = samplerTexture.GetPixelBilinear(uv.x, uv.y);
-        //         float randomOffsetX = (colorSample.r - 0.5f) * randomness * gridCellSize;
-        //         float randomOffsetY = (colorSample.g - 0.5f) * randomness * gridCellSize;
-        //         var offset = new Vector2(randomOffsetX, randomOffsetY);
-        //
-        //         var originalWorldPoint = worldPoints[i];
-        //         var offsetPoint = new Vector3(originalWorldPoint.x + offset.x, 0, originalWorldPoint.y + offset.y);
-        //
-        //         var offsetUV = WorldToTextureCoord(offsetPoint, polygonBoundsCenter);
-        //         var newColorSample = samplerTexture.GetPixelBilinear(offsetUV.x, offsetUV.y);
-        //         offsetPoint.y = newColorSample.b;
-        //
-        //         print(newColorSample.a);
-        //
-        //         if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped
-        //             continue;
-        //
-        //         points.Add(offsetPoint);
-        //     }
-        //
-        //     return points;
-        // }
-
-        private Vector2[] ConvertToUVSpace(List<Vector2> gridPoints, Vector3 polygonBoundsCenter, float gridSampleSize)
-        {
-            var uvPoints = new Vector2[gridPoints.Count];
-            for (var i = 0; i < gridPoints.Count; i++)
-            {
-                var point = gridPoints[i];
-                uvPoints[i] = GridToTextureCoord(samplerTexture, point, polygonBoundsCenter, gridSampleSize);
-            }
-
-            return uvPoints;
         }
 
         /// <summary>
@@ -206,10 +152,10 @@ namespace Netherlands3D.Twin
         private static Vector2 GridToTextureCoord(Texture2D texture, Vector2 gridPos, Vector3 boundsCenter, float gridSampleSize)
         {
             Vector2 localGridPos = gridPos - new Vector2(boundsCenter.x, boundsCenter.z); // Convert to local space relative to the center of the bounds
-            
+
             var scaledTextureHorizontalExtent = texture.width / 2 / gridSampleSize; //divide by gridSampleSize to account for multiple pixels in the texture per square world unit 
             var scaledTextureVerticalExtent = texture.height / 2 / gridSampleSize;
-            
+
             float x = Mathf.InverseLerp(-scaledTextureHorizontalExtent, scaledTextureHorizontalExtent, localGridPos.x); // Convert x to [0, 1]
             float y = Mathf.InverseLerp(-scaledTextureVerticalExtent, scaledTextureVerticalExtent, localGridPos.y); // Convert x to [0, 1]
             return new Vector2(x, y);
@@ -225,7 +171,7 @@ namespace Netherlands3D.Twin
         {
             var width = Mathf.CeilToInt(gridSampleSize * bounds.size.x + 2 * maxRandomOffset); //add 2*maxRandomOffset to include the max scatter range on both sides
             var height = Mathf.CeilToInt(gridSampleSize * bounds.size.z + 2 * maxRandomOffset);
-            print("texture dimensions: " + width + "\t" + height);
+            print("texture dimensions: " + width + " x " + height);
             var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.None);
             depthCamera.targetTexture = renderTexture;
             debugImageRaw.texture = renderTexture;
