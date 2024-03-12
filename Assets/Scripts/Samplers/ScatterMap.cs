@@ -91,26 +91,19 @@ namespace Netherlands3D.Twin
         private IEnumerator GenerateScatterPointsCoroutine(CompoundPolygon polygon, float density, float scatter, float angle, System.Action<List<Vector3>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
-
-            print(" polygon bounds " + polygon.Bounds.size.x + "\t" + polygon.Bounds.size.y + "\t" + polygon.Bounds.size.z);
-            var gridPoints = CompoundPolygon.GenerateGridPoints(polygon, cellSize, angle, out var gridBounds); //todo: points outside of the bounds of the polygon can be ignored, need to find the best place to do this.
-            print("calculated grid bounds " + gridBounds.size.x + "\t" + gridBounds.size.y + "\t" + gridBounds.size.z);
+            
+            var gridPoints = CompoundPolygon.GenerateGridPoints(polygon, cellSize, angle, out var gridBounds);
             //todo: rotate grid in the transform matrix after generation?
 
-            yield return new WaitForEndOfFrame(); //todo wait for new polygon mesh to be created
+            yield return new WaitForEndOfFrame(); //wait for new polygon mesh to be created in case this function was coupled to the same event as the polygon mesh generation and this would be called before the mesh creation.
             CreateRenderTexture(gridBounds, scatter * cellSize, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
             RenderDepthCamera();
-            yield return new WaitForEndOfFrame(); //todo wait for rendering to complete
-            RenderDepthCamera();
-            yield return new WaitForEndOfFrame(); //todo wait for rendering to complete
-            RenderDepthCamera();
-            yield return new WaitForEndOfFrame(); //todo wait for rendering to complete
+            yield return new WaitForEndOfFrame(); //wait for rendering to complete
 
             //convert points from world space to uv space
             var gridPointsUVSpace = ConvertToUVSpace(gridPoints, polygon.Bounds.center, GridSampleSize); //points outside of the texture bounds will be <0 or >=1, these need to be ignored to avoid a multitude of points being generated near the edges
             //sample texture at uv points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
-            // var offsetPoints = AddSampledRandomOffsetAndSampleHeight(gridPoints, polygon.Bounds.center, gridPointsUVSpace, scatter, cellSize);
             var offsetPoints = AddSampledRandomOffsetAndSampleHeight(gridPoints, gridPointsUVSpace, scatter, cellSize);
             //todo somehow sample random scale?
 
@@ -139,10 +132,8 @@ namespace Netherlands3D.Twin
                 var offset = new Vector2(randomOffsetX, randomOffsetY);
                 var offsetUV = uv + new Vector2(colorSample.r, colorSample.g) * gridCellSize;
                 var newColorSample = ReadPixelFromTexture(samplerTexture, offsetUV);
-                // var newColorSample = samplerTexture.GetPixelBilinear(offsetUV.x, offsetUV.y);
 
-                // print(newColorSample);
-                if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped
+                if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
                     continue;
 
                 var originalWorldPoint = worldPoints[i];
