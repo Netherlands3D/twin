@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 for (int j = 0; j < arraySize; j++)
                 {
                     // var pos = new Vector3(scatterPoints[1023 * i + j].x, 10, scatterPoints[1023 * i + j].y); //todo: use optical raycaster to determine y of entire polygon
-                    var scale = settings.GenerateRandomScale() * 10;
+                    var scale = settings.GenerateRandomScale();
                     var pos = scatterPoints[1023 * i + j] + new Vector3(0, meshOriginOffset * scale.y, 0);
                     var rot = Quaternion.identity;
                     matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale);
