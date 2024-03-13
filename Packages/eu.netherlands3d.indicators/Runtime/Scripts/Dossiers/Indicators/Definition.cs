@@ -7,8 +7,7 @@ namespace Netherlands3D.Indicators.Dossiers.Indicators
     {
         public string id;
         public string name;
-        public string citation;
 
-        public Justification justification;
+        public Citation citation;
     }
 }

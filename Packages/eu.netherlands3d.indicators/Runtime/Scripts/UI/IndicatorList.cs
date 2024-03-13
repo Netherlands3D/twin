@@ -55,7 +55,7 @@ namespace Netherlands3D.Indicators.UI
             listItem.name = $"{indicatorId}: {indicatorDefinition.name}";
             listItem.SetLabel(indicatorDefinition.name);
             listItem.SetValue(indicatorValue, true);
-            listItem.SetInformationButtonURL(indicatorDefinition.justification?.url);
+            listItem.SetInformationButtonURL(indicatorDefinition.citation?.url);
             switch (alertLevel)
             {
                 case IndicatorAlertLevel.OK:

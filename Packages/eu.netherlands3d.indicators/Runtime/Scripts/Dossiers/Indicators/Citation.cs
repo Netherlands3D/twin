@@ -1,8 +1,9 @@
 using System;
 
-namespace Netherlands3D.Indicators.Dossiers.Indicators{
+namespace Netherlands3D.Indicators.Dossiers
+{
     [Serializable]
-    public class Justification
+    public class Citation
     {
         public string name { get; set; } = "";
         public string url { get; set; } = "";

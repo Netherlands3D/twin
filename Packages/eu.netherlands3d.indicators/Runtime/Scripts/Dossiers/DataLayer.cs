@@ -9,7 +9,7 @@ namespace Netherlands3D.Indicators.Dossiers
     {
         public string name;
         public string unit;
-        public string citation;
+        public Citation citation;
         public List<LegendItem> legend;
         public List<Frame> frames;
     }
