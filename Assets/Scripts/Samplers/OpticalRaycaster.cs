@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin
             depthCamera.enabled = false; 
 
             //Create a red channel texture that we can sample depth from
-            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.R16, false);
+            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
         }
 
         private void OnDestroy() {
@@ -72,21 +72,7 @@ namespace Netherlands3D.Twin
 
         public Vector3 GetDepthCameraWorldPoint()
         {
-            CalculateAverageDepth();
-
-#if UNITY_EDITOR || !UNITY_WEBGL
-            //WebGL/OpenGL2 raw depth value is inverted
-            totalDepth = 1 - totalDepth;
-#endif
-
-            //Move far clip plane according to camera height to maintain precision (min 100m far clip plane)
-            var clipRangeTotal = Mathf.Max(depthCamera.transform.position.y * 2.0f, 100.0f);
-            depthCamera.farClipPlane = clipRangeTotal;
-
-            //Use camera near and far to determine totalDepth value
-            totalDepth = Mathf.Lerp(depthCamera.nearClipPlane, depthCamera.farClipPlane, totalDepth);
-
-            var worldPoint = depthCamera.transform.position + depthCamera.transform.forward * totalDepth;
+            var worldPoint = ReadWorldPositionFromPixel();
             OnDepthSampled.Invoke(worldPoint);
 
             return worldPoint;
@@ -102,20 +88,15 @@ namespace Netherlands3D.Twin
             RenderTexture.active = null;
         }
 
-        /// <summary>
-        /// Read all the pixels in the rendertexture, and use the average as our depth
-        /// </summary>
-        private void CalculateAverageDepth()
+        private Vector3 ReadWorldPositionFromPixel()
         {
-            totalDepth = 0;
-            for (int x = 0; x < samplerTexture.width; x++)
-            {
-                for (int y = 0; y < samplerTexture.height; y++)
-                {
-                    totalDepth += samplerTexture.GetPixel(x, y).r;
-                }
-            }
-            totalDepth /= (samplerTexture.width * samplerTexture.height);
+            var worldPosition = samplerTexture.GetPixel(0,0);
+            
+            return new Vector3(
+                worldPosition.r, 
+                worldPosition.g, 
+                worldPosition.b
+            );
         }
     }
 }
