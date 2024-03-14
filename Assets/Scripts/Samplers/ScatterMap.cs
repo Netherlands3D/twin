@@ -153,6 +153,9 @@ namespace Netherlands3D.Twin
             print("pixelcount: " + pixels.Length);
             var textureWidth = samplerTexture.width;
             var startTime = DateTime.UtcNow;
+
+            var minoffsetTest = 10f;
+            var maxOffsetTest = -10f;
             for (int i = 0; i < worldPoints.Length; i++)
             {
                 var originalWorldPoint = worldPoints[i];
@@ -196,7 +199,7 @@ namespace Netherlands3D.Twin
 
                 points.Add(offsetPoint);
             }
-
+            print("min: " + minoffsetTest + "\tmax: " + maxOffsetTest);
             return points;
         }
 

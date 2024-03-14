@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80914c3a9b534651be26a17b06ac5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridSampleSize: 1.5
+  GridSampleSize: 1
   debugImageRaw: {fileID: 482489878}
   propertyPanelPrefab: {fileID: 6128059142548452485, guid: 268ed3efe96c84284a00792823db0330,
     type: 3}
@@ -1804,22 +1804,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.07759509
+      value: -0.37781844
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.024518939
+      value: -0.08715978
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9503665
+      value: 0.89817786
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.3003022
+      value: -0.20720267
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
