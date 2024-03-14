@@ -148,6 +148,7 @@ namespace Netherlands3D.Twin
             var pixels = samplerTexture.GetPixels();
             print("pixelcount: " + pixels.Length);
             var textureWidth = samplerTexture.width;
+            var textureHeight = samplerTexture.height;
             var startTime = DateTime.UtcNow;
 
             for (int i = 0; i < worldPoints.Length; i++)
@@ -156,12 +157,15 @@ namespace Netherlands3D.Twin
                 int originalXInPixelSpace = (int)((originalWorldPoint.x + pointSamplePositionOffset.x) * gridSampleSize); //casting is more efficient than Mathf.FloorToInt
                 int originalYInPixelSpace = (int)((originalWorldPoint.y + pointSamplePositionOffset.y) * gridSampleSize);
 
+                if (originalXInPixelSpace < 0 || originalXInPixelSpace >= textureWidth || originalYInPixelSpace < 0 || originalYInPixelSpace >= textureHeight) // since we are converting a 2D coordinate to a 1D index, we need to account for points (mostly when rotating the grid) that are out of bounds of the texture so we do not accidentally read pixels from the previous or next pixel rows. By also checking the y, we also skip points that that are completely out of bounds of the texture
+                    continue;
+                
                 int index = originalYInPixelSpace * textureWidth + originalXInPixelSpace;
 
-                if (index < 0 || index >= pixels.Length) //in case the grid is rotated, points can end up outside of the texture bounds, this point is then by definition outside of the polygon and can be ignored.
-                {
-                    continue;
-                }
+                // if (index < 0 || index >= pixels.Length) //in case the grid is rotated, points can end up outside of the texture bounds, this point is then by definition outside of the polygon and can be ignored.
+                // {
+                //     continue;
+                // }
 
                 var colorSample = pixels[index];
                 float randomOffsetX = (colorSample.r - 0.5f) * randomness * gridCellSize; //range [-0.5*gridCellSize, 0.5*gridCellSize]
