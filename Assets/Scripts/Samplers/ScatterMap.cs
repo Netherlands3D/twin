@@ -17,12 +17,8 @@ namespace Netherlands3D.Twin
         private Texture2D samplerTexture;
 
         public float GridSampleSize = 1f; //how many pixels per square meter should be used in the texture for sampling?
-
-        [SerializeField] private RawImage debugImageRaw; //todo: delete me
         public ScatterSettingsPropertySection propertyPanelPrefab; //todo: find a better way to reference this.
-
-        // public UnityEvent<List<Vector3>> ScatterPointsGenerated;
-
+        
         private void Awake()
         {
             depthCamera = GetComponent<Camera>();
@@ -145,17 +141,15 @@ namespace Netherlands3D.Twin
             var points = new List<Vector3>(worldPoints.Length);
             var boundsCenter2D = new Vector2(gridBounds.center.x, gridBounds.center.z);
             var boundsExtents2D = new Vector2(gridBounds.extents.x, gridBounds.extents.z);
-            var scatterBoundsExtents2D = boundsExtents2D + new Vector2(gridCellSize, gridCellSize); //extents only need to be expanded by 1 cellSize, since the extents are half the size and the size is expanded by 2*cellSize in CreateRenderTexture
+            // var scatterBoundsExtents2D = boundsExtents2D + new Vector2(gridCellSize, gridCellSize); //extents only need to be expanded by 1 cellSize, since the extents are half the size and the size is expanded by 2*cellSize in CreateRenderTexture
             var pointSamplePositionOffset = -boundsCenter2D + boundsExtents2D;
-            var scatterPointSamplePositionOffset = -boundsCenter2D + scatterBoundsExtents2D; //scattered bounds have the same center point as unscattered
+            // var scatterPointSamplePositionOffset = -boundsCenter2D + scatterBoundsExtents2D; //scattered bounds have the same center point as unscattered
 
             var pixels = samplerTexture.GetPixels();
             print("pixelcount: " + pixels.Length);
             var textureWidth = samplerTexture.width;
             var startTime = DateTime.UtcNow;
 
-            var minoffsetTest = 10f;
-            var maxOffsetTest = -10f;
             for (int i = 0; i < worldPoints.Length; i++)
             {
                 var originalWorldPoint = worldPoints[i];
@@ -164,9 +158,8 @@ namespace Netherlands3D.Twin
 
                 int index = originalYInPixelSpace * textureWidth + originalXInPixelSpace;
 
-                if (index >= pixels.Length)
+                if (index < 0 || index >= pixels.Length) //in case the grid is rotated, points can end up outside of the texture bounds, this point is then by definition outside of the polygon and can be ignored.
                 {
-                    print("index out of bounds: " + index);
                     continue;
                 }
 
@@ -178,28 +171,26 @@ namespace Netherlands3D.Twin
                 float scatteredPointY = originalWorldPoint.y + randomOffsetY;
 
 
-                int scatteredXInPixelSpace = (int)((scatteredPointX + scatterPointSamplePositionOffset.x) * gridSampleSize);
-                int scatteredYInPixelSpace = (int)((scatteredPointY + scatterPointSamplePositionOffset.y) * gridSampleSize);
+                int scatteredXInPixelSpace = (int)((scatteredPointX + pointSamplePositionOffset.x) * gridSampleSize);
+                int scatteredYInPixelSpace = (int)((scatteredPointY + pointSamplePositionOffset.y) * gridSampleSize);
 
                 index = scatteredYInPixelSpace * textureWidth + scatteredXInPixelSpace;
-                if (index >= pixels.Length || index < 0)
+                if (index < 0 || index >= pixels.Length) //in case the grid is rotated, points can end up outside of the texture bounds, this point is then by definition outside of the polygon and can be ignored.
                 {
-                    print("scatter index out of bounds: " + index);
                     continue;
                 }
 
                 var newColorSample = pixels[index];
 
 
-                if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
-                    continue;
+                // if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
+                //     continue;
 
                 //todo: in WebGL the depth is inverted.                
                 var offsetPoint = new Vector3(scatteredPointX, newColorSample.b, scatteredPointY);
 
                 points.Add(offsetPoint);
             }
-            print("min: " + minoffsetTest + "\tmax: " + maxOffsetTest);
             return points;
         }
 
@@ -211,12 +202,11 @@ namespace Netherlands3D.Twin
         /// <param name="gridSampleSize">how many samples per square world unit should be taken in the texture</param>
         private void CreateRenderTexture(Bounds gridBounds, float gridCellSize, float gridSampleSize)
         {
-            var width = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.x + 2 * gridCellSize)); //add 2*maxRandomOffset to include the max scatter range on both sides
-            var height = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.z + 2 * gridCellSize));
+            var width = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.x /*+ 2 * gridCellSize)*/)); //add 2*maxRandomOffset to include the max scatter range on both sides
+            var height = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.z /*+ 2 * gridCellSize*/));
             var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.None);
             print("created texture: " + width + "x" + height + " pixelCount: " + width * height);
             depthCamera.targetTexture = renderTexture;
-            debugImageRaw.texture = renderTexture;
 
             if (depthCamera.targetTexture.width > 4096 || depthCamera.targetTexture.height > 4096)
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");
