@@ -10,8 +10,8 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class ScatterGenerationSettings : ScriptableObject
     {
-        [SerializeField] private float density = 0.1f;
-        [SerializeField] private float scatter = 0f;
+        [SerializeField] private float density = 1f;
+        [SerializeField] private float scatter = 1f;
         [SerializeField] private float angle = 0f;
         [SerializeField] private Vector3 minScale = Vector3.one;
         [SerializeField] private Vector3 maxScale = Vector3.one;
@@ -76,6 +76,5 @@ namespace Netherlands3D.Twin
 
             return new Vector3(x, y, z);
         }
-
     }
 }

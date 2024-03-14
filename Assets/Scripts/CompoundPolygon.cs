@@ -82,12 +82,12 @@ public class CompoundPolygon
     }
 
 
-    public static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
+    public static Vector2[] GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
     {
         return GenerateGridPoints(compoundPolygon, cellSize, angle, out _);
     }
-    
-    public static List<Vector2> GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle, out Bounds expandedBounds)
+
+    public static Vector2[] GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle, out Bounds expandedBounds)
     {
         var bounds = compoundPolygon.Bounds;
 
@@ -109,35 +109,31 @@ public class CompoundPolygon
         int numXIterations = Mathf.CeilToInt((expandedBounds.max.x - bottomLeft.x) / cellSize);
         int numYIterations = Mathf.CeilToInt((expandedBounds.max.z - bottomLeft.y) / cellSize);
 
-        // Calculate the capacity based on the number of iterations
-        int estimatedCapacity = numXIterations * numYIterations;
-        var points = new List<Vector2>(estimatedCapacity);
+        var capacity = numXIterations * numYIterations;
+        var array = new Vector2[capacity];
 
-        var maxX = expandedBounds.max.x;
-        var maxZ = expandedBounds.max.z;
-        
-        for (float x = bottomLeft.x; x <= maxX; x += cellSize)
+        var rotatedPoint = new Vector2(); //define a variable to use so the constructor isn't called every time as an optimisation for when processing many points.
+        for (int x = 0; x < numXIterations; x++)
         {
-            for (float y = bottomLeft.y; y <= maxZ; y += cellSize)
+            for (int y = 0; y < numYIterations; y++)
             {
                 // Translate point relative to rotation center
-                float translatedX = x - rotationCenter.x;
-                float translatedY = y - rotationCenter.y;
+                float translatedX = bottomLeft.x + x*cellSize - rotationCenter.x;
+                float translatedY = bottomLeft.y + y*cellSize - rotationCenter.y;
 
-                // Rotate point using sine and cosine
+                // Rotate point using Isine and cosine
                 float rotatedX = translatedX * cosAngle - translatedY * sinAngle;
                 float rotatedY = translatedX * sinAngle + translatedY * cosAngle;
 
                 // Translate back to original position
-                float finalX = rotatedX + rotationCenter.x;
-                float finalY = rotatedY + rotationCenter.y;
-
-                Vector2 rotatedPoint = new Vector2(finalX, finalY);
-                points.Add(rotatedPoint);
+                rotatedPoint.x = rotatedX + rotationCenter.x;
+                rotatedPoint.y = rotatedY + rotationCenter.y;
+                
+                array[x * numYIterations + y] = rotatedPoint;
             }
         }
 
-        return points;
+        return array;
     }
 
     public static List<Vector2> GenerateGridPointsInPolygonBoundingBox(CompoundPolygon compoundPolygon, float cellSize, float shear)
@@ -175,23 +171,20 @@ public class CompoundPolygon
         return gridPoints;
     }
 
-    public static List<Vector2> AddRandomOffset(List<Vector2> points, float gridCellSize, float randomness)
+    public static void AddRandomOffset(Vector2[] points, float gridCellSize, float randomness)
     {
-        List<Vector2> adjustedPoints = new List<Vector2>(points.Count);
-
-        foreach (Vector2 point in points)
+        var newPoint = new Vector2();
+        for (var i = 0; i < points.Length; i++)
         {
+            newPoint = points[i];
             float randomOffsetX = (UnityEngine.Random.value - 0.5f) * randomness * gridCellSize;
             float randomOffsetY = (UnityEngine.Random.value - 0.5f) * randomness * gridCellSize;
 
-            float adjustedX = point.x + randomOffsetX;
-            float adjustedY = point.y + randomOffsetY;
+            newPoint.x += randomOffsetX;
+            newPoint.y += randomOffsetY;
 
-            Vector2 adjustedPoint = new Vector2(adjustedX, adjustedY);
-            adjustedPoints.Add(adjustedPoint);
+            points[i] = newPoint;
         }
-
-        return adjustedPoints;
     }
 
     public static List<Vector2> PrunePointsWithPolygon(List<Vector2> points, CompoundPolygon polygon, bool pruneInside = false)
@@ -207,14 +200,14 @@ public class CompoundPolygon
         return prunedList;
     }
 
-    public static List<Vector2> GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle)
+    public static Vector2[] GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle)
     {
         float cellSize = 1f / Mathf.Sqrt(density);
-
-        var gridPoints = GenerateGridPoints(polygon, cellSize, angle);
-        var scatterPoints = AddRandomOffset(gridPoints, cellSize, scatter);
+    
+        var points = GenerateGridPoints(polygon, cellSize, angle);
+        AddRandomOffset(points, cellSize, scatter);
         // return PrunePointsWithPolygon(scatterPoints, polygon);
-        return scatterPoints;
+        return points;
     }
 
     public static bool IsPointInPolygon(Vector2 point, CompoundPolygon compoundPolygon)

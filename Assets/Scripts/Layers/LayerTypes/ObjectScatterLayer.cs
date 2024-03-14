@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.UI.LayerInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -51,7 +52,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateScatterMatrices()
         {
-            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle, ProcessScatterPoints);
+            print("Density: " + settings.Density);
+            print("Scatter: " + settings.Scatter);
+            print("Angle: " + settings.Angle);
+            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density/10, settings.Scatter, settings.Angle, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints)
@@ -63,8 +67,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             print(scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
             matrixBatches = new Matrix4x4[batchCount][];
 
-            var meshOriginOffset = 0;//todo mesh.bounds.extents.y;
+            var meshOriginOffset = 0; //todo mesh.bounds.extents.y;
             print("offset: " + meshOriginOffset);
+            var tempMatrix = new Matrix4x4();
             for (int i = 0; i < batchCount; i++)
             {
                 var arraySize = i == batchCount - 1 ? remainder : 1023;
@@ -72,16 +77,26 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 for (int j = 0; j < arraySize; j++)
                 {
                     // var pos = new Vector3(scatterPoints[1023 * i + j].x, 10, scatterPoints[1023 * i + j].y); //todo: use optical raycaster to determine y of entire polygon
-                    var scale = settings.GenerateRandomScale();
-                    var pos = scatterPoints[1023 * i + j] + new Vector3(0, meshOriginOffset * scale.y, 0);
-                    var rot = Quaternion.identity;
-                    matrixBatches[i][j] = Matrix4x4.TRS(pos, rot, scale);
+                    // var scale = settings.GenerateRandomScale();
+                    // var pos = scatterPoints[1023 * i + j];// + new Vector3(0, meshOriginOffset * scale.y, 0);
+                    // var rot = Quaternion.identity;
+                    tempMatrix.SetTRS(scatterPoints[1023 * i + j], Quaternion.identity, 10*settings.GenerateRandomScale());
+                    matrixBatches[i][j] = tempMatrix;
                 }
             }
         }
 
         private void Update()
         {
+            if (Keyboard.current.upArrowKey.wasPressedThisFrame)
+            {
+                settings.Scatter = Mathf.Clamp01(settings.Scatter + 0.1f);
+            }
+            else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+            {
+                settings.Scatter = Mathf.Clamp01(settings.Scatter - 0.1f);
+            }
+
             RenderBatches();
         }
 
