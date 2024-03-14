@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,14 +9,14 @@ namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(fileName = "TreeGenerationSettings", menuName = "ScriptableObjects/TreeGenerationSettings", order = 1)]
     [Serializable]
-    public class ScatterGenerationSettings : ScriptableObject
+    public class ScatterGenerationSettings : ScriptableObject, IPropertySection
     {
         [SerializeField] private float density = 1f;
-        [SerializeField] private float scatter = 1f;
+        [SerializeField] private float scatter = 0f;
         [SerializeField] private float angle = 0f;
         [SerializeField] private Vector3 minScale = Vector3.one;
         [SerializeField] private Vector3 maxScale = Vector3.one;
-
+        
         public UnityEvent SettingsChanged = new UnityEvent();
         
         public float Density
@@ -75,6 +76,12 @@ namespace Netherlands3D.Twin
             float z = UnityEngine.Random.Range(minScale.z, maxScale.z);
 
             return new Vector3(x, y, z);
+        }
+        
+        public void AddToProperties(RectTransform properties)
+        {
+            var propertySection = Instantiate(ScatterMap.Instance.propertyPanelPrefab, properties);
+            propertySection.Settings = this;
         }
     }
 }

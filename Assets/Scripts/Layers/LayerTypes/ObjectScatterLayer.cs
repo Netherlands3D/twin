@@ -1,20 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class ObjectScatterLayer : ReferencedLayer
+    public class ObjectScatterLayer : ReferencedLayer, ILayerWithProperties
     {
         private Mesh mesh;
         private Material material;
         private ScatterGenerationSettings settings;
+        public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once
         private PolygonSelectionLayer polygonLayer => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+        private List<IPropertySection> propertySections = new();
 
         public override bool IsActiveInScene
         {
@@ -32,6 +36,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             this.material = material;
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
+            propertySections = new List<IPropertySection>() { settings };
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon));
         }
@@ -55,7 +60,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             print("Density: " + settings.Density);
             print("Scatter: " + settings.Scatter);
             print("Angle: " + settings.Angle);
-            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density/10, settings.Scatter, settings.Angle, ProcessScatterPoints);
+            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density / 10, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints)
@@ -80,7 +85,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     // var scale = settings.GenerateRandomScale();
                     // var pos = scatterPoints[1023 * i + j];// + new Vector3(0, meshOriginOffset * scale.y, 0);
                     // var rot = Quaternion.identity;
-                    tempMatrix.SetTRS(scatterPoints[1023 * i + j], Quaternion.identity, 10*settings.GenerateRandomScale());
+                    tempMatrix.SetTRS(scatterPoints[1023 * i + j], Quaternion.identity, 10 * settings.GenerateRandomScale());
                     matrixBatches[i][j] = tempMatrix;
                 }
             }
@@ -109,6 +114,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 Graphics.DrawMeshInstanced(mesh, 0, material, matrixBatch);
             }
+        }
+
+        public List<IPropertySection> GetPropertySections()
+        {
+            return propertySections;
         }
     }
 }
