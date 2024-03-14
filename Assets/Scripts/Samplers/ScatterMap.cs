@@ -93,7 +93,7 @@ namespace Netherlands3D.Twin
             print("max random offset: " + (scatter * cellSize));
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygon, cellSize, angle, out var gridBounds);
             //todo: rotate grid in the transform matrix after generation?
-            
+
             yield return new WaitForEndOfFrame(); //wait for new polygon mesh to be created in case this function was coupled to the same event as the polygon mesh generation and this would be called before the mesh creation.
             CreateRenderTexture(gridBounds, cellSize, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
@@ -108,7 +108,7 @@ namespace Netherlands3D.Twin
 
             onPointsGeneratedCallback?.Invoke(offsetPoints);
         }
-        
+
         /// <summary>
         /// This function will add a random offset to the grid points, and sample the new point's height and whether or not it falls inside or outside of the polygon.
         /// </summary>
@@ -118,15 +118,17 @@ namespace Netherlands3D.Twin
         /// <param name="randomness">How much scatter to apply in a Range from 0 (no scatter) to 1 (max scatter)</param>
         /// <param name="gridCellSize">size of a single grid cell</param>
         /// <returns>List of offset points with the sampled height</returns>
-        private List<Vector3> AddRandomOffsetAndSampleHeight(Vector2[] worldPoints, Bounds gridBounds , float gridSampleSize, float randomness, float gridCellSize)
+        private List<Vector3> AddRandomOffsetAndSampleHeight(Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize)
         {
             var points = new List<Vector3>(worldPoints.Length);
             var boundsCenter2D = new Vector2(gridBounds.center.x, gridBounds.center.z);
             var boundsExtents2D = new Vector2(gridBounds.extents.x, gridBounds.extents.z);
+            var scatterBoundsExtents2D = boundsExtents2D + new Vector2(2 * gridCellSize, 2 * gridCellSize);
             var pointSamplePositionOffset = -boundsCenter2D + boundsExtents2D;
+            var scatterPointSamplePositionOffset = -boundsCenter2D + scatterBoundsExtents2D; //scattered bounds have the same center point as unscattered
 
             var pixels = samplerTexture.GetPixels();
-            print((pixels.Length));
+            print("pixelcount: " + pixels.Length);
             var textureWidth = samplerTexture.width;
             var startTime = DateTime.UtcNow;
             for (int i = 0; i < worldPoints.Length; i++)
@@ -139,24 +141,29 @@ namespace Netherlands3D.Twin
                 var colorSample = pixels[index];
                 float randomOffsetX = (colorSample.r - 0.5f) * randomness * gridCellSize; //range [-0.5*gridCellSize, 0.5*gridCellSize]
                 float randomOffsetY = (colorSample.g - 0.5f) * randomness * gridCellSize;
-                
+
                 float scatteredPointX = originalWorldPoint.x + randomOffsetX;
                 float scatteredPointY = originalWorldPoint.y + randomOffsetY;
-                
-                int scatteredXInPixelSpace = (int)((scatteredPointX + pointSamplePositionOffset.x) * gridSampleSize);
-                int scatteredYInPixelSpace = (int)((scatteredPointY + pointSamplePositionOffset.y) * gridSampleSize);
-                
+
+
+                int scatteredXInPixelSpace = (int)((scatteredPointX + scatterPointSamplePositionOffset.x) * gridSampleSize);
+                int scatteredYInPixelSpace = (int)((scatteredPointY + scatterPointSamplePositionOffset.y) * gridSampleSize);
+
                 index = scatteredYInPixelSpace * textureWidth + scatteredXInPixelSpace;
                 if (index >= pixels.Length)
-                    print(index);
+                {
+                    print("index out of bounds: " + index);
+                    continue;
+                }
+
                 var newColorSample = pixels[index];
-                    
+
                 if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
                     continue;
 
                 //todo: in WebGL the depth is inverted.                
                 var offsetPoint = new Vector3(scatteredPointX, newColorSample.b, scatteredPointY);
-                
+
                 points.Add(offsetPoint);
             }
 
@@ -172,8 +179,8 @@ namespace Netherlands3D.Twin
         private void CreateRenderTexture(Bounds bounds, float gridCellSize, float gridSampleSize)
         {
             print("grid bounds: " + bounds.size);
-            var width = Mathf.CeilToInt(gridSampleSize * (bounds.size.x + 2 * gridCellSize)); //add 2*maxRandomOffset to include the max scatter range on both sides
-            var height = Mathf.CeilToInt(gridSampleSize * (bounds.size.z + 2 * gridCellSize));
+            var width = Mathf.CeilToInt(gridSampleSize * (Mathf.CeilToInt(bounds.size.x) + 2 * Mathf.CeilToInt(gridCellSize))); //add 2*maxRandomOffset to include the max scatter range on both sides
+            var height = Mathf.CeilToInt(gridSampleSize * (Mathf.CeilToInt(bounds.size.z) + 2 * Mathf.CeilToInt(gridCellSize)));
             print("texture dimensions: " + width + " x " + height);
             var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.None);
             depthCamera.targetTexture = renderTexture;
