@@ -51,28 +51,6 @@ namespace Netherlands3D.Twin
             RenderTexture.active = null;
         }
 
-//         public Vector3 GetDepthCameraWorldPoint()
-//         {
-//             CalculateAverageDepth();
-//
-// #if UNITY_EDITOR || !UNITY_WEBGL
-//             //WebGL/OpenGL2 raw depth value is inverted
-//             totalDepth = 1 - totalDepth;
-// #endif
-//
-//             //Move far clip plane according to camera height to maintain precision (min 100m far clip plane)
-//             var clipRangeTotal = Mathf.Max(depthCamera.transform.position.y * 2.0f, 100.0f);
-//             depthCamera.farClipPlane = clipRangeTotal;
-//
-//             //Use camera near and far to determine totalDepth value
-//             totalDepth = Mathf.Lerp(depthCamera.nearClipPlane, depthCamera.farClipPlane, totalDepth);
-//
-//             var worldPoint = depthCamera.transform.position + depthCamera.transform.forward * totalDepth;
-//             OnDepthSampled.Invoke(worldPoint);
-//
-//             return worldPoint;
-//         }
-
         public void GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle, System.Action<List<Vector3>> onPointsGeneratedCallback)
         {
             if (onPointsGeneratedCallback == null)
@@ -93,9 +71,7 @@ namespace Netherlands3D.Twin
             polyBounds = polygon.Bounds;
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
-
-            //todo: rotate grid in the transform matrix after generation?
-
+            
             yield return new WaitForEndOfFrame(); //wait for new polygon mesh to be created in case this function was coupled to the same event as the polygon mesh generation and this would be called before the mesh creation.
             CreateRenderTexture(gridBounds, cellSize, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
@@ -141,9 +117,7 @@ namespace Netherlands3D.Twin
             var points = new List<Vector3>(worldPoints.Length);
             var boundsCenter2D = new Vector2(gridBounds.center.x, gridBounds.center.z);
             var boundsExtents2D = new Vector2(gridBounds.extents.x, gridBounds.extents.z);
-            // var scatterBoundsExtents2D = boundsExtents2D + new Vector2(gridCellSize, gridCellSize); //extents only need to be expanded by 1 cellSize, since the extents are half the size and the size is expanded by 2*cellSize in CreateRenderTexture
             var pointSamplePositionOffset = -boundsCenter2D + boundsExtents2D;
-            // var scatterPointSamplePositionOffset = -boundsCenter2D + scatterBoundsExtents2D; //scattered bounds have the same center point as unscattered
 
             var pixels = samplerTexture.GetPixels();
             print("pixelcount: " + pixels.Length);
@@ -161,11 +135,6 @@ namespace Netherlands3D.Twin
                     continue;
                 
                 int index = originalYInPixelSpace * textureWidth + originalXInPixelSpace;
-
-                // if (index < 0 || index >= pixels.Length) //in case the grid is rotated, points can end up outside of the texture bounds, this point is then by definition outside of the polygon and can be ignored.
-                // {
-                //     continue;
-                // }
 
                 var colorSample = pixels[index];
                 float randomOffsetX = (colorSample.r - 0.5f) * randomness * gridCellSize; //range [-0.5*gridCellSize, 0.5*gridCellSize]
@@ -185,10 +154,9 @@ namespace Netherlands3D.Twin
                 }
 
                 var newColorSample = pixels[index];
-
-
-                // if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
-                //     continue;
+                
+                if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
+                    continue;
 
                 //todo: in WebGL the depth is inverted.                
                 var offsetPoint = new Vector3(scatteredPointX, newColorSample.b, scatteredPointY);
