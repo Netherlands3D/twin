@@ -34,16 +34,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public LayerNL3DBase[] ChildrenLayers { get; private set; }
 
-        public virtual void OnSelect()
-        {
-        }
+        public virtual void OnSelect(){ }
 
-        public virtual void OnDeselect()
-        {
-        }
+        public virtual void OnDeselect(){ }
 
         protected virtual void OnDestroy()
         {
+            if(!Application.isPlaying) return;
+
             UI?.DestroyUI();
             LayerData.RemoveLayer(this);
         }
