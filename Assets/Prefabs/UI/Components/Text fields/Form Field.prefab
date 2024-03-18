@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 2670784831607253445}
   - component: {fileID: 6527299783640815486}
   - component: {fileID: 3469015320980451011}
+  - component: {fileID: 3977447599000750833}
   m_Layer: 5
   m_Name: Form Field
   m_TagString: Untagged
@@ -368,6 +369,33 @@ MonoBehaviour:
   isAlert: 0
   m_InputValidator: {fileID: 0}
   m_ShouldActivateOnSelect: 1
+--- !u!114 &3977447599000750833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680146476129533989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c095261a4557a488c7fe256708244f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 3469015320980451011}
+  activeTextColor: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
+  disabledTextColor: {r: 0.8, g: 0.84313726, b: 0.89411765, a: 1}
+  backgroundImage: {fileID: 6527299783640815486}
+  activeBackgroundSprite: {fileID: 8135366055003731584, guid: 685ecaf306afba84585012e9385c6599,
+    type: 3}
+  disabledBackgroundSprite: {fileID: 8135366055003731584, guid: a9adbf9a01219e043ae932d061fb0d31,
+    type: 3}
+  labelImage: {fileID: 0}
+  activeLabelSprite: {fileID: 8135366055003731584, guid: 685ecaf306afba84585012e9385c6599,
+    type: 3}
+  disabledLabelSprite: {fileID: 8135366055003731584, guid: a9adbf9a01219e043ae932d061fb0d31,
+    type: 3}
+  activeLabelColor: {r: 0.8, g: 0.84313726, b: 0.89411765, a: 1}
+  disabledLabelColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &6826107517606439278
 GameObject:
   m_ObjectHideFlags: 0

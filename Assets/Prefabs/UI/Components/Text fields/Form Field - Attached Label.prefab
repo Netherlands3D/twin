@@ -294,6 +294,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_Mode
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3977447599000750833, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: labelImage
+      value: 
+      objectReference: {fileID: 7599927214783786047}
     - target: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_Name
