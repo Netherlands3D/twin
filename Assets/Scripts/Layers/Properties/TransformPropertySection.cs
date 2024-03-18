@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
+using RuntimeHandle;
 using TMPro;
 using UnityEngine;
 
@@ -33,6 +34,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 UpdatePositionFields();
                 UpdateRotationFields();
                 UpdateScalingFields();
+
+                SetTransformLocks();
             }
         }
         
@@ -57,6 +60,34 @@ namespace Netherlands3D.Twin.Layers.Properties
                 UpdateRotationFields();
                 UpdateScalingFields();
                 Layer.transform.hasChanged = false;
+            }
+        }
+
+        private void SetTransformLocks()
+        {
+            if (layer.TryGetComponent(out TransformAxes transformLocks))
+            {
+                position.xField.interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
+                position.yField.interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
+                position.zField.interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Z);
+                rotation.xField.interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.X);
+                rotation.yField.interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Y);
+                rotation.zField.interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Z);
+                scale.xField.interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.X);
+                scale.yField.interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Y);
+                scale.zField.interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Z);
+            }
+            else
+            {
+                position.xField.interactable = true;
+                position.yField.interactable = true;
+                position.zField.interactable = true;
+                rotation.xField.interactable = true;
+                rotation.yField.interactable = true;
+                rotation.zField.interactable = true;
+                scale.xField.interactable = true;
+                scale.yField.interactable = true;
+                scale.zField.interactable = true;
             }
         }
 
