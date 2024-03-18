@@ -42,7 +42,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if(!Application.isPlaying) return;
 
-            UI?.DestroyUI();
+            if(UI) UI.DestroyUI();
+            
             LayerData.RemoveLayer(this);
         }
 
