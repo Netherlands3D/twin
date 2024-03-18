@@ -24,13 +24,14 @@ namespace Netherlands3D.Twin
             if(targetGameObject.TryGetComponent(out TransformAxes transformLocks))
             {
                 handleButtonsPanel.SetLocks(transformLocks);
-                RuntimeTransformHandle.SetAxis(transformLocks.positionAxes);
             }
             else
             {
                 handleButtonsPanel.ClearLocks();
                 RuntimeTransformHandle.SetAxis(HandleAxes.XYZ);
             }
+
+            handleButtonsPanel.UpdateGizmoHandles();
         }
 
         public void ClearTransformTarget()

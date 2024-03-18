@@ -39,9 +39,6 @@ namespace Netherlands3D.Twin
 
             //If current toggle is enabled but is locked, pick another one
             PickAvailableTransform();
-
-            //Apply gizmos to make sure we are not using locked axis
-            UpdateGizmoHandles();
         }
 
         public void UpdateGizmoHandles()

@@ -1998,16 +1998,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position:
     xField: {fileID: 2606627055169622581}
-    yField: {fileID: 3114825054205818457}
-    zField: {fileID: 3491345822493050677}
+    yField: {fileID: 3491345822493050677}
+    zField: {fileID: 3114825054205818457}
   rotation:
     xField: {fileID: 2083419468590742919}
-    yField: {fileID: 8366836416948631464}
-    zField: {fileID: 9106842790572418953}
+    yField: {fileID: 9106842790572418953}
+    zField: {fileID: 8366836416948631464}
   scale:
     xField: {fileID: 5162515647959348561}
-    yField: {fileID: 1612910241398376175}
-    zField: {fileID: 2494273805321238436}
+    yField: {fileID: 2494273805321238436}
+    zField: {fileID: 1612910241398376175}
 --- !u!224 &3964240960759765200 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
