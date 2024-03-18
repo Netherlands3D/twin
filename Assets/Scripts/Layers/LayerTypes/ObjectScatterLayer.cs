@@ -35,6 +35,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             this.mesh = mesh;
             this.material = material;
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
+            settings.MinScale = Vector3.one;
+            settings.MaxScale = new Vector3(3, 3, 3);
             settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
             propertySections = new List<IPropertySection>() { settings };
 
