@@ -50,6 +50,8 @@ namespace Netherlands3D.Twin
         
         public void OnPointerClick(PointerEventData eventData)
         {
+            if(ReferencedProxy.UI == null) return;
+
             ReferencedProxy.UI.Select(true);
         }
         
