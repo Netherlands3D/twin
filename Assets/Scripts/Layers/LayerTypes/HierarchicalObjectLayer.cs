@@ -14,8 +14,6 @@ namespace Netherlands3D.Twin
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        private TransformHandleInterfaceToggle transformHandleInterfaceToggle;
-
         public override bool IsActiveInScene
         {
             get => gameObject.activeSelf;
@@ -25,7 +23,7 @@ namespace Netherlands3D.Twin
                 ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
         }
-        
+
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
@@ -49,20 +47,24 @@ namespace Netherlands3D.Twin
                 ReferencedProxy.UI.Deselect();
             }
         }
-        
+
         public void OnPointerClick(PointerEventData eventData)
         {
             ReferencedProxy.UI.Select(true);
         }
-        
+
         public override void OnSelect()
         {
-           transformHandleInterfaceToggle.SetTransformTarget(gameObject);
+            var transformHandleInterfaceToggle = FindObjectOfType<TransformHandleInterfaceToggle>(true);
+            if (transformHandleInterfaceToggle != null)
+                transformHandleInterfaceToggle.SetTransformTarget(gameObject);
         }
 
         public override void OnDeselect()
         {
-            transformHandleInterfaceToggle.ClearTransformTarget();
+            var transformHandleInterfaceToggle = FindObjectOfType<TransformHandleInterfaceToggle>(true);
+            if (transformHandleInterfaceToggle != null)
+                transformHandleInterfaceToggle.ClearTransformTarget();
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
