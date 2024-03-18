@@ -111,9 +111,10 @@ MonoBehaviour:
   trigger:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2899205090272600502}
-        m_TargetAssemblyTypeName: RuntimeHandle.RuntimeTransformHandle, RuntimeTransformHandle
-        m_MethodName: SetTarget
+      - m_Target: {fileID: 8401870430251024848}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.TransformHandleInterfaceToggle,
+          Assembly-CSharp
+        m_MethodName: SetTransformTarget
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -135,4 +136,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159cfb2aaa1744010b3963660cdbae56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 0}
+  runtimeTransformHandle: {fileID: 2899205090272600502}
+  handleButtonsPanel: {fileID: 0}

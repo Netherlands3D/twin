@@ -14,6 +14,8 @@ namespace Netherlands3D.Twin
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
+        private TransformHandleInterfaceToggle transformHandleInterfaceToggle;
+
         public override bool IsActiveInScene
         {
             get => gameObject.activeSelf;
@@ -55,15 +57,12 @@ namespace Netherlands3D.Twin
         
         public override void OnSelect()
         {
-            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
-            rth.SetTarget(gameObject);
+           transformHandleInterfaceToggle.SetTransformTarget(gameObject);
         }
 
         public override void OnDeselect()
         {
-            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);
-            if (rth.target == transform)
-                rth.SetTarget(rth.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
+            transformHandleInterfaceToggle.ClearTransformTarget();
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
