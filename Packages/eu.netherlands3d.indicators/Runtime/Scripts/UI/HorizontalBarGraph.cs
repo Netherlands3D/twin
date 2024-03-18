@@ -30,6 +30,12 @@ namespace Netherlands3D.Indicators.UI
         public Color DefaultYellow = new(0.8f, 0.8f, 0.0f);
         public Color DefaultRed = new(0.8f, 0.0f, 0.0f);
 
+        private string url = "";
+
+        private void Awake()
+        {
+            informationButton.gameObject.SetActive(false);
+        }
 
         public void SetLabel(string label)
         {
@@ -54,6 +60,22 @@ namespace Netherlands3D.Indicators.UI
                 var normalisedValue = Mathf.InverseLerp(minValue, maxValue, value);
                 SetFill(normalisedValue);
             }
+        }
+
+        public void SetInformationButtonURL(string url)
+        {
+            this.url = url;
+            if (string.IsNullOrEmpty(url))
+            {
+                informationButton.gameObject.SetActive(false);
+                return;
+            }
+            informationButton.gameObject.SetActive(true);
+        }
+
+        public void ClickInformationButton()
+        {
+            Application.OpenURL(url);
         }
 
         public void SetFill(float value)
