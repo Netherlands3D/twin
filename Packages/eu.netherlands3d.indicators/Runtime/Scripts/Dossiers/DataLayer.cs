@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Indicators.Dossiers.Indicators;
 
 namespace Netherlands3D.Indicators.Dossiers
 {

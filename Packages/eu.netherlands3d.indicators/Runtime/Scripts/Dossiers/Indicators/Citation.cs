@@ -1,6 +1,6 @@
 using System;
 
-namespace Netherlands3D.Indicators.Dossiers
+namespace Netherlands3D.Indicators.Dossiers.Indicators
 {
     [Serializable]
     public class Citation
