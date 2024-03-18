@@ -38,7 +38,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            GetComponentInParent<CartesianTiles.TileHandler>().RemoveLayer(layer);
+
+            if(Application.isPlaying && tileHandler && layer)
+                tileHandler.RemoveLayer(layer);
         }
     }
 }
