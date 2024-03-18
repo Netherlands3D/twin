@@ -1,3 +1,4 @@
+using RuntimeHandle;
 using UnityEngine;
 
 
@@ -11,8 +12,15 @@ namespace Netherlands3D.Twin
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle; 
 
+        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
+        private TransformAxes transformLocks;
+
         private void Awake() {
             buttonsPanel.gameObject.SetActive(false);
+
+            positionToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
+            rotationToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
+            scaleToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
         }
 
         public void ShowPanel(bool show)
@@ -22,7 +30,7 @@ namespace Netherlands3D.Twin
 
         public void SetLocks(TransformAxes transformLocks)
         {
-            Debug.Log("SetLocks", transformLocks.gameObject);
+            this.transformLocks = transformLocks;
 
             //Check if axis are locked
             positionToggle.SetInteractable(!transformLocks.PositionLocked);
@@ -31,10 +39,35 @@ namespace Netherlands3D.Twin
 
             //If current toggle is enabled but is locked, pick another one
             PickAvailableTransform();
+
+            //Apply gizmos to make sure we are not using locked axis
+            UpdateGizmoHandles();
+        }
+
+        public void UpdateGizmoHandles()
+        {
+            if(!transformLocks) return;
+
+            if (positionToggle.Toggle.isOn)
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.positionAxes);
+            else if (rotationToggle.Toggle.isOn)
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.rotationAxes);
+            else if (scaleToggle.Toggle.isOn)
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.scaleAxes);
+        }
+ 
+        public void ClearLocks()
+        {
+            transformLocks = null;
+
+            positionToggle.SetInteractable(true);
+            rotationToggle.SetInteractable(true);
+            scaleToggle.SetInteractable(true);
         }
 
         private void PickAvailableTransform()
         {
+            //If we are set to manipulate a tramsform property axis, pick another available that is allowed
             if (!positionToggle.IsInteractable && positionToggle.Toggle.isOn)
             {
                 if (rotationToggle.IsInteractable)
@@ -56,13 +89,6 @@ namespace Netherlands3D.Twin
                 else if (rotationToggle.IsInteractable)
                     rotationToggle.Toggle.isOn = true;
             }
-        }
-
-        public void ClearLocks()
-        {
-            positionToggle.SetInteractable(true);
-            rotationToggle.SetInteractable(true);
-            scaleToggle.SetInteractable(true);
         }
     }
 }

@@ -8,25 +8,28 @@ namespace Netherlands3D.Twin
         [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
         [SerializeField] private TransformHandleButtonsPanel handleButtonsPanel;
 
+        public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
+
         private void Awake() {
-            runtimeTransformHandle = GetComponent<RuntimeTransformHandle>();
+            RuntimeTransformHandle = GetComponent<RuntimeTransformHandle>();
+            handleButtonsPanel.TransformHandleInterfaceToggle = this;
         }
 
         public void SetTransformTarget(GameObject targetGameObject)
         {
             //Set the target of the transform handle
-            runtimeTransformHandle.SetTarget(targetGameObject);
+            RuntimeTransformHandle.SetTarget(targetGameObject);
 
             //Check if specific Transform axes locks are set
             if(targetGameObject.TryGetComponent(out TransformAxes transformLocks))
             {
                 handleButtonsPanel.SetLocks(transformLocks);
-                runtimeTransformHandle.SetAxis(transformLocks.positionAxes);
+                RuntimeTransformHandle.SetAxis(transformLocks.positionAxes);
             }
             else
             {
                 handleButtonsPanel.ClearLocks();
-                runtimeTransformHandle.SetAxis(HandleAxes.XYZ);
+                RuntimeTransformHandle.SetAxis(HandleAxes.XYZ);
             }
         }
 
