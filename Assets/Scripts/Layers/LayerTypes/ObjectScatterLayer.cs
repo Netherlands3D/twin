@@ -35,6 +35,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             this.mesh = mesh;
             this.material = material;
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
+            settings.Density = 1000; // per ha for the UI
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
@@ -59,7 +60,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void RecalculateScatterMatrices()
         {
-            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+            var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)

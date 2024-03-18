@@ -929,12 +929,12 @@ PrefabInstance:
     - target: {fileID: 2606725405746614021, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2606725405746614021, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
       propertyPath: m_MaxValue
-      value: 5
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 2606725405746614021, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
@@ -954,7 +954,7 @@ PrefabInstance:
     - target: {fileID: 4076728600593136711, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
       propertyPath: unitOfMeasurement
-      value: "per m\xB2"
+      value: per ha
       objectReference: {fileID: 0}
     - target: {fileID: 4711406036158068481, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
