@@ -63,8 +63,6 @@ namespace Netherlands3D.Twin
         {
             float cellSize = 1f / Mathf.Sqrt(density);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
-            print("generated grid. count: " + gridPoints.Length);
-            // polyBounds = polygon.Bounds;
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 
@@ -185,7 +183,6 @@ namespace Netherlands3D.Twin
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");
             //todo: cap resolution to max 4096 x 4096 and render the texture in batches if it is higher
         }
-
         
         /// <summary>
         /// Align the camera to the polygon bounds

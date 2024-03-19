@@ -119,7 +119,6 @@ namespace Netherlands3D.Twin.Layers
             }
 
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            print(bounds.center + "\t" + bounds.size);
             ScatterMap.Instance.GenerateScatterPoints(bounds, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
         }
 
@@ -129,7 +128,7 @@ namespace Netherlands3D.Twin.Layers
             var batchCount = (scatterPoints.Count / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var remainder = scatterPoints.Count % 1023;
 
-            print(scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
+            //print(scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
             matrixBatches = new Matrix4x4[batchCount][];
 
             var meshOriginOffset = 0; //todo mesh.bounds.extents.y;

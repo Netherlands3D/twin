@@ -541,7 +541,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Volledig gevuld
+  m_text: Beide
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -3031,7 +3031,7 @@ PrefabInstance:
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_text
-      value: RandBreedte
+      value: Locatie verspreide objecten
       objectReference: {fileID: 0}
     - target: {fileID: 4136261530444499954, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
