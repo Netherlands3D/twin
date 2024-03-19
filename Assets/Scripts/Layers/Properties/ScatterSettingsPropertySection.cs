@@ -1,15 +1,33 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.UI.Elements.Properties;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
     public class ScatterSettingsPropertySection : MonoBehaviour
     {
+        private ObjectScatterLayer layer;
+
+        public ObjectScatterLayer Layer
+        {
+            get => layer;
+            set
+            {
+                layer = value;
+                Settings = layer.Settings;
+            }
+        }
+
         private ScatterGenerationSettings settings;
+        [SerializeField] private Toggle completeToggle;
+        [SerializeField] private Toggle strokeToggle;
+        [SerializeField] private Toggle fillToggle;
+        [SerializeField] private Slider strokeWidthSlider;
         [SerializeField] private Slider densitySlider;
         [SerializeField] private Slider scatterSlider;
         [SerializeField] private Slider angleSlider;
@@ -21,6 +39,9 @@ namespace Netherlands3D.Twin
             get => settings;
             set
             {
+                // if (value != layer.Settings)
+                //     Debug.LogError("You are attempting to assign settings that are not the same as the settings of the associated layer", value); //todo: make this impossible?
+
                 settings = value;
                 densitySlider.SetValueWithoutNotify(settings.Density);
                 scatterSlider.SetValueWithoutNotify(settings.Scatter);
@@ -34,6 +55,10 @@ namespace Netherlands3D.Twin
 
         private void OnEnable()
         {
+            completeToggle.onValueChanged.AddListener(SetFillTypeToComplete);
+            strokeToggle.onValueChanged.AddListener(SetFillTypeToStroke);
+            fillToggle.onValueChanged.AddListener(SetFillTypeToFill);
+            strokeWidthSlider.onValueChanged.AddListener(HandleStrokeWidthChange);
             densitySlider.onValueChanged.AddListener(HandleDensityChange);
             scatterSlider.onValueChanged.AddListener(HandleScatterChange);
             angleSlider.onValueChanged.AddListener(HandleAngleChange);
@@ -45,6 +70,10 @@ namespace Netherlands3D.Twin
 
         private void OnDisable()
         {
+            completeToggle.onValueChanged.RemoveListener(SetFillTypeToComplete);
+            strokeToggle.onValueChanged.RemoveListener(SetFillTypeToStroke);
+            fillToggle.onValueChanged.RemoveListener(SetFillTypeToFill);
+            strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
             densitySlider.onValueChanged.RemoveListener(HandleDensityChange);
             scatterSlider.onValueChanged.RemoveListener(HandleScatterChange);
             angleSlider.onValueChanged.RemoveListener(HandleAngleChange);
@@ -52,6 +81,26 @@ namespace Netherlands3D.Twin
             heightRangeSlider.onMaxValueChanged.RemoveListener(HandleMaxHeightRangeChange);
             diameterRangeSlider.onMinValueChanged.RemoveListener(HandleMinDiameterRangeChange);
             diameterRangeSlider.onMinValueChanged.RemoveListener(HandleMaxDiameterRangeChange);
+        }
+
+        private void SetFillTypeToComplete(bool arg0)
+        {
+            settings.FillType = FillType.Complete;
+        }
+
+        private void SetFillTypeToStroke(bool arg0)
+        {
+            settings.FillType = FillType.Stroke;
+        }
+        
+        private void SetFillTypeToFill(bool arg0)
+        {
+            settings.FillType = FillType.Fill;
+        }
+
+        private void HandleStrokeWidthChange(float newValue)
+        {
+            settings.StrokeWidth = newValue;
         }
 
         private void HandleDensityChange(float newValue)
@@ -91,7 +140,7 @@ namespace Netherlands3D.Twin
             minScale.z = newValue;
             settings.MinScale = minScale;
         }
-        
+
         private void HandleMaxDiameterRangeChange(float newValue)
         {
             var maxScale = settings.MaxScale;

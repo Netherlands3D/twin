@@ -82,14 +82,14 @@ public class CompoundPolygon
     }
 
 
-    public static Vector2[] GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle)
+    public static Vector2[] GenerateGridPoints(Bounds bounds, float cellSize, float angle)
     {
-        return GenerateGridPoints(compoundPolygon, cellSize, angle, out _);
+        return GenerateGridPoints(bounds, cellSize, angle, out _);
     }
 
-    public static Vector2[] GenerateGridPoints(CompoundPolygon compoundPolygon, float cellSize, float angle, out Bounds expandedBounds)
+    public static Vector2[] GenerateGridPoints(Bounds bounds, float cellSize, float angle, out Bounds expandedBounds)
     {
-        var bounds = compoundPolygon.Bounds;
+        // var bounds = compoundPolygon.Bounds;
 
         // Increase the bounds size to ensure coverage after rotation
         float diagonalLength = bounds.size.magnitude;
@@ -204,7 +204,7 @@ public class CompoundPolygon
     {
         float cellSize = 1f / Mathf.Sqrt(density);
     
-        var points = GenerateGridPoints(polygon, cellSize, angle);
+        var points = GenerateGridPoints(polygon.Bounds, cellSize, angle);
         AddRandomOffset(points, cellSize, scatter);
         // return PrunePointsWithPolygon(scatterPoints, polygon);
         return points;

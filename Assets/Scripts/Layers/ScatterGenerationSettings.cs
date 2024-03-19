@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,7 +17,9 @@ namespace Netherlands3D.Twin
         [SerializeField] private float angle = 0f;
         [SerializeField] private Vector3 minScale = Vector3.one;
         [SerializeField] private Vector3 maxScale = Vector3.one;
-        
+        [SerializeField] private FillType fillType = FillType.Complete;
+        [SerializeField] private float strokeWidth = 1f;
+
         public UnityEvent SettingsChanged = new UnityEvent();
         
         public float Density
@@ -65,6 +68,25 @@ namespace Netherlands3D.Twin
             set
             {
                 maxScale = value;
+                SettingsChanged.Invoke();
+            }
+        }
+        
+        public FillType FillType
+        {
+            get => fillType;
+            set
+            {
+                fillType = value;
+                SettingsChanged.Invoke();
+            } 
+        } 
+        public float StrokeWidth
+        {
+            get => strokeWidth;
+            set
+            {
+                strokeWidth = value;
                 SettingsChanged.Invoke();
             }
         }

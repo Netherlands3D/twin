@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private float polygonExtrusionHeight;
         private Material polygonMeshMaterial;
+        public Material PolygonMeshMaterial => polygonMeshMaterial;
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         public UnityEvent polygonChanged = new();
@@ -77,7 +78,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             
-            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Polygons");
+            // polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Polygons");
             // PolygonVisualisation.transform.SetParent(transform);
             return polygonVisualisation;
         }

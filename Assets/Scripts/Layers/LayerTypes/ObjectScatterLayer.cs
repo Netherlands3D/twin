@@ -2,14 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
+    public enum FillType
+    {
+        Complete,
+        Fill,
+        Stroke,
+    }
+
     public class ObjectScatterLayer : ReferencedLayer, ILayerWithProperties
     {
         private Mesh mesh;
@@ -19,6 +27,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once
         private PolygonSelectionLayer polygonLayer => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
         private List<IPropertySection> propertySections = new();
+        private List<PolygonVisualisation> visualisations = new();
 
         public override bool IsActiveInScene
         {
@@ -58,10 +67,60 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
         }
 
+        private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
+        {
+            foreach (var visualisation in visualisations)
+            {
+                Destroy(visualisation.gameObject);
+            }
+
+            var strokeWidth = -settings.StrokeWidth; //invert so the stroke is always inset
+            if (settings.FillType == FillType.Complete)
+                strokeWidth = 0;
+
+            var polygons = PolygonUtility.CalculatePolygons(settings.FillType, basePolygon, strokeWidth);
+            visualisations = new List<PolygonVisualisation>(polygons.Count);
+            foreach (var polygon in polygons)
+            {
+                visualisations.Add(CreatePolygonMesh(polygon));
+            }
+
+            // RedrawBoundaries();
+            return polygons;
+        }
+
+        private PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon)
+        {
+            var contours = new List<List<Vector3>>(polygon.Paths.Count);
+            for (int i = 0; i < polygon.Paths.Count; i++)
+            {
+                contours.Add(polygon.Paths[i].ToVector3List());
+            }
+
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonMeshMaterial);
+            polygonVisualisation.DrawLine = true;
+
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
+            // PolygonVisualisation.transform.SetParent(transform);
+            return polygonVisualisation;
+        }
+
         private void RecalculateScatterMatrices()
         {
+            var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
+            if(polygons.Count == 0)
+                return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
+            
+            var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
+            for (var index = 1; index < polygons.Count; index++)
+            {
+                var polygon = polygons[index];
+                bounds.Encapsulate(polygon.Bounds);
+            }
+
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            ScatterMap.Instance.GenerateScatterPoints(polygonLayer.Polygon, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+            print(bounds.center + "\t" + bounds.size);
+            ScatterMap.Instance.GenerateScatterPoints(bounds, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)
@@ -83,8 +142,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 for (int j = 0; j < arraySize; j++)
                 {
                     var index = 1023 * i + j;
-                    scale.x = Mathf.Lerp(settings.MinScale.x,settings.MaxScale.x,sampledScales[index].x);
-                    scale.y = Mathf.Lerp(settings.MinScale.y,settings.MaxScale.y,sampledScales[index].y);
+                    scale.x = Mathf.Lerp(settings.MinScale.x, settings.MaxScale.x, sampledScales[index].x);
+                    scale.y = Mathf.Lerp(settings.MinScale.y, settings.MaxScale.y, sampledScales[index].y);
                     scale.z = scale.x; // also x since we are taking a diameter
                     tempMatrix.SetTRS(scatterPoints[index], Quaternion.identity, scale);
                     matrixBatches[i][j] = tempMatrix;
@@ -120,6 +179,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public List<IPropertySection> GetPropertySections()
         {
             return propertySections;
+        }
+
+        public override void OnSelect()
+        {
+            base.OnSelect();
+            foreach (var visualisation in visualisations)
+            {
+                visualisation.DrawLine = true;
+            }
+        }
+
+        public override void OnDeselect()
+        {
+            base.OnDeselect();
+            foreach (var visualisation in visualisations)
+            {
+                visualisation.DrawLine = false;
+            }
         }
     }
 }

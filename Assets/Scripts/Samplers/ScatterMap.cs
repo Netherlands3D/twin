@@ -51,20 +51,20 @@ namespace Netherlands3D.Twin
             RenderTexture.active = null;
         }
 
-        public void GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        public void GenerateScatterPoints(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             if (onPointsGeneratedCallback == null)
                 return;
 
-            StartCoroutine(GenerateScatterPointsCoroutine(polygon, density, scatter, angle, onPointsGeneratedCallback));
+            StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onPointsGeneratedCallback));
         }
 
-        private IEnumerator GenerateScatterPointsCoroutine(CompoundPolygon polygon, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
-            var gridPoints = CompoundPolygon.GenerateGridPoints(polygon, cellSize, angle, out var gridBounds);
-
-            polyBounds = polygon.Bounds;
+            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
+            print("generated grid. count: " + gridPoints.Length);
+            // polyBounds = polygon.Bounds;
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 
@@ -72,8 +72,8 @@ namespace Netherlands3D.Twin
             CreateRenderTexture(gridBounds, cellSize, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
             // RenderDepthCamera();
-            yield return new WaitForEndOfFrame(); //wait for rendering to complete
-            RenderDepthCamera(); //don't know why it is needed to wait twice, but not doing so causes unexpected behaviour
+            yield return null; //wait for next frame to begin rendering with the new settings
+            RenderDepthCamera(); //don't know exactly why it is needed to wait twice, but not doing so causes unexpected behaviour
             yield return new WaitForEndOfFrame(); //wait for rendering to complete
 
             //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
@@ -176,16 +176,17 @@ namespace Netherlands3D.Twin
         /// <param name="gridSampleSize">how many samples per square world unit should be taken in the texture</param>
         private void CreateRenderTexture(Bounds gridBounds, float gridCellSize, float gridSampleSize)
         {
-            var width = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.x /*+ 2 * gridCellSize)*/)); //add 2*maxRandomOffset to include the max scatter range on both sides
-            var height = Mathf.CeilToInt(gridSampleSize * (gridBounds.size.z /*+ 2 * gridCellSize*/));
+            var width = Mathf.CeilToInt(gridSampleSize * gridBounds.size.x);
+            var height = Mathf.CeilToInt(gridSampleSize * gridBounds.size.z);
+
             var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.None);
             depthCamera.targetTexture = renderTexture;
-
             if (depthCamera.targetTexture.width > 4096 || depthCamera.targetTexture.height > 4096)
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");
             //todo: cap resolution to max 4096 x 4096 and render the texture in batches if it is higher
         }
 
+        
         /// <summary>
         /// Align the camera to the polygon bounds
         /// </summary>
