@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -24,7 +22,7 @@ namespace Netherlands3D.Twin.Layers
         private Material material;
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
-        private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once
+        private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         private PolygonSelectionLayer polygonLayer => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
         private List<IPropertySection> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
@@ -84,8 +82,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisations.Add(CreatePolygonMesh(polygon));
             }
-
-            // RedrawBoundaries();
             return polygons;
         }
 
@@ -101,7 +97,6 @@ namespace Netherlands3D.Twin.Layers
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
-            // PolygonVisualisation.transform.SetParent(transform);
             return polygonVisualisation;
         }
 
@@ -124,11 +119,9 @@ namespace Netherlands3D.Twin.Layers
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)
         {
-            // var scatterPoints = CompoundPolygon.GenerateScatterPoints(polygonLayer.Polygon, settings.Density, settings.Scatter, settings.Angle);
             var batchCount = (scatterPoints.Count / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var remainder = scatterPoints.Count % 1023;
 
-            //print(scatterPoints.Count + " points in " + (batchCount - 1) + " batches of 1023 and a remainder of " + remainder);
             matrixBatches = new Matrix4x4[batchCount][];
 
             var meshOriginOffset = 0; //todo mesh.bounds.extents.y;

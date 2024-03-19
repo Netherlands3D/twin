@@ -7,22 +7,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.Properties
 {
     public class ScatterSettingsPropertySection : MonoBehaviour
     {
-        private ObjectScatterLayer layer;
-
-        public ObjectScatterLayer Layer
-        {
-            get => layer;
-            set
-            {
-                layer = value;
-                Settings = layer.Settings;
-            }
-        }
-
         private ScatterGenerationSettings settings;
         [SerializeField] private Toggle completeToggle;
         [SerializeField] private Toggle strokeToggle;
@@ -39,9 +27,6 @@ namespace Netherlands3D.Twin
             get => settings;
             set
             {
-                // if (value != layer.Settings)
-                //     Debug.LogError("You are attempting to assign settings that are not the same as the settings of the associated layer", value); //todo: make this impossible?
-
                 settings = value;
                 densitySlider.SetValueWithoutNotify(settings.Density);
                 scatterSlider.SetValueWithoutNotify(settings.Scatter);

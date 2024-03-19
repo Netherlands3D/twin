@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
@@ -15,9 +14,15 @@ namespace Netherlands3D.Twin
 
         private Camera depthCamera;
         private Texture2D samplerTexture;
-
         public float GridSampleSize = 1f; //how many pixels per square meter should be used in the texture for sampling?
+        
         public ScatterSettingsPropertySection propertyPanelPrefab; //todo: find a better way to reference this.
+
+#if UNITY_EDITOR //for debug purposes
+        private Bounds polyBounds;
+        private Bounds gridBounds;
+        private float gridCellSize;
+#endif
 
         private void Awake()
         {
@@ -28,7 +33,7 @@ namespace Netherlands3D.Twin
                 Instance = this;
         }
 
-        void Start()
+        private void Start()
         {
             //We will only render on demand using camera.Render()
             depthCamera.enabled = false;
@@ -39,7 +44,10 @@ namespace Netherlands3D.Twin
             Destroy(samplerTexture);
         }
 
-        public void RenderDepthCamera()
+        /// <summary>
+        /// Renders the depth camera and creates the texture to sample from.
+        /// </summary>
+        private void RenderDepthCamera()
         {
             //Read pixels from the depth texture
             depthCamera.Render();
@@ -51,6 +59,14 @@ namespace Netherlands3D.Twin
             RenderTexture.active = null;
         }
 
+        /// <summary>
+        /// Starts a coroutine to generate scatterpoints and sample randomness at the scattered points.
+        /// </summary>
+        /// <param name="polygonBounds">Bounds of the polygon to generate points in (in world space)</param>
+        /// <param name="density">Density of the points in the grid</param>
+        /// <param name="scatter">Normalized amount of scatter to apply to the points (0=no scatter, 1=max scatter)</param>
+        /// <param name="angle">Angle to rotate the grid of points by</param>
+        /// <param name="onPointsGeneratedCallback">The generation takes a few frames because we need to wait for the camera to render. This callback will be invoked once the generation is done.</param>
         public void GenerateScatterPoints(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             if (onPointsGeneratedCallback == null)
@@ -58,18 +74,19 @@ namespace Netherlands3D.Twin
 
             StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onPointsGeneratedCallback));
         }
-
         private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
+            
+#if UNITY_EDITOR 
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
-
+#endif
             yield return new WaitForEndOfFrame(); //wait for new polygon mesh to be created in case this function was coupled to the same event as the polygon mesh generation and this would be called before the mesh creation.
-            CreateRenderTexture(gridBounds, cellSize, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
+            CreateRenderTexture(gridBounds, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
-            // RenderDepthCamera();
+
             yield return null; //wait for next frame to begin rendering with the new settings
             RenderDepthCamera(); //don't know exactly why it is needed to wait twice, but not doing so causes unexpected behaviour
             yield return new WaitForEndOfFrame(); //wait for rendering to complete
@@ -79,10 +96,7 @@ namespace Netherlands3D.Twin
             onPointsGeneratedCallback?.Invoke(offsetPoints.Item1, offsetPoints.Item2);
         }
 
-        private Bounds polyBounds;
-        private Bounds gridBounds;
-        private float gridCellSize;
-
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
@@ -94,16 +108,17 @@ namespace Netherlands3D.Twin
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(gridBounds.center, new Vector3(width, 0, height));
         }
+#endif
 
         /// <summary>
         /// This function will add a random offset to the grid points, and sample the new point's height and whether or not it falls inside or outside of the polygon.
         /// </summary>
-        /// <param name="worldPoints">List of world points to process</param>
+        /// <param name="worldPoints">Array of world points to process</param>
         /// <param name="gridBounds">Bounds of the world points</param>
         /// <param name="gridSampleSize">How many samples the texture has per square world unit</param>
         /// <param name="randomness">How much scatter to apply in a Range from 0 (no scatter) to 1 (max scatter)</param>
         /// <param name="gridCellSize">size of a single grid cell</param>
-        /// <returns>List of offset points with the sampled height</returns>
+        /// <returns>List of offset points with the sampled height and the raw random sample at the offset point</returns>
         private (List<Vector3>, List<Vector2>) AddRandomOffsetAndSampleHeightAndSampleScale(Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize)
         {
             var points = new List<Vector3>(worldPoints.Length);
@@ -117,7 +132,7 @@ namespace Netherlands3D.Twin
             var textureWidth = samplerTexture.width;
             var textureHeight = samplerTexture.height;
             var offsetPoint = new Vector3(); //define vector3 here to avoid calling constructor in the (potentially large) loop
-            var sampledScale = new Vector2();
+            var sampledRandomness = new Vector2();
 
             for (int i = 0; i < worldPoints.Length; i++)
             {
@@ -156,11 +171,11 @@ namespace Netherlands3D.Twin
                 offsetPoint.y = newColorSample.b;
                 offsetPoint.z = scatteredPointY;
 
-                sampledScale.x = newColorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
-                sampledScale.y = newColorSample.g;
+                sampledRandomness.x = newColorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
+                sampledRandomness.y = newColorSample.g;
 
                 points.Add(offsetPoint);
-                sampledScales.Add(sampledScale);
+                sampledScales.Add(sampledRandomness);
             }
 
             return (points, sampledScales);
@@ -169,10 +184,9 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Create a render texture for the camera to render to, using the to polygon size + max random offset on all sides.
         /// </summary>
-        /// <param name="polygon">the polygon to fit to</param>
-        /// <param name="maxRandomOffset">the maximum extra space around an edge of the polygon bounds to include, for example when scattering points with a randomness that might need data outside of the polygon bounds</param>
+        /// <param name="Bounds">the bounds of the grid to fit to</param>
         /// <param name="gridSampleSize">how many samples per square world unit should be taken in the texture</param>
-        private void CreateRenderTexture(Bounds gridBounds, float gridCellSize, float gridSampleSize)
+        private void CreateRenderTexture(Bounds gridBounds, float gridSampleSize)
         {
             var width = Mathf.CeilToInt(gridSampleSize * gridBounds.size.x);
             var height = Mathf.CeilToInt(gridSampleSize * gridBounds.size.z);
@@ -183,7 +197,7 @@ namespace Netherlands3D.Twin
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");
             //todo: cap resolution to max 4096 x 4096 and render the texture in batches if it is higher
         }
-        
+
         /// <summary>
         /// Align the camera to the polygon bounds
         /// </summary>
