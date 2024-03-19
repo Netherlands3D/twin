@@ -50,20 +50,25 @@ namespace Netherlands3D.Twin
         
         public void OnPointerClick(PointerEventData eventData)
         {
+            if(ReferencedProxy.UI == null) return;
+
             ReferencedProxy.UI.Select(true);
         }
         
         public override void OnSelect()
         {
-            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
-            rth.SetTarget(gameObject);
+            var transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            
+            if(transformHandle)
+                transformHandle.SetTarget(gameObject);
         }
 
         public override void OnDeselect()
         {
-            var rth = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);
-            if (rth.target == transform)
-                rth.SetTarget(rth.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
+            var transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);
+            
+            if (transformHandle && transformHandle.target == transform)
+                transformHandle.SetTarget(transformHandle.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
