@@ -1998,8 +1998,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position:
     xField: {fileID: 2606627055169622581}
-    yField: {fileID: 3491345822493050677}
-    zField: {fileID: 3114825054205818457}
+    yField: {fileID: 3114825054205818457}
+    zField: {fileID: 3491345822493050677}
   rotation:
     xField: {fileID: 2083419468590742919}
     yField: {fileID: 9106842790572418953}
