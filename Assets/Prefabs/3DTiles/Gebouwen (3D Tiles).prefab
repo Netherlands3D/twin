@@ -247,7 +247,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionality: {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
+  functionality: {fileID: 0}
+  functionalities:
+  - {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []

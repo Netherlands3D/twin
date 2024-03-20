@@ -248,6 +248,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   functionality: {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
+  functionalities:
+  - {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
