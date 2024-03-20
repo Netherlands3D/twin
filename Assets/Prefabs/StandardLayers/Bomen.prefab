@@ -52,7 +52,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: 'https://assets.netherlands3d.eu/publicassets/SolitaryTrees_2023/trees_{x}_{y}.1.bin '
+    path: https://assets.netherlands3d.eu/publicassets/SolitaryTrees_2023/trees_{x}_{y}.1.bin
     pathQuery: 
     maximumDistance: 3000
     maximumDistanceSquared: 0
