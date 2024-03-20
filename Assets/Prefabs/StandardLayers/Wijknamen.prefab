@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7451913900040229269}
   - component: {fileID: 1488714661089064865}
   - component: {fileID: 1737505678239128256}
+  - component: {fileID: 4147506660242282027}
   m_Layer: 0
   m_Name: Wijknamen
   m_TagString: Untagged
@@ -93,3 +94,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4147506660242282027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2907779477277976049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1737505678239128256}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

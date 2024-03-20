@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4101759199928899428}
   - component: {fileID: 3995669530772315581}
   - component: {fileID: 4913964984048323131}
+  - component: {fileID: 7179839010937765445}
   m_Layer: 0
   m_Name: Straatnamen
   m_TagString: Untagged
@@ -93,3 +94,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7179839010937765445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915834300300047598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4913964984048323131}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

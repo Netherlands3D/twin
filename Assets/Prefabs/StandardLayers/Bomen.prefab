@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1634243888683479019}
   - component: {fileID: 6757356103537766160}
   - component: {fileID: 3732835547605356908}
+  - component: {fileID: -6617633297429980398}
   m_Layer: 10
   m_Name: Bomen
   m_TagString: Untagged
@@ -51,8 +52,8 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://stflevolandunity.blob.core.windows.net/3dflevoland/Trees_2019/Trees{x}_{y}.1.bin
-    pathQuery: ?sv=2021-12-02&ss=b&srt=sco&sp=r&se=2024-04-14T19:42:33Z&st=2023-04-17T11:42:33Z&spr=https&sig=NAbl2WIj7Uh2A51gaYUfzPeF%2Fj%2F53Zw6P%2F3HwsAWUTo%3D
+    path: 'https://assets.netherlands3d.eu/publicassets/SolitaryTrees_2023/trees_{x}_{y}.1.bin '
+    pathQuery: 
     maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
@@ -67,9 +68,9 @@ MonoBehaviour:
   removeFromID: 
   DefaultMaterialList:
   - {fileID: 2100000, guid: d46c5122997e7644088116a42496be75, type: 2}
-  createMeshcollider: 0
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
+  createMeshcollider: 0
 --- !u!114 &3732835547605356908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,3 +83,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6617633297429980398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712503248906199988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3732835547605356908}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
