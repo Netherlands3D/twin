@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin
         [SerializeField] Tool toolThatEnablesColliders;
 
         private BinaryMeshLayer binaryMeshLayer;
-
+        [SerializeField] private float waitForAnimationTime = 0.85f;
         private void Awake() {
             binaryMeshLayer = GetComponent<BinaryMeshLayer>();
 
@@ -25,15 +25,25 @@ namespace Netherlands3D.Twin
 
         private void EnableColliders() {
             binaryMeshLayer.CreateMeshColliders = true;
+            StartCoroutine(AddColliders());
+        }
 
-            //Add a mesh colliders for all renderers that already have spawned
-            var meshFilters = GetComponentsInChildren<MeshFilter>();
-            foreach (var meshFilter in meshFilters) {
-                if(meshFilter.gameObject.GetComponent<MeshCollider>() != null) continue;
+        private IEnumerator AddColliders() {
+            yield return new WaitForSeconds(waitForAnimationTime);
+            //Add a mesh colliders for all renderers that will spawn in the future
+            var renderers = GetComponentsInChildren<Renderer>();
+            foreach (var renderer in renderers) {
+                if(!renderer) continue; //May be removed this frame
 
-                var meshCollider = meshFilter.gameObject.AddComponent<MeshCollider>();
-                meshCollider.sharedMesh = meshFilter.sharedMesh;
+                if(renderer.gameObject.GetComponent<MeshCollider>() != null) continue;
+
+                var meshCollider = renderer.gameObject.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = renderer.GetComponent<MeshFilter>().sharedMesh;
+
+                yield return null;
             }
+
+            yield return null;
         }
 
         private void DisableColliders() {
