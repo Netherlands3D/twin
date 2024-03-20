@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Layers
 
             matrixBatches = new Matrix4x4[batchCount][];
 
-            var meshOriginOffset = 0; //todo mesh.bounds.extents.y;
+            // var meshOriginOffset = mesh.bounds.extents.y;
             var tempMatrix = new Matrix4x4();
             var scale = new Vector3();
             for (int i = 0; i < batchCount; i++)
@@ -145,15 +145,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void Update()
         {
-            if (Keyboard.current.upArrowKey.wasPressedThisFrame)
-            {
-                settings.Scatter = Mathf.Clamp01(settings.Scatter + 0.1f);
-            }
-            else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
-            {
-                settings.Scatter = Mathf.Clamp01(settings.Scatter - 0.1f);
-            }
-
             RenderBatches();
         }
 

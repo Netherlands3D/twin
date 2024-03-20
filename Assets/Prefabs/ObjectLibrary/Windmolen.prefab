@@ -173,6 +173,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 869381972100837130, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 90951f9283fe44edaa2d4317ec9aa344, type: 2}
+    - target: {fileID: 1579045074245179163, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 90951f9283fe44edaa2d4317ec9aa344, type: 2}
+    - target: {fileID: 6204976667950233699, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 90951f9283fe44edaa2d4317ec9aa344, type: 2}
     - target: {fileID: 6327966342072211590, guid: 93247cb61c38b3843ab17c379a4f0b97,
         type: 3}
       propertyPath: axisHeight
@@ -193,6 +208,11 @@ PrefabInstance:
       propertyPath: defaultDiameter
       value: 54.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7377788389082313739, guid: 93247cb61c38b3843ab17c379a4f0b97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 90951f9283fe44edaa2d4317ec9aa344, type: 2}
     - target: {fileID: 8601746673670394497, guid: 93247cb61c38b3843ab17c379a4f0b97,
         type: 3}
       propertyPath: m_LocalPosition.x

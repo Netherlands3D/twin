@@ -15,6 +15,8 @@ namespace Netherlands3D.Twin
     {
         private Button button;
         [SerializeField] private GameObject prefab;
+        [SerializeField] private Vector3 initialRotation = Vector3.zero;
+        [SerializeField] private Vector3 initialScale = Vector3.one;
         // [SerializeField] private UnityEvent<GameObject> createdLibraryObject;
 
         private void Awake()
@@ -55,7 +57,8 @@ namespace Netherlands3D.Twin
             }
 
 
-            var newObject = Instantiate(prefab, spawnPoint, Quaternion.identity);
+            var newObject = Instantiate(prefab, spawnPoint, Quaternion.Euler(initialRotation));
+            newObject.transform.localScale = initialScale;
             newObject.name = prefab.name;
             var layerComponent = newObject.GetComponent<HierarchicalObjectLayer>();
             if (!layerComponent)
