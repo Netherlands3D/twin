@@ -132,7 +132,6 @@ namespace Netherlands3D.Twin.Layers
         {
             sampleTexture = newTexture;
             ResampleTexture();
-            print(sampleTexture.pixels.Length +"\t" + sampleTexture.width + "\t" +sampleTexture.height);
         }
 
         private Bounds RecalculatePolygonsAndGetBounds()
