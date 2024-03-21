@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
+using RuntimeHandle;
 using TMPro;
 using UnityEngine;
 
@@ -13,9 +14,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         [Serializable]
         private class SetOfXYZ
         {
-            public TMP_InputField xField;
-            public TMP_InputField yField;
-            public TMP_InputField zField;
+            public FormField xField;
+            public FormField yField;
+            public FormField zField;
         }
 
         [SerializeField] private SetOfXYZ position = new();
@@ -33,10 +34,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                 UpdatePositionFields();
                 UpdateRotationFields();
                 UpdateScalingFields();
+
+                SetTransformLocks();
             }
         }
         
-        private void Awake()
+        private void Start()
         {
             position.xField.onEndEdit.AddListener(OnPositionChanged);
             position.yField.onEndEdit.AddListener(OnPositionChanged);
@@ -60,11 +63,39 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
+        private void SetTransformLocks()
+        {
+            if (layer.TryGetComponent(out TransformAxes transformLocks))
+            {
+                position.xField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
+                position.yField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
+                position.zField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Z);
+                rotation.xField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.X);
+                rotation.yField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Y);
+                rotation.zField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Z);
+                scale.xField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.X);
+                scale.yField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Y);
+                scale.zField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Z);
+            }
+            else
+            {
+                position.xField.Interactable = true;
+                position.yField.Interactable = true;
+                position.zField.Interactable = true;
+                rotation.xField.Interactable = true;
+                rotation.yField.Interactable = true;
+                rotation.zField.Interactable = true;
+                scale.xField.Interactable = true;
+                scale.yField.Interactable = true;
+                scale.zField.Interactable = true;
+            }
+        }
+
         private void OnPositionChanged(string axisValue)
         {
-            double.TryParse(position.xField.text, out var x);
-            double.TryParse(position.yField.text, out var y);
-            double.TryParse(position.zField.text, out var z);
+            double.TryParse(position.xField.Text, out var x);
+            double.TryParse(position.yField.Text, out var y);
+            double.TryParse(position.zField.Text, out var z);
             
             var rdCoordinate = new Coordinate(CoordinateSystem.RD, x, y, z);
 
@@ -75,18 +106,18 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private void OnRotationChanged(string axisValue)
         {
-            float.TryParse(rotation.xField.text, out var x);
-            float.TryParse(rotation.yField.text, out var y);
-            float.TryParse(rotation.zField.text, out var z);
+            float.TryParse(rotation.xField.Text, out var x);
+            float.TryParse(rotation.yField.Text, out var y);
+            float.TryParse(rotation.zField.Text, out var z);
 
             layer.transform.eulerAngles = new Vector3(x, y, z);
         }
         
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.text.Replace(percentageCharacter,""), out var x);
-            float.TryParse(scale.yField.text.Replace(percentageCharacter,""), out var y);
-            float.TryParse(scale.zField.text.Replace(percentageCharacter,""), out var z);
+            float.TryParse(scale.xField.Text.Replace(percentageCharacter,""), out var x);
+            float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
+            float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
 
             UpdateScalingFields();
 
