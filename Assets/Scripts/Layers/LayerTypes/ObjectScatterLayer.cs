@@ -18,14 +18,17 @@ namespace Netherlands3D.Twin.Layers
 
     public class ObjectScatterLayer : ReferencedLayer, ILayerWithProperties
     {
+        private GameObject originalObject;
         private Mesh mesh;
         private Material material;
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        private PolygonSelectionLayer polygonLayer => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+        private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
         private List<IPropertySection> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
+
+        private bool completedInitialization;
 
         public override bool IsActiveInScene
         {
@@ -37,10 +40,13 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(PolygonSelectionLayer polygon, Mesh mesh, Material material)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon)
         {
-            this.mesh = mesh;
-            this.material = material;
+            this.originalObject = originalObject;
+            this.mesh = CombineHierarchicalMeshes(originalObject.transform);
+            this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
+            polygonLayer = polygon;
+
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.Density = 1000; // per ha for the UI
             settings.MinScale = new Vector3(3, 3, 3);
@@ -57,10 +63,12 @@ namespace Netherlands3D.Twin.Layers
             ReferencedProxy.SetParent(polygon);
             RecalculateScatterMatrices();
             polygon.polygonChanged.AddListener(RecalculateScatterMatrices);
+            completedInitialization = true;
         }
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
             settings.SettingsChanged.RemoveListener(RecalculateScatterMatrices);
             polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
         }
@@ -82,6 +90,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisations.Add(CreatePolygonMesh(polygon));
             }
+
             return polygons;
         }
 
@@ -103,9 +112,9 @@ namespace Netherlands3D.Twin.Layers
         private void RecalculateScatterMatrices()
         {
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
-            if(polygons.Count == 0)
+            if (polygons.Count == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
-            
+
             var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
             for (var index = 1; index < polygons.Count; index++)
             {
@@ -180,6 +189,93 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisation.DrawLine = false;
             }
+        }
+
+        private static Mesh CombineHierarchicalMeshes(Transform transform)
+        {
+            var originalPosition = transform.position;
+            var originalRotation = transform.rotation;
+            var originalScale = transform.localScale;
+
+            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
+            transform.rotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+
+            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                print(meshFilters[i].mesh.vertices.Length);
+
+                combine[i].mesh = meshFilters[i].mesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.CombineMeshes(combine);
+            mesh.RecalculateBounds();
+
+            print(mesh.vertices.Length);
+            print(mesh.bounds.center);
+            print(mesh.bounds.extents);
+
+            transform.position = originalPosition; //reset position
+            transform.rotation = originalRotation; //reset rotation
+            transform.localScale = originalScale; //reset scale
+            return mesh;
+        }
+
+
+        public override void OnProxyTransformParentChanged()
+        {
+            base.OnProxyTransformParentChanged();
+            if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
+                return;
+            
+            var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+            if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
+            {
+                // ConvertToHierarchicalObject(); 
+                StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame());
+                return;
+            }
+
+            if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
+            {
+                polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
+                polygonLayer = newPolygonParent;
+                RecalculateScatterMatrices();
+                polygonLayer.polygonChanged.AddListener(RecalculateScatterMatrices);
+            }
+
+            //if both checks fail, this function is called because of a reorder in the same polygon parent, in this case no action is required.
+        }
+
+        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame()
+        {
+            print("parent now: " +ReferencedProxy.ParentLayer?.name);
+            print("sibling index now: " +ReferencedProxy.transform.GetSiblingIndex());
+            yield return new WaitForEndOfFrame();
+            print("parent eof: " +ReferencedProxy.ParentLayer?.name);
+            print("sibling index eof: " +ReferencedProxy.transform.GetSiblingIndex());
+            // ConvertToHierarchicalObject();
+            
+            var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
+            layer.gameObject.SetActive(true); //activate to initialize the added component.
+            // layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
+            yield return new WaitForEndOfFrame(); //todo: remove the need for this
+            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
+            DestroyLayer();
+        }
+        
+        private HierarchicalObjectLayer ConvertToHierarchicalObject()
+        {
+            var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
+            layer.gameObject.SetActive(true); //activate to initialize the added component.
+            // layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
+            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
+            DestroyLayer();
+            return layer;
         }
     }
 }

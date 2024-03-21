@@ -6,7 +6,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using RuntimeHandle;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -24,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
+                ReferencedProxy.UI?.MarkLayerUIAsDirty();
             }
         }
 
@@ -55,7 +54,7 @@ namespace Netherlands3D.Twin.Layers
         public override void OnProxyTransformParentChanged()
         {
             if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
-                ConvertToScatterLayer();
+                ConvertToScatterLayer(this);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -81,51 +80,16 @@ namespace Netherlands3D.Twin.Layers
             return propertySections;
         }
 
-        public void ConvertToScatterLayer()
+        public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
         {
             print("converting to scatter layer");
-            var scatterLayer = new GameObject(name + "_Scatter");
+            var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
-
-            var mesh = CombineHierarchicalMeshes();
-            var material = GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
-            layerComponent.Initialize(ReferencedProxy.ParentLayer as PolygonSelectionLayer, mesh, material);
-
-            Destroy(gameObject);
-        }
-
-        private Mesh CombineHierarchicalMeshes()
-        {
-            var originalPosition = transform.position;
-            var originalRotation = transform.rotation;
-            var originalScale = transform.localScale;
-
-            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
-            transform.rotation = quaternion.identity;
-            transform.localScale = Vector3.one;
-
-            var meshFilters = GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-            for (int i = 0; i < meshFilters.Length; i++)
-            {
-                print(meshFilters[i].mesh.vertices.Length);
-
-                combine[i].mesh = meshFilters[i].mesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.CombineMeshes(combine);
-            mesh.RecalculateBounds();
             
-            print(mesh.vertices.Length);
-            print(mesh.bounds.center);
-            print(mesh.bounds.extents);
-            
-            transform.position = originalPosition; //reset position
-            transform.rotation = originalRotation; //reset rotation
-            transform.localScale = originalScale; //reset scale
-            return mesh;
+            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer);
+
+            Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
+            return layerComponent;
         }
     }
 }
