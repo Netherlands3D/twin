@@ -95,7 +95,9 @@ namespace Netherlands3D.Twin.Layers
             visualisations = new List<PolygonVisualisation>(polygons.Count);
             foreach (var polygon in polygons)
             {
-                visualisations.Add(CreatePolygonMesh(polygon));
+                var visualisation = CreatePolygonMesh(polygon);
+                visualisations.Add(visualisation);
+                // visualisation.gameObject.SetActive(false); //only enable when rendering
             }
 
             return polygons;
@@ -123,12 +125,14 @@ namespace Netherlands3D.Twin.Layers
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            ScatterMap.Instance.GenerateScatterPoints(polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, SetSampleTexture, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+            ScatterMap.Instance.GenerateScatterPoints(visualisations, polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, UpdateSampleTexture);
         }
 
-        private void SetSampleTexture(SampleTexture newTexture)
+        private void UpdateSampleTexture(SampleTexture newTexture)
         {
             sampleTexture = newTexture;
+            ResampleTexture();
+            print(sampleTexture.pixels.Length +"\t" + sampleTexture.width + "\t" +sampleTexture.height);
         }
 
         private Bounds RecalculatePolygonsAndGetBounds()

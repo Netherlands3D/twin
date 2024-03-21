@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
@@ -84,33 +86,39 @@ namespace Netherlands3D.Twin
         /// <param name="scatter">Normalized amount of scatter to apply to the points (0=no scatter, 1=max scatter)</param>
         /// <param name="angle">Angle to rotate the grid of points by</param>
         /// <param name="onPointsGeneratedCallback">The generation takes a few frames because we need to wait for the camera to render. This callback will be invoked once the generation is done.</param>
-        public void GenerateScatterPoints(Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        public void GenerateScatterPoints(List<PolygonVisualisation> visualisations, Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated)
         {
-            if (onPointsGeneratedCallback == null)
+            if (onSamplerTextureCreated == null)
                 return;
 
             // If no coroutine is running, start immediately
             if (scatterCoroutine == null)
             {
-                scatterCoroutine = StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onSamplerTextureCreated, onPointsGeneratedCallback));
+                scatterCoroutine = StartCoroutine(GenerateScatterPointsCoroutine(visualisations, polygonBounds, density, scatter, angle, onSamplerTextureCreated));
             }
             else
             {
                 // If a coroutine is already running, add to the queue
-                coroutineQueue.Enqueue(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onSamplerTextureCreated, onPointsGeneratedCallback));
+                coroutineQueue.Enqueue(GenerateScatterPointsCoroutine(visualisations, polygonBounds, density, scatter, angle, onSamplerTextureCreated));
             }
         }
 
-        private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        private IEnumerator GenerateScatterPointsCoroutine(List<PolygonVisualisation> visualisations, Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
-            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
+            CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds); // we need the gridBounds out variable. 
 
 #if UNITY_EDITOR
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 #endif
             yield return new WaitForEndOfFrame(); //wait for new polygon mesh to be created in case this function was coupled to the same event as the polygon mesh generation and this would be called before the mesh creation.
+
+            foreach (var visualisation in visualisations)
+            {
+                visualisation.gameObject.SetActive(true); //enable all visualisations and disable them again when done, to avoid visualisations showing up in other textures
+            }
+            
             CreateRenderTexture(gridBounds, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
             AlignCameraToPolygon(depthCamera, gridBounds);
 
@@ -120,7 +128,12 @@ namespace Netherlands3D.Twin
 
             var texture = new SampleTexture(samplerTexture);
             Destroy(samplerTexture);
+            
             onSamplerTextureCreated.Invoke(texture);
+            foreach (var visualisation in visualisations)
+            {
+                visualisation.gameObject.SetActive(false); //enable all visualisations and disable them again when done, to avoid visualisations showing up in other textures
+            }
 
             // Coroutine finished, check if there's anything in the queue
             scatterCoroutine = null;
@@ -130,7 +143,7 @@ namespace Netherlands3D.Twin
                 scatterCoroutine = StartCoroutine(coroutineQueue.Dequeue());
             }
         }
-
+        
         public void SampleTexture(SampleTexture sampleTexture, Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
