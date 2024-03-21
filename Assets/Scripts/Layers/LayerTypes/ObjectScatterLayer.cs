@@ -86,18 +86,18 @@ namespace Netherlands3D.Twin.Layers
             {
                 Destroy(visualisation.gameObject);
             }
+            visualisations.Clear();
 
             var strokeWidth = -settings.StrokeWidth; //invert so the stroke is always inset
             if (settings.FillType == FillType.Complete)
                 strokeWidth = 0;
 
             var polygons = PolygonUtility.CalculatePolygons(settings.FillType, basePolygon, strokeWidth);
-            visualisations = new List<PolygonVisualisation>(polygons.Count);
             foreach (var polygon in polygons)
             {
                 var visualisation = CreatePolygonMesh(polygon);
                 visualisations.Add(visualisation);
-                // visualisation.gameObject.SetActive(false); //only enable when rendering
+                visualisation.gameObject.SetActive(false); //only enable when rendering
             }
 
             return polygons;
