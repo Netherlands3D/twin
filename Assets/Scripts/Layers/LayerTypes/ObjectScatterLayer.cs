@@ -168,7 +168,6 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-
         public override void OnSelect()
         {
             base.OnSelect();
@@ -212,6 +211,10 @@ namespace Netherlands3D.Twin.Layers
             transform.position = originalPosition; //reset position
             transform.rotation = originalRotation; //reset rotation
             transform.localScale = originalScale; //reset scale
+            
+            if(mesh.vertices.Length == 0)
+                Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
+            
             return mesh;
         }
 
