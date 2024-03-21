@@ -1,9 +1,9 @@
-using Netherlands3D.Windmills;
+using Netherlands3D.ObjectLibrary;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySection
+    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private WindmillPropertySection propertySectionPrefab;
 

@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -20,7 +17,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private List<Sprite> layerTypeSprites;
 
         [SerializeField] private RectTransform layerUIContainer;
-        [SerializeField] private ToggleGroup propertyToggles;
         
         public RectTransform LayerUIContainer => layerUIContainer;
 
@@ -145,20 +141,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeselectAllLayers()
         {
-            foreach (var selectedLayer in SelectedLayers)
+            // Make a copy of the SelectedLayers list because the Deselect function removes
+            // the selected layer from this list; and the enumeration fails without a copy
+            foreach (var selectedLayer in SelectedLayers.ToList())
             {
-                selectedLayer.SetHighlight(InteractionState.Default);
-                selectedLayer.Layer.OnDeselect();
+                selectedLayer.Deselect();
             }
-
-            SelectedLayers.Clear();
         }
 
         public FolderLayer CreateFolderLayer()
         {
             var newLayer = new GameObject("Folder");
             var folder = newLayer.AddComponent<FolderLayer>();
-            // AddMissingLayersToInspector();
             return folder;
         }
 
@@ -167,17 +161,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             switch (layer)
             {
                 case ReferencedProxyLayer _:
-                    // print("tile layer");
                     var reference = ((ReferencedProxyLayer)layer).Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
-                    // print("folder layer");
                     return layerTypeSprites[2];
+                case ObjectScatterLayer _:
+                    return layerTypeSprites[4];
                 case DatasetLayer _:
-                    // print("dataset layer");
                     return layerTypeSprites[5];
                 case PolygonSelectionLayer _:
-                    // print("polygon selection layer");
                     return layerTypeSprites[6];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
@@ -190,17 +182,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             switch (layer)
             {
                 case CartesianTileLayer _:
-                    // print("Tile layer");
                     return layerTypeSprites[1];
                 case Tile3DLayer2 _:
-                    // print("Tile layer");
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayer _:
-                    // print("object layer");
                     return layerTypeSprites[3];
-                case ObjectScatterLayer _:
-                    // print("object scatter layer");
-                    return layerTypeSprites[4];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];

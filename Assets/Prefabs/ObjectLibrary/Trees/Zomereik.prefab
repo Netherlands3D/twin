@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1571365761081755410}
   - component: {fileID: 1844725639758130159}
   - component: {fileID: 5259523044241033190}
+  - component: {fileID: -4685342658120317428}
   m_Layer: 0
   m_Name: Zomereik
   m_TagString: Untagged
@@ -108,3 +109,17 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &-4685342658120317428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048121435226336912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
+    type: 3}

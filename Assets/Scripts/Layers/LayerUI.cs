@@ -408,8 +408,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void Deselect()
+        public void Deselect(bool alreadyRemovedFromSelectedLayers = false)
         {
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            
             layerManager.SelectedLayers.Remove(this);
             Layer.OnDeselect();
             SetHighlight(InteractionState.Default);
@@ -665,6 +667,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
 
             properties.Show(layerWithProperties);
+
+            if (!IsSelected)
+            {
+                // To prevent confusion with the user, also immediately select this layer.
+                Select(true);
+            }
         }
     }
 }

@@ -5,6 +5,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 {
     public interface ILayerWithProperties
     {
-        public List<IPropertySection> GetPropertySections();
+        public List<IPropertySectionInstantiator> GetPropertySections();
     }
 }

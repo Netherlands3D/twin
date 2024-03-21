@@ -1,10 +1,5 @@
-using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -39,17 +34,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public LayerNL3DBase[] ChildrenLayers { get; private set; }
 
-        public virtual void OnSelect()
-        {
-        }
+        public virtual void OnSelect(){ }
 
-        public virtual void OnDeselect()
-        {
-        }
+        public virtual void OnDeselect(){ }
 
         protected virtual void OnDestroy()
         {
-            UI?.DestroyUI();
+            if(!Application.isPlaying) return;
+
+            if(UI) UI.DestroyUI();
+            
             LayerData.RemoveLayer(this);
         }
 

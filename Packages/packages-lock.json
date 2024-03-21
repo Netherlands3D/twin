@@ -329,7 +329,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.2.0",
+      "version": "2.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -386,7 +386,7 @@
       "hash": "2a05795436497dec646aecb7c47d62fcfe9e03d7"
     },
     "eu.netherlands3d.transform-handles": {
-      "version": "1.0.1",
+      "version": "1.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -419,7 +419,7 @@
       "url": "https://package.openupm.com"
     },
     "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/",
+      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.2.0",
       "depth": 0,
       "source": "git",
       "dependencies": {

@@ -19,7 +19,7 @@ MonoBehaviour:
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
-  onActivate:
+  onOpen:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 205a5bc34432740a38a860c6a7a17733, type: 2}
@@ -34,7 +34,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  onDeactivate:
+  onClose:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 205a5bc34432740a38a860c6a7a17733, type: 2}
@@ -52,7 +52,6 @@ MonoBehaviour:
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
     type: 3}
   functionalityPrefabs: []
