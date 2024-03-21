@@ -205,8 +205,6 @@ namespace Netherlands3D.Twin.Layers
             CombineInstance[] combine = new CombineInstance[meshFilters.Length];
             for (int i = 0; i < meshFilters.Length; i++)
             {
-                print(meshFilters[i].mesh.vertices.Length);
-
                 combine[i].mesh = meshFilters[i].mesh;
                 combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             }
@@ -215,31 +213,26 @@ namespace Netherlands3D.Twin.Layers
             mesh.CombineMeshes(combine);
             mesh.RecalculateBounds();
 
-            print(mesh.vertices.Length);
-            print(mesh.bounds.center);
-            print(mesh.bounds.extents);
-
             transform.position = originalPosition; //reset position
             transform.rotation = originalRotation; //reset rotation
             transform.localScale = originalScale; //reset scale
             return mesh;
         }
-
-
-        public override void OnProxyTransformParentChanged()
+        
+        public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
-            base.OnProxyTransformParentChanged();
+            base.OnSiblingIndexOrParentChanged(newSiblingIndex);
+            
             if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
                 return;
-            
+
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
             if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
-                // ConvertToHierarchicalObject(); 
                 StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame());
                 return;
             }
-
+            
             if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
                 polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
@@ -248,34 +241,16 @@ namespace Netherlands3D.Twin.Layers
                 polygonLayer.polygonChanged.AddListener(RecalculateScatterMatrices);
             }
 
-            //if both checks fail, this function is called because of a reorder in the same polygon parent, in this case no action is required.
         }
 
         private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame()
         {
-            print("parent now: " +ReferencedProxy.ParentLayer?.name);
-            print("sibling index now: " +ReferencedProxy.transform.GetSiblingIndex());
-            yield return new WaitForEndOfFrame();
-            print("parent eof: " +ReferencedProxy.ParentLayer?.name);
-            print("sibling index eof: " +ReferencedProxy.transform.GetSiblingIndex());
-            // ConvertToHierarchicalObject();
-            
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
             layer.gameObject.SetActive(true); //activate to initialize the added component.
-            // layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
-            yield return new WaitForEndOfFrame(); //todo: remove the need for this
+            yield return new WaitForEndOfFrame(); //wait for layer component to initialize
+            layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             DestroyLayer();
-        }
-        
-        private HierarchicalObjectLayer ConvertToHierarchicalObject()
-        {
-            var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
-            layer.gameObject.SetActive(true); //activate to initialize the added component.
-            // layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
-            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
-            DestroyLayer();
-            return layer;
         }
     }
 }

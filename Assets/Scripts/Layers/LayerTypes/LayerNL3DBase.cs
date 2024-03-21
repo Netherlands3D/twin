@@ -87,11 +87,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
         }
 
+        protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
+        {
+        }
+
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
         {
             if (newParentLayer == this)
                 return;
 
+            var parentChanged = ParentLayer != newParentLayer;
+            var oldSiblingIndex = transform.GetSiblingIndex();
             var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
 
             if (newParentLayer == null)
@@ -105,6 +111,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
 
             OnLayerActiveInHierarchyChanged(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
+
+            if (siblingIndex == -1)
+                siblingIndex = newParent.childCount -1;
+            if (parentChanged || siblingIndex != oldSiblingIndex)
+            {
+                OnSiblingIndexOrParentChanged(siblingIndex);
+            }
         }
 
         private void RecalculateCurrentSubTreeDepthValuesRecursively()
