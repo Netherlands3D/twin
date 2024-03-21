@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     public enum ShapeType
     {

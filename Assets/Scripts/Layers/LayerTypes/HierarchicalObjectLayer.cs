@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
-using RuntimeHandle;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler, ILayerWithProperties
     {
@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin
             set
             {
                 gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
+                ReferencedProxy.UI?.MarkLayerUIAsDirty();
             }
         }
 
@@ -74,6 +74,24 @@ namespace Netherlands3D.Twin
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
+        }
+
+        public override void OnProxyTransformParentChanged()
+        {
+            if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
+                ConvertToScatterLayer(this);
+        }
+
+        public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
+        {
+            print("converting to scatter layer");
+            var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
+            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
+    
+            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer);
+
+            Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
+            return layerComponent;
         }
     }
 }

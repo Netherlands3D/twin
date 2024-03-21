@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using SLIDDES.UI;
 using UnityEngine;
@@ -165,8 +166,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
-                case ObjectScatterLayer _:
-                    return layerTypeSprites[4];
                 case DatasetLayer _:
                     return layerTypeSprites[5];
                 case PolygonSelectionLayer _:
@@ -187,6 +186,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayer _:
                     return layerTypeSprites[3];
+                case ObjectScatterLayer _:
+                    return layerTypeSprites[4];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];

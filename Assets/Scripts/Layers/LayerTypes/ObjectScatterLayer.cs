@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
         public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
-        private List<IPropertySection> propertySections = new();
+        private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
         private bool completedInitialization;
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
-            propertySections = new List<IPropertySection>() { settings };
+            propertySections = new List<IPropertySectionInstantiator>() { settings };
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon));
         }
@@ -168,10 +168,6 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public List<IPropertySection> GetPropertySections()
-        {
-            return propertySections;
-        }
 
         public override void OnSelect()
         {
@@ -218,11 +214,11 @@ namespace Netherlands3D.Twin.Layers
             transform.localScale = originalScale; //reset scale
             return mesh;
         }
-        
+
         public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
-            
+
             if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
                 return;
 
@@ -232,7 +228,7 @@ namespace Netherlands3D.Twin.Layers
                 StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame());
                 return;
             }
-            
+
             if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
                 polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
@@ -240,7 +236,6 @@ namespace Netherlands3D.Twin.Layers
                 RecalculateScatterMatrices();
                 polygonLayer.polygonChanged.AddListener(RecalculateScatterMatrices);
             }
-
         }
 
         private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame()
@@ -251,6 +246,11 @@ namespace Netherlands3D.Twin.Layers
             layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             DestroyLayer();
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return propertySections;
         }
     }
 }

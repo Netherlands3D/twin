@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(fileName = "TreeGenerationSettings", menuName = "ScriptableObjects/TreeGenerationSettings", order = 1)]
     [Serializable]
-    public class ScatterGenerationSettings : ScriptableObject, IPropertySection
+    public class ScatterGenerationSettings : ScriptableObject, IPropertySectionInstantiator
     {
         [SerializeField] private float density = 1f;
         [SerializeField] private float scatter = 0f;
