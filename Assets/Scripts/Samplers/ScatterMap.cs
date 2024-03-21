@@ -7,6 +7,20 @@ using UnityEngine.Experimental.Rendering;
 
 namespace Netherlands3D.Twin
 {
+    public struct SampleTexture
+    {
+        public Color[] pixels;
+        public int width;
+        public int height;
+
+        public SampleTexture(Texture2D texture)
+        {
+            pixels = texture.GetPixels();
+            width = texture.width;
+            height = texture.height;
+        }
+    }
+
     [RequireComponent(typeof(Camera))]
     public class ScatterMap : MonoBehaviour
     {
@@ -15,6 +29,9 @@ namespace Netherlands3D.Twin
         private Camera depthCamera;
         private Texture2D samplerTexture;
         public float GridSampleSize = 1f; //how many pixels per square meter should be used in the texture for sampling?
+
+        private Coroutine scatterCoroutine;
+        private Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>(); //queue to ensure the camera only processes one request at a time
 
         public ScatterSettingsPropertySection propertyPanelPrefab; //todo: find a better way to reference this.
 
@@ -67,15 +84,24 @@ namespace Netherlands3D.Twin
         /// <param name="scatter">Normalized amount of scatter to apply to the points (0=no scatter, 1=max scatter)</param>
         /// <param name="angle">Angle to rotate the grid of points by</param>
         /// <param name="onPointsGeneratedCallback">The generation takes a few frames because we need to wait for the camera to render. This callback will be invoked once the generation is done.</param>
-        public void GenerateScatterPoints(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        public void GenerateScatterPoints(Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             if (onPointsGeneratedCallback == null)
                 return;
 
-            StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onPointsGeneratedCallback));
+            // If no coroutine is running, start immediately
+            if (scatterCoroutine == null)
+            {
+                scatterCoroutine = StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onSamplerTextureCreated, onPointsGeneratedCallback));
+            }
+            else
+            {
+                // If a coroutine is already running, add to the queue
+                coroutineQueue.Enqueue(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onSamplerTextureCreated, onPointsGeneratedCallback));
+            }
         }
 
-        private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
@@ -92,13 +118,23 @@ namespace Netherlands3D.Twin
             RenderDepthCamera(); //don't know exactly why it is needed to wait twice, but not doing so causes unexpected behaviour
             yield return new WaitForEndOfFrame(); //wait for rendering to complete
 
-            SampleTexture(gridPoints, gridBounds, scatter, cellSize, onPointsGeneratedCallback);
+            var texture = new SampleTexture(samplerTexture);
+            Destroy(samplerTexture);
+            onSamplerTextureCreated.Invoke(texture);
+
+            // Coroutine finished, check if there's anything in the queue
+            scatterCoroutine = null;
+            if (coroutineQueue.Count > 0)
+            {
+                // Start the next coroutine in the queue
+                scatterCoroutine = StartCoroutine(coroutineQueue.Dequeue());
+            }
         }
 
-        public void SampleTexture(Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        public void SampleTexture(SampleTexture sampleTexture, Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
-            var offsetPoints = AddRandomOffsetAndSampleHeightAndSampleScale(gridPoints, gridBounds, GridSampleSize, scatter, cellSize);
+            var offsetPoints = AddRandomOffsetAndSampleHeightAndSampleScale(sampleTexture, gridPoints, gridBounds, GridSampleSize, scatter, cellSize);
             onPointsGeneratedCallback?.Invoke(offsetPoints.Item1, offsetPoints.Item2);
         }
 
@@ -125,7 +161,7 @@ namespace Netherlands3D.Twin
         /// <param name="randomness">How much scatter to apply in a Range from 0 (no scatter) to 1 (max scatter)</param>
         /// <param name="gridCellSize">size of a single grid cell</param>
         /// <returns>List of offset points with the sampled height and the raw random sample at the offset point</returns>
-        private (List<Vector3>, List<Vector2>) AddRandomOffsetAndSampleHeightAndSampleScale(Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize)
+        private (List<Vector3>, List<Vector2>) AddRandomOffsetAndSampleHeightAndSampleScale(SampleTexture texture, Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize)
         {
             var points = new List<Vector3>(worldPoints.Length);
             var sampledScales = new List<Vector2>(worldPoints.Length);
@@ -134,9 +170,9 @@ namespace Netherlands3D.Twin
             var boundsExtents2D = new Vector2(gridBounds.extents.x, gridBounds.extents.z);
             var pointSamplePositionOffset = -boundsCenter2D + boundsExtents2D;
 
-            var pixels = samplerTexture.GetPixels();
-            var textureWidth = samplerTexture.width;
-            var textureHeight = samplerTexture.height;
+            var pixels = texture.pixels;
+            var textureWidth = texture.width;
+            var textureHeight = texture.height;
             var offsetPoint = new Vector3(); //define vector3 here to avoid calling constructor in the (potentially large) loop
             var sampledRandomness = new Vector2();
 

@@ -27,7 +27,9 @@ namespace Netherlands3D.Twin.Layers
         private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
+
         private Bounds polygonBounds = new();
+        private SampleTexture sampleTexture;
 
         private bool completedInitialization;
 
@@ -53,7 +55,7 @@ namespace Netherlands3D.Twin.Layers
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
-            settings.ScatterShapeChanged.AddListener(RecalculateScatterMatrices);
+            settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState));
@@ -63,8 +65,8 @@ namespace Netherlands3D.Twin.Layers
         {
             yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
-            RecalculateScatterMatrices();
-            polygon.polygonChanged.AddListener(RecalculateScatterMatrices);
+            RecalculatePolygonsAndSamplerTexture();
+            polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
             completedInitialization = true;
@@ -74,8 +76,8 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnDestroy();
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
-            settings.ScatterShapeChanged.RemoveListener(RecalculateScatterMatrices);
-            polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
+            settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+            polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
@@ -114,14 +116,19 @@ namespace Netherlands3D.Twin.Layers
             return polygonVisualisation;
         }
 
-        private void RecalculateScatterMatrices()
+        private void RecalculatePolygonsAndSamplerTexture()
         {
             RecalculatePolygonsAndGetBounds();
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            ScatterMap.Instance.GenerateScatterPoints(polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+            ScatterMap.Instance.GenerateScatterPoints(polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, SetSampleTexture, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+        }
+
+        private void SetSampleTexture(SampleTexture newTexture)
+        {
+            sampleTexture = newTexture;
         }
 
         private Bounds RecalculatePolygonsAndGetBounds()
@@ -146,7 +153,7 @@ namespace Netherlands3D.Twin.Layers
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
-            ScatterMap.Instance.SampleTexture(gridPoints, gridBounds, settings.Scatter, cellSize, ProcessScatterPoints);
+            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, settings.Scatter, cellSize, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)
@@ -259,10 +266,10 @@ namespace Netherlands3D.Twin.Layers
 
             if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
-                polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
+                polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonLayer = newPolygonParent;
-                RecalculateScatterMatrices();
-                polygonLayer.polygonChanged.AddListener(RecalculateScatterMatrices);
+                RecalculatePolygonsAndSamplerTexture();
+                polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             }
         }
 
