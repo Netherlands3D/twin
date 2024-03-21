@@ -57,18 +57,18 @@ namespace Netherlands3D.Twin
 
         public override void OnSelect()
         {
-            var transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
             
-            if(transformHandle)
-                transformHandle.SetTarget(gameObject);
+            if(transformInterfaceToggle)
+                transformInterfaceToggle.SetTransformTarget(gameObject);
         }
 
         public override void OnDeselect()
         {
-            var transformHandle = FindAnyObjectByType<RuntimeTransformHandle>(FindObjectsInactive.Include);
+            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
             
-            if (transformHandle && transformHandle.target == transform)
-                transformHandle.SetTarget(transformHandle.gameObject); //todo: update RuntimeTransformHandles Package to accept null 
+            if (transformInterfaceToggle)
+                transformInterfaceToggle.ClearTransformTarget();
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
