@@ -27,6 +27,7 @@ namespace Netherlands3D.Twin.Layers
         private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
+        private Bounds polygonBounds = new();
 
         private bool completedInitialization;
 
@@ -51,7 +52,8 @@ namespace Netherlands3D.Twin.Layers
             settings.Density = 1000; // per ha for the UI
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
-            settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
+            settings.ScatterSettingsChanged.AddListener(ResampleTexture);
+            settings.ScatterShapeChanged.AddListener(RecalculateScatterMatrices);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState));
@@ -71,7 +73,8 @@ namespace Netherlands3D.Twin.Layers
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            settings.SettingsChanged.RemoveListener(RecalculateScatterMatrices);
+            settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
+            settings.ScatterShapeChanged.RemoveListener(RecalculateScatterMatrices);
             polygonLayer.polygonChanged.RemoveListener(RecalculateScatterMatrices);
         }
 
@@ -113,9 +116,19 @@ namespace Netherlands3D.Twin.Layers
 
         private void RecalculateScatterMatrices()
         {
+            RecalculatePolygonsAndGetBounds();
+            if (polygonBounds.size.sqrMagnitude == 0)
+                return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
+
+            var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            ScatterMap.Instance.GenerateScatterPoints(polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+        }
+
+        private Bounds RecalculatePolygonsAndGetBounds()
+        {
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
             if (polygons.Count == 0)
-                return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
+                return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
             var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
             for (var index = 1; index < polygons.Count; index++)
@@ -124,8 +137,16 @@ namespace Netherlands3D.Twin.Layers
                 bounds.Encapsulate(polygon.Bounds);
             }
 
+            polygonBounds = bounds;
+            return bounds;
+        }
+
+        private void ResampleTexture()
+        {
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            ScatterMap.Instance.GenerateScatterPoints(bounds, densityPerSquareUnit, settings.Scatter, settings.Angle, ProcessScatterPoints); //todo: when settings change but polygon doesn't don't re-render the scatter camera
+            float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
+            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
+            ScatterMap.Instance.SampleTexture(gridPoints, gridBounds, settings.Scatter, cellSize, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)

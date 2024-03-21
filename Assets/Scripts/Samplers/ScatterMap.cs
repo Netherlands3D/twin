@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
         private Camera depthCamera;
         private Texture2D samplerTexture;
         public float GridSampleSize = 1f; //how many pixels per square meter should be used in the texture for sampling?
-        
+
         public ScatterSettingsPropertySection propertyPanelPrefab; //todo: find a better way to reference this.
 
 #if UNITY_EDITOR //for debug purposes
@@ -74,12 +74,13 @@ namespace Netherlands3D.Twin
 
             StartCoroutine(GenerateScatterPointsCoroutine(polygonBounds, density, scatter, angle, onPointsGeneratedCallback));
         }
+
         private IEnumerator GenerateScatterPointsCoroutine(Bounds polygonBounds, float density, float scatter, float angle, System.Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds);
-            
-#if UNITY_EDITOR 
+
+#if UNITY_EDITOR
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 #endif
@@ -91,6 +92,11 @@ namespace Netherlands3D.Twin
             RenderDepthCamera(); //don't know exactly why it is needed to wait twice, but not doing so causes unexpected behaviour
             yield return new WaitForEndOfFrame(); //wait for rendering to complete
 
+            SampleTexture(gridPoints, gridBounds, scatter, cellSize, onPointsGeneratedCallback);
+        }
+
+        public void SampleTexture(Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+        {
             //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
             var offsetPoints = AddRandomOffsetAndSampleHeightAndSampleScale(gridPoints, gridBounds, GridSampleSize, scatter, cellSize);
             onPointsGeneratedCallback?.Invoke(offsetPoints.Item1, offsetPoints.Item2);

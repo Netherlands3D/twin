@@ -20,7 +20,8 @@ namespace Netherlands3D.Twin
         [SerializeField] private FillType fillType = FillType.Complete;
         [SerializeField] private float strokeWidth = 1f;
 
-        public UnityEvent SettingsChanged = new UnityEvent();
+        public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
+        public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
         
         public float Density
         {
@@ -28,7 +29,7 @@ namespace Netherlands3D.Twin
             set
             {
                 density = value;
-                SettingsChanged.Invoke();
+                ScatterSettingsChanged.Invoke();
             }
         }
 
@@ -38,7 +39,7 @@ namespace Netherlands3D.Twin
             set
             {
                 scatter = value;
-                SettingsChanged.Invoke();
+                ScatterSettingsChanged.Invoke();
             }
         }
 
@@ -48,7 +49,7 @@ namespace Netherlands3D.Twin
             set
             {
                 angle = value;
-                SettingsChanged.Invoke();
+                ScatterSettingsChanged.Invoke();
             }
         }
         
@@ -58,7 +59,7 @@ namespace Netherlands3D.Twin
             set
             {
                 minScale = value;
-                SettingsChanged.Invoke();
+                ScatterSettingsChanged.Invoke();
             }
         }
         
@@ -68,7 +69,7 @@ namespace Netherlands3D.Twin
             set
             {
                 maxScale = value;
-                SettingsChanged.Invoke();
+                ScatterSettingsChanged.Invoke();
             }
         }
         
@@ -78,7 +79,7 @@ namespace Netherlands3D.Twin
             set
             {
                 fillType = value;
-                SettingsChanged.Invoke();
+                ScatterShapeChanged.Invoke();
             } 
         } 
         public float StrokeWidth
@@ -87,7 +88,7 @@ namespace Netherlands3D.Twin
             set
             {
                 strokeWidth = value;
-                SettingsChanged.Invoke();
+                ScatterShapeChanged.Invoke();
             }
         }
         
