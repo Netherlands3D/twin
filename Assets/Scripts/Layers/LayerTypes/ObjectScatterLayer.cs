@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -54,15 +54,17 @@ namespace Netherlands3D.Twin.Layers
             settings.SettingsChanged.AddListener(RecalculateScatterMatrices);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon));
+            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState));
         }
 
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon)
+        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState)
         {
             yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
             RecalculateScatterMatrices();
             polygon.polygonChanged.AddListener(RecalculateScatterMatrices);
+            ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
+
             completedInitialization = true;
         }
 
@@ -211,10 +213,10 @@ namespace Netherlands3D.Twin.Layers
             transform.position = originalPosition; //reset position
             transform.rotation = originalRotation; //reset rotation
             transform.localScale = originalScale; //reset scale
-            
-            if(mesh.vertices.Length == 0)
+
+            if (mesh.vertices.Length == 0)
                 Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
-            
+
             return mesh;
         }
 
@@ -228,7 +230,9 @@ namespace Netherlands3D.Twin.Layers
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
             if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
-                StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame());
+                var initialActiveState = IsActiveInScene;
+                gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
+                StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState));
                 return;
             }
 
@@ -241,13 +245,13 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame()
+        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)
         {
+            originalObject.gameObject.SetActive(true); //activate to initialize the added component.
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
-            layer.gameObject.SetActive(true); //activate to initialize the added component.
             yield return new WaitForEndOfFrame(); //wait for layer component to initialize
-            layer.gameObject.SetActive(IsActiveInScene); //set to same state as current layer
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
+            layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             DestroyLayer();
         }
 

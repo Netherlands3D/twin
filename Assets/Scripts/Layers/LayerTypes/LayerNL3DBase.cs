@@ -20,6 +20,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     child.OnLayerActiveInHierarchyChanged(child.ActiveInHierarchy);
                 }
+
+                UI?.UpdateEnabledToggle(value);
             }
         }
 
