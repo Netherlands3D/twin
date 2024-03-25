@@ -124,8 +124,9 @@ namespace Netherlands3D.Twin.Layers
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
-            var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
-            ScatterMap.Instance.GenerateScatterPoints(visualisations, polygonBounds, densityPerSquareUnit, settings.Scatter, settings.Angle, UpdateSampleTexture);
+            var densityPerSquareUnit = settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            var normalizedScatter = settings.Scatter / 100f;
+            ScatterMap.Instance.GenerateScatterPoints(visualisations, polygonBounds, densityPerSquareUnit, normalizedScatter, settings.Angle, UpdateSampleTexture);
         }
 
         private void UpdateSampleTexture(SampleTexture newTexture)
@@ -153,10 +154,12 @@ namespace Netherlands3D.Twin.Layers
 
         private void ResampleTexture()
         {
+            print("ScatterMap:"+ settings.Scatter);
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
-            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, settings.Scatter, cellSize, ProcessScatterPoints);
+            var normalizedScatter = settings.Scatter / 100f;
+            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, normalizedScatter, cellSize, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)

@@ -28,13 +28,21 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 settings = value;
-                densitySlider.SetValueWithoutNotify(settings.Density);
-                scatterSlider.SetValueWithoutNotify(settings.Scatter);
-                angleSlider.SetValueWithoutNotify(settings.Angle);
-                heightRangeSlider.SetMinValueWithoutNotify(settings.MinScale.y);
-                heightRangeSlider.SetMaxValueWithoutNotify(settings.MaxScale.y);
-                diameterRangeSlider.SetMinValueWithoutNotify(settings.MinScale.x); //x and z are the same for diameter
-                diameterRangeSlider.maxSliderValue = settings.MaxScale.x; //Only the last one should be set with regular slider.value= settings.value, to invoke the SettingsChanged event only once.
+                if (settings.FillType == FillType.Complete)
+                    completeToggle.isOn = true;
+                else if (settings.FillType == FillType.Stroke)
+                    strokeToggle.isOn = true;
+                else
+                    fillToggle.isOn = true;
+
+                strokeWidthSlider.value = settings.StrokeWidth;
+                densitySlider.value = settings.Density;
+                scatterSlider.value = settings.Scatter; 
+                angleSlider.value = settings.Angle;
+                heightRangeSlider.minSliderValue = settings.MinScale.y;
+                heightRangeSlider.maxSliderValue = settings.MaxScale.y;
+                diameterRangeSlider.minSliderValue = settings.MinScale.x; //x and z are the same for diameter
+                diameterRangeSlider.maxSliderValue = settings.MaxScale.x;
             }
         }
 
@@ -77,7 +85,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             settings.FillType = FillType.Stroke;
         }
-        
+
         private void SetFillTypeToFill(bool arg0)
         {
             settings.FillType = FillType.Fill;
@@ -95,7 +103,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleScatterChange(float newValue)
         {
-            settings.Scatter = newValue / 100f; // user sets a percentage 
+            settings.Scatter = newValue;
         }
 
         private void HandleAngleChange(float newValue)
@@ -119,7 +127,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleMinDiameterRangeChange(float newValue)
         {
-            print(settings);
             var minScale = settings.MinScale;
             minScale.x = newValue;
             minScale.z = newValue;

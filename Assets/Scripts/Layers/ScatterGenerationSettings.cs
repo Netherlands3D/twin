@@ -28,6 +28,9 @@ namespace Netherlands3D.Twin
             get { return density; }
             set
             {
+                if(density == value)
+                    return;
+                
                 density = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -38,6 +41,9 @@ namespace Netherlands3D.Twin
             get { return scatter; }
             set
             {
+                if(scatter == value)
+                    return;
+                
                 scatter = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -48,6 +54,9 @@ namespace Netherlands3D.Twin
             get { return angle; }
             set
             {
+                if(angle == value)
+                    return;
+                
                 angle = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -58,6 +67,9 @@ namespace Netherlands3D.Twin
             get { return minScale; }
             set
             {
+                if(minScale == value)
+                    return;
+                
                 minScale = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -68,6 +80,9 @@ namespace Netherlands3D.Twin
             get { return maxScale; }
             set
             {
+                if(maxScale == value)
+                    return;
+                
                 maxScale = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -78,6 +93,9 @@ namespace Netherlands3D.Twin
             get => fillType;
             set
             {
+                if(fillType == value)
+                    return;
+                
                 fillType = value;
                 ScatterShapeChanged.Invoke();
             } 
@@ -87,6 +105,9 @@ namespace Netherlands3D.Twin
             get => strokeWidth;
             set
             {
+                if(strokeWidth == value)
+                    return;
+                
                 strokeWidth = value;
                 ScatterShapeChanged.Invoke();
             }
