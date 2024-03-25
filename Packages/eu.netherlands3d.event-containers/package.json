@@ -1,5 +1,5 @@
 {
-  "name": "eu.netherlands3d.eventcontainers",
+  "name": "eu.netherlands3d.event-containers",
   "version": "1.0.0",
   "displayName": "Netherlands3D - Event Containers",
   "description": "Simple data payload Event Containers",
@@ -8,7 +8,9 @@
   "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
   "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
   "keywords": [
-    "digital-twin"
+    "digital-twin",
+    "events",
+    "containers"
   ],
   "author": {
     "name": "Netherlands3D",
