@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
         [SerializeField] private bool readOnly;
         [SerializeField] private TMP_Text valueField;
         [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private string formatString = "N2";
         [SerializeField] private string unitOfMeasurement;
 
         private void Awake()
@@ -42,7 +43,7 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
 
         private void OnValueChanged(float value)
         {
-            var valueText = value.ToString("N2", CultureInfo.InvariantCulture) + unitOfMeasurement;
+            var valueText = value.ToString(formatString, CultureInfo.InvariantCulture) + unitOfMeasurement;
             valueField.text = valueText;
             inputField.SetTextWithoutNotify(valueText);
         }

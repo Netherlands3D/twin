@@ -21,10 +21,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             axisHeightSlider.onValueChanged.AddListener(HandleAxisHeightChange);
             rotorDiameterSlider.onValueChanged.AddListener(HandleRotorDiameterChange);
+        }
+        
+        private void OnDisable()
+        {
+            axisHeightSlider.onValueChanged.RemoveListener(HandleAxisHeightChange);
+            rotorDiameterSlider.onValueChanged.RemoveListener(HandleRotorDiameterChange);
         }
 
         private void HandleAxisHeightChange(float newValue)

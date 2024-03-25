@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     public enum ShapeType
     {
@@ -20,8 +21,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private float polygonExtrusionHeight;
         private Material polygonMeshMaterial;
+        public Material PolygonMeshMaterial => polygonMeshMaterial;
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
+        public UnityEvent polygonChanged = new();
 
         public void Initialize(List<Vector3> solidPolygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
@@ -66,6 +69,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 PolygonVisualisation.UpdateVisualisation(solidPolygon);
             else
                 PolygonVisualisation = CreatePolygonMesh(solidPolygon, polygonExtrusionHeight, polygonMeshMaterial);
+            
+            polygonChanged.Invoke();
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
@@ -73,6 +78,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
+            
+            // polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Polygons");
             // PolygonVisualisation.transform.SetParent(transform);
             return polygonVisualisation;
         }
