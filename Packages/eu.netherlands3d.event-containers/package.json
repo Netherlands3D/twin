@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.event-containers",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "displayName": "Netherlands3D - Event Containers",
   "description": "Simple data payload Event Containers",
   "unity": "2022.2",
