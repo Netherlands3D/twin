@@ -292,7 +292,7 @@ PrefabInstance:
     - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: m_Name
-      value: PolygonSelection
+      value: PolygonSelection_Polygon
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}

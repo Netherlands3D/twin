@@ -130,9 +130,9 @@ MonoBehaviour:
   polygonExtrusionHeight: 10
   polygonMeshMaterial: {fileID: 2100000, guid: 44d459479e0340446b1215b3f6901764, type: 2}
   polygonInput: {fileID: 3477808925150663380}
-  polygonCreatedEvent: {fileID: 11400000, guid: 777e7bc0e0d3e4c4496e3278d9b50a7c,
+  polygonCreatedEvent: {fileID: 11400000, guid: 77f9110b380db7e4085386da1f665dd3,
     type: 2}
-  polygonEditedEvent: {fileID: 11400000, guid: 6040433f915cd4f0eaae4862785c42f7, type: 2}
+  polygonEditedEvent: {fileID: 11400000, guid: 11bfe03ea53b4dd4a882ef7d345d340f, type: 2}
 --- !u!1001 &7627789677212842901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -145,6 +145,31 @@ PrefabInstance:
         type: 3}
       propertyPath: mode
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: maxPoints
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: snapToStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: minPointsToCloseLoop
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: requireClosedPolygon
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      propertyPath: closeLoopAtStartPoint
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
@@ -171,8 +196,7 @@ PrefabInstance:
         type: 3}
       propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: 6040433f915cd4f0eaae4862785c42f7,
-        type: 2}
+      objectReference: {fileID: 5782818580375870023}
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: blockCameraDrag.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -192,12 +216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: 777e7bc0e0d3e4c4496e3278d9b50a7c,
-        type: 2}
+      objectReference: {fileID: 5782818580375870023}
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: editedPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
+      value: UpdateLine
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
@@ -207,7 +230,7 @@ PrefabInstance:
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: createdNewPolygonArea.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
+      value: SetLine
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
@@ -292,7 +315,7 @@ PrefabInstance:
     - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
       propertyPath: m_Name
-      value: PolygonSelection
+      value: PolygonSelection_Line
       objectReference: {fileID: 0}
     - target: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
         type: 3}
@@ -307,7 +330,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6456176726394300766, guid: 6821fcd3220974e36a98cc56d26f905d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5782818580375870023}
   m_SourcePrefab: {fileID: 100100000, guid: 6821fcd3220974e36a98cc56d26f905d, type: 3}
 --- !u!1 &3477808925150663371 stripped
 GameObject:
@@ -315,6 +342,48 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7627789677212842901}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5782818580375870023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3477808925150663371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd791f3599234cb4f8f8afa832fcf909, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnPolygonCreated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 77f9110b380db7e4085386da1f665dd3, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPolygonEdited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 11bfe03ea53b4dd4a882ef7d345d340f, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3477808925150663380 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6456176726394300737, guid: 6821fcd3220974e36a98cc56d26f905d,
