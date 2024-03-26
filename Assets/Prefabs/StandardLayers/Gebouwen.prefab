@@ -52,7 +52,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Buildings_2023/Buildings{x}_{y}.2.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/Buildings.2.2/Buildings{x}_{y}.2.2.bin
     pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
