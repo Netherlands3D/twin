@@ -74,6 +74,10 @@ MonoBehaviour:
     functionality: {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
     spawnedObject: {fileID: 3712503248906199988, guid: 6915dd70276474a0688a5fb1a9c248c0,
       type: 3}
+  - name: Functionality_Trees - Bossen
+    functionality: {fileID: 11400000, guid: 8b0d3742935095d48941c64dd41343c0, type: 2}
+    spawnedObject: {fileID: 3712503248906199988, guid: 65e87ace5e7c94c2dba27317474f1179,
+      type: 3}
   - name: Functionality_Streetnames - Straatnamen
     functionality: {fileID: 11400000, guid: 2baaa0e46661c6248a5938b6b2c47544, type: 2}
     spawnedObject: {fileID: 915834300300047598, guid: 9462ac35a03ed4ade9a4e14ea76906a3,

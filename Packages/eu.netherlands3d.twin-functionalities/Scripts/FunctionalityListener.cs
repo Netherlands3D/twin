@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
@@ -9,43 +11,59 @@ namespace Netherlands3D.Twin.Functionalities
     /// </summary>
     public class FunctionalityListener : MonoBehaviour
     {
-        [FormerlySerializedAs("feature")]
-        public Functionality functionality;
+        public Functionality[] functionalities;
 
-        public UnityEvent<Functionality> OnEnableFunctionality = new ();
-        public UnityEvent<Functionality> OnDisableFunctionality = new ();
+        public UnityEvent<Functionality> OnEnableFunctionality = new();
+        public UnityEvent<Functionality> OnDisableFunctionality = new();
 
-        private void Awake() {
-            functionality.OnEnable.AddListener(EnableFunctionality);
-            functionality.OnDisable.AddListener(DisableFunctionality);
+        private void Awake()
+        {
+            foreach (var functionality in functionalities)
+            {
+                functionality.OnEnable.AddListener(EnableFunctionality);
+                functionality.OnDisable.AddListener(DisableFunctionality);
+            }
         }
-        
+
         private void OnEnable()
         {
-            if (functionality.IsEnabled)
+            foreach (var functionality in functionalities)
             {
-                EnableFunctionality();
+
+                if (functionality.IsEnabled)
+                {
+                    EnableFunctionality();
+                }
+                else
+                {
+                    DisableFunctionality();
+                }
             }
-            else
-            {
-                DisableFunctionality();
-            } 
         }
 
         private void EnableFunctionality()
         {
-            OnEnableFunctionality.Invoke(functionality);
+            foreach (var functionality in functionalities)
+            {
+                OnEnableFunctionality.Invoke(functionality);
+            }
         }
 
         private void DisableFunctionality()
         {
-            OnDisableFunctionality.Invoke(functionality);
+            foreach (var functionality in functionalities)
+            {
+                OnDisableFunctionality.Invoke(functionality);
+            }
         }
 
         private void OnDestroy()
         {
-            functionality.OnEnable.RemoveListener(EnableFunctionality);
-            functionality.OnDisable.RemoveListener(DisableFunctionality);
+            foreach (var functionality in functionalities)
+            {
+                functionality.OnEnable.RemoveListener(EnableFunctionality);
+                functionality.OnDisable.RemoveListener(DisableFunctionality);
+            }
         }
     }
 }

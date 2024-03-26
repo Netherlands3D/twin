@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin
             foreach (var functionalityAndlayer in functionalityAndLayers)
             {
                 functionalityAndlayer.functionality.OnEnable.AddListener(() => Spawn(functionalityAndlayer.spawnedObject));
-                functionalityAndlayer.functionality.OnDisable.AddListener(() => DestroyByName(functionalityAndlayer.spawnedObject));
 
                 //Start with default spawns
                 if(functionalityAndlayer.functionality.IsEnabled){
@@ -45,19 +44,6 @@ namespace Netherlands3D.Twin
         {
             var newLayer = Instantiate(layer, transform);
             newLayer.name = layer.name;
-        }
-
-        public void DestroyByName(GameObject prefab)
-        {
-            //Find child with the same name and destroy it
-            foreach (Transform child in transform)
-            {
-                if (child.name == prefab.name)
-                {
-                    Destroy(child.gameObject);
-                    return;
-                }
-            }
         }
     }
 }
