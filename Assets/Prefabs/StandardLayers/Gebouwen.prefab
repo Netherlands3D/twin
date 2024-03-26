@@ -104,3 +104,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolThatEnablesColliders: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad,
     type: 2}
+  waitForAnimationTime: 0.85
