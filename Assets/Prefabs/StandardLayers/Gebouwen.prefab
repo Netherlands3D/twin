@@ -55,7 +55,7 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Buildings_2023/Buildings{x}_{y}.2.2.bin
     pathQuery: 
-    maximumDistance: 10000
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
