@@ -26,11 +26,23 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         public UnityEvent polygonChanged = new();
 
-        public void Initialize(List<Vector3> solidPolygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
+        private ShapeType shapeType;
+        public ShapeType ShapeType { get => shapeType; }
+        
+        private List<Vector3> originalPolygon;
+        private float lineWidth = 10.0f;
+
+        public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType)
         {
+            this.shapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
-            SetPolygon(solidPolygon);
+            originalPolygon = polygon;
+
+            if(shapeType == ShapeType.Line)
+                polygon = PolygonFromLine(polygon);
+
+            SetPolygon(polygon);
             PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
         }
 
@@ -61,7 +73,6 @@ namespace Netherlands3D.Twin.Layers
         public void SetPolygon(List<Vector3> solidPolygon)
         {
             var flatPolygon = PolygonCalculator.FlattenPolygon(solidPolygon.ToArray(), new Plane(Vector3.up, 0));
-
             var polygon = new CompoundPolygon(flatPolygon);
             Polygon = polygon;
 
@@ -73,14 +84,36 @@ namespace Netherlands3D.Twin.Layers
             polygonChanged.Invoke();
         }
 
+        private List<Vector3> PolygonFromLine(List<Vector3> originalLine)
+        {
+            var polygon = new List<Vector3>();
+            for (int i = 0; i < originalLine.Count; i++)
+            {
+                var startPoint = originalLine[i];
+                var endPoint = originalLine[(i + 1) % originalLine.Count];
+
+                var direction1 = new Vector3(endPoint.y - startPoint.y, startPoint.x - endPoint.x, 0).normalized * lineWidth;
+                var direction2 = new Vector3(startPoint.y - endPoint.y, endPoint.x - startPoint.x, 0).normalized * lineWidth;
+
+                var p1 = startPoint + direction1;
+                var p2 = endPoint + direction1;
+                var p3 = endPoint + direction2;
+                var p4 = startPoint + direction2;
+
+                polygon.Add(p1);
+                polygon.Add(p2);
+                polygon.Add(p3);
+                polygon.Add(p4);
+            }
+            return polygon;
+        }
+
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             
-            // polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Polygons");
-            // PolygonVisualisation.transform.SetParent(transform);
             return polygonVisualisation;
         }
 
@@ -88,7 +121,6 @@ namespace Netherlands3D.Twin.Layers
         {
             print("setting active: " + activeInHierarchy);
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
-            // throw new System.NotImplementedException();
         }
 
         public override void OnSelect()
