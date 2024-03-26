@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
   - component: {fileID: 6531086895741313930}
+  - component: {fileID: 628255411531967872}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -98,3 +99,15 @@ MonoBehaviour:
   toolThatEnablesColliders: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad,
     type: 2}
   waitForAnimationTime: 0.85
+--- !u!114 &628255411531967872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cff521f39950423ea8aad987b8e67a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
