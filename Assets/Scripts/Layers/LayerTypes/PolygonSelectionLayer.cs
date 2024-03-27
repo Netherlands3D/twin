@@ -27,19 +27,19 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent polygonChanged = new();
 
         private ShapeType shapeType;
-        public ShapeType ShapeType { get => shapeType; }
+        public ShapeType ShapeType { get => shapeType; set => shapeType = value;}
         
         private List<Vector3> originalPolygon;
         private float lineWidth = 10.0f;
 
         public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType)
         {
-            this.shapeType = shapeType;
+            this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
             originalPolygon = polygon;
 
-            if(shapeType == ShapeType.Line)
+            if(shapeType == Layers.ShapeType.Line)
                 polygon = PolygonFromLine(polygon);
 
             SetPolygon(polygon);
