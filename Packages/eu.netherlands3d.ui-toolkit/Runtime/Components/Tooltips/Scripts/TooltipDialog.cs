@@ -14,6 +14,7 @@ namespace Netherlands3D.Interface
         private ContentSizeFitter contentSizeFitter;
         private Vector3[] worldCorners = new Vector3[4];
 
+        private bool pivotTop = false;
         private bool pivotRight = false;
 
         #region Singleton
@@ -65,12 +66,24 @@ namespace Netherlands3D.Interface
                 pivotRight = false;
                 rectTransform.pivot = Vector2.zero;
             }
+            
+            //Swap pivot based on place in screen (to try to stay in the screen vertically)
+            if (!pivotTop && rectTransform.position.y > Screen.height * 0.9f)
+            {
+                pivotTop = true;
+                rectTransform.pivot = Vector2.up;
+            }
+            else if (pivotTop && rectTransform.position.y <= Screen.height * 0.9f)
+            {
+                pivotTop = false;
+                rectTransform.pivot = Vector2.zero;
+            }
         }
 
         public void AlignOnElement(RectTransform element)
         {
             if (!element) return;
-
+            
             rectTransform.position = Vector3.Lerp(
                 GetRectTransformBounds(element).center,
                 GetRectTransformBounds(element).max, 
