@@ -151,6 +151,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4788262714036096619, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: tooltipText
+      value: Indicatoren
+      objectReference: {fileID: 0}
     - target: {fileID: 6259493272207176500, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: m_Sprite
@@ -165,10 +170,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2445755576139861334}
-    - targetCorrespondingSourceObject: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 545125020539994432}
   m_SourcePrefab: {fileID: 100100000, guid: d802d2d99eb96db41845556a85c935dc, type: 3}
 --- !u!1 &6470450147855937901 stripped
 GameObject:
@@ -220,16 +221,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &545125020539994432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470450147855937901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tooltipText: Indicatoren
