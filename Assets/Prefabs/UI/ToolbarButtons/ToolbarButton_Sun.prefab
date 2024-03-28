@@ -187,6 +187,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4788262714036096619, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: tooltipText
+      value: Zonnestand
+      objectReference: {fileID: 0}
     - target: {fileID: 6259493272207176500, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: m_Sprite

@@ -151,6 +151,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4788262714036096619, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      propertyPath: tooltipText
+      value: Gebied downloaden
+      objectReference: {fileID: 0}
     - target: {fileID: 6259493272207176500, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: m_Sprite
@@ -184,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionality: {fileID: 11400000, guid: cd3367005c1f1cd4b8de1fd613e311fa, type: 2}
   functionalities:
   - {fileID: 11400000, guid: cd3367005c1f1cd4b8de1fd613e311fa, type: 2}
   OnEnableFunctionality:
