@@ -5,6 +5,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2024-03-28
+
+### fxied
+
+- Fixed Version numbering so there is no longer a conflict between tag v1.1.0 on Github and release v1.1.1 on OpenUPM
+
+
 ## [1.1.1] - 2024-03-28
 
 ### fxied
