@@ -49,6 +49,8 @@ namespace RuntimeHandle
         public Color zColor = Color.blue;
         public Color allAxisColor = Color.white;
 
+        private bool wasPressedPreviousFrame = false;
+        
         void Start()
         {
             if (handleCamera == null)
@@ -92,6 +94,8 @@ namespace RuntimeHandle
 
         void Update()
         {
+            var isPressed = PointerIsDown();
+            
             if (autoScale)
                 transform.localScale =
                     Vector3.one * (Vector3.Distance(handleCamera.transform.position, transform.position) * autoScaleFactor) / 15;
@@ -110,20 +114,20 @@ namespace RuntimeHandle
 
             HandleOverEffect(handle, hitPoint);
 
-            if (PointerIsDown() && _draggingHandle != null)
+            if (isPressed && _draggingHandle != null)
             {
                 _draggingHandle.Interact(_previousMousePosition);
                 isDraggingHandle.Invoke();
             }
 
-            if (GetPointerDown() && handle != null)
+            if (GetPointerDown(isPressed) && handle != null)
             {
                 _draggingHandle = handle;
                 _draggingHandle.StartInteraction(hitPoint);
                 startedDraggingHandle.Invoke();
             }
 
-            if (GetPointerUp() && _draggingHandle != null)
+            if (GetPointerUp(isPressed) && _draggingHandle != null)
             {
                 _draggingHandle.EndInteraction();
                 _draggingHandle = null;
@@ -141,12 +145,14 @@ namespace RuntimeHandle
             {
                 transform.rotation = Quaternion.identity;
             }
+
+            wasPressedPreviousFrame = isPressed;
         }
 
-        public static bool GetPointerDown()
+        public bool GetPointerDown(bool isPressedCurrentFrame)
         {
 #if ENABLE_INPUT_SYSTEM
-            return Mouse.current.leftButton.wasPressedThisFrame;
+            return isPressedCurrentFrame && !wasPressedPreviousFrame;
 #else
             return Input.GetMouseButtonDown(0);
 #endif
@@ -155,16 +161,16 @@ namespace RuntimeHandle
         public static bool PointerIsDown()
         {
 #if ENABLE_INPUT_SYSTEM
-            return Mouse.current.leftButton.isPressed;
+            return Pointer.current.press.isPressed;
 #else
             return Input.GetMouseButton(0);
 #endif
         }
 
-        public static bool GetPointerUp()
+        public bool GetPointerUp(bool isPressedCurrentFrame)
         {
 #if ENABLE_INPUT_SYSTEM
-            return Mouse.current.leftButton.wasReleasedThisFrame;
+            return !isPressedCurrentFrame && wasPressedPreviousFrame;
 #else
             return Input.GetMouseButtonUp(0);
 #endif
@@ -173,7 +179,7 @@ namespace RuntimeHandle
         public static Vector3 GetMousePosition()
         {
 #if ENABLE_INPUT_SYSTEM
-            return Mouse.current.position.ReadValue();
+            return Pointer.current.position.ReadValue();
 #else
             return Input.mousePosition;
 #endif
