@@ -48,6 +48,8 @@ namespace Netherlands3D.Twin.Layers
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material.enableInstancing = true;
+            
             polygonLayer = polygon;
 
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
