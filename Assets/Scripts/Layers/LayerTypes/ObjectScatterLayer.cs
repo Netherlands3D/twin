@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -57,14 +57,18 @@ namespace Netherlands3D.Twin.Layers
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
-
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState));
+            
+            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
         }
 
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState)
+        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
         {
             yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
+            foreach (var child in children)
+            {
+                child.SetParent(ReferencedProxy);
+            }
             RecalculatePolygonsAndSamplerTexture();
             polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
@@ -284,6 +288,11 @@ namespace Netherlands3D.Twin.Layers
             originalObject.gameObject.SetActive(true); //activate to initialize the added component.
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
             yield return new WaitForEndOfFrame(); //wait for layer component to initialize
+            foreach (var child in ReferencedProxy.ChildrenLayers)
+            {
+                if(child.Depth == ReferencedProxy.Depth + 1)
+                    child.SetParent(layer.ReferencedProxy);
+            }
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             DestroyLayer();
