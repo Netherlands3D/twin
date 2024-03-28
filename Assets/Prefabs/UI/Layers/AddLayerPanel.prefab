@@ -5753,7 +5753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3937650689336427930, guid: e0272ce89eb284961a0185f7a4f2ce3f, type: 3}
   initialRotation: {x: 0, y: 0, z: 0}
-  initialScale: {x: 10, y: 10, z: 10}
+  initialScale: {x: 1, y: 1, z: 1}
 --- !u!1 &3407878080615670921
 GameObject:
   m_ObjectHideFlags: 0
