@@ -73,8 +73,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.7.0",
-      "depth": 1,
+      "version": "1.8.1",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
@@ -386,7 +386,7 @@
       "hash": "2a05795436497dec646aecb7c47d62fcfe9e03d7"
     },
     "eu.netherlands3d.transform-handles": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
