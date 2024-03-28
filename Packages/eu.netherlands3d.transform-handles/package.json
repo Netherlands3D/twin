@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.transform-handles",
-  "version": "1.1.2",
+  "version": "1.1.1",
   "displayName": "Netherlands3D - Transform Handles",
   "description": "Runtime transform handles, adapted from https://github.com/pshtif/RuntimeTransformHandle",
   "unity": "2022.2",
