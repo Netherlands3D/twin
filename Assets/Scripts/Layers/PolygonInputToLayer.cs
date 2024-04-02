@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public void UpdateLineLayer(List<Vector3> editedLine)
         {
-            activeLayer.SetPolygon(editedLine);
+            activeLayer.SetLine(editedLine);
         }
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
@@ -74,23 +74,22 @@ namespace Netherlands3D.Twin.Layers
             //Do not allow selecting a new polygon if we are still creating one
             if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
-
+            
             activeLayer = layer;
             if (layer)
             {
                 if(layer.ShapeType == ShapeType.Polygon)
                 {
-                    polygonInput.ReselectPolygon(layer.Polygon.SolidPolygon.ToVector3List());
-
                     polygonInput.gameObject.SetActive(true);
                     lineInput.gameObject.SetActive(false);
+                    polygonInput.ReselectPolygon(layer.OriginalPolygon);
                 }
                 else if(layer.ShapeType == ShapeType.Line)
                 {
-                    lineInput.ReselectPolygon(layer.Polygon.SolidPolygon.ToVector3List());
-
                     lineInput.gameObject.SetActive(true);
                     polygonInput.gameObject.SetActive(false);
+                    
+                    lineInput.ReselectPolygon(layer.OriginalPolygon);
                 }
                 return;
             }

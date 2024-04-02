@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Layers
         private ShapeType shapeType;
         public ShapeType ShapeType { get => shapeType; set => shapeType = value;}
         
-        private List<Vector3> originalPolygon;
+        public List<Vector3> OriginalPolygon;
         private float lineWidth = 10.0f;
 
         public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType)
@@ -37,10 +37,10 @@ namespace Netherlands3D.Twin.Layers
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
-            originalPolygon = polygon;
+            OriginalPolygon = polygon;
 
             if(shapeType == Layers.ShapeType.Line)
-                polygon = PolygonFromLine(polygon);
+                polygon = PolygonFromLine(polygon, lineWidth);
 
             SetPolygon(polygon);
             PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
@@ -84,27 +84,41 @@ namespace Netherlands3D.Twin.Layers
             polygonChanged.Invoke();
         }
 
-        private List<Vector3> PolygonFromLine(List<Vector3> originalLine)
+        public void SetLine(List<Vector3> line)
         {
-            var polygon = new List<Vector3>();
-            for (int i = 0; i < originalLine.Count; i++)
+            if(shapeType != ShapeType.Line)
+                Debug.LogError("The polygon layer is not a line layer, this will result in unexpected behaviour");
+            
+            var polygon = PolygonFromLine(line, lineWidth);
+            SetPolygon(polygon);
+        }
+
+        private List<Vector3> PolygonFromLine(List<Vector3> originalLine, float width)
+        {
+            if (originalLine.Count != 2)
             {
-                var startPoint = originalLine[i];
-                var endPoint = originalLine[(i + 1) % originalLine.Count];
-
-                var direction1 = new Vector3(endPoint.y - startPoint.y, startPoint.x - endPoint.x, 0).normalized * lineWidth;
-                var direction2 = new Vector3(startPoint.y - endPoint.y, endPoint.x - startPoint.x, 0).normalized * lineWidth;
-
-                var p1 = startPoint + direction1;
-                var p2 = endPoint + direction1;
-                var p3 = endPoint + direction2;
-                var p4 = startPoint + direction2;
-
-                polygon.Add(p1);
-                polygon.Add(p2);
-                polygon.Add(p3);
-                polygon.Add(p4);
+                Debug.LogError("cannot create rectangle because position list contains more than 2 entries");
+                return null;
             }
+
+            var worldPlane = new Plane(Vector3.up, 0); //todo: work with terrain height
+            var flatPolygon = PolygonCalculator.FlattenPolygon(originalLine, worldPlane);
+            var dir = flatPolygon[1] - flatPolygon[0];
+            var normal = new Vector2(-dir.y, dir.x).normalized;
+
+            var dist = normal * width/2;
+
+            var point1 = originalLine[0] + new Vector3(dist.x, 0, dist.y);
+            var point2 = originalLine[0] - new Vector3(dist.x, 0, dist.y);
+            var point3 = originalLine[1] - new Vector3(dist.x, 0, dist.y);
+            var point4 = originalLine[1] + new Vector3(dist.x, 0, dist.y);
+            
+            var polygon = new List<Vector3>() {
+                point1,
+                point2,
+                point3,
+                point4
+            };
             return polygon;
         }
 
