@@ -1150,7 +1150,6 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 7857407149832917040}
-  - component: {fileID: 3042799374884260876}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1342,79 +1341,13 @@ MonoBehaviour:
         m_CallState: 2
   createdNewPolygonArea:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3042799374884260876}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.LineToPolygon, Assembly-CSharp
-        m_MethodName: SetLine
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   editedPolygonArea:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3042799374884260876}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.LineToPolygon, Assembly-CSharp
-        m_MethodName: UpdateLine
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3042799374884260876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239524049806933421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd791f3599234cb4f8f8afa832fcf909, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnPolygonCreated:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 77f9110b380db7e4085386da1f665dd3, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnPolygonEdited:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 11bfe03ea53b4dd4a882ef7d345d340f, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.Vector3ListEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0
