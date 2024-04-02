@@ -27,8 +27,13 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent polygonChanged = new();
 
         private ShapeType shapeType;
-        public ShapeType ShapeType { get => shapeType; set => shapeType = value;}
-        
+
+        public ShapeType ShapeType
+        {
+            get => shapeType;
+            set => shapeType = value;
+        }
+
         public List<Vector3> OriginalPolygon;
         private float lineWidth = 10.0f;
 
@@ -37,12 +42,11 @@ namespace Netherlands3D.Twin.Layers
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
-            OriginalPolygon = polygon;
 
-            if(shapeType == Layers.ShapeType.Line)
-                polygon = PolygonFromLine(polygon, lineWidth);
-
-            SetPolygon(polygon);
+            if (shapeType == Layers.ShapeType.Line)
+                SetLine(polygon);
+            else
+                SetPolygon(polygon);
             PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
         }
 
@@ -72,28 +76,41 @@ namespace Netherlands3D.Twin.Layers
 
         public void SetPolygon(List<Vector3> solidPolygon)
         {
+            OriginalPolygon = solidPolygon;
+
             var flatPolygon = PolygonCalculator.FlattenPolygon(solidPolygon.ToArray(), new Plane(Vector3.up, 0));
-            var polygon = new CompoundPolygon(flatPolygon);
-            Polygon = polygon;
+            Polygon = new CompoundPolygon(flatPolygon);
 
             if (PolygonVisualisation)
                 PolygonVisualisation.UpdateVisualisation(solidPolygon);
             else
                 PolygonVisualisation = CreatePolygonMesh(solidPolygon, polygonExtrusionHeight, polygonMeshMaterial);
-            
+
             polygonChanged.Invoke();
         }
 
         public void SetLine(List<Vector3> line)
         {
-            if(shapeType != ShapeType.Line)
+            OriginalPolygon = line;
+
+            if (shapeType != ShapeType.Line)
                 Debug.LogError("The polygon layer is not a line layer, this will result in unexpected behaviour");
-            
-            var polygon = PolygonFromLine(line, lineWidth);
-            SetPolygon(polygon);
+
+            var rectangle = PolygonFromLine(line, lineWidth);
+
+            Polygon = new CompoundPolygon(rectangle);
+
+            var rectangle3D = rectangle.ToVector3List();
+
+            if (PolygonVisualisation)
+                PolygonVisualisation.UpdateVisualisation(rectangle3D);
+            else
+                PolygonVisualisation = CreatePolygonMesh(rectangle3D, polygonExtrusionHeight, polygonMeshMaterial);
+
+            polygonChanged.Invoke();
         }
 
-        private List<Vector3> PolygonFromLine(List<Vector3> originalLine, float width)
+        private Vector2[] PolygonFromLine(List<Vector3> originalLine, float width)
         {
             if (originalLine.Count != 2)
             {
@@ -106,19 +123,21 @@ namespace Netherlands3D.Twin.Layers
             var dir = flatPolygon[1] - flatPolygon[0];
             var normal = new Vector2(-dir.y, dir.x).normalized;
 
-            var dist = normal * width/2;
+            var dist = normal * width / 2;
 
-            var point1 = originalLine[0] + new Vector3(dist.x, 0, dist.y);
-            var point2 = originalLine[0] - new Vector3(dist.x, 0, dist.y);
-            var point3 = originalLine[1] - new Vector3(dist.x, 0, dist.y);
-            var point4 = originalLine[1] + new Vector3(dist.x, 0, dist.y);
-            
-            var polygon = new List<Vector3>() {
+            var point1 = flatPolygon[0] + new Vector2(dist.x, dist.y);
+            var point4 = flatPolygon[1] + new Vector2(dist.x, dist.y);
+            var point3 = flatPolygon[1] - new Vector2(dist.x, dist.y);
+            var point2 = flatPolygon[0] - new Vector2(dist.x, dist.y);
+
+            var polygon = new Vector2[]
+            {
                 point1,
                 point2,
                 point3,
                 point4
             };
+            
             return polygon;
         }
 
@@ -127,7 +146,7 @@ namespace Netherlands3D.Twin.Layers
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
-            
+
             return polygonVisualisation;
         }
 
