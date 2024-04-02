@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
+  - component: {fileID: -2324982978833452817}
   m_Layer: 7
   m_Name: Gebouwen (3D Tiles)
   m_TagString: Untagged
@@ -234,3 +235,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2324982978833452817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionality: {fileID: 0}
+  functionalities:
+  - {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4142489338678956943}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
