@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -10,9 +12,22 @@ namespace Netherlands3D.Twin
         public abstract bool IsActiveInScene { get; set; }
         public ReferencedProxyLayer ReferencedProxy { get; set; }
 
+        public UnityEvent onShow = new();
+        public UnityEvent onHide = new();
+        
         protected virtual void Awake()
         {
             CreateProxy();
+        }
+
+        private void OnEnable()
+        {
+            onShow.Invoke();
+        }
+
+        private void OnDisable()
+        {
+            onHide.Invoke();
         }
 
         public virtual void OnSelect() {}
