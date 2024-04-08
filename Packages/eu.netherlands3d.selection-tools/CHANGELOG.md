@@ -5,6 +5,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.2]
+
+### Fixed
+
+- Fixed execution order issue where another system may disable the input action map of this system. By default the input action map will be enabled and no longer disabled to avoid interfering with other systems that may use the same input action map.
+
 ## [2.2.1]
 
 ### Fixed
