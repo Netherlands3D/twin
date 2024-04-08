@@ -189,6 +189,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   functionality: {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
+  functionalities:
+  - {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls:

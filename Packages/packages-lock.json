@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.burst": "1.4.11"
       },
-      "hash": "c2e0e43a8dfa2fca973ce527b30fd46e3b29b3e7"
+      "hash": "b2e283ef99d8b0a6a076411aa4649278c5aadef4"
     },
     "com.cdm.authentication": {
       "version": "https://github.com/cdmvision/authentication-unity.git#1.1.3",
