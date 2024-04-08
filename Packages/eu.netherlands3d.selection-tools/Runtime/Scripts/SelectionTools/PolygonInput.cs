@@ -143,6 +143,12 @@ namespace Netherlands3D.SelectionTools
             {
                 if (createHandles) Debug.Log("Please set a handleTemplate reference to create handles.", this.gameObject);
             }
+
+            if (!polygonSelectionActionMap.enabled)
+            {
+                Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
+                polygonSelectionActionMap.Enable();
+            }
         }
 
 #if UNITY_EDITOR
@@ -171,8 +177,6 @@ namespace Netherlands3D.SelectionTools
             clickAction.canceled += ClickAction_canceled;
             escapeAction.canceled += EscapeAction_canceled;
             finishAction.performed += FinishAction_performed;
-
-            polygonSelectionActionMap.Enable(); //make sure to look at the execution order in case there are multiple Scripts that make use of this ActionMap, OnDisable() of another object might be called after this function, resulting in no inputs being registered
         }
 
         protected virtual void OnDisable()
@@ -184,8 +188,6 @@ namespace Netherlands3D.SelectionTools
             clickAction.canceled -= ClickAction_canceled;
             escapeAction.canceled -= EscapeAction_canceled;
             finishAction.performed -= FinishAction_performed;
-
-            polygonSelectionActionMap.Disable();
         }
 
         private void TapAction_performed(InputAction.CallbackContext obj)
