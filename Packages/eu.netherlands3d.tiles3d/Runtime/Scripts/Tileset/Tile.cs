@@ -41,7 +41,7 @@ namespace Netherlands3D.Tiles3D
         public string contentUri = "";
 
         public Content content; //Gltf content
-        
+
         public int CountLoadingChildren()
         {
             int result = 0;
@@ -230,6 +230,9 @@ namespace Netherlands3D.Tiles3D
 
         public void CalculateBounds()
         {
+            if(boundingVolume == null || boundingVolume.values.Length == 0)
+                return;
+
             switch (boundingVolume.boundingVolumeType)
             {
                 case BoundingVolumeType.Box:

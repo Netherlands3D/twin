@@ -93,12 +93,10 @@ namespace Netherlands3D.Tiles3D
             int localIndex = parentNortonIndex * 4;
             int levelstart = LevelStartIndex + (int)Mathf.Pow(4, (tile.level-appendTilesTo.level));
             
-
             AddChild(tile, localIndex, levelstart, 0);
             AddChild(tile, localIndex, levelstart, 1);
             AddChild(tile, localIndex, levelstart, 2);
             AddChild(tile, localIndex, levelstart, 3);
-
         }
 
         private void AddChild(Tile parentTile, int localIndex, int LevelStartIndex, int childNumber)
