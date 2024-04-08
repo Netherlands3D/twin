@@ -16,7 +16,6 @@ namespace Netherlands3D.Tiles3D
     [RequireComponent(typeof(ReadSubtree))]
     public class Read3DTileset : MonoBehaviour
     {
-
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
         public string publicKey;
         public string personalKey;
@@ -71,9 +70,9 @@ namespace Netherlands3D.Tiles3D
             }
 
 #else
-if (string.IsNullOrEmpty(publicKey)==false)
+            if (string.IsNullOrEmpty(publicKey)==false)
             {
-            tilesetUrl = tilesetUrl + "?key=" + publicKey;
+                tilesetUrl = tilesetUrl + "?key=" + publicKey;
             }
 #endif
         }
@@ -94,8 +93,6 @@ if (string.IsNullOrEmpty(publicKey)==false)
             ExtractDatasetPaths();
 
             StartCoroutine(LoadTileset());
-            
-
         }
 
         private void ExtractDatasetPaths()
@@ -187,15 +184,13 @@ if (string.IsNullOrEmpty(publicKey)==false)
             usingPrioritiser = (tilePrioritiser);
         }
 
-        private void RelativeCenterChanged(Vector3 cameraOffset)
+        public void RecalculateBounds()
         {
             if (root == null) return;
 
             //Flag all calculated bounds to be recalculated when tile bounds is requested
             RecalculateAllTileBounds(root);
         }
-
-
 
         /// <summary>
         /// Recursive recalculation of tile bounds
@@ -230,18 +225,12 @@ if (string.IsNullOrEmpty(publicKey)==false)
                 string jsonstring = www.downloadHandler.text;
                 ParseTileset.subtreeReader = GetComponent<ReadSubtree>();
                 JSONNode rootnode = JSON.Parse(jsonstring)["root"];
-               root = ParseTileset.ReadTileset(rootnode);
-                
+                root = ParseTileset.ReadTileset(rootnode);
             }
         }
 
         private void RequestContentUpdate(Tile tile)
         {
-            //tile.parent.IncrementLoadingChildren();
-            //foreach (var child in tile.children)
-            //{
-            //    child.IncrementLoadingParents();
-            //}
             if (!tile.content)
             {
                 var newContentGameObject = new GameObject($"{tile.level},{tile.X},{tile.Y} content");
@@ -294,24 +283,15 @@ if (string.IsNullOrEmpty(publicKey)==false)
             {
                 //If camera changed, recalculate what tiles are be in view
                 currentCamera.transform.GetPositionAndRotation(out currentCameraPosition, out currentCameraRotation);
+                lastCameraAngle = (currentCamera.orthographic ? currentCamera.orthographicSize : currentCamera.fieldOfView);
+                currentCamera.transform.GetPositionAndRotation(out lastCameraPosition, out lastCameraRotation);
 
-                //if (nestedTreeLoaded || CameraChanged())
-                //{
-                //    nestedTreeLoaded = false;
-
-                    lastCameraAngle = (currentCamera.orthographic ? currentCamera.orthographicSize : currentCamera.fieldOfView);
-                    currentCamera.transform.GetPositionAndRotation(out lastCameraPosition, out lastCameraRotation);
-
-                    SetSSEComponent(currentCamera);
-                    DisposeTilesOutsideView(currentCamera);
-
-                    //root.IsInViewFrustrum(currentCamera);
+                SetSSEComponent(currentCamera);
+                DisposeTilesOutsideView(currentCamera);
                 foreach (var child in root.children)
                 {
                     LoadInViewRecursively(child, currentCamera);
                 }
-                    
-                //}
 
                 yield return null;
             }
@@ -514,12 +494,7 @@ if (string.IsNullOrEmpty(publicKey)==false)
         {
             var relativeContentUrl = tile.contentUri;
 
-            //if (tilingMethod == TilingMethod.implicitTiling)
-            //{
-            //    relativeContentUrl = (implicitTilingSettings.contentUri.Replace("{level}", tile.X.ToString()).Replace("{x}", tile.Y.ToString()).Replace("{y}", tile.Z.ToString()));
-            //}
-
-            //RDam specific temp fix.
+            //RD amsterdam specific temp fix.
             relativeContentUrl = relativeContentUrl.Replace("../", "");
 
             var fullPath = (tile.contentUri.StartsWith("/")) ? rootPath + relativeContentUrl : absolutePath + relativeContentUrl;
