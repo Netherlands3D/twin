@@ -103,7 +103,6 @@ namespace Netherlands3D.Tiles3D
 
         private void AddChild(Tile parentTile, int localIndex, int LevelStartIndex, int childNumber)
         {
-
             Tile childTile = new Tile();
             childTile.parent = parentTile;
             childTile.transform = parentTile.transform;
@@ -117,9 +116,6 @@ namespace Netherlands3D.Tiles3D
             childTile.geometricError = parentTile.geometricError / 2f;
             childTile.boundingVolume = parentTile.boundingVolume.GetChildBoundingVolume(childNumber,settings.subdivisionScheme);
            
-
-
-
             // check geometric content
             if (childTile.level < appendTilesTo.level + currentSubtreeLevels)
             {

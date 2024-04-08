@@ -14,6 +14,16 @@ namespace Netherlands3D.Tiles3D
         public int Y;
         public bool hascontent;
 
+        public int priority = 0;
+
+        private bool boundsAvailable = false;
+        private Bounds bounds = new Bounds();
+        public BoundingVolume boundingVolume;
+
+        public bool requestedDispose = false;
+        public bool requestedUpdate = false;
+        internal bool nestedTilesLoaded = false;
+
         public int childrenCountDelayingDispose = 0;
         public Tile parent;
 
@@ -24,7 +34,6 @@ namespace Netherlands3D.Tiles3D
         public float screenSpaceError = float.MaxValue;
 
         public string refine;
-        public BoundingVolume boundingVolume;
 
         public bool inView = false;
         public bool canRefine = false;
@@ -32,11 +41,7 @@ namespace Netherlands3D.Tiles3D
         public string contentUri = "";
 
         public Content content; //Gltf content
-
-
-
-
-
+        
         public int CountLoadingChildren()
         {
             int result = 0;
@@ -137,14 +142,6 @@ namespace Netherlands3D.Tiles3D
             }
             return result;
         }
-        public int priority = 0;
-
-        private bool boundsAvailable = false;
-        private Bounds bounds = new Bounds();
-
-        public bool requestedDispose = false;
-        public bool requestedUpdate = false;
-        internal bool nestedTilesLoaded = false;
 
         public Bounds ContentBounds
         {
@@ -209,13 +206,6 @@ namespace Netherlands3D.Tiles3D
             loaded
         }
 
-       
-       
-
-        
-
-      
-
         public bool IsInViewFrustrum(Camera ofCamera)
         {
             if (!boundsAvailable)
@@ -235,8 +225,6 @@ namespace Netherlands3D.Tiles3D
                 inView = ofCamera.InView(ContentBounds);
             }
             
-            
-
             return inView;
         }
 
@@ -262,11 +250,6 @@ namespace Netherlands3D.Tiles3D
                     bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis + Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
                     bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
                     bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
-
-                    //bounds.Encapsulate(zAxisExt);
-                    //bounds.Encapsulate(xAxisExtInv);
-                    //bounds.Encapsulate(yAxisExtInv);
-                    //bounds.Encapsulate(zAxisExtInv);
 
                     break;
                 case BoundingVolumeType.Sphere:

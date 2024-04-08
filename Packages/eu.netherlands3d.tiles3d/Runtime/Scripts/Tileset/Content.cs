@@ -180,7 +180,6 @@ namespace Netherlands3D.Tiles3D
         {
             foreach (var renderer in parent.GetComponentsInChildren<Renderer>())
             {
-                Debug.Log(renderer.gameObject.name, renderer.gameObject);
                 renderer.material = overrideMaterial;
             }
         }
