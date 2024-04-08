@@ -49,8 +49,17 @@
         "apiKey": "{{NL3D_INDICATORS_API_KEY|default('')}}"
       }
     },
-	  "csv-coloring": {
+    "csv-coloring": {
       "enabled": {{NL3D_CSV_COLORING|default('true')}}
+    },
+    "3dtiles": {
+      "enabled": {{NL3D_3DTILES|default('false')}}
+    },
+    "google-realitymesh": {
+      "enabled": {{NL3D_GOOGLE_REALITYMESH|default('false')}},
+      "configuration": {
+        "apiKey": "{{NL3D_GOOGLE_REALITYMESH_API_KEY|default('')}}"
+      }        
     },
     "sun": {
       "enabled": {{NL3D_SUN|default('false')}}
