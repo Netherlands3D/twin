@@ -681,7 +681,7 @@ namespace Netherlands3D.SelectionTools
             }
 
             if (mode == DrawMode.Create)
-                mode = DrawMode.Edit;
+                SetDrawMode(DrawMode.Edit);
 
             var positionsCopy = new List<Vector3>(positions);
             if (!polygonFinished && invokeNewPolygonEvent && positions.Count > 1)
