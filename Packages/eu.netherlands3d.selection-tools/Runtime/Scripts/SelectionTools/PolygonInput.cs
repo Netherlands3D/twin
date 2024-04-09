@@ -416,9 +416,9 @@ namespace Netherlands3D.SelectionTools
                         positions.Add(closingLineEnd);
                     }
                 }
+                
+                closedLoop = true;
             }
-
-            closedLoop = true;
 
             FinishPolygon(isNewPolygon);
         }
@@ -577,7 +577,7 @@ namespace Netherlands3D.SelectionTools
             {
                 blockCameraDrag.Invoke(false);
 
-                if (!closedLoop) return;
+                if (!polygonFinished) return;
 
                 FinishPolygon(false);
             });
