@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(ReferencedProxy.UI == null) return;
+            if (ReferencedProxy.UI == null) return;
 
             ReferencedProxy.UI.Select(true);
         }
@@ -58,15 +58,15 @@ namespace Netherlands3D.Twin.Layers
         public override void OnSelect()
         {
             var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
-            
-            if(transformInterfaceToggle)
+
+            if (transformInterfaceToggle)
                 transformInterfaceToggle.SetTransformTarget(gameObject);
         }
 
         public override void OnDeselect()
         {
             var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
-            
+
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ClearTransformTarget();
         }
@@ -87,11 +87,30 @@ namespace Netherlands3D.Twin.Layers
             print("converting to scatter layer");
             var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
-    
-            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf);
+
+            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy));
 
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
             return layerComponent;
+        }
+
+        private static List<LayerNL3DBase> UnparentDirectChildren(LayerNL3DBase layer)
+        {
+            var list = new List<LayerNL3DBase>();
+            foreach (var child in layer.ChildrenLayers)
+            {
+                if (child.Depth == layer.Depth + 1)
+                {
+                    list.Add(child);
+                }
+            }
+
+            foreach (var directChild in list)
+            {
+                directChild.SetParent(null);
+            }
+
+            return list;
         }
     }
 }
