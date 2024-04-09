@@ -379,6 +379,11 @@ namespace Netherlands3D.SelectionTools
         {
             if (closedLoop)
                 return;
+            
+            if (positions.Count == minPointsToCloseLoop -1) // add an extra point at the current mouse position to attempt to create a valid shape
+            {
+                Tap();
+            }
 
             if (requireClosedPolygon)
             {

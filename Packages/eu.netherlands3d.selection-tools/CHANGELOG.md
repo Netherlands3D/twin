@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Fixed problem where dragging the end point of an open polygon (line) would also move the first point to the end position.
+- When performing the closing action with less than the minimum required points, a point is added at the cursor position to attempt to create a valid shape.
 
 ## [2.2.3]
 
