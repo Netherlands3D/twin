@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using SLIDDES.UI;
 using UnityEngine;
 
@@ -8,11 +6,19 @@ namespace Netherlands3D.Twin
     public class ScaleWithInspector : MonoBehaviour
     {
         [SerializeField] private RectTransform inspector;
-        
-        void Update()
+        private RectTransform rt;
+        private float offsetLeft;
+
+        private void Awake()
         {
-            var rt = transform as RectTransform;
-            rt.SetLeft(inspector.anchoredPosition.x + inspector.sizeDelta.x);
+            rt = transform as RectTransform;
+            offsetLeft = rt.offsetMin.x;
+        }
+
+        private void Update()
+        {
+            var inspectorLeft = Mathf.Clamp(inspector.anchoredPosition.x + inspector.sizeDelta.x, 0, float.MaxValue);
+            rt.SetLeft(offsetLeft + inspectorLeft);
         }
     }
 }

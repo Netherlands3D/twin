@@ -16,17 +16,26 @@ MonoBehaviour:
   Title: Google RealityMesh
   Caption: BETA
   Header: Google RealityMesh (BETA)
-  Description: 'Maakt het mogelijk om gebouwen en maaiveld te tonen vanuit de Google''s
-    3D Tiles.
+  Description: 'Toont voor delen van Nederland een foto-realistisch beeld van de
+    omgeving.
+
+    
+
+    Met de kaartlaag ''Google Reality Mesh'' komt een fotorealistische
+    laag beschikbaar in de 3D viewer. Voor grote delen van Nederland heeft Google
+    een 3D model beschikbaar gesteld waar objecten in 3D herkenbaar worden weergegeven.
+    Deze laag, die in 3D Tiles formaat wordt aangeboden, maakt het mogelijk om nog
+    beter inzicht te krijgen in de werkelijke situatie.
 
 
-    <i>Let op; deze functionaliteit is nog in ontwikkeling.</i>
+    <i>Let op; deze functionaliteit
+    is nog in ontwikkeling.</i>
 
 
     <color=blue><u><link=https://developers.google.com/maps/documentation/tile/3d-tiles/>Klik
     hier om een API Key aan te vragen bij Google</link></u></color>'
   configuration: {fileID: 11400000, guid: 4c49a4edecb014c439152023c23297db, type: 2}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
