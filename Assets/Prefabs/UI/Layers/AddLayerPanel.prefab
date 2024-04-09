@@ -9649,9 +9649,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'RealityMesh
+  m_text: 'Google
 
-    (3D Tiles)'
+    (Google)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -12121,7 +12121,7 @@ GameObject:
   - component: {fileID: 2025425913983600394}
   - component: {fileID: 7419438749685670692}
   m_Layer: 5
-  m_Name: RealityMesh
+  m_Name: GoogleRealityMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
