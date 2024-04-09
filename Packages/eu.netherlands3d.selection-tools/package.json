@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.selection-tools",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "displayName": "Netherlands3D - Selection Tools",
   "description": "Tool to draw areas, and make selections",
   "unity": "2022.2",
