@@ -19,7 +19,13 @@ namespace Netherlands3D.Twin.Layers
         [Header("Line settings")] 
         [SerializeField] private PolygonInput lineInput;
         [SerializeField] private float defaultLineWidth = 10.0f;
+        [SerializeField] private PolygonPropertySection polygonPropertySectionPrefab;
+        public static PolygonPropertySection PolygonPropertySectionPrefab { get; private set; }
 
+        private void Awake()
+        {
+            PolygonPropertySectionPrefab = polygonPropertySectionPrefab;
+        }
 
         private void OnEnable()
         {
@@ -59,7 +65,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var newObject = new GameObject("Line");
             var layerComponent = newObject.AddComponent<PolygonSelectionLayer>();
-            layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line);
+            layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
             

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,7 +16,7 @@ namespace Netherlands3D.Twin.Layers
         Line = 2
     }
 
-    public class PolygonSelectionLayer : LayerNL3DBase
+    public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
     {
         public CompoundPolygon Polygon { get; set; }
         public PolygonVisualisation PolygonVisualisation { get; private set; }
@@ -28,6 +30,8 @@ namespace Netherlands3D.Twin.Layers
 
         private ShapeType shapeType;
 
+        private List<IPropertySectionInstantiator> propertySections = new();
+
         public ShapeType ShapeType
         {
             get => shapeType;
@@ -35,19 +39,37 @@ namespace Netherlands3D.Twin.Layers
         }
 
         public List<Vector3> OriginalPolygon;
-        private float lineWidth = 10.0f;
+        private float lineWidth;
 
-        public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType)
+        public float LineWidth
+        {
+            get => lineWidth;
+            set
+            {
+                lineWidth = value;
+                RecalculateLineWidth(OriginalPolygon, lineWidth);
+            }
+        }
+
+        public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f)
         {
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
+            this.lineWidth = defaultLineWidth;
 
             if (shapeType == Layers.ShapeType.Line)
                 SetLine(polygon);
             else
                 SetPolygon(polygon);
             PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            if(shapeType == ShapeType.Line)
+                UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
 
         private void OnEnable()
@@ -96,7 +118,16 @@ namespace Netherlands3D.Twin.Layers
             if (shapeType != ShapeType.Line)
                 Debug.LogError("The polygon layer is not a line layer, this will result in unexpected behaviour");
 
-            var rectangle = PolygonFromLine(line, lineWidth);
+            RecalculateLineWidth(line, lineWidth);
+
+            var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+            propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
+            // Properties.Properties.Instance.Show(this);
+        }
+
+        private void RecalculateLineWidth(List<Vector3> line, float width)
+        {
+            var rectangle = PolygonFromLine(line, width);
 
             Polygon = new CompoundPolygon(rectangle);
 
@@ -106,7 +137,6 @@ namespace Netherlands3D.Twin.Layers
                 PolygonVisualisation.UpdateVisualisation(rectangle3D);
             else
                 PolygonVisualisation = CreatePolygonMesh(rectangle3D, polygonExtrusionHeight, polygonMeshMaterial);
-
             polygonChanged.Invoke();
         }
 
@@ -137,7 +167,7 @@ namespace Netherlands3D.Twin.Layers
                 point3,
                 point4
             };
-            
+
             return polygon;
         }
 
@@ -173,6 +203,11 @@ namespace Netherlands3D.Twin.Layers
             base.OnDestroy();
             PolygonVisualisation.reselectVisualisedPolygon.RemoveListener(OnPolygonVisualisationSelected);
             Destroy(PolygonVisualisation.gameObject);
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return propertySections;
         }
     }
 }

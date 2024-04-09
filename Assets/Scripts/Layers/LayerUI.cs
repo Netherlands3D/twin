@@ -684,5 +684,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 Select(true);
             }
         }
+
+        public void ToggleProperties(bool isOn)
+        {
+            propertyToggle.isOn = isOn;
+        }
     }
 }

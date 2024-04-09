@@ -473,6 +473,8 @@ MonoBehaviour:
   polygonInput: {fileID: 5035265957184785309}
   lineInput: {fileID: 7857407149832917040}
   defaultLineWidth: 10
+  polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
+    type: 3}
 --- !u!1 &4868054342503346395
 GameObject:
   m_ObjectHideFlags: 0
