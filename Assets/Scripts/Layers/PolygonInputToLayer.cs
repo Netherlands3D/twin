@@ -36,6 +36,14 @@ namespace Netherlands3D.Twin.Layers
             lineInput.editedPolygonArea.AddListener(UpdateLineLayer);
         }
 
+        public void ShowPolygonVisualisations(bool enabled)
+        {
+            foreach (var visualisation in layers.Keys)
+            {
+                visualisation.gameObject.SetActive(enabled);
+            }
+        }
+
         private void OnDisable()
         {
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
@@ -52,7 +60,7 @@ namespace Netherlands3D.Twin.Layers
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
-
+            
             activeLayer = layerComponent;
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
         }
