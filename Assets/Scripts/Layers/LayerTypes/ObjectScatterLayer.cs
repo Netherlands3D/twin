@@ -5,7 +5,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -24,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+        private PolygonSelectionLayer polygonLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
@@ -49,17 +48,23 @@ namespace Netherlands3D.Twin.Layers
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
             this.material.enableInstancing = true;
-            
+
             polygonLayer = polygon;
 
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.Density = 1000; // per ha for the UI
+            if (polygon.ShapeType == ShapeType.Line)
+            {
+                settings.Angle = CalculateLineAngle(polygon);
+                settings.AutoRotateToLine = true;
+            }
+
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
-            
+
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
         }
 
@@ -71,6 +76,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.SetParent(ReferencedProxy);
             }
+
             RecalculatePolygonsAndSamplerTexture();
             polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
@@ -92,6 +98,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 Destroy(visualisation.gameObject);
             }
+
             visualisations.Clear();
 
             var strokeWidth = -settings.StrokeWidth; //invert so the stroke is always inset
@@ -126,6 +133,18 @@ namespace Netherlands3D.Twin.Layers
 
         private void RecalculatePolygonsAndSamplerTexture()
         {
+            if (polygonLayer.ShapeType == ShapeType.Line)
+            {
+                var newAngle = CalculateLineAngle(polygonLayer);
+                
+                //Avoid calling the code below twice, once through the polygon edit event, and once because of the settings change event (since the angle is set).
+                if (!Mathf.Approximately(settings.Angle, newAngle)) 
+                {
+                    settings.Angle = newAngle; //this will call the change event, which will result in this function be called again but this time this if block won't be reached and we can continue with the polygon recalculation.
+                    return; 
+                }
+            }
+
             RecalculatePolygonsAndGetBounds();
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
@@ -160,7 +179,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void ResampleTexture()
         {
-            print("ScatterMap:"+ settings.Scatter);
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
@@ -292,9 +310,10 @@ namespace Netherlands3D.Twin.Layers
             yield return new WaitForEndOfFrame(); //wait for layer component to initialize
             foreach (var child in ReferencedProxy.ChildrenLayers)
             {
-                if(child.Depth == ReferencedProxy.Depth + 1)
+                if (child.Depth == ReferencedProxy.Depth + 1)
                     child.SetParent(layer.ReferencedProxy);
             }
+
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             DestroyLayer();
@@ -303,6 +322,14 @@ namespace Netherlands3D.Twin.Layers
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
+        }
+
+        private static float CalculateLineAngle(PolygonSelectionLayer polygon)
+        {
+            var start = new Vector2(polygon.OriginalPolygon[0].x, polygon.OriginalPolygon[0].z);
+            var end = new Vector2(polygon.OriginalPolygon[1].x, polygon.OriginalPolygon[1].z);
+            var dir = end - start;
+            return Vector2.Angle(Vector2.up, dir);
         }
     }
 }

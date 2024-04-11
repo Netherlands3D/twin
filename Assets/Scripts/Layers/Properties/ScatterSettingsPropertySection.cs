@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Slider densitySlider;
         [SerializeField] private Slider scatterSlider;
         [SerializeField] private Slider angleSlider;
+        [SerializeField] private GameObject angleTitleLabel;
         [SerializeField] private DoubleSlider heightRangeSlider;
         [SerializeField] private DoubleSlider diameterRangeSlider;
 
@@ -39,10 +40,21 @@ namespace Netherlands3D.Twin.Layers.Properties
                 densitySlider.value = settings.Density;
                 scatterSlider.value = settings.Scatter; 
                 angleSlider.value = settings.Angle;
+                ShowAngleSlider = !settings.AutoRotateToLine;
                 heightRangeSlider.minSliderValue = settings.MinScale.y;
                 heightRangeSlider.maxSliderValue = settings.MaxScale.y;
                 diameterRangeSlider.minSliderValue = settings.MinScale.x; //x and z are the same for diameter
                 diameterRangeSlider.maxSliderValue = settings.MaxScale.x;
+            }
+        }
+
+        public bool ShowAngleSlider
+        {
+            get => angleSlider.gameObject.activeSelf;
+            set
+            {
+                angleSlider.gameObject.SetActive(value);
+                angleTitleLabel.gameObject.SetActive(value);
             }
         }
 
