@@ -150,6 +150,9 @@ namespace Netherlands3D.Twin.Layers
 
         private Bounds RecalculatePolygonsAndGetBounds()
         {
+            if (polygonLayer.ShapeType == ShapeType.Line)
+                settings.Angle = CalculateLineAngle(polygonLayer);
+            
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
