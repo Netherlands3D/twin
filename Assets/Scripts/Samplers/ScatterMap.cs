@@ -106,10 +106,10 @@ namespace Netherlands3D.Twin
         private IEnumerator GenerateScatterPointsCoroutine(List<PolygonVisualisation> visualisations, Bounds polygonBounds, float density, float scatter, float angle, Action<SampleTexture> onSamplerTextureCreated)
         {
             float cellSize = 1f / Mathf.Sqrt(density);
-            polyBounds = polygonBounds;
             CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds); // we need the gridBounds out variable. 
 
 #if UNITY_EDITOR
+            this.polyBounds = polygonBounds;
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 #endif
