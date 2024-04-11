@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Layers
             settings.Density = 1000; // per ha for the UI
             if (polygon.ShapeType == ShapeType.Line)
             {
-                settings.Angle = CalculateLineAngle(polygon);
+                settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
                 settings.AutoRotateToLine = true;
             }
 
@@ -133,18 +133,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void RecalculatePolygonsAndSamplerTexture()
         {
-            if (polygonLayer.ShapeType == ShapeType.Line)
-            {
-                var newAngle = CalculateLineAngle(polygonLayer);
-                
-                //Avoid calling the code below twice, once through the polygon edit event, and once because of the settings change event (since the angle is set).
-                if (!Mathf.Approximately(settings.Angle, newAngle)) 
-                {
-                    settings.Angle = newAngle; //this will call the change event, which will result in this function be called again but this time this if block won't be reached and we can continue with the polygon recalculation.
-                    return; 
-                }
-            }
-
             RecalculatePolygonsAndGetBounds();
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
