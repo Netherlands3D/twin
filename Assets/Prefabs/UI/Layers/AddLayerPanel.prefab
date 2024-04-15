@@ -4614,6 +4614,7 @@ GameObject:
   - component: {fileID: 869923797893058250}
   - component: {fileID: 4533545435102344014}
   - component: {fileID: 5868682921196359066}
+  - component: {fileID: 3226984465825914631}
   m_Layer: 5
   m_Name: PolygonToolPanel
   m_TagString: Untagged
@@ -4682,6 +4683,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 1
+--- !u!114 &3226984465825914631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2668964273557317027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75f102c7447a4821b67a24c3cafff98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggles:
+  - {fileID: 8946658228495644462}
+  - {fileID: 851642062320030576}
 --- !u!1 &2684262872128270626
 GameObject:
   m_ObjectHideFlags: 0
