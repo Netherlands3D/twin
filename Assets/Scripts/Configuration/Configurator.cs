@@ -59,6 +59,14 @@ namespace Netherlands3D.Twin.Configuration
                 return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
             } 
         }
+        
+        [MenuItem("Netherlands3D/Change Debug Configuration")]
+        public static void OpenConfiguratorInInspector()
+        {
+            var assetPath = AssetDatabase.GUIDToAssetPath("049e538b7dc9ec64789200c6804d8dbf");
+            var myScriptableObject = AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
+            Selection.activeObject = myScriptableObject;
+        }
 
         public bool IsOpen { 
             get => SetupSceneLoaded; 
