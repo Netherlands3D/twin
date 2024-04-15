@@ -5,7 +5,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -24,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        private PolygonSelectionLayer polygonLayer; // => ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+        public PolygonSelectionLayer polygonLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
@@ -49,17 +48,24 @@ namespace Netherlands3D.Twin.Layers
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
             this.material.enableInstancing = true;
-            
+
             polygonLayer = polygon;
 
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.Density = 1000; // per ha for the UI
+            if (polygon.ShapeType == ShapeType.Line)
+            {
+                settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
+                settings.AutoRotateToLine = true;
+            }
+
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
+            settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
-            
+
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
         }
 
@@ -71,10 +77,15 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.SetParent(ReferencedProxy);
             }
+
             RecalculatePolygonsAndSamplerTexture();
             polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
+#if UNITY_EDITOR
+            gameObject.AddComponent<GridDebugger>();
+#endif
+            
             completedInitialization = true;
         }
 
@@ -82,6 +93,7 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnDestroy();
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
+            settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
@@ -92,6 +104,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 Destroy(visualisation.gameObject);
             }
+
             visualisations.Clear();
 
             var strokeWidth = -settings.StrokeWidth; //invert so the stroke is always inset
@@ -143,6 +156,9 @@ namespace Netherlands3D.Twin.Layers
 
         private Bounds RecalculatePolygonsAndGetBounds()
         {
+            if (polygonLayer.ShapeType == ShapeType.Line)
+                settings.Angle = CalculateLineAngle(polygonLayer);
+            
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
@@ -153,19 +169,18 @@ namespace Netherlands3D.Twin.Layers
                 var polygon = polygons[index];
                 bounds.Encapsulate(polygon.Bounds);
             }
-
+            
             polygonBounds = bounds;
             return bounds;
         }
 
         private void ResampleTexture()
         {
-            print("ScatterMap:"+ settings.Scatter);
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
-            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
+            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, 0, out var gridBounds); //dont rotate the grid here, we will rotate the results after sampling to avoid issues with anti-aliassing
             var normalizedScatter = settings.Scatter / 100f;
-            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, normalizedScatter, cellSize, ProcessScatterPoints);
+            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, normalizedScatter, cellSize, settings.Angle, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)
@@ -292,9 +307,10 @@ namespace Netherlands3D.Twin.Layers
             yield return new WaitForEndOfFrame(); //wait for layer component to initialize
             foreach (var child in ReferencedProxy.ChildrenLayers)
             {
-                if(child.Depth == ReferencedProxy.Depth + 1)
+                if (child.Depth == ReferencedProxy.Depth + 1)
                     child.SetParent(layer.ReferencedProxy);
             }
+
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             DestroyLayer();
@@ -303,6 +319,14 @@ namespace Netherlands3D.Twin.Layers
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
+        }
+
+        private static float CalculateLineAngle(PolygonSelectionLayer polygon)
+        {
+            var start = new Vector2(polygon.OriginalPolygon[0].x, polygon.OriginalPolygon[0].z);
+            var end = new Vector2(polygon.OriginalPolygon[1].x, polygon.OriginalPolygon[1].z);
+            var dir = end - start;
+            return Vector2.Angle(Vector2.up, dir);
         }
     }
 }
