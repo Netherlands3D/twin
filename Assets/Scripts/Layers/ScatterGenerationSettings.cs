@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin
                     return;
 
                 density = value;
-                ScatterSettingsChanged.Invoke();
+                ScatterShapeChanged.Invoke(); //changing the density requires a rerender of the shape because of the resolution change
             }
         }
 

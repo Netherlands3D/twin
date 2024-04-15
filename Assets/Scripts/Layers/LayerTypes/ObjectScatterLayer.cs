@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Layers
 
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
-            settings.ScatterSettingsChanged.AddListener(RecalculatePolygonsAndSamplerTexture); //todo: when scatter settings change, the polygons don't always need to be recalculated, but in case of a density change it does, because the sample texture should have a different resolution.
+            settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
 
