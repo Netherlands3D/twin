@@ -181,6 +181,18 @@ namespace Netherlands3D.Twin.Configuration
             #endif
         }
 
+        [ContextMenu("Write config to Debug Config field")]
+        private void WriteConfigToDebugConfig()
+        {
+            debugConfig = configuration.ToJsonNode().ToString(4);
+        }
+
+        [ContextMenu("Write config to Debug Url field")]
+        private void WriteConfigToDebugUrl()
+        {
+            debugUrl = $"https://netherlands3d.eu/twin/{configuration.ToQueryString()}";
+        }
+
         public void StartSetup()
         {
             Open();
