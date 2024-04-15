@@ -30,7 +30,12 @@ namespace Netherlands3D.Twin
         public void Init(Functionality functionality)
         {
             this.functionality = functionality;
-
+            
+            // Two-way binding, if the functionality changes state with the SetupWizard open, it should
+            // influence whether it is toggled. This is used, for example, by the validation mechanism.
+            functionality.OnDisable.AddListener(() => toggle.SetIsOnWithoutNotify(false));
+            functionality.OnEnable.AddListener(() => toggle.SetIsOnWithoutNotify(false));
+                
             title.text = functionality.Title;
             caption.text = functionality.Caption;
             toggle.isOn = this.functionality.IsEnabled;

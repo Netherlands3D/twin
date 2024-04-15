@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Functionalities;
 using SimpleJSON;
@@ -55,6 +56,24 @@ namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
             {
                 ["apiKey"] = apiKey
             };
+        }
+
+        /// <summary>
+        /// Returns a list of error messages when the configuration is not valid, or no messages if
+        /// the configuration _is_ valid.
+        /// </summary>
+        public List<string> Validate()
+        {
+            var errorMessages = new List<string>();
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                errorMessages.Add(
+                "Google API sleutel ontbreekt, vraag de applicatiebeheerder om deze in te stellen."
+                );
+            }
+
+            return errorMessages;
         }
     }
 }

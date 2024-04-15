@@ -28,6 +28,7 @@ namespace Netherlands3D.Twin.Functionalities
             get => isEnabled;
             set
             {
+                var config = configuration as IConfiguration;
                 var wasEnabled = isEnabled;
                 isEnabled = value;
                 switch (wasEnabled)
@@ -38,6 +39,14 @@ namespace Netherlands3D.Twin.Functionalities
                     case true when isEnabled == false:
                         OnDisable.Invoke();
                         break;
+                }
+
+                // If the configuration is invalid, and we try to enable it: actively disable again.
+                if (isEnabled && config != null && config.Validate().Count > 0)
+                {
+                    // Please note we use the _property_ here so that the logic above is performed and the
+                    // event triggered
+                    IsEnabled = false;
                 }
             }
         }

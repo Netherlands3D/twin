@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Web;
@@ -84,6 +85,20 @@ namespace Netherlands3D.Twin.Configuration.Indicators
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
             SetDossierIdInQueryParameters(urlBuilder);
+        }
+
+        public List<string> Validate()
+        {
+            var issues = new List<string>();
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                issues.Add("Een API sleutel is benodigd in de configuratie om kwaliteitsindicatoren te kunnen laden");
+            }
+            if (string.IsNullOrEmpty(baseUri))
+            {
+                issues.Add("De Twin is niet geconfigureerd om indicatoren te ondersteunen, de URL naar de backend ontbreekt");
+            }
+            return issues;
         }
 
         public void SetDossierIdInQueryParameters(UriBuilder urlBuilder)
