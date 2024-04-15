@@ -7,7 +7,9 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
 using SimpleJSON;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -60,6 +62,7 @@ namespace Netherlands3D.Twin.Configuration
             } 
         }
         
+#if UNITY_EDITOR
         [MenuItem("Netherlands3D/Change Debug Configuration")]
         public static void OpenConfiguratorInInspector()
         {
@@ -67,6 +70,7 @@ namespace Netherlands3D.Twin.Configuration
             var myScriptableObject = AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
             Selection.activeObject = myScriptableObject;
         }
+#endif
 
         public bool IsOpen { 
             get => SetupSceneLoaded; 
