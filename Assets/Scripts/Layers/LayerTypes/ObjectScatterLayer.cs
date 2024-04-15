@@ -167,7 +167,7 @@ namespace Netherlands3D.Twin.Layers
                 var polygon = polygons[index];
                 bounds.Encapsulate(polygon.Bounds);
             }
-
+            
             polygonBounds = bounds;
             return bounds;
         }
@@ -176,9 +176,9 @@ namespace Netherlands3D.Twin.Layers
         {
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
-            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, settings.Angle, out var gridBounds);
+            var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, 0, out var gridBounds); //dont rotate the grid here, we will rotate the results after sampling to avoid issues with anti-aliassing
             var normalizedScatter = settings.Scatter / 100f;
-            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, normalizedScatter, cellSize, ProcessScatterPoints);
+            ScatterMap.Instance.SampleTexture(sampleTexture, gridPoints, gridBounds, normalizedScatter, cellSize, settings.Angle, ProcessScatterPoints);
         }
 
         private void ProcessScatterPoints(List<Vector3> scatterPoints, List<Vector2> sampledScales)
