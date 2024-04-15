@@ -62,6 +62,7 @@ namespace Netherlands3D.Twin.Layers
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
+            settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { settings };
 
@@ -92,6 +93,7 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnDestroy();
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
+            settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }

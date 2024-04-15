@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin
 
         public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
         public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
+        public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
         public bool AutoRotateToLine { get; set; } = false;
 
@@ -34,7 +35,7 @@ namespace Netherlands3D.Twin
                     return;
 
                 density = value;
-                ScatterShapeChanged.Invoke(); //changing the density requires a rerender of the shape because of the resolution change
+                ScatterDistributionChanged.Invoke(); 
             }
         }
 
@@ -60,7 +61,7 @@ namespace Netherlands3D.Twin
                     return;
 
                 angle = value;
-                ScatterSettingsChanged.Invoke();
+                ScatterDistributionChanged.Invoke();
             }
         }
 
