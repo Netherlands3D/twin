@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,27 +9,30 @@ namespace Netherlands3D.Twin
 {
     public class GridDebugger : MonoBehaviour
     {
+        private ObjectScatterLayer layer;
         private CompoundPolygon poly;
         private Vector2[] grid;
         private int startIndex = 0;
         private float angle;
         private Bounds gridBounds;
-        [SerializeField]
-        private float cellSize = 0.5f;
+        private float cellSize = 1000000;
         
         private void Start()
         {
-            var verts = new Vector2[]
-            {
-                Vector2.zero,
-                Vector2.one * 1.5f,
-                new Vector2(0, 1)
-            };
-            poly = new CompoundPolygon(verts);
+            layer = GetComponent<ObjectScatterLayer>();
+            UpdateGrid();
+            layer.polygonLayer.polygonChanged.AddListener(UpdateGrid);
+            layer.Settings.ScatterSettingsChanged.AddListener(UpdateGrid);
+        }
 
-            var angle = Vector2.Angle(verts[startIndex%verts.Length], verts[++startIndex%verts.Length]);
+        private void UpdateGrid()
+        {
+            poly = layer.polygonLayer.Polygon;
+            var angle = layer.Settings.Angle;
             
-            grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out gridBounds); // we need the gridBounds out variable. 
+            var densityPerSquareUnit = layer.Settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
+            grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out gridBounds);
         }
 
         private void Update()
@@ -36,9 +40,9 @@ namespace Netherlands3D.Twin
             if (Keyboard.current.kKey.wasPressedThisFrame)
             {
                 print(startIndex);
-                
-                angle = GetAngle();
-                grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, 0.5f, angle, out var gridBounds); // we need the gridBounds out variable. 
+
+                // angle = GetAngle();
+                grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out var gridBounds); // we need the gridBounds out variable. 
             }
         }
 
@@ -61,7 +65,7 @@ namespace Netherlands3D.Twin
             var height = Mathf.CeilToInt(1f * (gridBounds.size.z + 2 * cellSize));
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(gridBounds.center, new Vector3(width, 0, height));
-            
+
             //draw polygon
             Gizmos.color = Color.cyan;
             for (var i = 0; i < poly.SolidPolygon.Length; i++)
@@ -71,28 +75,30 @@ namespace Netherlands3D.Twin
 
                 var nextVert = poly.SolidPolygon[(i + 1) % poly.SolidPolygon.Length];
                 var nextVert3D = new Vector3(nextVert.x, 0, nextVert.y);
-                
-                Gizmos.DrawSphere(vert3D, 0.1f);
+
+                Gizmos.DrawSphere(vert3D, 0.5f);
                 Gizmos.DrawLine(vert3D, nextVert3D);
             }
-            Gizmos.DrawWireCube(poly.Bounds.center,poly.Bounds.size);
-            
+
+            Gizmos.DrawWireCube(poly.Bounds.center, poly.Bounds.size);
+
             //draw grid
             Gizmos.color = Color.magenta;
             var grid3D = grid.ToVector3List();
             foreach (var p in grid3D)
             {
-                Gizmos.DrawSphere(p, 0.05f);
+                Gizmos.DrawSphere(p, 0.2f);
             }
+
             Gizmos.DrawWireCube(gridBounds.center, gridBounds.size);
 
             //draw centerline
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(poly.Bounds.center, 0.05f);
-            
+            Gizmos.DrawSphere(poly.Bounds.center, 0.2f);
+
             var center = poly.Bounds.center;
             Vector3 direction = Quaternion.Euler(0, -angle, 0) * Vector3.forward; // Calculate the direction of the line based on angle
-            
+
             Vector3 startPoint = center - direction * (poly.Bounds.extents.magnitude / 2); // Calculate the starting point of the line
             Vector3 endPoint = center + direction * (poly.Bounds.extents.magnitude / 2); // Calculate the end point of the line
 

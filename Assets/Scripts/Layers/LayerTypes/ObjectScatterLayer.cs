@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        private PolygonSelectionLayer polygonLayer;
+        public PolygonSelectionLayer polygonLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
@@ -81,6 +81,10 @@ namespace Netherlands3D.Twin.Layers
             polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
+#if UNITY_EDITOR
+            gameObject.AddComponent<GridDebugger>();
+#endif
+            
             completedInitialization = true;
         }
 
