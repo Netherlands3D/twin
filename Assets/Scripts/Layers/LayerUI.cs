@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -223,23 +224,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void RecalculateVisibleHierarchyRecursive()
         {
             layerManager.LayersVisibleInInspector.Clear();
-            foreach (Transform unparentedLayer in LayerBaseTransform)
-            {
-                var ui = unparentedLayer.GetComponent<LayerUI>();
-                ui.RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers();
-            }
-        }
-
-        private void RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers()
-        {
-            layerManager.LayersVisibleInInspector.Add(this);
-            if (foldoutToggle.isOn)
-            {
-                foreach (var child in ChildrenUI)
-                {
-                    child.RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers();
-                }
-            }
+            layerManager.LayersVisibleInInspector = LayerBaseTransform.GetComponentsInChildren<LayerUI>(false).ToList();
 
             if (Layer) // When the layer is deleted, this UI should not update
                 MarkLayerUIAsDirty();
@@ -248,7 +233,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateParentAndChildren()
         {
             ParentUI = transform.parent.GetComponentInParent<LayerUI>(true); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
-            ChildrenUI = childrenPanel.GetComponentsInChildren<LayerUI>(true);
+          
+            var list = new List<LayerUI>();
+            foreach (Transform t in childrenPanel) //loop over the transforms explicitly because using GetComponentsInChildren is recursive.
+            {
+                 var ui = t.GetComponent<LayerUI>();
+                 list.Add(ui);
+            }
+
+            ChildrenUI = list.ToArray();
+            UpdateFoldout(); //update the foldout because the children are recalculated
         }
 
         public void MarkLayerUIAsDirty()
