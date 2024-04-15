@@ -120,8 +120,11 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculateLineWidth(line, lineWidth);
 
-            var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
-            propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
+            if (propertySections.Count == 0)
+            {
+                var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+                propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
+            }
             // Properties.Properties.Instance.Show(this);
         }
 
