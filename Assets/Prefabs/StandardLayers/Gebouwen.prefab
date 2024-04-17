@@ -53,14 +53,14 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Buildings_2023_LOD12/buildings-{x}_{y}.1.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod1.2/buildings-{x}_{y}.1.2.bin
     pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Buildings_2023_LOD22/buildings-{x}_{y}.2.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod2.2/buildings-{x}_{y}.2.2.bin
     pathQuery: 
     maximumDistance: 3000
     maximumDistanceSquared: 0
