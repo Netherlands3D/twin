@@ -70,13 +70,13 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private DrawMode mode = DrawMode.CreateAndEdit;
         public DrawMode Mode => mode;
 
-        private InputAction pointerAction;
-        private InputAction tapAction;
-        private InputAction escapeAction;
-        private InputAction finishAction;
-        private InputAction tapSecondaryAction;
-        private InputAction clickAction;
-        private InputAction modifierAction;
+        protected InputAction pointerAction;
+        protected InputAction tapAction;
+        protected InputAction escapeAction;
+        protected InputAction finishAction;
+        protected InputAction tapSecondaryAction;
+        protected InputAction clickAction;
+        protected InputAction modifierAction;
 
         [SerializeField] private LineRenderer polygonLineRenderer;
         [SerializeField] private LineRenderer previewLineRenderer;
@@ -90,6 +90,12 @@ namespace Netherlands3D.SelectionTools
         protected Vector2 previousFrameScreenCoordinate = default;
         protected Vector3 lastNormal = Vector3.zero;
         protected Plane worldPlane;
+
+        public Plane WorldPlane
+        {
+            get => worldPlane;
+            set => worldPlane = value;
+        }
 
         private bool closedLoop = false;
         private bool snappingToStartPoint = false;
@@ -111,12 +117,14 @@ namespace Netherlands3D.SelectionTools
         [Header("Invoke")] 
         public UnityEvent<bool> blockCameraDrag;
         public UnityEvent<List<Vector3>> createdNewPolygonArea;
+        
         [Header("Optional Invoke")] 
         public UnityEvent<List<Vector3>> editedPolygonArea;
 
-        [Tooltip("Contains the list of points the line is made of")] public UnityEvent<List<Vector3>> previewLineHasChanged;
+        [Tooltip("Contains the list of points the line is made of")]
+        public UnityEvent<List<Vector3>> previewLineHasChanged;
 
-        void Awake()
+        protected virtual void Awake()
         {
             mainCamera = Camera.main;
             polygonLineRenderer.startColor = polygonLineRenderer.endColor = lineColor;
@@ -274,7 +282,7 @@ namespace Netherlands3D.SelectionTools
 
                 return;
             }
-            
+
             //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
             if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
             {
@@ -379,8 +387,8 @@ namespace Netherlands3D.SelectionTools
         {
             if (closedLoop)
                 return;
-            
-            if (positions.Count == minPointsToCloseLoop -1) // add an extra point at the current mouse position to attempt to create a valid shape
+
+            if (positions.Count == minPointsToCloseLoop - 1) // add an extra point at the current mouse position to attempt to create a valid shape
             {
                 Tap();
             }
@@ -421,7 +429,7 @@ namespace Netherlands3D.SelectionTools
                         positions.Add(closingLineEnd);
                     }
                 }
-                
+
                 closedLoop = true;
             }
 
