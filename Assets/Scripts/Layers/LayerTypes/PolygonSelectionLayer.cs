@@ -180,6 +180,8 @@ namespace Netherlands3D.Twin.Layers
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
 
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
+            
             return polygonVisualisation;
         }
 

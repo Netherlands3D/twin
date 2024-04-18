@@ -241,8 +241,8 @@ namespace Netherlands3D.Twin
                 offsetPoint.y = newColorSample.b;
                 offsetPoint.z = rotatedY + boundsCenter2D.y;
 
-                sampledRandomness.x = newColorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
-                sampledRandomness.y = newColorSample.g;
+                sampledRandomness.x = colorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
+                sampledRandomness.y = colorSample.g;
 
                 points.Add(offsetPoint);
                 sampledScales.Add(sampledRandomness);
