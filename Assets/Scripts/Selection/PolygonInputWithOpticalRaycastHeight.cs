@@ -14,12 +14,17 @@ namespace Netherlands3D.Twin
             base.Awake();
             opticalRaycaster = GameObject.FindAnyObjectByType<OpticalRaycaster>();
         }
-        
+
         protected override void UpdateCurrentWorldCoordinate()
         {
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var point = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, currentPointerPosition);
-            currentWorldCoordinate = point;
+
+            print(point);
+            if (point != Vector3.right) //todo: why is the default value (1,0,0) instead of (0,0,0)?
+                currentWorldCoordinate = point;
+            else
+                base.UpdateCurrentWorldCoordinate();
         }
     }
 }
