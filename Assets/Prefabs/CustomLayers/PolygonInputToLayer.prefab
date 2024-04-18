@@ -1484,6 +1484,7 @@ GameObject:
   - component: {fileID: 4912615273628568593}
   - component: {fileID: 5783392271817491039}
   - component: {fileID: 758463596900562266}
+  - component: {fileID: 3544518474178100614}
   m_Layer: 0
   m_Name: Projector
   m_TagString: Untagged
@@ -1675,3 +1676,15 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &3544518474178100614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8777288894377185338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d602daece20d4d718251faaf0cb627c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

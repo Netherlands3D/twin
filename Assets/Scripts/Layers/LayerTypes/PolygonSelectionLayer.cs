@@ -62,27 +62,17 @@ namespace Netherlands3D.Twin.Layers
                 SetLine(polygon);
             else
                 SetPolygon(polygon);
-            PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
+
+            PolygonSelectionCalculator.RegisterPolygon(this);
         }
 
         protected override void Start()
         {
             base.Start();
-            if(shapeType == ShapeType.Line)
+            if (shapeType == ShapeType.Line)
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
-
-        private void OnEnable()
-        {
-            ClickNothingPlane.ClickedOnNothing.AddListener(DeselectPolygon);
-        }
-
-        private void OnDisable()
-        {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(DeselectPolygon);
-        }
-
-        private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
+        public void SelectPolygon()
         {
             if (UI)
                 UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
@@ -181,7 +171,7 @@ namespace Netherlands3D.Twin.Layers
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
-            
+
             return polygonVisualisation;
         }
 
@@ -206,7 +196,7 @@ namespace Netherlands3D.Twin.Layers
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            PolygonVisualisation.reselectVisualisedPolygon.RemoveListener(OnPolygonVisualisationSelected);
+            PolygonSelectionCalculator.UnregisterPolygon(this);
             Destroy(PolygonVisualisation.gameObject);
         }
 
