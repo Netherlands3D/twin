@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var point = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, currentPointerPosition);
 
-            if (point != Vector3.right) //todo: why is the default value (1,0,0) instead of (0,0,0)?
+            if (point != Vector3.zero)
                 currentWorldCoordinate = point;
             else
                 base.UpdateCurrentWorldCoordinate();
