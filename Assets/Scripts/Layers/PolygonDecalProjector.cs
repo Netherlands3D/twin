@@ -10,6 +10,9 @@ namespace Netherlands3D.Twin
         [Header("Mask camera settings")]
         [SerializeField] private float minDistance = 100;
         [SerializeField] private float maxDistance = 1000;
+
+        [SerializeField] private float minCamHeightMultiplier = 0.1f;
+        [SerializeField] private float maxCamHeightMultiplier = 100f;
         
         [Header("Mask texture settings")]
         [SerializeField] private AnimationCurve lookDirectionResolution;
@@ -28,15 +31,15 @@ namespace Netherlands3D.Twin
         {
             var lookingForward = 1-Math.Abs(Vector3.Dot(Vector3.down, Camera.main.transform.forward)); //0 is looking top down, 1 is looking straight to the horizon
             var sampleMaxDistance = Mathf.Lerp(maxDistance, minDistance, lookDirectionResolution.Evaluate(lookingForward));
-            print("sample: "+sampleMaxDistance);
 
-            var minCamHeight = -20f;
-            var maxCamHeight = 500f;
+            var minCamHeight = -50f;
+            var maxCamHeight = 1500f;
             var camHeight = EstimateCameraHeight(); 
             var normalizedHeight = Mathf.InverseLerp(minCamHeight, maxCamHeight, camHeight);
-            var camHeigtMultiplier = Mathf.Lerp(0.5f, 50f, normalizedHeight);
-            sampleMaxDistance *= camHeigtMultiplier;
-
+            var t = lookDirectionResolution.Evaluate(normalizedHeight);
+            var camHeightMultiplier = Mathf.Lerp(minCamHeightMultiplier, maxCamHeightMultiplier, normalizedHeight);
+            sampleMaxDistance *= camHeightMultiplier;
+            
             var extent = Camera.main.GetExtent(sampleMaxDistance);
             var w = (float)extent.Width;
             var h = (float)extent.Height;

@@ -1544,6 +1544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minDistance: 100
   maxDistance: 1000
+  minCamHeightMultiplier: 0.1
+  maxCamHeightMultiplier: 100
   lookDirectionResolution:
     serializedVersion: 2
     m_Curve:
@@ -1577,6 +1579,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  terrainLayer: {fileID: 0}
 --- !u!20 &5783392271817491039
 Camera:
   m_ObjectHideFlags: 0
