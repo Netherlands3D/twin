@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -17,14 +16,12 @@ namespace Netherlands3D.Twin
         
         private DecalProjector decalProjector;
         private Camera projectionCamera;
-        private OpticalRaycaster opticalRaycaster;
+        [SerializeField] private CartesianTileLayer terrainLayer;
 
         private void Awake()
         {
             decalProjector = GetComponent<DecalProjector>();
             projectionCamera = GetComponent<Camera>();
-            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-            // renderTexture = new RenderTexture(1024, 1024, 24);
         }
 
         private void Update()
@@ -35,11 +32,10 @@ namespace Netherlands3D.Twin
 
             var minCamHeight = -20f;
             var maxCamHeight = 500f;
-            var camHeight = Camera.main.transform.position.y; //todo: get real height above terrain: get bounds of all terrein, get terrain with smallest y extents. use this bounds center as an estimation
+            var camHeight = EstimateCameraHeight(); 
             var normalizedHeight = Mathf.InverseLerp(minCamHeight, maxCamHeight, camHeight);
-            var camHeigtMultiplier = Mathf.Lerp(1, 50, normalizedHeight);
+            var camHeigtMultiplier = Mathf.Lerp(0.5f, 50f, normalizedHeight);
             sampleMaxDistance *= camHeigtMultiplier;
-            // print("sample wit height: "+sampleMaxDistance);
 
             var extent = Camera.main.GetExtent(sampleMaxDistance);
             var w = (float)extent.Width;
@@ -53,6 +49,30 @@ namespace Netherlands3D.Twin
             decalProjector.size = size;
             
             projectionCamera.orthographicSize = maxDimension / 2;
+        }
+
+        private float EstimateCameraHeight()
+        {
+            if (!terrainLayer)
+                return Camera.main.transform.position.y;
+            
+            //estimate real height above terrain: get bounds of all terrein, get terrain with smallest y extents. use this bounds center as an estimation
+            var tiles = terrainLayer.GetComponentsInChildren<MeshFilter>();
+            var smallestYExtents = float.MaxValue;
+            var estimatedTerrainHeight = 0f;
+
+            foreach (var tile in tiles)
+            {
+                var tileBounds = tile.mesh.bounds;
+                var ySize = tileBounds.size.y;
+                if (ySize < smallestYExtents)
+                {
+                    smallestYExtents = ySize;
+                    estimatedTerrainHeight = tileBounds.center.y;
+                }
+            }
+            
+            return Camera.main.transform.position.y - estimatedTerrainHeight; 
         }
     }
 }
