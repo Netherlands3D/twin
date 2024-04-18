@@ -479,6 +479,11 @@ PrefabInstance:
       propertyPath: far clip plane
       value: 15000
       objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 2039
+      objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015817, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: m_RootOrder
@@ -1706,6 +1711,11 @@ PrefabInstance:
       propertyPath: targetGameObject
       value: 
       objectReference: {fileID: 767208734}
+    - target: {fileID: 6372084430124044627, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: polygonMeshMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
     - target: {fileID: 6562649301780415454, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: onTriggered.m_PersistentCalls.m_Calls.Array.size
