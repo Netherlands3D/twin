@@ -471,8 +471,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   polygonExtrusionHeight: 10
   polygonMeshMaterial: {fileID: 2100000, guid: 44d459479e0340446b1215b3f6901764, type: 2}
-  polygonInput: {fileID: 5035265957184785309}
-  lineInput: {fileID: 7857407149832917040}
+  polygonInput: {fileID: 2971444630074657358}
+  lineInput: {fileID: 6819746166564945398}
   defaultLineWidth: 10
   polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
     type: 3}
@@ -526,7 +526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2125279392852574923
 Transform:
   m_ObjectHideFlags: 0
@@ -553,7 +553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
-  - component: {fileID: 5035265957184785309}
+  - component: {fileID: 2971444630074657358}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -683,7 +683,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 0
---- !u!114 &5035265957184785309
+--- !u!114 &2971444630074657358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -692,12 +692,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5035265957184785282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e0e5a1aab0d69a4fb6831b226ee84c7, type: 3}
+  m_Script: {fileID: 11500000, guid: cc1c2cc6fac734b8eac771ad4ae62c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
     type: 3}
-  lineColor: {r: 1, g: 0.7202714, b: 0, a: 1}
+  lineColor: {r: 1, g: 0.72156864, b: 0, a: 1}
   closedLoopLineColor: {r: 0, g: 1, b: 0, a: 1}
   lineWidthMultiplier: 1
   maxSelectionDistanceFromCamera: 10000
@@ -718,7 +718,7 @@ MonoBehaviour:
   lockInputLayers:
     serializedVersion: 2
     m_Bits: 32
-  mode: 2
+  mode: 0
   polygonLineRenderer: {fileID: 5035265957184785308}
   previewLineRenderer: {fileID: 190626057916171551}
   currentWorldCoordinate: {x: 0, y: 0, z: 0}
@@ -1152,7 +1152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
-  - component: {fileID: 7857407149832917040}
+  - component: {fileID: 6819746166564945398}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1282,7 +1282,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 0
---- !u!114 &7857407149832917040
+--- !u!114 &6819746166564945398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1291,12 +1291,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7239524049806933421}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e0e5a1aab0d69a4fb6831b226ee84c7, type: 3}
+  m_Script: {fileID: 11500000, guid: cc1c2cc6fac734b8eac771ad4ae62c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
     type: 3}
-  lineColor: {r: 1, g: 0.7202714, b: 0, a: 1}
+  lineColor: {r: 1, g: 0.72156864, b: 0, a: 1}
   closedLoopLineColor: {r: 0, g: 1, b: 0, a: 1}
   lineWidthMultiplier: 1
   maxSelectionDistanceFromCamera: 10000
