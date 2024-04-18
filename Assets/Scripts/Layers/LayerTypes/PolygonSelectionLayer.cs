@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers
 
     public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
     {
+        private ShapeType shapeType;
         public CompoundPolygon Polygon { get; set; }
         public PolygonVisualisation PolygonVisualisation { get; private set; }
 
@@ -27,11 +28,9 @@ namespace Netherlands3D.Twin.Layers
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         public UnityEvent polygonChanged = new();
-
-        private ShapeType shapeType;
-
+        
         private List<IPropertySectionInstantiator> propertySections = new();
-
+        
         public ShapeType ShapeType
         {
             get => shapeType;
@@ -72,6 +71,8 @@ namespace Netherlands3D.Twin.Layers
             if (shapeType == ShapeType.Line)
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
+
+        
         public void SelectPolygon()
         {
             if (UI)

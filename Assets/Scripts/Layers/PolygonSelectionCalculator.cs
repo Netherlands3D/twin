@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -28,7 +29,7 @@ namespace Netherlands3D.Twin
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
         }
-        
+
         private void OnDisable()
         {
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
@@ -65,8 +66,10 @@ namespace Netherlands3D.Twin
                     layer.SelectPolygon();
                     return; //select only one
                 }
-
-                layer.DeselectPolygon(); //deselect if the click wasn't in the polygon
+                else
+                {
+                    layer.DeselectPolygon(); //deselect if the click wasn't in the polygon and the multiselect modifier keys aren't pressed
+                }
             }
         }
 
