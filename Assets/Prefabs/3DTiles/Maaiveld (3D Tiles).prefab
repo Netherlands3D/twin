@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: 89685079575361742}
+  - component: {fileID: 6210933797574673189}
+  - component: {fileID: -3573476773808680392}
   m_Layer: 6
   m_Name: Maaiveld (3D Tiles)
   m_TagString: Untagged
@@ -114,7 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d54ea15f91053479c4b173b0d2c20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
   OnOriginChanged:
     m_PersistentCalls:
       m_Calls:
@@ -296,3 +297,45 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6210933797574673189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: -3573476773808680392}
+  referenceCoordinateSystem: 4326
+  onShift:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5648866956155822156}
+        m_TargetAssemblyTypeName: Netherlands3D.Tiles3D.Read3DTileset, eu.Netherlands3D.Runtime.Tiles3D
+        m_MethodName: RecalculateBounds
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &-3573476773808680392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

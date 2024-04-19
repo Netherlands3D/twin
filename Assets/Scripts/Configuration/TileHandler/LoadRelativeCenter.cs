@@ -1,4 +1,5 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Configuration.TileHandler
@@ -19,9 +20,7 @@ namespace Netherlands3D.Twin.Configuration.TileHandler
 
         private void Apply(Coordinate coordinate)
         {
-            var newCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
-            // CoordinateConverter.zeroGroundLevelY = ConfigurationFile.zeroGroundLevelY;
-            EPSG7415.relativeCenter = new Vector2RD(newCoordinate.Points[0], newCoordinate.Points[1]);
+            GetComponent<Origin>().MoveOriginTo(coordinate);
         }
     }
 }
