@@ -139,5 +139,59 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8435314608753558583}
   m_SourcePrefab: {fileID: 100100000, guid: d802d2d99eb96db41845556a85c935dc, type: 3}
+--- !u!1 &3660824164094496530 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1057364327075258088, guid: d802d2d99eb96db41845556a85c935dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 4350863644145832442}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8435314608753558583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660824164094496530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3660824164094496530}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3660824164094496530}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
