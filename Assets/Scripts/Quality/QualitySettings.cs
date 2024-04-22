@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
         void Awake()
         {
             activeRenderPipelineAsset = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
+            SetQualityLevel(2);
         }
 
         /// <summary>
