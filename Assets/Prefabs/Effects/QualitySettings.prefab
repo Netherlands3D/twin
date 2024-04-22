@@ -301,7 +301,7 @@ PrefabInstance:
     - target: {fileID: 6880043876299353398, guid: 2e3a33c9286c0074487a4649b8fb59fc,
         type: 3}
       propertyPath: m_Name
-      value: LensFlare
+      value: SunFlare
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

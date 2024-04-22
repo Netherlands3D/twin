@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 343987274347582753}
   - component: {fileID: 248862585603240386}
   m_Layer: 0
-  m_Name: LensFlare
+  m_Name: SunFlare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

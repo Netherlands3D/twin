@@ -204,12 +204,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7fd482478be5cd40b562430e460a7a5, type: 3}
---- !u!4 &297387428 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2488954073963816146}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &409187175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,7 +1014,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sun
       value: 
-      objectReference: {fileID: 297387428}
+      objectReference: {fileID: 0}
     - target: {fileID: 4011927426931184592, guid: 0f87291afaf773943b253acaaf83be5d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1093,6 +1087,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Maaiveld
+      objectReference: {fileID: 0}
+    - target: {fileID: 508876100290826252, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: m_UsePipelineSettings
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 829415354187447443, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1701,31 +1700,6 @@ PrefabInstance:
       propertyPath: <IsReferenceLayer>k__BackingField
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: day
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: hour
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: month
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: minutes
-      value: 29
-      objectReference: {fileID: 0}
-    - target: {fileID: 2794549335201400503, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2921212951514727232, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_Name
@@ -1800,26 +1774,6 @@ PrefabInstance:
         type: 3}
       propertyPath: onTriggered.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7333123
-      objectReference: {fileID: 0}
-    - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.35182995
-      objectReference: {fileID: 0}
-    - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.52453333
-      objectReference: {fileID: 0}
-    - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.25166157
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
