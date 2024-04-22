@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waterReflectionsRenderer: {fileID: 5264056497488259051}
+  aoRenderFeature: {fileID: -6529169233301359828, guid: 33f1feddcc7564949a6e319fabf5f662,
+    type: 2}
 --- !u!1 &5264056497488259051
 GameObject:
   m_ObjectHideFlags: 0
