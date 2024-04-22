@@ -201,14 +201,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "https://github.com/Netherlands3D/CartesianTiles.git#feature/recalculate-mesh-normals",
+      "version": "1.1.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.2.0",
         "com.unity.textmeshpro": "3.0.6"
       },
-      "hash": "3b805b992a2c44fa4cfc9fcf0b213aeca5b17301"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",
