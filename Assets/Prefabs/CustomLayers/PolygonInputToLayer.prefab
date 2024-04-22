@@ -1546,7 +1546,7 @@ MonoBehaviour:
   minDistance: 100
   maxDistance: 1000
   minCamHeightMultiplier: 0.1
-  maxCamHeightMultiplier: 100
+  maxCamHeightMultiplier: 50
   lookDirectionResolution:
     serializedVersion: 2
     m_Curve:
