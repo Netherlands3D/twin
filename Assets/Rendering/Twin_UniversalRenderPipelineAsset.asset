@@ -50,7 +50,7 @@ MonoBehaviour:
   m_AdditionalLightsShadowResolutionTierHigh: 512
   m_ReflectionProbeBlending: 0
   m_ReflectionProbeBoxProjection: 0
-  m_ShadowDistance: 1951.5647
+  m_ShadowDistance: 1950
   m_ShadowCascadeCount: 1
   m_Cascade2Split: 0
   m_Cascade3Split: {x: 0.1, y: 0.3}
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_ColorGradingMode: 0
   m_ColorGradingLutSize: 32
   m_UseFastSRGBLinearConversion: 0
-  m_SupportDataDrivenLensFlare: 1
+  m_SupportDataDrivenLensFlare: 0
   m_ShadowType: 1
   m_LocalShadowsSupported: 0
   m_LocalShadowsAtlasResolution: 256
