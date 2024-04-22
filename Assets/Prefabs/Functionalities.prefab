@@ -1354,7 +1354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onEvent: {fileID: 11400000, guid: 30239cdc8728fdd49b01aee52837b460, type: 2}
   invertBoolean: 0
-  disableAtLateStart: 1
+  disableAtLateStart: 0
 --- !u!1001 &7024172545652094836
 PrefabInstance:
   m_ObjectHideFlags: 0
