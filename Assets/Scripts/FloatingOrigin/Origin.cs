@@ -78,6 +78,10 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
             Coordinate = to;
 
+            // TODO: Should we prepare shifting so that we can track positions or do stuff before the shift?
+            // OnBeforeShift? oid
+
+            
             // TODO: Shouldn't this be a listener to the event below?
             var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
             EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);

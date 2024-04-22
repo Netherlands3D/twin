@@ -11,6 +11,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var delta = CoordinateConverter.ConvertTo(from, CoordinateSystem.Unity).ToVector3() 
                 - CoordinateConverter.ConvertTo(to, CoordinateSystem.Unity).ToVector3();
             
+            // TODO: This does not adjust for the ECEF
+
             foreach (Transform child in transform)
             {
                 child.position += delta;
