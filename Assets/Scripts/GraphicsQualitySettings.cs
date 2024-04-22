@@ -3,16 +3,16 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-    public enum QualityLevel
+    public enum GraphicsQualityLevel
     {
         Low = 0,
         Medium = 1,
         High = 2
     }
 
-    public class QualitySettings : MonoBehaviour
+    public class GraphicsQualitySettings : MonoBehaviour
     {
-        public static readonly UnityEvent<QualityLevel> qualityLevelChanged = new();
+        public static readonly UnityEvent<GraphicsQualityLevel> qualityLevelChanged = new();
         private static readonly string[] defaultToHighQualityVendorNames = new[] { "nvidia", "apple" };
         private static readonly string[] defaultToLowQualityVendorNames = new[] { "intel" };
 
@@ -32,19 +32,19 @@ namespace Netherlands3D.Twin
         {
             if (PlayerPrefs.HasKey(QUALITY_SETTINGS_KEY))
             {
-                var savedQualitySettings = (QualityLevel)PlayerPrefs.GetInt(QUALITY_SETTINGS_KEY);
+                var savedQualitySettings = (GraphicsQualityLevel)PlayerPrefs.GetInt(QUALITY_SETTINGS_KEY);
                 SetGraphicsQuality(savedQualitySettings, false);
                 return; // if the user set something specifically, use this instead of defaults0
             }
 
-            var initialQualitySettings = QualityLevel.Medium;
+            var initialQualitySettings = GraphicsQualityLevel.Medium;
 
             var graphicsDeviceVendor = SystemInfo.graphicsDeviceVendor;
             foreach (var vendor in defaultToHighQualityVendorNames)
             {
                 if (!graphicsDeviceVendor.ToLower().Contains(vendor))
                     continue;
-                initialQualitySettings = QualityLevel.High;
+                initialQualitySettings = GraphicsQualityLevel.High;
             }
 
             foreach (var vendor in defaultToLowQualityVendorNames)
@@ -52,13 +52,13 @@ namespace Netherlands3D.Twin
                 if (!graphicsDeviceVendor.ToLower().Contains(vendor))
                     continue;
 
-                initialQualitySettings = QualityLevel.Low;
+                initialQualitySettings = GraphicsQualityLevel.Low;
             }
 
             SetGraphicsQuality(initialQualitySettings, false);
         }
 
-        public static void SetGraphicsQuality(QualityLevel level, bool saveSetting)
+        public static void SetGraphicsQuality(GraphicsQualityLevel level, bool saveSetting)
         {
             Debug.Log("setting ql to : " + level);
             UnityEngine.QualitySettings.SetQualityLevel((int)level);

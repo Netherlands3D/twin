@@ -26,19 +26,19 @@ namespace Netherlands3D.Twin
         private void SetGraphicsQualityToLow(bool isOn)
         {
             if(isOn)
-                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.Low, true);
+                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Low, true);
         }
         
         private void SetGraphicsQualityToMedium(bool isOn)
         {
             if(isOn)
-                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.Medium, true);
+                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Medium, true);
         }
         
         private void SetGraphicsQualityToHigh(bool isOn)
         {
             if(isOn)
-                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.High, true);
+                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.High, true);
         }
     }
 }
