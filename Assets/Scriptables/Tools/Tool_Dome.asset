@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   code: dome
   title: Ondergrond doorzicht
-  functionGroups: []
+  functionGroups:
+  - {fileID: 11400000, guid: c0d441bd276bb5547beb95c4a77c39e8, type: 2}
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
@@ -51,6 +52,7 @@ MonoBehaviour:
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 0}
+  inspectorPrefab: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
+    type: 3}
   functionalityPrefabs: []
-  open: 0
+  open: 1
