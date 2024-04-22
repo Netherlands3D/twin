@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,19 +26,19 @@ namespace Netherlands3D.Twin
         private void SetGraphicsQualityToLow(bool isOn)
         {
             if(isOn)
-                QualitySettings.SetGraphicsQuality(QualityLevel.Low, true);
+                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.Low, true);
         }
         
         private void SetGraphicsQualityToMedium(bool isOn)
         {
             if(isOn)
-                QualitySettings.SetGraphicsQuality(QualityLevel.Medium, true);
+                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.Medium, true);
         }
         
         private void SetGraphicsQualityToHigh(bool isOn)
         {
             if(isOn)
-                QualitySettings.SetGraphicsQuality(QualityLevel.High, true);
+                Netherlands3D.Twin.QualitySettings.SetGraphicsQuality(QualityLevel.High, true);
         }
     }
 }
