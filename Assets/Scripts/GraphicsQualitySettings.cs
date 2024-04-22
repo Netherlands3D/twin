@@ -20,11 +20,6 @@ namespace Netherlands3D.Twin
 
         private void Awake()
         {
-            Debug.Log(SystemInfo.graphicsDeviceName);
-            Debug.Log(SystemInfo.graphicsDeviceType);
-            Debug.Log(SystemInfo.graphicsDeviceVendor);
-            Debug.Log(SystemInfo.graphicsDeviceVersion);
-
             InitializeQualitySettings();
         }
 
