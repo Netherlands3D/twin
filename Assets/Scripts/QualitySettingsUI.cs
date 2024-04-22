@@ -11,9 +11,16 @@ namespace Netherlands3D.Twin
         
         private void OnEnable()
         {
+            var currentQuality = (GraphicsQualityLevel)QualitySettings.GetQualityLevel();
+            
+            lowQualityToggle.isOn = currentQuality == GraphicsQualityLevel.Low;
+            mediumQualityToggle.isOn = currentQuality == GraphicsQualityLevel.Medium;
+            highQualityToggle.isOn = currentQuality == GraphicsQualityLevel.High;
+            
             lowQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToLow);
             mediumQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToMedium);
             highQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToHigh);
+            
         }
 
         private void OnDisable()

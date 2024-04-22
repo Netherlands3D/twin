@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin
 
             var initialQualitySettings = GraphicsQualityLevel.Medium;
 
-            var graphicsDeviceVendor = SystemInfo.graphicsDeviceVendor;
+            var graphicsDeviceVendor = SystemInfo.graphicsDeviceName;
             foreach (var vendor in defaultToHighQualityVendorNames)
             {
                 if (!graphicsDeviceVendor.ToLower().Contains(vendor))
