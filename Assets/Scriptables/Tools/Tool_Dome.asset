@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
   m_Name: Tool_Dome
   m_EditorClassIdentifier: 
-  code: 
+  code: dome
   title: Ondergrond doorzicht
   functionGroups: []
   onAvailabilityChange:
