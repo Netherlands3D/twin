@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -12,50 +12,64 @@ namespace Netherlands3D.Twin
         Medium = 1,
         High = 2
     }
-    
+
     public class QualitySettings : MonoBehaviour
     {
-        [SerializeField] private Toggle lowQualityToggle;
-        [SerializeField] private Toggle mediumQualityToggle;
-        [SerializeField] private Toggle highQualityToggle;
+        public static readonly UnityEvent<QualityLevel> qualityLevelChanged = new();
+        private static readonly string[] defaultToHighQualityVendorNames = new[] { "nvidia", "apple" };
+        private static readonly string[] defaultToLowQualityVendorNames = new[] { "intel" };
 
-        private void OnEnable()
+        private const string QUALITY_SETTINGS_KEY = "QualitySettings";
+
+        private void Awake()
         {
-            lowQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToLow);
-            mediumQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToMedium);
-            highQualityToggle.onValueChanged.AddListener(SetGraphicsQualityToHigh);
+            Debug.Log(SystemInfo.graphicsDeviceName);
+            Debug.Log(SystemInfo.graphicsDeviceType);
+            Debug.Log(SystemInfo.graphicsDeviceVendor);
+            Debug.Log(SystemInfo.graphicsDeviceVersion);
+
+            InitializeQualitySettings();
         }
 
-        private void OnDisable()
+        private static void InitializeQualitySettings()
         {
-            lowQualityToggle.onValueChanged.RemoveListener(SetGraphicsQualityToLow);
-            mediumQualityToggle.onValueChanged.RemoveListener(SetGraphicsQualityToMedium);
-            highQualityToggle.onValueChanged.RemoveListener(SetGraphicsQualityToHigh);
+            if (PlayerPrefs.HasKey(QUALITY_SETTINGS_KEY))
+            {
+                var savedQualitySettings = (QualityLevel)PlayerPrefs.GetInt(QUALITY_SETTINGS_KEY);
+                SetGraphicsQuality(savedQualitySettings, false);
+                return; // if the user set something specifically, use this instead of defaults0
+            }
+
+            var initialQualitySettings = QualityLevel.Medium;
+
+            var graphicsDeviceVendor = SystemInfo.graphicsDeviceVendor;
+            foreach (var vendor in defaultToHighQualityVendorNames)
+            {
+                if (!graphicsDeviceVendor.ToLower().Contains(vendor))
+                    continue;
+                initialQualitySettings = QualityLevel.High;
+            }
+
+            foreach (var vendor in defaultToLowQualityVendorNames)
+            {
+                if (!graphicsDeviceVendor.ToLower().Contains(vendor))
+                    continue;
+
+                initialQualitySettings = QualityLevel.Low;
+            }
+
+            SetGraphicsQuality(initialQualitySettings, false);
         }
 
-        private void SetGraphicsQualityToLow(bool isOn)
+        public static void SetGraphicsQuality(QualityLevel level, bool saveSetting)
         {
-            if(isOn)
-                SetGraphicsQuality(QualityLevel.Low);
-        }
-        
-        private void SetGraphicsQualityToMedium(bool isOn)
-        {
-            if(isOn)
-                SetGraphicsQuality(QualityLevel.Medium);
-        }
-        
-        private void SetGraphicsQualityToHigh(bool isOn)
-        {
-            if(isOn)
-                SetGraphicsQuality(QualityLevel.High);
-        }
-
-
-        public static void SetGraphicsQuality(QualityLevel level)
-        {
-            print("setting ql to : " + level);
+            Debug.Log("setting ql to : " + level);
             UnityEngine.QualitySettings.SetQualityLevel((int)level);
+
+            if (saveSetting)
+                PlayerPrefs.SetInt(QUALITY_SETTINGS_KEY, (int)level);
+            
+            qualityLevelChanged.Invoke(level);
         }
     }
 }
