@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin
         
         private void OnEnable()
         {
-            var currentQuality = (GraphicsQualityLevel)QualitySettings.GetQualityLevel();
+            var currentQuality = (GraphicsQualityLevel)UnityEngine.QualitySettings.GetQualityLevel();
             
             lowQualityToggle.isOn = currentQuality == GraphicsQualityLevel.Low;
             mediumQualityToggle.isOn = currentQuality == GraphicsQualityLevel.Medium;
@@ -33,19 +33,19 @@ namespace Netherlands3D.Twin
         private void SetGraphicsQualityToLow(bool isOn)
         {
             if(isOn)
-                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Low, true);
+                QualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Low, true);
         }
         
         private void SetGraphicsQualityToMedium(bool isOn)
         {
             if(isOn)
-                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Medium, true);
+                QualitySettings.SetGraphicsQuality(GraphicsQualityLevel.Medium, true);
         }
         
         private void SetGraphicsQualityToHigh(bool isOn)
         {
             if(isOn)
-                GraphicsQualitySettings.SetGraphicsQuality(GraphicsQualityLevel.High, true);
+                QualitySettings.SetGraphicsQuality(GraphicsQualityLevel.High, true);
         }
     }
 }
