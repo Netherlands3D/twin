@@ -131,9 +131,9 @@ namespace Netherlands3D.Tiles3D
 
                 for (int i = 0; i < scenes; i++)
                 {
-
                     await gltf.InstantiateSceneAsync(transform, i);
-                    scene = transform.GetChild(0).transform;
+                    scene = transform.GetChild(i).transform;
+                    if(scene == null) continue;
 
                     MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
                     if (parsedGltf.rtcCenter != null)
@@ -148,7 +148,6 @@ namespace Netherlands3D.Tiles3D
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         scene.position = unityPosition;
                     }
-
                 }
 
                 this.gameObject.name = uri;
