@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers
 
     public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
     {
+        private ShapeType shapeType;
         public CompoundPolygon Polygon { get; set; }
         public PolygonVisualisation PolygonVisualisation { get; private set; }
 
@@ -27,11 +28,9 @@ namespace Netherlands3D.Twin.Layers
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         public UnityEvent polygonChanged = new();
-
-        private ShapeType shapeType;
-
+        
         private List<IPropertySectionInstantiator> propertySections = new();
-
+        
         public ShapeType ShapeType
         {
             get => shapeType;
@@ -62,27 +61,19 @@ namespace Netherlands3D.Twin.Layers
                 SetLine(polygon);
             else
                 SetPolygon(polygon);
-            PolygonVisualisation.reselectVisualisedPolygon.AddListener(OnPolygonVisualisationSelected);
+
+            PolygonSelectionCalculator.RegisterPolygon(this);
         }
 
         protected override void Start()
         {
             base.Start();
-            if(shapeType == ShapeType.Line)
+            if (shapeType == ShapeType.Line)
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
 
-        private void OnEnable()
-        {
-            ClickNothingPlane.ClickedOnNothing.AddListener(DeselectPolygon);
-        }
-
-        private void OnDisable()
-        {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(DeselectPolygon);
-        }
-
-        private void OnPolygonVisualisationSelected(PolygonVisualisation visualisation)
+        
+        public void SelectPolygon()
         {
             if (UI)
                 UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
@@ -177,8 +168,10 @@ namespace Netherlands3D.Twin.Layers
         public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
             var contours = new List<List<Vector3>> { polygon };
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, true, false, false, polygonMeshMaterial);
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
+
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
 
             return polygonVisualisation;
         }
@@ -204,7 +197,7 @@ namespace Netherlands3D.Twin.Layers
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            PolygonVisualisation.reselectVisualisedPolygon.RemoveListener(OnPolygonVisualisationSelected);
+            PolygonSelectionCalculator.UnregisterPolygon(this);
             Destroy(PolygonVisualisation.gameObject);
         }
 
