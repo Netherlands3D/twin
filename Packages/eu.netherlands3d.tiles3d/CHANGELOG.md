@@ -5,11 +5,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.5] - 23-04-2024
+
+### Fixed
+
+- move all loaded scenes inside gltf to coordinate instead of just scene index 0
+
 ## [1.2.4] - 23-04-2024
 
 ### Fixed
 
-* move all loaded scenes inside gltf to coordinate instead of just scene index 0
+- Removed forced assignment to layer 11 of the tile objects. Tile objects will take the parent object's layer by default, and will allow for manual assignment thereafter.
 
 ## [1.2.3] - 08-04-2024
 

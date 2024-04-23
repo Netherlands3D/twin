@@ -235,7 +235,7 @@ namespace Netherlands3D.Tiles3D
             {
                 var newContentGameObject = new GameObject($"{tile.level},{tile.X},{tile.Y} content");
                 newContentGameObject.transform.SetParent(transform, false);
-                newContentGameObject.layer = 11;
+                newContentGameObject.layer = gameObject.layer;
                 tile.content = newContentGameObject.AddComponent<Content>();
                 tile.content.State = Content.ContentLoadState.NOTLOADING;
                 tile.content.ParentTile = tile;
@@ -357,24 +357,6 @@ namespace Netherlands3D.Tiles3D
                         
                     }
                 }
-
-                int childcount = tile.CountLoadedChildren();
-                int layerIndex = 12;
-                if (childcount==0)
-                {
-                    layerIndex = 11;
-                }
-                if (tile.content != null)
-                {
-                    if (tile.content.gameObject != null)
-                    {
-                        foreach (var item in tile.content.gameObject.GetComponentsInChildren<Transform>())
-                        {
-                            item.gameObject.layer = layerIndex;
-                        }
-                    }
-                }
-
             }
         }
 

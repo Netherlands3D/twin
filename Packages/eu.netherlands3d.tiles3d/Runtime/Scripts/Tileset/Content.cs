@@ -152,11 +152,6 @@ namespace Netherlands3D.Tiles3D
 
                 this.gameObject.name = uri;
                 
-                foreach (var item in this.gameObject.GetComponentsInChildren<Transform>())
-                {
-                    item.gameObject.layer = 11;
-                }
-
                 //Check if mesh features addon is used to define subobjects
 
 #if SUBOBJECT
