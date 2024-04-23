@@ -5,6 +5,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 23-04-2024
+
+### Fixed
+
+* move all loaded scenes inside gltf to coordinate instead of just scene index 0
+
 ## [1.2.3] - 08-04-2024
 
 ### Fixed
@@ -28,7 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.1.0] - 28-11-2023
 
-### Added 
+### Added
 
 - Added ability to read meshfeatures and store them using the subobjects-package
 - Added support for implicit Tiling 
