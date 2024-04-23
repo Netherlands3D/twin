@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin
 
         private const string QUALITY_SETTINGS_KEY = "QualitySettings";
 
-        private void Awake()
+        private void Start()
         {
             activeRenderPipelineAsset = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             InitializeQualitySettings();
