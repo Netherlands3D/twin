@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 .ToVector3();
 
 #if UNITY_EDITOR
-            Debug.Log($"<color=grey>{gameObject.name}: Shifting from {transform.position} to {newPosition}</color>");
+            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting from {transform.position} to {newPosition}</color>");
 #endif
 
             transform.position = newPosition;

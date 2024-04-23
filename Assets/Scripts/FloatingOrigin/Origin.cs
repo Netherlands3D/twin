@@ -27,7 +27,9 @@ namespace Netherlands3D.Twin.FloatingOrigin
         private int sqrDistanceBeforeShifting = 100000000;
 
         public UnityEvent<Coordinate, Coordinate> onPreShift = new(); 
-        public UnityEvent<Coordinate, Coordinate> onPostShift = new(); 
+        public UnityEvent<Coordinate, Coordinate> onPostShift = new();
+
+        public bool LogShifts = false;
         
         private void Start()
         {
@@ -84,7 +86,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var from = Coordinate;
             var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
 #if UNITY_EDITOR
-            Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
+            if (LogShifts) Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
 #endif
 
             onPreShift.Invoke(from, to);

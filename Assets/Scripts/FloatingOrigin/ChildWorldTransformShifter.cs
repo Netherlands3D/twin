@@ -36,13 +36,13 @@ namespace Netherlands3D.Twin.FloatingOrigin
         public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
         {
 #if UNITY_EDITOR
-            Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} children</color>");
+            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} children</color>");
 #endif
             foreach (KeyValuePair<Transform,Coordinate> tile in tilesToShift)
             {
                 var newPosition = CoordinateConverter.ConvertTo(tile.Value, CoordinateSystem.Unity).ToVector3();
 #if UNITY_EDITOR
-                Debug.Log($"<color=grey>| Shifting {tile.Key.gameObject.name} from {tile.Key.position} to {newPosition}</color>");
+                if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>| Shifting {tile.Key.gameObject.name} from {tile.Key.position} to {newPosition}</color>");
 #endif
                 tile.Key.position = newPosition;
             }
