@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Configuration.TileHandler
 
         private void Apply(Coordinate coordinate)
         {
-            GetComponent<Origin>().MoveOriginTo(coordinate);
+            // GetComponent<Origin>().MoveOriginTo(coordinate);
         }
     }
 }

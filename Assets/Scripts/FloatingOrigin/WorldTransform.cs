@@ -1,4 +1,3 @@
-using System;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,12 +14,10 @@ namespace Netherlands3D.Twin.FloatingOrigin
             set;
         }
 
-        /// <summary>
-        /// Called when the origin shifts with the from and to of the origin, because
-        /// of the custom shifters in this class we cannot be sure this transform itself
-        /// changed position.
-        /// </summary>
-        public UnityEvent<Coordinate, Coordinate> onShift = new();
+        public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
+
+        public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
+        public UnityEvent<WorldTransform, Coordinate> onPostShift = new();
 
         private void Awake()
         {
@@ -28,6 +25,14 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 origin = FindObjectOfType<Origin>();
             }
+
+            if (worldTransformShifter == null)
+            {
+                worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
+            }
+
+            // Pre-initialize the coordinates before using them
+            Coordinate = new Coordinate(ReferenceCoordinateSystem, 0, 0, 0);
         }
 
         private void OnValidate()
@@ -44,17 +49,15 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void OnEnable()
         {
-            var position = transform.position;
-            Coordinate = CoordinateConverter.ConvertTo(
-                new Coordinate(CoordinateSystem.Unity, position.x, position.y, position.z), 
-                referenceCoordinateSystem
-            ); 
-            origin.onShiftOriginTo.AddListener(ShiftTo);
+            UpdateCoordinateBasedOnUnityTransform();
+            origin.onPreShift.AddListener(PrepareToShift);
+            origin.onPostShift.AddListener(ShiftTo);
         }
 
         private void OnDisable()
         {
-            origin.onShiftOriginTo.RemoveListener(ShiftTo);
+            origin.onPreShift.RemoveListener(PrepareToShift);
+            origin.onPostShift.RemoveListener(ShiftTo);
         }
 
         private void Update()
@@ -75,19 +78,19 @@ namespace Netherlands3D.Twin.FloatingOrigin
             );
         }
 
+        private void PrepareToShift(Coordinate from, Coordinate to)
+        {
+            // Invoke Pre-shifting event first so that a listener might do some things before the shifter is invoked
+            onPreShift.Invoke(this, Coordinate);
+            
+            worldTransformShifter.PrepareToShift(this, from, to);
+        }
+
         private void ShiftTo(Coordinate from, Coordinate to)
         {
-            if (worldTransformShifter == null)
-            {
-                // We can just recalculate the transform position based on the real world Coordinate.
-                transform.position = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.Unity).ToVector3();
-            }
-            else
-            {
-                worldTransformShifter.ShiftTo(this, from, to);
-            }
+            worldTransformShifter.ShiftTo(this, from, to);
             
-            onShift.Invoke(from, to);
+            onPostShift.Invoke(this, Coordinate);
         }
     }
 }

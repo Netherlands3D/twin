@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,7 +26,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
         /// </summary>
         private int sqrDistanceBeforeShifting = 100000000;
 
-        public UnityEvent<Coordinate, Coordinate> onShiftOriginTo = new(); 
+        public UnityEvent<Coordinate, Coordinate> onPreShift = new(); 
+        public UnityEvent<Coordinate, Coordinate> onPostShift = new(); 
         
         private void Start()
         {
@@ -43,51 +45,57 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 ),
                 referenceCoordinateSystem
             );
+
+            StartCoroutine(AttemptShift());
         }
 
-        private void LateUpdate() 
+        private IEnumerator AttemptShift() 
         {
-            var mainCameraPosition = mainCamera.transform.position;
-            var distanceToCamera = mainCameraPosition - transform.position;
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
 
-            // sqrMagnitude is used because it outperforms magnitude quite a bit: https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
-            if (distanceToCamera.sqrMagnitude < sqrDistanceBeforeShifting) {
-                return;
+                var mainCameraPosition = mainCamera.transform.position;
+                var distanceToCamera = mainCameraPosition - transform.position;
+
+                // sqrMagnitude is used because it outperforms magnitude quite a bit: https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
+                if (distanceToCamera.sqrMagnitude < sqrDistanceBeforeShifting)
+                {
+                    continue;
+                }
+
+                Profiler.BeginSample("PerformOriginShift");
+                var newPosition = new Vector3(mainCameraPosition.x, transform.position.y, mainCameraPosition.z);
+
+                // Move this Origin to the camera's position, but keep the same height as it is now. 
+                MoveOriginTo(
+                    CoordinateConverter.ConvertTo(
+                        new Coordinate(CoordinateSystem.Unity, newPosition.x, newPosition.y, newPosition.z),
+                        Coordinate.CoordinateSystem
+                    )
+                );
+
+                Profiler.EndSample();
             }
-
-            Profiler.BeginSample("PerformOriginShift");
-            var newPosition = new Vector3(mainCameraPosition.x, transform.position.y, mainCameraPosition.z);
-           
-            // Move this Origin to the camera's position, but keep the same height as it is now. 
-            MoveOriginTo(
-                CoordinateConverter.ConvertTo(
-                    new Coordinate(CoordinateSystem.Unity, newPosition.x, newPosition.y, newPosition.z),
-                    Coordinate.CoordinateSystem
-                )
-            );
-
-            Profiler.EndSample();
         }
 
         public void MoveOriginTo(Coordinate destination)
         {
-#if UNITY_EDITOR
-            Debug.Log("Move origin to " + Coordinate);
-#endif
             var from = Coordinate;
             var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
-            Coordinate = to;
+#if UNITY_EDITOR
+            Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
+#endif
 
-            // TODO: Should we prepare shifting so that we can track positions or do stuff before the shift?
-            // OnBeforeShift? oid
-
+            onPreShift.Invoke(from, to);
             
+            Coordinate = to;
             // TODO: Shouldn't this be a listener to the event below?
             var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
             EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);
 
             // Shout to the world that the origin has changed to this coordinate
-            onShiftOriginTo.Invoke(from, to);
+            onPostShift.Invoke(from, to);
         }
     }
 }

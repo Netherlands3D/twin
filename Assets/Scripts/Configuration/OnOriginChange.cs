@@ -13,19 +13,19 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private UnityEvent OnOriginChanged = new();
         private Origin origin;
 
-        private void Start()
-        {
-            origin = FindObjectOfType<Origin>();
-        }
-
         private void OnEnable()
         {
-            origin.onShiftOriginTo.AddListener(OnNewOrigin);
+            if (origin == null)
+            {
+                origin = FindObjectOfType<Origin>();
+            }
+
+            origin.onPostShift.AddListener(OnNewOrigin);
         }
 
         private void OnDisable()
         {
-            origin.onShiftOriginTo.RemoveListener(OnNewOrigin);
+            origin.onPostShift.RemoveListener(OnNewOrigin);
         }
 
         private void OnNewOrigin(Coordinate from, Coordinate to)
