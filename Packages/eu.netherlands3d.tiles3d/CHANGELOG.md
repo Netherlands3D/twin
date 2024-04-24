@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Added function to refresh the tiles, for example after the url changes.
+- Added rudimentary check if URL is valid. 
 
 ## [1.2.4] - 23-04-2024
 
