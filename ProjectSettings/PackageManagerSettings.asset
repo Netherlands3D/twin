@@ -35,6 +35,9 @@ MonoBehaviour:
     - com.virgis.geojson.net
     - com.atteneder.draco
     - com.joshclose.csvhelper
+    - com.greener-games.sharp-zip-lib
+    - com.greener-games.unity-extensions
+    - com.svermeulen.asyncawaitutil
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4
