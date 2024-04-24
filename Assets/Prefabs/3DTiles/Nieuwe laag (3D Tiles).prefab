@@ -205,7 +205,7 @@ MonoBehaviour:
   maximumScreenSpaceError: 5
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
-  materialOverride: {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
+  materialOverride: {fileID: 0}
 --- !u!114 &7109194962515795805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowURLEdit: 1
 --- !u!114 &-2324982978833452817
 MonoBehaviour:
   m_ObjectHideFlags: 0

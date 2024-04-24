@@ -27,12 +27,12 @@ namespace Netherlands3D.Twin
 
         private void OnEnable()
         {
-            urlInputField.onValueChanged.AddListener(HandleURLChange);
+            urlInputField.onEndEdit.AddListener(HandleURLChange);
         }
         
         private void OnDisable()
         {
-            urlInputField.onValueChanged.RemoveListener(HandleURLChange);
+            urlInputField.onEndEdit.RemoveListener(HandleURLChange);
         }
 
         private void HandleURLChange(string newValue)

@@ -13,6 +13,21 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1599645300415279917, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 13.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599645300415279917, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_fontSizeMax
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599645300415279917, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3852244505954252403, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
       propertyPath: m_text
