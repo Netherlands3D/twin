@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 namespace Netherlands3D.Tiles3D
 {
     [RequireComponent(typeof(ReadSubtree))]
@@ -33,9 +34,9 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
-        #if SUBOBJECT
+#if SUBOBJECT
         public bool parseSubObjects = false;
-        #endif
+#endif
 
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
@@ -58,13 +59,12 @@ namespace Netherlands3D.Tiles3D
 
         private bool nestedTreeLoaded = false;
 
-        [Header("Optional material override")]
-        public Material materialOverride;
+        [Header("Optional material override")] public Material materialOverride;
 
-        private void Awake()
+        public void ConstructURLWithKey()
         {
 #if UNITY_EDITOR
-            if (string.IsNullOrEmpty(personalKey)==false)
+            if (string.IsNullOrEmpty(personalKey) == false)
             {
                 tilesetUrl = tilesetUrl + "?key=" + personalKey;
             }
@@ -77,14 +77,52 @@ namespace Netherlands3D.Tiles3D
 #endif
         }
 
-        private void OnEnable()
-        {
-            currentCamera = Camera.main;
-            StartCoroutine(LoadInView());
-        }
-
         void Start()
         {
+            RefreshTiles();
+        }
+
+        public void RefreshTiles()
+        {
+            StopAllCoroutines();
+            DisposeAllTilesRecursive(root);
+            root = null;
+            visibleTiles = new();
+
+            InitializeURLAndLoadTileSet();
+        }
+
+        private bool IsValidURL()
+        {
+            return tilesetUrl.Contains("tileset.json"); //todo: expand this validation
+        }
+
+        private void DisposeAllTilesRecursive(Tile tile)
+        {
+            if (tile == null)
+                return;
+
+            foreach (var t in tile.children)
+            {
+                DisposeAllTilesRecursive(t);
+            }
+
+            tilePrioritiser.RequestDispose(tile, true);
+        }
+
+        void InitializeURLAndLoadTileSet()
+        {
+            if (!IsValidURL())
+            {
+                Debug.LogError("The provided url is invalid: " + tilesetUrl);
+                return;
+            }
+
+            ConstructURLWithKey();
+
+            currentCamera = Camera.main;
+            StartCoroutine(LoadInView());
+
             if (usingPrioritiser)
             {
                 tilePrioritiser.SetCamera(currentCamera);
@@ -92,13 +130,14 @@ namespace Netherlands3D.Tiles3D
 
             ExtractDatasetPaths();
 
+            print("loading tilset from : " + tilesetUrl);
             StartCoroutine(LoadTileset());
         }
 
         private void ExtractDatasetPaths()
         {
             Uri uri = new(tilesetUrl);
-            absolutePath = tilesetUrl.Substring(0,tilesetUrl.LastIndexOf("/")+1);
+            absolutePath = tilesetUrl.Substring(0, tilesetUrl.LastIndexOf("/") + 1);
             if (tilesetUrl.StartsWith("file://"))
             {
                 rootPath = absolutePath;
@@ -107,6 +146,7 @@ namespace Netherlands3D.Tiles3D
             {
                 rootPath = uri.GetLeftPart(UriPartial.Authority);
             }
+
             queryParameters = ParseQueryString(uri.Query);
             Debug.Log($"Query url {ToQueryString(queryParameters)}");
             foreach (string segment in uri.Segments)
@@ -172,6 +212,7 @@ namespace Netherlands3D.Tiles3D
             this.maximumScreenSpaceError = maximumScreenSpaceError;
 
             SetTilePrioritiser(tilePrioritiser);
+            RefreshTiles();
         }
 
         /// <summary>
@@ -241,14 +282,14 @@ namespace Netherlands3D.Tiles3D
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
 
-                #if SUBOBJECT
+#if SUBOBJECT
                 tile.content.parseSubObjects = parseSubObjects;
-                #endif 
+#endif
 
                 //Request tile content update via optional prioritiser, or load directly
                 if (usingPrioritiser)
                 {
-                    if(!tile.requestedUpdate)
+                    if (!tile.requestedUpdate)
                         tilePrioritiser.RequestUpdate(tile);
                 }
                 else
@@ -261,7 +302,7 @@ namespace Netherlands3D.Tiles3D
         private void RequestDispose(Tile tile)
         {
             if (!tile.content) return;
-           
+
             if (usingPrioritiser && !tile.requestedDispose)
             {
                 tilePrioritiser.RequestDispose(tile);
@@ -318,7 +359,7 @@ namespace Netherlands3D.Tiles3D
                 var tileIsInView = tile.IsInViewFrustrum(currentCamera);
                 if (!tileIsInView)
                 {
-                    tilePrioritiser.RequestDispose(tile,true);
+                    tilePrioritiser.RequestDispose(tile, true);
                     visibleTiles.RemoveAt(i);
                     continue;
                 }
@@ -332,29 +373,27 @@ namespace Netherlands3D.Tiles3D
 
                 if (tile.screenSpaceError > maximumScreenSpaceError) //too little detail
                 {
-                    
                     if (tile.CountLoadingChildren() == 0)
                     {
-                        
                         if (tile.CountLoadedChildren() > 0)
                         {
                             tilePrioritiser.RequestDispose(tile);
-                            
-                            
+
+
                             visibleTiles.RemoveAt(i);
                         }
                     }
                 }
+
                 if (tile.screenSpaceError < maximumScreenSpaceError) //too much detail
                 {
                     if (tile.CountLoadedParents() > 0)
                     {
-                        if (tile.getParentSSE()<maximumScreenSpaceError)
+                        if (tile.getParentSSE() < maximumScreenSpaceError)
                         {
                             tilePrioritiser.RequestDispose(tile, true);
                             visibleTiles.RemoveAt(i);
                         }
-                        
                     }
                 }
             }
@@ -370,7 +409,8 @@ namespace Netherlands3D.Tiles3D
             else
             {
                 sse = (sseComponent * (float)child.geometricError) / Vector3.Distance(currentMainCamera.transform.position, closestPointOnBounds);
-            }   
+            }
+
             child.screenSpaceError = sse;
         }
 
@@ -388,7 +428,8 @@ namespace Netherlands3D.Tiles3D
                 StartCoroutine(LoadNestedTileset(tile));
                 return;
             }
-            if (tile.isLoading==false && tile.children.Count==0 && tile.contentUri.Contains(".subtree"))
+
+            if (tile.isLoading == false && tile.children.Count == 0 && tile.contentUri.Contains(".subtree"))
             {
                 UnityEngine.Debug.Log(tile.contentUri);
                 ReadSubtree subtreeReader = GetComponent<ReadSubtree>();
@@ -396,11 +437,12 @@ namespace Netherlands3D.Tiles3D
                 {
                     return;
                 }
+
                 subtreeReader.isbusy = true;
                 tile.isLoading = true;
-               
+
                 Debug.Log("try to download a subtree");
-                subtreeReader.DownloadSubtree("", implicitTilingSettings,tile, subtreeLoaded);
+                subtreeReader.DownloadSubtree("", implicitTilingSettings, tile, subtreeLoaded);
                 return;
             }
 
@@ -408,15 +450,15 @@ namespace Netherlands3D.Tiles3D
             CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
             var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
 
-            if (enoughDetail||tile.children.Count==0)
+            if (enoughDetail || tile.children.Count == 0)
             {
-                var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json")&& !tile.contentUri.Contains(".subtree");
-                
+                var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json") && !tile.contentUri.Contains(".subtree");
+
                 if (Has3DContent)
                 {
                     int loadingParentsCount = tile.CountLoadingParents();
                     int loadedParentsCount = tile.CountLoadedParents();
-                    if (loadedParentsCount+ loadingParentsCount<2)
+                    if (loadedParentsCount + loadingParentsCount < 2)
                     {
                         if (!visibleTiles.Contains(tile))
                         {
@@ -424,8 +466,8 @@ namespace Netherlands3D.Tiles3D
                             visibleTiles.Add(tile);
                         }
                     }
-                    
                 }
+
                 return;
             }
 
@@ -435,6 +477,7 @@ namespace Netherlands3D.Tiles3D
                 LoadInViewRecursively(childTile, currentCamera);
             }
         }
+
         public void subtreeLoaded(Tile tile)
         {
             tile.parent.isLoading = false;
@@ -451,7 +494,7 @@ namespace Netherlands3D.Tiles3D
                     yield return www.SendWebRequest();
 
                     if (www.result != UnityWebRequest.Result.Success)
-                    {            
+                    {
                         Debug.Log(www.error + " at " + nestedJsonPath);
                     }
                     else
@@ -464,6 +507,7 @@ namespace Netherlands3D.Tiles3D
                         nestedTreeLoaded = true;
                     }
                 }
+
                 tile.isLoading = false;
             }
             else if (tilingMethod == TilingMethod.ImplicitTiling)
@@ -491,7 +535,7 @@ namespace Netherlands3D.Tiles3D
                     queryParameters.Add(key, contentQueryParameters[key]);
                 }
             }
-          
+
             uriBuilder.Query = ToQueryString(queryParameters);
             var url = uriBuilder.ToString();
             return url;
@@ -520,11 +564,10 @@ namespace Netherlands3D.Tiles3D
                     }
                 }
             }
-            
+
             return "?" + queryString.ToString();
         }
 
-       
 
         /// <summary>
         /// Screen-space error component calculation.
@@ -533,9 +576,9 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         public void SetSSEComponent(Camera currentCamera)
         {
-            if(usingPrioritiser) maxScreenHeightInPixels = tilePrioritiser.MaxScreenHeightInPixels;
+            if (usingPrioritiser) maxScreenHeightInPixels = tilePrioritiser.MaxScreenHeightInPixels;
 
-            var screenHeight = (maxScreenHeightInPixels > 0) ? Mathf.Min(maxScreenHeightInPixels,Screen.height) : Screen.height;
+            var screenHeight = (maxScreenHeightInPixels > 0) ? Mathf.Min(maxScreenHeightInPixels, Screen.height) : Screen.height;
 
             if (currentCamera.orthographic)
             {
@@ -561,6 +604,7 @@ namespace Netherlands3D.Tiles3D
         Replace,
         Add
     }
+
     public enum SubdivisionScheme
     {
         Quadtree,
