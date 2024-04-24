@@ -23,8 +23,7 @@ namespace Netherlands3D.Tiles3D
         private string absolutePath = "";
         private string rootPath = "";
         private NameValueCollection queryParameters;
-
-
+        
         public Tile root;
         public double[] transformValues;
 
@@ -41,7 +40,6 @@ namespace Netherlands3D.Tiles3D
 
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
-
         public int maximumScreenSpaceError = 5;
 
         [SerializeField] private float sseComponent = -1;
