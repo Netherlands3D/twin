@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] 26-04-2024
+
+### Added
+* static CoodinateSystems-class for connecting a epsg-coordinatesystem to Unity and connecting a epsg-coordinate to the Unity-Origin
+* enum CoordinateSystem, exposing all the available coordinateSystems
+* Coordinate-struct for storing a coordinate in a specified coordaintesystem
+  - convert function for converting between coordinateSystems
+  - ToUnity function to convert to a unity Vector3
+  - Constructor to create a coordinate from a unity Vector3
+  - RotationToLocalGravityUp function to get the required rotation to align geometry defined in a coordaintesystem to the geometry defined in the coordinatesystem that is connected to Unity.
+  - test to see if the coordinate is valid
+
+### Deprecated
+* CoordinateConverter class with all its functions
+* EPSG3857-class
+* EPSG4326-class
+* EPSG4936-class
+* EPSG7415-class
+* MovingOrigin-class
+* MovingOriginFollower-class
+* Unity-class
+* Vector2RD-struct
+* Vector3ECEF-struct
+* Vector3RD-struct
+
 ## [1.3.0] 16-02-2024
 
 ### Added

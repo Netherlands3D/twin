@@ -174,7 +174,7 @@ namespace Netherlands3D.Coordinates
             return result;
         }
 
-        public Quaternion RotationToUnityUp()
+        public Quaternion RotationToLocalGRavityUp()
         {
             /// we want to find out how much we have to rotate to make the localUpDirection in our coordinateSystem 
             /// align with the localUpDirection in the coordinateSystem that is connected to Unity
