@@ -6,10 +6,14 @@ Using this package it is possible to
 1. Convert between the following coordinate systems:
    - [World Geodetic System 1984 Lattitude, Longitude, EllipsoidalHeight (EPSG:3857, WGS84_LatLonH)](https://epsg.io/3857)
    - [World Geodetic System 1984 Lattitude, Longitude (EPSG:4326, WGS84_LatLon)](https://epsg.io/4326)
-   - [World Geodetic System 1984 EartCentered-EarthFixed (EPSG:4978 WGS84_ECEF)](https://epsg.io/4978)
-
+   - [World Geodetic System 1984 EartCentered-EarthFixed (EPSG:4978, WGS84_ECEF)](https://epsg.io/4978)
+   - [European Terrestrial Reference System 1989 Lattitude, Longitude, EllipsoidalHeight (EPSG:4937, ERTS89_LatLonH)](https://epsg.io/4937)
+   - [European Terrestrial Reference System 1989 Lattitude, Longitude (EPSG:4258, ERTS89_LatLon)](https://epsg.io/4258)
+   - European Terrestrial Reference System 1989 EartCentered-EarthFixed (EPSG:4936, ERTS89_ECEF)](https://epsg.io/4936)
+   - [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:28992](https://epsg.io/28992))
    - [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) + [NAP height](https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:7415](https://epsg.io/7415))
-   - [Earth-centered, Earth-fixed (EPSG:4936, ECEF)](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system)
+   - WGS 84 / Pseudo-Mercator (EPSG:3857, WGS84_PseudoMercator)](https://epsg.io/3857)
+
 
 2. convert between each of these coordinateSystems and Unity Vector3
 
@@ -64,7 +68,7 @@ When a geocentric coordinateSystem is attached to Unity, the geometry defined in
 different coordinatesystems use different Up- and East-directions.
 When coordinateSystem A is connected to Unity, but you have geometry (for example a mesh) that is defined in coordinateSystem B, a rotation might have to be applied to ensure that the geometry aligns nicely with the other objects in unity.
 
-$Quaternion rotationInUnity = CoordinateAtOrigin.RotationToUnityUp()
+$Quaternion rotationInUnity = CoordinateAtOrigin.RotationToLocalGravityUp()
 $transform.rotation = rotationInUnity
 
 * (for now) we assume that the mesh itself is defined in a left-handed, Y-up style. (even though most official coordinatesystems are righthanded and Z-up), most geometry-parsers in unity already change this definition
@@ -74,5 +78,4 @@ $transform.rotation = rotationInUnity
 
 In Netherlands3D, we used to make use of conversion methods on the CoordinateConverter -such as RDtoWGS84- and
 Vector3 classes per Coordinate System. This architecture is not scalable to support the plethora of CRS out there,
-and as such these are all deprecated and replaced by the Coordinate class and the ConvertTo method in the 
-CoordinateConverter.
+and as such these are all deprecated and replaced by Coordinate.Convert(targetCRS)
