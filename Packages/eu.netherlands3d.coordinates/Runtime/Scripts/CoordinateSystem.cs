@@ -15,22 +15,112 @@
 *  implied. See the License for the specific language governing
 *  permissions and limitations under the License.
 */
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Netherlands3D.Coordinates
 {
-    /// <summary>
-    /// Supported coordinate systems
-    /// </summary>
-    public enum CoordinateSystem
+    
+    internal enum CoordinateSystemGroup
     {
-        Unity = -1, // Deprecated, Unity should not be considered a coordinate system but a translation by the MovingOrigin
-        EPSG_3857 = 3857, // WGS 84 / Pseudo-Mercator in meters
-        EPSG_4326 = 4326, // WGS 84 / lattitude-longitude in degrees
-        EPSG_4936 = 4936, // ETRS98-ECEF
-        EPSG_7415 = 7415,
+        unity = -1,
+        None = 0,
+        RD = 1,
+        WGS84 =2,
+        ETRS89 = 3
 
-        // Aliases for backwards compatibility
-        WGS84 = EPSG_4326, // As an alias for WGS84
-        RD = EPSG_7415, // As an alias for RD, we assume RD Amersfoort New + NAP / RD3D
     }
+    internal enum CoordinateSystemType
+    {
+        Projected,
+        Geographic,
+        Geocentric
+    }
+    [Serializable]
+   public enum CoordinateSystem
+    {
+        Unity = -1, 
+        WGS84_PseudoMercator = 3857,
+        ETRS89_LatLon = 4258,
+        WGS84_LatLon = 4326, 
+        ETRS89_ECEF = 4936,
+        ETRS89_LatLonHeight = 4937,
+        WGS84_ECEF = 4978,
+        WGS84_LatLonHeight = 4979,
+        RDNAP = 2,
+
+        RD = 28992,
+        EPSG_3857 = WGS84_PseudoMercator,
+        EPSG_4936 = ETRS89_ECEF,
+
+        WGS84 = WGS84_LatLonHeight,
+    }
+
+    public static class CoordinateSystems
+    {
+         internal static Dictionary<CoordinateSystem, CoordinateSystemOperation> operators = new Dictionary<CoordinateSystem, CoordinateSystemOperation> {
+            { CoordinateSystem.RDNAP, new RDNAP_Operations() } ,
+            { CoordinateSystem.RD, new RD_Operations() },
+            { CoordinateSystem.WGS84_ECEF, new WGS84_ECEF_Operations() },
+            { CoordinateSystem.WGS84_LatLonHeight, new WGS84_LatLonHeight_Operations() },
+            { CoordinateSystem.WGS84_LatLon, new WGS84_LatLon_Operations() },
+            { CoordinateSystem.WGS84_PseudoMercator, new WGS84_PseudoMercator_Operations() },
+            { CoordinateSystem.ETRS89_ECEF, new ETRS89_ECEF_Operations() },
+            { CoordinateSystem.ETRS89_LatLon, new ETRS89_LatLon_Operations() },
+            { CoordinateSystem.ETRS89_LatLonHeight, new ETRS89_LatLonHeight_Operations() }
+
+        };
+
+        static CoordinateSystem _connectedCoordinateSystem;
+        static Coordinate _coordinateAtOrigin;
+        
+        public static Quaternion connectedCRSToUnityUp;
+        public static Vector3WGS wgsAtUp;
+
+        public static CoordinateSystem connectedCoordinateSystem
+        {
+            get { return _connectedCoordinateSystem; }
+            set {
+                _connectedCoordinateSystem = value;
+                Debug.Log("coordinateSystem set: " + value.ToString());
+                //if (operators.ContainsKey((CoordinateSystem)_coordinateAtOrigin.CoordinateSystem))
+                //{
+                //    SetOrigin(_coordinateAtOrigin);
+                //}
+            }
+        }
+       
+        public static void SetOrigin(Coordinate coordinateAtUnityOrigin)
+        {
+            
+            _coordinateAtOrigin = coordinateAtUnityOrigin.Convert(_connectedCoordinateSystem);
+            CoordinateSystemOperation myConverter = CoordinateSystems.operators[_connectedCoordinateSystem];
+
+            // Up-direction in the coordinateSystem at the coordinate
+            wgsAtUp = myConverter.LocalUpDirection(_coordinateAtOrigin);
+
+            
+            /// we want to find out how much we have to rotate to make the localUpDirection align with the orientation of the coordinateSystem
+            /// this is the amount we have to rotate the coordinateSystem to align with the UnityAxes.
+            /// First we calculate the difference in longitude between de localUP at the coordinate and the orientation of the coordinateSystem 
+            Quaternion rotationToEast = Quaternion.AngleAxis((float)wgsAtUp.lon- (float)myConverter.Orientation().lon, Vector3.up);
+            if (myConverter.GetCoordinateSystemType() == CoordinateSystemType.Geocentric)
+            {
+                //rotate -90 degrees around the up-axis, to make sure east is in the X-direction;
+                rotationToEast = rotationToEast * Quaternion.AngleAxis(-90, Vector3.up);
+            }
+            /// Now we calculate the difference in lattitude between de localUP at the coordinate and the orientation of the coordinateSystem  
+            Quaternion rotationToFlat = Quaternion.AngleAxis((float)myConverter.Orientation().lat - (float)wgsAtUp.lat, Vector3.right);
+            /// when we apply both rotations, we get the rotation required to get the coordinateSystem pointing Up and North at the Unity-Origin
+                connectedCRSToUnityUp = rotationToFlat * rotationToEast;
+            
+            
+            
+        }
+        
+        public static Coordinate CoordinateAtUnityOrigin { get { return _coordinateAtOrigin; } }
+        
+    }
+
 }
