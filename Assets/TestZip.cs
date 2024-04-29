@@ -40,11 +40,11 @@ namespace Netherlands3D.Twin
         public void AddFileToZip(string fileNames)
         {
             var fileName = fileNames.Split(",")[0];
-            var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var persistentDataPath = Application.persistentDataPath + "/" + randomFileTag + "_" + fileName;
+            var persistentDataPath = Application.persistentDataPath + "/" + fileName;
             Debug.Log("Adding file to zip: " + persistentDataPath);
             byte[] buffer = new byte[4096];
-            ZipEntry entry = new ZipEntry(fileName);
+            var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");
+            ZipEntry entry = new ZipEntry(randomFileTag + "_" + fileName);
             zipOutputStream.PutNextEntry(entry);
 
             using (FileStream fs = File.OpenRead(persistentDataPath)) {
