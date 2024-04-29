@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
@@ -23,7 +24,9 @@ namespace Netherlands3D.Twin
         private string randomTime = "";
         private string zipName = "";
 
-        void Start()
+        private Stopwatch stopwatch = new Stopwatch();
+
+        void OnEnable()
         {
             randomTime = DateTime.Now.ToString("yyyyMMddHHmmss");
             zipName = $"test_{randomTime}.zip";
@@ -34,9 +37,16 @@ namespace Netherlands3D.Twin
             zipOutputStream.SetLevel(9); // 0 - store only to 9 - means best compression
         }
 
+        private void OnDisable() {
+            stopwatch.Stop();
+            zipOutputStream.Finish();
+            zipOutputStream.Close();
+            zipOutputStream.Dispose();
+        }
+
         public void DoneDownloadZip()
         {
-            Debug.Log("Done downloading zip");
+            UnityEngine.Debug.Log("Done downloading zip");
         }
 
         // Append a file to zip
@@ -44,7 +54,11 @@ namespace Netherlands3D.Twin
         {
             var fileName = fileNames.Split(",")[0];
             var persistentDataPath = Application.persistentDataPath + "/" + fileName;
-            Debug.Log("Adding file to zip: " + persistentDataPath);
+            UnityEngine.Debug.Log("Adding file to zip: " + persistentDataPath);
+            stopwatch.Reset();
+            stopwatch.Start();
+
+
             byte[] buffer = new byte[4096];
             var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");
             ZipEntry entry = new ZipEntry(randomFileTag + "_" + fileName);
@@ -52,11 +66,17 @@ namespace Netherlands3D.Twin
 
             using (FileStream fs = File.OpenRead(persistentDataPath)) {
                 StreamUtils.Copy(fs, zipOutputStream, buffer);
-            }         
+            }     
+
+            stopwatch.Stop();
+            UnityEngine.Debug.Log($"Added file to zip in {stopwatch.ElapsedMilliseconds}ms");    
         }
 
         public void CloseZip()
         {
+            stopwatch.Reset();
+            stopwatch.Start();
+
             zipOutputStream.Finish();
             zipOutputStream.Close();
 
@@ -68,7 +88,8 @@ namespace Netherlands3D.Twin
 
         public void ZipReadyInIndexedDB()
         {
-            Debug.Log("Zip is ready in indexedDB");
+            stopwatch.Stop();
+            UnityEngine.Debug.Log($"Finished zip in IndexedDB in {stopwatch.ElapsedMilliseconds}ms");
             DownloadFromIndexedDB($"/{zipName}", this.gameObject.name, "DoneDownloadZip");
         }
     }
