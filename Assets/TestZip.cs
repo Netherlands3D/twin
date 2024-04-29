@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin
         {
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Finished zip in IndexedDB in {stopwatch.ElapsedMilliseconds}ms");
-            DownloadFromIndexedDB($"/{zipName}", this.gameObject.name, "DoneDownloadZip");
+            DownloadFromIndexedDB($"{zipName}", this.gameObject.name, "DoneDownloadZip");
         }
     }
 }
