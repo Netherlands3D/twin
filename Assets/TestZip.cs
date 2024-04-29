@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
     public class TestZip : MonoBehaviour
     {
         [DllImport("__Internal")]
-        private static extern void DownloadFileFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
+        private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")]
         private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin
         public void ZipReadyInIndexedDB()
         {
             Debug.Log("Zip is ready in indexedDB");
-            DownloadFileFromIndexedDB(Application.persistentDataPath + "/test.zip", this.gameObject.name, "DoneDownloadZip");
+            DownloadFromIndexedDB(Application.persistentDataPath + "/test.zip", this.gameObject.name, "DoneDownloadZip");
         }
     }
 }
