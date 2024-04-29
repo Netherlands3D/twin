@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin
         public void ZipReadyInIndexedDB()
         {
             Debug.Log("Zip is ready in indexedDB");
-            DownloadFromIndexedDB(Application.persistentDataPath + $"/{zipName}", this.gameObject.name, "DoneDownloadZip");
+            DownloadFromIndexedDB($"/{zipName}", this.gameObject.name, "DoneDownloadZip");
         }
     }
 }
