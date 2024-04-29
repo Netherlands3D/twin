@@ -6,6 +6,7 @@ using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -15,6 +16,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         [SerializeField] private bool allowURLEditInPropertySection;
         private List<IPropertySectionInstantiator> propertySections = new();
+        public UnityEvent<string> UnsupportedExtensionsMessage;
 
         public string URL
         {
@@ -48,6 +50,29 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
                 propertySections = new();
+        }
+
+        private void OnEnable()
+        {
+            tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
+        }
+
+        private void OnDisable()
+        {
+            tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
+        }
+
+        private void InvokeUnsupportedExtensionsMessage(string[] unsupportedExtensions)
+        {
+            if (unsupportedExtensions.Length == 0)
+                return;
+
+            string message = name + " contains the following unsupported extensions: ";
+            foreach (var extension in unsupportedExtensions)
+            {
+                message += "\n"+ extension;
+            }
+            UnsupportedExtensionsMessage.Invoke(message);
         }
 
         private IEnumerator Start()
