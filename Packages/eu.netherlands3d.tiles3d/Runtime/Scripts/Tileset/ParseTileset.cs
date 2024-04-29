@@ -193,15 +193,16 @@ namespace Netherlands3D.Tiles3D
 
         internal static (string[], string[]) GetUsedExtensions(JSONNode rootNode)
         {
-            var extensionsUsedNode = rootNode["extensionsUsed"].AsArray;
+            var extensionsUsedNode = rootNode["extensionsUsed"];
 
             if (extensionsUsedNode == null)
                 return (Array.Empty<string>(), Array.Empty<string>());
             
-            string[] extensionsUsed = new string[extensionsUsedNode.Count];
-            for (var i = 0; i < extensionsUsedNode.Count; i++)
+            var extensionsUsedArray = extensionsUsedNode.AsArray;
+            string[] extensionsUsed = new string[extensionsUsedArray.Count];
+            for (var i = 0; i < extensionsUsedArray.Count; i++)
             {
-                var item = extensionsUsedNode[i];
+                var item = extensionsUsedArray[i];
                 extensionsUsed[i] = item.Value;
             }
 
