@@ -21,13 +21,16 @@ namespace Netherlands3D.Twin
 
 
         private string randomTime = "";
+        private string zipName = "";
 
         void Start()
         {
             randomTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+            zipName = $"test_{randomTime}.zip";
+            
 
             //Open our zip stream, and keep it open
-            zipOutputStream = new ZipOutputStream(File.Create(Application.persistentDataPath + $"/test_{randomTime}.zip"));
+            zipOutputStream = new ZipOutputStream(File.Create(Application.persistentDataPath + $"/{zipName}"));
             zipOutputStream.SetLevel(9); // 0 - store only to 9 - means best compression
         }
 
@@ -66,7 +69,7 @@ namespace Netherlands3D.Twin
         public void ZipReadyInIndexedDB()
         {
             Debug.Log("Zip is ready in indexedDB");
-            DownloadFromIndexedDB(Application.persistentDataPath + "/test.zip", this.gameObject.name, "DoneDownloadZip");
+            DownloadFromIndexedDB(Application.persistentDataPath + $"/{zipName}", this.gameObject.name, "DoneDownloadZip");
         }
     }
 }
