@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using SimpleJSON;
 
@@ -12,7 +14,7 @@ namespace Netherlands3D.Tiles3D
             { "box", BoundingVolumeType.Box },
             { "sphere", BoundingVolumeType.Sphere }
         };
-        
+        public static readonly string[] SupportedExtensions = Array.Empty<string>(); //currently no extensions are supported
         
         internal static ReadSubtree subtreeReader;
         internal static Tile ReadTileset(JSONNode rootnode)
@@ -186,23 +188,37 @@ namespace Netherlands3D.Tiles3D
             {
                 parentTile.contentUri = implicitTilingSettings.subtreeUri.Replace("{level}", parentTile.level.ToString()).Replace("{x}", parentTile.X.ToString()).Replace("{y}", parentTile.Y.ToString());
             }
-            subtreeReader.DownloadSubtree("", implicitTilingSettings,parentTile, test);
+            subtreeReader.DownloadSubtree("", implicitTilingSettings,parentTile, null);
         }
 
-        public static void test(Tile tile)
+        internal static (string[], string[]) GetUsedExtensions(JSONNode rootNode)
+        {
+            var extensionsUsedNode = rootNode["extensionsUsed"].AsArray;
+
+            string[] extensionsUsed = new string[extensionsUsedNode.Count];
+            for (var i = 0; i < extensionsUsedNode.Count; i++)
             {
-            tile.isLoading = false;
-            
-            if (tile.children.Count==1)
-            {
-                tile = tile.children[0];
-                
+                var item = extensionsUsedNode[i];
+                extensionsUsed[i] = item.Value;
             }
-            //Read3DTileset tilesetReader = subtreeReader.transform.GetComponent<Read3DTileset>();
-            //if (tilesetReader != null)
-            //{
-            //    tilesetReader.root = tile;
-            //}
+
+            var unsupportedExtensions = GetUnsupportedExtensions(extensionsUsed);
+            
+            return (extensionsUsed, unsupportedExtensions);
+        }
+
+        internal static string[] GetUnsupportedExtensions(string[] extensionsUsed)
+        {
+            var list = new List<string>();
+            foreach (var extension in extensionsUsed)
+            {
+                if (!SupportedExtensions.Contains(extension))
+                {
+                    list.Add(extension);
+                }
+            }
+
+            return list.ToArray();
         }
     }
 }
