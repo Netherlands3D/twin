@@ -1050,6 +1050,37 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: edd4d6f79aaa1004997df0dbf078ed55,
+        type: 2}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4778416693274480372, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_Size
