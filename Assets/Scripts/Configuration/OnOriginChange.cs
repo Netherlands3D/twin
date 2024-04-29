@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,20 +10,25 @@ namespace Netherlands3D.Twin.Configuration
 {
     public class OnOriginChange : MonoBehaviour
     {
-        [SerializeField] private Configuration configuration;
-        [SerializeField] private UnityEvent OnOriginChanged = new UnityEvent();
+        [SerializeField] private UnityEvent OnOriginChanged = new();
+        private Origin origin;
 
         private void OnEnable()
         {
-            configuration.OnOriginChanged.AddListener(OnNewOrigin);
+            if (origin == null)
+            {
+                origin = FindObjectOfType<Origin>();
+            }
+
+            origin.onPostShift.AddListener(OnNewOrigin);
         }
 
         private void OnDisable()
         {
-            configuration.OnOriginChanged.RemoveListener(OnNewOrigin);
+            origin.onPostShift.RemoveListener(OnNewOrigin);
         }
 
-        private void OnNewOrigin(Coordinate origin)
+        private void OnNewOrigin(Coordinate from, Coordinate to)
         {
             OnOriginChanged.Invoke();
         }
