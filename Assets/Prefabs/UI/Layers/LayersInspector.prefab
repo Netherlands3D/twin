@@ -1057,9 +1057,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
-      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 11400000, guid: edd4d6f79aaa1004997df0dbf078ed55,
+        type: 2}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19,
         type: 2}
     - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
@@ -1068,13 +1079,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
-      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: InvokeStarted
       objectReference: {fileID: 0}
     - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
-      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ProcessFile
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: onFilesSelected.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4372603941552908243, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
