@@ -5,6 +5,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 29-04-2024
+
+### Added
+
+- The usedExtensions node in the root node are now parsed and checked against supported extensions
+
 ## [1.3.0] - 24-04-2024
 
 ### Added
