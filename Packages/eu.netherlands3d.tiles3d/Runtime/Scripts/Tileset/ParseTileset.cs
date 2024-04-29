@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using SimpleJSON;
 
@@ -12,7 +14,7 @@ namespace Netherlands3D.Tiles3D
             { "box", BoundingVolumeType.Box },
             { "sphere", BoundingVolumeType.Sphere }
         };
-        
+        public static readonly string[] SupportedExtensions = Array.Empty<string>(); //currently no extensions are supported
         
         internal static ReadSubtree subtreeReader;
         internal static Tile ReadTileset(JSONNode rootnode)
@@ -186,23 +188,41 @@ namespace Netherlands3D.Tiles3D
             {
                 parentTile.contentUri = implicitTilingSettings.subtreeUri.Replace("{level}", parentTile.level.ToString()).Replace("{x}", parentTile.X.ToString()).Replace("{y}", parentTile.Y.ToString());
             }
-            subtreeReader.DownloadSubtree("", implicitTilingSettings,parentTile, test);
+            subtreeReader.DownloadSubtree("", implicitTilingSettings,parentTile, null);
         }
 
-        public static void test(Tile tile)
-            {
-            tile.isLoading = false;
+        internal static (string[], string[]) GetUsedExtensions(JSONNode rootNode)
+        {
+            var extensionsUsedNode = rootNode["extensionsUsed"];
+
+            if (extensionsUsedNode == null)
+                return (Array.Empty<string>(), Array.Empty<string>());
             
-            if (tile.children.Count==1)
+            var extensionsUsedArray = extensionsUsedNode.AsArray;
+            string[] extensionsUsed = new string[extensionsUsedArray.Count];
+            for (var i = 0; i < extensionsUsedArray.Count; i++)
             {
-                tile = tile.children[0];
-                
+                var item = extensionsUsedArray[i];
+                extensionsUsed[i] = item.Value;
             }
-            //Read3DTileset tilesetReader = subtreeReader.transform.GetComponent<Read3DTileset>();
-            //if (tilesetReader != null)
-            //{
-            //    tilesetReader.root = tile;
-            //}
+
+            var unsupportedExtensions = GetUnsupportedExtensions(extensionsUsed);
+            
+            return (extensionsUsed, unsupportedExtensions);
+        }
+
+        internal static string[] GetUnsupportedExtensions(string[] extensionsUsed)
+        {
+            var list = new List<string>();
+            foreach (var extension in extensionsUsed)
+            {
+                if (!SupportedExtensions.Contains(extension))
+                {
+                    list.Add(extension);
+                }
+            }
+
+            return list.ToArray();
         }
     }
 }

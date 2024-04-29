@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -60,6 +61,9 @@ namespace Netherlands3D.Tiles3D
         private bool nestedTreeLoaded = false;
 
         [Header("Optional material override")] public Material materialOverride;
+
+        public string[] usedExtensions { get; private set; }
+        public UnityEvent<string[]> unsupportedExtensionsParsed;
 
         public void ConstructURLWithKey()
         {
@@ -267,6 +271,10 @@ namespace Netherlands3D.Tiles3D
                 ParseTileset.subtreeReader = GetComponent<ReadSubtree>();
                 JSONNode rootnode = JSON.Parse(jsonstring)["root"];
                 root = ParseTileset.ReadTileset(rootnode);
+                
+                var extensions = ParseTileset.GetUsedExtensions(rootnode);
+                usedExtensions = extensions.Item1;
+                unsupportedExtensionsParsed.Invoke(extensions.Item2);
             }
         }
 
