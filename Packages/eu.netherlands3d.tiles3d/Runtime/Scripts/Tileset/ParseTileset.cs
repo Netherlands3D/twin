@@ -195,6 +195,9 @@ namespace Netherlands3D.Tiles3D
         {
             var extensionsUsedNode = rootNode["extensionsUsed"].AsArray;
 
+            if (extensionsUsedNode == null)
+                return (Array.Empty<string>(), Array.Empty<string>());
+            
             string[] extensionsUsed = new string[extensionsUsedNode.Count];
             for (var i = 0; i < extensionsUsedNode.Count; i++)
             {
