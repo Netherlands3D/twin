@@ -166,7 +166,7 @@ namespace Netherlands3D.Coordinates
             y = Math.Log(Math.Tan(((90d + y) * Math.PI) / 360d)) / (Math.PI / 180d);
             y = (y * 20037508.34d) / 180d;
             
-            return new Coordinate(CoordinateSystem.EPSG_3857, x, y, 0);
+            return new Coordinate(CoordinateSystem.WGS84_PseudoMercator, x, y, 0);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Netherlands3D.Coordinates
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_4326)
+            if (coordinate.CoordinateSystem != 4326)
             {
                 throw new ArgumentOutOfRangeException(
                     $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
@@ -217,17 +217,17 @@ namespace Netherlands3D.Coordinates
                     var result = ToUnity(vector3);
                     return new Coordinate(targetCrs, result.x, result.y, result.z);
                 }
-                case (int)CoordinateSystem.EPSG_7415:
+                case (int)CoordinateSystem.RDNAP:
                 {
                     var result = ToEPSG7415(vector3.lon, vector3.lat);
                     return new Coordinate(targetCrs, result.x, result.y, result.z);
                 }
-                case (int)CoordinateSystem.EPSG_4936:
+                case (int)CoordinateSystem.ETRS89_ECEF:
                 {
                     var result = ToECEF(vector3);
                     return new Coordinate(targetCrs, result.X, result.Y, result.Z);
                 }
-                case (int)CoordinateSystem.EPSG_3857: return ToEPSG3857(coordinate);
+                case (int)CoordinateSystem.WGS84_PseudoMercator: return ToEPSG3857(coordinate);
             }
 
             throw new ArgumentOutOfRangeException(

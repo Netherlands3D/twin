@@ -31,6 +31,8 @@ namespace Netherlands3D.Coordinates
         public static Vector3ECEF ToECEF(Vector3 point)
         {
             var temppoint = Quaternion.Inverse(EPSG4936.RotationToUp()) * point;
+            
+
             Vector3ECEF ecef = new Vector3ECEF();
             ecef.X = -temppoint.x + EPSG4936.relativeCenter.X;
             ecef.Y = -temppoint.z + EPSG4936.relativeCenter.Y;
@@ -82,17 +84,17 @@ namespace Netherlands3D.Coordinates
 
             switch (targetCrs)
             {
-                case (int)CoordinateSystem.WGS84:
+                case (int)CoordinateSystem.WGS84_LatLonHeight:
                 {
                     var result = ToWGS84(vector3);
                     return new Coordinate(targetCrs, result.lon, result.lat, result.h);
                 }
-                case (int)CoordinateSystem.EPSG_7415:
+                case 7415:
                 {
                     var result = ToEPSG7415(vector3);
                     return new Coordinate(targetCrs, result.x, result.y, result.z);
                 }
-                case (int)CoordinateSystem.EPSG_4936:
+                case 4936:
                 {
                     var result = ToECEF(vector3);
                     return new Coordinate(targetCrs, result.X, result.Y, result.Z);

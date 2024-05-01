@@ -6,13 +6,17 @@ namespace Netherlands3D.Coordinates
 {
 public class CoordinateSetup : MonoBehaviour
 {
+        public CoordinateSystem coordintesystem;
         public Vector2RD rdCoordinatesAtUnityCenter;
         public float napElevationAtUniytZero;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-            EPSG7415.relativeCenter = rdCoordinatesAtUnityCenter;
-            EPSG7415.zeroGroundLevelY = napElevationAtUniytZero;
+            CoordinateSystems.connectedCoordinateSystem = coordintesystem;
+            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, rdCoordinatesAtUnityCenter.x, rdCoordinatesAtUnityCenter.y, napElevationAtUniytZero));
+            CoordinateConverter.relativeCenterRD = rdCoordinatesAtUnityCenter;
+            CoordinateConverter.zeroGroundLevelY = napElevationAtUniytZero;
+
     }
 }
 }

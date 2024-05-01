@@ -28,7 +28,7 @@ namespace Netherlands3D.Coordinates
     {
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_3857)
+            if (coordinate.CoordinateSystem != 3857)
             {
                 throw new ArgumentOutOfRangeException(
                     $"Invalid coordinate received, this class cannot convert CRS {coordinate.CoordinateSystem}"
@@ -38,7 +38,7 @@ namespace Netherlands3D.Coordinates
             switch (targetCrs)
             {
                 case (int)CoordinateSystem.Unity: return ToUnity(coordinate);
-                case (int)CoordinateSystem.EPSG_4326: return ToEPSG4326(coordinate);
+                case 4326: return ToEPSG4326(coordinate);
             }
 
             throw new ArgumentOutOfRangeException(
@@ -49,7 +49,7 @@ namespace Netherlands3D.Coordinates
         private static Coordinate ToUnity(Coordinate coordinate)
         {
             return CoordinateConverter.ConvertTo(
-                CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.EPSG_4326),
+                CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.WGS84_LatLon),
                 CoordinateSystem.Unity
             );
         }
@@ -63,7 +63,7 @@ namespace Netherlands3D.Coordinates
             y = (y * 180d) / 20037508.34d;
             y = (Math.Atan(Math.Exp(y * (Math.PI / 180d))) * 360d) / Math.PI - 90d;
             
-            return new Coordinate(CoordinateSystem.EPSG_4326, x, y, coordinate.Points[2]);
+            return new Coordinate(CoordinateSystem.WGS84_LatLon, x, y, coordinate.Points[2]);
         }
     }
 }

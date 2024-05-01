@@ -16,6 +16,8 @@
 *  permissions and limitations under the License.
 */
 
+using UnityEngine;
+
 namespace Netherlands3D.Coordinates
 {
     /// <summary>
@@ -31,6 +33,19 @@ namespace Netherlands3D.Coordinates
             lat = Lat;
             lon = Lon;
             h = H;
+        }
+        public static Vector3WGS operator +(Vector3WGS a, Vector3WGS b )
+        {
+            return new Vector3WGS(a.lon + b.lon, a.lat + b.lat, a.h + b.h);
+        }
+        public static Vector3WGS operator -(Vector3WGS a, Vector3WGS b)
+        {
+            return new Vector3WGS(a.lon - b.lon, a.lat - b.lat, a.h - b.h);
+        }
+
+        public  Quaternion UnityQuaterion()
+        {
+           return Quaternion.AngleAxis((float)lon, Vector3.up)* Quaternion.AngleAxis((float)(lat), Vector3.right) ;
         }
     }
 }

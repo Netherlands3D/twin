@@ -4,53 +4,78 @@
 Using this package it is possible to 
 
 1. Convert between the following coordinate systems:
-   1. Unity units (interpreted as **meters**)
-   2. [World Geodetic System 1984 (EPSG:3857, WGS84)](https://epsg.io/3857)
-   2. [World Geodetic System 1984 (EPSG:4326, WGS84)](https://epsg.io/4326)
-   3. [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) + [NAP height](https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:7415](https://epsg.io/7415))
-   4. [Earth-centered, Earth-fixed (EPSG:4936, ECEF)](https://en.wikipedia.org/wiki/Earth-centered,_Earth-fixed_coordinate_system)
+   - [World Geodetic System 1984 Lattitude, Longitude, EllipsoidalHeight (EPSG:3857, WGS84_LatLonH)](https://epsg.io/3857)
+   - [World Geodetic System 1984 Lattitude, Longitude (EPSG:4326, WGS84_LatLon)](https://epsg.io/4326)
+   - [World Geodetic System 1984 EartCentered-EarthFixed (EPSG:4978, WGS84_ECEF)](https://epsg.io/4978)
+   - [European Terrestrial Reference System 1989 Lattitude, Longitude, EllipsoidalHeight (EPSG:4937, ERTS89_LatLonH)](https://epsg.io/4937)
+   - [European Terrestrial Reference System 1989 Lattitude, Longitude (EPSG:4258, ERTS89_LatLon)](https://epsg.io/4258)
+   - European Terrestrial Reference System 1989 EartCentered-EarthFixed (EPSG:4936, ERTS89_ECEF)](https://epsg.io/4936)
+   - [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:28992](https://epsg.io/28992))
+   - [Rijksdriehoekscoördinaten](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) + [NAP height](https://en.wikipedia.org/wiki/Amsterdam_Ordnance_Datum) (RD / [EPSG:7415](https://epsg.io/7415))
+   - WGS 84 / Pseudo-Mercator (EPSG:3857, WGS84_PseudoMercator)](https://epsg.io/3857)
 
-## Usage
 
-This package exposes a unit called Coordinate that is related to a specific Coordinate Reference System (CRS)
-and represents a _coordinate_ in that CRS using 2 or 3 or more _points_.
+2. convert between each of these coordinateSystems and Unity Vector3
 
-Example, describing longitude 10.02, latitude 20.01 in the WGS-84, or EPSG:4326, Coordinate Reference System.
+# Usage
+
+## Using coordinates
+
+### Creating a Coordinate from known values
+
+Example, describing longitude 10.02, latitude 20.01 in EPSG:4326, Coordinate Reference System.
 
 ```
-$coordinate = new Coordinate(CoordinateSystem.EPSG_4326, 10.02, 20.01);
+$coordinate = new Coordinate(CoordinateSystem.WGS84LatLon, 20.01, 10.02);
 ```
+### Testing the validity of a coordinate
+
+you can test is a coordinate is valid using the function IsValid():
+
+```
+$bool isValid = CoordinateToTest.isValid();
+```
+returns true if:
+	- the number of axis is correct AND
+	- the AxisValues fall within the bounds of the valid area for the coordinatesystem
 
 ### Converting to another CoordinateSystem
 
-With such a unit, you can to convert it to a coordinate in another CRS using the CoordinateConverter
-service's ConvertTo method:
+$rdCoordinate = originalCoordinate.Convert(CoordinateSystem.RDNAP);
 
-```
-$rdCoordinate = CoordinateConverter(coordinate, CoordinateSystem.EPSG_7415);
-```
+## Connecting Coordinates to Unity
+
+### assigning a CoordinateSystem to Unity
+
+$CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
+
+### assigning a location to the Unity Origin
+
+$CoordinateSystems.SetOrigin(Coordinate that has to be at the Unity-Origin)
+this coordinate does not have to be in the coordinateSystem that is assigned to Unity.
+
+### Creating a coordinate from an Unity Vector3
+
+$newCoordinate = new Coordinate(UnityVector3)
 
 ### Converting to a Vector3
 
-> Important: this feature is considered alpha and is subject to change.
+$Vector3 = CoordinateToConvert.ToUnity()
 
-To represent a Coordinate in Unity worldspace, it is possible for the RD/EPSG:7415 and ECEF/EPSG:4936 Coordinate Systems
-to translate to and from a Unity Vector3. This is done by taking -respectively- the relativeCenter property from the 
-EPSG4936 or EPSG7415 class use that as the Vector3.Zero in worldspace. The distance in **meters** between that relative 
-center and the given Coordinate is calulated -in meters- and returned as a Vector3 indicating that location.
-To set up the relativeCenter u can use CoordinateSetup.cs on a gameobject.
+### Rotating geometry
+When a geocentric coordinateSystem is attached to Unity, the geometry defined in this coordinatesystem has to be rotated so that the gravity-Updirection at the UnityOrigin aligns with UnityUp and the north-direction aligns with the Unity Z-axis.
 
-```
-$rdCoordinate = CoordinateConverter(coordinate, CoordinateSystem.Unity);
-```
+different coordinatesystems use different Up- and East-directions.
+When coordinateSystem A is connected to Unity, but you have geometry (for example a mesh) that is defined in coordinateSystem B, a rotation might have to be applied to ensure that the geometry aligns nicely with the other objects in unity.
 
-In a future version of this package, the conversion to and from Unity units will be moved to a specialized Floating 
-Origin solution (see MovingOrigin and MovingOriginFollower for a start) but for backwards compatibility this is 
-supported by the CoordinateConverter.
+$Quaternion rotationInUnity = CoordinateAtOrigin.RotationToLocalGravityUp()
+$transform.rotation = rotationInUnity
+
+* (for now) we assume that the mesh itself is defined in a left-handed, Y-up style. (even though most official coordinatesystems are righthanded and Z-up), most geometry-parsers in unity already change this definition
+
 
 ## Backwards compatibility
 
 In Netherlands3D, we used to make use of conversion methods on the CoordinateConverter -such as RDtoWGS84- and
 Vector3 classes per Coordinate System. This architecture is not scalable to support the plethora of CRS out there,
-and as such these are all deprecated and replaced by the Coordinate class and the ConvertTo method in the 
-CoordinateConverter.
+and as such these are all deprecated and replaced by Coordinate.Convert(targetCRS)

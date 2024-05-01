@@ -239,7 +239,7 @@ namespace Netherlands3D.Coordinates
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.EPSG_7415)
+            if (coordinate.CoordinateSystem != 7415)
             {
                 throw new ArgumentOutOfRangeException(
                     $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
@@ -255,7 +255,7 @@ namespace Netherlands3D.Coordinates
                     var result = ToUnity(vector3);
                     return new Coordinate(targetCrs, result.x, result.y, result.z);
                 }
-                case (int)CoordinateSystem.WGS84:
+                case (int)CoordinateSystem.WGS84_LatLonHeight:
                 {
                     var result = ToWGS84(vector3.x, vector3.y, vector3.z);
                     return new Coordinate(targetCrs, result.lon, result.lat, result.h);
