@@ -57,7 +57,6 @@ namespace Netherlands3D.Twin.Layers
         public void CreatePolygonLayer(List<Vector3> polygon)
         {
             var newPolygonObject = new GameObject("Polygon");
-            newPolygonObject.AddComponent<WorldTransform>();
             var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
@@ -74,7 +73,6 @@ namespace Netherlands3D.Twin.Layers
         public void CreateLineLayer(List<Vector3> line)
         {
             var newLineObject = new GameObject("Line");
-            newLineObject.AddComponent<WorldTransform>();
             var layerComponent = newLineObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
