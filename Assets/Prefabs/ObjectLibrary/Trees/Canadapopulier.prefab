@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 121414271217785244}
   - component: {fileID: 8704022603555858576}
   - component: {fileID: 6927920033585568931}
+  - component: {fileID: -7908968183286354971}
   m_Layer: 0
   m_Name: Canadapopulier
   m_TagString: Untagged
@@ -72,6 +73,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
+--- !u!114 &-7908968183286354971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4573407623913318474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5193155301075726062
 GameObject:
   m_ObjectHideFlags: 0

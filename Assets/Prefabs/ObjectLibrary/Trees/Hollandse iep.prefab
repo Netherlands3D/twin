@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2296718785537555909}
   - component: {fileID: -280998323809393642}
   - component: {fileID: -3488138144189563609}
+  - component: {fileID: -2122084242925856577}
   m_Layer: 0
   m_Name: Hollandse iep
   m_TagString: Untagged
@@ -123,3 +124,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
+--- !u!114 &-2122084242925856577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126082523732754716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
