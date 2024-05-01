@@ -7,7 +7,9 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
 using SimpleJSON;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -59,6 +61,16 @@ namespace Netherlands3D.Twin.Configuration
                 return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
             } 
         }
+        
+#if UNITY_EDITOR
+        [MenuItem("Netherlands3D/Change Debug Configuration")]
+        public static void OpenConfiguratorInInspector()
+        {
+            var assetPath = AssetDatabase.GUIDToAssetPath("049e538b7dc9ec64789200c6804d8dbf");
+            var myScriptableObject = AssetDatabase.LoadAssetAtPath(assetPath, typeof(ScriptableObject));
+            Selection.activeObject = myScriptableObject;
+        }
+#endif
 
         public bool IsOpen { 
             get => SetupSceneLoaded; 
@@ -167,6 +179,18 @@ namespace Netherlands3D.Twin.Configuration
             File.WriteAllText(filePath, jsonText);
             Debug.Log($"{filePath} created");
             #endif
+        }
+
+        [ContextMenu("Write config to Debug Config field")]
+        private void WriteConfigToDebugConfig()
+        {
+            debugConfig = configuration.ToJsonNode().ToString(4);
+        }
+
+        [ContextMenu("Write config to Debug Url field")]
+        private void WriteConfigToDebugUrl()
+        {
+            debugUrl = $"https://netherlands3d.eu/twin/{configuration.ToQueryString()}";
         }
 
         public void StartSetup()

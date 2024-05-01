@@ -10,7 +10,6 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -131,7 +130,13 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var functionality in Functionalities)
             {
                 var config = functionality.configuration as IConfiguration;
-                config?.Populate(queryParameters);
+                if (config == null) continue;
+                
+                config.Populate(queryParameters);
+                if (config.Validate().Count > 0 && functionality.IsEnabled)
+                {
+                    functionality.IsEnabled = false;
+                }
             }
         }
 
@@ -155,6 +160,11 @@ namespace Netherlands3D.Twin.Configuration
 
                 functionalityConfiguration.AddQueryParameters(urlBuilder);
             }
+        }
+
+        public List<string> Validate()
+        {
+            return new List<string>();
         }
 
         public void Populate(JSONNode jsonNode)
