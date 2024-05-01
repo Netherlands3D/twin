@@ -171,7 +171,7 @@ MonoBehaviour:
   nestingDepth: 0
   parseSubObjects: 0
   maxScreenHeightInPixels: 1080
-  maximumScreenSpaceError: 5
+  maximumScreenSpaceError: 40
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
