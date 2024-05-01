@@ -89,19 +89,16 @@ public class CompoundPolygon
 
     public static Vector2[] GenerateGridPoints(Bounds bounds, float cellSize, float angle, out Bounds expandedBounds)
     {
-        // var bounds = compoundPolygon.Bounds;
-
         // Increase the bounds size to ensure coverage after rotation
         float diagonalLength = bounds.size.magnitude;
         float expandedBoundsSizeSide = diagonalLength;
-        var expandedBoundsSize = new Vector3(expandedBoundsSizeSide, bounds.size.y, expandedBoundsSizeSide);
+        var expandedBoundsSize = new Vector3(expandedBoundsSizeSide + cellSize, bounds.size.y, expandedBoundsSizeSide + cellSize);
         expandedBounds = new Bounds(bounds.center, expandedBoundsSize);
+        
+        var offsetX = (expandedBoundsSizeSide % cellSize) / 2 + cellSize / 2; //offset half the remainder of the grid + half a cell size to center it
+        var offsetY = (expandedBoundsSizeSide % cellSize) / 2 + cellSize / 2;
 
-        Vector2 bottomLeft = new Vector2(expandedBounds.center.x, expandedBounds.center.z) - new Vector2(expandedBounds.extents.x, expandedBounds.extents.z);
-
-        float angleRad = angle * Mathf.Deg2Rad;
-        float sinAngle = Mathf.Sin(angleRad);
-        float cosAngle = Mathf.Cos(angleRad);
+        Vector2 bottomLeft = new Vector2(expandedBounds.center.x, expandedBounds.center.z) - new Vector2(expandedBounds.extents.x, expandedBounds.extents.z) + new Vector2(offsetX, offsetY);
 
         Vector2 rotationCenter = new Vector2(expandedBounds.center.x, expandedBounds.center.z);
 
@@ -109,17 +106,21 @@ public class CompoundPolygon
         int numXIterations = Mathf.CeilToInt((expandedBounds.max.x - bottomLeft.x) / cellSize);
         int numYIterations = Mathf.CeilToInt((expandedBounds.max.z - bottomLeft.y) / cellSize);
 
-        var capacity = numXIterations * numYIterations;
+        var capacity = numXIterations * numYIterations; 
         var array = new Vector2[capacity];
 
+        float angleRad = angle * Mathf.Deg2Rad;
+        float sinAngle = Mathf.Sin(angleRad);
+        float cosAngle = Mathf.Cos(angleRad);
+        
         var rotatedPoint = new Vector2(); //define a variable to use so the constructor isn't called every time as an optimisation for when processing many points.
         for (int x = 0; x < numXIterations; x++)
         {
             for (int y = 0; y < numYIterations; y++)
             {
                 // Translate point relative to rotation center
-                float translatedX = bottomLeft.x + x*cellSize - rotationCenter.x;
-                float translatedY = bottomLeft.y + y*cellSize - rotationCenter.y;
+                float translatedX = bottomLeft.x + x * cellSize - rotationCenter.x;
+                float translatedY = bottomLeft.y + y * cellSize - rotationCenter.y;
 
                 // Rotate point using Isine and cosine
                 float rotatedX = translatedX * cosAngle - translatedY * sinAngle;
@@ -128,7 +129,7 @@ public class CompoundPolygon
                 // Translate back to original position
                 rotatedPoint.x = rotatedX + rotationCenter.x;
                 rotatedPoint.y = rotatedY + rotationCenter.y;
-                
+
                 array[x * numYIterations + y] = rotatedPoint;
             }
         }
@@ -203,7 +204,7 @@ public class CompoundPolygon
     public static Vector2[] GenerateScatterPoints(CompoundPolygon polygon, float density, float scatter, float angle)
     {
         float cellSize = 1f / Mathf.Sqrt(density);
-    
+
         var points = GenerateGridPoints(polygon.Bounds, cellSize, angle);
         AddRandomOffset(points, cellSize, scatter);
         // return PrunePointsWithPolygon(scatterPoints, polygon);

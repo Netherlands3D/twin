@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
   - component: {fileID: 6531086895741313930}
+  - component: {fileID: -1780917372914214898}
+  - component: {fileID: 2626529733265145809}
+  - component: {fileID: -1431062917293908258}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -52,9 +55,16 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Buildings_2021/Buildings{x}_{y}.2.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod1.2/buildings-{x}_{y}.1.2.bin
     pathQuery: 
     maximumDistance: 10000
+    maximumDistanceSquared: 0
+    enabled: 1
+  - Description: 
+    geoLOD: 
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod2.2/buildings-{x}_{y}.2.2.bin
+    pathQuery: 
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
@@ -98,3 +108,62 @@ MonoBehaviour:
   toolThatEnablesColliders: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad,
     type: 2}
   waitForAnimationTime: 0.85
+--- !u!114 &-1780917372914214898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6432123512545269546}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2626529733265145809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: -1431062917293908258}
+  referenceCoordinateSystem: 4326
+--- !u!114 &-1431062917293908258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

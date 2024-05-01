@@ -22,17 +22,20 @@ namespace Netherlands3D.Twin
 
         public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
         public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
-        
+        public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
+
+        public bool AutoRotateToLine { get; set; } = false;
+
         public float Density
         {
             get { return density; }
             set
             {
-                if(density == value)
+                if (density == value)
                     return;
-                
+
                 density = value;
-                ScatterSettingsChanged.Invoke();
+                ScatterDistributionChanged.Invoke(); 
             }
         }
 
@@ -41,9 +44,9 @@ namespace Netherlands3D.Twin
             get { return scatter; }
             set
             {
-                if(scatter == value)
+                if (scatter == value)
                     return;
-                
+
                 scatter = value;
                 ScatterSettingsChanged.Invoke();
             }
@@ -54,65 +57,66 @@ namespace Netherlands3D.Twin
             get { return angle; }
             set
             {
-                if(angle == value)
+                if (angle == value)
                     return;
-                
+
                 angle = value;
-                ScatterSettingsChanged.Invoke();
+                ScatterDistributionChanged.Invoke();
             }
         }
-        
+
         public Vector3 MinScale
         {
             get { return minScale; }
             set
             {
-                if(minScale == value)
+                if (minScale == value)
                     return;
-                
+
                 minScale = value;
                 ScatterSettingsChanged.Invoke();
             }
         }
-        
+
         public Vector3 MaxScale
         {
             get { return maxScale; }
             set
             {
-                if(maxScale == value)
+                if (maxScale == value)
                     return;
-                
+
                 maxScale = value;
                 ScatterSettingsChanged.Invoke();
             }
         }
-        
+
         public FillType FillType
         {
             get => fillType;
             set
             {
-                if(fillType == value)
+                if (fillType == value)
                     return;
-                
+
                 fillType = value;
                 ScatterShapeChanged.Invoke();
-            } 
-        } 
+            }
+        }
+
         public float StrokeWidth
         {
             get => strokeWidth;
             set
             {
-                if(strokeWidth == value)
+                if (strokeWidth == value)
                     return;
-                
+
                 strokeWidth = value;
                 ScatterShapeChanged.Invoke();
             }
         }
-        
+
         public Vector3 GenerateRandomScale()
         {
             float x = UnityEngine.Random.Range(minScale.x, maxScale.x);
@@ -121,7 +125,7 @@ namespace Netherlands3D.Twin
 
             return new Vector3(x, y, z);
         }
-        
+
         public void AddToProperties(RectTransform properties)
         {
             var propertySection = Instantiate(ScatterMap.Instance.propertyPanelPrefab, properties);

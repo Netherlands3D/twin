@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
 
         public Tool Tool { get => tool; private set => tool = value; }
 
-        private void Awake() {
+        private void Start() {
             //Always start button Tool as disabled
             Tool.Open = false;
         }

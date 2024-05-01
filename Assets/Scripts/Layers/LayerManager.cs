@@ -62,9 +62,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI = layerUI;
             layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
-
-            LayersVisibleInInspector.Add(layerUI);
-
+            
             return layerUI;
         }
 
@@ -169,7 +167,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case DatasetLayer _:
                     return layerTypeSprites[5];
                 case PolygonSelectionLayer _:
-                    return layerTypeSprites[6];
+                    if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
+                        return layerTypeSprites[6];
+                    return layerTypeSprites[7];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];

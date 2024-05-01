@@ -109,6 +109,7 @@ namespace Netherlands3D.Twin
             CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, angle, out var gridBounds); // we need the gridBounds out variable. 
 
 #if UNITY_EDITOR
+            this.polyBounds = polygonBounds;
             this.gridBounds = gridBounds;
             this.gridCellSize = cellSize;
 #endif
@@ -118,9 +119,9 @@ namespace Netherlands3D.Twin
             {
                 visualisation.gameObject.SetActive(true); //enable all visualisations and disable them again when done, to avoid visualisations showing up in other textures
             }
-            
+
             CreateRenderTexture(gridBounds, GridSampleSize); //todo: polygon should be rendered with an outline to include the random offset of points outside the polygon that due to the random offset will be shifted inside the polygon.
-            AlignCameraToPolygon(depthCamera, gridBounds);
+            AlignCameraToPolygon(depthCamera, gridBounds, angle);
 
             yield return null; //wait for next frame to begin rendering with the new settings
             RenderDepthCamera(); //don't know exactly why it is needed to wait twice, but not doing so causes unexpected behaviour
@@ -128,7 +129,7 @@ namespace Netherlands3D.Twin
 
             var texture = new SampleTexture(samplerTexture);
             Destroy(samplerTexture);
-            
+
             onSamplerTextureCreated.Invoke(texture);
             foreach (var visualisation in visualisations)
             {
@@ -143,11 +144,11 @@ namespace Netherlands3D.Twin
                 scatterCoroutine = StartCoroutine(coroutineQueue.Dequeue());
             }
         }
-        
-        public void SampleTexture(SampleTexture sampleTexture, Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
+
+        public void SampleTexture(SampleTexture sampleTexture, Vector2[] gridPoints, Bounds gridBounds, float scatter, float cellSize, float angle, Action<List<Vector3>, List<Vector2>> onPointsGeneratedCallback)
         {
             //sample texture at points to get random offset and add random offset to world space points. Sample texture at new point to see if it is inside the poygon and if so to get the height.
-            var offsetPoints = AddRandomOffsetAndSampleHeightAndSampleScale(sampleTexture, gridPoints, gridBounds, GridSampleSize, scatter, cellSize);
+            var offsetPoints = AddRandomOffsetAndSampleHeightAndSampleScale(sampleTexture, gridPoints, gridBounds, GridSampleSize, scatter, cellSize, angle);
             onPointsGeneratedCallback?.Invoke(offsetPoints.Item1, offsetPoints.Item2);
         }
 
@@ -174,7 +175,7 @@ namespace Netherlands3D.Twin
         /// <param name="randomness">How much scatter to apply in a Range from 0 (no scatter) to 1 (max scatter)</param>
         /// <param name="gridCellSize">size of a single grid cell</param>
         /// <returns>List of offset points with the sampled height and the raw random sample at the offset point</returns>
-        private (List<Vector3>, List<Vector2>) AddRandomOffsetAndSampleHeightAndSampleScale(SampleTexture texture, Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize)
+        private (List<Vector3>, List<Vector2>) AddRandomOffsetAndSampleHeightAndSampleScale(SampleTexture texture, Vector2[] worldPoints, Bounds gridBounds, float gridSampleSize, float randomness, float gridCellSize, float angle)
         {
             var points = new List<Vector3>(worldPoints.Length);
             var sampledScales = new List<Vector2>(worldPoints.Length);
@@ -188,6 +189,11 @@ namespace Netherlands3D.Twin
             var textureHeight = texture.height;
             var offsetPoint = new Vector3(); //define vector3 here to avoid calling constructor in the (potentially large) loop
             var sampledRandomness = new Vector2();
+
+
+            float angleRad = angle * Mathf.Deg2Rad;
+            float sinAngle = Mathf.Sin(angleRad);
+            float cosAngle = Mathf.Cos(angleRad);
 
             for (int i = 0; i < worldPoints.Length; i++)
             {
@@ -222,12 +228,21 @@ namespace Netherlands3D.Twin
                 if (newColorSample.a < 0.5f) //new sampled color does not have an alpha value, so it falls outside of the polygon. Therefore this point can be skipped. This wil clip out any points outside of the polygon
                     continue;
 
-                offsetPoint.x = scatteredPointX;
-                offsetPoint.y = newColorSample.b;
-                offsetPoint.z = scatteredPointY;
+                // Translate point relative to rotation center
+                float translatedX = scatteredPointX - boundsCenter2D.x;
+                float translatedY = scatteredPointY - boundsCenter2D.y;
 
-                sampledRandomness.x = newColorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
-                sampledRandomness.y = newColorSample.g;
+                // Rotate point using Isine and cosine
+                float rotatedX = translatedX * cosAngle - translatedY * sinAngle;
+                float rotatedY = translatedX * sinAngle + translatedY * cosAngle;
+
+                // Translate back to original position
+                offsetPoint.x = rotatedX + boundsCenter2D.x;
+                offsetPoint.y = newColorSample.b;
+                offsetPoint.z = rotatedY + boundsCenter2D.y;
+
+                sampledRandomness.x = colorSample.r; //for our purposes, it doesn't really matter if these use the same sampled values as for the random offset
+                sampledRandomness.y = colorSample.g;
 
                 points.Add(offsetPoint);
                 sampledScales.Add(sampledRandomness);
@@ -258,9 +273,10 @@ namespace Netherlands3D.Twin
         /// </summary>
         /// <param name="camera">Camera to align. The camera must be orthographic to set the size properly</param>
         /// <param name="bounds">Polygon to align to. The camera orthographic size will be set to the polygon height (z) value.</param>
-        public void AlignCameraToPolygon(Camera camera, Bounds bounds)
+        public void AlignCameraToPolygon(Camera camera, Bounds bounds, float angle)
         {
             camera.transform.position = new Vector3(bounds.center.x, camera.transform.position.y, bounds.center.z);
+            camera.transform.rotation = Quaternion.Euler(90, 0, angle);
             camera.orthographicSize = bounds.extents.z;
         }
     }

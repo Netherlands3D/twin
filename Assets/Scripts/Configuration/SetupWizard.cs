@@ -90,24 +90,28 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateStartingPositionWithoutNotify(Coordinate coordinate)
         {
-            var currentAltitude = configuration.Origin.Points[2];
+            var currentCameraPosition = Camera.main.transform.position;
+            var cameraCoordinateUnity = new Coordinate(CoordinateSystem.Unity, 
+                currentCameraPosition.x, 
+                currentCameraPosition.y,
+                currentCameraPosition.z
+            );
+            var cameraCoordinateRD = CoordinateConverter.ConvertTo(cameraCoordinateUnity, CoordinateSystem.RD);
+            var cameraAltitude = cameraCoordinateRD.Points[2];   
             var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
 
-            // if Coordinate is 2D, make sure it is 3D
-            if (convertedCoordinate.Points.Length == 2)
-            {
-                convertedCoordinate = new Coordinate(
-                    convertedCoordinate.CoordinateSystem, 
-                    convertedCoordinate.Points[0], 
-                    convertedCoordinate.Points[1],
-                    currentAltitude
-                );
-            }
+            // Keep current camera elevation
+            convertedCoordinate = new Coordinate(
+                convertedCoordinate.CoordinateSystem, 
+                convertedCoordinate.Points[0], 
+                convertedCoordinate.Points[1],
+                cameraAltitude
+            );
             
             // Setting a starting position's altitude to 0 shouldn't happen, if we detect this as an artefact of
             // the conversion process or an actual intention, we reinstate the original altitude.
             if (Mathf.Approximately((float)convertedCoordinate.Points[2], 0f)) {
-                convertedCoordinate.Points[2] = currentAltitude;
+                convertedCoordinate.Points[2] = cameraAltitude;
             }
 
             var roundedCoordinate = new Coordinate(

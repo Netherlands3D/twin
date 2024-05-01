@@ -1365,6 +1365,7 @@ MonoBehaviour:
   densitySlider: {fileID: 1757738007071709277}
   scatterSlider: {fileID: 4471605445229573455}
   angleSlider: {fileID: 5235943752098695262}
+  angleTitleLabel: {fileID: 1543947321330805619}
   heightRangeSlider: {fileID: 6027059580585128721}
   diameterRangeSlider: {fileID: 7687734465722825394}
 --- !u!1 &7402408927570306566
@@ -2652,6 +2653,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7b4ed3ca1dcba245a37420ca328777d, type: 3}
+--- !u!1 &1543947321330805619 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4136261530444499954, guid: c7b4ed3ca1dcba245a37420ca328777d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3173841584132497537}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8275993854338620794 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,

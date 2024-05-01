@@ -22,7 +22,7 @@ MonoBehaviour:
   onOpen:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 205a5bc34432740a38a860c6a7a17733, type: 2}
+      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6
@@ -37,7 +37,7 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 205a5bc34432740a38a860c6a7a17733, type: 2}
+      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6

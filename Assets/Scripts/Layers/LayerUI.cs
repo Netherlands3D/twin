@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -223,23 +224,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void RecalculateVisibleHierarchyRecursive()
         {
             layerManager.LayersVisibleInInspector.Clear();
-            foreach (Transform unparentedLayer in LayerBaseTransform)
-            {
-                var ui = unparentedLayer.GetComponent<LayerUI>();
-                ui.RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers();
-            }
-        }
-
-        private void RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers()
-        {
-            layerManager.LayersVisibleInInspector.Add(this);
-            if (foldoutToggle.isOn)
-            {
-                foreach (var child in ChildrenUI)
-                {
-                    child.RecalculateLayersVisibleInHierarchyRecursiveForParentedLayers();
-                }
-            }
+            layerManager.LayersVisibleInInspector = LayerBaseTransform.GetComponentsInChildren<LayerUI>(false).ToList();
 
             if (Layer) // When the layer is deleted, this UI should not update
                 MarkLayerUIAsDirty();
@@ -248,7 +233,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateParentAndChildren()
         {
             ParentUI = transform.parent.GetComponentInParent<LayerUI>(true); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
-            ChildrenUI = childrenPanel.GetComponentsInChildren<LayerUI>(true);
+          
+            var list = new List<LayerUI>();
+            foreach (Transform t in childrenPanel) //loop over the transforms explicitly because using GetComponentsInChildren is recursive.
+            {
+                 var ui = t.GetComponent<LayerUI>();
+                 list.Add(ui);
+            }
+
+            ChildrenUI = list.ToArray();
+            UpdateFoldout(); //update the foldout because the children are recalculated
         }
 
         public void MarkLayerUIAsDirty()
@@ -270,10 +264,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateName();
             RecalculateIndent(Layer.Depth);
             SetLayerTypeImage();
-            var maxWidth = transform.parent.GetComponent<RectTransform>().rect.width;
-            RecalculateNameWidth(maxWidth);
+            RecalculateNameWidth();
             UpdateFoldout();
-            
+
             UpdatePropertiesToggle();
         }
 
@@ -290,9 +283,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var layerProxy = Layer as ReferencedProxyLayer;
 
-            return (layerProxy == null) 
-                ? Layer as ILayerWithProperties 
-                : layerProxy.Reference as ILayerWithProperties;
+            return (layerProxy == null) ? Layer as ILayerWithProperties : layerProxy.Reference as ILayerWithProperties;
         }
 
         private void SetLayerTypeImage()
@@ -321,8 +312,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerNameField.text = Layer.name;
         }
 
-        private void RecalculateNameWidth(float maxWidth)
+        private void RecalculateNameWidth()
         {
+            var maxWidth = 0f;
+            if (ParentUI)
+                maxWidth = ParentUI.rectTransform.rect.width;
+            else
+                maxWidth = LayerBaseTransform.GetComponent<RectTransform>().rect.width;
+
             var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
             var width = maxWidth;
             width -= layerNameFieldRectTransform.anchoredPosition.x;
@@ -418,7 +415,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void Deselect(bool alreadyRemovedFromSelectedLayers = false)
         {
             if (propertyToggle.isOn) propertyToggle.isOn = false;
-            
+
             layerManager.SelectedLayers.Remove(this);
             Layer.OnDeselect();
             SetHighlight(InteractionState.Default);
@@ -504,7 +501,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     layerManager.DragLine.SetLeft(leftOffset);
 
                     newParent = referenceLayerUnderMouse.ParentUI;
-                    newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex() ;
+                    newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
 
                     if (newParent == ParentUI && newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
                         newSiblingIndex--;
@@ -648,11 +645,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
             // consequence of Destroying the parent)
-            SetParent(null); 
-            
+            SetParent(null);
+
             // Make sure to remove the properties when removing the UI
             if (propertyToggle.isOn) propertyToggle.isOn = false;
-            
+
             Destroy(gameObject);
         }
 
@@ -661,7 +658,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
             propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
         }
-        
+
         private void ToggleProperties(bool onOrOff, Properties properties)
         {
             var layerWithProperties = TryFindProperties();
@@ -680,6 +677,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 // To prevent confusion with the user, also immediately select this layer.
                 Select(true);
             }
+        }
+
+        public void ToggleProperties(bool isOn)
+        {
+            propertyToggle.isOn = isOn;
         }
     }
 }

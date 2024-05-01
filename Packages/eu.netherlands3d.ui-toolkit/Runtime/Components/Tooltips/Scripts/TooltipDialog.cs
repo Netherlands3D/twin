@@ -9,12 +9,13 @@ namespace Netherlands3D.Interface
 {
     public class TooltipDialog : MonoBehaviour
     {
+        [Tooltip("Offset of the tooltip in relation to the element")]
+        [SerializeField] private Vector2 offset;
+        
         private TextMeshProUGUI tooltiptext;
         private RectTransform rectTransform;
         private ContentSizeFitter contentSizeFitter;
         private Vector3[] worldCorners = new Vector3[4];
-
-        private bool pivotRight = false;
 
         #region Singleton
 
@@ -54,28 +55,32 @@ namespace Netherlands3D.Interface
 
         private void SwapPivot()
         {
+            var pivot = Vector2.zero;
             //Swap pivot based on place in screen (to try to stay in the screen horizontally)
-            if (!pivotRight && rectTransform.position.x > Screen.width * 0.9f)
+            if (rectTransform.position.x + GetRectTransformBounds(rectTransform).size.x > Screen.width)
             {
-                pivotRight = true;
-                rectTransform.pivot = Vector2.right;
+                pivot.x = 1;
             }
-            else if (pivotRight && rectTransform.position.x <= Screen.width * 0.9f)
+
+            //Swap pivot based on place in screen (to try to stay in the screen vertically)
+            if (rectTransform.position.y + GetRectTransformBounds(rectTransform).size.y > Screen.height)
             {
-                pivotRight = false;
-                rectTransform.pivot = Vector2.zero;
+                pivot.y = 1;
             }
+
+            rectTransform.pivot = pivot;
         }
 
         public void AlignOnElement(RectTransform element)
         {
             if (!element) return;
 
-            rectTransform.position = Vector3.Lerp(
-                GetRectTransformBounds(element).center,
-                GetRectTransformBounds(element).max, 
-                0.5f
-            );
+            var elementCenter = GetRectTransformBounds(element).center;
+            var elementMax = GetRectTransformBounds(element).max;
+            
+            var tooltipPosition = new Vector2(elementMax.x, elementCenter.y) + offset;
+            rectTransform.position = tooltipPosition;
+            
             SwapPivot();
         }
 
