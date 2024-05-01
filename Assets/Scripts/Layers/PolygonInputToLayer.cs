@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -55,8 +56,9 @@ namespace Netherlands3D.Twin.Layers
 
         public void CreatePolygonLayer(List<Vector3> polygon)
         {
-            var newObject = new GameObject("Polygon");
-            var layerComponent = newObject.AddComponent<PolygonSelectionLayer>();
+            var newPolygonObject = new GameObject("Polygon");
+            newPolygonObject.AddComponent<WorldTransform>();
+            var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
@@ -71,8 +73,9 @@ namespace Netherlands3D.Twin.Layers
 
         public void CreateLineLayer(List<Vector3> line)
         {
-            var newObject = new GameObject("Line");
-            var layerComponent = newObject.AddComponent<PolygonSelectionLayer>();
+            var newLineObject = new GameObject("Line");
+            newLineObject.AddComponent<WorldTransform>();
+            var layerComponent = newLineObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
