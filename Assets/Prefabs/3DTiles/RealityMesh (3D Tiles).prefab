@@ -53,6 +53,12 @@ MonoBehaviour:
     X: 0
     Y: 0
     hascontent: 0
+    priority: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
+    requestedDispose: 0
+    requestedUpdate: 0
     childrenCountDelayingDispose: 0
     children: []
     transform:
@@ -75,17 +81,11 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    boundingVolume:
-      boundingVolumeType: 0
-      values: []
     inView: 0
     canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
-    priority: 0
-    requestedDispose: 0
-    requestedUpdate: 0
   settings:
     refinementType: 0
     subdivisionScheme: 0
@@ -121,6 +121,12 @@ MonoBehaviour:
     X: 0
     Y: 0
     hascontent: 0
+    priority: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
+    requestedDispose: 0
+    requestedUpdate: 0
     childrenCountDelayingDispose: 0
     children: []
     transform:
@@ -143,17 +149,11 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    boundingVolume:
-      boundingVolumeType: 0
-      values: []
     inView: 0
     canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
-    priority: 0
-    requestedDispose: 0
-    requestedUpdate: 0
   transformValues: []
   implicitTilingSettings:
     refinementType: 0
@@ -175,6 +175,9 @@ MonoBehaviour:
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
+  unsupportedExtensionsParsed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7109194962515795805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,3 +267,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  allowURLEditInPropertySection: 0
+  UnsupportedExtensionsMessage:
+    m_PersistentCalls:
+      m_Calls: []
