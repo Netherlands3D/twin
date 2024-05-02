@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (IsScatterLayer())
             {
-                convertToggle.gameObject.SetActive(true);
+                gameObject.SetActive(true);
                 convertToggle.SetIsOnWithoutNotify(true);
                 return;
             }
@@ -40,13 +40,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 if (Layer.ReferencedProxy.ParentLayer is PolygonSelectionLayer)
                 {
-                    convertToggle.gameObject.SetActive(true);
+                    gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(false);
                     return;
                 }
             }
 
-            convertToggle.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         private void ToggleScatter(bool isOn)
