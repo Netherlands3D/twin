@@ -80,9 +80,6 @@ namespace Netherlands3D.Twin.Layers
 
         public override void OnProxyTransformParentChanged()
         {
-            // if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
-            //     ConvertToScatterLayer(this);
-
             if (toggleScatterPropertySectionInstantiator.PropertySection != null)
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }

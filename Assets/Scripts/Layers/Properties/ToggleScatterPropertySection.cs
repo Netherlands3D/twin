@@ -65,7 +65,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public bool IsObjectLayer()
         {
-            print(Layer);
             return Layer is HierarchicalObjectLayer;
         }
 
