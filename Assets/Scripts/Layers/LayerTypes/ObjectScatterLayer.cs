@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -72,10 +72,10 @@ namespace Netherlands3D.Twin.Layers
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
+            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
         }
 
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
+        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
         {
             yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
@@ -91,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
 #if UNITY_EDITOR
             gameObject.AddComponent<GridDebugger>();
 #endif
-
+            ReferencedProxy.UI.ToggleProperties(openProperties);
             completedInitialization = true;
         }
 
@@ -308,10 +308,11 @@ namespace Netherlands3D.Twin.Layers
         {
             var initialActiveState = IsActiveInScene;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState));
+            var openProperties = ReferencedProxy.UI &&ReferencedProxy.UI.PropertiesOpen;
+            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));
         }
 
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)
+        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState, bool openProperties)
         {
             originalObject.gameObject.SetActive(true); //activate to initialize the added component.
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
@@ -324,6 +325,7 @@ namespace Netherlands3D.Twin.Layers
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
+            layer.ReferencedProxy.UI.ToggleProperties(openProperties);
             DestroyLayer();
         }
 
