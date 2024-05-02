@@ -128,7 +128,7 @@ namespace Netherlands3D.Twin
 
         public void AddToProperties(RectTransform properties)
         {
-            var propertySection = Instantiate(ScatterMap.Instance.propertyPanelPrefab, properties);
+            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
             propertySection.Settings = this;
         }
     }

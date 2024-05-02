@@ -29,10 +29,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void TogglePropertyToggle()
         {
-            print("toggling toggle active");
             if (IsScatterLayer())
             {
-                print("is scatter layer");
                 convertToggle.gameObject.SetActive(true);
                 convertToggle.SetIsOnWithoutNotify(true);
                 return;
@@ -40,10 +38,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             if (IsObjectLayer())
             {
-                    print("is object layer");
                 if (Layer.ReferencedProxy.ParentLayer is PolygonSelectionLayer)
                 {
-                    print("is object and has parent");
                     convertToggle.gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(false);
                     return;
@@ -55,10 +51,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void ToggleScatter(bool isOn)
         {
-            Debug.Log("toggle scatter " + isOn);
             if (IsScatterLayer())
             {
-                print("converting to hierarchical object");
                 var scatterLayer = Layer as ObjectScatterLayer;
                 scatterLayer.RevertToHierarchicalObjectLayer();
             }
@@ -66,7 +60,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 var objectLayer = Layer as HierarchicalObjectLayer;
                 HierarchicalObjectLayer.ConvertToScatterLayer(objectLayer);
-                print("converting to scatter");
             }
         }
 
