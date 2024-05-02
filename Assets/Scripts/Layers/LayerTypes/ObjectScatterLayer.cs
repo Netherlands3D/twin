@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers
         private Material material;
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
+        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         public PolygonSelectionLayer polygonLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
@@ -51,6 +52,11 @@ namespace Netherlands3D.Twin.Layers
 
             polygonLayer = polygon;
 
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+
+            if (!toggleScatterPropertySectionInstantiator)
+                toggleScatterPropertySectionInstantiator = gameObject.AddComponent<ToggleScatterPropertySectionInstantiator>();
+
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.Density = 1000; // per ha for the UI
             if (polygon.ShapeType == ShapeType.Line)
@@ -64,7 +70,7 @@ namespace Netherlands3D.Twin.Layers
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            propertySections = new List<IPropertySectionInstantiator>() { settings };
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
         }
@@ -85,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
 #if UNITY_EDITOR
             gameObject.AddComponent<GridDebugger>();
 #endif
-            
+
             completedInitialization = true;
         }
 
@@ -158,7 +164,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (polygonLayer.ShapeType == ShapeType.Line)
                 settings.Angle = CalculateLineAngle(polygonLayer);
-            
+
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
@@ -169,7 +175,7 @@ namespace Netherlands3D.Twin.Layers
                 var polygon = polygons[index];
                 bounds.Encapsulate(polygon.Bounds);
             }
-            
+
             polygonBounds = bounds;
             return bounds;
         }
@@ -285,9 +291,7 @@ namespace Netherlands3D.Twin.Layers
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
             if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
-                var initialActiveState = IsActiveInScene;
-                gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-                StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState));
+                RevertToHierarchicalObjectLayer();
                 return;
             }
 
@@ -298,6 +302,13 @@ namespace Netherlands3D.Twin.Layers
                 RecalculatePolygonsAndSamplerTexture();
                 polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             }
+        }
+
+        public void RevertToHierarchicalObjectLayer()
+        {
+            var initialActiveState = IsActiveInScene;
+            gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
+            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState));
         }
 
         private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)

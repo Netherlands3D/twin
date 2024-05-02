@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.Layers
 {
     public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler, ILayerWithProperties
     {
+        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -32,6 +33,7 @@ namespace Netherlands3D.Twin.Layers
         protected override void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             base.Awake();
         }
 
@@ -78,8 +80,11 @@ namespace Netherlands3D.Twin.Layers
 
         public override void OnProxyTransformParentChanged()
         {
-            if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
-                ConvertToScatterLayer(this);
+            // if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
+            //     ConvertToScatterLayer(this);
+
+            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
+                toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 
         public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
