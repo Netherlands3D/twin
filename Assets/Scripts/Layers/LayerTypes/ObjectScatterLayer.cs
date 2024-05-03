@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers
         private Material material;
         private ScatterGenerationSettings settings;
         public ScatterGenerationSettings Settings => settings;
+        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         public PolygonSelectionLayer polygonLayer;
         private List<IPropertySectionInstantiator> propertySections = new();
@@ -42,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -50,6 +51,11 @@ namespace Netherlands3D.Twin.Layers
             this.material.enableInstancing = true;
 
             polygonLayer = polygon;
+
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+
+            if (!toggleScatterPropertySectionInstantiator)
+                toggleScatterPropertySectionInstantiator = gameObject.AddComponent<ToggleScatterPropertySectionInstantiator>();
 
             settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
             settings.Density = 1000; // per ha for the UI
@@ -64,12 +70,12 @@ namespace Netherlands3D.Twin.Layers
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            propertySections = new List<IPropertySectionInstantiator>() { settings };
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children));
+            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
         }
 
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
+        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
         {
             yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
@@ -85,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
 #if UNITY_EDITOR
             gameObject.AddComponent<GridDebugger>();
 #endif
-            
+            ReferencedProxy.UI.ToggleProperties(openProperties);
             completedInitialization = true;
         }
 
@@ -158,7 +164,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (polygonLayer.ShapeType == ShapeType.Line)
                 settings.Angle = CalculateLineAngle(polygonLayer);
-            
+
             var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
@@ -169,7 +175,7 @@ namespace Netherlands3D.Twin.Layers
                 var polygon = polygons[index];
                 bounds.Encapsulate(polygon.Bounds);
             }
-            
+
             polygonBounds = bounds;
             return bounds;
         }
@@ -285,9 +291,7 @@ namespace Netherlands3D.Twin.Layers
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
             if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
-                var initialActiveState = IsActiveInScene;
-                gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-                StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState));
+                RevertToHierarchicalObjectLayer();
                 return;
             }
 
@@ -300,7 +304,15 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)
+        public void RevertToHierarchicalObjectLayer()
+        {
+            var initialActiveState = IsActiveInScene;
+            gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
+            var openProperties = ReferencedProxy.UI &&ReferencedProxy.UI.PropertiesOpen;
+            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));
+        }
+
+        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState, bool openProperties)
         {
             originalObject.gameObject.SetActive(true); //activate to initialize the added component.
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
@@ -313,6 +325,7 @@ namespace Netherlands3D.Twin.Layers
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
+            layer.ReferencedProxy.UI.ToggleProperties(openProperties);
             DestroyLayer();
         }
 

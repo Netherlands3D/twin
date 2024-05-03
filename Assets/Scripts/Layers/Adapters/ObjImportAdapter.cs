@@ -128,6 +128,8 @@ namespace Netherlands3D.Twin
             
             var instantiator = parsedObj.AddComponent<HierarchicalObjectPropertySectionInstantiator>();
             instantiator.PropertySectionPrefab = defaultPropertySection;
+
+            parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();
             
             parsedObj.AddComponent<HierarchicalObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
