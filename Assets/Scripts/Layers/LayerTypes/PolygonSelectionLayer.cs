@@ -172,7 +172,7 @@ namespace Netherlands3D.Twin.Layers
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
             polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
-            
+            polygonVisualisation.gameObject.AddComponent<WorldTransform>();  
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
 

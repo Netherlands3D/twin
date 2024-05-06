@@ -14,10 +14,11 @@ namespace Netherlands3D.Twin
     /// </summary>
     public class PolygonShifter : WorldTransformShifter
     {
-        private WorldTransform worldTransform;
         private PolygonVisualisation polygonVisualisation;
         private List<List<Coordinate>> preshiftPolygonsCoordinates;
         private List<List<Vector3>> currentPolygons;
+
+        private Coordinate beforeShiftCoordinate;
 
         void Awake()
         {
@@ -25,15 +26,20 @@ namespace Netherlands3D.Twin
         }
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
         {
-            StoreLists();
+            var unityCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            beforeShiftCoordinate = CoordinateConverter.ConvertTo(unityCoordinate,CoordinateSystem.RD);
+
+            StoreLocalUnityCoordinatesLists();
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
         {
-            ReapplyLists();
+            var newUnityCoordinate = CoordinateConverter.ConvertTo(beforeShiftCoordinate, CoordinateSystem.Unity);
+            Debug.Log("Shifted from " + beforeShiftCoordinate + " to " + newUnityCoordinate);
+            ConvertAndApplyCoordinates();
         }
 
-        private void StoreLists()
+        private void StoreLocalUnityCoordinatesLists()
         {
             currentPolygons = polygonVisualisation.Polygons;
 
@@ -46,14 +52,19 @@ namespace Netherlands3D.Twin
                 for (int j = 0; j < currentPolygons[i].Count; j++)
                 {
                     var point = currentPolygons[i][j];
-                    var unityCoordinate = new Coordinate(CoordinateSystem.Unity, point.x, point.y, point.z);
-                    var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+                    var unityCoordinate = new Coordinate(
+                        CoordinateSystem.Unity, 
+                        point.x, 
+                        point.y, 
+                        point.z
+                    );
+                    var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
                     preshiftPolygonsCoordinates[i].Add(worldCoordinate);
                 }
             }
         }
 
-        private void ReapplyLists()
+        private void ConvertAndApplyCoordinates()
         {
             //Update currentPolygons
             for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
