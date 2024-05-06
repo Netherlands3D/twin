@@ -75,6 +75,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
         public string LayerName => Layer.name;
+        public bool PropertiesOpen => propertyToggle.isOn;
 
         private void Awake()
         {

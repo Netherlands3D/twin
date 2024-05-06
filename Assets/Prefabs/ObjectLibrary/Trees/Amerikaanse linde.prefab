@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8699527710199513864}
   - component: {fileID: -245332181238952691}
   - component: {fileID: 4775273902216997001}
-  - component: {fileID: 2327485050449912193}
+  - component: {fileID: -3885775545404754916}
   m_Layer: 0
   m_Name: Amerikaanse linde
   m_TagString: Untagged
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
---- !u!114 &2327485050449912193
+--- !u!114 &-3885775545404754916
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,15 +165,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5862764184642994096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
-  worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4326
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
+  propertySectionPrefab: {fileID: 3812163125236446964, guid: 78bb15813f932433888f9c5536c7f12a,
+    type: 3}

@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4725739564332424504}
   - component: {fileID: -1805953198364215317}
   - component: {fileID: 1747189573281747701}
-  - component: {fileID: -7966152934942479088}
+  - component: {fileID: 2916134291011604672}
   m_Layer: 0
   m_Name: Beuk
   m_TagString: Untagged
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
---- !u!114 &-7966152934942479088
+--- !u!114 &2916134291011604672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,15 +165,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900504088924924644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
-  worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4326
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
+  propertySectionPrefab: {fileID: 3812163125236446964, guid: 78bb15813f932433888f9c5536c7f12a,
+    type: 3}
