@@ -71,14 +71,27 @@ namespace Netherlands3D.Twin.Layers
 
         private void ReselectLayerPolygon(PolygonSelectionLayer layer)
         {
+            Debug.Log("Reselect layer polygon");
+
             if(layer==null)
                 return;
 
             EnableInputByType(layer);
 
             //Align the input sytem to the polygon and reselect
-            polygonInput.transform.position = layer.PolygonVisualisation.transform.position;
-            polygonInput.ReselectPolygon(layer.OriginalPolygon);
+            var visualisation = layer.PolygonVisualisation;
+            var originalPolygon = layer.OriginalPolygon;
+
+            //Offset points with the polygon's position, so we can keep our polygonInput in world space 0,0,0
+            var offsetPolygon = new List<Vector3>();
+            foreach (var point in originalPolygon)
+            {
+                var newPoint = point + visualisation.transform.position;
+                newPoint.y = point.y; //Keep Y, we dont shift it.   
+                offsetPolygon.Add(newPoint);
+            }
+
+            polygonInput.ReselectPolygon(offsetPolygon);
         }
 
         /// <summary>
