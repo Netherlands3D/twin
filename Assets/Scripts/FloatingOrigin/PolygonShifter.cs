@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin
                         point.y, 
                         point.z
                     );
-                    var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+                    var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
                     preshiftPolygonsCoordinates[i].Add(worldCoordinate);
                 }
             }

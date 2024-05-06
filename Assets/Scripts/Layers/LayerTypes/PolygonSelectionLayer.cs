@@ -187,8 +187,8 @@ namespace Netherlands3D.Twin.Layers
 
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             var polygonShifter = polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
-            polygonShifter.polygonShifted.AddListener(UpdateWithShape);
             polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
+            polygonShifter.polygonShifted.AddListener(UpdateWithShape);
 
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");

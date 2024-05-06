@@ -23,11 +23,11 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 if(activeLayer != null)
-                    activeLayer.polygonSelected.RemoveListener(ReselectLayerPolygon);
+                    activeLayer.polygonChanged.RemoveListener(RefreshChangedPolygon);
 
                 activeLayer = value;
                 if(activeLayer)
-                    activeLayer.polygonSelected.AddListener(ReselectLayerPolygon);
+                    activeLayer.polygonChanged.AddListener(RefreshChangedPolygon);
             }
         }
 
@@ -69,6 +69,13 @@ namespace Netherlands3D.Twin.Layers
             ClearSelection();
         }
 
+        private void RefreshChangedPolygon()
+        {
+            //Simply reselect the active layer to move any shifted handles 
+            if(activeLayer)
+                ReselectLayerPolygon(activeLayer);
+        }
+
         private void ReselectLayerPolygon(PolygonSelectionLayer layer)
         {
             Debug.Log("Reselect layer polygon");
@@ -79,19 +86,8 @@ namespace Netherlands3D.Twin.Layers
             EnableInputByType(layer);
 
             //Align the input sytem to the polygon and reselect
-            var visualisation = layer.PolygonVisualisation;
             var originalPolygon = layer.OriginalPolygon;
-
-            //Offset points with the polygon's position, so we can keep our polygonInput in world space 0,0,0
-            var offsetPolygon = new List<Vector3>();
-            foreach (var point in originalPolygon)
-            {
-                var newPoint = point + visualisation.transform.position;
-                newPoint.y = point.y; //Keep Y, we dont shift it.   
-                offsetPolygon.Add(newPoint);
-            }
-
-            polygonInput.ReselectPolygon(offsetPolygon);
+            polygonInput.ReselectPolygon(originalPolygon);
         }
 
         /// <summary>
