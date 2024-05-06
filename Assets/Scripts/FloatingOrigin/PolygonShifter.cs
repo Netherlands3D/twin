@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin
     /// This class is responsible for shifting the all the polygons their points when the world origin is shifted.
     /// The points before shift are stored as world coordinates and reapplyed as unity coordinates after the shift.
     /// </summary>
-    public class PolygonShifter : MonoBehaviour
+    public class PolygonShifter : WorldTransformShifter
     {
         private WorldTransform worldTransform;
         private PolygonVisualisation polygonVisualisation;
@@ -22,13 +22,18 @@ namespace Netherlands3D.Twin
         void Awake()
         {
             polygonVisualisation = GetComponent<PolygonVisualisation>();
-
-            worldTransform = gameObject.AddComponent<WorldTransform>();
-            worldTransform.onPreShift.AddListener(StoreLists);
-            worldTransform.onPostShift.AddListener(ReapplyLists);
+        }
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        {
+            StoreLists();
         }
 
-        private void StoreLists(WorldTransform worldTransform, Coordinate coordinate)
+        public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        {
+            ReapplyLists();
+        }
+
+        private void StoreLists()
         {
             currentPolygons = polygonVisualisation.Polygons;
 
@@ -48,7 +53,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void ReapplyLists(WorldTransform worldTransform, Coordinate coordinate)
+        private void ReapplyLists()
         {
             //Update currentPolygons
             for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
