@@ -147,7 +147,7 @@ namespace Netherlands3D.Twin.Layers
                 PolygonVisualisation.UpdateVisualisation(rectangle3D);
             else
                 PolygonVisualisation = CreatePolygonMesh(rectangle3D, polygonExtrusionHeight, polygonMeshMaterial);
-                
+
             polygonChanged.Invoke();
         }
 
@@ -221,7 +221,7 @@ namespace Netherlands3D.Twin.Layers
             base.OnDestroy();
             PolygonSelectionCalculator.UnregisterPolygon(this);
 
-            if(PolygonVisualisation.gameObject)
+            if(PolygonVisualisation)
                 Destroy(PolygonVisualisation.gameObject);
         }
 

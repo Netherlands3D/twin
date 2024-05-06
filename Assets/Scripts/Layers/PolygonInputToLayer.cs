@@ -71,18 +71,24 @@ namespace Netherlands3D.Twin.Layers
 
         private void ReselectLayerPolygon(PolygonSelectionLayer layer)
         {
-            if(layer.ShapeType == ShapeType.Polygon)
-            {
-                polygonInput.gameObject.SetActive(true);
-                lineInput.gameObject.SetActive(false);
-                polygonInput.ReselectPolygon(layer.OriginalPolygon);
-            }
-            else if(layer.ShapeType == ShapeType.Line)
-            {
-                lineInput.gameObject.SetActive(true);
-                polygonInput.gameObject.SetActive(false);
-                lineInput.ReselectPolygon(layer.OriginalPolygon);
-            }
+            if(layer==null)
+                return;
+
+            EnableInputByType(layer);
+
+            //Align the input sytem to the polygon and reselect
+            polygonInput.transform.position = layer.PolygonVisualisation.transform.position;
+            polygonInput.ReselectPolygon(layer.OriginalPolygon);
+        }
+
+        /// <summary>
+        /// Enable the proper line or poly input system based on layer type
+        /// </summary>
+        private void EnableInputByType(PolygonSelectionLayer layer)
+        {
+            var input = layer.ShapeType == ShapeType.Polygon ? polygonInput : lineInput;
+            lineInput.gameObject.SetActive(input == lineInput);
+            polygonInput.gameObject.SetActive(input == polygonInput);
         }
 
         public void ClearSelection()
