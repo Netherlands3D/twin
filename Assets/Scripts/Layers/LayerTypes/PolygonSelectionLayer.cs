@@ -99,8 +99,6 @@ namespace Netherlands3D.Twin.Layers
                 SetLine(shape);
             else
                 SetPolygon(shape);
-
-            
         }
 
         public void SetPolygon(List<Vector3> solidPolygon)
