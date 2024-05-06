@@ -60,14 +60,14 @@ namespace Netherlands3D.Twin.Layers
             if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
 
+            ClearSelection();
+
             ActiveLayer = layer;
             if (layer)
             {
                 ReselectLayerPolygon(layer);
                 return;
-            }
-            
-            ClearSelection();
+            }    
         }
 
         private void RefreshChangedPolygon()
@@ -84,22 +84,27 @@ namespace Netherlands3D.Twin.Layers
             if(layer==null)
                 return;
 
-            EnableInputByType(layer);
-
-            //Align the input sytem to the polygon and reselect
-            var originalPolygon = layer.OriginalPolygon;
-
-            polygonInput.ReselectPolygon(originalPolygon);
+            //Align the input sytem by reselecting using layer polygon
+            var inputType = EnableInputByType(layer);
+            inputType.ReselectPolygon(layer.OriginalPolygon);
         }
 
         /// <summary>
         /// Enable the proper line or poly input system based on layer type
         /// </summary>
-        private void EnableInputByType(PolygonSelectionLayer layer)
+        private PolygonInput EnableInputByType(PolygonSelectionLayer layer)
         {
-            var input = layer.ShapeType == ShapeType.Polygon ? polygonInput : lineInput;
-            lineInput.gameObject.SetActive(input == lineInput);
-            polygonInput.gameObject.SetActive(input == polygonInput);
+            if (layer.ShapeType == ShapeType.Polygon)
+            {
+                polygonInput.gameObject.SetActive(true);
+                lineInput.gameObject.SetActive(false);
+                return polygonInput;
+            }
+
+            //Default to returning line input
+            polygonInput.gameObject.SetActive(false);
+            lineInput.gameObject.SetActive(true);
+            return lineInput;
         }
 
         public void ClearSelection()
@@ -129,6 +134,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void CreatePolygonLayer(List<Vector3> polygon)
         {
+            Debug.Log("------------------------Create polygon layer");
             var newPolygonObject = new GameObject("Polygon");
             var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
