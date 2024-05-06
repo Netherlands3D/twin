@@ -130,10 +130,9 @@ namespace Netherlands3D.Twin
             var instantiator = parsedObj.AddComponent<HierarchicalObjectPropertySectionInstantiator>();
             instantiator.PropertySectionPrefab = defaultPropertySection;
 
-            parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();
-            
-            parsedObj.AddComponent<HierarchicalObjectLayer>();
             parsedObj.AddComponent<MeshCollider>();
+            parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();     
+            parsedObj.AddComponent<HierarchicalObjectLayer>();
             parsedObj.AddComponent<WorldTransform>();
             
             CreatedMoveableGameObject.Invoke(parsedObj);
