@@ -59,10 +59,7 @@ namespace Netherlands3D.Twin.Layers
             this.polygonMeshMaterial = polygonMeshMaterial;
             this.lineWidth = defaultLineWidth;
 
-            if (shapeType == Layers.ShapeType.Line)
-                SetLine(polygon);
-            else
-                SetPolygon(polygon);
+            UpdateWithShape(polygon);
 
             PolygonSelectionCalculator.RegisterPolygon(this);
         }
@@ -89,6 +86,23 @@ namespace Netherlands3D.Twin.Layers
                 OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
         }
 
+        public void UpdateWithShape(List<List<Vector3>> shapes)
+        {
+            if(shapes.Count == 0)
+                return;      
+                
+            UpdateWithShape(shapes[0]);
+        }
+        public void UpdateWithShape(List<Vector3> shape)
+        {
+             if (shapeType == Layers.ShapeType.Line)
+                SetLine(shape);
+            else
+                SetPolygon(shape);
+
+            
+        }
+
         public void SetPolygon(List<Vector3> solidPolygon)
         {
             OriginalPolygon = solidPolygon;
@@ -103,6 +117,7 @@ namespace Netherlands3D.Twin.Layers
 
             polygonChanged.Invoke();
         }
+       
 
         public void SetLine(List<Vector3> line)
         {
@@ -118,7 +133,6 @@ namespace Netherlands3D.Twin.Layers
                 var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
                 propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
             }
-            // Properties.Properties.Instance.Show(this);
         }
 
         private void RecalculateLineWidth(List<Vector3> line, float width)
@@ -133,6 +147,7 @@ namespace Netherlands3D.Twin.Layers
                 PolygonVisualisation.UpdateVisualisation(rectangle3D);
             else
                 PolygonVisualisation = CreatePolygonMesh(rectangle3D, polygonExtrusionHeight, polygonMeshMaterial);
+                
             polygonChanged.Invoke();
         }
 
@@ -167,12 +182,16 @@ namespace Netherlands3D.Twin.Layers
             return polygon;
         }
 
-        public static PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
+        public PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
             var contours = new List<List<Vector3>> { polygon };
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
-            polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
-            polygonVisualisation.gameObject.AddComponent<WorldTransform>();  
+
+            //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
+            var polygonShifter = polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
+            polygonShifter.polygonShifted.AddListener(UpdateWithShape);
+            polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
+
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
 

@@ -13,7 +13,23 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private Material polygonMeshMaterial;
 
         private Dictionary<PolygonVisualisation, PolygonSelectionLayer> layers = new();
+
         private PolygonSelectionLayer activeLayer;
+        private PolygonSelectionLayer ActiveLayer { 
+            get
+            {
+                return activeLayer;
+            }
+            set
+            {
+                if(activeLayer != null)
+                    activeLayer.polygonSelected.RemoveListener(ReselectLayerPolygon);
+
+                activeLayer = value;
+                if(activeLayer)
+                    activeLayer.polygonSelected.AddListener(ReselectLayerPolygon);
+            }
+        }
 
         [SerializeField] private PolygonInput polygonInput;
 
@@ -35,6 +51,46 @@ namespace Netherlands3D.Twin.Layers
 
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLineLayer);
+        }
+
+        private void ProcessPolygonSelection(PolygonSelectionLayer layer)
+        {
+            //Do not allow selecting a new polygon if we are still creating one
+            if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
+                return;
+
+            ActiveLayer = layer;
+            if (layer)
+            {
+                ReselectLayerPolygon(layer);
+                return;
+            }
+            
+            ClearSelection();
+        }
+
+        private void ReselectLayerPolygon(PolygonSelectionLayer layer)
+        {
+            if(layer.ShapeType == ShapeType.Polygon)
+            {
+                polygonInput.gameObject.SetActive(true);
+                lineInput.gameObject.SetActive(false);
+                polygonInput.ReselectPolygon(layer.OriginalPolygon);
+            }
+            else if(layer.ShapeType == ShapeType.Line)
+            {
+                lineInput.gameObject.SetActive(true);
+                polygonInput.gameObject.SetActive(false);
+                lineInput.ReselectPolygon(layer.OriginalPolygon);
+            }
+        }
+
+        public void ClearSelection()
+        {
+            //Clear inputs if no layer is selected by default
+            var emptyList = new List<Vector3>();
+            polygonInput.ReselectPolygon(emptyList);
+            lineInput.ReselectPolygon(emptyList);
         }
 
         public void ShowPolygonVisualisations(bool enabled)
@@ -62,12 +118,12 @@ namespace Netherlands3D.Twin.Layers
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
             
-            activeLayer = layerComponent;
+            ActiveLayer = layerComponent;
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
         }
         public void UpdatePolygonLayer(List<Vector3> editedPolygon)
         {
-            activeLayer.SetPolygon(editedPolygon);
+            ActiveLayer.UpdateWithShape(editedPolygon);
         }
 
         public void CreateLineLayer(List<Vector3> line)
@@ -78,56 +134,26 @@ namespace Netherlands3D.Twin.Layers
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
             
-            activeLayer = layerComponent;
+            ActiveLayer = layerComponent;
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
         }
         public void UpdateLineLayer(List<Vector3> editedLine)
         {
-            activeLayer.SetLine(editedLine);
-        }
-
-        private void ProcessPolygonSelection(PolygonSelectionLayer layer)
-        {
-            //Do not allow selecting a new polygon if we are still creating one
-            if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
-                return;
-
-            activeLayer = layer;
-            if (layer)
-            {
-                if(layer.ShapeType == ShapeType.Polygon)
-                {
-                    polygonInput.gameObject.SetActive(true);
-                    lineInput.gameObject.SetActive(false);
-                    polygonInput.ReselectPolygon(layer.OriginalPolygon);
-                }
-                else if(layer.ShapeType == ShapeType.Line)
-                {
-                    lineInput.gameObject.SetActive(true);
-                    polygonInput.gameObject.SetActive(false);
-                    lineInput.ReselectPolygon(layer.OriginalPolygon);
-                }
-                return;
-            }
-            
-            //Clear inputs if no layer is selected by default
-            var emptyList = new List<Vector3>();
-            polygonInput.ReselectPolygon(emptyList);
-            lineInput.ReselectPolygon(emptyList);
+            ActiveLayer.UpdateWithShape(editedLine);
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
-            if(activeLayer)
-                activeLayer.DeselectPolygon(); 
+            if(ActiveLayer)
+                ActiveLayer.DeselectPolygon(); 
             
             polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
 
         public void SetLineInputModeToCreate(bool isCreateMode)
         {
-            if(activeLayer)
-                activeLayer.DeselectPolygon();
+            if(ActiveLayer)
+                ActiveLayer.DeselectPolygon();
 
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }

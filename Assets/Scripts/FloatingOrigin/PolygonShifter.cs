@@ -5,6 +5,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -19,6 +20,8 @@ namespace Netherlands3D.Twin
         private List<List<Vector3>> currentPolygons;
 
         private Coordinate beforeShiftCoordinate;
+
+        public UnityEvent<List<List<Vector3>>> polygonShifted = new UnityEvent<List<List<Vector3>>>();
 
         void Awake()
         {
@@ -79,6 +82,8 @@ namespace Netherlands3D.Twin
 
             //Trigger reapplied points
             polygonVisualisation.UpdateVisualisation(currentPolygons);
+
+            polygonShifted.Invoke(currentPolygons);
         }
     }
 }
