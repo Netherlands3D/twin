@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin.Layers
                     activeLayer.polygonChanged.AddListener(RefreshChangedPolygon);
             }
         }
+        private bool updatePolygonOnEdit = true; //We ignore this if polygon edit was not done by user but by origin shift.
 
         [SerializeField] private PolygonInput polygonInput;
 
@@ -87,6 +88,7 @@ namespace Netherlands3D.Twin.Layers
 
             //Align the input sytem to the polygon and reselect
             var originalPolygon = layer.OriginalPolygon;
+
             polygonInput.ReselectPolygon(originalPolygon);
         }
 
@@ -138,7 +140,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public void UpdatePolygonLayer(List<Vector3> editedPolygon)
         {
-            ActiveLayer.UpdateWithShape(editedPolygon);
+            ActiveLayer.SetShape(editedPolygon);
         }
 
         public void CreateLineLayer(List<Vector3> line)
@@ -154,7 +156,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public void UpdateLineLayer(List<Vector3> editedLine)
         {
-            ActiveLayer.UpdateWithShape(editedLine);
+            ActiveLayer.SetShape(editedLine);
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)

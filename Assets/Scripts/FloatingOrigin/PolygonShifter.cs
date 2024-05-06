@@ -82,7 +82,6 @@ namespace Netherlands3D.Twin
 
             //Trigger reapplied points
             polygonVisualisation.UpdateVisualisation(currentPolygons);
-
             polygonShifted.Invoke(currentPolygons);
         }
     }
