@@ -5,9 +5,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class GameObjectWorldTransformShifter : WorldTransformShifter
     {
+        private WorldTransform worldTransform;
+
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
         {
-            // Doesn't need to do anything prior to shifting
+            this.worldTransform = worldTransform;
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
@@ -22,6 +24,27 @@ namespace Netherlands3D.Twin.FloatingOrigin
 #endif
 
             transform.position = newPosition;
+            transform.hasChanged = false;
+        }
+
+        private void Update()
+        {
+            if (transform.hasChanged)
+            {
+                UpdateCoordinateBasedOnUnityTransform();
+                transform.hasChanged = false;
+            }
+        }
+
+        private void UpdateCoordinateBasedOnUnityTransform()
+        {
+            if(!this.worldTransform)
+                return;
+
+            var position = transform.position;
+            this.worldTransform.Coordinate = CoordinateConverter.ConvertTo(
+                new Coordinate(CoordinateSystem.Unity, position.x, position.y, position.z),this.worldTransform.ReferenceCoordinateSystem
+            );
         }
     }
 }

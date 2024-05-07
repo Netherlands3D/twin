@@ -467,6 +467,7 @@ GameObject:
   - component: {fileID: -1071879601358292985}
   - component: {fileID: 2889220090886471414}
   - component: {fileID: -8747403443636244537}
+  - component: {fileID: -8621302414943142910}
   m_Layer: 0
   m_Name: Windmolen
   m_TagString: Untagged
@@ -577,8 +578,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 3812163125236446964, guid: 78bb15813f932433888f9c5536c7f12a,
-    type: 3}
+--- !u!114 &-8621302414943142910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2705356315501710771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5380499999678492150
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
         public UnityEvent<WorldTransform, Coordinate> onPostShift = new();
 
+
         private void Awake()
         {
             if (origin == null)
@@ -27,6 +28,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 origin = FindObjectOfType<Origin>();
             }
 
+            worldTransformShifter = GetComponent<WorldTransformShifter>();
             if (worldTransformShifter == null)
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
@@ -50,7 +52,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void OnEnable()
         {
-            UpdateCoordinateBasedOnUnityTransform();
             origin.onPreShift.AddListener(PrepareToShift);
             origin.onPostShift.AddListener(ShiftTo);
         }
@@ -59,24 +60,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
         {
             origin.onPreShift.RemoveListener(PrepareToShift);
             origin.onPostShift.RemoveListener(ShiftTo);
-        }
-
-        private void Update()
-        {
-            if (transform.hasChanged)
-            {
-                UpdateCoordinateBasedOnUnityTransform();
-                transform.hasChanged = false;
-            }
-        }
-
-        private void UpdateCoordinateBasedOnUnityTransform()
-        {
-            var position = transform.position;
-            Coordinate = CoordinateConverter.ConvertTo(
-                new Coordinate(CoordinateSystem.Unity, position.x, position.y, position.z), 
-                Coordinate.CoordinateSystem
-            );
         }
 
         private void PrepareToShift(Coordinate from, Coordinate to)

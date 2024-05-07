@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 2773908478669454240}
   - component: {fileID: 3222822051699343867}
   - component: {fileID: 8990017419290068341}
+  - component: {fileID: 7607280315470155402}
   - component: {fileID: 6024696626269244472}
   - component: {fileID: 2016380645068371846}
   - component: {fileID: 6271079609621010434}
@@ -166,6 +167,20 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &7607280315470155402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7658382538514721410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f513f7fb996c4d7392a83bc1ff0f6160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 3222822051699343867}
+  factor: 0.75
 --- !u!114 &6024696626269244472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4069,6 +4084,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
+        type: 3}
+      propertyPath: layerStartIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568988435537759527, guid: 316af653f2625134ab367f8e339c26b9,
+        type: 3}
+      propertyPath: maxZoomScale
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2568988435537759544, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
