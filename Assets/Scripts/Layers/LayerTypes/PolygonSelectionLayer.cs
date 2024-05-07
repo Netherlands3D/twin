@@ -34,6 +34,8 @@ namespace Netherlands3D.Twin.Layers
         private bool notifyOnPolygonChange = true;
         
         private List<IPropertySectionInstantiator> propertySections = new();
+
+        private PolygonWorldTransformShifter worldTransformShifter;
         
         public ShapeType ShapeType
         {
@@ -60,6 +62,12 @@ namespace Netherlands3D.Twin.Layers
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
             this.lineWidth = defaultLineWidth;
+
+            //Add shifter that manipulates the polygon if the world origin is shifted
+            worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
+            worldTransformShifter.polygonSelectionLayer = this;
+            gameObject.AddComponent<WorldTransform>(); 
+            worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
 
@@ -88,25 +96,13 @@ namespace Netherlands3D.Twin.Layers
                 OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
         }
 
-        public void SetShapesWithoutNotify(List<List<Vector3>> shapes)
+        private void ShiftedPolygon(List<Vector3> newPolygon)
         {
-            //Hide handles if polygon was shifted
+            //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             notifyOnPolygonChange = false;
             DeselectPolygon();
-            SetShapes(shapes);
+            SetShape(newPolygon);
             notifyOnPolygonChange = true;
-        }
-
-        /// <summary>
-        /// Set the shape of the polygon layer
-        /// </summary>
-        /// <param name="shapes">Nested Vector3 list where first index [0] is used as contour</param>
-        public void SetShapes(List<List<Vector3>> shapes)
-        {
-            if(shapes.Count == 0)
-                return;      
-                
-            SetShape(shapes[0]);
         }
 
         /// <summary>
@@ -132,8 +128,9 @@ namespace Netherlands3D.Twin.Layers
             var flatPolygon = PolygonCalculator.FlattenPolygon(solidPolygon.ToArray(), new Plane(Vector3.up, 0));
             Polygon = new CompoundPolygon(flatPolygon);
 
+            UpdateVisualisation(solidPolygon);
+
             if(notifyOnPolygonChange){
-                UpdateVisualisation(solidPolygon);
                 polygonChanged.Invoke();
             }
         }
@@ -162,10 +159,10 @@ namespace Netherlands3D.Twin.Layers
             Polygon = new CompoundPolygon(rectangle);
 
             var rectangle3D = rectangle.ToVector3List();
+            UpdateVisualisation(rectangle3D);
             
             if(notifyOnPolygonChange)
             {
-                UpdateVisualisation(rectangle3D);
                 polygonChanged.Invoke();
             }
         }
@@ -218,10 +215,6 @@ namespace Netherlands3D.Twin.Layers
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
 
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
-            var polygonShifter = polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
-            polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
-            polygonShifter.polygonShifted.AddListener(SetShapesWithoutNotify);
-
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
 
