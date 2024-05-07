@@ -101,6 +101,7 @@ namespace Netherlands3D.Twin.Layers
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             notifyOnPolygonChange = false;
+            DeselectPolygon();
             SetShape(newPolygon);
             polygonMoved.Invoke();
             notifyOnPolygonChange = true;

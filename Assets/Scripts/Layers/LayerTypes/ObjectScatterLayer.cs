@@ -91,6 +91,8 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculatePolygonsAndSamplerTexture();
             polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygon.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
 #if UNITY_EDITOR
@@ -107,6 +109,7 @@ namespace Netherlands3D.Twin.Layers
             settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+            polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
