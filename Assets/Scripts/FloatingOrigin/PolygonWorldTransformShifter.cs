@@ -20,13 +20,13 @@ namespace Netherlands3D.Twin
         private List<Coordinate> preshiftPolygonsCoordinates;
         public UnityEvent<List<Vector3>> polygonShifted = new();
 
-        public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             var unityCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
             StoreLocalUnityCoordinatesLists();
         }
 
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             ConvertAndApplyCoordinates();
         }
