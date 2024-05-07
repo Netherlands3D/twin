@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
@@ -31,6 +32,8 @@ namespace Netherlands3D.Twin.Layers
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
 
+        private WorldTransform worldTransform;
+
         private bool completedInitialization;
 
         public override bool IsActiveInScene
@@ -51,6 +54,8 @@ namespace Netherlands3D.Twin.Layers
             this.material.enableInstancing = true;
 
             polygonLayer = polygon;
+
+            
 
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
@@ -298,8 +303,11 @@ namespace Netherlands3D.Twin.Layers
             if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
                 polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
+                polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
                 polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             }
         }

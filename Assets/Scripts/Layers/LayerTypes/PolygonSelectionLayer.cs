@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin.Layers
         public Material PolygonMeshMaterial => polygonMeshMaterial;
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
+        public UnityEvent polygonMoved = new();
         public UnityEvent polygonChanged = new();
         private bool notifyOnPolygonChange = true;
         
@@ -100,8 +101,8 @@ namespace Netherlands3D.Twin.Layers
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             notifyOnPolygonChange = false;
-            DeselectPolygon();
             SetShape(newPolygon);
+            polygonMoved.Invoke();
             notifyOnPolygonChange = true;
         }
 
