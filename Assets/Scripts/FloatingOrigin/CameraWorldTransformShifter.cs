@@ -5,19 +5,19 @@ namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class CameraWorldTransformShifter : WorldTransformShifter
     {
-        public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             // Doesn't need to do anything prior to shifting
         }
 
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             // Cameras stay at the same Unity location and change their Coordinates when the Origin move, regular
             // objects' Coordinate does not change when the Origin moves because the Coordinate represents their real
             // world location
 
-            var delta = CoordinateConverter.ConvertTo(from, CoordinateSystem.Unity).ToVector3() -
-                CoordinateConverter.ConvertTo(to, CoordinateSystem.Unity).ToVector3();
+            var delta = CoordinateConverter.ConvertTo(fromOrigin, CoordinateSystem.Unity).ToVector3() -
+                CoordinateConverter.ConvertTo(toOrigin, CoordinateSystem.Unity).ToVector3();
 
             var unityTransform = worldTransform.transform;
             var newPosition = unityTransform.position;

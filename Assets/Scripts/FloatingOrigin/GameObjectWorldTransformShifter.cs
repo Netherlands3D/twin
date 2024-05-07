@@ -7,12 +7,12 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         private WorldTransform worldTransform;
 
-        public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             this.worldTransform = worldTransform;
         }
 
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             // We can just recalculate the transform position based on the real world Coordinate.
             var newPosition = CoordinateConverter

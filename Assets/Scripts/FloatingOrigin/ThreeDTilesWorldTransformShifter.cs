@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         /// coordinate back to a Unity position. Because the calculation to a Unity position includes taking the origin
         /// shift into account, it will thus reposition the tile to the correct location.
         /// </summary>
-        public override void PrepareToShift(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             tilesToShift.Clear();
             
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             }
         }
         
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate from, Coordinate to)
+        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
 #if UNITY_EDITOR
             if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} tiles</color>");

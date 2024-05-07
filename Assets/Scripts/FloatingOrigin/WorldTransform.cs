@@ -62,17 +62,17 @@ namespace Netherlands3D.Twin.FloatingOrigin
             origin.onPostShift.RemoveListener(ShiftTo);
         }
 
-        private void PrepareToShift(Coordinate from, Coordinate to)
+        private void PrepareToShift(Coordinate fromOrigin, Coordinate toOrigin)
         {
             // Invoke Pre-shifting event first so that a listener might do some things before the shifter is invoked
             onPreShift.Invoke(this, Coordinate);
             
-            worldTransformShifter.PrepareToShift(this, from, to);
+            worldTransformShifter.PrepareToShift(this, fromOrigin, toOrigin);
         }
 
-        private void ShiftTo(Coordinate from, Coordinate to)
+        private void ShiftTo(Coordinate fromOrigin, Coordinate toOrigin)
         {
-            worldTransformShifter.ShiftTo(this, from, to);
+            worldTransformShifter.ShiftTo(this, fromOrigin, toOrigin);
             
             onPostShift.Invoke(this, Coordinate);
         }
