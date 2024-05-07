@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.PlayerLoop;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -30,7 +31,7 @@ namespace Netherlands3D.Twin.Layers
 
         public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         public UnityEvent polygonChanged = new();
-        private bool notifyOnPolygonChange = false;
+        private bool notifyOnPolygonChange = true;
         
         private List<IPropertySectionInstantiator> propertySections = new();
         
@@ -87,13 +88,11 @@ namespace Netherlands3D.Twin.Layers
                 OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
         }
 
-        /// <summary>
-        /// Change shape without invoking polygonChanged event (for example, in change caused by origin shift)
-        /// </summary>
-        public void UpdateShapesWithoutNotify(List<List<Vector3>> shapes)
+        public void SetShapesWithoutNotify(List<List<Vector3>> shapes)
         {
+            //Hide handles if polygon was shifted
             notifyOnPolygonChange = false;
-            
+            DeselectPolygon();
             SetShapes(shapes);
             notifyOnPolygonChange = true;
         }
@@ -125,7 +124,7 @@ namespace Netherlands3D.Twin.Layers
         /// <summary>
         /// Set the polygon of the layer as a solid filled polygon
         /// </summary>
-        public void SetPolygon(List<Vector3> solidPolygon)
+        private void SetPolygon(List<Vector3> solidPolygon)
         {
             ShapeType = ShapeType.Polygon;
             OriginalPolygon = solidPolygon;
@@ -133,16 +132,16 @@ namespace Netherlands3D.Twin.Layers
             var flatPolygon = PolygonCalculator.FlattenPolygon(solidPolygon.ToArray(), new Plane(Vector3.up, 0));
             Polygon = new CompoundPolygon(flatPolygon);
 
-            UpdateVisualisation(solidPolygon);
-
-            if(notifyOnPolygonChange)
+            if(notifyOnPolygonChange){
+                UpdateVisualisation(solidPolygon);
                 polygonChanged.Invoke();
+            }
         }
        
        /// <summary>
        /// Set the layer as a 'line'. This will create a rectangle polygon from the line with a given width.
        /// </summary>
-        public void SetLine(List<Vector3> line)
+        private void SetLine(List<Vector3> line)
         {
             ShapeType = ShapeType.Line;
             OriginalPolygon = line;
@@ -163,10 +162,12 @@ namespace Netherlands3D.Twin.Layers
             Polygon = new CompoundPolygon(rectangle);
 
             var rectangle3D = rectangle.ToVector3List();
-            UpdateVisualisation(rectangle3D);
             
             if(notifyOnPolygonChange)
+            {
+                UpdateVisualisation(rectangle3D);
                 polygonChanged.Invoke();
+            }
         }
 
         private Vector2[] PolygonFromLine(List<Vector3> originalLine, float width)
@@ -219,7 +220,7 @@ namespace Netherlands3D.Twin.Layers
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             var polygonShifter = polygonVisualisation.gameObject.AddComponent<PolygonShifter>();
             polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
-            polygonShifter.polygonShifted.AddListener(UpdateShapesWithoutNotify);
+            polygonShifter.polygonShifted.AddListener(SetShapesWithoutNotify);
 
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");

@@ -17,11 +17,9 @@ namespace Netherlands3D.Twin
     {
         private PolygonVisualisation polygonVisualisation;
         private List<List<Coordinate>> preshiftPolygonsCoordinates;
-        private List<List<Vector3>> currentPolygons;
-
         private Coordinate beforeShiftCoordinate;
 
-        public UnityEvent<List<List<Vector3>>> polygonShifted = new UnityEvent<List<List<Vector3>>>();
+        public UnityEvent<List<List<Vector3>>> polygonShifted = new();
 
         void Awake()
         {
@@ -44,7 +42,7 @@ namespace Netherlands3D.Twin
 
         private void StoreLocalUnityCoordinatesLists()
         {
-            currentPolygons = polygonVisualisation.Polygons;
+            var currentPolygons = polygonVisualisation.Polygons;
 
             //Create matching points list with world coordinates
             preshiftPolygonsCoordinates = new List<List<Coordinate>>(currentPolygons.Count);
@@ -65,24 +63,36 @@ namespace Netherlands3D.Twin
                     preshiftPolygonsCoordinates[i].Add(worldCoordinate);
                 }
             }
+
+            Debug.Log("Second point before shift: " + currentPolygons[0][1]);
         }
 
         private void ConvertAndApplyCoordinates()
         {
-            //Update currentPolygons
+            // Initialize newPolygons list
+            var newPolygons = new List<List<Vector3>>(preshiftPolygonsCoordinates.Count);
+            for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
+            {
+                newPolygons.Add(new List<Vector3>());
+            }
+
+            // Update currentPolygons
             for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
             {
                 for (int j = 0; j < preshiftPolygonsCoordinates[i].Count; j++)
                 {
                     var worldCoordinate = preshiftPolygonsCoordinates[i][j];
                     var unityCoordinate = CoordinateConverter.ConvertTo(worldCoordinate, CoordinateSystem.Unity);
-                    currentPolygons[i][j] = new Vector3((float)unityCoordinate.Points[0], (float)unityCoordinate.Points[1], (float)unityCoordinate.Points[2]);
+                    var unityVector3Coordinate = new Vector3((float)unityCoordinate.Points[0], (float)unityCoordinate.Points[1], (float)unityCoordinate.Points[2]);
+                    newPolygons[i].Add(unityVector3Coordinate);
                 }
             }
 
-            //Trigger reapplied points
-            polygonVisualisation.UpdateVisualisation(currentPolygons);
-            polygonShifted.Invoke(currentPolygons);
+            Debug.Log("Second point after shift: " + newPolygons[0][1]);
+
+            // Trigger reapplied points
+            polygonVisualisation.UpdateVisualisation(newPolygons);
+            polygonShifted.Invoke(newPolygons);
         }
     }
 }

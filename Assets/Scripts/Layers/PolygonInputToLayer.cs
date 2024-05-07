@@ -22,15 +22,9 @@ namespace Netherlands3D.Twin.Layers
             }
             set
             {
-                if(activeLayer != null)
-                    activeLayer.polygonChanged.RemoveListener(RefreshChangedPolygon);
-
                 activeLayer = value;
-                if(activeLayer)
-                    activeLayer.polygonChanged.AddListener(RefreshChangedPolygon);
             }
         }
-        private bool updatePolygonOnEdit = true; //We ignore this if polygon edit was not done by user but by origin shift.
 
         [SerializeField] private PolygonInput polygonInput;
 
@@ -53,6 +47,15 @@ namespace Netherlands3D.Twin.Layers
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLineLayer);
         }
+        
+        private void OnDisable()
+        {
+            polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
+            polygonInput.editedPolygonArea.RemoveListener(UpdatePolygonLayer);
+
+            lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
+            lineInput.editedPolygonArea.RemoveListener(UpdateLineLayer);
+        }
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
@@ -68,13 +71,6 @@ namespace Netherlands3D.Twin.Layers
                 ReselectLayerPolygon(layer);
                 return;
             }    
-        }
-
-        private void RefreshChangedPolygon()
-        {
-            //Simply reselect the active layer to move any shifted handles 
-            if(activeLayer)
-                ReselectLayerPolygon(activeLayer);
         }
 
         private void ReselectLayerPolygon(PolygonSelectionLayer layer)
@@ -121,15 +117,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisation.gameObject.SetActive(enabled);
             }
-        }
-
-        private void OnDisable()
-        {
-            polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
-            polygonInput.editedPolygonArea.RemoveListener(UpdatePolygonLayer);
-
-            lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
-            lineInput.editedPolygonArea.RemoveListener(UpdateLineLayer);
         }
 
         public void CreatePolygonLayer(List<Vector3> polygon)
