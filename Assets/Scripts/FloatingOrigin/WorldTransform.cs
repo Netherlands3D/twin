@@ -20,7 +20,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
         public UnityEvent<WorldTransform, Coordinate> onPostShift = new();
 
-
         private void Awake()
         {
             if (origin == null)
