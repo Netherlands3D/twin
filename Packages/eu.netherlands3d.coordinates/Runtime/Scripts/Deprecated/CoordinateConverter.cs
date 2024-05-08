@@ -87,8 +87,20 @@ namespace Netherlands3D.Coordinates
         /// <exception cref="ArgumentOutOfRangeException">If conversion for the involved Coordinate Systems is not supported.</exception>
         public static Coordinate ConvertTo(Coordinate coordinate, CoordinateSystem targetCrs)
         {
-           
-           return ConvertTo(coordinate, (int)targetCrs);
+            if (targetCrs == CoordinateSystem.Unity)
+            {
+                Vector3 unityPos = coordinate.ToUnity();
+                return new Coordinate(CoordinateSystem.Unity, unityPos.x, unityPos.y, unityPos.z);
+            }
+
+            if (coordinate.CoordinateSystem==-1)
+            {
+                coordinate.ToVector3();
+                return new Coordinate(coordinate.ToVector3()).Convert(targetCrs);
+            }
+
+            return coordinate.Convert(targetCrs);
+           //return ConvertTo(coordinate, (int)targetCrs);
         }
 
         /// <summary>
