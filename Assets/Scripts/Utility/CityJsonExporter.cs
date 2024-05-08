@@ -52,6 +52,11 @@ namespace Netherlands3D.Twin
         {
             StringWriter stringWriter = new StringWriter();
             Mesh mesh = targetGameObject.GetComponentInChildren<MeshFilter>().sharedMesh;
+            if(!mesh)
+            {
+                Debug.LogError("No mesh found on target object");
+                return;
+            }
 
             var unityCoordinate = new Coordinate(CoordinateSystem.Unity,
                 targetGameObject.transform.position.x,
