@@ -99,8 +99,8 @@ namespace Netherlands3D.Coordinates
 
             // Up-direction in the coordinateSystem at the coordinate
             wgsAtUp = myConverter.LocalUpDirection(_coordinateAtOrigin);
+            EPSG4936.relativeCenter = CoordinateConverter.ConvertTo(coordinateAtUnityOrigin, CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
 
-            
             /// we want to find out how much we have to rotate to make the localUpDirection align with the orientation of the coordinateSystem
             /// this is the amount we have to rotate the coordinateSystem to align with the UnityAxes.
             /// First we calculate the difference in longitude between de localUP at the coordinate and the orientation of the coordinateSystem 
