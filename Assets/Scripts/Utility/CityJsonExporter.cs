@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin
             stringWriter.WriteLine("    },");
             stringWriter.WriteLine("      \"geometry\": [{");
             stringWriter.WriteLine("      \"type\": \"MultiSurface\",");
-            stringWriter.WriteLine("      \"lod\": \"2\",");
+            stringWriter.WriteLine("      \"lod\": \"2.2\",");
             // Export mesh triangles (with inverted winding order)
             stringWriter.WriteLine("      \"boundaries\": [");
             int[] triangles = mesh.triangles;
