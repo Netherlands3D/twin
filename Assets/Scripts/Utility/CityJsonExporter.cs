@@ -118,7 +118,7 @@ namespace Netherlands3D.Twin
             {
                 File.WriteAllText(path, output);
             }
-#elif UNITY_WEBGL
+#elif !UNITY_EDITOR && UNITY_WEBGL
             byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
             DownloadFileImmediate("", "", targetGameObject.name+".json", byteArray, byteArray.Length);
 #endif
