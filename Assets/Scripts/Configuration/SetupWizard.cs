@@ -96,9 +96,9 @@ namespace Netherlands3D.Twin.Configuration
                 currentCameraPosition.y,
                 currentCameraPosition.z
             );
-            var cameraCoordinateRD = CoordinateConverter.ConvertTo(cameraCoordinateUnity, CoordinateSystem.RD);
+            var cameraCoordinateRD = CoordinateConverter.ConvertTo(cameraCoordinateUnity, CoordinateSystem.RDNAP);
             var cameraAltitude = cameraCoordinateRD.Points[2];   
-            var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+            var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
 
             // Keep current camera elevation
             convertedCoordinate = new Coordinate(
