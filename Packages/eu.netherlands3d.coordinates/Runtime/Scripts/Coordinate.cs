@@ -176,68 +176,35 @@ namespace Netherlands3D.Coordinates
 
         public Quaternion RotationToLocalGravityUp()
         {
-            /// we want to find out how much we have to rotate to make the localUpDirection in our coordinateSystem 
-            /// align with the localUpDirection in the coordinateSystem that is connected to Unity
 
-            /// if our coordinateSystem is the same as the one connected to Unity, it is easy and we are alrady done.
             if (this.CoordinateSystem == (int)CoordinateSystems.connectedCoordinateSystem)
             {
                 return CoordinateSystems.connectedCRSToUnityUp;
             }
 
-
             CoordinateSystemOperation myConverter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
             CoordinateSystemOperation connectedConverter = CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem];
 
-            ///to figure out how much we have to rotate, we need to combine a couple of angles
-            ///first we calculate how much the point we try to align to is rotated relative to the unity-Origin 
-            ///we can calculate this bij looking at the localRotation in the connectedCrs for the origin and the point we are looking at
+            Vector3WGS orientationDifference = connectedConverter.Orientation() - myConverter.Orientation();
 
-            Coordinate thisCoordinateInConnectedCRS = this.Convert(CoordinateSystems.connectedCoordinateSystem);
-            Vector3WGS ConnectedCRSLocalUpAtTHisPoint = connectedConverter.LocalUpDirection(thisCoordinateInConnectedCRS);
-            Vector3WGS ConnectedCRSLocalUpAtOrigin = connectedConverter.LocalUpDirection(CoordinateSystems.CoordinateAtUnityOrigin);
-            Vector3WGS inUnityRotation = ConnectedCRSLocalUpAtTHisPoint - ConnectedCRSLocalUpAtOrigin;
+            Coordinate inConnectedCrs = this.Convert(CoordinateSystems.connectedCoordinateSystem);
+            Vector3WGS extraRotation = new Vector3WGS(inConnectedCrs.extraLongitudeRotation, inConnectedCrs.extraLattitudeRotation, 0);
 
-            /// we also need to know how much our CRS is rotated at the origin
-            /// we can calculate this by calculating how much rotation is needed to align with the connectedCoordinateSystem
-            /// 
-            Vector3WGS crsRotation = connectedConverter.Orientation() - myConverter.Orientation();
+            orientationDifference += extraRotation;
 
-
-            //don't touch these work
-            Coordinate myCRSposAtOrigin = CoordinateSystems.CoordinateAtUnityOrigin.Convert((CoordinateSystem)this.CoordinateSystem);
-            Vector3WGS localUpAtOrigin = myConverter.LocalUpDirection(myCRSposAtOrigin);
-            Vector3WGS wgsUpAtPosition = connectedConverter.GlobalUpDirection(this.Convert(CoordinateSystems.connectedCoordinateSystem));
-
-            Vector3WGS myLocalUPAtPosition = myConverter.LocalUpDirection(this);
-
-            Vector3WGS wgsUpAtOrigin = CoordinateSystems.wgsAtUp;
-
-            Vector3WGS extraRotation = (wgsUpAtPosition - myLocalUPAtPosition) - (wgsUpAtOrigin - localUpAtOrigin);
-
-            Vector3WGS rotation = wgsUpAtOrigin - extraRotation;
-
-
-
-            //Apply the rotation
-            Quaternion rotationToEast = Quaternion.AngleAxis((float)rotation.lon - (float)myConverter.Orientation().lon, Vector3.up);
+            Quaternion rotationToEast = Quaternion.AngleAxis((float)orientationDifference.lon, Vector3.up);
             if (myConverter.GetCoordinateSystemType() == CoordinateSystemType.Geocentric)
             {
+                //rotate -90 degrees around the up-axis, to make sure east is in the X-direction;
                 rotationToEast = rotationToEast * Quaternion.AngleAxis(-90, Vector3.up);
             }
-            Quaternion rotationToFlat = Quaternion.AngleAxis((float)myConverter.Orientation().lat - (float)rotation.lat, Vector3.right);
-            Quaternion result = rotationToFlat * rotationToEast;
-
-            
-
+            /// Now we calculate the difference in lattitude between de localUP at the coordinate and the orientation of the coordinateSystem  
+            Quaternion rotationToFlat = Quaternion.AngleAxis(-(float)orientationDifference.lat, Vector3.right);
+            /// when we apply both rotations, we get the rotation required to get the coordinateSystem pointing Up and North at the Unity-Origin
+            Quaternion result = CoordinateSystems.connectedCRSToUnityUp * rotationToFlat * rotationToEast;
 
             return result;
 
-
-
-
-
-            //return rotation;
         }
        
         public Vector3 ToUnity()
