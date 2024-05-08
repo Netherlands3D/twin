@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Text;
 
 namespace Netherlands3D.Twin
 {
@@ -17,7 +18,7 @@ namespace Netherlands3D.Twin
             // Using new inputsystem to detect if shift+E is pressed
             if (Keyboard.current.leftShiftKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame)
             {
-                Debug.Log("Exporting city to JSON");
+                Debug.Log("Exporting selected object to CityJSON");
                 ExportSelectedObjectCityJSON();
             }
         }
@@ -119,7 +120,7 @@ namespace Netherlands3D.Twin
                 File.WriteAllText(path, output);
             }
 #elif !UNITY_EDITOR && UNITY_WEBGL
-            byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
+            byte[] byteArray = Encoding.UTF8.GetBytes(output);
             DownloadFileImmediate("", "", targetGameObject.name+".json", byteArray, byteArray.Length);
 #endif
         }
