@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin
         private void ExportSelectedObjectCityJSON()
         {
             var transformHandles = FindObjectOfType<RuntimeTransformHandle>();
-            if(transformHandles.target != null)
+            if(transformHandles && transformHandles.target != null)
             {
                 ExportGameObjectToCityJSON();
             }
@@ -81,12 +81,12 @@ namespace Netherlands3D.Twin
             stringWriter.WriteLine("      \"geometry\": [{");
             stringWriter.WriteLine("      \"type\": \"MultiSurface\",");
             stringWriter.WriteLine("      \"lod\": \"2\",");
-            // Export mesh triangles
+            // Export mesh triangles (with inverted winding order)
             stringWriter.WriteLine("      \"boundaries\": [");
             int[] triangles = mesh.triangles;
             for (int i = 0; i < triangles.Length; i += 3)
             {
-                stringWriter.WriteLine("      [[" + triangles[i] + ", " + triangles[i + 1] + ", " + triangles[i + 2] + "]]" + (i < triangles.Length - 3 ? "," : ""));
+                stringWriter.WriteLine("      [[" + triangles[i + 2] + ", " + triangles[i + 1] + ", " + triangles[i] + "]]" + (i < triangles.Length - 3 ? "," : ""));
             }
             // Geometry end
             stringWriter.WriteLine("      ]");
@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin
             // Export mesh vertices
             stringWriter.WriteLine("    \"vertices\": [");
             Vector3[] vertices = mesh.vertices;
-            // Apply gameobject world rotation to vertices
+            // Apply gameobject world rotation to vertices and make sure the list is reversed
             for (int i = 0; i < vertices.Length; i++)
             {
                 vertices[i] = targetGameObject.transform.rotation * vertices[i];
