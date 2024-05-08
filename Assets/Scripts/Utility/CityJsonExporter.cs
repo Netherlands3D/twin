@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
         void Update()
         {
             // Using new inputsystem to detect if shift+E is pressed
-            if (Keyboard.current.leftShiftKey.isPressed && Keyboard.current.eKey.wasPressedThisFrame)
+            if (Keyboard.current.leftShiftKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame)
             {
                 Debug.Log("Exporting city to JSON");
                 ExportSelectedObjectCityJSON();
