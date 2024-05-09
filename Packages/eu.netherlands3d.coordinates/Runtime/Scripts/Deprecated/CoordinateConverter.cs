@@ -87,6 +87,13 @@ namespace Netherlands3D.Coordinates
         /// <exception cref="ArgumentOutOfRangeException">If conversion for the involved Coordinate Systems is not supported.</exception>
         public static Coordinate ConvertTo(Coordinate coordinate, CoordinateSystem targetCrs)
         {
+            CoordinateSystem _targetCoordinateSystem = targetCrs;
+            if (targetCrs == CoordinateSystem.RD)
+            {
+                _targetCoordinateSystem = CoordinateSystem.RDNAP;
+            }
+
+
             if (targetCrs == CoordinateSystem.Unity)
             {
                 Vector3 unityPos = coordinate.ToUnity();
@@ -96,10 +103,10 @@ namespace Netherlands3D.Coordinates
             if (coordinate.CoordinateSystem==-1)
             {
                 coordinate.ToVector3();
-                return new Coordinate(coordinate.ToVector3()).Convert(targetCrs);
+                return new Coordinate(coordinate.ToVector3()).Convert(_targetCoordinateSystem);
             }
-
-            return coordinate.Convert(targetCrs);
+            
+            return coordinate.Convert(_targetCoordinateSystem);
            //return ConvertTo(coordinate, (int)targetCrs);
         }
 
