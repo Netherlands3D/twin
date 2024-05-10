@@ -52,10 +52,8 @@ namespace Netherlands3D.Twin.Configuration
 
                 yield break;
             };
-
-            mainCamera.transform.position = CoordinateConverter
-                .ConvertTo(newOrigin, CoordinateSystem.Unity)
-                .ToVector3();
+            GeoReference.SetCameraPosition(newOrigin);
+            
         }
     }
 }
