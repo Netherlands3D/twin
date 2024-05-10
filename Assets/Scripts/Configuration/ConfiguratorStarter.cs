@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -13,6 +14,13 @@ namespace Netherlands3D.Twin.Configuration
         /// ensure everything has completed loading. Without this, you will get all kinds of weird Null exceptions
         /// and the progressbar won't show.
         /// </summary>
+        /// 
+
+        private void Awake()
+        {
+            GeoReference.connectedCoordinateSystem = CoordinateSystem.RDNAP;
+            GeoReference.SetCameraPosition(new Coordinate(CoordinateSystem.RDNAP, 120000, 480000,300));
+        }
         private IEnumerator Start()
         {
             yield return null;
