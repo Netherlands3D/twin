@@ -329,14 +329,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.3.0",
+      "version": "https://github.com/Netherlands3D/SelectionTools.git",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.poly2tri": "2.0.0",
         "com.unity.inputsystem": "1.5.1"
       },
-      "url": "https://package.openupm.com"
+      "hash": "8a70d609b5e42b7ad443c567e9c12731eee3552a"
     },
     "eu.netherlands3d.simplejson": {
       "version": "1.0.0",
