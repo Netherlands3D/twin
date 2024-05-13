@@ -223,6 +223,15 @@ namespace Netherlands3D.SelectionTools
             CloseLoop(true);
         }
 
+        public void SetCurrentInputPointsWithoutNotify(List<Vector3> points)
+        {
+            //Set positions to copy
+            positions = new List<Vector3>(points);
+            UpdateLine();
+            MoveAllHandlesToPoint();
+            UpdatePreviewLine();
+        }
+
         public void ReselectPolygon(List<Vector3> points)
         {
             if (mode == DrawMode.Create)
@@ -250,7 +259,6 @@ namespace Netherlands3D.SelectionTools
         protected virtual void Update()
         {
             UpdateCurrentWorldCoordinate();
-
             UpdatePreviewLine();
 
             if (pointerRepresentation)
