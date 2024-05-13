@@ -10,33 +10,31 @@ namespace Netherlands3D.Twin
     public class ShaderWorldTransformShifter : WorldTransformShifter
     {
         [SerializeField] [Tooltip("Global shader variable used in shaders/shadergraphs")] private string shaderKeyWord = "_WorldOriginOffset";
-        [SerializeField] private float remainderOf = 10000;
+        [SerializeField] private float remainderOf = 2000;
 
-        private Vector3 cameraPosition = Vector3.zero;
+        [SerializeField]  private Vector2 shaderOffset = Vector2.zero;
 
-        [SerializeField] private Vector2 shaderOffset;
-
-        private void OnEnable()
-        {
-            Shader.SetGlobalVector(shaderKeyWord, Vector2.one);
-        }
-
-        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
-        {
-            cameraPosition = Camera.main.transform.position;
-        }
+        public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin){}
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
+            //Simply use the new RD origin as our offset
+            var rdTo = CoordinateConverter.ConvertTo(toOrigin, CoordinateSystem.RD);
+            shaderOffset = new Vector2(
+                (float)rdTo.Points[0] % remainderOf,
+                (float)rdTo.Points[1] % remainderOf
+            );
+
+            UpdateShaders();
+        }
+
+        private void OnValidate() {
             UpdateShaders();
         }
 
         private void UpdateShaders()
         {
-            shaderOffset = new Vector2(
-                cameraPosition.x,
-                cameraPosition.z
-            );
+            Shader.SetGlobalVector(shaderKeyWord, shaderOffset);
         }
     }
 }
