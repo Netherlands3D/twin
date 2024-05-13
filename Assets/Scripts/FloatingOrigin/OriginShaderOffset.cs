@@ -38,13 +38,9 @@ namespace Netherlands3D.Twin
 
             //Limit so our shaders also keeps precision by limiting the offset
             Vector3 offset = unityAfter - unityBefore;
-            offset.x %= remainderOf;
+            /*offset.x %= remainderOf;
             offset.y %= remainderOf;
-            offset.z %= remainderOf;
-
-            offset.x = -offset.x;
-            offset.y = -offset.y;
-            offset.z = -offset.z;
+            offset.z %= remainderOf;*/
 
             Debug.Log("Shader new offset: " + offset.ToString());
 
