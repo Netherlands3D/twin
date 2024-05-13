@@ -281,7 +281,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 409187177}
-  - component: {fileID: 409187176}
   - component: {fileID: 409187178}
   - component: {fileID: 409187179}
   m_Layer: 0
@@ -291,25 +290,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &409187176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 409187175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7e06437edc560e47accfb817d45a047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zeroGroundLevelY: 0
-  relativeCenterRD:
-    x: 161088
-    y: 503050
-  setInvariantCultureInfo: 1
-  movingOrigin: 0
-  maxCameraDistanceFromOrigin: 5000
 --- !u!4 &409187177
 Transform:
   m_ObjectHideFlags: 0
@@ -350,7 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01f12fd6280446099334d0dde362a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
+  mainShifter: {fileID: 0}
   referenceCoordinateSystem: 7415
   distanceBeforeShifting: 5000
   onPreShift:
@@ -652,10 +632,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 767208758}
-    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 767208759}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
 --- !u!1 &767208734 stripped
 GameObject:
@@ -696,20 +672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &767208759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 767208734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f4fbc4edf7b9e44381c3da9d18d87d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shiftDistance: 10000
-  floatingOrigin: {fileID: 0}
 --- !u!1 &829986190
 GameObject:
   m_ObjectHideFlags: 0
@@ -2482,7 +2444,7 @@ PrefabInstance:
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 45.265
       objectReference: {fileID: 0}
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
