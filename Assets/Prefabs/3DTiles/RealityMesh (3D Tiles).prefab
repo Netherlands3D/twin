@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
-  publicKey: 
-  personalKey: 
+  publicKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
+  personalKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
   root:
     isLoading: 0
     level: 0
