@@ -96,11 +96,6 @@ namespace Netherlands3D.Tiles3D
             InitializeURLAndLoadTileSet();
         }
 
-        private bool IsValidURL()
-        {
-            return tilesetUrl.Contains("tileset.json"); //todo: expand this validation
-        }
-
         private void DisposeAllTilesRecursive(Tile tile)
         {
             if (tile == null)
@@ -116,12 +111,6 @@ namespace Netherlands3D.Tiles3D
 
         void InitializeURLAndLoadTileSet()
         {
-            if (!IsValidURL())
-            {
-                Debug.LogError("The provided url is invalid: " + tilesetUrl);
-                return;
-            }
-
             ConstructURLWithKey();
 
             currentCamera = Camera.main;
