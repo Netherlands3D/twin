@@ -47,9 +47,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             rotation.xField.onEndEdit.AddListener(OnRotationChanged);
             rotation.yField.onEndEdit.AddListener(OnRotationChanged);
             rotation.zField.onEndEdit.AddListener(OnRotationChanged);        
-            scale.xField.onValueChanged.AddListener(OnScaleChanged);
-            scale.yField.onValueChanged.AddListener(OnScaleChanged);
-            scale.zField.onValueChanged.AddListener(OnScaleChanged);
+            scale.xField.onEndEdit.AddListener(OnScaleChanged);
+            scale.yField.onEndEdit.AddListener(OnScaleChanged);
+            scale.zField.onEndEdit.AddListener(OnScaleChanged);
         }
 
         private void Update()
@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 UpdatePositionFields();
                 UpdateRotationFields();
                 UpdateScalingFields();
-                Layer.transform.hasChanged = false;
+                layer.transform.hasChanged = false;
             }
         }
 
@@ -119,9 +119,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
             float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
 
-            UpdateScalingFields();
-
             layer.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
+
+            UpdateScalingFields();
         }
         
         private void UpdatePositionFields()
@@ -135,6 +135,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void UpdateRotationFields()
         {
             var eulerAngles = layer.transform.localEulerAngles;
+
             rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
             rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
             rotation.zField.SetTextWithoutNotify(eulerAngles.z.ToString("0.00", CultureInfo.InvariantCulture));
