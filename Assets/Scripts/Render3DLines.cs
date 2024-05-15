@@ -20,13 +20,13 @@ namespace Netherlands3D.Twin
         [SerializeField] private bool flattenY = false;
         [Tooltip("Offset the Y position of the line")]
         [SerializeField] private float offsetY = 0.0f;
+        [SerializeField] private float lineDiameter = 0.2f;
 
         private List<List<Vector3>> lines;
         private List<List<Matrix4x4>> lineTransformMatrixCache; 
         private List<List<Matrix4x4>> jointsTransformMatrixCache; 
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
-        private float lineDiameter = 0.2f;
         private bool hasColors = false;
 
         public Mesh LineMesh { get => lineMesh; set => lineMesh = value; }
