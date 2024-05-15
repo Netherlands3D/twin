@@ -33,14 +33,17 @@ namespace Netherlands3D.Twin
         public Mesh JointMesh { get => jointMesh; set => jointMesh = value; }
         public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
         public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
+        
         public bool FlattenY { get => flattenY; set{
             flattenY = value;
             GenerateTransformMatrixCache();  
         }}
+
         public float OffsetY { get => offsetY; set{
             offsetY = value;
             GenerateTransformMatrixCache();  
         }}
+
         public float LineDiameter { get => lineDiameter; set => lineDiameter = value; }
 
         private void Update()
@@ -78,6 +81,9 @@ namespace Netherlands3D.Twin
             }
         }
 
+        /// <summary>
+        /// Set a single line (overwriting any previous lines)
+        /// </summary>
         public void SetLine(List<Vector3> linePoints)
         {
             var validLine = ValidateLine(linePoints);
@@ -87,6 +93,9 @@ namespace Netherlands3D.Twin
             SetLines(lines);
         }
 
+        /// <summary>
+        /// Set the current list of lines (overwriting any previous list)
+        /// </summary>
         public void SetLines(List<List<Vector3>> lines)
         {
             foreach(List<Vector3> line in lines)
@@ -99,6 +108,42 @@ namespace Netherlands3D.Twin
             GenerateTransformMatrixCache();
         }
 
+        /// <summary>
+        /// Append single line to the current list of lines
+        /// </summary>
+        public void AppendLine(List<Vector3> linePoints)
+        {
+            var validLine = ValidateLine(linePoints);
+            if(!validLine) return;
+
+            if (lines == null)
+                lines = new List<List<Vector3>>();
+
+            lines.Add(linePoints);
+            GenerateTransformMatrixCache();
+        }
+
+        /// <summary>
+        /// Append multiple lines to the current list of lines
+        /// </summary>
+        public void AppendLines(List<List<Vector3>> lines)
+        {
+            foreach(List<Vector3> line in lines)
+            {
+                var validLine = ValidateLine(line);
+                if(!validLine) return;
+            }
+
+            if (this.lines == null)
+                this.lines = new List<List<Vector3>>();
+
+            this.lines.AddRange(lines);
+            GenerateTransformMatrixCache();
+        }
+
+        /// <summary>
+        /// Give every line a random color
+        /// </summary>
         [ContextMenu("Randomize line colors")]
         public void SetRandomLineColors()
         {
@@ -110,6 +155,10 @@ namespace Netherlands3D.Twin
             SetSpecificLineMaterialColors(colors);
         }
 
+        /// <summary>
+        /// Set specific colors for each line
+        /// </summary>
+        /// <param name="colors">Array of colors matching the list of lines length</param>
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
             if(colors.Length != lines.Count){
@@ -121,17 +170,11 @@ namespace Netherlands3D.Twin
             foreach (Color color in colors)
             {
                 MaterialPropertyBlock props = new();
-                props.SetColor("_Color", color);
+                props.SetColor("_BaseColor", color);
                 materialPropertyBlockCache.Add(props);
             }
 
             hasColors = true;
-        }
-
-        public void ClearColors()
-        {
-            hasColors = false;
-            materialPropertyBlockCache.Clear();
         }
 
         public bool ValidateLine(List<Vector3> line)
@@ -152,6 +195,12 @@ namespace Netherlands3D.Twin
             lineTransformMatrixCache.Clear();
             jointsTransformMatrixCache.Clear();
             cacheReady = false;
+        }
+
+        public void ClearColors()
+        {
+            hasColors = false;
+            materialPropertyBlockCache.Clear();
         }
 
         private void GenerateTransformMatrixCache()
