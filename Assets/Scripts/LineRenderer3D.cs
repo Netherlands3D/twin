@@ -95,6 +95,48 @@ namespace Netherlands3D.Twin
         }
 
         /// <summary>
+        /// Return the index of the closest line to a given point.
+        /// Handy for selecting a line based on a click position.
+        /// </summary>
+        public int ClosestLineToPoint(Vector3 point)
+        {
+            int closestLineIndex = -1;
+            float closestDistance = float.MaxValue;
+            for (int i = 0; i < lineTransformMatrixCache.Count; i++)
+            {
+                var lineTransforms = lineTransformMatrixCache[i];
+                foreach (var lineTransform in lineTransforms)
+                {
+                    var linePoint = lineTransform.GetColumn(3);
+                    var distance = Vector3.Distance(linePoint, point);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestLineIndex = i;
+                    }
+                }
+            }
+            return closestLineIndex;
+        }
+
+        /// <summary>
+        /// Set a specific line color by index of the line.
+        /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
+        /// </summary>
+        public void SetSpecificLineColorByIndex(int index, Color color)
+        {
+            if(index >= materialPropertyBlockCache.Count)
+            {
+                Debug.LogWarning($"Index {index} is out of range");
+                return;
+            }
+
+            MaterialPropertyBlock props = materialPropertyBlockCache[index];
+            props.SetColor("_BaseColor", color);
+            materialPropertyBlockCache[index] = props;
+        } 
+
+        /// <summary>
         /// Set a single line (overwriting any previous lines)
         /// </summary>
         public void SetLine(List<Vector3> linePoints)
