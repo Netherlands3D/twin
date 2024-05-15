@@ -170,6 +170,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
                         return layerTypeSprites[6];
                     return layerTypeSprites[7];
+                case GeoJSONLayer _:
+                    return layerTypeSprites[6]; //todo: split in points/lines/polygons
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
