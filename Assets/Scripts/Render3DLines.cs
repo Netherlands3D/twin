@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin
         [Tooltip("Offset the Y position of the line")]
         [SerializeField] private float offsetY = 0.0f;
 
-        private List<List<Vector3>> linesPoints;
+        private List<List<Vector3>> lines;
         private List<List<Matrix4x4>> lineTransformMatrixCache; 
         private List<List<Matrix4x4>> jointsTransformMatrixCache; 
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
@@ -33,14 +33,25 @@ namespace Netherlands3D.Twin
         public Mesh JointMesh { get => jointMesh; set => jointMesh = value; }
         public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
         public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
-        public bool FlattenY { get => flattenY; set => flattenY = value; }
-        public float OffsetY { get => offsetY; set => offsetY = value; }
+        public bool FlattenY { get => flattenY; set{
+            flattenY = value;
+            GenerateTransformMatrixCache();  
+        }}
+        public float OffsetY { get => offsetY; set{
+            offsetY = value;
+            GenerateTransformMatrixCache();  
+        }}
         public float LineDiameter { get => lineDiameter; set => lineDiameter = value; }
 
         private void Update()
         {
             if (cacheReady)
                 DrawLines();
+        }
+
+        private void OnValidate()
+        {
+            GenerateTransformMatrixCache();
         }
 
         private void DrawLines()
@@ -72,27 +83,26 @@ namespace Netherlands3D.Twin
             var validLine = ValidateLine(linePoints);
             if(!validLine) return;
 
-            linesPoints = new List<List<Vector3>> { linePoints };
-            SetLines(linesPoints);
+            lines = new List<List<Vector3>> { linePoints };
+            SetLines(lines);
         }
 
-        public void SetLines(List<List<Vector3>> linesLists)
+        public void SetLines(List<List<Vector3>> lines)
         {
-            foreach(List<Vector3> line in linesLists)
+            foreach(List<Vector3> line in lines)
             {
                 var validLine = ValidateLine(line);
                 if(!validLine) return;
             }
 
-            linesPoints = linesLists;
+            this.lines = lines;
             GenerateTransformMatrixCache();
-            DrawLines();
         }
 
         [ContextMenu("Randomize line colors")]
         public void SetRandomLineColors()
         {
-            Color[] colors = new Color[linesPoints.Count-1];
+            Color[] colors = new Color[lines.Count];
             for (int i = 0; i < colors.Length; i++)
             {
                 colors[i] = Random.ColorHSV();
@@ -102,8 +112,8 @@ namespace Netherlands3D.Twin
 
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
-            if(colors.Length != linesPoints.Count-1){
-                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {linesPoints.Count-1}");
+            if(colors.Length != lines.Count-1){
+                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count-1}");
                 return;
             }
 
@@ -136,7 +146,9 @@ namespace Netherlands3D.Twin
 
         public void ClearLines()
         {
-            linesPoints.Clear();
+            lines.Clear();
+            ClearColors();
+
             lineTransformMatrixCache.Clear();
             jointsTransformMatrixCache.Clear();
             cacheReady = false;
@@ -144,10 +156,12 @@ namespace Netherlands3D.Twin
 
         private void GenerateTransformMatrixCache()
         {
+            if(lines == null || lines.Count < 1) return;
+
             lineTransformMatrixCache = new List<List<Matrix4x4>>(); // Updated to nested List<Matrix4x4>
             jointsTransformMatrixCache = new List<List<Matrix4x4>>();
 
-            foreach (List<Vector3> line in linesPoints)
+            foreach (List<Vector3> line in lines)
             {
                 List<Matrix4x4> lineTransforms = new();
                 List<Matrix4x4> jointTransforms = new();
