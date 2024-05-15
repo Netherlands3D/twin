@@ -33,18 +33,31 @@ namespace Netherlands3D.Twin
         public Mesh JointMesh { get => jointMesh; set => jointMesh = value; }
         public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
         public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
+
+        public float LineDiameter { 
+            get => lineDiameter; 
+            set{
+                lineDiameter = value; 
+                GenerateTransformMatrixCache();
+            }
+        }
         
-        public bool FlattenY { get => flattenY; set{
-            flattenY = value;
-            GenerateTransformMatrixCache();  
-        }}
+        public bool FlattenY { 
+            get => flattenY; 
+            set{
+                flattenY = value;
+                GenerateTransformMatrixCache();
+            }
+        }
 
-        public float OffsetY { get => offsetY; set{
-            offsetY = value;
-            GenerateTransformMatrixCache();  
-        }}
+        public float OffsetY { 
+            get => offsetY; 
+            set{
+                offsetY = value;
+                GenerateTransformMatrixCache();
+            }
+        }
 
-        public float LineDiameter { get => lineDiameter; set => lineDiameter = value; }
 
         private void Update()
         {
@@ -67,6 +80,7 @@ namespace Netherlands3D.Twin
                 if(hasColors)
                 {
                     MaterialPropertyBlock props = materialPropertyBlockCache[i];
+                    Debug.Log("Drawing with color properties: " + props.GetColor("_BaseColor"));
                     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
                     
                     if(DrawJoints)
