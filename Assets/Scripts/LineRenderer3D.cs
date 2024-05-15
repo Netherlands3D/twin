@@ -13,18 +13,18 @@ namespace Netherlands3D.Twin
         [Tooltip("The mesh to use for the joints to get smooth corners")]
         [SerializeField] private Mesh jointMesh;
         [SerializeField] private Material lineMaterial;
-        
+
         [Header("Settings")]
         [SerializeField] private bool drawJoints = true;
-        [Tooltip("Force all point Y positions to 0")] 
+        [Tooltip("Force all point Y positions to 0")]
         [SerializeField] private bool flattenY = false;
         [Tooltip("Offset the Y position of the line")]
         [SerializeField] private float offsetY = 0.0f;
         [SerializeField] private float lineDiameter = 0.2f;
 
         private List<List<Vector3>> lines;
-        private List<List<Matrix4x4>> lineTransformMatrixCache; 
-        private List<List<Matrix4x4>> jointsTransformMatrixCache; 
+        private List<List<Matrix4x4>> lineTransformMatrixCache;
+        private List<List<Matrix4x4>> jointsTransformMatrixCache;
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
         private bool hasColors = false;
@@ -34,30 +34,35 @@ namespace Netherlands3D.Twin
         public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
         public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
 
-        public float LineDiameter { 
-            get => lineDiameter; 
-            set{
-                lineDiameter = value; 
+        public float LineDiameter
+        {
+            get => lineDiameter;
+            set
+            {
+                lineDiameter = value;
                 GenerateTransformMatrixCache();
             }
         }
-        
-        public bool FlattenY { 
-            get => flattenY; 
-            set{
+
+        public bool FlattenY
+        {
+            get => flattenY;
+            set
+            {
                 flattenY = value;
                 GenerateTransformMatrixCache();
             }
         }
 
-        public float OffsetY { 
-            get => offsetY; 
-            set{
+        public float OffsetY
+        {
+            get => offsetY;
+            set
+            {
                 offsetY = value;
                 GenerateTransformMatrixCache();
             }
         }
-
 
         private void Update()
         {
@@ -77,19 +82,19 @@ namespace Netherlands3D.Twin
             {
                 var lineTransforms = lineTransformMatrixCache[i];
                 var lineJointTransforms = jointsTransformMatrixCache[i];
-                if(hasColors)
+                if (hasColors)
                 {
                     MaterialPropertyBlock props = materialPropertyBlockCache[i];
                     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
-                    
-                    if(DrawJoints)
+
+                    if (DrawJoints)
                         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
 
                     continue;
                 }
 
                 Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
-                if(DrawJoints)
+                if (DrawJoints)
                     Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms);
             }
         }
@@ -125,7 +130,7 @@ namespace Netherlands3D.Twin
         public int SetLineColorClosestToPoint(Vector3 point, Color color)
         {
             int closestLineIndex = GetClosestLineIndex(point);
-            if(closestLineIndex == -1)
+            if (closestLineIndex == -1)
             {
                 Debug.LogWarning("No line found");
                 return -1;
@@ -140,7 +145,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetSpecificLineColorByIndex(int index, Color color)
         {
-            if(index >= materialPropertyBlockCache.Count)
+            if (index >= materialPropertyBlockCache.Count)
             {
                 Debug.LogWarning($"Index {index} is out of range");
                 return;
@@ -149,7 +154,7 @@ namespace Netherlands3D.Twin
             MaterialPropertyBlock props = materialPropertyBlockCache[index];
             props.SetColor("_BaseColor", color);
             materialPropertyBlockCache[index] = props;
-        } 
+        }
 
         /// <summary>
         /// Set a single line (overwriting any previous lines)
@@ -157,7 +162,7 @@ namespace Netherlands3D.Twin
         public void SetLine(List<Vector3> linePoints)
         {
             var validLine = ValidateLine(linePoints);
-            if(!validLine) return;
+            if (!validLine) return;
 
             lines = new List<List<Vector3>> { linePoints };
             SetLines(lines);
@@ -168,10 +173,10 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetLines(List<List<Vector3>> lines)
         {
-            foreach(List<Vector3> line in lines)
+            foreach (List<Vector3> line in lines)
             {
                 var validLine = ValidateLine(line);
-                if(!validLine) return;
+                if (!validLine) return;
             }
 
             this.lines = lines;
@@ -184,7 +189,7 @@ namespace Netherlands3D.Twin
         public void AppendLine(List<Vector3> linePoints)
         {
             var validLine = ValidateLine(linePoints);
-            if(!validLine) return;
+            if (!validLine) return;
 
             if (lines == null)
                 lines = new List<List<Vector3>>();
@@ -198,10 +203,10 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void AppendLines(List<List<Vector3>> lines)
         {
-            foreach(List<Vector3> line in lines)
+            foreach (List<Vector3> line in lines)
             {
                 var validLine = ValidateLine(line);
-                if(!validLine) return;
+                if (!validLine) return;
             }
 
             if (this.lines == null)
@@ -231,7 +236,8 @@ namespace Netherlands3D.Twin
         /// <param name="colors">Array of colors matching the list of lines length</param>
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
-            if(colors.Length != lines.Count){
+            if (colors.Length != lines.Count)
+            {
                 Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count}");
                 return;
             }
@@ -275,7 +281,7 @@ namespace Netherlands3D.Twin
 
         private void GenerateTransformMatrixCache()
         {
-            if(lines == null || lines.Count < 1) return;
+            if (lines == null || lines.Count < 1) return;
 
             lineTransformMatrixCache = new List<List<Matrix4x4>>(); // Updated to nested List<Matrix4x4>
             jointsTransformMatrixCache = new List<List<Matrix4x4>>();
@@ -288,14 +294,14 @@ namespace Netherlands3D.Twin
                 {
                     var currentPoint = line[i];
                     var nextPoint = line[i + 1];
-                    
+
                     var direction = nextPoint - currentPoint;
                     float distance = direction.magnitude;
 
                     // Flatten the Y axis if needed
                     currentPoint.y = (FlattenY ? 0 : currentPoint.y) + offsetY;
                     nextPoint.y = (FlattenY ? 0 : nextPoint.y) + offsetY;
-  
+
                     direction.Normalize();
 
                     // Calculate the rotation based on the direction vector
@@ -314,7 +320,7 @@ namespace Netherlands3D.Twin
                     jointTransforms.Add(jointTransformMatrix);
 
                     //Add the last joint to cap the line end
-                    if(i == line.Count - 2)
+                    if (i == line.Count - 2)
                     {
                         jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
                         jointTransforms.Add(jointTransformMatrix);
