@@ -80,13 +80,12 @@ namespace Netherlands3D.Twin
                 if(hasColors)
                 {
                     MaterialPropertyBlock props = materialPropertyBlockCache[i];
-                    Debug.Log("Drawing with color properties: " + props.GetColor("_BaseColor"));
                     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
                     
                     if(DrawJoints)
                         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
 
-                    return;
+                    continue;
                 }
 
                 Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
