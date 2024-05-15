@@ -76,12 +76,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinderMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
     type: 3}
   jointMesh: {fileID: 4711208715938537054, guid: 0de12834fe259ec4cbcffaca05de9fc6,
     type: 3}
   lineMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
-  DrawSphereJoints: 1
+  drawJoints: 1
+  flattenY: 0
+  offsetY: 0
 --- !u!114 &3553788355367363293
 MonoBehaviour:
   m_ObjectHideFlags: 0

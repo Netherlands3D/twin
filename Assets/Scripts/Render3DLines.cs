@@ -7,12 +7,19 @@ namespace Netherlands3D.Twin
 {
     public class LineRenderer3D : MonoBehaviour
     {
+        [Header("References")]
         [Tooltip("The mesh to use for the line segments")]
-        public Mesh cylinderMesh;
+        [SerializeField] private Mesh lineMesh;
         [Tooltip("The mesh to use for the joints to get smooth corners")]
-        public Mesh jointMesh;
-        public bool DrawSphereJoints = true;
-        public Material lineMaterial;
+        [SerializeField] private Mesh jointMesh;
+        [SerializeField] private Material lineMaterial;
+        
+        [Header("Settings")]
+        [SerializeField] private bool drawJoints = true;
+        [Tooltip("Force all point Y positions to 0")] 
+        [SerializeField] private bool flattenY = false;
+        [Tooltip("Offset the Y position of the line")]
+        [SerializeField] private float offsetY = 0.0f;
 
         private List<List<Vector3>> linesPoints;
         private List<List<Matrix4x4>> lineTransformMatrixCache; 
@@ -20,6 +27,45 @@ namespace Netherlands3D.Twin
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
         private float lineDiameter = 0.2f;
+        private bool hasColors = false;
+
+        public Mesh LineMesh { get => lineMesh; set => lineMesh = value; }
+        public Mesh JointMesh { get => jointMesh; set => jointMesh = value; }
+        public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
+        public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
+        public bool FlattenY { get => flattenY; set => flattenY = value; }
+        public float OffsetY { get => offsetY; set => offsetY = value; }
+        public float LineDiameter { get => lineDiameter; set => lineDiameter = value; }
+
+        private void Update()
+        {
+            if (cacheReady)
+                DrawLines();
+        }
+
+        private void DrawLines()
+        {
+            //Seperate line draws so we can use different colors for each line
+            for (int i = 0; i < lineTransformMatrixCache.Count; i++)
+            {
+                var lineTransforms = lineTransformMatrixCache[i];
+                var lineJointTransforms = jointsTransformMatrixCache[i];
+                if(hasColors)
+                {
+                    MaterialPropertyBlock props = materialPropertyBlockCache[i];
+                    Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
+                    
+                    if(DrawJoints)
+                        Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
+
+                    return;
+                }
+
+                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
+                if(DrawJoints)
+                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms);
+            }
+        }
 
         public void SetLine(List<Vector3> linePoints)
         {
@@ -46,13 +92,12 @@ namespace Netherlands3D.Twin
         [ContextMenu("Randomize line colors")]
         public void SetRandomLineColors()
         {
-            materialPropertyBlockCache = new List<MaterialPropertyBlock>();
-            foreach (List<Vector3> line in linesPoints)
+            Color[] colors = new Color[linesPoints.Count-1];
+            for (int i = 0; i < colors.Length; i++)
             {
-                MaterialPropertyBlock props = new();
-                props.SetColor("_Color", Random.ColorHSV());
-                materialPropertyBlockCache.Add(props);
+                colors[i] = Random.ColorHSV();
             }
+            SetSpecificLineMaterialColors(colors);
         }
 
         public void SetSpecificLineMaterialColors(Color[] colors)
@@ -69,6 +114,14 @@ namespace Netherlands3D.Twin
                 props.SetColor("_Color", color);
                 materialPropertyBlockCache.Add(props);
             }
+
+            hasColors = true;
+        }
+
+        public void ClearColors()
+        {
+            hasColors = false;
+            materialPropertyBlockCache.Clear();
         }
 
         public bool ValidateLine(List<Vector3> line)
@@ -79,11 +132,6 @@ namespace Netherlands3D.Twin
                 return false;
             }
             return true;
-        }
-
-        public void SetLineDiameter(float diameter)
-        {
-            lineDiameter = diameter;
         }
 
         public void ClearLines()
@@ -101,29 +149,34 @@ namespace Netherlands3D.Twin
 
             foreach (List<Vector3> line in linesPoints)
             {
-                List<Matrix4x4> lineTransforms = new List<Matrix4x4>();
-                List<Matrix4x4> jointTransforms = new List<Matrix4x4>();
+                List<Matrix4x4> lineTransforms = new();
+                List<Matrix4x4> jointTransforms = new();
                 for (int i = 0; i < line.Count - 1; i++)
                 {
                     var currentPoint = line[i];
                     var nextPoint = line[i + 1];
+                    
                     var direction = nextPoint - currentPoint;
                     float distance = direction.magnitude;
 
+                    // Flatten the Y axis if needed
+                    currentPoint.y = (FlattenY ? 0 : currentPoint.y) + offsetY;
+                    nextPoint.y = (FlattenY ? 0 : nextPoint.y) + offsetY;
+  
                     direction.Normalize();
 
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
 
                     // Calculate the scale based on the distance
-                    var scale = new Vector3(lineDiameter, lineDiameter, distance);
+                    var scale = new Vector3(LineDiameter, LineDiameter, distance);
 
                     // Create a transform matrix for each line point
                     Matrix4x4 transformMatrix = Matrix4x4.TRS(currentPoint, rotation, scale);
                     lineTransforms.Add(transformMatrix);
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
-                    var jointScale = new Vector3(lineDiameter, lineDiameter, lineDiameter);
+                    var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
                     jointTransforms.Add(jointTransformMatrix);
 
@@ -140,27 +193,6 @@ namespace Netherlands3D.Twin
             }
 
             cacheReady = true;
-        }
-
-        private void Update()
-        {
-            if (cacheReady)
-                DrawLines();
-        }
-
-        private void DrawLines()
-        {
-            //Seperate line draws so we can use different colors for each line
-            for (int i = 0; i < lineTransformMatrixCache.Count; i++)
-            {
-                var lineTransforms = lineTransformMatrixCache[i];
-                var lineJointTransforms = jointsTransformMatrixCache[i];
-                MaterialPropertyBlock props = materialPropertyBlockCache[i];
-                Graphics.DrawMeshInstanced(cylinderMesh, 0, lineMaterial, lineTransforms, props);
-
-                if(!DrawSphereJoints)  return;
-                    Graphics.DrawMeshInstanced(jointMesh, 0, lineMaterial, lineJointTransforms, props);
-            }
         }
     }
 }
