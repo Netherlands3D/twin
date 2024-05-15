@@ -112,8 +112,8 @@ namespace Netherlands3D.Twin
 
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
-            if(colors.Length != lines.Count-1){
-                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count-1}");
+            if(colors.Length != lines.Count){
+                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count}");
                 return;
             }
 
