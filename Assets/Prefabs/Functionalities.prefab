@@ -101,8 +101,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2063551827834062454}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Render3DLines, Assembly-CSharp
-        m_MethodName: SetLine
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.LineRenderer3D, Assembly-CSharp
+        m_MethodName: AppendLine
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
