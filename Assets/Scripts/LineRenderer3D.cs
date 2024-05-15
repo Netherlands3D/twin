@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin
         /// Return the index of the closest line to a given point.
         /// Handy for selecting a line based on a click position.
         /// </summary>
-        public int ClosestLineToPoint(Vector3 point)
+        public int GetClosestLineIndex(Vector3 point)
         {
             int closestLineIndex = -1;
             float closestDistance = float.MaxValue;
@@ -116,6 +116,21 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
+            return closestLineIndex;
+        }
+
+        /// <summary>
+        /// Set specific line color for the line closest to a given point.
+        /// </summary>
+        public int SetLineColorClosestToPoint(Vector3 point, Color color)
+        {
+            int closestLineIndex = GetClosestLineIndex(point);
+            if(closestLineIndex == -1)
+            {
+                Debug.LogWarning("No line found");
+                return -1;
+            }
+            SetSpecificLineColorByIndex(closestLineIndex, color);
             return closestLineIndex;
         }
 
