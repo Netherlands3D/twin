@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin
         {
             var reader = new StreamReader(filePath);
             print("start geoJSON parse");
-            // yield return null;
+
             var jsonReader = new JsonTextReader(reader);
 
             JsonSerializer serializer = new JsonSerializer();
@@ -49,57 +49,78 @@ namespace Netherlands3D.Twin
             reader = new StreamReader(filePath);
             jsonReader = new JsonTextReader(reader);
 
-            int tokenCounter = 0;
+            // int tokenCounter = 0;
 
             while (jsonReader.Read())
             {
-                tokenCounter++;
-                if ((tokenCounter % maxParsesPerFrame) == 0) yield return null;
+                // tokenCounter++;
+                // if ((tokenCounter % maxParsesPerFrame) == 0) yield return null;
 
-                if (jsonReader.Value != null)
-                {
-                    Debug.Log(tokenCounter + " Token: " + jsonReader.TokenType + " Value: " + jsonReader.Value);
-                }
-                else
-                {
-                    Debug.Log(tokenCounter + " Cannot read Token: " + jsonReader.TokenType);
-                }
+                // if (jsonReader.Value != null)
+                // {
+                //     Debug.Log(tokenCounter + " Token: " + jsonReader.TokenType + " Value: " + jsonReader.Value);
+                // }
+                // else
+                // {
+                //     Debug.Log(tokenCounter + " Cannot read Token: " + jsonReader.TokenType);
+                // }
 
                 //read features depending on type
                 if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
                 {
                     jsonReader.Read(); //start array
-                    tokenCounter++;
-                    jsonReader.Read(); // start feature object
-                    tokenCounter++;
+                    // tokenCounter++;
+
                     print("features token found");
-                    var feature = serializer.Deserialize<Feature>(jsonReader);
-                    print(feature.Id + feature.Properties.Count);
+
+                    yield return ReadFeaturesArray(jsonReader, serializer);
                 }
-
-                // JObject test = JObject.Parse(reader);
-                // var a = new JTokenReader();
-
-                // a.ReadJson(reader, typeof(GeoJSONObject), null, serializer);
             }
 
             jsonReader.Close();
         }
 
+        private static IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
+        {
+            var features = new List<Feature>();
+            var startTime = Time.realtimeSinceStartup;
+            
+            while (jsonReader.Read())
+            {
+                if (jsonReader.TokenType == JsonToken.EndArray)
+                {
+                    // end of feature array, stop parsing here
+                    break;
+                }
+
+                var feature = serializer.Deserialize<Feature>(jsonReader);
+                features.Add(feature);
+                
+                var parseDuration = Time.realtimeSinceStartup - startTime;
+                if (parseDuration > 0.01f)
+                {
+                    // print(parseDuration + " time exceeded. waiting a frame " + features.Count + " features parsed");
+                    yield return null;
+                    startTime = Time.realtimeSinceStartup;
+                }
+            }
+        }
+
         private void FindTypeAndCRS(JsonTextReader reader, JsonSerializer serializer)
         {
+            //reader must be at 0 for this to work properly
             while (reader.TokenType != JsonToken.PropertyName)
             {
-                reader.Read(); // read until property name is found
+                reader.Read(); // read until property name is found (highest depth in json hierarchy)
             }
 
             bool typeFound = false;
             bool crsFound = false;
-            do
+            do //process the found object, and continue reading after processing is done
             {
                 if (!IsAtTypeToken(reader) && !IsAtCRSToken(reader))
                 {
-                    reader.Skip();
+                    reader.Skip(); //if the found token is is not "type" or "crs", skip this object
                 }
 
                 //read type
@@ -108,13 +129,15 @@ namespace Netherlands3D.Twin
                     ReadType(reader, serializer);
                     typeFound = true;
                 }
+
                 //read crs
                 if (IsAtCRSToken(reader))
                 {
                     ReadCRS(reader, serializer);
                     crsFound = true;
                 }
-                if(typeFound && crsFound)
+
+                if (typeFound && crsFound)
                     return;
             } while (reader.Read());
         }
@@ -124,7 +147,7 @@ namespace Netherlands3D.Twin
             //Default if no CRS object is specified
             CRS = DefaultCRS.Instance;
             reader.Read(); // go to start of CRS object
-            
+
             //we need to stay within our CRS object, because there can also be "type" and "name" tokens outside of the object, and entire CRS objects in features.
             //we must not accidentally parse these objects as our main CRS object, but we do not know the type we should deserialize as. We will just cast to a string and parse the object again since this is not a big string.
             var CRSObject = serializer.Deserialize(reader);
