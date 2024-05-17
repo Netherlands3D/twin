@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Configuration
 
                 yield break;
             };
-            GeoReference.SetCameraPosition(newOrigin);
+           CoordinateSystems.SetOrigin(newOrigin);
             
         }
     }

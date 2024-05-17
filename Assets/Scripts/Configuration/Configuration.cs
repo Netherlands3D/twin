@@ -237,7 +237,7 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[2].Trim(), out int z);
 
             Origin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-            GeoReference.SetCameraPosition(Origin);
+            CoordinateSystems.SetOrigin(Origin);
             Debug.Log($"Set origin '{Origin}' from URL");
         }
 
