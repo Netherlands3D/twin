@@ -10,14 +10,14 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class Origin : MonoBehaviour, IHasCoordinate
     {
         public Coordinate Coordinate { get; set; }
-        public Camera mainCamera;
+        public Transform mainShifter;
         public CoordinateSystem referenceCoordinateSystem;
 
         /// <summary>
         /// The maximum of 30.000 is to prevent integer overflows when squaring the distance, with
-        /// a safety margin for when the camera moves really fast.
+        /// a safety margin for when the camera/shifter moves really fast.
         /// </summary>
-        [Tooltip("The distance from the mainCamera before shifting the Origin")]
+        [Tooltip("The distance from the mainCamera/mainShifter before shifting the Origin")]
         [Range(1000, 30000)]
         [SerializeField] private int distanceBeforeShifting = 10000;
         
@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         
         private void Start()
         {
-            mainCamera = mainCamera == null ? Camera.main : mainCamera;
+            mainShifter = mainShifter == null ? Camera.main.transform : mainShifter;
 
             // Cache the square of the distance
             sqrDistanceBeforeShifting = distanceBeforeShifting * distanceBeforeShifting;
@@ -57,8 +57,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 yield return new WaitForEndOfFrame();
 
-                var mainCameraPosition = mainCamera.transform.position;
-                var distanceToCamera = mainCameraPosition - transform.position;
+                var mainShifterPosition = mainShifter.position;
+                var distanceToCamera = mainShifterPosition - transform.position;
 
                 // sqrMagnitude is used because it outperforms magnitude quite a bit: https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
                 if (distanceToCamera.sqrMagnitude < sqrDistanceBeforeShifting)
@@ -67,7 +67,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 }
 
                 Profiler.BeginSample("PerformOriginShift");
-                var newPosition = new Vector3(mainCameraPosition.x, transform.position.y, mainCameraPosition.z);
+                var newPosition = new Vector3(mainShifterPosition.x, transform.position.y, mainShifterPosition.z);
 
                 // Move this Origin to the camera's position, but keep the same height as it is now. 
                 MoveOriginTo(

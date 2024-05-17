@@ -55,14 +55,14 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod1.2/buildings-{x}_{y}.1.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.04.20/lod1.2/buildings-{x}_{y}.1.2.bin
     pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.02.28/lod2.2/buildings-{x}_{y}.2.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.04.20/lod2.2/buildings-{x}_{y}.2.2.bin
     pathQuery: 
     maximumDistance: 3000
     maximumDistanceSquared: 0
@@ -155,6 +155,12 @@ MonoBehaviour:
   origin: {fileID: 0}
   worldTransformShifter: {fileID: -1431062917293908258}
   referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-1431062917293908258
 MonoBehaviour:
   m_ObjectHideFlags: 0
