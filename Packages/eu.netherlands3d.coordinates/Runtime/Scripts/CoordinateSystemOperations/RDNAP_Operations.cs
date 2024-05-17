@@ -9,6 +9,10 @@ namespace Netherlands3D.Coordinates
 /// </summary>
     class RDNAP_Operations: CoordinateSystemOperation
     {
+        public override string Code()
+        {
+            return "28992";
+        }
         public override CoordinateSystemGroup GetCoordinateSystemGroup()
         {
             return CoordinateSystemGroup.RD;

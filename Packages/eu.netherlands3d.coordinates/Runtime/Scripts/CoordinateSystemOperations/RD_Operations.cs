@@ -9,6 +9,10 @@ namespace Netherlands3D.Coordinates
     /// </summary>
     class RD_Operations : CoordinateSystemOperation
     {
+        public override string Code()
+        {
+            return "28992";
+        }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];

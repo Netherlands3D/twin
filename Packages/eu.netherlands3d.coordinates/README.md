@@ -43,6 +43,14 @@ returns true if:
 
 $rdCoordinate = originalCoordinate.Convert(CoordinateSystem.RDNAP);
 
+### find a CoordinateSystem by name
+
+$bool CanHandleTheCoordainteSystem = CoordinateSytems.FindCoordinateSystem("coordinatesystemName", out NewCoordinateSystem)
+
+each coordinateSystem has a unique name (in most case the epsg-code). the first found coordinateSystem who's name ins contained in the searchterm will be returned.
+If a coordinateSystem is found, the function returns "True"
+If a coordinateSystem is not found, the function return "False" and the coordainteSystem is set to CoordinateSystem.Undefined
+
 ## Connecting Coordinates to Unity
 
 ### assigning a CoordinateSystem to Unity
@@ -52,6 +60,7 @@ $CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
 ### assigning a location to the Unity Origin
 
 $CoordinateSystems.SetOrigin(Coordinate that has to be at the Unity-Origin)
+
 this coordinate does not have to be in the coordinateSystem that is assigned to Unity.
 
 ### Creating a coordinate from an Unity Vector3

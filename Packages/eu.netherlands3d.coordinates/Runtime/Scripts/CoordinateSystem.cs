@@ -40,6 +40,7 @@ namespace Netherlands3D.Coordinates
     [Serializable]
    public enum CoordinateSystem
     {
+        Undefined = -2,
         Unity = -1, 
         WGS84_PseudoMercator = 3857,
         ETRS89_LatLon = 4258,
@@ -77,6 +78,20 @@ namespace Netherlands3D.Coordinates
         
         public static Quaternion connectedCRSToUnityUp;
         public static Vector3WGS wgsAtUp;
+
+        public static bool FindCoordinateSystem(string name, out CoordinateSystem result)
+        {
+            foreach (var kvp in operators)
+            {
+                if (name.Contains(kvp.Value.Code()))
+                {
+                    result = kvp.Key;
+                    return true;
+                }
+            }
+            result = CoordinateSystem.Undefined;
+            return false;
+        }
 
         public static CoordinateSystem connectedCoordinateSystem
         {

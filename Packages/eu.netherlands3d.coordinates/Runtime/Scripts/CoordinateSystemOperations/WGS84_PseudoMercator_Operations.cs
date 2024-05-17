@@ -7,6 +7,11 @@ namespace Netherlands3D.Coordinates
 {
     class WGS84_PseudoMercator_Operations : CoordinateSystemOperation
     {
+
+        public override string Code()
+        {
+            return "3857";
+        }
         double semiMajorAxis = 6378137.000;
         
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)

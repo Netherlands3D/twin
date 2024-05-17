@@ -9,6 +9,10 @@ namespace Netherlands3D.Coordinates
     /// </summary>
     class WGS84_LatLon_Operations : CoordinateSystemOperation
     {
+        public override string Code()
+        {
+            return "4326";
+        }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             double[] newPoints = new double[3] { coordinate.Points[0], coordinate.Points[1], 0 };

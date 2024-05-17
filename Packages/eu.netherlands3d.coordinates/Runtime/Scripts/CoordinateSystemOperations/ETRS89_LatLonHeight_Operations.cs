@@ -9,6 +9,10 @@ namespace Netherlands3D.Coordinates
     /// </summary>
     class ETRS89_LatLonHeight_Operations : CoordinateSystemOperation
     {
+        public override string Code()
+        {
+            return "4937";
+        }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLonHeight, coordinate.Points);
