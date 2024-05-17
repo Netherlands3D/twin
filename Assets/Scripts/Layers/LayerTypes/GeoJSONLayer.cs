@@ -8,21 +8,19 @@ using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
+using Netherlands3D.Coordinates;
+using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers;
 using SimpleJSON;
 
 namespace Netherlands3D.Twin
 {
-    // public enum GeoJSONType
-    // {
-    //     Geometry, 
-    //     Feature,
-    //     FeatureCollection
-    // }
-
     public class GeoJSONLayer : LayerNL3DBase
     {
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
+        public List<Feature> Features = new();
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -36,6 +34,8 @@ namespace Netherlands3D.Twin
 
         private IEnumerator ParseGeoJSON(string filePath, int maxParsesPerFrame = Int32.MaxValue)
         {
+            var startFrame = Time.frameCount;
+            
             var reader = new StreamReader(filePath);
             print("start geoJSON parse");
 
@@ -49,22 +49,8 @@ namespace Netherlands3D.Twin
             reader = new StreamReader(filePath);
             jsonReader = new JsonTextReader(reader);
 
-            // int tokenCounter = 0;
-
             while (jsonReader.Read())
             {
-                // tokenCounter++;
-                // if ((tokenCounter % maxParsesPerFrame) == 0) yield return null;
-
-                // if (jsonReader.Value != null)
-                // {
-                //     Debug.Log(tokenCounter + " Token: " + jsonReader.TokenType + " Value: " + jsonReader.Value);
-                // }
-                // else
-                // {
-                //     Debug.Log(tokenCounter + " Cannot read Token: " + jsonReader.TokenType);
-                // }
-
                 //read features depending on type
                 if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
                 {
@@ -78,13 +64,17 @@ namespace Netherlands3D.Twin
             }
 
             jsonReader.Close();
+
+            var frameCount = Time.frameCount - startFrame;
+            
+            print("Features parsed: " + Features.Count + " in " + frameCount + " frames");
         }
 
-        private static IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
+        private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
         {
-            var features = new List<Feature>();
+            Features = new List<Feature>();
             var startTime = Time.realtimeSinceStartup;
-            
+
             while (jsonReader.Read())
             {
                 if (jsonReader.TokenType == JsonToken.EndArray)
@@ -94,8 +84,9 @@ namespace Netherlands3D.Twin
                 }
 
                 var feature = serializer.Deserialize<Feature>(jsonReader);
-                features.Add(feature);
-                
+                Features.Add(feature);
+                VisualizeFeature(feature);
+
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > 0.01f)
                 {
@@ -104,6 +95,78 @@ namespace Netherlands3D.Twin
                     startTime = Time.realtimeSinceStartup;
                 }
             }
+        }
+
+        private void VisualizeFeature(Feature feature)
+        {
+            switch (feature.Geometry.Type)
+            {
+                case GeoJSONObjectType.MultiPolygon:
+                {
+                    VisualizeMultiPolygon(feature.Geometry as MultiPolygon);
+                    break;
+                }
+            }
+        }
+
+        private static void VisualizeMultiPolygon(MultiPolygon multiPolygon)
+        {
+            foreach (var polygon in multiPolygon.Coordinates)
+            {
+                VisualizePolygon(polygon);
+            }
+        }
+
+        public static void VisualizePolygon(Polygon polygon)
+        {
+            var list = new List<Vector2[]>();
+            foreach (var lineString in polygon.Coordinates)
+            {
+                var ring = ConvertToUnityCoordinates(lineString);
+                list.Add(ring);
+            }
+
+            var compoundPolygon = new CompoundPolygon(list);
+            CreatePolygonMesh(compoundPolygon, 10f, null);
+        }
+
+        public static PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
+        {
+            var contours = new List<List<Vector3>> { polygon.Paths };
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
+
+            //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
+            polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
+
+            return polygonVisualisation;
+        }
+        
+        private static Vector2[] ConvertToUnityCoordinates(LineString lineString)
+        {
+            Vector2[] convertedCoordinates = new Vector2[lineString.Coordinates.Count];
+            Vector2 unityCoord2D = new Vector2();
+
+            for (var i = 0; i < lineString.Coordinates.Count; i++)
+            {
+                var point = lineString.Coordinates[i];
+                var lat = point.Latitude;
+                var lon = point.Longitude;
+                var alt = point.Altitude;
+
+                Coordinate coord;
+                if (alt == null)
+                    alt = 0;
+
+                coord = new Coordinate(CoordinateSystem.WGS84, lat, lon, (double)alt); //todo: replace with parsed CRS
+
+                var unityCoord = CoordinateConverter.ConvertTo(coord, CoordinateSystem.Unity).ToVector3();
+                unityCoord2D.x = unityCoord.x;
+                unityCoord2D.y = unityCoord.z;
+                convertedCoordinates[i] = new Vector2(unityCoord.x, unityCoord.z);
+            }
+
+            return convertedCoordinates;
         }
 
         private void FindTypeAndCRS(JsonTextReader reader, JsonSerializer serializer)
@@ -168,36 +231,6 @@ namespace Netherlands3D.Twin
 
                 CRS = new NamedCRS(name);
             }
-
-            print(CRS.Type);
-            return;
-
-            while (reader.Read())
-            {
-                print("finding crs " + reader.Value);
-                if (reader.TokenType == JsonToken.PropertyName && IsAtTypeToken(reader))
-                {
-                    reader.Read(); // read the value of the type token.
-                    if (reader.Value.ToString().ToLower() == "name")
-                    {
-                        // CRS = new NamedCRS(reader.Value.ToString());
-                        CRS = serializer.Deserialize<NamedCRS>(reader);
-                        break;
-                    }
-
-                    if (reader.Value.ToString().ToLower() == "link")
-                    {
-                        // CRS = new LinkedCRS(reader.Value.ToString());
-                        CRS = serializer.Deserialize<LinkedCRS>(reader);
-                        break;
-                    }
-
-                    // serializer.Deserialize<UnspecifiedCRS>(reader);
-                    break;
-                }
-            }
-
-            print("parsed CRS: " + CRS);
         }
 
         private void ReadType(JsonTextReader reader, JsonSerializer serializer)
