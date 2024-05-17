@@ -16,6 +16,10 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
+            ///Coordinatesystem has to be set before any function ries to do anytihing with coordinates.
+            CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
+            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, 120000, 480000, 0));
         }
 
         /// <summary>
@@ -26,11 +30,7 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         /// 
 
-        private void Awake()
-        {
-            CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
-            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, 120000, 480000,0));
-        }
+        
         private IEnumerator Start()
         {
             yield return null;
