@@ -10,6 +10,11 @@ namespace Netherlands3D.Coordinates
     {
         GeographicToGeocentricSettings conversionSettings = new GeographicToGeocentricSettings(0d, 6378137d, 298.257222101);
 
+        public override string Code()
+        {
+            return "4936";
+        }
+
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             Coordinate result = GeographicToGeocentric.Forward(coordinate, conversionSettings);
@@ -24,8 +29,8 @@ namespace Netherlands3D.Coordinates
         {
             Coordinate result = GeographicToGeocentric.Reverse(coordinate, conversionSettings);
             Coordinate output = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, result.Points);
-            output.extraLattitudeRotation = result.Points[0];
-            output.extraLongitudeRotation = result.Points[1];
+            output.extraLattitudeRotation = coordinate.extraLattitudeRotation;
+            output.extraLongitudeRotation = coordinate.extraLongitudeRotation;
 
             return output;
         }
