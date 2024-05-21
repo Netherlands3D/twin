@@ -10,8 +10,8 @@ namespace Netherlands3D.Twin
         private Read3DTileset tilesetReader;
         private Matrix4x4 cameraMatrixLastFrame;
 
-        [SerializeField] private int IdleMaximumScreenSpaceError = 5;
-        [SerializeField] private int MovingMaximumScreenSpaceError = 40;
+        [SerializeField] private int idleMaximumScreenSpaceError = 5;
+        [SerializeField] private int movingMaximumScreenSpaceError = 40;
         [SerializeField] private int detailIncrementStepPerFrame = 5;
 
         void Awake()
@@ -26,12 +26,12 @@ namespace Netherlands3D.Twin
 
             if (cameraIsIdle)
             {
-                if(tilesetReader.maximumScreenSpaceError > IdleMaximumScreenSpaceError)
+                if(tilesetReader.maximumScreenSpaceError > idleMaximumScreenSpaceError)
                 {
                     tilesetReader.maximumScreenSpaceError -= detailIncrementStepPerFrame;
                 }
             }
-            else if(tilesetReader.maximumScreenSpaceError < MovingMaximumScreenSpaceError)
+            else if(tilesetReader.maximumScreenSpaceError < movingMaximumScreenSpaceError)
             {
                 tilesetReader.maximumScreenSpaceError += detailIncrementStepPerFrame;
             }
