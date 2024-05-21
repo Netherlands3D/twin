@@ -29,6 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 462e8813cb03c5b40bc80604c74ac17e, type: 2}
   - {fileID: 11400000, guid: 3da8bf8309a3baa4da8b4dba6d2283d9, type: 2}
   - {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
+  - {fileID: 11400000, guid: db8c80d7396a1c04fa85faf2b38afc2f, type: 2}
   OnAllowUserSettingsChanged:
     m_PersistentCalls:
       m_Calls: []
