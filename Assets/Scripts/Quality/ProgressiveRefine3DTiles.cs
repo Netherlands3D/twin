@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin
             }
             else if(tilesetReader.maximumScreenSpaceError < movingMaximumScreenSpaceError)
             {
-                tilesetReader.maximumScreenSpaceError += detailIncrementStepPerFrame;
+                tilesetReader.maximumScreenSpaceError = movingMaximumScreenSpaceError;
             }
 
             cameraMatrixLastFrame = Camera.main.cameraToWorldMatrix;
