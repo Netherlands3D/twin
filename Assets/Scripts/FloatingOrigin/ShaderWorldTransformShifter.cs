@@ -10,8 +10,6 @@ namespace Netherlands3D.Twin
     public class ShaderWorldTransformShifter : WorldTransformShifter
     {
         [SerializeField] [Tooltip("Global shader variable used in shaders/shadergraphs")] private string shaderKeyWord = "_WorldOriginOffset";
-        [SerializeField] private float remainderOf = 2000;
-
         [SerializeField]  private Vector2 shaderOffset = Vector2.zero;
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin){}
@@ -21,8 +19,8 @@ namespace Netherlands3D.Twin
             //Simply use the new RD origin as our offset
             var rdTo = CoordinateConverter.ConvertTo(toOrigin, CoordinateSystem.RD);
             shaderOffset = new Vector2(
-                (float)rdTo.Points[0] % remainderOf,
-                (float)rdTo.Points[1] % remainderOf
+                (float)rdTo.Points[0],
+                (float)rdTo.Points[1]
             );
 
             UpdateShaders();
