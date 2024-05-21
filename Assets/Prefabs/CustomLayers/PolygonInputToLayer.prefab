@@ -569,6 +569,8 @@ GameObject:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
   - component: {fileID: 2971444630074657358}
+  - component: {fileID: 7163774462162175177}
+  - component: {fileID: 2078740147637220152}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -801,6 +803,55 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7163774462162175177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9ca290ddabb0948a82095a25e21e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonInput: {fileID: 2971444630074657358}
+  polygonShifted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2971444630074657358}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.PolygonInput, eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: SetCurrentInputPointsWithoutNotify
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2078740147637220152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6169829145916154088
@@ -1168,6 +1219,8 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 6819746166564945398}
+  - component: {fileID: 9185555297181203813}
+  - component: {fileID: 2460815277619546369}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1400,6 +1453,55 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &9185555297181203813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9ca290ddabb0948a82095a25e21e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonInput: {fileID: 6819746166564945398}
+  polygonShifted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6819746166564945398}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.PolygonInput, eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: SetCurrentInputPointsWithoutNotify
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2460815277619546369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &7298217538574612641
