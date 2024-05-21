@@ -220,7 +220,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.4.3",
+      "version": "1.5.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin
         private IEnumerator ParseGeoJSON(string filePath, int maxParsesPerFrame = Int32.MaxValue)
         {
             var startFrame = Time.frameCount;
-            
+
             var reader = new StreamReader(filePath);
             print("start geoJSON parse");
 
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin
             jsonReader.Close();
 
             var frameCount = Time.frameCount - startFrame;
-            
+
             print("Features parsed: " + Features.Count + " in " + frameCount + " frames");
         }
 
@@ -103,75 +103,25 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    VisualizeMultiPolygon(feature.Geometry as MultiPolygon);
+                    GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon);
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    VisualizePolygon(feature.Geometry as Polygon);
+                    GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon);
+                    break;
+                }
+                case GeoJSONObjectType.MultiLineString:
+                {
+                    GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(feature.Geometry as MultiLineString);
+                    break;
+                }
+                case GeoJSONObjectType.LineString:
+                {
+                    GeoJSONGeometryVisualizerUtility.VisualizeLineString(feature.Geometry as LineString);
                     break;
                 }
             }
-        }
-
-        private static void VisualizeMultiPolygon(MultiPolygon multiPolygon)
-        {
-            foreach (var polygon in multiPolygon.Coordinates)
-            {
-                VisualizePolygon(polygon);
-            }
-        }
-
-        public static void VisualizePolygon(Polygon polygon)
-        {
-            var list = new List<Vector2[]>();
-            foreach (var lineString in polygon.Coordinates)
-            {
-                var ring = ConvertToUnityCoordinates(lineString);
-                list.Add(ring);
-            }
-
-            var compoundPolygon = new CompoundPolygon(list);
-            CreatePolygonMesh(compoundPolygon, 10f, null);
-        }
-
-        public static PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
-        {
-            var contours = new List<List<Vector3>> { polygon.Paths };
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
-
-            //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
-            polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
-            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
-
-            return polygonVisualisation;
-        }
-        
-        private static Vector2[] ConvertToUnityCoordinates(LineString lineString)
-        {
-            Vector2[] convertedCoordinates = new Vector2[lineString.Coordinates.Count];
-            Vector2 unityCoord2D = new Vector2();
-
-            for (var i = 0; i < lineString.Coordinates.Count; i++)
-            {
-                var point = lineString.Coordinates[i];
-                var lat = point.Latitude;
-                var lon = point.Longitude;
-                var alt = point.Altitude;
-
-                Coordinate coord;
-                if (alt == null)
-                    alt = 0;
-
-                coord = new Coordinate(CoordinateSystem.WGS84, lat, lon, (double)alt); //todo: replace with parsed CRS
-
-                var unityCoord = CoordinateConverter.ConvertTo(coord, CoordinateSystem.Unity).ToVector3();
-                unityCoord2D.x = unityCoord.x;
-                unityCoord2D.y = unityCoord.z;
-                convertedCoordinates[i] = new Vector2(unityCoord.x, unityCoord.z);
-            }
-
-            return convertedCoordinates;
         }
 
         private void FindTypeAndCRS(JsonTextReader reader, JsonSerializer serializer)
