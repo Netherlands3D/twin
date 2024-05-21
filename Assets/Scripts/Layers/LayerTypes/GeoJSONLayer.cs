@@ -106,6 +106,11 @@ namespace Netherlands3D.Twin
                     VisualizeMultiPolygon(feature.Geometry as MultiPolygon);
                     break;
                 }
+                case GeoJSONObjectType.Polygon:
+                {
+                    VisualizePolygon(feature.Geometry as Polygon);
+                    break;
+                }
             }
         }
 
