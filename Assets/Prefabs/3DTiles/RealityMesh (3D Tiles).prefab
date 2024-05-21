@@ -319,6 +319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe096534462cf714bb38d69e1ca829e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IdleMaximumScreenSpaceError: 5
-  MovingMaximumScreenSpaceError: 40
-  detailIncrementStepPerFrame: 5
+  idleMaximumScreenSpaceError: 5
+  movingMaximumScreenSpaceError: 40
+  detailIncrementStepPerFrame: 1

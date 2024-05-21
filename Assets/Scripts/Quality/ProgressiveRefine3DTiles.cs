@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class ProgressiveRefine : MonoBehaviour
+    public class ProgressiveRefine3DTiles : MonoBehaviour
     {
         private Read3DTileset tilesetReader;
         private Matrix4x4 cameraMatrixLastFrame;
