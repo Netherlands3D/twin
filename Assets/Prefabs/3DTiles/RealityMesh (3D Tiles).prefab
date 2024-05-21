@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
+  - component: {fileID: -5688274655914667246}
+  - component: {fileID: -3892557586120215936}
   m_Layer: 6
   m_Name: RealityMesh (3D Tiles)
   m_TagString: Untagged
@@ -113,8 +115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
-  publicKey: 
-  personalKey: 
+  publicKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
+  personalKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
   root:
     isLoading: 0
     level: 0
@@ -271,3 +273,36 @@ MonoBehaviour:
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-5688274655914667246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-3892557586120215936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
