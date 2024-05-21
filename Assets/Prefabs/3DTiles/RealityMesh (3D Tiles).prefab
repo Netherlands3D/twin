@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
-  worldTransformShifter: {fileID: 0}
+  worldTransformShifter: {fileID: -3892557586120215936}
   referenceCoordinateSystem: 4326
   onPreShift:
     m_PersistentCalls:
