@@ -8,6 +8,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class ThreeDTilesWorldTransformShifter : WorldTransformShifter
     {
         private Dictionary<Transform, Coordinate> tilesToShift = new();
+        private Read3DTileset tilesetReader;
+
+        private void Awake() {
+            tilesetReader = GetComponent<Read3DTileset>();
+        }
 
         /// <summary>
         /// Because the 3D Tile handler dynamically creates and destroys tiles, we need to collect a list of transforms
@@ -52,6 +57,9 @@ namespace Netherlands3D.Twin.FloatingOrigin
 #endif
                 tile.Key.position = newPosition;
             }
+
+            //Refresh 3D Tiles internal Bounds calculations
+            tilesetReader.RecalculateBounds();
         }
     }
 }
