@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Interface
         
         public IWindow window;
 
+        public bool toggleOpenOnStart = false;
+
         private void CheckData(){
             if(!windowData) return;
 
