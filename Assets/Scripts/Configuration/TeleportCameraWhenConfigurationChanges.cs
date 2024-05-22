@@ -44,18 +44,16 @@ namespace Netherlands3D.Twin.Configuration
             movingCoRoutine = null;
 
             // TODO: IsValid is broken an should be restored first
-            // if (EPSG7415.IsValid(newOrigin.ToVector3RD()) == false)
-            // {
-            //     Debug.LogWarning(
-            //         $"{newOrigin} is not a valid RD coordinate, camera is not moving to that position"
-            //     );
-            //
-            //     yield break;
-            // };
+            if (newOrigin.IsValid() == false)
+            {
+                Debug.LogWarning(
+                    $"{newOrigin} is not a valid coordinate, camera is not moving to that position"
+                );
 
-            mainCamera.transform.position = CoordinateConverter
-                .ConvertTo(newOrigin, CoordinateSystem.Unity)
-                .ToVector3();
+                yield break;
+            };
+           CoordinateSystems.SetOrigin(newOrigin);
+            
         }
     }
 }

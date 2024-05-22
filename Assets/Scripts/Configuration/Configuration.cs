@@ -236,7 +236,8 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[1].Trim(), out int y);
             int.TryParse(originParts[2].Trim(), out int z);
 
-            Origin = new Coordinate(CoordinateSystem.RD, x, y, z);
+            Origin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
+            CoordinateSystems.SetOrigin(Origin);
             Debug.Log($"Set origin '{Origin}' from URL");
         }
 

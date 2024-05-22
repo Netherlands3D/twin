@@ -2,6 +2,7 @@ using System.Collections;
 using System.Globalization;
 using System.Threading;
 using UnityEngine;
+using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -15,6 +16,10 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
+            ///Coordinatesystem has to be set before any function ries to do anytihing with coordinates.
+            CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
+            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, 120000, 480000, 0));
         }
 
         /// <summary>
@@ -23,6 +28,9 @@ namespace Netherlands3D.Twin.Configuration
         /// ensure everything has completed loading. Without this, you will get all kinds of weird Null exceptions
         /// and the progressbar won't show.
         /// </summary>
+        /// 
+
+        
         private IEnumerator Start()
         {
             yield return null;
