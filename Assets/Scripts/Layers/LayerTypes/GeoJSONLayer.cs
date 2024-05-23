@@ -85,8 +85,13 @@ namespace Netherlands3D.Twin
             jsonReader.Close();
 
             var frameCount = Time.frameCount - startFrame;
-
             print(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
+
+            if (frameCount == 0)
+                yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
+
+            if (UI)
+                UI.Color = visualizationMaterial.color;
         }
 
         private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)

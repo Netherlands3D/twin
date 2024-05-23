@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
             var fullPath = Path.Combine(Application.persistentDataPath, file);
 
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
-            randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.value, 1);
+            randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
             CreateGeoJSONLayer(fullPath, randomColorVisualisationMaterial, displayErrorMessageEvent);
         }
 

@@ -71,7 +71,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public InteractionState InteractionState { get; set; }
 
         public Sprite VisibilitySprite => visibilitySprites[(int)State];
-        public Color Color => colorButton.targetGraphic.color;
+
+        public Color Color
+        {
+            get => colorButton.targetGraphic.color;
+            set => colorButton.targetGraphic.color = value;
+        }
+
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
         public string LayerName => Layer.name;
@@ -234,12 +240,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RecalculateParentAndChildren()
         {
             ParentUI = transform.parent.GetComponentInParent<LayerUI>(true); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
-          
+
             var list = new List<LayerUI>();
             foreach (Transform t in childrenPanel) //loop over the transforms explicitly because using GetComponentsInChildren is recursive.
             {
-                 var ui = t.GetComponent<LayerUI>();
-                 list.Add(ui);
+                var ui = t.GetComponent<LayerUI>();
+                list.Add(ui);
             }
 
             ChildrenUI = list.ToArray();
