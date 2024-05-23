@@ -9,6 +9,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using SimpleJSON;
 using UnityEngine.Events;
@@ -128,16 +129,17 @@ namespace Netherlands3D.Twin
 
         private void VisualizeFeature(Feature feature)
         {
+            var originalCoordinateSystem = GetCoordinateSystem();
             switch (feature.Geometry.Type)
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, VisualizationMaterial));
+                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, originalCoordinateSystem, VisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, VisualizationMaterial));
+                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, originalCoordinateSystem, VisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
@@ -151,6 +153,25 @@ namespace Netherlands3D.Twin
                     break;
                 }
             }
+        }
+
+        private CoordinateSystem GetCoordinateSystem()
+        {
+            var coordinateSystem = CoordinateSystem.WGS84;
+            
+            if (CRS is NamedCRS)
+            {
+                if (CoordinateSystems.FindCoordinateSystem((CRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
+                {
+                    coordinateSystem = globalCoordinateSystem;
+                }
+            }
+            else if (CRS is LinkedCRS)
+            {
+                Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
+            }
+
+            return coordinateSystem;
         }
 
         private void FindTypeAndCRS(JsonTextReader reader, JsonSerializer serializer)
