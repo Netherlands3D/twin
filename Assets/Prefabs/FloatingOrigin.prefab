@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainShifter: {fileID: 0}
-  referenceCoordinateSystem: 7415
+  referenceCoordinateSystem: 2
   distanceBeforeShifting: 5000
   onPreShift:
     m_PersistentCalls:
@@ -82,5 +82,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shaderKeyWord: _WorldOriginOffset
-  origin: {fileID: 0}
-  remainderOf: 10000
+  shaderOffset: {x: 0, y: 0}
