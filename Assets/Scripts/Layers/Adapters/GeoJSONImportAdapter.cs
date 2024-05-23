@@ -13,7 +13,10 @@ namespace Netherlands3D.Twin
         public void ParseGeoJSON(string file)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, file);
-            CreateGeoJSONLayer(fullPath, visualizationMaterial, displayErrorMessageEvent);
+
+            var randomColorVisualisationMaterial = new Material(visualizationMaterial);
+            randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.value, 1);
+            CreateGeoJSONLayer(fullPath, randomColorVisualisationMaterial, displayErrorMessageEvent);
         }
 
         public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial, UnityEvent<string> onErrorCallback = null)
