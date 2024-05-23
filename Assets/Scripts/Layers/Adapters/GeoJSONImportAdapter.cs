@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -7,16 +8,22 @@ namespace Netherlands3D.Twin
     public class GeoJSONImportAdapter : ScriptableObject
     {
         [SerializeField] private Material visualizationMaterial;
+        [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
+
         public void ParseGeoJSON(string file)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, file);
-            CreateGeoJSONLayer(fullPath, visualizationMaterial);
+            CreateGeoJSONLayer(fullPath, visualizationMaterial, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial)
+        public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial, UnityEvent<string> onErrorCallback = null)
         {
             var go = new GameObject("GeoJSON");
             var layer = go.AddComponent<GeoJSONLayer>();
+
+            if (onErrorCallback != null)
+                layer.OnParseError.AddListener(onErrorCallback.Invoke);
+            
             layer.VisualizationMaterial = visualizationMaterial;
             layer.ParseGeoJSON(filePath);
             return layer;

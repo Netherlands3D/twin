@@ -11,13 +11,14 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.SelectionTools;
 using SimpleJSON;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
     public class GeoJSONLayer : LayerNL3DBase
     {
         public static float maxParseDuration = 0.01f;
-        
+
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
         public List<Feature> Features = new();
@@ -25,12 +26,11 @@ namespace Netherlands3D.Twin
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
 
         private Material visualizationMaterial;
+        public UnityEvent<string> OnParseError = new();
+
         public Material VisualizationMaterial
         {
-            get
-            {
-                return visualizationMaterial;
-            }
+            get { return visualizationMaterial; }
             set
             {
                 visualizationMaterial = value;
@@ -63,6 +63,8 @@ namespace Netherlands3D.Twin
             var jsonReader = new JsonTextReader(reader);
 
             JsonSerializer serializer = new JsonSerializer();
+            serializer.Error += OnSerializerError;
+
             FindTypeAndCRS(jsonReader, serializer);
 
             //reset position of reader
@@ -84,7 +86,12 @@ namespace Netherlands3D.Twin
 
             var frameCount = Time.frameCount - startFrame;
 
-            print(Features.Count+ " features parsed and visualized: " + " in " + frameCount + " frames");
+            print(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
+        }
+
+        private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+        {
+            OnParseError.Invoke("Er was een probleem met het inladen van dit GeoJSON bestand:\n\n" + args.ErrorContext.Error.Message);
         }
 
         private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
