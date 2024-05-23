@@ -46,7 +46,6 @@ namespace Netherlands3D.Twin
             foreach (var visualization in PolygonVisualisations)
             {
                 visualization.gameObject.SetActive(activeInHierarchy);
-                
             }
         }
 
@@ -91,6 +90,7 @@ namespace Netherlands3D.Twin
         private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
         {
             Features = new List<Feature>();
+            PolygonVisualisations = new List<PolygonVisualisation>();
             var startTime = Time.realtimeSinceStartup;
 
             while (jsonReader.Read())
@@ -120,12 +120,12 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    PolygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, VisualizationMaterial);
+                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, VisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    PolygonVisualisations = new List<PolygonVisualisation>() { GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, VisualizationMaterial) };
+                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, VisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
