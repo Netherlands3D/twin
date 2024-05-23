@@ -9,19 +9,19 @@ namespace Netherlands3D.Twin
 {
     public static class GeoJSONGeometryVisualizerUtility
     {
-        public static List<PolygonVisualisation> VisualizeMultiPolygon(MultiPolygon multiPolygon)
+        public static List<PolygonVisualisation> VisualizeMultiPolygon(MultiPolygon multiPolygon, Material visualizationMaterial)
         {
             var visualizations = new List<PolygonVisualisation>(multiPolygon.Coordinates.Count);
             foreach (var polygon in multiPolygon.Coordinates)
             {
-                var visualization = VisualizePolygon(polygon);
+                var visualization = VisualizePolygon(polygon, visualizationMaterial);
                 visualizations.Add(visualization);
             }
 
             return visualizations;
         }
 
-        public static PolygonVisualisation VisualizePolygon(Polygon polygon)
+        public static PolygonVisualisation VisualizePolygon(Polygon polygon, Material visualizationMaterial)
         {
             var ringList = new List<List<Vector3>>();
             foreach (var lineString in polygon.Coordinates)
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin
                 ringList.Add(ring);
             }
 
-            return CreatePolygonMesh(ringList, 10f, null);
+            return CreatePolygonMesh(ringList, 10f, visualizationMaterial);
         }
 
         public static void VisualizeMultiLineString(MultiLineString multiLineString)

@@ -9,22 +9,45 @@ using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
-using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.Layers;
 using SimpleJSON;
 
 namespace Netherlands3D.Twin
 {
     public class GeoJSONLayer : LayerNL3DBase
     {
+        public static float maxParseDuration = 0.01f;
+        
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
         public List<Feature> Features = new();
 
+        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
+
+        private Material visualizationMaterial;
+        public Material VisualizationMaterial
+        {
+            get
+            {
+                return visualizationMaterial;
+            }
+            set
+            {
+                visualizationMaterial = value;
+                foreach (var visualization in PolygonVisualisations)
+                {
+                    visualization.GetComponent<MeshRenderer>().material = visualizationMaterial;
+                }
+            }
+        }
+
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            throw new System.NotImplementedException();
+            foreach (var visualization in PolygonVisualisations)
+            {
+                visualization.gameObject.SetActive(activeInHierarchy);
+                
+            }
         }
 
         public void ParseGeoJSON(string filePath)
@@ -37,7 +60,6 @@ namespace Netherlands3D.Twin
             var startFrame = Time.frameCount;
 
             var reader = new StreamReader(filePath);
-            print("start geoJSON parse");
 
             var jsonReader = new JsonTextReader(reader);
 
@@ -55,10 +77,6 @@ namespace Netherlands3D.Twin
                 if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
                 {
                     jsonReader.Read(); //start array
-                    // tokenCounter++;
-
-                    print("features token found");
-
                     yield return ReadFeaturesArray(jsonReader, serializer);
                 }
             }
@@ -67,7 +85,7 @@ namespace Netherlands3D.Twin
 
             var frameCount = Time.frameCount - startFrame;
 
-            print("Features parsed: " + Features.Count + " in " + frameCount + " frames");
+            print(Features.Count+ " features parsed and visualized: " + " in " + frameCount + " frames");
         }
 
         private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
@@ -88,9 +106,8 @@ namespace Netherlands3D.Twin
                 VisualizeFeature(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
-                if (parseDuration > 0.01f)
+                if (parseDuration > maxParseDuration)
                 {
-                    // print(parseDuration + " time exceeded. waiting a frame " + features.Count + " features parsed");
                     yield return null;
                     startTime = Time.realtimeSinceStartup;
                 }
@@ -103,12 +120,12 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon);
+                    PolygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, VisualizationMaterial);
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon);
+                    PolygonVisualisations = new List<PolygonVisualisation>() { GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, VisualizationMaterial) };
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
