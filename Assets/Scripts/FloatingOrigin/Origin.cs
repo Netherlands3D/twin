@@ -38,15 +38,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             // Cache the square of the distance
             sqrDistanceBeforeShifting = distanceBeforeShifting * distanceBeforeShifting;
 
-            Coordinate = CoordinateConverter.ConvertTo(
-                new Coordinate(
-                    CoordinateSystem.Unity,
-                    transform.position.x,
-                    transform.position.y,
-                    transform.position.z
-                ),
-                referenceCoordinateSystem
-            );
+            Coordinate = new Coordinate(transform.position);
 
             StartCoroutine(AttemptShift());
         }
@@ -58,6 +50,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 yield return new WaitForEndOfFrame();
 
                 var mainShifterPosition = mainShifter.position;
+                //cancel out the elevation (Y-axis), elevation at the origin will not be changed, and we dont want the origin-moving to occur every frame when the camera is high above the origin.
+                mainShifterPosition.y = transform.position.y;
                 var distanceToCamera = mainShifterPosition - transform.position;
 
                 // sqrMagnitude is used because it outperforms magnitude quite a bit: https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
@@ -70,12 +64,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 var newPosition = new Vector3(mainShifterPosition.x, transform.position.y, mainShifterPosition.z);
 
                 // Move this Origin to the camera's position, but keep the same height as it is now. 
-                MoveOriginTo(
-                    CoordinateConverter.ConvertTo(
-                        new Coordinate(CoordinateSystem.Unity, newPosition.x, newPosition.y, newPosition.z),
-                        Coordinate.CoordinateSystem
-                    )
-                );
+                MoveOriginTo(new Coordinate(newPosition));
 
                 Profiler.EndSample();
             }
@@ -83,8 +72,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         public void MoveOriginTo(Coordinate destination)
         {
-            var from = Coordinate;
-            var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
+            var from  = Coordinate;
+            var to = destination;
 #if UNITY_EDITOR
             if (LogShifts) Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
 #endif
@@ -93,9 +82,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             
             Coordinate = to;
             // TODO: Shouldn't this be a listener to the event below?
-            var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
-            EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);
-
+            CoordinateSystems.SetOrigin(Coordinate);
             // Shout to the world that the origin has changed to this coordinate
             onPostShift.Invoke(from, to);
         }
