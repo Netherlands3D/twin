@@ -101,5 +101,13 @@ namespace Netherlands3D.Twin.Projects
                 undoStack.RemoveAt(undoStack.Count - 1);
             }
         }
+
+        /// <summary>
+        /// Receiver for the ProjectData to notify the ProjectDataHandler that the project has been saved to IndexedDB
+        /// </summary>
+        public void ProjectSavedToIndexedDB()
+        {
+            projectData.ProjectSavedToIndexedDB();
+        }
     }
 }

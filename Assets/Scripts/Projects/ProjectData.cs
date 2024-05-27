@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
 
         
-        private ProjectDataHandler projectStateHandler;
+        private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
 
@@ -96,11 +96,11 @@ namespace Netherlands3D.Twin.Projects
             OnDataChanged.Invoke(this);
         }
 
-        public void SaveAsFile(ProjectDataHandler projectStateHandler)
+        public void SaveAsFile(ProjectDataHandler projectDataHandler)
         {
             RefreshUUID();
             
-            this.projectStateHandler = projectStateHandler;
+            this.projectDataHandler = projectDataHandler;
 
             // Set the timestamp when the data was saved
             SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -132,7 +132,7 @@ namespace Netherlands3D.Twin.Projects
 
             // Make sure indexedDB is synced
             #if !UNITY_EDITOR && UNITY_WEBGL
-            SyncFilesToIndexedDB(projectStateHandler.name, "ProjectReadyInIndexedDB");
+            SyncFilesToIndexedDB(projectStateHandler.name, "ProjectSavedToIndexedDB");
             
             #elif UNITY_EDITOR
             //Request using file write dialog of unity editor where to copy the file from lastSavePath path
@@ -163,9 +163,9 @@ namespace Netherlands3D.Twin.Projects
             StreamUtils.Copy(fs, zipOutputStream, buffer);
         }
 
-        public void ProjectReadyInIndexedDB()
+        public void ProjectSavedToIndexedDB()
         {
-            DownloadFromIndexedDB($"{UUID}", projectStateHandler.name, "DoneDownloadZip");
+            DownloadFromIndexedDB($"{UUID}", projectDataHandler.name, "DoneDownloadProject");
         }  
         public void DoneDownloadProject()
         {
