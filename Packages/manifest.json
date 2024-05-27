@@ -2,6 +2,7 @@
   "dependencies": {
     "com.atteneder.draco": "https://github.com/Netherlands3D/Draco3DWebgl2022.git",
     "com.cdm.authentication": "https://github.com/cdmvision/authentication-unity.git#1.1.3",
+    "com.greener-games.sharp-zip-lib": "1.3.303",
     "com.joshclose.csvhelper": "13.0.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.2.0",
@@ -15,7 +16,7 @@
     "eu.netherlands3d.address-search": "1.1.3",
     "eu.netherlands3d.cartesiantiles": "1.1.2",
     "eu.netherlands3d.collada": "0.1.1",
-    "eu.netherlands3d.filebrowser": "2.0.1",
+    "eu.netherlands3d.filebrowser": "2.0.2",
     "eu.netherlands3d.masking": "2.0.1",
     "eu.netherlands3d.meshclipper": "https://github.com/Netherlands3D/MeshClipper.git",
     "eu.netherlands3d.minimap": "1.1.4",
@@ -69,7 +70,10 @@
         "com.cdm",
         "com.virgis.geojson.net",
         "com.atteneder.draco",
-        "com.joshclose.csvhelper"
+        "com.joshclose.csvhelper",
+        "com.greener-games.sharp-zip-lib",
+        "com.greener-games.unity-extensions",
+        "com.svermeulen.asyncawaitutil"
       ]
     }
   ]
