@@ -54,6 +54,13 @@ namespace Netherlands3D.Twin.Projects
             IsDirty = true;
         }
 
+        public void CopyUndoFrom(ProjectData project)
+        {
+            //TODO: Implement undo copy with just the data we want to move between undo/redo states
+            //Now we simply copy everything
+            CopyFrom(project);
+        }
+
         public void LoadFromFile(string filePath)
         {
             // Open the zip file

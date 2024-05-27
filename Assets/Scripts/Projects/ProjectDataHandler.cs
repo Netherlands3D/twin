@@ -68,9 +68,17 @@ namespace Netherlands3D.Twin.Projects
             projectData.SaveAsFile(this);
         }
 
-        public void LoadFromFile()
+        public void LoadFromFile(string filePaths)
         {
-            projectData.LoadFromFile("test");            
+            var files = filePaths.Split(',');
+            foreach (var filePath in files)
+            {
+                if(filePath.EndsWith(".nl3d"))
+                {
+                    projectData.LoadFromFile(filePath);
+                    return;
+                }
+            }  
         }
 
         public void Redo()
@@ -79,7 +87,7 @@ namespace Netherlands3D.Twin.Projects
             if (redoStack.Count > 0)
             {
                 var lastState = redoStack[redoStack.Count - 1];
-                projectData.CopyFrom(lastState);
+                projectData.CopyUndoFrom(lastState);
                 redoStack.RemoveAt(redoStack.Count - 1);
             }       
         }
@@ -89,7 +97,7 @@ namespace Netherlands3D.Twin.Projects
             if (undoStack.Count > 0)
             {
                 var lastState = undoStack[undoStack.Count - 1];
-                projectData.CopyFrom(lastState);
+                projectData.CopyUndoFrom(lastState);
                 undoStack.RemoveAt(undoStack.Count - 1);
             }
         }
