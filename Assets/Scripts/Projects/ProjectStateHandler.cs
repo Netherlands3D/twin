@@ -28,10 +28,10 @@ namespace Netherlands3D.Twin.Projects
                 return;
             }
 
-            projectData.OnDataChanged.AddListener(OnProjectChanged);
+            projectData.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
-        private void OnProjectChanged(Project project)
+        private void OnProjectDataChanged(Project project)
         {
             // Add new undo state
             if (undoStack.Count == undoStackSize)
@@ -52,19 +52,15 @@ namespace Netherlands3D.Twin.Projects
 
             // Save shortcut
             if (Input.GetKeyDown(KeyCode.S) && ctrlModifier)
-            {
                 SaveProject();
-            }
 
             // Undo/redo shortcuts
             if (Input.GetKeyDown(KeyCode.Z) && ctrlModifier)
-            {
                 Undo();
-            }
+
             if (Input.GetKeyDown(KeyCode.Y) && ctrlModifier)
-            {
                 Redo();
-            }
+
         }
 
         public void SaveProject()

@@ -8,6 +8,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -66,7 +67,7 @@ namespace Netherlands3D.Twin.Projects
                     {
                         using StreamReader reader = new(zipInputStream);
                         string json = reader.ReadToEnd();
-                        JsonUtility.FromJsonOverwrite(json, this);
+                        JsonConvert.PopulateObject(json, this);
                     }
                     else
                     {
@@ -99,10 +100,10 @@ namespace Netherlands3D.Twin.Projects
             zipOutputStream.SetLevel(9); // 0 - store only to 9 - means best compression
 
             // Generate the JSON data and add it to the project zip as the first file
-            var jsonProject = JsonUtility.ToJson(this);
+            var jsonProject = JsonConvert.SerializeObject(this);
             var entry = new ZipEntry("project.json");
             zipOutputStream.PutNextEntry(entry);
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject);
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
             zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);         
 
             // For now we can directly download the zip file (in the future we want to append more files to the zip, like meshes and textures etc.)
