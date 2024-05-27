@@ -10,6 +10,25 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private ProjectData project;
 
+        private Matrix4x4 lastSavedCameraTransformMatrix = Matrix4x4.identity;
+
+        private void Update() {
+            var currentCameraMatrix = transform.localToWorldMatrix;        
+            if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
+
+            lastSavedCameraTransformMatrix = currentCameraMatrix;
+            SaveCurrentCameraTransform();
+        }
+
+        private void SaveCurrentCameraTransform()
+        {
+            var cameraCoordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.Unity,transform.position[0], transform.position[1],transform.position[2]), CoordinateSystem.RD);
+            var cameraRotation = transform.eulerAngles;
+
+            project.CameraPosition = new double[] { cameraCoordinate.Points[0], cameraCoordinate.Points[1], cameraCoordinate.Points[2] };
+            project.CameraRotation = new double[] { cameraRotation.x, cameraRotation.y, cameraRotation.z };
+        }
+
         private void OnEnable()
         {
             project.OnDataChanged.AddListener(OnProjectDataChanged);
@@ -27,16 +46,10 @@ namespace Netherlands3D.Twin
 
             transform.position = cameraUnityCoordinate;
 
-            //Euler if 3 values, 4 is quaternion
             if(project.CameraRotation.Length == 3)
             {
                 var cameraRotation = new Vector3((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2]);
                 transform.rotation = Quaternion.Euler(cameraRotation);
-            }
-            else if(project.CameraRotation.Length == 4)
-            {
-                var cameraRotation = new Quaternion((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2], (float)project.CameraRotation[3]);
-                transform.rotation = cameraRotation;
             }
         }
     }
