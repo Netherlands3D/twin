@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
 
 
-        private ProjectStateHandler projectStateHandler;
+        private ProjectDataHandler projectStateHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
 
@@ -84,7 +84,7 @@ namespace Netherlands3D.Twin.Projects
             OnDataChanged.Invoke(this);
         }
 
-        public void SaveAsFile(ProjectStateHandler projectStateHandler)
+        public void SaveAsFile(ProjectDataHandler projectStateHandler)
         {
             RefreshUUID();
             

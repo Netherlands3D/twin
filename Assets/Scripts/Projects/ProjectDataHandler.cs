@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Projects
     /// <summary>
     /// This class manages the state of the project (undo/redo) and handles saving and loading of the project as a file
     /// </summary>
-    public class ProjectStateHandler : MonoBehaviour
+    public class ProjectDataHandler : MonoBehaviour
     {
         [SerializeField] private ProjectData projectData;
 
