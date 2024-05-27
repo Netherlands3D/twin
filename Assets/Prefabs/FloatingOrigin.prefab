@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7034851048902944905}
   - component: {fileID: 6559384971221327733}
   - component: {fileID: 3825768464969730733}
-  - component: {fileID: 5505363285917548851}
   m_Layer: 0
   m_Name: FloatingOrigin
   m_TagString: Untagged
@@ -69,18 +68,3 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LogShifts: 1
---- !u!114 &5505363285917548851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179472504103147788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9052dd8cf9118c5498fb7436f6f94a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shaderKeyWord: _WorldOriginOffset
-  origin: {fileID: 0}
-  remainderOf: 10000
