@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        public UnityEvent<Project> OnDataChanged = new UnityEvent<Project>();
+        public UnityEvent<Project> OnDataChanged = new();
 
         public void CopyFrom(Project project)
         {
