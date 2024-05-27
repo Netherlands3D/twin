@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Projects
         public string SavedTimestamp;
         public string UUID = "";
         public double[] CameraStartPosition; //X, Y, Z,- Assume RD for now
-        public Vector3 CameraStartRotation; //Euler angles
+        public double[] CameraStartRotation; 
 
 
         private ProjectStateHandler projectStateHandler;
@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Projects
             // Open the zip file
             using (FileStream fs = File.OpenRead(filePath))
             {
-                using ZipInputStream zipInputStream = new ZipInputStream(fs);
+                using ZipInputStream zipInputStream = new(fs);
                 ZipEntry entry;
                 while ((entry = zipInputStream.GetNextEntry()) != null)
                 {
@@ -92,15 +92,15 @@ namespace Netherlands3D.Twin.Projects
 
             // Set the timestamp when the data was saved
             SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HH:mm");
+            var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
 
-            // Start the zip output stream with best compression
+            // Start the zip output stream
             lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}{ProjectFileExtension}";
             zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-            zipOutputStream.SetLevel(9); // 0 - store only to 9 - means best compression
+            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
             // Generate the JSON data and add it to the project zip as the first file
-            var jsonProject = JsonConvert.SerializeObject(this);
+            var jsonProject = JsonConvert.SerializeObject(this, Formatting.Indented);
             var entry = new ZipEntry("project.json");
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
@@ -124,8 +124,9 @@ namespace Netherlands3D.Twin.Projects
             
             #elif UNITY_EDITOR
             //Request using file write dialog of unity editor where to copy the file from lastSavePath path
-            Debug.Log("Project saved to: " + lastSavePath);
-            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, DefaultFileName, ProjectFileExtension);
+            var fileName = Path.GetFileNameWithoutExtension(lastSavePath);
+            var fileExtention = Path.GetExtension(lastSavePath).Replace(".", "");
+            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, fileExtention);
             if(fileTargetPath.Length > 0)
             {
                 File.Copy(lastSavePath, fileTargetPath, true);
