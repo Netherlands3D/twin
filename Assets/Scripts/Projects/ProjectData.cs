@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Netherlands3D.Twin.Projects
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Project", fileName = "Project", order = 0)]
-    public class Project : ScriptableObject
+    public class ProjectData : ScriptableObject
     {
         [DllImport("__Internal")] private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
@@ -22,10 +22,10 @@ namespace Netherlands3D.Twin.Projects
         
         [Header("Serialized data")]
         public int Version = 1;
-        public string SavedTimestamp;
+        public string SavedTimestamp = "";
         public string UUID = "";
-        public double[] CameraStartPosition; //X, Y, Z,- Assume RD for now
-        public double[] CameraStartRotation; 
+        public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+        public double[] CameraRotation = new double[3];
 
 
         private ProjectStateHandler projectStateHandler;
@@ -40,16 +40,16 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        public UnityEvent<Project> OnDataChanged = new();
+        public UnityEvent<ProjectData> OnDataChanged = new();
 
-        public void CopyFrom(Project project)
+        public void CopyFrom(ProjectData project)
         {
             // Explicit copy of fields. Will be more complex once bin. files are saved
             Version = project.Version;
             SavedTimestamp = project.SavedTimestamp;
             UUID = project.UUID;
-            CameraStartPosition = project.CameraStartPosition;
-            CameraStartRotation = project.CameraStartRotation;
+            CameraPosition = project.CameraPosition;
+            CameraRotation = project.CameraRotation;
 
             IsDirty = true;
         }

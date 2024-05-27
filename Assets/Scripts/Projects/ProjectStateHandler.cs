@@ -15,10 +15,10 @@ namespace Netherlands3D.Twin.Projects
     /// </summary>
     public class ProjectStateHandler : MonoBehaviour
     {
-        [SerializeField] private Project projectData;
+        [SerializeField] private ProjectData projectData;
 
-        public List<Project> undoStack = new();
-        public List<Project> redoStack = new();
+        public List<ProjectData> undoStack = new();
+        public List<ProjectData> redoStack = new();
 
         public int undoStackSize = 10;
 
@@ -31,14 +31,14 @@ namespace Netherlands3D.Twin.Projects
             projectData.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
-        private void OnProjectDataChanged(Project project)
+        private void OnProjectDataChanged(ProjectData project)
         {
             // Add new undo state
             if (undoStack.Count == undoStackSize)
                 undoStack.RemoveAt(0);
             
             // Copy the current projectData to a new project instance for our undo history
-            var newProject = ScriptableObject.CreateInstance<Project>();
+            var newProject = ScriptableObject.CreateInstance<ProjectData>();
             newProject.CopyFrom(projectData);
             undoStack.Add(newProject);
 
