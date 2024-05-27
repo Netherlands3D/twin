@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin.Projects
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
         public const string DefaultFileName = "NL3D_Project_";
         public const string ProjectFileExtension = ".nl3d";
+        public const string ProjectJsonFileNameInZip = "project.json";
         
         [Header("Serialized data")]
         public int Version = 1;
@@ -27,12 +28,12 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
 
-
+        
         private ProjectDataHandler projectStateHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
 
-        private bool isDirty = false;
+        [NonSerialized] private bool isDirty = false;
         public bool IsDirty { 
             get => isDirty; 
             set{
@@ -40,7 +41,7 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        public UnityEvent<ProjectData> OnDataChanged = new();
+        [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
 
         public void CopyFrom(ProjectData project)
         {
@@ -61,30 +62,34 @@ namespace Netherlands3D.Twin.Projects
             CopyFrom(project);
         }
 
-        public void LoadFromFile(string filePath)
+        public void LoadFromFile(string fileName)
         {
+            Debug.Log("Loading project file: " + fileName);
+            
             // Open the zip file
-            using (FileStream fs = File.OpenRead(filePath))
+            using (FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName)))
             {
-                using ZipInputStream zipInputStream = new(fs);
-                ZipEntry entry;
-                while ((entry = zipInputStream.GetNextEntry()) != null)
+                //Extract specific project.json from zip using CsharpLib
+                using ZipFile zf = new ZipFile(fs);
+
+                foreach (ZipEntry zipEntry in zf)
                 {
-                    if (entry.Name == "project.json")
+                    if (!zipEntry.IsFile) continue;
+                    if (zipEntry.Name == ProjectJsonFileNameInZip)
                     {
-                        using StreamReader reader = new(zipInputStream);
-                        string json = reader.ReadToEnd();
-                        JsonConvert.PopulateObject(json, this);
+                        using Stream zipStream = zf.GetInputStream(zipEntry);
+                        using StreamReader sr = new(zipStream);
+                        string json = sr.ReadToEnd();
+                        ProjectData project = JsonConvert.DeserializeObject<ProjectData>(json);
+                        CopyFrom(project);
                     }
                     else
                     {
-                        // Extract the additional project files to our indexedDB
-                        string persistentDataPath = Application.persistentDataPath + "/" + entry.Name;
-                        using FileStream output = File.Create(persistentDataPath);
-                        byte[] buffer = new byte[4096];
-                        StreamUtils.Copy(zipInputStream, output, buffer);
+                        //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
+                        Debug.Log("Other file found in Project zip. Ignoring for now.");
                     }
                 }
+
             }
 
             IsDirty = true;
@@ -108,7 +113,7 @@ namespace Netherlands3D.Twin.Projects
 
             // Generate the JSON data and add it to the project zip as the first file
             var jsonProject = JsonConvert.SerializeObject(this, Formatting.Indented);
-            var entry = new ZipEntry("project.json");
+            var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
             zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);         
