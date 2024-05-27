@@ -165,11 +165,8 @@ namespace Netherlands3D.Twin.Projects
 
         public void ProjectSavedToIndexedDB()
         {
-            DownloadFromIndexedDB($"{UUID}", projectDataHandler.name, "DoneDownloadProject");
-        }  
-        public void DoneDownloadProject()
-        {
-            Debug.Log("Downloading project file succeeded");
+            var fileName = Path.GetFileName(lastSavePath);
+            DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
         }
         public void RefreshUUID()
         {

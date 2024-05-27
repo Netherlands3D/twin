@@ -107,5 +107,9 @@ namespace Netherlands3D.Twin.Projects
         {
             projectData.ProjectSavedToIndexedDB();
         }
+        public void DownloadedProject()
+        {
+            Debug.Log("Downloading project file succeeded");
+        }
     }
 }
