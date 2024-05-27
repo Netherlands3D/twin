@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 
-  UUID: 
-  CameraStartPosition: []
-  CameraStartRotation: []
-  OnDataChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  SavedTimestamp: 20240527144746
+  UUID: 70af4089-049b-49a0-b270-cf801addc09d
+  CameraPosition:
+  - 155207
+  - 462945
+  - 300
+  CameraRotation:
+  - 60.000003814697266
+  - 0
+  - 0

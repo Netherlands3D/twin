@@ -132,7 +132,7 @@ namespace Netherlands3D.Twin.Projects
 
             // Make sure indexedDB is synced
             #if !UNITY_EDITOR && UNITY_WEBGL
-            SyncFilesToIndexedDB(projectStateHandler.name, "ProjectSavedToIndexedDB");
+            SyncFilesToIndexedDB(projectDataHandler.name, "ProjectSavedToIndexedDB");
             
             #elif UNITY_EDITOR
             //Request using file write dialog of unity editor where to copy the file from lastSavePath path
