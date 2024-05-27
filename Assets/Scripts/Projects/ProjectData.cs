@@ -17,6 +17,7 @@ namespace Netherlands3D.Twin.Projects
     {
         [DllImport("__Internal")] private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
+        
         public const string DefaultFileName = "NL3D_Project_";
         public const string ProjectFileExtension = ".nl3d";
         public const string ProjectJsonFileNameInZip = "project.json";
@@ -27,8 +28,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-
-        
+  
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
@@ -42,6 +42,11 @@ namespace Netherlands3D.Twin.Projects
         }
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
+
+        public void RefreshUUID()
+        {
+            UUID = Guid.NewGuid().ToString();
+        }
 
         public void CopyFrom(ProjectData project)
         {
@@ -167,10 +172,6 @@ namespace Netherlands3D.Twin.Projects
         {
             var fileName = Path.GetFileName(lastSavePath);
             DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
-        }
-        public void RefreshUUID()
-        {
-            UUID = Guid.NewGuid().ToString();
         }
     }
 }
