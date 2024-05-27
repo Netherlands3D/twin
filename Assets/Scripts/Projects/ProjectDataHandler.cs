@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Netherlands3D.Coordinates;
-using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
 namespace Netherlands3D.Twin.Projects
@@ -15,6 +10,7 @@ namespace Netherlands3D.Twin.Projects
     /// </summary>
     public class ProjectDataHandler : MonoBehaviour
     {
+        [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
         [SerializeField] private ProjectData projectData;
 
         public List<ProjectData> undoStack = new();
@@ -29,6 +25,11 @@ namespace Netherlands3D.Twin.Projects
             }
 
             projectData.OnDataChanged.AddListener(OnProjectDataChanged);
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+            //Prevent default browser shortcuts for saving and undo/redo
+            PreventDefaultShortcuts();
+#endif
         }
 
         private void OnProjectDataChanged(ProjectData project)
@@ -50,17 +51,14 @@ namespace Netherlands3D.Twin.Projects
         {
             var ctrlModifier = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
 
-            // Save shortcut
             if (Input.GetKeyDown(KeyCode.S) && ctrlModifier)
                 SaveProject();
 
-            // Undo/redo shortcuts
             if (Input.GetKeyDown(KeyCode.Z) && ctrlModifier)
                 Undo();
 
             if (Input.GetKeyDown(KeyCode.Y) && ctrlModifier)
                 Redo();
-
         }
 
         public void SaveProject()
