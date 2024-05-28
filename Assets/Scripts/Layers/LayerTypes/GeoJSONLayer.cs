@@ -24,20 +24,33 @@ namespace Netherlands3D.Twin
         public CRSBase CRS { get; private set; }
         public List<Feature> Features = new();
 
-        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
-
-        private Material visualizationMaterial;
         public UnityEvent<string> OnParseError = new();
+        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
+        public List<List<Vector3>> Lines { get; private set; } = new();
+        
+        private LineRenderer3D lineRenderer3D;
 
-        public Material VisualizationMaterial
+        public LineRenderer3D LineRenderer3D
         {
-            get { return visualizationMaterial; }
+            get { return lineRenderer3D; }
+            set
+            { //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list
+                // value.SetLines(lineRenderer3D.Lines); 
+                // lineRenderer3D.SetLine(null);
+                lineRenderer3D = value;
+            }
+        }
+        
+        private Material polygonVisualizationMaterial;
+        public Material PolygonVisualizationMaterial
+        {
+            get { return polygonVisualizationMaterial; }
             set
             {
-                visualizationMaterial = value;
+                polygonVisualizationMaterial = value;
                 foreach (var visualization in PolygonVisualisations)
                 {
-                    visualization.GetComponent<MeshRenderer>().material = visualizationMaterial;
+                    visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
                 }
             }
         }
@@ -92,7 +105,7 @@ namespace Netherlands3D.Twin
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
 
             if (UI)
-                UI.Color = visualizationMaterial.color;
+                UI.Color = polygonVisualizationMaterial.color;
         }
 
         private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
@@ -134,22 +147,22 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, originalCoordinateSystem, VisualizationMaterial));
+                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, originalCoordinateSystem, PolygonVisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, originalCoordinateSystem, VisualizationMaterial));
+                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, originalCoordinateSystem, PolygonVisualizationMaterial));
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(feature.Geometry as MultiLineString);
+                    GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(feature.Geometry as MultiLineString, originalCoordinateSystem, LineRenderer3D);
                     break;
                 }
                 case GeoJSONObjectType.LineString:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeLineString(feature.Geometry as LineString);
+                    GeoJSONGeometryVisualizerUtility.VisualizeLineString(feature.Geometry as LineString, originalCoordinateSystem, LineRenderer3D);
                     break;
                 }
             }

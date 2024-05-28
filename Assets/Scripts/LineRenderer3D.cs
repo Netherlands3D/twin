@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private float offsetY = 0.0f;
         [SerializeField] private float lineDiameter = 0.2f;
 
-        private List<List<Vector3>> lines;
+        public List<List<Vector3>> Lines { get; private set; }
         private List<List<Matrix4x4>> lineTransformMatrixCache;
         private List<List<Matrix4x4>> jointsTransformMatrixCache;
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
@@ -164,8 +164,8 @@ namespace Netherlands3D.Twin
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
-            lines = new List<List<Vector3>> { linePoints };
-            SetLines(lines);
+            Lines = new List<List<Vector3>> { linePoints };
+            SetLines(Lines);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Netherlands3D.Twin
                 if (!validLine) return;
             }
 
-            this.lines = lines;
+            this.Lines = lines;
             GenerateTransformMatrixCache();
         }
 
@@ -191,10 +191,10 @@ namespace Netherlands3D.Twin
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
-            if (lines == null)
-                lines = new List<List<Vector3>>();
+            if (Lines == null)
+                Lines = new List<List<Vector3>>();
 
-            lines.Add(linePoints);
+            Lines.Add(linePoints);
             GenerateTransformMatrixCache();
         }
 
@@ -209,10 +209,10 @@ namespace Netherlands3D.Twin
                 if (!validLine) return;
             }
 
-            if (this.lines == null)
-                this.lines = new List<List<Vector3>>();
+            if (this.Lines == null)
+                this.Lines = new List<List<Vector3>>();
 
-            this.lines.AddRange(lines);
+            this.Lines.AddRange(lines);
             GenerateTransformMatrixCache();
         }
 
@@ -222,7 +222,7 @@ namespace Netherlands3D.Twin
         [ContextMenu("Randomize line colors")]
         public void SetRandomLineColors()
         {
-            Color[] colors = new Color[lines.Count];
+            Color[] colors = new Color[Lines.Count];
             for (int i = 0; i < colors.Length; i++)
             {
                 colors[i] = Random.ColorHSV();
@@ -236,9 +236,9 @@ namespace Netherlands3D.Twin
         /// <param name="colors">Array of colors matching the list of lines length</param>
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
-            if (colors.Length != lines.Count)
+            if (colors.Length != Lines.Count)
             {
-                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count}");
+                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {Lines.Count}");
                 return;
             }
 
@@ -265,7 +265,7 @@ namespace Netherlands3D.Twin
 
         public void ClearLines()
         {
-            lines.Clear();
+            Lines.Clear();
             ClearColors();
 
             lineTransformMatrixCache.Clear();
@@ -281,12 +281,12 @@ namespace Netherlands3D.Twin
 
         private void GenerateTransformMatrixCache()
         {
-            if (lines == null || lines.Count < 1) return;
+            if (Lines == null || Lines.Count < 1) return;
 
             lineTransformMatrixCache = new List<List<Matrix4x4>>(); // Updated to nested List<Matrix4x4>
             jointsTransformMatrixCache = new List<List<Matrix4x4>>();
 
-            foreach (List<Vector3> line in lines)
+            foreach (List<Vector3> line in Lines)
             {
                 List<Matrix4x4> lineTransforms = new();
                 List<Matrix4x4> jointTransforms = new();

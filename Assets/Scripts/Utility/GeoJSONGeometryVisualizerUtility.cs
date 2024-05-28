@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
 
         public static PolygonVisualisation VisualizePolygon(Polygon polygon, CoordinateSystem originalCoordinateSystem, Material visualizationMaterial)
         {
-            var ringList = new List<List<Vector3>>();
+            var ringList = new List<List<Vector3>>(polygon.Coordinates.Count);
 
             foreach (var lineString in polygon.Coordinates)
             {
@@ -33,16 +33,21 @@ namespace Netherlands3D.Twin
             return CreatePolygonMesh(ringList, 10f, visualizationMaterial);
         }
 
-        public static void VisualizeMultiLineString(MultiLineString multiLineString)
+        public static void VisualizeMultiLineString(MultiLineString multiLineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
         {
+            var convertedLineStrings = new List<List<Vector3>>(multiLineString.Coordinates.Count);
             foreach (var lineString in multiLineString.Coordinates)
             {
-                VisualizeLineString(lineString);
+                var convertedLineString = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+                convertedLineStrings.Add(convertedLineString);
             }
+            renderer.AppendLines(convertedLineStrings);
         }
 
-        public static void VisualizeLineString(LineString lineString)
+        public static void VisualizeLineString(LineString lineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
         {
+            var convertedLineString = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+            renderer.AppendLine(convertedLineString);
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<List<Vector3>> contours, float polygonExtrusionHeight, Material polygonMeshMaterial)
