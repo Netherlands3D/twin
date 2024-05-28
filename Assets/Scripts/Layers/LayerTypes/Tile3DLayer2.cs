@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties
+    public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
 
@@ -39,6 +39,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 gameObject.SetActive(value);
                 ReferencedProxy.UI.MarkLayerUIAsDirty();
             }
+        }
+
+        private CredentialsPropertySection propertySection;
+        public CredentialsPropertySection PropertySection {
+            get => propertySection;
+            set => propertySection = value;
         }
 
         protected override void Awake()
@@ -84,6 +90,26 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
+        }
+
+        public void SetCredentials(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetKey(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetCode(string code)
+        {
+            throw new NotImplementedException();
         }
     }
 }
