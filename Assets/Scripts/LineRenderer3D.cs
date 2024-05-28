@@ -23,8 +23,8 @@ namespace Netherlands3D.Twin
         [SerializeField] private float lineDiameter = 0.2f;
 
         public List<List<Vector3>> Lines { get; private set; }
-        private List<List<Matrix4x4>> lineTransformMatrixCache;
-        private List<List<Matrix4x4>> jointsTransformMatrixCache;
+        private List<List<Matrix4x4>> lineTransformMatrixCache = new List<List<Matrix4x4>>();
+        private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
         private bool hasColors = false;
@@ -194,8 +194,9 @@ namespace Netherlands3D.Twin
             if (Lines == null)
                 Lines = new List<List<Vector3>>();
 
+            var startIndex = Lines.Count;
             Lines.Add(linePoints);
-            GenerateTransformMatrixCache();
+            GenerateTransformMatrixCache(startIndex);
         }
 
         /// <summary>
@@ -212,8 +213,9 @@ namespace Netherlands3D.Twin
             if (this.Lines == null)
                 this.Lines = new List<List<Vector3>>();
 
+            var startIndex = Lines.Count;
             this.Lines.AddRange(lines);
-            GenerateTransformMatrixCache();
+            GenerateTransformMatrixCache(startIndex);
         }
 
         /// <summary>
@@ -279,21 +281,25 @@ namespace Netherlands3D.Twin
             materialPropertyBlockCache.Clear();
         }
 
-        private void GenerateTransformMatrixCache()
+        private void GenerateTransformMatrixCache(int startIndex = 0)
         {
             if (Lines == null || Lines.Count < 1) return;
+            
+            // lineTransformMatrixCache = new List<List<Matrix4x4>>(Lines.Count); // Updated to nested List<Matrix4x4>
+            // jointsTransformMatrixCache = new List<List<Matrix4x4>>(Lines.Count);
 
-            lineTransformMatrixCache = new List<List<Matrix4x4>>(); // Updated to nested List<Matrix4x4>
-            jointsTransformMatrixCache = new List<List<Matrix4x4>>();
-
-            foreach (List<Vector3> line in Lines)
+            lineTransformMatrixCache.Capacity = Lines.Count;
+            jointsTransformMatrixCache.Capacity = Lines.Count;
+            
+            for (var i = startIndex; i < Lines.Count; i++)
             {
+                var line = Lines[i];
                 List<Matrix4x4> lineTransforms = new();
                 List<Matrix4x4> jointTransforms = new();
-                for (int i = 0; i < line.Count - 1; i++)
+                for (int j = 0; j < line.Count - 1; j++)
                 {
-                    var currentPoint = line[i];
-                    var nextPoint = line[i + 1];
+                    var currentPoint = line[j];
+                    var nextPoint = line[j + 1];
 
                     var direction = nextPoint - currentPoint;
                     float distance = direction.magnitude;
@@ -320,15 +326,22 @@ namespace Netherlands3D.Twin
                     jointTransforms.Add(jointTransformMatrix);
 
                     //Add the last joint to cap the line end
-                    if (i == line.Count - 2)
+                    if (j == line.Count - 2)
                     {
                         jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
                         jointTransforms.Add(jointTransformMatrix);
                     }
                 }
 
-                lineTransformMatrixCache.Add(lineTransforms);
-                jointsTransformMatrixCache.Add(jointTransforms);
+                if(i < lineTransformMatrixCache.Count)
+                     lineTransformMatrixCache[i] = lineTransforms;
+                else
+                    lineTransformMatrixCache.Add(lineTransforms);
+
+                if (i < jointsTransformMatrixCache.Count)
+                    jointsTransformMatrixCache[i] = jointTransforms;
+                else
+                    jointsTransformMatrixCache.Add(jointTransforms);
             }
 
             cacheReady = true;
