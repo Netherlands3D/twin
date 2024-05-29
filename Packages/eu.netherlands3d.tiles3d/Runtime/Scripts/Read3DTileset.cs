@@ -63,7 +63,12 @@ namespace Netherlands3D.Tiles3D
         [Header("Optional material override")] public Material materialOverride;
 
         public string[] usedExtensions { get; private set; }
+
         public UnityEvent<string[]> unsupportedExtensionsParsed;
+
+        //Custom WebRequestHeader dictionary
+        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
 
         public void ConstructURLWithKey()
         {
@@ -94,6 +99,18 @@ namespace Netherlands3D.Tiles3D
             visibleTiles = new();
 
             InitializeURLAndLoadTileSet();
+        }
+
+        /// <summary>
+        /// Add custom headers for all internal WebRequests
+        /// </summary>
+        public void AddCustomHeader(string key, string value)
+        {
+            customHeaders.Add(key, value);
+        }
+        public void ClearCustomHeaders()
+        {
+            customHeaders.Clear();
         }
 
         private void DisposeAllTilesRecursive(Tile tile)
@@ -248,6 +265,9 @@ namespace Netherlands3D.Tiles3D
         IEnumerator LoadTileset()
         {
             UnityWebRequest www = UnityWebRequest.Get(tilesetUrl);
+            foreach (var header in customHeaders)
+                www.SetRequestHeader(header.Key, header.Value);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -488,6 +508,9 @@ namespace Netherlands3D.Tiles3D
                 {
                     string nestedJsonPath = GetFullContentUri(tile);
                     UnityWebRequest www = UnityWebRequest.Get(nestedJsonPath);
+                    foreach (var header in customHeaders)
+                        www.SetRequestHeader(header.Key, header.Value);
+                        
                     yield return www.SendWebRequest();
 
                     if (www.result != UnityWebRequest.Result.Success)
