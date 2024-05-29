@@ -13,7 +13,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
-
         [SerializeField] private bool allowURLEditInPropertySection;
         private List<IPropertySectionInstantiator> propertySections = new();
         public UnityEvent<string> UnsupportedExtensionsMessage;
@@ -94,12 +93,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetCredentials(string username, string password)
         {
-            throw new NotImplementedException();
+            tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
         }
 
         public void SetKey(string key)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SetToken(string token)
