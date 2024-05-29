@@ -21,25 +21,7 @@ namespace Netherlands3D.Twin
             UsernamePassword = 2
         }
 
-        private CredentialType credentialType = CredentialType.UsernamePassword;
-
-        public void SetCredentialType(int type)
-        {
-            credentialType = (CredentialType)type;
-
-            if(credentialType == CredentialType.UsernamePassword)
-            {
-                userNameInputField.transform.parent.gameObject.SetActive(true);
-                passwordInputField.transform.parent.gameObject.SetActive(true);
-                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(false);
-            }
-            else
-            {
-                userNameInputField.transform.parent.gameObject.SetActive(false);
-                passwordInputField.transform.parent.gameObject.SetActive(false);
-                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(true);
-            }
-        }
+        public CredentialType credentialType = CredentialType.UsernamePassword;
 
         private void OnEnable()
         {
@@ -63,6 +45,30 @@ namespace Netherlands3D.Twin
                     Layer.SetToken(keyTokenOrCodeInputField.text);
                     Layer.SetCode(keyTokenOrCodeInputField.text);
                     break;
+            }
+        }
+
+        public void SetCredentialType(int type)
+        {
+            credentialType = (CredentialType)type;
+            SetCredentialType(credentialType);
+        }
+
+        public void SetCredentialType(CredentialType type)
+        {
+            credentialType = type;
+
+            if(credentialType == CredentialType.UsernamePassword)
+            {
+                userNameInputField.transform.parent.gameObject.SetActive(true);
+                passwordInputField.transform.parent.gameObject.SetActive(true);
+                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                userNameInputField.transform.parent.gameObject.SetActive(false);
+                passwordInputField.transform.parent.gameObject.SetActive(false);
+                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(true);
             }
         }
 
