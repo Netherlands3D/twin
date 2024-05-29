@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -288,9 +289,18 @@ namespace Netherlands3D.Twin
             // lineTransformMatrixCache = new List<List<Matrix4x4>>(Lines.Count); // Updated to nested List<Matrix4x4>
             // jointsTransformMatrixCache = new List<List<Matrix4x4>>(Lines.Count);
 
+            var jointCount = Lines.SelectMany(list => list).Count();
+            var segmentCount  = jointCount - 1;
+            var batchCount = (jointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
+            var remainder = jointCount % 1023;
+
+            var jointMatrixBatches = new Matrix4x4[batchCount][];
+            int arrayBatchIndex = 0;
+            int arrayMatrixIndex = 0;
+            
             lineTransformMatrixCache.Capacity = Lines.Count;
             jointsTransformMatrixCache.Capacity = Lines.Count;
-            
+
             for (var i = startIndex; i < Lines.Count; i++)
             {
                 var line = Lines[i];
@@ -323,8 +333,10 @@ namespace Netherlands3D.Twin
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
                     var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
+                    // jointMatrixBatches[arrayBatchIndex][arrayMatrixIndex] = jointTransformMatrix;
+                    // arrayMatrixIndex++;
                     jointTransforms.Add(jointTransformMatrix);
-
+                    
                     //Add the last joint to cap the line end
                     if (j == line.Count - 2)
                     {
