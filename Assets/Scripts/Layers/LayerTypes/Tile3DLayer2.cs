@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -16,6 +17,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private bool allowURLEditInPropertySection;
         private List<IPropertySectionInstantiator> propertySections = new();
         public UnityEvent<string> UnsupportedExtensionsMessage;
+
+        //public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed => tileSet.OnServerRequestFailed; //<- TODO: Implement this in Read3DTileset
+        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string URL
         {
@@ -50,6 +54,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             base.Awake();
             tileSet = GetComponent<Read3DTileset>();
+            
 
             if (allowURLEditInPropertySection)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -110,6 +115,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
         
         public void SetCode(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsValidServerResult(UnityWebRequest.Result result)
         {
             throw new NotImplementedException();
         }

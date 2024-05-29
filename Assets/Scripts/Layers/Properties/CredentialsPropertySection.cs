@@ -1,6 +1,8 @@
+using System.Collections;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -18,10 +20,18 @@ namespace Netherlands3D.Twin
         {
             None = 0,
             KeyTokenOrCode = 1,
-            UsernamePassword = 2
+            UsernamePassword = 2,
+            Key = 3,
+            Token = 4,
+            Code = 5
         }
 
         public CredentialType credentialType = CredentialType.UsernamePassword;
+
+        private string url = "";
+        public string Url { get => url; set => url = value; }    
+
+        private Coroutine findSpecificTypeCoroutine;    
 
         private void OnEnable()
         {
@@ -41,12 +51,40 @@ namespace Netherlands3D.Twin
                     Layer.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
                 case CredentialType.KeyTokenOrCode:
-                    Layer.SetKey(keyTokenOrCodeInputField.text);
-                    Layer.SetToken(keyTokenOrCodeInputField.text);
-                    Layer.SetCode(keyTokenOrCodeInputField.text);
+                    if(findSpecificTypeCoroutine != null)
+                        StopCoroutine(findSpecificTypeCoroutine);
+
+                    findSpecificTypeCoroutine = StartCoroutine(TryToFindSpecificType());
                     break;
             }
         }
+
+        private IEnumerator TryToFindSpecificType()
+        {
+            //Try input as token
+            var www = new UnityWebRequest(url);
+            www.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
+            //add key as post variable
+            www.method = UnityWebRequest.kHttpVerbGET;
+
+            yield return www.SendWebRequest();
+            if(www.result == UnityWebRequest.Result.Success)
+            {
+                Layer.SetToken(keyTokenOrCodeInputField.text);
+                yield break;
+            }
+            
+            //Try input as key. First make sure its not already in url as a query parameter
+            if(!url.Contains("?"))
+                url += "?key=" + keyTokenOrCodeInputField.text;
+            else
+                url += "&key=" + keyTokenOrCodeInputField.text;
+            
+
+            
+        }
+
+
 
         public void SetCredentialType(int type)
         {
