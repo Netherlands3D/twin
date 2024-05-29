@@ -70,6 +70,8 @@ namespace Netherlands3D.Tiles3D
         private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
         public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
 
+        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
+
         public void ConstructURLWithKey()
         {
 #if UNITY_EDITOR
@@ -277,6 +279,7 @@ namespace Netherlands3D.Tiles3D
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log($"Could not load tileset from url:{tilesetUrl} Error:{www.error}");
+                OnServerRequestFailed.Invoke(www.result);
             }
             else
             {
@@ -512,6 +515,7 @@ namespace Netherlands3D.Tiles3D
                 {
                     string nestedJsonPath = GetFullContentUri(tile);
                     UnityWebRequest www = UnityWebRequest.Get(nestedJsonPath);
+                    
                     foreach (var header in customHeaders)
                         www.SetRequestHeader(header.Key, header.Value);
                         
@@ -520,6 +524,7 @@ namespace Netherlands3D.Tiles3D
                     if (www.result != UnityWebRequest.Result.Success)
                     {
                         Debug.Log(www.error + " at " + nestedJsonPath);
+                        OnServerRequestFailed.Invoke(www.result);
                     }
                     else
                     {
