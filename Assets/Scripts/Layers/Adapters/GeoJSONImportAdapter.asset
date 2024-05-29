@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualizationMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533,
     type: 2}
+  lineRenderer3D: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
+    type: 3}
   displayErrorMessageEvent:
     m_PersistentCalls:
       m_Calls:
