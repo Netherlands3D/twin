@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7034851048902944905}
-  - component: {fileID: 6559384971221327733}
   - component: {fileID: 3825768464969730733}
   m_Layer: 0
   m_Name: FloatingOrigin
@@ -33,19 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6559384971221327733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179472504103147788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18a451a729b04425863971bc5eea5f47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configurator: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
 --- !u!114 &3825768464969730733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainShifter: {fileID: 0}
-  referenceCoordinateSystem: 7415
   distanceBeforeShifting: 5000
   onPreShift:
     m_PersistentCalls:
@@ -67,4 +52,4 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
-  LogShifts: 1
+  LogShifts: 0
