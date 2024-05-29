@@ -79,8 +79,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         public void MoveOriginTo(Coordinate destination)
         {
-            //var from = Coordinate;
-            //var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
 
             Coordinate MainShifterWGS = new Coordinate(mainShifter.position).Convert(CoordinateSystem.WGS84_LatLonHeight);
 
@@ -93,17 +91,15 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
             onPreShift.Invoke(MainShifterWGS, MainShifterWGS);
 
-            //move the Camera
+            //set the origin to the wgs84-coordainte of the camera, using the elevation of this object
             Coordinate NewOriginPosition = MainShifterWGS;
             NewOriginPosition.Points[2] = Originelevation;
             CoordinateSystems.SetOrigin(NewOriginPosition);
+
+            //reset the cmeraPosition in unity based on the enew origin-coordinate
             mainShifter.position = MainShifterWGS.ToUnity();
 
-            //Coordinate = to;
-            //// TODO: Shouldn't this be a listener to the event below?
-            //var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
-            //EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);
-
+            
             // Shout to the world that the origin has changed to this coordinate
             onPostShift.Invoke(MainShifterWGS, MainShifterWGS);
         }
