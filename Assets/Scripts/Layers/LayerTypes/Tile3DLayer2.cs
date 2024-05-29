@@ -94,18 +94,21 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void SetCredentials(string username, string password)
         {
             tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
+            tileSet.RefreshTiles();
         }
 
         public void SetKey(string key)
         {
-            
+            tileSet.publicKey = key;
+            tileSet.RefreshTiles();
         }
 
         public void SetToken(string token)
         {
-            throw new NotImplementedException();
+            tileSet.AddCustomHeader("Authorization", "Bearer " + token);
+            tileSet.RefreshTiles();
         }
-
+        
         public void SetCode(string code)
         {
             throw new NotImplementedException();

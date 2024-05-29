@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.LayerInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -27,7 +21,7 @@ namespace Netherlands3D.Twin
             UsernamePassword = 2
         }
 
-        private CredentialType credentialType = CredentialType.None;
+        private CredentialType credentialType = CredentialType.UsernamePassword;
 
         public void SetCredentialType(int type)
         {
