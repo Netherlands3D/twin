@@ -31,8 +31,12 @@ namespace Netherlands3D.Twin.Configuration
         private Uri uri;
 
         [SerializeField] 
-        [Tooltip("The scene with the Setup Wizard that needs to load additively")]
+        [Tooltip("The scene with the Setup Window that needs to load additively")]
         private string setupSceneName;
+
+        [SerializeField]
+        [Tooltip("The main scene that will be loaded after the setup scene is closed")]
+        private string mainSceneName;
 
         [SerializeField]
         [Tooltip("The location where to get the configuration file from")]
@@ -119,14 +123,15 @@ namespace Netherlands3D.Twin.Configuration
                 configuration.Populate(uri);
             }
 
-            if (configuration.ShouldStartSetup)
-            {
-                StartSetup();
-            }
-
             OnLoaded.Invoke(configuration);
             
             indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
+
+            SceneManager.sceneLoaded += (scene, mode) => {
+                if(scene.name == mainSceneName && Configuration.ShouldStartSetup){
+                    StartSetup();
+                }
+            };
 
             yield return null;
         }
@@ -195,14 +200,9 @@ namespace Netherlands3D.Twin.Configuration
 
         public void StartSetup()
         {
-            Open();
-        }
-        
-        public void RestartSetup()
-        {
             if (!configuration.ShouldStartSetup) return;
 
-            StartSetup();
+            Open();
         }
         
         public void Open()
@@ -229,11 +229,10 @@ namespace Netherlands3D.Twin.Configuration
 
         public void CompleteSetup()
         {
-            // We assume the Setup Wizard modifies the configuration object; this is merely a hook for the rest of
+            // We assume the Setup Window modifies the configuration object; this is merely a hook for the rest of
             // the application to know that we are done.
             Close();
             OnLoaded.Invoke(configuration);
-            SceneManager.UnloadSceneAsync(setupSceneName);
         }
     }
 }

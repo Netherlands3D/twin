@@ -2,13 +2,14 @@ using System.Collections;
 using System.Globalization;
 using System.Threading;
 using UnityEngine;
-using Netherlands3D.Coordinates;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Configuration
 {
     public class ConfiguratorStarter : MonoBehaviour
     {
         [SerializeField] private Configurator configurator;
+        public UnityEvent<Configuration> OnLoadedConfiguration = new();
 
         /// <summary>
         /// Make sure to set the culture to invariant to prevent issues with parsing floats and doubles.
@@ -16,37 +17,21 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-
-            ///Coordinatesystem has to be set before any function ries to do anytihing with coordinates.
-            CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
-            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, 120000, 480000, 0));
+            Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
+            Coordinates.CoordinateSystems.SetOrigin(new Coordinates.Coordinate(Coordinates.CoordinateSystem.RDNAP, 120000, 480000, 0));
         }
 
-        /// <summary>
-        /// The configuration will affect all systems that first need to be initialized on Start. Because of this,
-        /// the loading of the configuration needs to happen in the second frame (hence the yield return null) as to
-        /// ensure everything has completed loading. Without this, you will get all kinds of weird Null exceptions
-        /// and the progressbar won't show.
-        /// </summary>
-        /// 
-
-        
         private IEnumerator Start()
         {
-            yield return null;
-
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
-        }
-
-        public void ReopenSetup()
-        {
-            configurator.RestartSetup();
+            Coordinates.CoordinateSystems.SetOrigin(configurator.Configuration.Origin);
         }
 
         private void AfterLoading(Configuration configuration)
         {
             Debug.Log("Finished loading configuration");
+            OnLoadedConfiguration.Invoke(configuration);
         }
     }
 }
