@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         public Coordinate Coordinate { get; set; }
         public Transform mainShifter;
-        public CoordinateSystem referenceCoordinateSystem;
+        //public CoordinateSystem referenceCoordinateSystem;
 
         /// <summary>
         /// The maximum of 30.000 is to prevent integer overflows when squaring the distance, with
@@ -38,15 +38,15 @@ namespace Netherlands3D.Twin.FloatingOrigin
             // Cache the square of the distance
             sqrDistanceBeforeShifting = distanceBeforeShifting * distanceBeforeShifting;
 
-            Coordinate = CoordinateConverter.ConvertTo(
-                new Coordinate(
-                    CoordinateSystem.Unity,
-                    transform.position.x,
-                    transform.position.y,
-                    transform.position.z
-                ),
-                referenceCoordinateSystem
-            );
+            //Coordinate = CoordinateConverter.ConvertTo(
+            //    new Coordinate(
+            //        CoordinateSystem.Unity,
+            //        transform.position.x,
+            //        transform.position.y,
+            //        transform.position.z
+            //    ),
+            //    referenceCoordinateSystem
+            //);
 
             StartCoroutine(AttemptShift());
         }
@@ -70,12 +70,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
                 var newPosition = new Vector3(mainShifterPosition.x, transform.position.y, mainShifterPosition.z);
 
                 // Move this Origin to the camera's position, but keep the same height as it is now. 
-                MoveOriginTo(
-                    CoordinateConverter.ConvertTo(
-                        new Coordinate(CoordinateSystem.Unity, newPosition.x, newPosition.y, newPosition.z),
-                        Coordinate.CoordinateSystem
-                    )
-                );
+                MoveOriginTo(new Coordinate(newPosition));
+                   
 
                 Profiler.EndSample();
             }
@@ -83,21 +79,33 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         public void MoveOriginTo(Coordinate destination)
         {
-            var from = Coordinate;
-            var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
+            //var from = Coordinate;
+            //var to = CoordinateConverter.ConvertTo(destination, Coordinate.CoordinateSystem);
+
+            Coordinate MainShifterWGS = new Coordinate(mainShifter.position).Convert(CoordinateSystem.WGS84_LatLonHeight);
+
+            double Originelevation = new Coordinate(transform.position).Convert(CoordinateSystem.WGS84_LatLonHeight).Points[2];
+
+
 #if UNITY_EDITOR
-            if (LogShifts) Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
+            //if (LogShifts) Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
 #endif
 
-            onPreShift.Invoke(from, to);
-            
-            Coordinate = to;
-            // TODO: Shouldn't this be a listener to the event below?
-            var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
-            EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);
+            onPreShift.Invoke(MainShifterWGS, MainShifterWGS);
+
+            //move the Camera
+            Coordinate NewOriginPosition = MainShifterWGS;
+            NewOriginPosition.Points[2] = Originelevation;
+            CoordinateSystems.SetOrigin(NewOriginPosition);
+            mainShifter.position = MainShifterWGS.ToUnity();
+
+            //Coordinate = to;
+            //// TODO: Shouldn't this be a listener to the event below?
+            //var rdCoordinate = CoordinateConverter.ConvertTo(Coordinate, CoordinateSystem.RD);
+            //EPSG7415.relativeCenter = new Vector2RD(rdCoordinate.Points[0], rdCoordinate.Points[1]);
 
             // Shout to the world that the origin has changed to this coordinate
-            onPostShift.Invoke(from, to);
+            onPostShift.Invoke(MainShifterWGS, MainShifterWGS);
         }
     }
 }

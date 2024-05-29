@@ -17,12 +17,15 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
+            Coordinates.CoordinateSystems.SetOrigin(new Coordinates.Coordinate(Coordinates.CoordinateSystem.RDNAP, 120000, 480000, 0));
         }
 
         private IEnumerator Start()
         {
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
+            Coordinates.CoordinateSystems.SetOrigin(configurator.Configuration.Origin);
         }
 
         private void AfterLoading(Configuration configuration)

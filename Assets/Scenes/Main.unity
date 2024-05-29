@@ -887,6 +887,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FreeCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 5780207628711831110, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8068913146316752299, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
       propertyPath: origin
@@ -2308,7 +2313,7 @@ PrefabInstance:
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 45.265
       objectReference: {fileID: 0}
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -8555,6 +8560,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloatingOrigin
       objectReference: {fileID: 0}
+    - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
+        type: 3}
+      propertyPath: referenceCoordinateSystem
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559384971221327733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7034851048902944905, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8606,7 +8626,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 5505363285917548851, guid: 6ef3d66327e26d8479b217ee6b62a2f4, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
