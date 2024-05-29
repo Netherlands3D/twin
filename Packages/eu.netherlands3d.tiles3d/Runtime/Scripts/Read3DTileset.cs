@@ -104,10 +104,14 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Add custom headers for all internal WebRequests
         /// </summary>
-        public void AddCustomHeader(string key, string value)
+        public void AddCustomHeader(string key, string value, bool replace = true)
         {
-            customHeaders.Add(key, value);
+            if(replace && customHeaders.ContainsKey(key))
+                customHeaders[key] = value;
+            else
+                customHeaders.Add(key, value);
         }
+        
         public void ClearCustomHeaders()
         {
             customHeaders.Clear();
