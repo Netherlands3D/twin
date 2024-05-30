@@ -9,6 +9,7 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private Material visualizationMaterial;
         [SerializeField] private LineRenderer3D lineRenderer3D;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
 
         public void ParseGeoJSON(string file)
@@ -17,10 +18,10 @@ namespace Netherlands3D.Twin
 
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
             randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
-            CreateGeoJSONLayer(fullPath, randomColorVisualisationMaterial, lineRenderer3D, displayErrorMessageEvent);
+            CreateGeoJSONLayer(fullPath, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial, LineRenderer3D lineRenderer3D, UnityEvent<string> onErrorCallback = null)
+        public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D,UnityEvent<string> onErrorCallback = null)
         {
             var go = new GameObject("GeoJSON");
             var layer = go.AddComponent<GeoJSONLayer>();
@@ -30,6 +31,7 @@ namespace Netherlands3D.Twin
             
             layer.PolygonVisualizationMaterial = visualizationMaterial;
             layer.LineRenderer3D = Instantiate(lineRenderer3D);
+            layer.PointRenderer3D = Instantiate(pointRenderer3D);
             layer.ParseGeoJSON(filePath);
             return layer;
         }

@@ -16,6 +16,8 @@ MonoBehaviour:
     type: 2}
   lineRenderer3D: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
     type: 3}
+  pointRenderer3D: {fileID: -4723935055048165154, guid: 5174e2e7a4c654e2ead494648a2604fd,
+    type: 3}
   displayErrorMessageEvent:
     m_PersistentCalls:
       m_Calls:
