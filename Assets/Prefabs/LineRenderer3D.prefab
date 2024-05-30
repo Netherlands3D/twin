@@ -52,4 +52,4 @@ MonoBehaviour:
   drawJoints: 1
   flattenY: 0
   offsetY: 0
-  lineDiameter: 0.2
+  lineDiameter: 1
