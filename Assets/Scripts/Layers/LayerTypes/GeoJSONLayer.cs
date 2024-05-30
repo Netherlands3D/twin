@@ -35,8 +35,8 @@ namespace Netherlands3D.Twin
             get { return lineRenderer3D; }
             set
             { //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                value.SetLines(lineRenderer3D.Lines); 
-                Destroy(lineRenderer3D.gameObject);
+                // value.SetLines(lineRenderer3D.Lines); 
+                // Destroy(lineRenderer3D.gameObject);
                 lineRenderer3D = value;
             }
         }
@@ -47,8 +47,8 @@ namespace Netherlands3D.Twin
             get { return pointRenderer3D; }
             set
             { //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                value.SetPositionCollections(pointRenderer3D.PositionCollections); 
-                Destroy(pointRenderer3D.gameObject);
+                // value.SetPositionCollections(pointRenderer3D.PositionCollections); 
+                // Destroy(pointRenderer3D.gameObject);
                 pointRenderer3D = value;
             }
         }
