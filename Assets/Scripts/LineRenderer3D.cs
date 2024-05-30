@@ -33,8 +33,6 @@ namespace Netherlands3D.Twin
         private List<List<Matrix4x4>> segmentTransformMatrixCache = new List<List<Matrix4x4>>();
 
         private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
-        // private Matrix4x4[][] segmentTransformMatrixCache;
-        // private Matrix4x4[][] jointsTransformMatrixCache;
 
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
@@ -110,21 +108,27 @@ namespace Netherlands3D.Twin
             for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
                 var lineTransforms = segmentTransformMatrixCache[i];
-                var lineJointTransforms = jointsTransformMatrixCache[i];
-                if (hasColors)
-                {
-                    MaterialPropertyBlock props = materialPropertyBlockCache[i];
-                    Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
-
-                    if (DrawJoints)
-                        Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
-
-                    continue;
-                }
+                // if (hasColors)
+                // {
+                //     MaterialPropertyBlock props = materialPropertyBlockCache[i];
+                //     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
+                //
+                //     if (DrawJoints)
+                //         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
+                //
+                //     continue;
+                // }
 
                 Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
-                if (DrawJoints)
+            }
+
+            if (DrawJoints)
+            {
+                for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
+                {
+                    var lineJointTransforms = jointsTransformMatrixCache[i];
                     Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms);
+                }
             }
         }
 
@@ -363,26 +367,26 @@ namespace Netherlands3D.Twin
 
                     // Create a transform matrix for each line point
                     Matrix4x4 transformMatrix = Matrix4x4.TRS(currentPoint, rotation, scale);
-                    AppendMatrixToBatches(segmentTransformMatrixCache, ref segmentIndices.batchIndex, ref segmentIndices.matrixIndex, transformMatrix, " segments");
+                    AppendMatrixToBatches(segmentTransformMatrixCache, ref segmentIndices.batchIndex, ref segmentIndices.matrixIndex, transformMatrix);
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
                     var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
-                    AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix, " joints ");
-                    
+                    AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
+
                     //Add the last joint to cap the line end
                     if (j == line.Count - 2)
                     {
                         jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
-                        AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix, " joints ");
+                        AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
                     }
                 }
             }
 
             cacheReady = true;
         }
-        
-        private void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd, string test)
+
+        private void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd)
         {
             //start a new batch if needed
             if (arrayIndex >= batchList.Count && matrixIndex == 0)
