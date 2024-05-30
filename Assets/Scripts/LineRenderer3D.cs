@@ -107,29 +107,6 @@ namespace Netherlands3D.Twin
 
         private void DrawLines()
         {
-            //Seperate line draws so we can use different colors for each line
-            // for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
-            // {
-            //     var lineBatch = segmentTransformMatrixCache[i];
-            //     if (hasColors)
-            //     {
-            //         MaterialPropertyBlock props = materialPropertyBlockCache[i];
-            //         Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineBatch, props);
-            //         continue;
-            //     }
-            //
-            //     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineBatch);
-            // }
-            //
-            // if (DrawJoints)
-            // {
-            //     for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
-            //     {
-            //         var jointBatch = jointsTransformMatrixCache[i];
-            //         Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, jointBatch);
-            //     }
-            // }
-
             for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
                 var lineTransforms = segmentTransformMatrixCache[i];
@@ -344,21 +321,20 @@ namespace Netherlands3D.Twin
 
             var jointCount = Lines.SelectMany(list => list).Count(); //each point should have a joint
             var segmentCount = jointCount - Lines.Count; // each line one more joint than segments, so subtracting the lineCount will result in the total number of segments
-            
+
             var jointBatchCount = (jointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var segmentBatchCount = (segmentCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
-            
+
             if (lineStartIndex < 0) //reset cache completely
             {
                 segmentTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
                 jointsTransformMatrixCache = new List<List<Matrix4x4>>(segmentBatchCount);
                 lineStartIndex = 0;
             }
-            
-            print("joints: " + jointCount + "/" + jointBatchCount + "segments: " + segmentCount + "/" + segmentBatchCount);
+
             jointsTransformMatrixCache.Capacity = jointBatchCount;
             segmentTransformMatrixCache.Capacity = segmentBatchCount;
-            
+
             var jointIndices = GetJointMatrixIndices(lineStartIndex); //each point in the line is a joint
             var segmentIndices = GetSegmentMatrixIndices(lineStartIndex);
 
@@ -387,17 +363,13 @@ namespace Netherlands3D.Twin
 
                     // Create a transform matrix for each line point
                     Matrix4x4 transformMatrix = Matrix4x4.TRS(currentPoint, rotation, scale);
-                    // print("total seg count: " + segmentCount);
                     AppendMatrixToBatches(segmentTransformMatrixCache, ref segmentIndices.batchIndex, ref segmentIndices.matrixIndex, transformMatrix, " segments");
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
                     var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
-                    // print("total joint count: " + jointCount);
                     AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix, " joints ");
-
-                    // jointTransforms.Add(jointTransformMatrix);
-
+                    
                     //Add the last joint to cap the line end
                     if (j == line.Count - 2)
                     {
@@ -409,58 +381,23 @@ namespace Netherlands3D.Twin
 
             cacheReady = true;
         }
-
-        // private void AppendMatrixToBatchedArray(Matrix4x4[][] array, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd, int flattenedTotalMatrixCount)
-        // {
-        //     // print("totalc " + flattenedTotalMatrixCount);
-        //     //append new array if index overshoots, or initialize the first array
-        //     
-        //     if (matrixIndex >= 1023 || arrayIndex < 0)
-        //     {
-        //         if (arrayIndex < 0)
-        //         {
-        //             arrayIndex = -1; //will be incremented to 0 in the block
-        //         }
-        //         
-        //         int flattenedIndex = arrayIndex * 1023 + matrixIndex;
-        //         var remainder = flattenedTotalMatrixCount % 1023;
-        //         int lastArrayThreshold = flattenedTotalMatrixCount - remainder;
-        //         var newArraySize = flattenedIndex > lastArrayThreshold ? remainder : 1023;
-        //         print("incrementing array index: " + arrayIndex + " with size: " + newArraySize);
-        //         arrayIndex++;
-        //         array[arrayIndex] = new Matrix4x4[newArraySize];
-        //         matrixIndex = 0;
-        //     }
-        //     // print(arrayIndex +"\t" + matrixIndex);
-        //     array[arrayIndex][matrixIndex] = valueToAdd;
-        //     matrixIndex++;
-        // }
-
+        
         private void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd, string test)
         {
-            // print("totalc " + flattenedTotalMatrixCount);
-            //append new array if index overshoots, or initialize the first array
-
-            // print("attempting to add matrix to: " + test + "["+arrayIndex+"]["+matrixIndex+"]");
-
-            if (arrayIndex >= batchList.Count && matrixIndex == 0) //start a new batch if needed
+            //start a new batch if needed
+            if (arrayIndex >= batchList.Count && matrixIndex == 0)
             {
                 batchList.Add(new List<Matrix4x4>(1023));
             }
 
+            //append new array if index overshoots
             if (matrixIndex >= 1023) //matrix index exceeds batch size, so add a new batch and reset the matrix index
             {
-                // print( test + " index "+  matrixIndex + " exceeds 1023");
                 arrayIndex++;
-                // print("incrementing array index of: " + test + " to " + arrayIndex);
                 batchList.Add(new List<Matrix4x4>(1023));
                 matrixIndex -= 1023; //todo: account for matrixIndex larger than 2046
-
-                // print("adding matrix to: " + test + "["+arrayIndex+"]["+matrixIndex+"]");
             }
 
-
-            // print(test +" batch count: " + batchList.Count);
             if (matrixIndex < batchList[arrayIndex].Count)
                 batchList[arrayIndex][matrixIndex] = valueToAdd;
             else
@@ -468,7 +405,7 @@ namespace Netherlands3D.Twin
             matrixIndex++;
         }
 
-        public (int batchIndex, int matrixIndex) GetJointMatrixIndices(int lineStartIndex)
+        private (int batchIndex, int matrixIndex) GetJointMatrixIndices(int lineStartIndex)
         {
             if (lineStartIndex < 0)
                 return (-1, -1);
@@ -477,23 +414,16 @@ namespace Netherlands3D.Twin
             int totalJointsBeforeStartIndex = Lines.Take(lineStartIndex).Sum(list => list.Count);
 
             return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
-
-            // // If startIndex is out of bounds, return an error (-1, -1)
-            // return (-1, -1);
         }
 
-        public (int batchIndex, int matrixIndex) GetSegmentMatrixIndices(int lineStartIndex)
+        private (int batchIndex, int matrixIndex) GetSegmentMatrixIndices(int lineStartIndex)
         {
             if (lineStartIndex < 0)
                 return (-1, -1);
 
             // Iterate over the Lines to find the total number of Vector3s before the startIndex
             int totalJointsBeforeStartIndex = Lines.Take(lineStartIndex).Sum(list => list.Count) - lineStartIndex; // each line has one more joint than segments, so subtracting the startIndex will result in the total number of segments
-
             return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
-
-            // // If startIndex is out of bounds, return an error (-1, -1)
-            // return (-1, -1);
         }
     }
 }
