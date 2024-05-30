@@ -331,8 +331,8 @@ namespace Netherlands3D.Twin
 
             if (lineStartIndex < 0) //reset cache completely
             {
-                segmentTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
-                jointsTransformMatrixCache = new List<List<Matrix4x4>>(segmentBatchCount);
+                jointsTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
+                segmentTransformMatrixCache = new List<List<Matrix4x4>>(segmentBatchCount);
                 lineStartIndex = 0;
             }
 
