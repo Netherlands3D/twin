@@ -27,7 +27,7 @@ Using this package it is possible to
 Example, coordinate 10.02, 20.01, 1.05 in EPSG:4326, Coordinate Reference System.
 
 ```
-$coordinate = new Coordinate(CoordinateSystem.WGS84LatLonHeight, 10.02, 20.01);
+$coordinate = new Coordinate(CoordinateSystem.WGS84LatLonHeight, 10.02, 20.01, 1.05);
 ```
 alternatively when knowing Longitude = 10.02, Lattitude = 20.01 and height = 1.05, and you are not sure in what order they have to be:
 ```
@@ -50,46 +50,46 @@ returns true if:
 	- the AxisValues fall within the bounds of the valid area for the coordinatesystem
 
 ### Converting to another CoordinateSystem
-
+```
 $rdCoordinate = originalCoordinate.Convert(CoordinateSystem.RDNAP);
-
+```
 ### find a CoordinateSystem by name
-
+```
 $bool CanHandleTheCoordainteSystem = CoordinateSytems.FindCoordinateSystem("coordinatesystemName", out NewCoordinateSystem)
-
-each coordinateSystem has a unique name (in most case the epsg-code). the first found coordinateSystem who's name ins contained in the searchterm will be returned.
+```
+each coordinateSystem has a unique name (in most case the epsg-code). the first found coordinateSystem who's name is contained in the searchterm will be returned.
 If a coordinateSystem is found, the function returns "True"
 If a coordinateSystem is not found, the function return "False" and the coordainteSystem is set to CoordinateSystem.Undefined
 
 ## Connecting Coordinates to Unity
 
 ### assigning a CoordinateSystem to Unity
-
+```
 $CoordinateSystems.connectedCoordinateSystem = CoordinateSystem.RDNAP;
-
+```
 ### assigning a location to the Unity Origin
-
+```
 $CoordinateSystems.SetOrigin(Coordinate that has to be at the Unity-Origin)
-
+```
 this coordinate does not have to be in the coordinateSystem that is assigned to Unity.
 
 ### Creating a coordinate from an Unity Vector3
-
+```
 $newCoordinate = new Coordinate(UnityVector3)
-
+```
 ### Converting to a Vector3
-
+```
 $Vector3 = CoordinateToConvert.ToUnity()
-
+```
 ### Rotating geometry
 When a geocentric coordinateSystem is attached to Unity, the geometry defined in this coordinatesystem has to be rotated so that the gravity-Updirection at the UnityOrigin aligns with UnityUp and the north-direction aligns with the Unity Z-axis.
 
 different coordinatesystems use different Up- and East-directions.
 When coordinateSystem A is connected to Unity, but you have geometry (for example a mesh) that is defined in coordinateSystem B, a rotation might have to be applied to ensure that the geometry aligns nicely with the other objects in unity.
-
-$Quaternion rotationInUnity = CoordinateAtOrigin.RotationToLocalGravityUp()
+```
+$Quaternion rotationInUnity = CoordinateAtOriginOfGeometry.RotationToLocalGravityUp()
 $transform.rotation = rotationInUnity
-
+```
 * (for now) we assume that the mesh itself is defined in a left-handed, Y-up style. (even though most official coordinatesystems are righthanded and Z-up), most geometry-parsers in unity already change this definition
 
 
