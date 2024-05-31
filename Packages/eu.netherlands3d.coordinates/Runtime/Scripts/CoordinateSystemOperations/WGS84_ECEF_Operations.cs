@@ -44,7 +44,7 @@ namespace Netherlands3D.Coordinates
             output.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             output.extraLongitudeRotation = coordinate.extraLongitudeRotation;
 
-            return new Coordinate(CoordinateSystem.WGS84_LatLonHeight, result.Points);
+            return output;
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)
