@@ -48,8 +48,52 @@ namespace Netherlands3D.Coordinates
         public double extraLattitudeRotation;
         public double[] Points;
 
+        CoordinateSystemOperation converter;
+
+        public double easting { 
+            get {
+                if (converter==null)
+                {
+                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
+                }
+                return Points[converter.EastingIndex()]; 
+            }
+            set {
+                if (converter == null)
+                {
+                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
+                }
+                Points[converter.EastingIndex()] = value; 
+            }
+        }
+        public double northing
+        {
+            get { return Points[converter.NorthingIndex()]; }
+            set { Points[converter.NorthingIndex()] = value; }
+        }
+        public double height
+        {
+            get
+            {
+                if (Points.Length>2)
+                {
+                    return Points[2];
+                }
+                return 0;
+            }
+            set
+            {
+                if (Points.Length > 2)
+                {
+                    Points[2]=value;
+                }
+                
+            }
+        }
+
         public Coordinate(CoordinateSystem coordinateSystem, params double[] points)
         {
+            converter = null;
             CoordinateSystem = (int)coordinateSystem;
             Points = points;
             extraLongitudeRotation = 0;
@@ -58,6 +102,7 @@ namespace Netherlands3D.Coordinates
 
         public Coordinate(int coordinateSystem, params double[] points)
         {
+            converter = null;
             CoordinateSystem = coordinateSystem;
             Points = points;
             extraLongitudeRotation = 0;
@@ -66,6 +111,7 @@ namespace Netherlands3D.Coordinates
 
         public Coordinate(Vector3 unityPosition)
         {
+            converter = CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem];
             extraLattitudeRotation = 0;
             extraLongitudeRotation = 0;
             Vector3 unrotatedRelativePosition = Quaternion.Inverse(CoordinateSystems.connectedCRSToUnityUp) * unityPosition;
@@ -90,6 +136,15 @@ namespace Netherlands3D.Coordinates
             Points = (CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, Points)).Points;
         }
 
+        public Coordinate(CoordinateSystem coordinateSystem)
+        {
+            converter = CoordinateSystems.operators[coordinateSystem];
+            Points = new double[converter.AxisCount()];
+            CoordinateSystem = (int)coordinateSystem;
+            extraLongitudeRotation = 0;
+            extraLattitudeRotation = 0;
+        }
+        
         public static Coordinate operator +(Coordinate a, Coordinate b)
         {
             int maxcoordinatecount = a.Points.Length;
