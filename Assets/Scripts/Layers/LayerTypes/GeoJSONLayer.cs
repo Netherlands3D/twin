@@ -76,6 +76,8 @@ namespace Netherlands3D.Twin
             foreach (var visualization in PolygonVisualisations)
             {
                 visualization.gameObject.SetActive(activeInHierarchy);
+                lineRenderer3D.gameObject.SetActive(activeInHierarchy);
+                pointRenderer3D.gameObject.SetActive(activeInHierarchy);
             }
         }
 
