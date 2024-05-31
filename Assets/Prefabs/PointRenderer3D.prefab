@@ -48,4 +48,4 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
   flattenY: 0
   offsetY: 0
-  meshScale: 0.2
+  meshScale: 5

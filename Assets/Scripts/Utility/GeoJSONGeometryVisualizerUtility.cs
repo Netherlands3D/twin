@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin
 
         public static void VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
-            var convertedPoint = ConvertToUnityCoordinates(point, coordinateSystem);
+            var convertedPoint = ConvertToUnityCoordinate(coordinateSystem, point.Coordinates);
             renderer.AppendCollection(new List<Vector3>() { convertedPoint });
         }
 
@@ -74,74 +74,53 @@ namespace Netherlands3D.Twin
             return polygonVisualisation;
         }
 
-        private static List<Vector3> ConvertToUnityCoordinates(LineString lineString, CoordinateSystem originalCoordinateSystem, float defaultHeight = 0)
+        private static List<Vector3> ConvertToUnityCoordinates(LineString lineString, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
         {
             var convertedCoordinates = new List<Vector3>(lineString.Coordinates.Count);
-            // Vector3 unityCoord2D = new Vector3();
 
             for (var i = 0; i < lineString.Coordinates.Count; i++)
             {
                 var point = lineString.Coordinates[i];
-                var lat = point.Latitude;
-                var lon = point.Longitude;
-                var alt = point.Altitude;
-
-                Coordinate coord;
-                if (alt == null)
-                    alt = defaultHeight;
-
-                coord = new Coordinate(originalCoordinateSystem, lat, lon, (double)alt);
-
-                var unityCoord = CoordinateConverter.ConvertTo(coord, CoordinateSystem.Unity).ToVector3();
-                // unityCoord2D.x = unityCoord.x;
-                // unityCoord2D.y = unityCoord.z;
+                var unityCoord = ConvertToUnityCoordinate(originalCoordinateSystem, point, defaultNAPHeight);
                 convertedCoordinates.Add(unityCoord);
             }
 
             return convertedCoordinates;
         }
         
-        private static List<Vector3> ConvertToUnityCoordinates(MultiPoint multiPoint, CoordinateSystem originalCoordinateSystem, float defaultHeight = 0)
+        private static List<Vector3> ConvertToUnityCoordinates(MultiPoint multiPoint, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
         {
             var convertedCoordinates = new List<Vector3>(multiPoint.Coordinates.Count);
-            // Vector3 unityCoord2D = new Vector3();
 
             for (var i = 0; i < multiPoint.Coordinates.Count; i++)
             {
                 var point = multiPoint.Coordinates[i];
-                var lat = point.Coordinates.Latitude;
-                var lon = point.Coordinates.Longitude;
-                var alt = point.Coordinates.Altitude;
-
-                Coordinate coord;
-                if (alt == null)
-                    alt = defaultHeight;
-
-                coord = new Coordinate(originalCoordinateSystem, lat, lon, (double)alt);
-
-                var unityCoord = CoordinateConverter.ConvertTo(coord, CoordinateSystem.Unity).ToVector3();
-                // unityCoord2D.x = unityCoord.x;
-                // unityCoord2D.y = unityCoord.z;
+                var unityCoord = ConvertToUnityCoordinate(originalCoordinateSystem, point.Coordinates, defaultNAPHeight);
                 convertedCoordinates.Add(unityCoord);
             }
-
             return convertedCoordinates;
         }
 
-        private static Vector3 ConvertToUnityCoordinates(Point point, CoordinateSystem originalCoordinateSystem, float defaultHeight = 0)
+        private static Vector3 ConvertToUnityCoordinate(CoordinateSystem originalCoordinateSystem, IPosition point, float defaultNAPHeight = 0)
         {
-            var lat = point.Coordinates.Latitude;
-            var lon = point.Coordinates.Longitude;
-            var alt = point.Coordinates.Altitude;
+            var lat = point.Latitude;
+            var lon = point.Longitude;
+            var alt = point.Altitude;
 
-            Coordinate coord;
-            if (alt == null)
-                alt = defaultHeight;
+            Coordinate coord = new Coordinate(originalCoordinateSystem);
+            coord.easting = lon;
+            coord.northing = lat;
+            if (alt != null)
+            {
+                coord.height = (double)alt;
+            }
+            else
+            {
+                coord = coord.Convert(CoordinateSystem.RDNAP);
+                coord.height = defaultNAPHeight;
+            }
 
-            coord = new Coordinate(originalCoordinateSystem, lat, lon, (double)alt);
-
-            var unityCoord = CoordinateConverter.ConvertTo(coord, CoordinateSystem.Unity).ToVector3();
-            return unityCoord;
+            return coord.ToUnity();
         }
     }
 }

@@ -185,7 +185,7 @@ namespace Netherlands3D.Twin
             for (var i = startIndex; i < PositionCollections.Count; i++)
             {
                 var collection = PositionCollections[i];
-                for (int j = 0; j < collection.Count - 1; j++)
+                for (int j = 0; j < collection.Count; j++)
                 {
                     var currentPoint = collection[j];
 

@@ -27,14 +27,15 @@ namespace Netherlands3D.Twin
         public UnityEvent<string> OnParseError = new();
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
         public List<List<Vector3>> Lines { get; private set; } = new();
-        
+
         private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
         {
             get { return lineRenderer3D; }
             set
-            { //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            {
+                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
                 // value.SetLines(lineRenderer3D.Lines); 
                 // Destroy(lineRenderer3D.gameObject);
                 lineRenderer3D = value;
@@ -42,18 +43,21 @@ namespace Netherlands3D.Twin
         }
 
         private BatchedMeshInstanceRenderer pointRenderer3D;
+
         public BatchedMeshInstanceRenderer PointRenderer3D
         {
             get { return pointRenderer3D; }
             set
-            { //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            {
+                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
                 // value.SetPositionCollections(pointRenderer3D.PositionCollections); 
                 // Destroy(pointRenderer3D.gameObject);
                 pointRenderer3D = value;
             }
         }
-        
+
         private Material polygonVisualizationMaterial;
+
         public Material PolygonVisualizationMaterial
         {
             get { return polygonVisualizationMaterial; }
@@ -196,8 +200,8 @@ namespace Netherlands3D.Twin
 
         private CoordinateSystem GetCoordinateSystem()
         {
-            var coordinateSystem = CoordinateSystem.WGS84;
-            
+            var coordinateSystem = CoordinateSystem.CRS84;
+
             if (CRS is NamedCRS)
             {
                 if (CoordinateSystems.FindCoordinateSystem((CRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
@@ -283,7 +287,7 @@ namespace Netherlands3D.Twin
             {
                 reader.Read(); //read the value of the Type Object
                 Type = serializer.Deserialize<GeoJSONObjectType>(reader);
-                print("parsed type: " + Type);
+                // print("parsed type: " + Type);
             }
         }
 
