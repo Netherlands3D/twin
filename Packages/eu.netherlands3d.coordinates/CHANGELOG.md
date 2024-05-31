@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] 31-05-2024
+
+### Added
+* Added CoordinateSystem CRS84_LonLat
+* Added constructor to Coordinate, setting only the coordinateSystem.
+* Added variables to Coordinate to set/get Easting, Northing and Height. these put the values in the appropriate position
+
+### Fixed
+* RDNAP_Operations returned the wrong name.
+
 ## [1.5.0] 17-05-2024
 
 ### Added

@@ -6,6 +6,7 @@ Using this package it is possible to
 1. Convert between the following coordinate systems:
    - [World Geodetic System 1984 Lattitude, Longitude, EllipsoidalHeight (EPSG:3857, WGS84_LatLonH)](https://epsg.io/3857)
    - [World Geodetic System 1984 Lattitude, Longitude (EPSG:4326, WGS84_LatLon)](https://epsg.io/4326)
+   - [World Geodetic System 1984 Longitude, Lattitude (CRS84, CRS84_LonLat)](https://spatialreference.org/ref/ogc/CRS84/)
    - [World Geodetic System 1984 EartCentered-EarthFixed (EPSG:4978, WGS84_ECEF)](https://epsg.io/4978)
    - [European Terrestrial Reference System 1989 Lattitude, Longitude, EllipsoidalHeight (EPSG:4937, ERTS89_LatLonH)](https://epsg.io/4937)
    - [European Terrestrial Reference System 1989 Lattitude, Longitude (EPSG:4258, ERTS89_LatLon)](https://epsg.io/4258)
@@ -23,11 +24,20 @@ Using this package it is possible to
 
 ### Creating a Coordinate from known values
 
-Example, describing longitude 10.02, latitude 20.01 in EPSG:4326, Coordinate Reference System.
+Example, coordinate 10.02, 20.01, 1.05 in EPSG:4326, Coordinate Reference System.
 
 ```
-$coordinate = new Coordinate(CoordinateSystem.WGS84LatLon, 20.01, 10.02);
+$coordinate = new Coordinate(CoordinateSystem.WGS84LatLonHeight, 10.02, 20.01);
 ```
+alternatively when knowing Longitude = 10.02, Lattitude = 20.01 and height = 1.05, and you are not sure in what order they have to be:
+```
+$coordinate = new Coordinate(CoordinateSystem.WGS84LatLonHeight);
+$coordinate.easting = longitudeValue
+$coordinate.northing = lattitudeValue
+$coordinate.height = heightValue
+```
+
+
 ### Testing the validity of a coordinate
 
 you can test is a coordinate is valid using the function IsValid():

@@ -13,6 +13,19 @@ namespace Netherlands3D.Coordinates
         {
             return "28992";
         }
+
+        public override int NorthingIndex()
+        {
+            return 1;
+        }
+        public override int EastingIndex()
+        {
+            return 0;
+        }
+        public override int AxisCount()
+        {
+            return 2;
+        }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];

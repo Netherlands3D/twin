@@ -14,6 +14,9 @@ namespace Netherlands3D.Coordinates
         public abstract Vector3WGS Orientation();
         public abstract Vector3WGS GlobalUpDirection(Coordinate coordinate);
         public abstract Vector3WGS LocalUpDirection(Coordinate coordinate);
+        public abstract int EastingIndex();
+        public abstract int NorthingIndex();
+        public abstract int AxisCount();
         public abstract string Code();
 
 
