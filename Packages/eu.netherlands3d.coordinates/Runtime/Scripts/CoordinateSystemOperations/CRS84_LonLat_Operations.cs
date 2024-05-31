@@ -29,19 +29,19 @@ namespace Netherlands3D.Coordinates
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             double[] newPoints = new double[2] { coordinate.Points[1], coordinate.Points[0] };
-            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, newPoints);
+            Coordinate result = new Coordinate(CoordinateSystem.CRS84, newPoints);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
-            return coordinate;
+            return result;
         }
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
             double[] newPoints = new double[3] { coordinate.Points[1], coordinate.Points[0],0 };
-            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLon, newPoints);
+            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, newPoints);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
-            return coordinate;
+            return result;
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)
