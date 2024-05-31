@@ -12,6 +12,19 @@ namespace Netherlands3D.Coordinates
         {
             return "3857";
         }
+
+        public override int NorthingIndex()
+        {
+            return 1;
+        }
+        public override int EastingIndex()
+        {
+            return 0;
+        }
+        public override int AxisCount()
+        {
+            return 2;
+        }
         double semiMajorAxis = 6378137.000;
         
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)

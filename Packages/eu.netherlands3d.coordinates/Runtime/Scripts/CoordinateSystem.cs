@@ -50,6 +50,7 @@ namespace Netherlands3D.Coordinates
         WGS84_ECEF = 4978,
         WGS84_LatLonHeight = 4979,
         RDNAP = 2,
+        CRS84,
 
         RD = 28992,
         EPSG_3857 = WGS84_PseudoMercator,
@@ -69,7 +70,8 @@ namespace Netherlands3D.Coordinates
             { CoordinateSystem.WGS84_PseudoMercator, new WGS84_PseudoMercator_Operations() },
             { CoordinateSystem.ETRS89_ECEF, new ETRS89_ECEF_Operations() },
             { CoordinateSystem.ETRS89_LatLon, new ETRS89_LatLon_Operations() },
-            { CoordinateSystem.ETRS89_LatLonHeight, new ETRS89_LatLonHeight_Operations() }
+            { CoordinateSystem.ETRS89_LatLonHeight, new ETRS89_LatLonHeight_Operations() },
+            { CoordinateSystem.CRS84, new CRS84_LonLat_Operations() }
 
         };
 

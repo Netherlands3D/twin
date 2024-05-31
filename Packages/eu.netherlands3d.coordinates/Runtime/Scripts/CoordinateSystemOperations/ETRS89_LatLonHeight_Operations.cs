@@ -13,6 +13,20 @@ namespace Netherlands3D.Coordinates
         {
             return "4937";
         }
+
+        public override int NorthingIndex()
+        {
+            return 0;
+        }
+        public override int EastingIndex()
+        {
+            return 1;
+        }
+
+        public override int AxisCount()
+        {
+            return 3;
+        }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLonHeight, coordinate.Points);

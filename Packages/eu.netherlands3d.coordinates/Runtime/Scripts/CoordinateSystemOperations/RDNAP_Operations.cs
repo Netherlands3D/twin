@@ -11,16 +11,29 @@ namespace Netherlands3D.Coordinates
     {
         public override string Code()
         {
-            return "28992";
+            return "7415";
+        }
+
+        public override int NorthingIndex()
+        {
+            return 1;
+        }
+        public override int EastingIndex()
+        {
+            return 0;
+        }
+        public override int AxisCount()
+        {
+            return 3;
         }
         public override CoordinateSystemGroup GetCoordinateSystemGroup()
         {
             return CoordinateSystemGroup.RD;
         }
 
-        public static byte[] RDCorrectionX = Resources.Load<TextAsset>("x2c").bytes;
-        public static byte[] RDCorrectionY = Resources.Load<TextAsset>("y2c").bytes;
-        public static byte[] RDCorrectionZ = Resources.Load<TextAsset>("nlgeo04").bytes;
+        public static byte[] RDCorrectionX =null;
+        public static byte[] RDCorrectionY = null;
+        public static byte[] RDCorrectionZ = null;
 
         private static double[] Rp = new double[] { 0, 1, 2, 0, 1, 3, 1, 0, 2 };
         private static double[] Rq = new double[] { 1, 1, 1, 3, 0, 1, 3, 2, 3 };
@@ -148,6 +161,12 @@ namespace Netherlands3D.Coordinates
             }
             double Y = DeltaY + refRDY;
 
+            if (RDCorrectionX==null)
+            {
+                 RDCorrectionX = Resources.Load<TextAsset>("x2c").bytes;
+                RDCorrectionY = Resources.Load<TextAsset>("y2c").bytes;
+                RDCorrectionZ = Resources.Load<TextAsset>("nlgeo04").bytes;
+            }
             double correctionX = RDCorrection(X, Y, "X", RDCorrectionX);
             double correctionY = RDCorrection(X, Y, "Y", RDCorrectionY);
             X -= correctionX;
@@ -170,6 +189,12 @@ namespace Netherlands3D.Coordinates
             double y = coordinate.Points[1];
             double nap = coordinate.Points[2];
 
+            if (RDCorrectionX == null)
+            {
+                RDCorrectionX = Resources.Load<TextAsset>("x2c").bytes;
+                RDCorrectionY = Resources.Load<TextAsset>("y2c").bytes;
+                RDCorrectionZ = Resources.Load<TextAsset>("nlgeo04").bytes;
+            }
 
             double correctionX = RDCorrection(x, y, "X", RDCorrectionX);
             double correctionY = RDCorrection(x, y, "Y", RDCorrectionY);

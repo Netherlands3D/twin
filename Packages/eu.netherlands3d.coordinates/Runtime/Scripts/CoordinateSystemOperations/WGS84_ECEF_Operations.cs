@@ -13,6 +13,18 @@ namespace Netherlands3D.Coordinates
             return "4978";
         }
 
+        public override int NorthingIndex()
+        {
+            return 1;
+        }
+        public override int EastingIndex()
+        {
+            return 0;
+        }
+        public override int AxisCount()
+        {
+            return 3;
+        }
         GeographicToGeocentricSettings conversionSettings = new GeographicToGeocentricSettings(0d, 6378137d, 298.2572236);
 
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
@@ -32,7 +44,7 @@ namespace Netherlands3D.Coordinates
             output.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             output.extraLongitudeRotation = coordinate.extraLongitudeRotation;
 
-            return new Coordinate(CoordinateSystem.WGS84_LatLonHeight, result.Points);
+            return output;
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)

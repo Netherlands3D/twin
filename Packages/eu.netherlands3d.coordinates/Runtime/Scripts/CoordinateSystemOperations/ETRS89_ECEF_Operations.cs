@@ -93,9 +93,23 @@ namespace Netherlands3D.Coordinates
             return GlobalUpDirection(coordinate);
         }
 
+        public override int NorthingIndex()
+        {
+            return 1;
+        }
+        public override int EastingIndex()
+        {
+            return 0;
+        }
+
         public override Vector3WGS Orientation()
         {
             return new Vector3WGS(0, 90, 0);
+        }
+
+        public override int AxisCount()
+        {
+            return 3;
         }
     }
 }

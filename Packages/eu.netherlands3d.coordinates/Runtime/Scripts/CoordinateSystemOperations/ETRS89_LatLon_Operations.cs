@@ -13,22 +13,36 @@ namespace Netherlands3D.Coordinates
         {
             return "4258";
         }
-        public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
+
+        public override int NorthingIndex()
         {
-            double[] newPoints = new double[3] { coordinate.Points[0], coordinate.Points[1], 0 };
-            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, newPoints);
-            result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
-            result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
-            return coordinate;
+            return 0;
+        }
+        public override int EastingIndex()
+        {
+            return 1;
         }
 
-        public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
+        public override int AxisCount()
+        {
+            return 2;
+        }
+        public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             double[] newPoints = new double[2] { coordinate.Points[0], coordinate.Points[1] };
             Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLon, newPoints);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
-            return coordinate;
+            return result;
+        }
+
+        public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
+        {
+            double[] newPoints = new double[3] { coordinate.Points[0], coordinate.Points[1],0 };
+            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, newPoints);
+            result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
+            result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
+            return result;
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)
