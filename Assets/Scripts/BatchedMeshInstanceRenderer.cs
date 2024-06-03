@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin
 {
@@ -24,6 +25,7 @@ namespace Netherlands3D.Twin
         public List<List<Vector3>> PositionCollections { get; private set; }
         private List<List<Matrix4x4>> transformMatrixCache = new List<List<Matrix4x4>>();
 
+        private Camera projectionCamera;
         private bool cacheReady = false;
 
         public Mesh Mesh
@@ -67,7 +69,11 @@ namespace Netherlands3D.Twin
                 GenerateTransformMatrixCache();
             }
         }
-
+        
+        private void Start()
+        {
+            projectionCamera = GameObject.FindWithTag("ProjectorCamera").GetComponent<Camera>();
+        }
         private void Update()
         {
             if (cacheReady)
@@ -83,8 +89,8 @@ namespace Netherlands3D.Twin
         {
             for (var i = 0; i < transformMatrixCache.Count; i++)
             {
-                var matrix = transformMatrixCache[i];
-                Graphics.DrawMeshInstanced(Mesh, 0, Material, matrix);
+                var batch = transformMatrixCache[i];
+                Graphics.DrawMeshInstanced(Mesh, 0, Material, batch, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
             }
         }
 

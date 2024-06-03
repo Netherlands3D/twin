@@ -34,6 +34,8 @@ namespace Netherlands3D.Twin
 
         private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
 
+        private Camera projectionCamera;
+        
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
         private bool hasColors = false;
@@ -92,6 +94,11 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private void Start()
+        {
+            projectionCamera = GameObject.FindWithTag("ProjectorCamera").GetComponent<Camera>();
+        }
+
         private void Update()
         {
             if (cacheReady)
@@ -118,8 +125,9 @@ namespace Netherlands3D.Twin
                 //
                 //     continue;
                 // }
-
-                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
+                
+                Graphics.DrawMeshInstanced(lineMesh, 0, LineMaterial, lineTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
+                // Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
             }
 
             if (DrawJoints)
@@ -127,7 +135,7 @@ namespace Netherlands3D.Twin
                 for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
                 {
                     var lineJointTransforms = jointsTransformMatrixCache[i];
-                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms);
+                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
                 }
             }
         }
