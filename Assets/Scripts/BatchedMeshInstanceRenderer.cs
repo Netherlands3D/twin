@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin
 
         [SerializeField] private float meshScale = 0.2f;
 
-        public List<List<Vector3>> PositionCollections { get; private set; }
+        public List<List<Coordinate>> PositionCollections { get; private set; }
         private List<List<Matrix4x4>> transformMatrixCache = new List<List<Matrix4x4>>();
 
         private Camera projectionCamera;
@@ -123,16 +124,16 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Set a single line (overwriting any previous lines)
         /// </summary>
-        public void SetLine(List<Vector3> linePoints)
+        public void SetLine(List<Coordinate> linePoints)
         {
-            PositionCollections = new List<List<Vector3>> { linePoints };
+            PositionCollections = new List<List<Coordinate>> { linePoints };
             SetPositionCollections(PositionCollections);
         }
 
         /// <summary>
         /// Set the current list of lines (overwriting any previous list)
         /// </summary>
-        public void SetPositionCollections(List<List<Vector3>> collections)
+        public void SetPositionCollections(List<List<Coordinate>> collections)
         {
             PositionCollections = collections;
             GenerateTransformMatrixCache();
@@ -141,10 +142,10 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Append single line to the current list of lines
         /// </summary>
-        public void AppendCollection(List<Vector3> collection)
+        public void AppendCollection(List<Coordinate> collection)
         {
             if (PositionCollections == null)
-                PositionCollections = new List<List<Vector3>>();
+                PositionCollections = new List<List<Coordinate>>();
 
             var startIndex = PositionCollections.Count;
             PositionCollections.Add(collection);
@@ -154,10 +155,10 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Append multiple lines to the current list of lines
         /// </summary>
-        public void AppendCollections(List<List<Vector3>> collections)
+        public void AppendCollections(List<List<Coordinate>> collections)
         {
             if (PositionCollections == null)
-                PositionCollections = new List<List<Vector3>>();
+                PositionCollections = new List<List<Coordinate>>();
 
             var startIndex = PositionCollections.Count;
             PositionCollections.AddRange(collections);
@@ -171,7 +172,7 @@ namespace Netherlands3D.Twin
             cacheReady = false;
         }
 
-        private void GenerateTransformMatrixCache(int startIndex = -1)
+        public void GenerateTransformMatrixCache(int startIndex = -1)
         {
             if (PositionCollections == null || PositionCollections.Count < 1) return;
 
@@ -193,7 +194,7 @@ namespace Netherlands3D.Twin
                 var collection = PositionCollections[i];
                 for (int j = 0; j < collection.Count; j++)
                 {
-                    var currentPoint = collection[j];
+                    var currentPoint = collection[j].ToUnity();
 
                     // Flatten the Y axis if needed
                     currentPoint.y = (FlattenY ? 0 : currentPoint.y) + offsetY;
@@ -231,7 +232,7 @@ namespace Netherlands3D.Twin
             matrixIndex++;
         }
 
-        private static (int batchIndex, int matrixIndex) GetMatrixIndices(List<List<Vector3>> collections, int startIndex)
+        private static (int batchIndex, int matrixIndex) GetMatrixIndices(List<List<Coordinate>> collections, int startIndex)
         {
             if (startIndex < 0)
                 return (-1, -1);

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 486974600061382359}
   - component: {fileID: 373191915858293964}
+  - component: {fileID: 5447569626426196056}
   m_Layer: 12
   m_Name: LineRenderer3D
   m_TagString: Untagged
@@ -53,3 +54,36 @@ MonoBehaviour:
   flattenY: 0
   offsetY: 0
   lineDiameter: 1
+--- !u!114 &5447569626426196056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4979
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 373191915858293964}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.LineRenderer3D, Assembly-CSharp
+        m_MethodName: GenerateTransformMatrixCache
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

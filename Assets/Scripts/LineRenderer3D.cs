@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -28,7 +29,7 @@ namespace Netherlands3D.Twin
 
         [SerializeField] private float lineDiameter = 0.2f;
 
-        public List<List<Vector3>> Lines { get; private set; }
+        public List<List<Coordinate>> Lines { get; private set; }
 
         private List<List<Matrix4x4>> segmentTransformMatrixCache = new List<List<Matrix4x4>>();
 
@@ -202,21 +203,21 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Set a single line (overwriting any previous lines)
         /// </summary>
-        public void SetLine(List<Vector3> linePoints)
+        public void SetLine(List<Coordinate> linePoints)
         {
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
-            Lines = new List<List<Vector3>> { linePoints };
+            Lines = new List<List<Coordinate>> { linePoints };
             SetLines(Lines);
         }
 
         /// <summary>
         /// Set the current list of lines (overwriting any previous list)
         /// </summary>
-        public void SetLines(List<List<Vector3>> lines)
+        public void SetLines(List<List<Coordinate>> lines)
         {
-            foreach (List<Vector3> line in lines)
+            foreach (List<Coordinate> line in lines)
             {
                 var validLine = ValidateLine(line);
                 if (!validLine) return;
@@ -229,13 +230,13 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Append single line to the current list of lines
         /// </summary>
-        public void AppendLine(List<Vector3> linePoints)
+        public void AppendLine(List<Coordinate> linePoints)
         {
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
             if (Lines == null)
-                Lines = new List<List<Vector3>>();
+                Lines = new List<List<Coordinate>>();
 
             var startIndex = Lines.Count;
             Lines.Add(linePoints);
@@ -245,16 +246,16 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Append multiple lines to the current list of lines
         /// </summary>
-        public void AppendLines(List<List<Vector3>> lines)
+        public void AppendLines(List<List<Coordinate>> lines)
         {
-            foreach (List<Vector3> line in lines)
+            foreach (List<Coordinate> line in lines)
             {
                 var validLine = ValidateLine(line);
                 if (!validLine) return;
             }
 
             if (this.Lines == null)
-                this.Lines = new List<List<Vector3>>();
+                this.Lines = new List<List<Coordinate>>();
 
             var startIndex = Lines.Count;
             this.Lines.AddRange(lines);
@@ -299,7 +300,7 @@ namespace Netherlands3D.Twin
             hasColors = true;
         }
 
-        public bool ValidateLine(List<Vector3> line)
+        public bool ValidateLine(List<Coordinate> line)
         {
             if (line.Count < 2)
             {
@@ -327,7 +328,7 @@ namespace Netherlands3D.Twin
             hasColors = false;
         }
 
-        private void GenerateTransformMatrixCache(int lineStartIndex = -1)
+        public void GenerateTransformMatrixCache(int lineStartIndex = -1)
         {
             if (Lines == null || Lines.Count < 1) return;
 
@@ -355,8 +356,8 @@ namespace Netherlands3D.Twin
                 var line = Lines[i];
                 for (int j = 0; j < line.Count - 1; j++)
                 {
-                    var currentPoint = line[j];
-                    var nextPoint = line[j + 1];
+                    var currentPoint = line[j].ToUnity();
+                    var nextPoint = line[j + 1].ToUnity();
 
                     var direction = nextPoint - currentPoint;
                     float distance = direction.magnitude;
