@@ -52,9 +52,9 @@ namespace Netherlands3D.Twin.Configuration
             if(originXField.isFocused || originYField.isFocused)
                 return;
 
-
+            //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
             var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            UpdateInterfaceToNewOrigin(cameraCoordinate);
+            configuration.Origin = cameraCoordinate;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void OnEnable()
         {
-            configuration.OnOriginChanged.AddListener(ValidateRdCoordinates);
+            configuration.OnOriginChanged.AddListener(ValidateRdCoordinate);
             configuration.OnOriginChanged.AddListener(UpdateInterfaceToNewOrigin);
             configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
             foreach (var availableFunctionality in configuration.Functionalities)
@@ -73,9 +73,11 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        private void ValidateRdCoordinates(Coordinate coordinates)
+        private void ValidateRdCoordinate(Coordinate coordinate)
         {
-            var validRdCoordinates = EPSG7415.IsValid(coordinates.ToVector3RD());
+            var rd = coordinate.Convert(CoordinateSystem.RD);
+            var validRdCoordinates = rd.IsValid();
+            
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
@@ -86,7 +88,7 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void OnDisable()
         {
-            configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinates);
+            configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinate);
             configuration.OnOriginChanged.RemoveListener(UpdateInterfaceToNewOrigin);
             configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
             foreach (var availableFunctionality in configuration.Functionalities)
