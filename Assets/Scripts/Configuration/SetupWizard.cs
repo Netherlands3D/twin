@@ -32,6 +32,9 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Events")]
         public UnityEvent OnSettingsChanged = new UnityEvent();
 
+        private bool urlNeedsUpdate = false;
+        private int urlUpdateFrameCooldown = 60;
+        private int lastUrlUpdate = 0;
 
         private void Start()
         {
@@ -55,6 +58,13 @@ namespace Netherlands3D.Twin.Configuration
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
             var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
             configuration.Origin = cameraCoordinate;
+
+            //Update url with some cooldown (browsers do not like setting url too often)
+            if(urlNeedsUpdate && Time.frameCount - lastUrlUpdate > urlUpdateFrameCooldown)
+            {
+                UpdateShareUrl();
+                lastUrlUpdate = Time.frameCount;
+            }
         }
 
         /// <summary>
@@ -77,7 +87,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             var rd = coordinate.Convert(CoordinateSystem.RD);
             var validRdCoordinates = rd.IsValid();
-            
+
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
             originYField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
         }
@@ -113,18 +123,13 @@ namespace Netherlands3D.Twin.Configuration
 
             //Update fields and browser URL if rounded coordinate is different from current text
             if(yText != originYField.text || xText != originXField.text){
-                UpdateShareUrlWhenOriginChanges(coordinate);
+                urlNeedsUpdate = true;
                 originXField.SetTextWithoutNotify(xText);
                 originYField.SetTextWithoutNotify(yText);
             }
         }
 
         private void UpdateShareUrlWhenFunctionalityChanges()
-        {
-            UpdateShareUrl();
-        }
-
-        private void UpdateShareUrlWhenOriginChanges(Coordinate origin)
         {
             UpdateShareUrl();
         }
@@ -136,16 +141,31 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateShareUrl()
         {
+            urlNeedsUpdate = false;
+            
             var queryString = Uri.UnescapeDataString(configuration.ToQueryString());
             #if UNITY_WEBGL && !UNITY_EDITOR
             ReplaceUrl($"./{queryString}");
+            #else
+            Debug.Log($"Update url query to ./{queryString}");
             #endif
         }
 
         private void OnOriginYChanged(string value)
         {
             int.TryParse(value, out int y);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, configuration.Origin.Points[2]);
+
+            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
+            cameraRD.Points[1] = y;
+
+            var newCameraCoordinate = CoordinateConverter
+                .ConvertTo(cameraRD, CoordinateSystem.Unity)
+                .ToVector3();
+
+            newCameraCoordinate.y = Camera.main.transform.position.y;
+
+            Camera.main.transform.position = newCameraCoordinate;
 
             OnSettingsChanged.Invoke();
         }
@@ -153,7 +173,18 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], configuration.Origin.Points[2]);
+            
+            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
+            cameraRD.Points[0] = x;
+
+            var newCameraCoordinate = CoordinateConverter
+                .ConvertTo(cameraRD, CoordinateSystem.Unity)
+                .ToVector3();
+
+            newCameraCoordinate.y = Camera.main.transform.position.y;
+
+            Camera.main.transform.position = newCameraCoordinate;
 
             OnSettingsChanged.Invoke();
         }
