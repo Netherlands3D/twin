@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -70,6 +71,7 @@ namespace Netherlands3D.Twin
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
+            polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
 
             return polygonVisualisation;
         }
