@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.1341472, b: 0.121078566, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1305,7 +1305,7 @@ PrefabInstance:
     - target: {fileID: 5126677324445757005, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000014294074
+      value: 0.00023452478
       objectReference: {fileID: 0}
     - target: {fileID: 7176924509424257124, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
@@ -1370,7 +1370,7 @@ PrefabInstance:
     - target: {fileID: 8461925525370366667, guid: b450a005ceae77445aeed9497c3a3ea8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.9332244
+      value: 0.0001782144
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1505,6 +1505,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1923115800}
     m_Modifications:
+    - target: {fileID: 1037331224262311910, guid: ccd0aefdbf9cee841b283f69917bfffe,
+        type: 3}
+      propertyPath: moveCameraToClickedLocation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5186350387006065524, guid: ccd0aefdbf9cee841b283f69917bfffe,
         type: 3}
       propertyPath: m_Name
@@ -1609,6 +1614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788323207140797385, guid: ccd0aefdbf9cee841b283f69917bfffe,
+        type: 3}
+      propertyPath: moveCamera
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

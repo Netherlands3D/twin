@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
-        [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 155207,462945, 300);
+        [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
 
         public string Title
@@ -35,6 +35,7 @@ namespace Netherlands3D.Twin.Configuration
             get => origin;
             set
             {
+               
                 var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.Points[0], (int)value.Points[1], (int)value.Points[2]);
                 origin = roundedValue;
                 OnOriginChanged.Invoke(roundedValue);
@@ -152,7 +153,8 @@ namespace Netherlands3D.Twin.Configuration
         {
             var enabledfunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
 
-            urlBuilder.AddQueryParameter("origin", $"{(int)Origin.Points[0]},{(int)origin.Points[1]},{(int)origin.Points[2]}");
+            var originRDNAP = origin.Convert(CoordinateSystem.RDNAP);
+            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.Points[0]},{(int)originRDNAP.Points[1]},{(int)originRDNAP.Points[2]}");
             urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledfunctionalities.ToArray()));
             foreach (var functionality in Functionalities)
             {

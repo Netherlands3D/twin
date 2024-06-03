@@ -17,6 +17,10 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
+
+            // Set the starting origin to the center of the Netherlands
+            Coordinates.CoordinateSystems.SetOrigin(new Coordinates.Coordinate(Coordinates.CoordinateSystem.RDNAP, 155000,463000, 0));
         }
 
         private IEnumerator Start()
