@@ -11,6 +11,8 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Configuration configuration;
         private Coroutine movingCoRoutine;
 
+        [SerializeField] private Vector3 defaultCameraOffset = new();
+
         private void Awake()
         {
             mainCamera = mainCamera == null ? Camera.main : mainCamera;
@@ -40,20 +42,14 @@ namespace Netherlands3D.Twin.Configuration
         private IEnumerator DebounceMovingOfOrigin(Coordinate newOrigin)
         {
             yield return new WaitForSeconds(.3f);
-
             movingCoRoutine = null;
 
-            // TODO: IsValid is broken an should be restored first
-            if (newOrigin.IsValid() == false)
-            {
-                Debug.LogWarning(
-                    $"{newOrigin} is not a valid coordinate, camera is not moving to that position"
-                );
+            var newCameraPosition = CoordinateConverter
+                .ConvertTo(newOrigin, CoordinateSystem.Unity)
+                .ToVector3();
 
-                yield break;
-            };
-           CoordinateSystems.SetOrigin(newOrigin);
-            
+            mainCamera.transform.position = newCameraPosition + defaultCameraOffset;
+            mainCamera.transform.LookAt(newCameraPosition);
         }
     }
 }

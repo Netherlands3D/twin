@@ -17,8 +17,8 @@ MonoBehaviour:
     extraLongitudeRotation: 0
     extraLattitudeRotation: 0
     Points:
-    - 170685
-    - 459702
+    - 155207
+    - 462945
     - 0
   Functionalities:
   - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
