@@ -32,21 +32,29 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Events")]
         public UnityEvent OnSettingsChanged = new UnityEvent();
 
+
         private void Start()
         {
             originXField.text = configuration.Origin.Points[0].ToString(CultureInfo.InvariantCulture);
-            originXField.onValueChanged.AddListener(OnOriginXChanged);
+            originXField.onEndEdit.AddListener(OnOriginXChanged);
 
             originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
-            originYField.onValueChanged.AddListener(OnOriginYChanged);
-
-            addressSearchField.onCoordinateFound.AddListener(UpdateStartingPositionWithoutNotify);
-            minimap.onClick.AddListener(UpdateStartingPositionWithoutNotify);
+            originYField.onEndEdit.AddListener(OnOriginYChanged);
 
             configuration.OnOriginChanged.Invoke(configuration.Origin);
 
             functionalitiesPane.Init(configuration.Functionalities);
             functionalitiesPane.Toggled.AddListener(functionality => OnSettingsChanged.Invoke());
+        }
+
+        private void Update()
+        {
+            if(originXField.isFocused || originYField.isFocused)
+                return;
+
+
+            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            UpdateInterfaceToNewOrigin(cameraCoordinate);
         }
 
         /// <summary>
@@ -56,7 +64,7 @@ namespace Netherlands3D.Twin.Configuration
         private void OnEnable()
         {
             configuration.OnOriginChanged.AddListener(ValidateRdCoordinates);
-            configuration.OnOriginChanged.AddListener(UpdateShareUrlWhenOriginChanges);
+            configuration.OnOriginChanged.AddListener(UpdateInterfaceToNewOrigin);
             configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
             foreach (var availableFunctionality in configuration.Functionalities)
             {
@@ -79,7 +87,7 @@ namespace Netherlands3D.Twin.Configuration
         private void OnDisable()
         {
             configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinates);
-            configuration.OnOriginChanged.RemoveListener(UpdateShareUrlWhenOriginChanges);
+            configuration.OnOriginChanged.RemoveListener(UpdateInterfaceToNewOrigin);
             configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
             foreach (var availableFunctionality in configuration.Functionalities)
             {
@@ -88,32 +96,9 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        public void UpdateStartingPositionWithoutNotify(Coordinate coordinate)
+        public void UpdateInterfaceToNewOrigin(Coordinate coordinate)
         {
-            var currentCameraPosition = Camera.main.transform.position;
-            var cameraCoordinateUnity = new Coordinate(CoordinateSystem.Unity, 
-                currentCameraPosition.x, 
-                currentCameraPosition.y,
-                currentCameraPosition.z
-            );
-            var cameraCoordinateRD = CoordinateConverter.ConvertTo(cameraCoordinateUnity, CoordinateSystem.RD);
-            var cameraAltitude = cameraCoordinateRD.Points[2];   
             var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
-
-            // Keep current camera elevation
-            convertedCoordinate = new Coordinate(
-                convertedCoordinate.CoordinateSystem, 
-                convertedCoordinate.Points[0], 
-                convertedCoordinate.Points[1],
-                cameraAltitude
-            );
-            
-            // Setting a starting position's altitude to 0 shouldn't happen, if we detect this as an artefact of
-            // the conversion process or an actual intention, we reinstate the original altitude.
-            if (Mathf.Approximately((float)convertedCoordinate.Points[2], 0f)) {
-                convertedCoordinate.Points[2] = cameraAltitude;
-            }
-
             var roundedCoordinate = new Coordinate(
                 convertedCoordinate.CoordinateSystem, 
                 (int)convertedCoordinate.Points[0], 
@@ -121,9 +106,15 @@ namespace Netherlands3D.Twin.Configuration
                 (int)convertedCoordinate.Points[2]
             );
 
-            originXField.SetTextWithoutNotify(roundedCoordinate.Points[0].ToString(CultureInfo.InvariantCulture));
-            originYField.SetTextWithoutNotify(roundedCoordinate.Points[1].ToString(CultureInfo.InvariantCulture));
-            configuration.Origin = convertedCoordinate;
+            var xText = roundedCoordinate.Points[0].ToString(CultureInfo.InvariantCulture);
+            var yText = roundedCoordinate.Points[1].ToString(CultureInfo.InvariantCulture);
+
+            //Update fields and browser URL if rounded coordinate is different from current text
+            if(yText != originYField.text || xText != originXField.text){
+                UpdateShareUrlWhenOriginChanges(coordinate);
+                originXField.SetTextWithoutNotify(xText);
+                originYField.SetTextWithoutNotify(yText);
+            }
         }
 
         private void UpdateShareUrlWhenFunctionalityChanges()
@@ -144,8 +135,6 @@ namespace Netherlands3D.Twin.Configuration
         public void UpdateShareUrl()
         {
             var queryString = Uri.UnescapeDataString(configuration.ToQueryString());
-            Debug.Log("Update queryString to " + queryString);
-
             #if UNITY_WEBGL && !UNITY_EDITOR
             ReplaceUrl($"./{queryString}");
             #endif
@@ -154,7 +143,7 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginYChanged(string value)
         {
             int.TryParse(value, out int y);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, (int)configuration.Origin.Points[0], y, configuration.Origin.Points[2]);
 
             OnSettingsChanged.Invoke();
         }
@@ -162,7 +151,7 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
-            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], 300);
+            configuration.Origin = new Coordinate(CoordinateSystem.RD, x, (int)configuration.Origin.Points[1], configuration.Origin.Points[2]);
 
             OnSettingsChanged.Invoke();
         }

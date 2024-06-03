@@ -79,29 +79,24 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         public void MoveOriginTo(Coordinate destination)
         {
-
-            Coordinate MainShifterWGS = new Coordinate(mainShifter.position).Convert(CoordinateSystem.WGS84_LatLonHeight);
-
-            double Originelevation = new Coordinate(transform.position).Convert(CoordinateSystem.WGS84_LatLonHeight).Points[2];
-
+            Coordinate mainShifterRD = new Coordinate(mainShifter.position).Convert(CoordinateSystem.RDNAP);
 
 #if UNITY_EDITOR
             //if (LogShifts) Debug.Log($"Moving origin from {from.ToVector3()} (EPSG:{from.CoordinateSystem}) to {to.ToVector3()} (EPSG:{to.CoordinateSystem})");
 #endif
 
-            onPreShift.Invoke(MainShifterWGS, MainShifterWGS);
+            onPreShift.Invoke(mainShifterRD, mainShifterRD);
 
             //set the origin to the wgs84-coordainte of the camera, using the elevation of this object
-            Coordinate NewOriginPosition = MainShifterWGS;
-            NewOriginPosition.Points[2] = Originelevation;
+            Coordinate NewOriginPosition = mainShifterRD;
+            NewOriginPosition.Points[2] = 0;
             CoordinateSystems.SetOrigin(NewOriginPosition);
 
             //reset the cmeraPosition in unity based on the enew origin-coordinate
-            mainShifter.position = MainShifterWGS.ToUnity();
-
+            mainShifter.position = mainShifterRD.ToUnity();
             
             // Shout to the world that the origin has changed to this coordinate
-            onPostShift.Invoke(MainShifterWGS, MainShifterWGS);
+            onPostShift.Invoke(mainShifterRD, mainShifterRD);
         }
     }
 }
