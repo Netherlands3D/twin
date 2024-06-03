@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField userNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
-        [SerializeField] private Button submitCredentialsButton;
+        [SerializeField] private Transform serverErrorFeedback;
 
         public ILayerWithCredentials Layer { get; set; }
 
@@ -33,18 +33,10 @@ namespace Netherlands3D.Twin
 
         private Coroutine findSpecificTypeCoroutine;    
 
-        private void OnEnable()
+        public void ApplyCredentials()
         {
-            submitCredentialsButton.onClick.AddListener(HandleCredentialsChange);
-        }
-        
-        private void OnDisable()
-        {
-            submitCredentialsButton.onClick.RemoveListener(HandleCredentialsChange);
-        }
+            serverErrorFeedback.gameObject.SetActive(false);
 
-        private void HandleCredentialsChange()
-        {
             switch(credentialType)
             {
                 case CredentialType.UsernamePassword:
@@ -79,12 +71,10 @@ namespace Netherlands3D.Twin
                 url += "?key=" + keyTokenOrCodeInputField.text;
             else
                 url += "&key=" + keyTokenOrCodeInputField.text;
-            
 
-            
+            //Nothing worked, show error
+            serverErrorFeedback.gameObject.SetActive(true);
         }
-
-
 
         public void SetCredentialType(int type)
         {
