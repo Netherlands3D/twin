@@ -222,7 +222,10 @@ namespace Netherlands3D.AddressSearch
             double.TryParse(lonLat[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon);
             double.TryParse(lonLat[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat);
 
-            return CoordinateConverter.WGS84toUnity(lon, lat);
+            var wgs84 = new Coordinate(CoordinateSystem.WGS84_LatLon, lat, lon);
+            var unityCoordinate = wgs84.ToUnity();
+            
+            return unityCoordinate;
         }
 
         IEnumerator LerpCamera(GameObject targetObj, Vector3 endPos, Quaternion endRot, float duration)
