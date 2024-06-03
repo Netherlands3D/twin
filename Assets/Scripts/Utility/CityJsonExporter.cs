@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin
                 targetGameObject.transform.position.y,
                 targetGameObject.transform.position.z
             );
-            var rdCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            var rdCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RDNAP);
             var scale = targetGameObject.transform.localScale;
 
 
