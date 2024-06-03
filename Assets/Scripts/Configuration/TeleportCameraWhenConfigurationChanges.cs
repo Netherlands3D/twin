@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Configuration
                 .ToVector3();
 
             mainCamera.transform.position = newCameraPosition + defaultCameraOffset;
+            mainCamera.transform.LookAt(newCameraPosition);
         }
     }
 }
