@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         [SerializeField] private Origin origin;
         [SerializeField] private WorldTransformShifter worldTransformShifter;
-        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.WGS84;
+        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
         public Coordinate Coordinate {
             get;
             set;
@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                     "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
                     "otherwise the Origin's location won't be taken into account."
                 );
-                referenceCoordinateSystem = CoordinateSystem.WGS84;
+                referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
             }
         }
 
