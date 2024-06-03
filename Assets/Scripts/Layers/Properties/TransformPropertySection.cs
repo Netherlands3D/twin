@@ -97,7 +97,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             double.TryParse(position.yField.Text, out var y);
             double.TryParse(position.zField.Text, out var z);
             
-            var rdCoordinate = new Coordinate(CoordinateSystem.RD, x, y, z);
+            var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
 
             var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
 
@@ -164,7 +164,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 transformPosition.z
             );
 
-            return CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            return CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RDNAP);
         }
     }
 }
