@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: ceb1e640e6a4fb7448e1c3d4c464d117, type: 3}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.62148476, g: 0.697132, b: 0.8781752, a: 1}
+  m_IndirectSpecularColor: {r: 0.6214746, g: 0.6971073, b: 0.8781438, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -886,11 +886,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FreeCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 5780207628711831110, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8068913146316752299, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
@@ -8559,6 +8554,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FloatingOrigin
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
+        type: 3}
+      propertyPath: LogShifts
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}

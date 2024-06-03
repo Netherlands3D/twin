@@ -3965,7 +3965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 7415
+  referenceCoordinateSystem: 4979
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
