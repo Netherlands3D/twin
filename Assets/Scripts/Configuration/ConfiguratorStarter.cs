@@ -25,6 +25,8 @@ namespace Netherlands3D.Twin.Configuration
         {
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
+
+            //Set the coordinate that will be used are the starting origin for Unity 0,0,0
             Coordinates.CoordinateSystems.SetOrigin(configurator.Configuration.Origin);
         }
 

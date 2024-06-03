@@ -96,6 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8284198237993072344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +148,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
   worldTransformShifter: {fileID: 8494173785329764173}
-  referenceCoordinateSystem: 4326
+  referenceCoordinateSystem: 2
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8494173785329764173
 MonoBehaviour:
   m_ObjectHideFlags: 0

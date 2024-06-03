@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: m_Name
-      value: FreeCamera Variant
+      value: FreeCamera Twin Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
@@ -105,17 +105,7 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7827784630567191569}
-    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5780207628711831110}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
---- !u!20 &5315891981602308678 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
-    type: 3}
-  m_PrefabInstance: {fileID: 5086919686984667790}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5315891981602308680 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
@@ -136,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4326
+  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -155,17 +145,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5780207628711831110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5315891981602308680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 675bc7a21b3b4ac296c0f160ba560824, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 5315891981602308678}
-  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
