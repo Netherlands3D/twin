@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Layer = GetComponent<ILayerWithCredentials>();
+            settings.LayerWithCredentials = GetComponent<ILayerWithCredentials>();
         }
     }
 }

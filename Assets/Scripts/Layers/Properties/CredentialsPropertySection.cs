@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
         [SerializeField] private Transform serverErrorFeedback;
 
-        public ILayerWithCredentials Layer { get; set; }
+        public ILayerWithCredentials LayerWithCredentials { get; set; }
 
         public enum CredentialType
         {
@@ -42,7 +42,7 @@ namespace Netherlands3D.Twin
             switch(credentialType)
             {
                 case CredentialType.UsernamePassword:
-                    Layer.SetCredentials(userNameInputField.text, passwordInputField.text);
+                    LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
                 case CredentialType.KeyTokenOrCode:
                     if(findSpecificTypeCoroutine != null)
@@ -63,10 +63,10 @@ namespace Netherlands3D.Twin
             yield return noCredentialsRequest.SendWebRequest();
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
-                Layer.SetCredentials("", "");
-                Layer.SetKey("");
-                Layer.SetToken("");
-                Layer.SetCode("");
+                LayerWithCredentials.SetCredentials("", "");
+                LayerWithCredentials.SetKey("");
+                LayerWithCredentials.SetToken("");
+                LayerWithCredentials.SetCode("");
                 yield break;
             }
 
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin
             yield return bearerTokenRequest.SendWebRequest();
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
-                Layer.SetToken(keyTokenOrCodeInputField.text);
+                LayerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
                 yield break;
             }
             
@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin
             yield return keyRequestUrl.SendWebRequest();
             if(keyRequestUrl.result == UnityWebRequest.Result.Success)
             {
-                Layer.SetKey(keyTokenOrCodeInputField.text);
+                LayerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
                 yield break;
             }
 
@@ -102,7 +102,7 @@ namespace Netherlands3D.Twin
             yield return codeRequestUrl.SendWebRequest();
             if(codeRequestUrl.result == UnityWebRequest.Result.Success)
             {
-                Layer.SetCode(keyTokenOrCodeInputField.text);
+                LayerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
                 yield break;
             }
 
