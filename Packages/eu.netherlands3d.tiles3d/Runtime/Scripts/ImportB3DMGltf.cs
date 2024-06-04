@@ -35,13 +35,16 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         /// <param name="url">Full url to .b3dm, .glb or .gltf file</param>
         /// <param name="callbackGltf">The callback to receive the GltfImport on success</param>
-        /// <param name="webRequest">Provide </param>
         /// <param name="bypassCertificateValidation"></param>
         /// <returns></returns>
-        public static IEnumerator ImportBinFromURL(string url, Action<ParsedGltf> callbackGltf, bool bypassCertificateValidation = false)
+        public static IEnumerator ImportBinFromURL(string url, Action<ParsedGltf> callbackGltf, bool bypassCertificateValidation = false, Dictionary<string,string> customHeaders = null)
         {
             var webRequest = UnityWebRequest.Get(url);
-
+            if(customHeaders != null){
+                foreach (var header in customHeaders)
+                    webRequest.SetRequestHeader(header.Key, header.Value);
+            }
+            
             if (bypassCertificateValidation)
                 webRequest.certificateHandler = customCertificateHandler; //Not safe; but solves breaking curl error
 
