@@ -27,6 +27,8 @@ namespace Netherlands3D.Twin
                 {
                     visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
                 }
+                if (UI)
+                    UI.Color = PolygonVisualizationMaterial.color; //todo: this now doesn't work because it is set before the UI exists
             }
         }
 

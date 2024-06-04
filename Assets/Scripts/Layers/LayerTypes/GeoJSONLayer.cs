@@ -86,9 +86,6 @@ namespace Netherlands3D.Twin
 
             if (frameCount == 0)
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
-
-            if (UI)
-                UI.Color = defaultPolygonVisualizationMaterial.color;
         }
 
         private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
