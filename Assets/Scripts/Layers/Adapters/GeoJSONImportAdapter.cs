@@ -12,25 +12,25 @@ namespace Netherlands3D.Twin
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
 
-        public void ParseGeoJSON(string file)
+        public void ParseGeoJSON(string fileName)
         {
-            var fullPath = Path.Combine(Application.persistentDataPath, file);
-
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
             randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
-            CreateGeoJSONLayer(fullPath, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
+            CreateGeoJSONLayer(fileName, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string filePath, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D,UnityEvent<string> onErrorCallback = null)
+        public static GeoJSONLayer CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D,UnityEvent<string> onErrorCallback = null)
         {
-            var go = new GameObject("GeoJSON");
+            var fullPath = Path.Combine(Application.persistentDataPath, fileName);
+            
+            var go = new GameObject(fileName);
             var layer = go.AddComponent<GeoJSONLayer>();
 
             if (onErrorCallback != null)
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);
             
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-            layer.ParseGeoJSON(filePath);
+            layer.ParseGeoJSON(fullPath);
             return layer;
         }
     }
