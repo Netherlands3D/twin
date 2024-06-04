@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         private IEnumerator TryToFindSpecificType()
         {
-            //Try request without credentials
+            // Try request without credentials
             var noCredentialsRequest = UnityWebRequest.Get(Url);
             yield return noCredentialsRequest.SendWebRequest();
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            //Try input as token
+            // Try input as bearer token
             var bearerTokenRequest = UnityWebRequest.Get(Url);
             bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
             yield return bearerTokenRequest.SendWebRequest();
@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin
                 yield break;
             }
             
-            //Try input as 'key' query parameter (remove a possible existing key query parameter and add the new one)
+            // Try input as 'key' query parameter (remove a possible existing key query parameter and add the new one)
             var uriBuilder = new UriBuilder(Url);
             var queryParameters = new NameValueCollection();
             uriBuilder.TryParseQueryString(queryParameters);
@@ -94,7 +94,7 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            //Try input as 'code' query parameter (remove a possible existing code query parameter and add the new one)
+            // Try input as 'code' query parameter (remove a possible existing code query parameter and add the new one)
             uriBuilder.RemoveQueryParameter("key");
             uriBuilder.RemoveQueryParameter("code");
             uriBuilder.AddQueryParameter("code", keyTokenOrCodeInputField.text);
@@ -106,7 +106,7 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            //Nothing worked, show error
+            // Nothing worked, show error
             serverErrorFeedback.gameObject.SetActive(true);
         }
 
