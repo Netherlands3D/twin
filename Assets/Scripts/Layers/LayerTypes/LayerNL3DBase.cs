@@ -60,7 +60,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             foreach (var child in ChildrenLayers)
             {
-                child.UI?.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
+                child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
         }
 

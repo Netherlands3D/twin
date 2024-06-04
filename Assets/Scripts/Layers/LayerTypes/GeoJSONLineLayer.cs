@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            // lineRenderer3D.gameObject.SetActive(activeInHierarchy);
+            LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
         public void AddAndVisualizeFeature(Feature feature, MultiLineString featureGeometry, CoordinateSystem originalCoordinateSystem)

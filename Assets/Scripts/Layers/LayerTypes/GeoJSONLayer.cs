@@ -29,32 +29,21 @@ namespace Netherlands3D.Twin
 
         private GeoJSONLineLayer lineFeatures;
         private LineRenderer3D lineRenderer3DPrefab; //todo: set this in the inspector somehow
-        
+
         public UnityEvent<string> OnParseError = new();
 
-        private BatchedMeshInstanceRenderer pointRenderer3D;
+        private GeoJSONPointLayer pointFeatures;
+        private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
 
-        public BatchedMeshInstanceRenderer PointRenderer3D
-        {
-            get { return pointRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetPositionCollections(pointRenderer3D.PositionCollections); 
-                // Destroy(pointRenderer3D.gameObject);
-                pointRenderer3D = value;
-            }
-        }
-
-        public void SetDefaultMaterials(Material defaultPolygonVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab)
+        public void SetDefaultVisualizerSettings(Material defaultPolygonVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultPolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
+            this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
         public void ParseGeoJSON(string filePath)
@@ -137,20 +126,35 @@ namespace Netherlands3D.Twin
         {
             var go = new GameObject("Polygonen");
             var layer = go.AddComponent<GeoJSONPolygonLayer>();
-            layer.SetParent(this);
+            StartCoroutine(SetSubLayerParent(layer));
             layer.PolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
             return layer;
         }
-        
+
         private GeoJSONLineLayer CreateLineLayer()
         {
             var go = new GameObject("Lijnen");
             var layer = go.AddComponent<GeoJSONLineLayer>();
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
-            layer.SetParent(this);
+            StartCoroutine(SetSubLayerParent(layer));
             return layer;
         }
 
+        private GeoJSONPointLayer CreatePointLayer()
+        {
+            var go = new GameObject("Punten");
+            var layer = go.AddComponent<GeoJSONPointLayer>();
+            layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
+            StartCoroutine(SetSubLayerParent(layer));
+            return layer;
+        }
+
+        private IEnumerator SetSubLayerParent(LayerNL3DBase layer)
+        {
+            yield return null; //wait a frame for layer to be initialized
+            layer.SetParent(this);
+        }
+        
         private void VisualizeFeature(Feature feature)
         {
             var originalCoordinateSystem = GetCoordinateSystem();
@@ -190,12 +194,18 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.MultiPoint:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(feature.Geometry as MultiPoint, originalCoordinateSystem, pointRenderer3D);
+                    if (!pointFeatures)
+                        pointFeatures = CreatePointLayer();
+
+                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPoint, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Point:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizePoint(feature.Geometry as Point, originalCoordinateSystem, pointRenderer3D);
+                    if (!pointFeatures)
+                        pointFeatures = CreatePointLayer();
+                    
+                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Point, originalCoordinateSystem);
                     break;
                 }
                 default:
