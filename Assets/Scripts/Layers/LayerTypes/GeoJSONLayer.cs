@@ -24,10 +24,10 @@ namespace Netherlands3D.Twin
         public CRSBase CRS { get; private set; }
         public List<Feature> Features = new();
 
-        public UnityEvent<string> OnParseError = new();
-        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
-        public List<List<Vector3>> Lines { get; private set; } = new();
+        private GeoJSONPolygonLayer polygonFeatures;
+        private Material defaultPolygonVisualizationMaterial;
 
+        public UnityEvent<string> OnParseError = new();
         private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
@@ -56,27 +56,13 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private Material polygonVisualizationMaterial;
-
-        public Material PolygonVisualizationMaterial
+        public void SetDefaultMaterials(Material defaultPolygonVisualizationMaterial)
         {
-            get { return polygonVisualizationMaterial; }
-            set
-            {
-                polygonVisualizationMaterial = value;
-                foreach (var visualization in PolygonVisualisations)
-                {
-                    visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
-                }
-            }
+            this.defaultPolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
         }
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            foreach (var visualization in PolygonVisualisations)
-            {
-                visualization.gameObject.SetActive(activeInHierarchy);
-            }
             lineRenderer3D.gameObject.SetActive(activeInHierarchy);
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
@@ -123,7 +109,7 @@ namespace Netherlands3D.Twin
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
 
             if (UI)
-                UI.Color = polygonVisualizationMaterial.color;
+                UI.Color = defaultPolygonVisualizationMaterial.color;
         }
 
         private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
@@ -134,7 +120,6 @@ namespace Netherlands3D.Twin
         private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
         {
             Features = new List<Feature>();
-            PolygonVisualisations = new List<PolygonVisualisation>();
             var startTime = Time.realtimeSinceStartup;
 
             while (jsonReader.Read())
@@ -158,6 +143,15 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private GeoJSONPolygonLayer CreatePolygonLayer()
+        {
+            var go = new GameObject("Polygons");
+            var layer = go.AddComponent<GeoJSONPolygonLayer>();
+            layer.SetParent(this);
+            layer.PolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
+            return layer;
+        }
+
         private void VisualizeFeature(Feature feature)
         {
             var originalCoordinateSystem = GetCoordinateSystem();
@@ -165,12 +159,18 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(feature.Geometry as MultiPolygon, originalCoordinateSystem, PolygonVisualizationMaterial));
+                    if (!polygonFeatures)
+                        polygonFeatures = CreatePolygonLayer();
+
+                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPolygon, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(feature.Geometry as Polygon, originalCoordinateSystem, PolygonVisualizationMaterial));
+                    if (!polygonFeatures)
+                        polygonFeatures = CreatePolygonLayer();
+
+                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Polygon, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:

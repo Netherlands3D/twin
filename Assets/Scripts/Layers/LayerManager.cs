@@ -13,12 +13,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
         public List<LayerUI> SelectedLayers { get; set; } = new();
-        
+
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
 
         [SerializeField] private RectTransform layerUIContainer;
-        
+
         public RectTransform LayerUIContainer => layerUIContainer;
 
         //Drag variables
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI = layerUI;
             layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
-            
+
             return layerUI;
         }
 
@@ -171,7 +171,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                         return layerTypeSprites[6];
                     return layerTypeSprites[7];
                 case GeoJSONLayer _:
-                    return layerTypeSprites[6]; //todo: split in points/lines/polygons
+                    return layerTypeSprites[8]; //todo: split in points/lines
+                case GeoJSONPolygonLayer:
+                    return layerTypeSprites[6];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
@@ -193,7 +195,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];
-            }  
+            }
         }
 
         public void EnableContextMenu(bool enable, Vector2 position = default)
@@ -222,7 +224,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 DeleteSelectedLayers();
             }
-            
+
             if (!contextMenu)
                 return;
 
@@ -268,7 +270,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             return DragGhost && MouseIsOverButton;
         }
-        
+
         public void DeleteSelectedLayers()
         {
             foreach (var layerUI in SelectedLayers)
