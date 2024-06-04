@@ -17,10 +17,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private bool allowURLEditInPropertySection;
         private List<IPropertySectionInstantiator> propertySections = new();
         public UnityEvent<string> UnsupportedExtensionsMessage;
-
-        //public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed => tileSet.OnServerRequestFailed; //<- TODO: Implement this in Read3DTileset
-        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
+        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get => tileSet.OnServerRequestFailed;  }
+        
         public string URL
         {
             get => tileSet.tilesetUrl;
@@ -55,7 +53,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             base.Awake();
             tileSet = GetComponent<Read3DTileset>();
             
-
             if (allowURLEditInPropertySection)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
@@ -98,13 +95,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetCredentials(string username, string password)
         {
-            tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
+            tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)), true);
             tileSet.RefreshTiles();
         }
 
         public void SetKey(string key)
         {
             tileSet.publicKey = key;
+            tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
         }
 
@@ -116,12 +114,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         
         public void SetCode(string code)
         {
-            throw new NotImplementedException();
+            tileSet.publicKey = code;
+            tileSet.QueryKeyName = "code";
+            tileSet.RefreshTiles();
         }
 
-        public bool IsValidServerResult(UnityWebRequest.Result result)
+        public void ClearCredentials()
         {
-            throw new NotImplementedException();
+            tileSet.publicKey = "";
+            tileSet.QueryKeyName = "key";
+            tileSet.RefreshTiles();
         }
     }
 }

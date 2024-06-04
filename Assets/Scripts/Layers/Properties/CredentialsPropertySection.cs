@@ -20,18 +20,12 @@ namespace Netherlands3D.Twin
 
         public enum CredentialType
         {
-            None = 0,
+            UsernamePassword = 0,
             KeyTokenOrCode = 1,
-            UsernamePassword = 2,
-            Key = 3,
-            Token = 4,
-            Code = 5
+            None = 2,
         }
 
-        public CredentialType credentialType = CredentialType.UsernamePassword;
-
-        private string url = "";
-        public string Url { get => Url; set => Url = value; }    
+        public CredentialType credentialType = CredentialType.None;
 
         private Coroutine findSpecificTypeCoroutine;    
 
@@ -59,19 +53,16 @@ namespace Netherlands3D.Twin
         private IEnumerator TryToFindSpecificType()
         {
             // Try request without credentials
-            var noCredentialsRequest = UnityWebRequest.Get(Url);
+            var noCredentialsRequest = UnityWebRequest.Get(LayerWithCredentials.URL);
             yield return noCredentialsRequest.SendWebRequest();
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
-                LayerWithCredentials.SetCredentials("", "");
-                LayerWithCredentials.SetKey("");
-                LayerWithCredentials.SetToken("");
-                LayerWithCredentials.SetCode("");
+                LayerWithCredentials.ClearCredentials();
                 yield break;
             }
 
             // Try input as bearer token
-            var bearerTokenRequest = UnityWebRequest.Get(Url);
+            var bearerTokenRequest = UnityWebRequest.Get(LayerWithCredentials.URL);
             bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
             yield return bearerTokenRequest.SendWebRequest();
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
@@ -81,7 +72,7 @@ namespace Netherlands3D.Twin
             }
             
             // Try input as 'key' query parameter (remove a possible existing key query parameter and add the new one)
-            var uriBuilder = new UriBuilder(Url);
+            var uriBuilder = new UriBuilder(LayerWithCredentials.URL);
             var queryParameters = new NameValueCollection();
             uriBuilder.TryParseQueryString(queryParameters);
             uriBuilder.RemoveQueryParameter("key"); 
@@ -113,25 +104,7 @@ namespace Netherlands3D.Twin
         public void SetCredentialInputType(int type)
         {
             credentialType = (CredentialType)type;
-            SetCredentialInputType(credentialType);
-        }
-
-        public void SetCredentialInputType(CredentialType type)
-        {
-            credentialType = type;
-
-            if(credentialType == CredentialType.UsernamePassword)
-            {
-                userNameInputField.transform.parent.gameObject.SetActive(true);
-                passwordInputField.transform.parent.gameObject.SetActive(true);
-                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(false);
-            }
-            else
-            {
-                userNameInputField.transform.parent.gameObject.SetActive(false);
-                passwordInputField.transform.parent.gameObject.SetActive(false);
-                keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(true);
-            }
+            Debug.Log("Set credential type to: " + credentialType);
         }
     }
 }
