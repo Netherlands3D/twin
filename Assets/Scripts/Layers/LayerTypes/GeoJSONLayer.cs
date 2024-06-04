@@ -27,20 +27,10 @@ namespace Netherlands3D.Twin
         private GeoJSONPolygonLayer polygonFeatures;
         private Material defaultPolygonVisualizationMaterial;
 
+        private GeoJSONLineLayer lineFeatures;
+        private LineRenderer3D lineRenderer3DPrefab; //todo: set this in the inspector somehow
+        
         public UnityEvent<string> OnParseError = new();
-        private LineRenderer3D lineRenderer3D;
-
-        public LineRenderer3D LineRenderer3D
-        {
-            get { return lineRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetLines(lineRenderer3D.Lines); 
-                // Destroy(lineRenderer3D.gameObject);
-                lineRenderer3D = value;
-            }
-        }
 
         private BatchedMeshInstanceRenderer pointRenderer3D;
 
@@ -56,14 +46,14 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public void SetDefaultMaterials(Material defaultPolygonVisualizationMaterial)
+        public void SetDefaultMaterials(Material defaultPolygonVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab)
         {
             this.defaultPolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
+            this.lineRenderer3DPrefab = lineRenderer3DPrefab;
         }
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            lineRenderer3D.gameObject.SetActive(activeInHierarchy);
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
@@ -145,10 +135,19 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var go = new GameObject("Polygons");
+            var go = new GameObject("Polygonen");
             var layer = go.AddComponent<GeoJSONPolygonLayer>();
             layer.SetParent(this);
             layer.PolygonVisualizationMaterial = defaultPolygonVisualizationMaterial;
+            return layer;
+        }
+        
+        private GeoJSONLineLayer CreateLineLayer()
+        {
+            var go = new GameObject("Lijnen");
+            var layer = go.AddComponent<GeoJSONLineLayer>();
+            layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
+            layer.SetParent(this);
             return layer;
         }
 
@@ -175,12 +174,18 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.MultiLineString:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(feature.Geometry as MultiLineString, originalCoordinateSystem, LineRenderer3D);
+                    if (!lineFeatures)
+                        lineFeatures = CreateLineLayer();
+
+                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiLineString, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.LineString:
                 {
-                    GeoJSONGeometryVisualizerUtility.VisualizeLineString(feature.Geometry as LineString, originalCoordinateSystem, LineRenderer3D);
+                    if (!lineFeatures)
+                        lineFeatures = CreateLineLayer();
+
+                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as LineString, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiPoint:

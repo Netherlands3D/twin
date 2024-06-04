@@ -171,9 +171,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                         return layerTypeSprites[6];
                     return layerTypeSprites[7];
                 case GeoJSONLayer _:
-                    return layerTypeSprites[8]; //todo: split in points/lines
+                    return layerTypeSprites[8]; //todo: split in points
                 case GeoJSONPolygonLayer:
                     return layerTypeSprites[6];
+                case GeoJSONLineLayer:
+                    return layerTypeSprites[7];
                 default:
                     Debug.LogError("layer type of " + layer.name + " is not specified");
                     return layerTypeSprites[0];

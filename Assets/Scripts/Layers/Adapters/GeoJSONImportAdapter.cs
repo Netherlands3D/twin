@@ -29,8 +29,7 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);
             
-            layer.SetDefaultMaterials(visualizationMaterial);
-            layer.LineRenderer3D = Instantiate(lineRenderer3D);
+            layer.SetDefaultMaterials(visualizationMaterial, lineRenderer3D);
             layer.PointRenderer3D = Instantiate(pointRenderer3D);
             layer.ParseGeoJSON(filePath);
             return layer;
