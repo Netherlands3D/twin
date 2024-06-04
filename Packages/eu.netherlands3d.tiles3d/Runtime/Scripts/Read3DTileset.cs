@@ -19,12 +19,21 @@ namespace Netherlands3D.Tiles3D
     public class Read3DTileset : MonoBehaviour
     {
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
+
+        [Header("API Key (Optional)")]
+        [Tooltip("Public API key for production use. This key will be used in production builds.")]
         public string publicKey;
+        [Tooltip("Personal API key for testing purposes. This key will override the public key in Unity editor.")]
         public string personalKey;
+        [Tooltip("The key name to use for the API key in the query string like 'key', or 'code' etc. Default is 'key' for Google Maps API.")]
+        [SerializeField] private string queryKeyName = "key";
+        public string QueryKeyName { get => queryKeyName; set => queryKeyName = value; }
+
         private string absolutePath = "";
         private string rootPath = "";
         private NameValueCollection queryParameters;
 
+        [Header("Tileset")]
         public Tile root;
         public double[] transformValues;
 
@@ -64,26 +73,37 @@ namespace Netherlands3D.Tiles3D
 
         public string[] usedExtensions { get; private set; }
 
-        public UnityEvent<string[]> unsupportedExtensionsParsed;
-
         //Custom WebRequestHeader dictionary
         private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
         public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
 
+        [Space(2)]
+        public UnityEvent<string[]> unsupportedExtensionsParsed;
         public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
+
 
         public void ConstructURLWithKey()
         {
+            //Apppend API key to URL
+            if (tilesetUrl.Contains("?"))
+            {
+                tilesetUrl = tilesetUrl + "&";
+            }
+            else
+            {
+                tilesetUrl = tilesetUrl + "?";
+            }
+
 #if UNITY_EDITOR
             if (string.IsNullOrEmpty(personalKey) == false)
             {
-                tilesetUrl = tilesetUrl + "?key=" + personalKey;
+                tilesetUrl += $"{QueryKeyName}={personalKey}";
             }
 
 #else
             if (string.IsNullOrEmpty(publicKey)==false)
             {
-                tilesetUrl = tilesetUrl + "?key=" + publicKey;
+                tilesetUrl += $"{QueryKeyName}={publicKey}";
             }
 #endif
         }
