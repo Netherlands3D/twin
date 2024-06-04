@@ -3,7 +3,9 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+using Netherlands3D.Web;
+using System;
+using System.Collections.Specialized;
 
 namespace Netherlands3D.Twin
 {
@@ -29,7 +31,7 @@ namespace Netherlands3D.Twin
         public CredentialType credentialType = CredentialType.UsernamePassword;
 
         private string url = "";
-        public string Url { get => url; set => url = value; }    
+        public string Url { get => Url; set => Url = value; }    
 
         private Coroutine findSpecificTypeCoroutine;    
 
@@ -51,38 +53,70 @@ namespace Netherlands3D.Twin
             }
         }
 
+        /// <summary>
+        /// Try to find the specific type of credential (key, token or code) that is needed for the layer
+        /// </summary>
         private IEnumerator TryToFindSpecificType()
         {
-            //Try input as token
-            var www = new UnityWebRequest(url);
-            www.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
-            //add key as post variable
-            www.method = UnityWebRequest.kHttpVerbGET;
+            //Try request without credentials
+            var noCredentialsRequest = UnityWebRequest.Get(Url);
+            yield return noCredentialsRequest.SendWebRequest();
+            if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
+            {
+                Layer.SetCredentials("", "");
+                Layer.SetKey("");
+                Layer.SetToken("");
+                Layer.SetCode("");
+                yield break;
+            }
 
-            yield return www.SendWebRequest();
-            if(www.result == UnityWebRequest.Result.Success)
+            //Try input as token
+            var bearerTokenRequest = UnityWebRequest.Get(Url);
+            bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
+            yield return bearerTokenRequest.SendWebRequest();
+            if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
                 Layer.SetToken(keyTokenOrCodeInputField.text);
                 yield break;
             }
             
-            //Try input as key. First make sure its not already in url as a query parameter
-            if(!url.Contains("?"))
-                url += "?key=" + keyTokenOrCodeInputField.text;
-            else
-                url += "&key=" + keyTokenOrCodeInputField.text;
+            //Try input as 'key' query parameter (remove a possible existing key query parameter and add the new one)
+            var uriBuilder = new UriBuilder(Url);
+            var queryParameters = new NameValueCollection();
+            uriBuilder.TryParseQueryString(queryParameters);
+            uriBuilder.RemoveQueryParameter("key"); 
+            uriBuilder.AddQueryParameter("key", keyTokenOrCodeInputField.text);
+            var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
+            yield return keyRequestUrl.SendWebRequest();
+            if(keyRequestUrl.result == UnityWebRequest.Result.Success)
+            {
+                Layer.SetKey(keyTokenOrCodeInputField.text);
+                yield break;
+            }
+
+            //Try input as 'code' query parameter (remove a possible existing code query parameter and add the new one)
+            uriBuilder.RemoveQueryParameter("key");
+            uriBuilder.RemoveQueryParameter("code");
+            uriBuilder.AddQueryParameter("code", keyTokenOrCodeInputField.text);
+            var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
+            yield return codeRequestUrl.SendWebRequest();
+            if(codeRequestUrl.result == UnityWebRequest.Result.Success)
+            {
+                Layer.SetCode(keyTokenOrCodeInputField.text);
+                yield break;
+            }
 
             //Nothing worked, show error
             serverErrorFeedback.gameObject.SetActive(true);
         }
 
-        public void SetCredentialType(int type)
+        public void SetCredentialInputType(int type)
         {
             credentialType = (CredentialType)type;
-            SetCredentialType(credentialType);
+            SetCredentialInputType(credentialType);
         }
 
-        public void SetCredentialType(CredentialType type)
+        public void SetCredentialInputType(CredentialType type)
         {
             credentialType = type;
 
@@ -98,11 +132,6 @@ namespace Netherlands3D.Twin
                 passwordInputField.transform.parent.gameObject.SetActive(false);
                 keyTokenOrCodeInputField.transform.parent.gameObject.SetActive(true);
             }
-        }
-
-        public void HandleServerReturnCode(int errorCode)
-        {
-            //Give feedback based on the error code
         }
     }
 }
