@@ -446,7 +446,7 @@
       "url": "https://package.openupm.com"
     },
     "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.2.0",
+      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.3.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -469,7 +469,7 @@
         "eu.netherlands3d.address-search": "1.0.0",
         "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "734ec4551910d1d365d9c32f865bfd77dfbbeaac"
+      "hash": "a216383ee5fcc8e4d6a8b238424f1e58e1c98bf6"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
