@@ -225,7 +225,6 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            print("setting active: " + activeInHierarchy);
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }
 

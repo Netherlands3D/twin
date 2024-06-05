@@ -45,6 +45,38 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - Extension: json
+    FileReceived:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.GeoJSONImportAdapter, Assembly-CSharp
+          m_MethodName: ParseGeoJSON
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - Extension: geojson
+    FileReceived:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.GeoJSONImportAdapter, Assembly-CSharp
+          m_MethodName: ParseGeoJSON
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - Extension: nl3d
     FileReceived:
       m_PersistentCalls:

@@ -1,38 +1,69 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 namespace Netherlands3D.Twin
 {
     public class LineRenderer3D : MonoBehaviour
     {
-        [Header("References")]
-        [Tooltip("The mesh to use for the line segments")]
-        [SerializeField] private Mesh lineMesh;
-        [Tooltip("The mesh to use for the joints to get smooth corners")]
-        [SerializeField] private Mesh jointMesh;
+        [Header("References")] [Tooltip("The mesh to use for the line segments")] [SerializeField]
+        private Mesh lineMesh;
+
+        [Tooltip("The mesh to use for the joints to get smooth corners")] [SerializeField]
+        private Mesh jointMesh;
+
         [SerializeField] private Material lineMaterial;
 
-        [Header("Settings")]
-        [SerializeField] private bool drawJoints = true;
-        [Tooltip("Force all point Y positions to 0")]
-        [SerializeField] private bool flattenY = false;
-        [Tooltip("Offset the Y position of the line")]
-        [SerializeField] private float offsetY = 0.0f;
+        [Header("Settings")] [SerializeField] private bool drawJoints = true;
+
+        [Tooltip("Force all point Y positions to 0")] [SerializeField]
+        private bool flattenY = false;
+
+        [Tooltip("Offset the Y position of the line")] [SerializeField]
+        private float offsetY = 0.0f;
+
         [SerializeField] private float lineDiameter = 0.2f;
 
-        private List<List<Vector3>> lines;
-        private List<List<Matrix4x4>> lineTransformMatrixCache;
-        private List<List<Matrix4x4>> jointsTransformMatrixCache;
+        public List<List<Coordinate>> Lines { get; private set; }
+
+        private List<List<Matrix4x4>> segmentTransformMatrixCache = new List<List<Matrix4x4>>();
+
+        private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
+
+        private Camera projectionCamera;
+        
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
         private bool cacheReady = false;
         private bool hasColors = false;
 
-        public Mesh LineMesh { get => lineMesh; set => lineMesh = value; }
-        public Mesh JointMesh { get => jointMesh; set => jointMesh = value; }
-        public Material LineMaterial { get => lineMaterial; set => lineMaterial = value; }
-        public bool DrawJoints { get => drawJoints; set => drawJoints = value; }
+        public Mesh LineMesh
+        {
+            get => lineMesh;
+            set => lineMesh = value;
+        }
+
+        public Mesh JointMesh
+        {
+            get => jointMesh;
+            set => jointMesh = value;
+        }
+
+        public Material LineMaterial
+        {
+            get => lineMaterial;
+            set => lineMaterial = value;
+        }
+
+        public bool DrawJoints
+        {
+            get => drawJoints;
+            set => drawJoints = value;
+        }
 
         public float LineDiameter
         {
@@ -64,6 +95,11 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private void Start()
+        {
+            projectionCamera = GameObject.FindWithTag("ProjectorCamera").GetComponent<Camera>();
+        }
+
         private void Update()
         {
             if (cacheReady)
@@ -77,25 +113,31 @@ namespace Netherlands3D.Twin
 
         private void DrawLines()
         {
-            //Seperate line draws so we can use different colors for each line
-            for (int i = 0; i < lineTransformMatrixCache.Count; i++)
+            for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
-                var lineTransforms = lineTransformMatrixCache[i];
-                var lineJointTransforms = jointsTransformMatrixCache[i];
-                if (hasColors)
+                var lineTransforms = segmentTransformMatrixCache[i];
+                // if (hasColors)
+                // {
+                //     MaterialPropertyBlock props = materialPropertyBlockCache[i];
+                //     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
+                //
+                //     if (DrawJoints)
+                //         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
+                //
+                //     continue;
+                // }
+                
+                Graphics.DrawMeshInstanced(lineMesh, 0, LineMaterial, lineTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
+                // Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
+            }
+
+            if (DrawJoints)
+            {
+                for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
                 {
-                    MaterialPropertyBlock props = materialPropertyBlockCache[i];
-                    Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
-
-                    if (DrawJoints)
-                        Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
-
-                    continue;
+                    var lineJointTransforms = jointsTransformMatrixCache[i];
+                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
                 }
-
-                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
-                if (DrawJoints)
-                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms);
             }
         }
 
@@ -107,9 +149,9 @@ namespace Netherlands3D.Twin
         {
             int closestLineIndex = -1;
             float closestDistance = float.MaxValue;
-            for (int i = 0; i < lineTransformMatrixCache.Count; i++)
+            for (int i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
-                var lineTransforms = lineTransformMatrixCache[i];
+                var lineTransforms = segmentTransformMatrixCache[i];
                 foreach (var lineTransform in lineTransforms)
                 {
                     var linePoint = lineTransform.GetColumn(3);
@@ -121,6 +163,7 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
+
             return closestLineIndex;
         }
 
@@ -135,6 +178,7 @@ namespace Netherlands3D.Twin
                 Debug.LogWarning("No line found");
                 return -1;
             }
+
             SetSpecificLineColorByIndex(closestLineIndex, color);
             return closestLineIndex;
         }
@@ -159,61 +203,63 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Set a single line (overwriting any previous lines)
         /// </summary>
-        public void SetLine(List<Vector3> linePoints)
+        public void SetLine(List<Coordinate> linePoints)
         {
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
-            lines = new List<List<Vector3>> { linePoints };
-            SetLines(lines);
+            Lines = new List<List<Coordinate>> { linePoints };
+            SetLines(Lines);
         }
 
         /// <summary>
         /// Set the current list of lines (overwriting any previous list)
         /// </summary>
-        public void SetLines(List<List<Vector3>> lines)
+        public void SetLines(List<List<Coordinate>> lines)
         {
-            foreach (List<Vector3> line in lines)
+            foreach (List<Coordinate> line in lines)
             {
                 var validLine = ValidateLine(line);
                 if (!validLine) return;
             }
 
-            this.lines = lines;
+            this.Lines = lines;
             GenerateTransformMatrixCache();
         }
 
         /// <summary>
         /// Append single line to the current list of lines
         /// </summary>
-        public void AppendLine(List<Vector3> linePoints)
+        public void AppendLine(List<Coordinate> linePoints)
         {
             var validLine = ValidateLine(linePoints);
             if (!validLine) return;
 
-            if (lines == null)
-                lines = new List<List<Vector3>>();
+            if (Lines == null)
+                Lines = new List<List<Coordinate>>();
 
-            lines.Add(linePoints);
-            GenerateTransformMatrixCache();
+            var startIndex = Lines.Count;
+            Lines.Add(linePoints);
+            GenerateTransformMatrixCache(startIndex);
         }
 
         /// <summary>
         /// Append multiple lines to the current list of lines
         /// </summary>
-        public void AppendLines(List<List<Vector3>> lines)
+        public void AppendLines(List<List<Coordinate>> lines)
         {
-            foreach (List<Vector3> line in lines)
+            foreach (List<Coordinate> line in lines)
             {
                 var validLine = ValidateLine(line);
                 if (!validLine) return;
             }
 
-            if (this.lines == null)
-                this.lines = new List<List<Vector3>>();
+            if (this.Lines == null)
+                this.Lines = new List<List<Coordinate>>();
 
-            this.lines.AddRange(lines);
-            GenerateTransformMatrixCache();
+            var startIndex = Lines.Count;
+            this.Lines.AddRange(lines);
+            GenerateTransformMatrixCache(startIndex);
         }
 
         /// <summary>
@@ -222,11 +268,12 @@ namespace Netherlands3D.Twin
         [ContextMenu("Randomize line colors")]
         public void SetRandomLineColors()
         {
-            Color[] colors = new Color[lines.Count];
+            Color[] colors = new Color[Lines.Count];
             for (int i = 0; i < colors.Length; i++)
             {
                 colors[i] = Random.ColorHSV();
             }
+
             SetSpecificLineMaterialColors(colors);
         }
 
@@ -236,9 +283,9 @@ namespace Netherlands3D.Twin
         /// <param name="colors">Array of colors matching the list of lines length</param>
         public void SetSpecificLineMaterialColors(Color[] colors)
         {
-            if (colors.Length != lines.Count)
+            if (colors.Length != Lines.Count)
             {
-                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {lines.Count}");
+                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {Lines.Count}");
                 return;
             }
 
@@ -253,47 +300,64 @@ namespace Netherlands3D.Twin
             hasColors = true;
         }
 
-        public bool ValidateLine(List<Vector3> line)
+        public bool ValidateLine(List<Coordinate> line)
         {
             if (line.Count < 2)
             {
                 Debug.LogWarning("A line should have at least 2 points");
                 return false;
             }
+
             return true;
         }
 
         public void ClearLines()
         {
-            lines.Clear();
+            Lines.Clear();
             ClearColors();
 
-            lineTransformMatrixCache.Clear();
-            jointsTransformMatrixCache.Clear();
+            segmentTransformMatrixCache = new List<List<Matrix4x4>>();
+            jointsTransformMatrixCache = new List<List<Matrix4x4>>();
             cacheReady = false;
         }
 
         public void ClearColors()
         {
+            if (hasColors)
+                materialPropertyBlockCache.Clear();
             hasColors = false;
-            materialPropertyBlockCache.Clear();
         }
 
-        private void GenerateTransformMatrixCache()
+        public void GenerateTransformMatrixCache(int lineStartIndex = -1)
         {
-            if (lines == null || lines.Count < 1) return;
+            if (Lines == null || Lines.Count < 1) return;
 
-            lineTransformMatrixCache = new List<List<Matrix4x4>>(); // Updated to nested List<Matrix4x4>
-            jointsTransformMatrixCache = new List<List<Matrix4x4>>();
+            var jointCount = Lines.SelectMany(list => list).Count(); //each point should have a joint
+            var segmentCount = jointCount - Lines.Count; // each line one more joint than segments, so subtracting the lineCount will result in the total number of segments
 
-            foreach (List<Vector3> line in lines)
+            var jointBatchCount = (jointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
+            var segmentBatchCount = (segmentCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
+
+            if (lineStartIndex < 0) //reset cache completely
             {
-                List<Matrix4x4> lineTransforms = new();
-                List<Matrix4x4> jointTransforms = new();
-                for (int i = 0; i < line.Count - 1; i++)
+                jointsTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
+                segmentTransformMatrixCache = new List<List<Matrix4x4>>(segmentBatchCount);
+                lineStartIndex = 0;
+            }
+
+            jointsTransformMatrixCache.Capacity = jointBatchCount;
+            segmentTransformMatrixCache.Capacity = segmentBatchCount;
+
+            var jointIndices = GetJointMatrixIndices(lineStartIndex); //each point in the line is a joint
+            var segmentIndices = GetSegmentMatrixIndices(lineStartIndex);
+
+            for (var i = lineStartIndex; i < Lines.Count; i++)
+            {
+                var line = Lines[i];
+                for (int j = 0; j < line.Count - 1; j++)
                 {
-                    var currentPoint = line[i];
-                    var nextPoint = line[i + 1];
+                    var currentPoint = line[j].ToUnity();
+                    var nextPoint = line[j + 1].ToUnity();
 
                     var direction = nextPoint - currentPoint;
                     float distance = direction.magnitude;
@@ -312,26 +376,67 @@ namespace Netherlands3D.Twin
 
                     // Create a transform matrix for each line point
                     Matrix4x4 transformMatrix = Matrix4x4.TRS(currentPoint, rotation, scale);
-                    lineTransforms.Add(transformMatrix);
+                    AppendMatrixToBatches(segmentTransformMatrixCache, ref segmentIndices.batchIndex, ref segmentIndices.matrixIndex, transformMatrix);
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
                     var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
-                    jointTransforms.Add(jointTransformMatrix);
+                    AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
 
                     //Add the last joint to cap the line end
-                    if (i == line.Count - 2)
+                    if (j == line.Count - 2)
                     {
                         jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
-                        jointTransforms.Add(jointTransformMatrix);
+                        AppendMatrixToBatches(jointsTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
                     }
                 }
-
-                lineTransformMatrixCache.Add(lineTransforms);
-                jointsTransformMatrixCache.Add(jointTransforms);
             }
 
             cacheReady = true;
+        }
+
+        private void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd)
+        {
+            //start a new batch if needed
+            if (arrayIndex >= batchList.Count && matrixIndex == 0)
+            {
+                batchList.Add(new List<Matrix4x4>(1023));
+            }
+
+            //append new array if index overshoots
+            if (matrixIndex >= 1023) //matrix index exceeds batch size, so add a new batch and reset the matrix index
+            {
+                arrayIndex++;
+                batchList.Add(new List<Matrix4x4>(1023));
+                matrixIndex -= 1023; //todo: account for matrixIndex larger than 2046
+            }
+
+            if (matrixIndex < batchList[arrayIndex].Count)
+                batchList[arrayIndex][matrixIndex] = valueToAdd;
+            else
+                batchList[arrayIndex].Add(valueToAdd);
+            matrixIndex++;
+        }
+
+        private (int batchIndex, int matrixIndex) GetJointMatrixIndices(int lineStartIndex)
+        {
+            if (lineStartIndex < 0)
+                return (-1, -1);
+
+            // Iterate over the Lines to find the total number of Vector3s before the startIndex
+            int totalJointsBeforeStartIndex = Lines.Take(lineStartIndex).Sum(list => list.Count);
+
+            return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
+        }
+
+        private (int batchIndex, int matrixIndex) GetSegmentMatrixIndices(int lineStartIndex)
+        {
+            if (lineStartIndex < 0)
+                return (-1, -1);
+
+            // Iterate over the Lines to find the total number of Vector3s before the startIndex
+            int totalJointsBeforeStartIndex = Lines.Take(lineStartIndex).Sum(list => list.Count) - lineStartIndex; // each line has one more joint than segments, so subtracting the startIndex will result in the total number of segments
+            return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
         }
     }
 }
