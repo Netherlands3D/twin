@@ -101,7 +101,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetKey(string key)
         {
+            tileSet.personalKey = key;
             tileSet.publicKey = key;
+            
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
         }

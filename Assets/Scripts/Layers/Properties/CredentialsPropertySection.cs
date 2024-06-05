@@ -20,12 +20,21 @@ namespace Netherlands3D.Twin
 
         public enum CredentialType
         {
+            None = -1,
             UsernamePassword = 0,
             KeyTokenOrCode = 1,
-            None = 2,
+            Key = 2,
+            Token = 3,
+            Code = 4,
         }
 
         public CredentialType credentialType = CredentialType.None;
+
+        private Dictionary<string, string> knownUrlCredentialTypes = new Dictionary<string, CredentialType>
+        {
+            { "https://tile.googleapis.com/v1/3dtiles/root.json", CredentialType.Key },
+            { "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", CredentialType.None }
+        };
 
         private Coroutine findSpecificTypeCoroutine;    
 
@@ -57,6 +66,7 @@ namespace Netherlands3D.Twin
             yield return noCredentialsRequest.SendWebRequest();
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log("Found no credentials needed for this layer: " + LayerWithCredentials.URL);
                 LayerWithCredentials.ClearCredentials();
                 yield break;
             }
@@ -67,6 +77,7 @@ namespace Netherlands3D.Twin
             yield return bearerTokenRequest.SendWebRequest();
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log("Found bearer token needed for this layer: " + LayerWithCredentials.URL);
                 LayerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
                 yield break;
             }
@@ -75,12 +86,12 @@ namespace Netherlands3D.Twin
             var uriBuilder = new UriBuilder(LayerWithCredentials.URL);
             var queryParameters = new NameValueCollection();
             uriBuilder.TryParseQueryString(queryParameters);
-            uriBuilder.RemoveQueryParameter("key"); 
             uriBuilder.AddQueryParameter("key", keyTokenOrCodeInputField.text);
             var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return keyRequestUrl.SendWebRequest();
             if(keyRequestUrl.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log("Found key needed for this layer: " + LayerWithCredentials.URL);
                 LayerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
                 yield break;
             }
@@ -93,10 +104,12 @@ namespace Netherlands3D.Twin
             yield return codeRequestUrl.SendWebRequest();
             if(codeRequestUrl.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log("Found code needed for this layer: " + LayerWithCredentials.URL);
                 LayerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
                 yield break;
             }
 
+            Debug.Log("No credential type worked to get access for this layer: " + LayerWithCredentials.URL);
             // Nothing worked, show error
             serverErrorFeedback.gameObject.SetActive(true);
         }
