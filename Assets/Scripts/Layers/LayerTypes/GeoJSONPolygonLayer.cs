@@ -51,5 +51,14 @@ namespace Netherlands3D.Twin
             PolygonFeatures.Add(feature);
             PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
         }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            foreach (var visualization in PolygonVisualisations)
+            {
+                Destroy(visualization.gameObject);
+            }
+        }
     }
 }

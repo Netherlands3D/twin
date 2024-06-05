@@ -41,5 +41,11 @@ namespace Netherlands3D.Twin
             LineFeatures.Add(feature);
             GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
         }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Destroy(LineRenderer3D.gameObject);
+        }
     }
 }

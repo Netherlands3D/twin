@@ -42,5 +42,11 @@ namespace Netherlands3D.Twin
             PointFeatures.Add(feature);
             GeoJSONGeometryVisualizerUtility.VisualizePoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
         }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Destroy(PointRenderer3D.gameObject);
+        }
     }
 }
