@@ -155,14 +155,14 @@ namespace Netherlands3D.Twin.Configuration
         {
             int.TryParse(value, out int y);
 
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position);
             var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
             cameraRD.Points[1] = y;
 
-            var newCameraCoordinate = CoordinateConverter
-                .ConvertTo(cameraRD, CoordinateSystem.Unity)
-                .ToVector3();
+            if(!cameraRD.IsValid())
+                return;
 
+            var newCameraCoordinate = cameraRD.ToUnity();
             newCameraCoordinate.y = Camera.main.transform.position.y;
 
             Camera.main.transform.position = newCameraCoordinate;
@@ -174,14 +174,14 @@ namespace Netherlands3D.Twin.Configuration
         {
             int.TryParse(value, out int x);
             
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position);
             var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
             cameraRD.Points[0] = x;
 
-            var newCameraCoordinate = CoordinateConverter
-                .ConvertTo(cameraRD, CoordinateSystem.Unity)
-                .ToVector3();
+            if(!cameraRD.IsValid())
+                return;
 
+            var newCameraCoordinate = cameraRD.ToUnity();
             newCameraCoordinate.y = Camera.main.transform.position.y;
 
             Camera.main.transform.position = newCameraCoordinate;
