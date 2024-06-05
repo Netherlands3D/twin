@@ -16,6 +16,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private Read3DTileset tileSet;
         [SerializeField] private bool allowURLEditInPropertySection;
         private List<IPropertySectionInstantiator> propertySections = new();
+        
+        private UnityEvent<string> onURLChanged = new();
+        public UnityEvent<string> OnURLChanged { get => onURLChanged; }
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get => tileSet.OnServerRequestFailed;  }
         
@@ -26,6 +29,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (tileSet.tilesetUrl != value)
                 {
+                    OnURLChanged.Invoke(value);
                     tileSet.tilesetUrl = value;
                     tileSet.RefreshTiles();
                 }

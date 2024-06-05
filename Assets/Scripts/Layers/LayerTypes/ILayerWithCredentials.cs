@@ -11,8 +11,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     {
         public CredentialsPropertySection PropertySection { get; set; }
         public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get; }
+        public UnityEvent<string> OnURLChanged { get; }
 
         public string URL { get; set; } //The base URL to check the credentials for
+
 
         public void SetCredentials(string username, string password);
         public void SetKey(string key);

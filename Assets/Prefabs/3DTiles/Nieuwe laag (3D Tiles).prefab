@@ -148,6 +148,7 @@ MonoBehaviour:
   tilesetUrl: 
   publicKey: 
   personalKey: 
+  queryKeyName: key
   root:
     isLoading: 0
     level: 0
@@ -209,6 +210,9 @@ MonoBehaviour:
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
   unsupportedExtensionsParsed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerRequestFailed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7109194962515795805

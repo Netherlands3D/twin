@@ -10,8 +10,13 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1157960013898630974, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
+      propertyPath: m_text
+      value: https://
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157960013898630974, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
       propertyPath: m_fontSize
-      value: 8
+      value: 13.2
       objectReference: {fileID: 0}
     - target: {fileID: 1157960013898630974, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
@@ -173,6 +178,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5061270493314190905 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5034138315602348353, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+    type: 3}
+  m_PrefabInstance: {fileID: 279755971507636088}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &5609622276578464255 stripped
@@ -666,7 +683,7 @@ PrefabInstance:
     - target: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
@@ -779,6 +796,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   urlInputField: {fileID: 3210210209626650500}
+  colorFeedbackImage: {fileID: 5061270493314190905}
+  defaultColor: {r: 0.8980393, g: 0.9215687, b: 0.9490197, a: 1}
+  warningColor: {r: 1, g: 0.65723264, b: 0.67298067, a: 1}
 --- !u!114 &7489777075126785877
 MonoBehaviour:
   m_ObjectHideFlags: 0

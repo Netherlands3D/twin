@@ -15,13 +15,14 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField userNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
+        [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform serverErrorFeedback;
         
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
 
         public ILayerWithCredentials LayerWithCredentials { get; set; }
 
-        private public CredentialType credentialType = CredentialType.None;
+        private CredentialType credentialType = CredentialType.None;
         private Coroutine findSpecificTypeCoroutine;    
 
         public void ApplyCredentials()
@@ -40,6 +41,24 @@ namespace Netherlands3D.Twin
                     findSpecificTypeCoroutine = StartCoroutine(TryToFindSpecificType());
                     break;
             }
+        }
+
+        private void OnEnable()
+        {
+            TryToDetermineCredentialsType(LayerWithCredentials.URL);
+            LayerWithCredentials.OnURLChanged.AddListener(TryToDetermineCredentialsType);
+        }
+
+        private void OnDisable()
+        {
+            LayerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
+        }
+
+        private void TryToDetermineCredentialsType(string newURL)
+        {
+            credentialType = keyVault.DetermineCredentialType(newURL);
+            Debug.Log("Determined credential type: " + credentialType);
+            credentialTypeDropdown.value = (int)credentialType;
         }
 
         /// <summary>
