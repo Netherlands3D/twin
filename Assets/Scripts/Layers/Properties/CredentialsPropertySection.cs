@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using TMPro;
 using UnityEngine;
@@ -15,27 +16,12 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
         [SerializeField] private Transform serverErrorFeedback;
+        
+        [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
 
         public ILayerWithCredentials LayerWithCredentials { get; set; }
 
-        public enum CredentialType
-        {
-            None = -1,
-            UsernamePassword = 0,
-            KeyTokenOrCode = 1,
-            Key = 2,
-            Token = 3,
-            Code = 4,
-        }
-
-        public CredentialType credentialType = CredentialType.None;
-
-        private Dictionary<string, string> knownUrlCredentialTypes = new Dictionary<string, CredentialType>
-        {
-            { "https://tile.googleapis.com/v1/3dtiles/root.json", CredentialType.Key },
-            { "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", CredentialType.None }
-        };
-
+        private public CredentialType credentialType = CredentialType.None;
         private Coroutine findSpecificTypeCoroutine;    
 
         public void ApplyCredentials()
