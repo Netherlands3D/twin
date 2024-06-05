@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -28,6 +29,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public bool ActiveInHierarchy
         {
             get { return gameObject.activeInHierarchy; }
+        }
+
+        private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        public Color Color
+        {
+            get => color;
+            set
+            {
+                color = value;
+                if (UI)
+                    UI.SetColor(value);
+            }
         }
 
         protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
@@ -63,7 +76,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
         }
-
+        
         protected virtual void OnTransformChildrenChanged()
         {
             LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
