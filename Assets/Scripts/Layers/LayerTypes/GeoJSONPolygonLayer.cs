@@ -27,8 +27,6 @@ namespace Netherlands3D.Twin
                 {
                     visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
                 }
-
-                Color = PolygonVisualizationMaterial.color;
             }
         }
 
