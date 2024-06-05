@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         [SerializeField] private Origin origin;
         [SerializeField] private WorldTransformShifter worldTransformShifter;
-        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
+        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
         public Coordinate Coordinate {
             get;
             set;

@@ -18,16 +18,15 @@ namespace Netherlands3D.Twin.Configuration
         private void Awake() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
-            Coordinates.CoordinateSystems.SetOrigin(new Coordinates.Coordinate(Coordinates.CoordinateSystem.RDNAP, 120000, 480000, 0));
+
+            // Set the starting origin to the center of the Netherlands
+            Coordinates.CoordinateSystems.SetOrigin(new Coordinates.Coordinate(Coordinates.CoordinateSystem.RDNAP, 155000,463000, 0));
         }
 
         private IEnumerator Start()
         {
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
-
-            //Set the coordinate that will be used are the starting origin for Unity 0,0,0
-            Coordinates.CoordinateSystems.SetOrigin(configurator.Configuration.Origin);
         }
 
         private void AfterLoading(Configuration configuration)

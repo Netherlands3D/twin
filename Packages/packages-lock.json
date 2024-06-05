@@ -18,9 +18,34 @@
       },
       "hash": "a7f502e4bba2416411c64b1160dc01d53da75fcd"
     },
+    "com.greener-games.sharp-zip-lib": {
+      "version": "1.3.303",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.greener-games.unity-extensions": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.greener-games.unity-extensions": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.svermeulen.asyncawaitutil": "0.1.3"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.joshclose.csvhelper": {
       "version": "13.0.0",
       "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.svermeulen.asyncawaitutil": {
+      "version": "0.1.3",
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
@@ -229,7 +254,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.filebrowser": {
-      "version": "2.0.1",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
