@@ -15,6 +15,8 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField userNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
+        [SerializeField] private TMP_Text keyTokenOrCodeLabel;
+        private string defaultLabelText = "";
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform serverErrorFeedback;
         
@@ -43,6 +45,11 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private void Awake()
+        {
+            defaultLabelText = keyTokenOrCodeLabel.text;
+        }
+
         private void OnEnable()
         {
             TryToDetermineCredentialsType(LayerWithCredentials.URL);
@@ -58,7 +65,16 @@ namespace Netherlands3D.Twin
         {
             credentialType = keyVault.DetermineCredentialType(newURL);
             Debug.Log("Determined credential type: " + credentialType);
-            credentialTypeDropdown.value = (int)credentialType;
+
+            //Update dropdown to reflect credential type (Just key for now, for Google api)
+            if(credentialType == CredentialType.Key)
+            {
+                credentialTypeDropdown.value = (int)credentialType;
+                keyTokenOrCodeLabel.text = "Sleutel";
+            }
+            else{
+                keyTokenOrCodeLabel.text = defaultLabelText;
+            }
         }
 
         /// <summary>
