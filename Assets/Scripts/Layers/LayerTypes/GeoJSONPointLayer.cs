@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
         public List<Feature> PointFeatures = new();
 
         private BatchedMeshInstanceRenderer pointRenderer3D;
+
         public BatchedMeshInstanceRenderer PointRenderer3D
         {
             get { return pointRenderer3D; }
@@ -42,11 +43,12 @@ namespace Netherlands3D.Twin
             PointFeatures.Add(feature);
             GeoJSONGeometryVisualizerUtility.VisualizePoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
         }
-        
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Destroy(PointRenderer3D.gameObject);
+            if (Application.isPlaying)
+                Destroy(PointRenderer3D.gameObject);
         }
     }
 }

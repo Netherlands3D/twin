@@ -15,20 +15,22 @@ namespace Netherlands3D.Twin
         public void ParseGeoJSON(string fileName)
         {
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
-            randomColorVisualisationMaterial.color = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
+            var randomColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
+            randomColor.a = visualizationMaterial.color.a;
+            randomColorVisualisationMaterial.color = randomColor;
             CreateGeoJSONLayer(fileName, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D,UnityEvent<string> onErrorCallback = null)
+        public static GeoJSONLayer CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, fileName);
-            
+
             var go = new GameObject(fileName);
             var layer = go.AddComponent<GeoJSONLayer>();
 
             if (onErrorCallback != null)
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);
-            
+
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
             layer.ParseGeoJSON(fullPath);
             return layer;

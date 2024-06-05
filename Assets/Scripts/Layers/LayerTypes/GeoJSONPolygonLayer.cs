@@ -27,8 +27,8 @@ namespace Netherlands3D.Twin
                 {
                     visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
                 }
-                if (UI)
-                    UI.Color = PolygonVisualizationMaterial.color; //todo: this now doesn't work because it is set before the UI exists
+
+                Color = PolygonVisualizationMaterial.color;
             }
         }
 
@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin
             PolygonFeatures.Add(feature);
             PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
         }
-        
+
         public void AddAndVisualizeFeature(Feature feature, Polygon geometry, CoordinateSystem originalCoordinateSystem)
         {
             PolygonFeatures.Add(feature);
@@ -55,9 +55,12 @@ namespace Netherlands3D.Twin
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            foreach (var visualization in PolygonVisualisations)
+            if (Application.isPlaying)
             {
-                Destroy(visualization.gameObject);
+                foreach (var visualization in PolygonVisualisations)
+                {
+                    Destroy(visualization.gameObject);
+                }
             }
         }
     }

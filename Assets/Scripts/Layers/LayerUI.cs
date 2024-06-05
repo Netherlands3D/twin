@@ -72,12 +72,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public Sprite VisibilitySprite => visibilitySprites[(int)State];
 
-        public Color Color
-        {
-            get => colorButton.targetGraphic.color;
-            set => colorButton.targetGraphic.color = value;
-        }
-
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
         public string LayerName => Layer.name;
@@ -103,7 +97,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
-
+        
         public void RecalculateCurrentTreeStates()
         {
             RecalculateState();
@@ -195,6 +189,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             MarkLayerUIAsDirty();
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
+            SetColor(Layer.Color);
         }
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
@@ -689,6 +684,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ToggleProperties(bool isOn)
         {
             propertyToggle.isOn = isOn;
+        }
+
+        public void SetColor(Color c)
+        {
+            colorButton.targetGraphic.color = c;
         }
     }
 }

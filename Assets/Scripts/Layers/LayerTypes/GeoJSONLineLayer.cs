@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin
         public List<Feature> LineFeatures = new();
 
         private LineRenderer3D lineRenderer3D;
+
         public LineRenderer3D LineRenderer3D
         {
             get { return lineRenderer3D; }
@@ -45,7 +46,8 @@ namespace Netherlands3D.Twin
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Destroy(LineRenderer3D.gameObject);
+            if (Application.isPlaying)
+                Destroy(LineRenderer3D.gameObject);
         }
     }
 }
