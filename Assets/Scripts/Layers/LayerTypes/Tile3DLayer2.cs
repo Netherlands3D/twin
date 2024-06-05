@@ -31,7 +31,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     OnURLChanged.Invoke(value);
                     tileSet.tilesetUrl = value;
-                    tileSet.RefreshTiles();
+                    if(!tileSet.enabled)
+                    {
+                        tileSet.enabled = true;
+                    }
+                    else
+                    {
+                        tileSet.RefreshTiles();
+                    }
                 }
             }
         }

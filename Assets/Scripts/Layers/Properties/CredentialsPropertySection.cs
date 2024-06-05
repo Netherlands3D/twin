@@ -17,12 +17,32 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
         [SerializeField] private TMP_Text keyTokenOrCodeLabel;
         private string defaultLabelText = "";
+        [SerializeField] private Transform headerDefault;
+        [SerializeField] private Transform headerWithCredentialTypeDropdown;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform serverErrorFeedback;
-        
+
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
 
-        public ILayerWithCredentials LayerWithCredentials { get; set; }
+        private ILayerWithCredentials layerWithCredentials;
+        public ILayerWithCredentials LayerWithCredentials { 
+            get
+            {
+                return layerWithCredentials;
+            }
+            set
+            {
+                if(layerWithCredentials != null)
+                    layerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
+
+                layerWithCredentials = value;
+
+                if(layerWithCredentials != null){
+                    layerWithCredentials.OnURLChanged.AddListener(TryToDetermineCredentialsType);
+                    TryToDetermineCredentialsType(layerWithCredentials.URL);
+                }
+            } 
+        }
 
         private CredentialType credentialType = CredentialType.None;
         private Coroutine findSpecificTypeCoroutine;    
@@ -50,15 +70,10 @@ namespace Netherlands3D.Twin
             defaultLabelText = keyTokenOrCodeLabel.text;
         }
 
-        private void OnEnable()
-        {
-            TryToDetermineCredentialsType(LayerWithCredentials.URL);
-            LayerWithCredentials.OnURLChanged.AddListener(TryToDetermineCredentialsType);
-        }
-
         private void OnDisable()
         {
-            LayerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
+            if(LayerWithCredentials != null)
+                LayerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
         }
 
         private void TryToDetermineCredentialsType(string newURL)
@@ -66,14 +81,21 @@ namespace Netherlands3D.Twin
             credentialType = keyVault.DetermineCredentialType(newURL);
             Debug.Log("Determined credential type: " + credentialType);
 
-            //Update dropdown to reflect credential type (Just key for now, for Google api)
+            //Below we may want to transform input to detected credential types in the future
+            return;
+
             if(credentialType == CredentialType.Key)
             {
                 credentialTypeDropdown.value = (int)credentialType;
                 keyTokenOrCodeLabel.text = "Sleutel";
+
+                headerDefault.gameObject.SetActive(true);
+                headerWithCredentialTypeDropdown.gameObject.SetActive(false);
             }
             else{
                 keyTokenOrCodeLabel.text = defaultLabelText;
+                headerDefault.gameObject.SetActive(false);
+                headerWithCredentialTypeDropdown.gameObject.SetActive(true);
             }
         }
 
