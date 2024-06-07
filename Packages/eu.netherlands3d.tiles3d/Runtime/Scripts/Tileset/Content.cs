@@ -139,7 +139,7 @@ namespace Netherlands3D.Tiles3D
                     scene = transform.GetChild(i).transform;
                     if(scene == null) continue;
 
-                    MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
+                   // MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
                     if (parsedGltf.rtcCenter != null)
                     {
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);

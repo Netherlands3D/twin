@@ -113,6 +113,14 @@ namespace Netherlands3D.Tiles3D
             RefreshTiles();
         }
 
+        private void OnEnable()
+        {
+            if (root !=null)
+            {
+                StartCoroutine(LoadInView());
+            }
+            
+        }
         public void RefreshTiles()
         {
             StopAllCoroutines();
@@ -265,8 +273,16 @@ namespace Netherlands3D.Tiles3D
         {
             if (root == null) return;
 
-            //Flag all calculated bounds to be recalculated when tile bounds is requested
+            
             RecalculateAllTileBounds(root);
+        }
+
+        public void InvalidateBounds()
+        {
+            if (root == null) return;
+
+            //Flag all calculated bounds to be recalculated when tile bounds is requested
+            InvalidateAllTileBounds(root);
         }
 
         /// <summary>
@@ -277,11 +293,28 @@ namespace Netherlands3D.Tiles3D
         {
             if (tile == null) return;
 
-            tile.CalculateBounds();
+            tile.CalculateUnitBounds();
 
             foreach (var child in tile.children)
             {
                 RecalculateAllTileBounds(child);
+            }
+        }
+
+        /// <summary>
+        /// Recursive invalidation of tile bounds
+        /// tilebounds will be recaluclated when testing for isInView
+        /// </summary>
+        /// <param name="tile">Starting tile</param>
+        private void InvalidateAllTileBounds(Tile tile)
+        {
+            if (tile == null) return;
+
+            tile.boundsAvailable = false ;
+
+            foreach (var child in tile.children)
+            {
+                InvalidateAllTileBounds(child);
             }
         }
 

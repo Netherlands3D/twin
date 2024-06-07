@@ -76,7 +76,7 @@ namespace Netherlands3D.Tiles3D
             tile.boundingVolume = new BoundingVolume();
             JSONNode boundingVolumeNode = node["boundingVolume"];
             tile.boundingVolume = ParseBoundingVolume( boundingVolumeNode);
-            tile.CalculateBounds();
+            tile.CalculateUnitBounds();
             tile.geometricError = double.Parse(node["geometricError"].Value);
             tile.refine = node["refine"].Value;
             JSONNode childrenNode = node["children"];

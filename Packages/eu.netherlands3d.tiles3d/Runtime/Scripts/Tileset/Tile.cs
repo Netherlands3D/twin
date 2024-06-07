@@ -16,13 +16,17 @@ namespace Netherlands3D.Tiles3D
 
         public int priority = 0;
 
-        private bool boundsAvailable = false;
-        private Bounds bounds = new Bounds();
+        internal bool boundsAvailable = false;
+        private Bounds unityBounds = new Bounds();
         public BoundingVolume boundingVolume;
+
+        public Coordinate BottomLeft;
+        public Coordinate TopRight;
 
         public bool requestedDispose = false;
         public bool requestedUpdate = false;
         internal bool nestedTilesLoaded = false;
+        bool boundsAreValid = true;
 
         public int childrenCountDelayingDispose = 0;
         public Tile parent;
@@ -147,9 +151,9 @@ namespace Netherlands3D.Tiles3D
         {
             get
             {
-                return bounds;
+                return unityBounds;
             }
-            set => bounds = value;
+            set => unityBounds = value;
         }
 
         public Vector3 EulerRotationToVertical()
@@ -206,53 +210,108 @@ namespace Netherlands3D.Tiles3D
             loaded
         }
 
+
+
         public bool IsInViewFrustrum(Camera ofCamera)
         {
-            if (!boundsAvailable)
+            if (!boundsAvailable && boundsAreValid)
             {
                 if (boundingVolume.values.Length>0)
                 {
-                    CalculateBounds();
+                    CalculateUnitBounds();
                 }
                 else
                 {
-                    return true;
+                    inView = false ;
                 }
                 
             }
             if (boundsAvailable)
             {
-                inView = ofCamera.InView(ContentBounds);
+                inView = false;
+                if (IsPointInbounds(new Coordinate(ofCamera.transform.position).Convert(CoordinateSystem.WGS84_ECEF),8000d))
+                {
+                    inView= ofCamera.InView(unityBounds);
+                }
+                
             }
             
             return inView;
         }
 
-        public void CalculateBounds()
+        bool IsPointInbounds(Coordinate point, double margin)
         {
-            if(boundingVolume == null || boundingVolume.values.Length == 0)
-                return;
+           
+            if (point.Points[0]+margin < BottomLeft.Points[0])
+            {
+                return false;
+            }
+            if (point.Points[1] + margin < BottomLeft.Points[1])
+            {
+                return false;
+            }
+            if (point.Points[2] + margin < BottomLeft.Points[2])
+            {
+                return false;
+            }
+            if (point.Points[0] - margin > TopRight.Points[0])
+            {
+                return false;
+            }
+            if (point.Points[1] - margin > TopRight.Points[1])
+            {
+                return false;
+            }
+            if (point.Points[2] - margin > TopRight.Points[2])
+            {
+                return false;
+            }
+            return true;
+        }
 
+        public void CalculateUnitBounds()
+        {
+            if (boundingVolume == null || boundingVolume.values.Length == 0)
+            {
+                boundsAreValid = false;
+                return;
+            }
+
+            boundsAvailable = true;
             switch (boundingVolume.boundingVolumeType)
             {
                 case BoundingVolumeType.Box:
-                    //TODO: proper Box bounding calculation
-                    
-                    Coordinate boxCenterEcef = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]);
-                    Coordinate Xaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]);
-                    Coordinate Yaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]);
-                    Coordinate Zaxis = new Coordinate(CoordinateSystem.EPSG_4936, boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]);
 
-                    bounds.size = Vector3.zero;
-                    bounds.center = CoordinateConverter.ConvertTo(boxCenterEcef,CoordinateSystem.Unity).ToVector3();
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef +Xaxis+Yaxis+Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef +Xaxis+Yaxis-Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef + Xaxis - Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef + Xaxis - Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis + Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis + Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis + Zaxis, CoordinateSystem.Unity).ToVector3());
-                    bounds.Encapsulate(CoordinateConverter.ConvertTo(boxCenterEcef - Xaxis - Yaxis - Zaxis, CoordinateSystem.Unity).ToVector3());
+                    Coordinate boxCenterEcef = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]);
+
+                    Coordinate Xaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]);
+                    Coordinate Yaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]);
+                    Coordinate Zaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]);
+
+                    
+
+
+                    unityBounds = new Bounds();
+                    unityBounds.center = boxCenterEcef.ToUnity();
+
+                    unityBounds.Encapsulate((boxCenterEcef + Xaxis + Yaxis + Zaxis).ToUnity());
+                    unityBounds.Encapsulate((boxCenterEcef + Xaxis + Yaxis - Zaxis).ToUnity());
+                    unityBounds.Encapsulate((boxCenterEcef + Xaxis - Yaxis + Zaxis).ToUnity());
+                    unityBounds.Encapsulate((boxCenterEcef + Xaxis - Yaxis - Zaxis).ToUnity());
+                    
+                    unityBounds.Encapsulate((boxCenterEcef - Xaxis + Yaxis + Zaxis).ToUnity());
+                    unityBounds.Encapsulate((boxCenterEcef - Xaxis - Yaxis + Zaxis).ToUnity());
+
+                    unityBounds.Encapsulate((boxCenterEcef - Xaxis + Yaxis - Zaxis).ToUnity());
+                    unityBounds.Encapsulate((boxCenterEcef - Xaxis - Yaxis - Zaxis).ToUnity());
+
+
+                    double deltaX =  Math.Abs(Xaxis.Points[0]) + Math.Abs(Yaxis.Points[0]) + Math.Abs(Zaxis.Points[0]);
+                    double deltaY = Math.Abs(Xaxis.Points[1]) + Math.Abs(Yaxis.Points[1]) + Math.Abs(Zaxis.Points[1]);
+                    double deltaZ = Math.Abs(Xaxis.Points[2]) + Math.Abs(Yaxis.Points[2]) + Math.Abs(Zaxis.Points[2]);
+                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF , boxCenterEcef.Points[0]-deltaX, boxCenterEcef.Points[1] - deltaY, boxCenterEcef.Points[2] - deltaZ);
+                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boxCenterEcef.Points[0] + deltaX, boxCenterEcef.Points[1] + deltaY, boxCenterEcef.Points[2] + deltaZ);
+
 
                     break;
                 case BoundingVolumeType.Sphere:
@@ -260,22 +319,37 @@ namespace Netherlands3D.Tiles3D
                     var sphereCentre = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]));
                     var sphereMin = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]- sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius));
                     var sphereMax = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]+ sphereRadius, boundingVolume.values[1]+ sphereRadius, boundingVolume.values[2]+ sphereRadius));
-                    bounds.size = Vector3.zero;
-                    bounds.center = sphereCentre;
-                    bounds.Encapsulate(sphereMin);
-                    bounds.Encapsulate(sphereMax);
+                    unityBounds.size = Vector3.zero;
+                    unityBounds.center = sphereCentre;
+                    unityBounds.Encapsulate(sphereMin);
+                    unityBounds.Encapsulate(sphereMax);
+                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0] - sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius);
+                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0] + sphereRadius, boundingVolume.values[1] + sphereRadius, boundingVolume.values[2] + sphereRadius);
                     break;
                 case BoundingVolumeType.Region:
+
+                    Debug.Log("region");
                     //Array order: west, south, east, north, minimum height, maximum height
+                    double West = (boundingVolume.values[0] * 180.0f) / Mathf.PI;
+                    double South = (boundingVolume.values[1] * 180.0f) / Mathf.PI;
+                    double East = (boundingVolume.values[2] * 180.0f) / Mathf.PI;
+                    double North = (boundingVolume.values[3] * 180.0f) / Mathf.PI;
+                    double MaxHeight = boundingVolume.values[4];
+                    double minHeight = boundingVolume.values[5];
+
                     var ecefMin = CoordinateConverter.WGS84toECEF(new Vector3WGS((boundingVolume.values[0] * 180.0f) / Mathf.PI, (boundingVolume.values[1] * 180.0f) / Mathf.PI, boundingVolume.values[4]));
-                    var ecefMax = CoordinateConverter.WGS84toECEF(new Vector3WGS((boundingVolume.values[2] * 180.0f) / Mathf.PI, (boundingVolume.values[3] * 180.0f) / Mathf.PI, boundingVolume.values[5]));
+                    Coordinate  wgsMin = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,South,West,minHeight);
+                    Coordinate wgsMax = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, East, MaxHeight);
 
-                    var unityMin = CoordinateConverter.ECEFToUnity(ecefMin);
-                    var unityMax = CoordinateConverter.ECEFToUnity(ecefMax);
+                    var unityMin = wgsMin.ToUnity();
+                    var unityMax = wgsMax.ToUnity();
 
-                    bounds.size = Vector3.zero;
-                    bounds.center = unityMin;
-                    bounds.Encapsulate(unityMax);
+                    unityBounds.size = Vector3.zero;
+                    unityBounds.center = unityMin;
+                    unityBounds.Encapsulate(unityMax);
+
+                    BottomLeft = wgsMin.Convert(CoordinateSystem.WGS84_ECEF);
+                    TopRight = wgsMax.Convert(CoordinateSystem.WGS84_ECEF);
                     break;
                 default:
                     break;

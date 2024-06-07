@@ -5,6 +5,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 07-06-2024
+
+### Fixed
+
+- tiles, very far away from the camera where loaded because cameraFrustumCheck couldn't handle very large positions. added pre-check, checking if camera is close to or inside bounds, calculating in the coordaintesystem of the 3d-tileset
+
 ## [1.5.0] - 04-06-2024
 
 ### Added
