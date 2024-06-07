@@ -9,12 +9,19 @@ namespace Netherlands3D.Twin
 {
     public class DownloadFile : MonoBehaviour
     {
-        [SerializeField] private string url;
+        public string URL { get; set; }
         public UnityEvent<string> onFileDownloaded = new();
+        public UnityEvent<string> onFileDownloadFailed = new();
+
+        //for in the inspector
+        public void SetURL(string url)
+        {
+            URL = url;
+        }
         
         public void DownloadFileFromURL()
         {
-            StartCoroutine(Download(url));
+            StartCoroutine(Download(URL));
         }
         
         private IEnumerator Download(string url) {
@@ -28,7 +35,7 @@ namespace Netherlands3D.Twin
             uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
-                Debug.LogError(uwr.error);
+                onFileDownloadFailed.Invoke(uwr.error);
             else
                 onFileDownloaded.Invoke(path);
             print("end frame: " + Time.frameCount);

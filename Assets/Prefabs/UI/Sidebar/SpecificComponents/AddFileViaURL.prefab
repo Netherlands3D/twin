@@ -372,7 +372,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 161.1058, y: -53.94}
+  m_AnchoredPosition: {x: 161.1058, y: -53.93994}
   m_SizeDelta: {x: 287.4984, y: 1.0345}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8343725629750479149
@@ -446,10 +446,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8574762161831476655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 177.85, y: 0}
-  m_SizeDelta: {x: 255.70001, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 177.85, y: -69.6973}
+  m_SizeDelta: {x: 255.70001, y: 83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8352810454335676995
 CanvasRenderer:
@@ -602,7 +602,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25.5, y: -26.7}
+  m_AnchoredPosition: {x: -25.5, y: -26.699951}
   m_SizeDelta: {x: 23.683014, y: 23.683}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2943789877104151082
@@ -744,9 +744,9 @@ RectTransform:
   - {fileID: 4111866870773889431}
   m_Father: {fileID: 8574762161831476655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 147.37, y: 0}
   m_SizeDelta: {x: 194.74, y: 19.867302}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3468089716429012749
@@ -1267,7 +1267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ab9b4a0e854d4e669f8a18818c0fef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: https://stflevolandunity.blob.core.windows.net/3dflevoland/GeoJSONTest/StraatnamenGeojsonPointTest.json?sv=2022-11-02&ss=bfqt&srt=sco&sp=rltfx&se=2024-07-08T16:49:16Z&st=2024-06-07T08:49:16Z&spr=https&sig=40GZcGZgybLrHfctY%2FmrYRaDc3ObPltlEysVjh62CUI%3D
   onFileDownloaded:
     m_PersistentCalls:
       m_Calls:
@@ -1282,6 +1281,33 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9167178631255533724}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onFileDownloadFailed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9167178631255533724}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &8333784127393854997
 GameObject:
@@ -1455,7 +1481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 28.5, y: -26.7}
+  m_AnchoredPosition: {x: 28.5, y: -26.699951}
   m_SizeDelta: {x: 23.683, y: 23.683}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6165287938304579627
@@ -1528,9 +1554,9 @@ RectTransform:
   - {fileID: 8186992380228057360}
   m_Father: {fileID: 8574762161831476655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 177.85, y: -143.70465}
   m_SizeDelta: {x: 255.7, y: 48.3547}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &826265513951254398
@@ -1680,7 +1706,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8360637078574007450}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.DownloadFile, Assembly-CSharp
+        m_MethodName: SetURL
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1739,7 +1777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8574762161831476655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1757,10 +1795,10 @@ RectTransform:
   - {fileID: 7554101576616012277}
   m_Father: {fileID: 2925110442081368954}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 160.35, y: 0}
-  m_SizeDelta: {x: 320.7, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 160.35, y: -152.13681}
+  m_SizeDelta: {x: 320.7, y: 181.88199}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7821161091622162646
 CanvasRenderer:
@@ -1856,22 +1894,22 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 137.61
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 19.01
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -1881,7 +1919,7 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -23.6428
       objectReference: {fileID: 0}
     - target: {fileID: 4957780787399807716, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -1916,7 +1954,7 @@ PrefabInstance:
     - target: {fileID: 4957780787399807716, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 157.61
       objectReference: {fileID: 0}
     - target: {fileID: 4957780787399807716, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -2043,6 +2081,41 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 7055746173932217125}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8360637078574007450}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DownloadFileFromURL
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.DownloadFile, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
