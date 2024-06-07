@@ -117,6 +117,7 @@ namespace Netherlands3D.Tiles3D
         {
             if (root !=null)
             {
+                InvalidateBounds();
                 StartCoroutine(LoadInView());
             }
             
