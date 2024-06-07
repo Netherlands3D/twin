@@ -38,9 +38,14 @@ namespace Netherlands3D.Twin
             uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(uwr.error);
                 onFileDownloadFailed.Invoke(uwr.error);
+            }
             else
+            {
                 onFileDownloaded.Invoke(path);
+            }
             print("end frame: " + Time.frameCount);
         }
     }
