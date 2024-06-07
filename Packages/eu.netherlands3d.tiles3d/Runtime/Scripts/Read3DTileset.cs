@@ -113,6 +113,14 @@ namespace Netherlands3D.Tiles3D
             RefreshTiles();
         }
 
+        private void OnEnable()
+        {
+            if (root !=null)
+            {
+                StartCoroutine(LoadInView());
+            }
+            
+        }
         public void RefreshTiles()
         {
             StopAllCoroutines();
