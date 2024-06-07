@@ -9,8 +9,6 @@ namespace Netherlands3D.Tiles3D
 {
     public class ReadSubtree : MonoBehaviour
     {
-        
-
         int currentSubtreeLevels;
         public Subtree subtree;
         public Tile tile;
@@ -18,7 +16,7 @@ namespace Netherlands3D.Tiles3D
         public string subtreeUrl;
         System.Action<Tile> sendResult;
         private Tile appendTilesTo;
-
+        private Read3DTileset tilesetReader;
         public bool isbusy = false;
 
         public void DownloadSubtree(string url, ImplicitTilingSettings tilingSettings,Tile appendTilesTo, System.Action<Tile> callback)
@@ -30,8 +28,8 @@ namespace Netherlands3D.Tiles3D
             subtreeUrl = url;
             if (url == "")
             {
-                Read3DTileset tilesetreader = GetComponent<Read3DTileset>();
-                subtreeUrl = tilesetreader.tilesetUrl.Replace(tilesetreader.tilesetFilename, appendTilesTo.contentUri);
+                tilesetReader = GetComponent<Read3DTileset>();
+                subtreeUrl = tilesetReader.tilesetUrl.Replace(tilesetReader.tilesetFilename, appendTilesTo.contentUri);
                                 
             }
             Debug.Log($"loading subtree: {subtreeUrl}");
@@ -48,6 +46,9 @@ namespace Netherlands3D.Tiles3D
         IEnumerator DownloadSubtree()
         {
             UnityWebRequest www = UnityWebRequest.Get(subtreeUrl);
+            foreach (var header in tilesetReader.CustomHeaders)
+                www.SetRequestHeader(header.Key, header.Value);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

@@ -19,12 +19,21 @@ namespace Netherlands3D.Tiles3D
     public class Read3DTileset : MonoBehaviour
     {
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
+
+        [Header("API Key (Optional)")]
+        [Tooltip("Public API key for production use. This key will be used in production builds.")]
         public string publicKey;
+        [Tooltip("Personal API key for testing purposes. This key will override the public key in Unity editor.")]
         public string personalKey;
+        [Tooltip("The key name to use for the API key in the query string like 'key', or 'code' etc. Default is 'key' for Google Maps API.")]
+        [SerializeField] private string queryKeyName = "key";
+        public string QueryKeyName { get => queryKeyName; set => queryKeyName = value; }
+
         private string absolutePath = "";
         private string rootPath = "";
         private NameValueCollection queryParameters;
 
+        [Header("Tileset")]
         public Tile root;
         public double[] transformValues;
 
@@ -63,20 +72,38 @@ namespace Netherlands3D.Tiles3D
         [Header("Optional material override")] public Material materialOverride;
 
         public string[] usedExtensions { get; private set; }
+
+        //Custom WebRequestHeader dictionary
+        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
+
+        [Space(2)]
         public UnityEvent<string[]> unsupportedExtensionsParsed;
+        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
+
 
         public void ConstructURLWithKey()
         {
+            //Apppend API key to URL
+            if (tilesetUrl.Contains("?"))
+            {
+                tilesetUrl = tilesetUrl + "&";
+            }
+            else
+            {
+                tilesetUrl = tilesetUrl + "?";
+            }
+
 #if UNITY_EDITOR
             if (string.IsNullOrEmpty(personalKey) == false)
             {
-                tilesetUrl = tilesetUrl + "?key=" + personalKey;
+                tilesetUrl += $"{QueryKeyName}={personalKey}";
             }
 
 #else
             if (string.IsNullOrEmpty(publicKey)==false)
             {
-                tilesetUrl = tilesetUrl + "?key=" + publicKey;
+                tilesetUrl += $"{QueryKeyName}={publicKey}";
             }
 #endif
         }
@@ -94,6 +121,22 @@ namespace Netherlands3D.Tiles3D
             visibleTiles = new();
 
             InitializeURLAndLoadTileSet();
+        }
+
+        /// <summary>
+        /// Add custom headers for all internal WebRequests
+        /// </summary>
+        public void AddCustomHeader(string key, string value, bool replace = true)
+        {
+            if(replace && customHeaders.ContainsKey(key))
+                customHeaders[key] = value;
+            else
+                customHeaders.Add(key, value);
+        }
+        
+        public void ClearCustomHeaders()
+        {
+            customHeaders.Clear();
         }
 
         private void DisposeAllTilesRecursive(Tile tile)
@@ -273,11 +316,15 @@ namespace Netherlands3D.Tiles3D
         IEnumerator LoadTileset()
         {
             UnityWebRequest www = UnityWebRequest.Get(tilesetUrl);
+            foreach (var header in customHeaders)
+                www.SetRequestHeader(header.Key, header.Value);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log($"Could not load tileset from url:{tilesetUrl} Error:{www.error}");
+                OnServerRequestFailed.Invoke(www.result);
             }
             else
             {
@@ -513,11 +560,16 @@ namespace Netherlands3D.Tiles3D
                 {
                     string nestedJsonPath = GetFullContentUri(tile);
                     UnityWebRequest www = UnityWebRequest.Get(nestedJsonPath);
+                    
+                    foreach (var header in customHeaders)
+                        www.SetRequestHeader(header.Key, header.Value);
+                        
                     yield return www.SendWebRequest();
 
                     if (www.result != UnityWebRequest.Result.Success)
                     {
                         Debug.Log(www.error + " at " + nestedJsonPath);
+                        OnServerRequestFailed.Invoke(www.result);
                     }
                     else
                     {

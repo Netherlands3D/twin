@@ -5,6 +5,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 04-06-2024
+
+### Added
+
+- Added method 'AddCustomHeader' to set custom headers for the internal web requests
+- Added property 'QueryKeyName' to change the key name from the default used by Google API ('key') to something else (For example 'code' or 'api_key' etc.)
+
 ## [1.4.1] - 14-05-2024
 
 ### Removed

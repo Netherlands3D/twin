@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 //using Netherlands3D.Core;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -83,7 +84,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load(Material overrideMaterial = null)
+        public void Load(Material overrideMaterial = null, Dictionary<string, string> headers = null)
         {
             if(overrideMaterial != null)
             {
@@ -97,7 +98,12 @@ namespace Netherlands3D.Tiles3D
             parentTile.isLoading = true;
 
             runningContentRequest = StartCoroutine(
-                ImportB3DMGltf.ImportBinFromURL(uri, GotGltfContent)
+                ImportB3DMGltf.ImportBinFromURL(
+                    uri, 
+                    GotGltfContent,
+                    false,
+                    headers
+                )
             );
         }
 
@@ -117,9 +123,7 @@ namespace Netherlands3D.Tiles3D
             {
                 Debug.Log("failed to parse: "+ uri +" , trying again");
                 State = ContentLoadState.DOWNLOADED;
-                //Load();
                 return;
-                
             }
 
             var gltf = parsedGltf.gltfImport;
@@ -194,18 +198,14 @@ namespace Netherlands3D.Tiles3D
             //Direct abort of downloads
             if (State == ContentLoadState.DOWNLOADING && runningContentRequest != null)
             {
-                StopCoroutine(runningContentRequest);
-
-               
+                StopCoroutine(runningContentRequest);       
             }
            
-
             State = ContentLoadState.DOWNLOADED;
 
             if (gltf != null)
             {
-                gltf.Dispose();
-               
+                gltf.Dispose();     
             }
             Destroy(this.gameObject);
         }
