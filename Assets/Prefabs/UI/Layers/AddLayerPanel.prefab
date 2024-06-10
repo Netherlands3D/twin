@@ -16970,6 +16970,7 @@ GameObject:
   - component: {fileID: 5583366106546897551}
   - component: {fileID: 4701628106885644189}
   - component: {fileID: 8464443332832227590}
+  - component: {fileID: 56679504018416206}
   m_Layer: 5
   m_Name: ImportFileFromURL
   m_TagString: Untagged
@@ -17081,18 +17082,32 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 56679504018416206}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.OverlayInstantiator, Assembly-CSharp
+        m_MethodName: InstantiateOverlay
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &56679504018416206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8203126887549318031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayPrefab: {fileID: 2605067482200781903, guid: 5a8099188fadb4cc1ab5bb27902bf38a,
+    type: 3}
 --- !u!1 &8269209386390192098
 GameObject:
   m_ObjectHideFlags: 0
@@ -18043,8 +18058,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4194749933784222526}
   m_HandleRect: {fileID: 1952508586956662896}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
