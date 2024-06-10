@@ -60,6 +60,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
@@ -129,6 +137,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
