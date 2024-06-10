@@ -1786,10 +1786,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50aa9366986240a1add13d795bf0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultOpenHeight: 210
+  defaultOpenHeight: 300
   minHeight: 0
   minResizeHeightThreshold: 50
-  maxHeight: 350
+  maxHeight: 450
   smoothTime: 1
   toggle: {fileID: 0}
   OnRectTransformSizeChanged:
