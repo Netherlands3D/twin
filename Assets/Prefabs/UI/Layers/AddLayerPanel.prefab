@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50aa9366986240a1add13d795bf0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultOpenHeight: 300
+  defaultOpenHeight: 306
   minHeight: 0
   minResizeHeightThreshold: 50
   maxHeight: 450
@@ -13938,7 +13938,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.77000046, y: 0}
+  m_AnchoredPosition: {x: 951.23, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
@@ -17973,7 +17973,7 @@ RectTransform:
   m_Father: {fileID: 3096135679824611675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 12, y: 0}
   m_Pivot: {x: 1, y: 1}
