@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
     public class ContentOverlay : MonoBehaviour
     {
         public static ContentOverlay Instance { get; private set; }
+        [SerializeField] private Image background;
 
         private void Awake()
         {
@@ -17,6 +19,7 @@ namespace Netherlands3D.Twin
                 return;
             }
 
+            ClearAllOverlays();
             Instance = this;
         }
 
@@ -26,6 +29,7 @@ namespace Netherlands3D.Twin
                 ClearAllOverlays();
 
             Instantiate(overlay, transform);
+            background.enabled = true;
         }
 
         private void ClearAllOverlays()
@@ -34,6 +38,7 @@ namespace Netherlands3D.Twin
             {
                 Destroy(child.gameObject);
             }
+            background.enabled = false;
         }
     }
 }
