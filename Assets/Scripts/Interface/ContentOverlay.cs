@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin
             Instance = this;
         }
 
-        public void ShowOverlay(GameObject overlay, bool clear)
+        public void ShowOverlay(OverlayInspector overlay, bool clear)
         {
             if(clear)
                 ClearAllOverlays();
@@ -39,6 +39,11 @@ namespace Netherlands3D.Twin
                 Destroy(child.gameObject);
             }
             background.enabled = false;
+        }
+
+        public void CloseOverlay()
+        {
+            ClearAllOverlays(); //todo: allow stacked overlays?
         }
     }
 }
