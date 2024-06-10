@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    public class DragWindowSize : MonoBehaviour, IDragHandler, IEndDragHandler
+    public class AddLayerPanelDragLine : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         [SerializeField] private AddLayerPanel panel;
         [SerializeField] private Toggle openToggle;

@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50aa9366986240a1add13d795bf0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultOpenHeight: 306
+  defaultOpenHeight: 310
   minHeight: 0
   minResizeHeightThreshold: 50
   maxHeight: 450
