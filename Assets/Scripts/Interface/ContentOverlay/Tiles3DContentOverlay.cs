@@ -69,10 +69,12 @@ namespace Netherlands3D.Twin
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
-            if(url != layerWithCredentials.URL) return;
+            //Trim trailing ? or & characters from the URL (TODO: should be fixed in 3DTiles package)
+            var determinedUrl = url.TrimEnd('?', '&');
+            if(determinedUrl != layerWithCredentials.URL) return;
 
             this.authorizationType = authorizationType;
-
+            Debug.Log("Determined authorization type: " + authorizationType);
             // It appears the current url needs authentication/authorization
             switch(authorizationType)
             {
@@ -81,6 +83,7 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.Token:
                 case AuthorizationType.Code:
                     //We are in. Our layer is there. Close overlay.
+                    Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
                 default:
