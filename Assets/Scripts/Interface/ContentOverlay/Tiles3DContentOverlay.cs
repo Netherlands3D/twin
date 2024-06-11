@@ -24,14 +24,13 @@ namespace Netherlands3D.Twin
 
         private void OnEnable()
         {
-            layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             keyVault.OnCredentialTypeDetermined.AddListener(DisplayCredentialsInputIfRequired);
 
             //Hide the credentials section by default. Only activated if we determine the URL needs credentials
             credentialsPropertySection.gameObject.SetActive(false);
         }
 
-        private void OnDisable() {
+        private void OnDestroy() {
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
             keyVault.OnCredentialTypeDetermined.RemoveListener(DisplayCredentialsInputIfRequired);
         }
@@ -58,6 +57,8 @@ namespace Netherlands3D.Twin
 
             tile3DLayerPropertySection.Layer = layerWithCredentials;
             credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
+
+            layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
         }
     }
 }
