@@ -61,6 +61,7 @@ namespace Netherlands3D.Twin
         private void UrlHasChanged(string newURL)
         {
             authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+
             SetAuthorizationInputType(authorizationType);
         }
 
@@ -71,10 +72,13 @@ namespace Netherlands3D.Twin
             switch(authorizationType)
             {
                 case AuthorizationType.UsernamePassword:
-                    LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
+                    keyVault.TryBasicAuthentication(
+                        LayerWithCredentials.URL, 
+                        userNameInputField.text, 
+                        passwordInputField.text
+                        );
                     break;
                 case AuthorizationType.ToBeDetermined:
-                Debug.Log("Try to find specific credential type for: " + LayerWithCredentials.URL + " with key: " + keyTokenOrCodeInputField.text);
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
@@ -86,7 +90,6 @@ namespace Netherlands3D.Twin
         private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
             Debug.Log("Vault determined credential type: " + type + " for url: " + url);
-
             var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
             if(url != layerUrl) return;
 
@@ -95,6 +98,9 @@ namespace Netherlands3D.Twin
 
             switch(type)
             {
+                case AuthorizationType.UsernamePassword:
+                    layerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
+                    break;
                 case AuthorizationType.Key:
                     layerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
                     break;
@@ -118,6 +124,9 @@ namespace Netherlands3D.Twin
 
         public void SetAuthorizationInputType(AuthorizationType type)
         {
+            if(type != AuthorizationType.UsernamePassword && type != AuthorizationType.ToBeDetermined)
+                return;
+
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;
         }

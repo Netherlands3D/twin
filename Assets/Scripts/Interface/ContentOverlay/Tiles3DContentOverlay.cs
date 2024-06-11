@@ -72,11 +72,13 @@ namespace Netherlands3D.Twin
             if(url != layerUrl) return;
 
             this.authorizationType = authorizationType;
+            
             Debug.Log("Determined authorization type: " + authorizationType);
             // It appears the current url needs authentication/authorization
             switch(authorizationType)
             {
                 case AuthorizationType.Public:
+                case AuthorizationType.UsernamePassword:
                 case AuthorizationType.Key:
                 case AuthorizationType.Token:
                 case AuthorizationType.Code:
@@ -84,9 +86,10 @@ namespace Netherlands3D.Twin
                     Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
+                case AuthorizationType.ToBeDetermined:
                 default:
-                    //Something went wrong, show the credentials section
-                    credentialsPropertySection.SetAuthorizationInputType(authorizationType);
+                    //Something went wrong, show the credentials section, starting with default
+                    credentialsPropertySection.SetAuthorizationInputType(AuthorizationType.UsernamePassword);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);
                     break;

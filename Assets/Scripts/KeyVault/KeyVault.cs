@@ -59,7 +59,10 @@ namespace Netherlands3D.Twin
             return AuthorizationType.Public;
         }
 
-        public void AddNewURLAuthorization(string url, AuthorizationType authorizationType)
+        /// <summary>
+        /// Add a new known URL with a specific authorization type
+        /// </summary>
+        public void NewURLAuthorizationDetermined(string url, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
         {
             if(storedAuthorizations.Exists(x => x.url == url))
                 storedAuthorizations.RemoveAll(x => x.url == url);
@@ -67,12 +70,14 @@ namespace Netherlands3D.Twin
             storedAuthorizations.Add(
                 new StoredAuthorization() { 
                     url = url, 
-                    authorizationType = authorizationType 
+                    authorizationType = authorizationType, 
+                    username = username, 
+                    password = password, 
+                    key = key 
                 });
 
             OnAuthorizationTypeDetermined.Invoke(url, authorizationType);
         }
-
 
         /// <summary>
         /// Try to find the specific type of credential (key, token or code) that is needed for the layer
@@ -83,9 +88,41 @@ namespace Netherlands3D.Twin
             if(coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
 
-            var coroutineGameObject = new GameObject("KeyVaultCoroutines");
+            var coroutineGameObject = new GameObject("KeyVaultCoroutine_FindSpecificAuthorizationType");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
             coroutineMonoBehaviour.StartCoroutine(FindSpecificAuthorizationType(url, key));
+        }
+
+        /// <summary>
+        /// Try to access a URL with a username and password.
+        /// OnAuthorizationTypeDetermined will be called with the result.
+        /// </summary>
+        public void TryBasicAuthentication(string url, string username, string password)
+        {
+            //Only allow one simultaneous coroutine for now
+            if(coroutineMonoBehaviour != null)
+                Destroy(coroutineMonoBehaviour.gameObject);
+
+            var coroutineGameObject = new GameObject("KeyVaultCoroutine_AccessWithUsernameAndPassword");
+            coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
+            coroutineMonoBehaviour.StartCoroutine(AccessWithUsernameAndPassword(url,username, password));
+        }
+
+        private IEnumerator AccessWithUsernameAndPassword(string url, string username,string password)
+        {
+            var request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
+            yield return request.SendWebRequest();
+
+            if(request.result == UnityWebRequest.Result.Success)
+            {
+                if(log) Debug.Log("Access granted with username and password for: " + url);
+                NewURLAuthorizationDetermined(url, AuthorizationType.UsernamePassword, username: username, password: password);
+            }
+            else
+            {
+                Debug.LogError("Access denied with username and password for: " + url);
+            }
         }
 
         private IEnumerator FindSpecificAuthorizationType(string url, string key)
@@ -101,7 +138,7 @@ namespace Netherlands3D.Twin
             {
                 if(log) Debug.Log("Found no credentials needed for this layer: " + url);
                 foundType = AuthorizationType.Public;
-                AddNewURLAuthorization(url, foundType);
+                NewURLAuthorizationDetermined(url, foundType);
                 yield break;
             }
 
@@ -110,7 +147,7 @@ namespace Netherlands3D.Twin
             {
                 Debug.Log("No key provided for this layer: " + url);
                 foundType = AuthorizationType.ToBeDetermined;
-                AddNewURLAuthorization(url, foundType);
+                NewURLAuthorizationDetermined(url, foundType);
                 yield break;
             }
 
@@ -122,7 +159,7 @@ namespace Netherlands3D.Twin
             {
                 if(log) Debug.Log("Found bearer token needed for this layer: " + url);
                 foundType = AuthorizationType.Token;
-                AddNewURLAuthorization(url, foundType);
+                NewURLAuthorizationDetermined(url, foundType, key: key);
                 yield break;
             }
             
@@ -137,7 +174,7 @@ namespace Netherlands3D.Twin
             {
                 if(log) Debug.Log("Found key needed for this layer: " + url);
                 foundType = AuthorizationType.Key;
-                AddNewURLAuthorization(url, foundType);
+                NewURLAuthorizationDetermined(url, foundType, key: key);
                 yield break;
             }
 
@@ -151,13 +188,13 @@ namespace Netherlands3D.Twin
             {
                 if(log) Debug.Log("Found code needed for this layer: " + url);
                 foundType = AuthorizationType.Code;
-                AddNewURLAuthorization(url, foundType);
+                NewURLAuthorizationDetermined(url, foundType, key: key);
                 yield break;
             }
             Debug.Log("No credential type worked to get access for this layer: " + url);
 
             // Nothing worked, return unknown
-            AddNewURLAuthorization(url, AuthorizationType.Unknown);
+            NewURLAuthorizationDetermined(url, AuthorizationType.Unknown);
         }
     }
 
