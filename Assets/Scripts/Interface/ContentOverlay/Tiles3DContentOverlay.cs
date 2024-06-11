@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin
 
         private void OnEnable()
         {
-            keyVault.OnCredentialTypeDetermined.AddListener(DisplayCredentialsInputIfRequired);
+            keyVault.OnAuthorizationTypeDetermined.AddListener(DisplayCredentialsInputIfRequired);
 
             //Hide the credentials section by default. Only activated if we determine the URL needs credentials
             credentialsPropertySection.gameObject.SetActive(false);
@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy() {
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-            keyVault.OnCredentialTypeDetermined.RemoveListener(DisplayCredentialsInputIfRequired);
+            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DisplayCredentialsInputIfRequired);
         }
 
         private void UrlHasChanged(string newURL)
@@ -43,12 +43,12 @@ namespace Netherlands3D.Twin
             keyVault.TryToFindSpecificCredentialType(newURL, "");
         }
 
-        private void DisplayCredentialsInputIfRequired(string url, AuthorizationType credentialType)
+        private void DisplayCredentialsInputIfRequired(string url, AuthorizationType authorizationType)
         {
             if(url != layerWithCredentials.URL) return;
 
-            //It appears the current url needs authentication/authorization
-            if(credentialType != AuthorizationType.None)
+            // It appears the current url needs authentication/authorization
+            if(authorizationType != AuthorizationType.None)
             {
                 credentialsPropertySection.gameObject.SetActive(true);
                 credentialExplanation.gameObject.SetActive(true);

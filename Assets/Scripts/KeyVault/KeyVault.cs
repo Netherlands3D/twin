@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
     {
         None = -1,
         UsernamePassword = 0,
-        ToBeDetermined = 1,
+        ToBeDetermined = 1, //Single field key, token or code (we dont know specifically yet)
         Key = 2,
         Token = 3,
         Code = 4,
@@ -25,41 +25,40 @@ namespace Netherlands3D.Twin
     {
         [TextArea(3, 10)]
         public string Description = "";
-        public List<StoredCredentials> storedCredentials = new();
-        public List<KnownUrlCredentialType> knownUrlCredentialTypes = new()
+        public List<StoredAuthorization> storedAuthorizations = new();
+        public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
-            new KnownUrlCredentialType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", credentialType = AuthorizationType.Key },
-            new KnownUrlCredentialType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", credentialType = AuthorizationType.None }
+            new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.Key },
+            new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.None }
         };
 
         public bool log = false;
+        private MonoBehaviour coroutineMonoBehaviour;
+        public UnityEvent<string,AuthorizationType> OnAuthorizationTypeDetermined = new();
 
-        public UnityEvent<string,AuthorizationType> OnCredentialTypeDetermined = new();
-
-        public AuthorizationType GetKnownCredentialTypeForURL(string url)
+        public AuthorizationType GetKnownAuthorizationTypeForURL(string url)
         {
             // Check if the url is known, like Google Maps or PDOK
-            foreach (var knownUrlCredentialType in knownUrlCredentialTypes)
+            foreach (var knownUrlAuthorizationType in knownUrlAuthorizationTypes)
             {
-                if (url.StartsWith(knownUrlCredentialType.baseUrl))
+                if (url.StartsWith(knownUrlAuthorizationType.baseUrl))
                 {
-                    return knownUrlCredentialType.credentialType;
+                    return knownUrlAuthorizationType.authorizationType;
                 }
             }
 
             // Check our own saved credentials.
-            foreach (var storedCredential in storedCredentials)
+            foreach (var storedAuthorization in storedAuthorizations)
             {
-                if (url.StartsWith(storedCredential.url))
+                if (url.StartsWith(storedAuthorization.url))
                 {
-                    return storedCredential.credentialType;
+                    return storedAuthorization.authorizationType;
                 }
             }
 
             return AuthorizationType.None;
         }
 
-        private MonoBehaviour coroutineMonoBehaviour;
 
         /// <summary>
         /// Try to find the specific type of credential (key, token or code) that is needed for the layer
@@ -72,10 +71,10 @@ namespace Netherlands3D.Twin
 
             var coroutineGameObject = new GameObject("KeyVaultCoroutines");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(FindSpecificCredentialType(url, key));
+            coroutineMonoBehaviour.StartCoroutine(FindSpecificAuthorizationType(url, key));
         }
 
-        private IEnumerator FindSpecificCredentialType(string url, string key)
+        private IEnumerator FindSpecificAuthorizationType(string url, string key)
         {
             // Try a request without credentials
             var noCredentialsRequest = UnityWebRequest.Get(url);
@@ -83,15 +82,15 @@ namespace Netherlands3D.Twin
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found no credentials needed for this layer: " + url);
-                OnCredentialTypeDetermined.Invoke(url,AuthorizationType.None);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.None);
                 yield break;
             }
 
             // No key provided, but credentials are needed
             if(key == "")
             {
-                Debug.Log("No credentials provided for this layer: " + url);
-                OnCredentialTypeDetermined.Invoke(url,AuthorizationType.ToBeDetermined);
+                Debug.Log("No key provided for this layer: " + url);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.ToBeDetermined);
                 yield break;
             }
 
@@ -102,7 +101,7 @@ namespace Netherlands3D.Twin
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found bearer token needed for this layer: " + url);
-                OnCredentialTypeDetermined.Invoke(url,AuthorizationType.Token);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Token);
                 yield break;
             }
             
@@ -116,7 +115,7 @@ namespace Netherlands3D.Twin
             if(keyRequestUrl.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found key needed for this layer: " + url);
-                OnCredentialTypeDetermined.Invoke(url,AuthorizationType.Key);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Key);
                 yield break;
             }
 
@@ -129,14 +128,14 @@ namespace Netherlands3D.Twin
             if(codeRequestUrl.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found code needed for this layer: " + url);
-                OnCredentialTypeDetermined.Invoke(url,AuthorizationType.Code);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Code);
                 yield break;
             }
 
             Debug.Log("No credential type worked to get access for this layer: " + url);
 
             // Nothing worked, return unknown
-            OnCredentialTypeDetermined.Invoke(url,AuthorizationType.Unknown);
+            OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Unknown);
         }
     }
 

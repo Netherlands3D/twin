@@ -1,7 +1,7 @@
 namespace Netherlands3D.Twin
 {
     [System.Serializable]
-    public class StoredCredentials
+    public class StoredAuthorization
     {
         public string url = "";
 
@@ -9,6 +9,6 @@ namespace Netherlands3D.Twin
         public string password = "";
         public string key = "";
 
-        public AuthorizationType credentialType = AuthorizationType.None;
+        public AuthorizationType authorizationType = AuthorizationType.None;
     }
 }

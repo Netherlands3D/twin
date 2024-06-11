@@ -47,12 +47,12 @@ namespace Netherlands3D.Twin
         }
 
         private void OnEnable() {
-            keyVault.OnCredentialTypeDetermined.AddListener(OnCredentialTypeDetermined);
+            keyVault.OnAuthorizationTypeDetermined.AddListener(OnCredentialTypeDetermined);
         }
 
         private void OnDisable()
         {
-            keyVault.OnCredentialTypeDetermined.RemoveListener(OnCredentialTypeDetermined);
+            keyVault.OnAuthorizationTypeDetermined.RemoveListener(OnCredentialTypeDetermined);
 
             if(LayerWithCredentials != null)
                 LayerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
@@ -60,7 +60,7 @@ namespace Netherlands3D.Twin
 
         private void UrlHasChanged(string newURL)
         {
-            credentialType = keyVault.GetKnownCredentialTypeForURL(newURL);
+            credentialType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
         }
 
         public void ApplyCredentials()
