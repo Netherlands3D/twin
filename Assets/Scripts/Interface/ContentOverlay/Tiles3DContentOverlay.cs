@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using Netherlands3D.TileSystem;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.UI.LayerInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -19,6 +20,7 @@ namespace Netherlands3D.Twin
 
         [Tooltip("The same credentials input is used here, as the one used in the property panel")]
         [SerializeField] private CredentialsPropertySection credentialsPropertySection;
+        [SerializeField] private RectTransform credentialExplanation;
 
         private Tile3DLayer2 layerWithCredentials;
 
@@ -28,6 +30,7 @@ namespace Netherlands3D.Twin
 
             //Hide the credentials section by default. Only activated if we determine the URL needs credentials
             credentialsPropertySection.gameObject.SetActive(false);
+            credentialExplanation.gameObject.SetActive(false);
         }
 
         private void OnDestroy() {
@@ -40,13 +43,16 @@ namespace Netherlands3D.Twin
             keyVault.TryToFindSpecificCredentialType(newURL, "");
         }
 
-        private void DisplayCredentialsInputIfRequired(string url, CredentialType credentialType)
+        private void DisplayCredentialsInputIfRequired(string url, AuthorizationType credentialType)
         {
             if(url != layerWithCredentials.URL) return;
 
             //It appears the current url needs authentication/authorization
-            if(credentialType != CredentialType.None)
+            if(credentialType != AuthorizationType.None)
+            {
                 credentialsPropertySection.gameObject.SetActive(true);
+                credentialExplanation.gameObject.SetActive(true);
+            }
         }
 
         public override void SetReferencedLayer(ReferencedLayer layer)

@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Transform serverErrorFeedback;
 
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
-        private CredentialType credentialType = CredentialType.None;
+        private AuthorizationType credentialType = AuthorizationType.None;
 
         private ILayerWithCredentials layerWithCredentials;
         public ILayerWithCredentials LayerWithCredentials { 
@@ -69,10 +69,10 @@ namespace Netherlands3D.Twin
 
             switch(credentialType)
             {
-                case CredentialType.UsernamePassword:
+                case AuthorizationType.UsernamePassword:
                     LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
-                case CredentialType.ToBeDetermined:
+                case AuthorizationType.ToBeDetermined:
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void OnCredentialTypeDetermined(string url, CredentialType type)
+        private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
             if(layerWithCredentials.URL != url)
                 return;
@@ -91,16 +91,16 @@ namespace Netherlands3D.Twin
 
             switch(type)
             {
-                case CredentialType.Key:
+                case AuthorizationType.Key:
                     layerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
                     break;
-                case CredentialType.Token:
+                case AuthorizationType.Token:
                     layerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
                     break;
-                case CredentialType.Code:
+                case AuthorizationType.Code:
                     layerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
                     break;
-                case CredentialType.None:
+                case AuthorizationType.None:
                     layerWithCredentials.ClearCredentials();
                     break;
             }
@@ -108,7 +108,7 @@ namespace Netherlands3D.Twin
 
         public void SetCredentialInputType(int type)
         {
-            credentialType = (CredentialType)type;
+            credentialType = (AuthorizationType)type;
             Debug.Log("Set credential type to: " + credentialType);
         }
     }

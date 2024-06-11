@@ -4,6 +4,6 @@ namespace Netherlands3D.Twin
     public class KnownUrlCredentialType
     {
         public string baseUrl;
-        public CredentialType credentialType;
+        public AuthorizationType credentialType;
     }
 }

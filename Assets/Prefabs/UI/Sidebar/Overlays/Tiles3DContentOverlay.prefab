@@ -526,6 +526,7 @@ MonoBehaviour:
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
   tile3DLayerPropertySection: {fileID: 8668067226482503201}
   credentialsPropertySection: {fileID: 5881392315390237125}
+  credentialExplanation: {fileID: 7453908474343751450}
 --- !u!1 &7321312257069704798
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,7 +2042,7 @@ PrefabInstance:
     - target: {fileID: 1123882199740587310, guid: aa9cb35fedee1e64b99dc08ddf7bbcbc,
         type: 3}
       propertyPath: m_Name
-      value: Accordion
+      value: AccordionCredentialsExplanation
       objectReference: {fileID: 0}
     - target: {fileID: 1123882199740587310, guid: aa9cb35fedee1e64b99dc08ddf7bbcbc,
         type: 3}
