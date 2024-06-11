@@ -1418,6 +1418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ab9b4a0e854d4e669f8a18818c0fef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  validFileExtensions:
+  - json
+  - geojson
   onFileDownloaded:
     m_PersistentCalls:
       m_Calls:
