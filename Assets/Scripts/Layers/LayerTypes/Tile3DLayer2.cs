@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool allowURLEditInPropertySection;
+        [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
         
         private UnityEvent<string> onURLChanged = new();
@@ -69,6 +70,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 propertySections = new();
         }
+     
+        private IEnumerator Start()
+        {
+            yield return null; //wait for UI to initialize
+            ReferencedProxy.UI.ToggleProperties(openPropertiesOnStart);
+        }
 
         private void OnEnable()
         {
@@ -91,12 +98,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 message += "\n"+ extension;
             }
             UnsupportedExtensionsMessage.Invoke(message);
-        }
-
-        private IEnumerator Start()
-        {
-            yield return null; //wait for UI to initialize
-            ReferencedProxy.UI.ToggleProperties(true);
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

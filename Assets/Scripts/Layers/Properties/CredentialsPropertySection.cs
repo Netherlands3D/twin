@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Transform serverErrorFeedback;
 
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
-        private AuthorizationType credentialType = AuthorizationType.None;
+        private AuthorizationType authorizationType = AuthorizationType.Public;
 
         private ILayerWithCredentials layerWithCredentials;
         public ILayerWithCredentials LayerWithCredentials { 
@@ -60,14 +60,14 @@ namespace Netherlands3D.Twin
 
         private void UrlHasChanged(string newURL)
         {
-            credentialType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+            authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
         }
 
         public void ApplyCredentials()
         {
             serverErrorFeedback.gameObject.SetActive(false);
 
-            switch(credentialType)
+            switch(authorizationType)
             {
                 case AuthorizationType.UsernamePassword:
                     LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin
                 return;
 
             credentialTypeDropdown.value = (int)type;
-            credentialType = type;
+            authorizationType = type;
 
             switch(type)
             {
@@ -100,7 +100,7 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.Code:
                     layerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
                     break;
-                case AuthorizationType.None:
+                case AuthorizationType.Public:
                     layerWithCredentials.ClearCredentials();
                     break;
             }
@@ -108,8 +108,8 @@ namespace Netherlands3D.Twin
 
         public void SetCredentialInputType(int type)
         {
-            credentialType = (AuthorizationType)type;
-            Debug.Log("Set credential type to: " + credentialType);
+            authorizationType = (AuthorizationType)type;
+            Debug.Log("Set credential type to: " + authorizationType);
         }
     }
 }

@@ -298,6 +298,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   allowURLEditInPropertySection: 1
+  openPropertiesOnStart: 0
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:

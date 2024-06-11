@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin
 {
     public enum AuthorizationType
     {
-        None = -1,
+        Public = -1,
         UsernamePassword = 0,
         ToBeDetermined = 1, //Single field key, token or code (we dont know specifically yet)
         Key = 2,
@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
             new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.Key },
-            new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.None }
+            new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
 
         public bool log = false;
@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin
                 }
             }
 
-            return AuthorizationType.None;
+            return AuthorizationType.Public;
         }
 
 
@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found no credentials needed for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.None);
+                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Public);
                 yield break;
             }
 

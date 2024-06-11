@@ -23,37 +23,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private RectTransform credentialExplanation;
 
         private Tile3DLayer2 layerWithCredentials;
-
-        private void OnEnable()
-        {
-            keyVault.OnAuthorizationTypeDetermined.AddListener(DisplayCredentialsInputIfRequired);
-
-            //Hide the credentials section by default. Only activated if we determine the URL needs credentials
-            credentialsPropertySection.gameObject.SetActive(false);
-            credentialExplanation.gameObject.SetActive(false);
-        }
-
-        private void OnDestroy() {
-            layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DisplayCredentialsInputIfRequired);
-        }
-
-        private void UrlHasChanged(string newURL)
-        {
-            keyVault.TryToFindSpecificCredentialType(newURL, "");
-        }
-
-        private void DisplayCredentialsInputIfRequired(string url, AuthorizationType authorizationType)
-        {
-            if(url != layerWithCredentials.URL) return;
-
-            // It appears the current url needs authentication/authorization
-            if(authorizationType != AuthorizationType.None)
-            {
-                credentialsPropertySection.gameObject.SetActive(true);
-                credentialExplanation.gameObject.SetActive(true);
-            }
-        }
+        private AuthorizationType authorizationType = AuthorizationType.Unknown;
 
         public override void SetReferencedLayer(ReferencedLayer layer)
         {
@@ -65,6 +35,60 @@ namespace Netherlands3D.Twin
             credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
 
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+        }
+
+        private void OnEnable()
+        {
+            keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
+
+            //Hide the credentials section by default. Only activated if we determine the URL needs credentials
+            credentialsPropertySection.gameObject.SetActive(false);
+            credentialExplanation.gameObject.SetActive(false);
+        }
+
+        private void OnDestroy() {
+            layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
+            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
+        }
+
+        private void UrlHasChanged(string newURL)
+        {
+            keyVault.TryToFindSpecificCredentialType(newURL, "");
+        }
+
+        public override void CloseOverlay()
+        {
+            base.CloseOverlay();
+
+            //If we close the overlay with close button without getting access to the layer we 'cancel' and remove the layer.
+            if(authorizationType != AuthorizationType.Unknown)
+            {
+                layerWithCredentials.DestroyLayer();
+            }
+        }
+
+        private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
+        {
+            if(url != layerWithCredentials.URL) return;
+
+            this.authorizationType = authorizationType;
+
+            // It appears the current url needs authentication/authorization
+            switch(authorizationType)
+            {
+                case AuthorizationType.Public:
+                case AuthorizationType.Key:
+                case AuthorizationType.Token:
+                case AuthorizationType.Code:
+                    //We are in. Our layer is there. Close overlay.
+                    CloseOverlay();
+                    break;
+                default:
+                    //Something went wrong, show the credentials section
+                    credentialsPropertySection.gameObject.SetActive(true);
+                    credentialExplanation.gameObject.SetActive(true);
+                    break;
+            }
         }
     }
 }

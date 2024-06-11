@@ -9,6 +9,6 @@ namespace Netherlands3D.Twin
         public string password = "";
         public string key = "";
 
-        public AuthorizationType authorizationType = AuthorizationType.None;
+        public AuthorizationType authorizationType = AuthorizationType.Public;
     }
 }
