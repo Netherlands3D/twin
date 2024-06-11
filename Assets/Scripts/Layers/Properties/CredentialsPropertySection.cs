@@ -109,7 +109,7 @@ namespace Netherlands3D.Twin
         public void SetCredentialInputType(int type)
         {
             authorizationType = (AuthorizationType)type;
-            Debug.Log("Set credential type to: " + authorizationType);
+            Debug.Log("Force AuthorizationType to: " + authorizationType);
         }
     }
 }

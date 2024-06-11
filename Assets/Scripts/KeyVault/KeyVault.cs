@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin
     }
 
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
-    public partial class KeyVault : ScriptableObject
+    public class KeyVault : ScriptableObject
     {
         [TextArea(3, 10)]
         public string Description = "";
@@ -59,6 +59,20 @@ namespace Netherlands3D.Twin
             return AuthorizationType.Public;
         }
 
+        public void AddNewURLAuthorization(string url, AuthorizationType authorizationType)
+        {
+            if(storedAuthorizations.Exists(x => x.url == url))
+                storedAuthorizations.RemoveAll(x => x.url == url);
+
+            storedAuthorizations.Add(
+                new StoredAuthorization() { 
+                    url = url, 
+                    authorizationType = authorizationType 
+                });
+
+            OnAuthorizationTypeDetermined.Invoke(url, authorizationType);
+        }
+
 
         /// <summary>
         /// Try to find the specific type of credential (key, token or code) that is needed for the layer
@@ -76,13 +90,16 @@ namespace Netherlands3D.Twin
 
         private IEnumerator FindSpecificAuthorizationType(string url, string key)
         {
+            AuthorizationType foundType = AuthorizationType.Unknown;
+
             // Try a request without credentials
             var noCredentialsRequest = UnityWebRequest.Get(url);
             yield return noCredentialsRequest.SendWebRequest();
             if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found no credentials needed for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Public);
+                foundType = AuthorizationType.Public;
+                AddNewURLAuthorization(url, foundType);
                 yield break;
             }
 
@@ -90,7 +107,8 @@ namespace Netherlands3D.Twin
             if(key == "")
             {
                 Debug.Log("No key provided for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.ToBeDetermined);
+                foundType = AuthorizationType.ToBeDetermined;
+                AddNewURLAuthorization(url, foundType);
                 yield break;
             }
 
@@ -101,7 +119,8 @@ namespace Netherlands3D.Twin
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found bearer token needed for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Token);
+                foundType = AuthorizationType.Token;
+                AddNewURLAuthorization(url, foundType);
                 yield break;
             }
             
@@ -115,7 +134,8 @@ namespace Netherlands3D.Twin
             if(keyRequestUrl.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found key needed for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Key);
+                foundType = AuthorizationType.Key;
+                AddNewURLAuthorization(url, foundType);
                 yield break;
             }
 
@@ -128,14 +148,14 @@ namespace Netherlands3D.Twin
             if(codeRequestUrl.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found code needed for this layer: " + url);
-                OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Code);
+                foundType = AuthorizationType.Code;
+                AddNewURLAuthorization(url, foundType);
                 yield break;
             }
-
             Debug.Log("No credential type worked to get access for this layer: " + url);
 
             // Nothing worked, return unknown
-            OnAuthorizationTypeDetermined.Invoke(url,AuthorizationType.Unknown);
+            AddNewURLAuthorization(url, AuthorizationType.Unknown);
         }
     }
 
