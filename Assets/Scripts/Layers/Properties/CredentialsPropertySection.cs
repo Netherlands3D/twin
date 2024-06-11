@@ -78,7 +78,7 @@ namespace Netherlands3D.Twin
                         passwordInputField.text
                         );
                     break;
-                case AuthorizationType.ToBeDetermined:
+                case AuthorizationType.SingleFieldGenericKey:
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
@@ -124,8 +124,8 @@ namespace Netherlands3D.Twin
 
         public void SetAuthorizationInputType(AuthorizationType type)
         {
-            if(type != AuthorizationType.UsernamePassword && type != AuthorizationType.ToBeDetermined)
-                return;
+            if(type == AuthorizationType.Key || type == AuthorizationType.Token || type == AuthorizationType.Code)
+                type = AuthorizationType.SingleFieldGenericKey;
 
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;

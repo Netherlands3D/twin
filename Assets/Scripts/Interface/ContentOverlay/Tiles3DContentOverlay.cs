@@ -61,18 +61,18 @@ namespace Netherlands3D.Twin
             base.CloseOverlay();
 
             //If we close the overlay with close button without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.ToBeDetermined)
+            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.SingleFieldGenericKey)
                 layerWithCredentials.DestroyLayer();
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
-            //Trim trailing ? or & characters from the URL (TODO: should be fixed in 3DTiles package)
+            //Trim trailing ? or & characters from the URL (TODO: should be stripped in 3DTiles package)
             var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
             if(url != layerUrl) return;
 
             this.authorizationType = authorizationType;
-            
+
             Debug.Log("Determined authorization type: " + authorizationType);
             // It appears the current url needs authentication/authorization
             switch(authorizationType)
@@ -86,10 +86,12 @@ namespace Netherlands3D.Twin
                     Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
-                case AuthorizationType.ToBeDetermined:
+                case AuthorizationType.SingleFieldGenericKey:
                 default:
                     //Something went wrong, show the credentials section, starting with default
-                    credentialsPropertySection.SetAuthorizationInputType(AuthorizationType.UsernamePassword);
+                    var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(layerUrl);
+
+                    credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);
                     break;

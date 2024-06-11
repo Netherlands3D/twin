@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
     {
         Public = -1,
         UsernamePassword = 0,
-        ToBeDetermined = 1, //Single field key, token or code (we dont know specifically yet)
+        SingleFieldGenericKey = 1, //Single field key, token or code (we dont know specifically yet)
         Key = 2,
         Token = 3,
         Code = 4,
@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin
             if(key == "")
             {
                 Debug.Log("No key provided for this layer: " + url);
-                foundType = AuthorizationType.ToBeDetermined;
+                foundType = AuthorizationType.SingleFieldGenericKey;
                 NewURLAuthorizationDetermined(url, foundType);
                 yield break;
             }
