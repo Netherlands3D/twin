@@ -61,6 +61,7 @@ namespace Netherlands3D.Twin
         private void UrlHasChanged(string newURL)
         {
             authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+            SetAuthorizationInputType(authorizationType);
         }
 
         public void ApplyCredentials()
