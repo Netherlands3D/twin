@@ -25,12 +25,12 @@ namespace Netherlands3D.Twin
     {
         [TextArea(3, 10)]
         public string Description = "";
-        public List<StoredAuthorization> storedAuthorizations = new();
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
             new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.Key },
             new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
+        public List<StoredAuthorization> storedAuthorizations = new();
 
         public bool log = false;
         private MonoBehaviour coroutineMonoBehaviour;
