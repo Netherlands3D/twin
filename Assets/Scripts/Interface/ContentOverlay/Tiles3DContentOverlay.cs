@@ -61,17 +61,15 @@ namespace Netherlands3D.Twin
             base.CloseOverlay();
 
             //If we close the overlay with close button without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType != AuthorizationType.Unknown)
-            {
+            if(authorizationType == AuthorizationType.Unknown)
                 layerWithCredentials.DestroyLayer();
-            }
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
             //Trim trailing ? or & characters from the URL (TODO: should be fixed in 3DTiles package)
-            var determinedUrl = url.TrimEnd('?', '&');
-            if(determinedUrl != layerWithCredentials.URL) return;
+            var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
+            if(url != layerUrl) return;
 
             this.authorizationType = authorizationType;
             Debug.Log("Determined authorization type: " + authorizationType);
