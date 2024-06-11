@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 837db1295eaf52846914083debf186b4, type: 3}
   m_Name: KeyVault
   m_EditorClassIdentifier: 
-  storedCredentials: []
-  knownUrlCredentialTypes:
-  - url: https://tile.googleapis.com/v1/3dtiles/root.json
-    username: 2
-  - url: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json
-    username: -1
+  Description: 
+  storedAuthorizations: []
+  knownUrlAuthorizationTypes:
+  - baseUrl: https://tile.googleapis.com/v1/3dtiles/root.json
+    authorizationType: 2
+  - baseUrl: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json
+    authorizationType: -1
+  log: 1
+  OnAuthorizationTypeDetermined:
+    m_PersistentCalls:
+      m_Calls: []
