@@ -71,7 +71,7 @@ namespace Netherlands3D.Twin
                 Destroy(coroutineMonoBehaviour.gameObject);
 
             var coroutineGameObject = new GameObject("KeyVaultCoroutines");
-            coroutineMonoBehaviour = coroutineGameObject.AddComponent<MonoBehaviour>();
+            coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
             coroutineMonoBehaviour.StartCoroutine(FindSpecificCredentialType(url, key));
         }
 
@@ -139,4 +139,6 @@ namespace Netherlands3D.Twin
             OnCredentialTypeDetermined.Invoke(url,CredentialType.Unknown);
         }
     }
+
+    public class KeyVaultCoroutines : MonoBehaviour {}
 }
