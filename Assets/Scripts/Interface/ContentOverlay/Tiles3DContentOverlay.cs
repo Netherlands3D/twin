@@ -20,17 +20,44 @@ namespace Netherlands3D.Twin
         [Tooltip("The same credentials input is used here, as the one used in the property panel")]
         [SerializeField] private CredentialsPropertySection credentialsPropertySection;
 
-        private ILayerWithCredentials layerWithCredentials;
+        private Tile3DLayer2 layerWithCredentials;
+
+        private void OnEnable()
+        {
+            layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+            keyVault.OnCredentialTypeDetermined.AddListener(DisplayCredentialsInputIfRequired);
+
+            //Hide the credentials section by default. Only activated if we determine the URL needs credentials
+            credentialsPropertySection.gameObject.SetActive(false);
+        }
+
+        private void OnDisable() {
+            layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
+            keyVault.OnCredentialTypeDetermined.RemoveListener(DisplayCredentialsInputIfRequired);
+        }
+
+        private void UrlHasChanged(string newURL)
+        {
+            keyVault.TryToFindSpecificCredentialType(newURL, "");
+        }
+
+        private void DisplayCredentialsInputIfRequired(string url, CredentialType credentialType)
+        {
+            if(url != layerWithCredentials.URL) return;
+
+            //It appears the current url needs authentication/authorization
+            if(credentialType != CredentialType.None)
+                credentialsPropertySection.gameObject.SetActive(true);
+        }
 
         public override void SetReferencedLayer(ReferencedLayer layer)
         {
             base.SetReferencedLayer(layer);
 
-            var tile3DLayer = layer as Tile3DLayer2;
-            layerWithCredentials = tile3DLayer;
+            layerWithCredentials = layer as Tile3DLayer2;
 
-            tile3DLayerPropertySection.Layer = tile3DLayer;
-            credentialsPropertySection.LayerWithCredentials = tile3DLayer;
+            tile3DLayerPropertySection.Layer = layerWithCredentials;
+            credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
         }
     }
 }

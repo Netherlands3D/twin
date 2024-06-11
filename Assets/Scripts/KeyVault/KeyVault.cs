@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
     {
         None = -1,
         UsernamePassword = 0,
-        KeyTokenOrCode = 1,
+        ToBeDetermined = 1,
         Key = 2,
         Token = 3,
         Code = 4,
@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin
     }
 
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
-    public class KeyVault : ScriptableObject
+    public partial class KeyVault : ScriptableObject
     {
         [TextArea(3, 10)]
         public string Description = "";
@@ -66,11 +66,12 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void TryToFindSpecificCredentialType(string url, string key)
         {
-            if(coroutineMonoBehaviour == null)
-            {
-                var coroutineGameObject = new GameObject("KeyVaultCoroutines");
-                coroutineMonoBehaviour = coroutineGameObject.AddComponent<MonoBehaviour>();
-            }
+            //Only allow one simultaneous coroutine for now
+            if(coroutineMonoBehaviour != null)
+                Destroy(coroutineMonoBehaviour.gameObject);
+
+            var coroutineGameObject = new GameObject("KeyVaultCoroutines");
+            coroutineMonoBehaviour = coroutineGameObject.AddComponent<MonoBehaviour>();
             coroutineMonoBehaviour.StartCoroutine(FindSpecificCredentialType(url, key));
         }
 
@@ -83,6 +84,14 @@ namespace Netherlands3D.Twin
             {
                 if(log) Debug.Log("Found no credentials needed for this layer: " + url);
                 OnCredentialTypeDetermined.Invoke(url,CredentialType.None);
+                yield break;
+            }
+
+            // No key provided, but credentials are needed
+            if(key == "")
+            {
+                Debug.Log("No credentials provided for this layer: " + url);
+                OnCredentialTypeDetermined.Invoke(url,CredentialType.ToBeDetermined);
                 yield break;
             }
 
@@ -129,25 +138,5 @@ namespace Netherlands3D.Twin
             // Nothing worked, return unknown
             OnCredentialTypeDetermined.Invoke(url,CredentialType.Unknown);
         }
-
-        [System.Serializable]
-        public class KnownUrlCredentialType
-        {
-            public string baseUrl;
-            public CredentialType credentialType;
-        }
-
-        [System.Serializable]
-        public class StoredCredentials
-        {
-            public string url = "";
-
-            public string username = "";
-            public string password = "";
-            public string key = "";
-
-            public CredentialType credentialType = CredentialType.None;
-        }
     }
-    
 }

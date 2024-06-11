@@ -46,8 +46,6 @@ namespace Netherlands3D.Twin
             } 
         }
 
-
-
         private void OnEnable() {
             keyVault.OnCredentialTypeDetermined.AddListener(OnCredentialTypeDetermined);
         }
@@ -74,7 +72,7 @@ namespace Netherlands3D.Twin
                 case CredentialType.UsernamePassword:
                     LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
-                case CredentialType.KeyTokenOrCode:
+                case CredentialType.ToBeDetermined:
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
