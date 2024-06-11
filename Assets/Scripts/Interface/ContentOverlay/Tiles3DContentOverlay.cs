@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin
             base.CloseOverlay();
 
             //If we close the overlay with close button without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType == AuthorizationType.Unknown)
+            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.ToBeDetermined)
                 layerWithCredentials.DestroyLayer();
         }
 
@@ -80,12 +80,13 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.Key:
                 case AuthorizationType.Token:
                 case AuthorizationType.Code:
-                    //We are in. Our layer is there. Close overlay.
+                    //We are in. Close overlay wizard.
                     Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
                 default:
                     //Something went wrong, show the credentials section
+                    credentialsPropertySection.SetAuthorizationInputType(authorizationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);
                     break;

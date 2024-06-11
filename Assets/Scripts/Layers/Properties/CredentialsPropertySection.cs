@@ -83,8 +83,10 @@ namespace Netherlands3D.Twin
 
         private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
-            if(layerWithCredentials.URL != url)
-                return;
+            Debug.Log("Vault determined credential type: " + type + " for url: " + url);
+
+            var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
+            if(url != layerUrl) return;
 
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;
@@ -106,10 +108,16 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public void SetCredentialInputType(int type)
+        public void SetAuthorizationInputType(int type)
         {
             authorizationType = (AuthorizationType)type;
             Debug.Log("Force AuthorizationType to: " + authorizationType);
+        }
+
+        public void SetAuthorizationInputType(AuthorizationType type)
+        {
+            credentialTypeDropdown.value = (int)type;
+            authorizationType = type;
         }
     }
 }
