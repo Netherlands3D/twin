@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using Netherlands3D.Web;
 using System;
 using System.Collections.Specialized;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -16,13 +17,14 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
         [SerializeField] private TMP_Text keyTokenOrCodeLabel;
-        private string defaultLabelText = "";
+
         [SerializeField] private Transform headerDefault;
         [SerializeField] private Transform headerWithCredentialTypeDropdown;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform serverErrorFeedback;
 
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
+        private CredentialType credentialType = CredentialType.None;
 
         private ILayerWithCredentials layerWithCredentials;
         public ILayerWithCredentials LayerWithCredentials { 
@@ -33,19 +35,35 @@ namespace Netherlands3D.Twin
             set
             {
                 if(layerWithCredentials != null)
-                    layerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
+                    layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
 
                 layerWithCredentials = value;
 
                 if(layerWithCredentials != null){
-                    layerWithCredentials.OnURLChanged.AddListener(TryToDetermineCredentialsType);
-                    TryToDetermineCredentialsType(layerWithCredentials.URL);
+                    layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+                    UrlHasChanged(layerWithCredentials.URL);
                 }
             } 
         }
 
-        private CredentialType credentialType = CredentialType.None;
-        private Coroutine findSpecificTypeCoroutine;    
+
+
+        private void OnEnable() {
+            keyVault.OnCredentialTypeDetermined.AddListener(OnCredentialTypeDetermined);
+        }
+
+        private void OnDisable()
+        {
+            keyVault.OnCredentialTypeDetermined.RemoveListener(OnCredentialTypeDetermined);
+
+            if(LayerWithCredentials != null)
+                LayerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
+        }
+
+        private void UrlHasChanged(string newURL)
+        {
+            credentialType = keyVault.GetKnownCredentialTypeForURL(newURL);
+        }
 
         public void ApplyCredentials()
         {
@@ -57,104 +75,37 @@ namespace Netherlands3D.Twin
                     LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
                 case CredentialType.KeyTokenOrCode:
-                    if(findSpecificTypeCoroutine != null)
-                        StopCoroutine(findSpecificTypeCoroutine);
-
-                    findSpecificTypeCoroutine = StartCoroutine(TryToFindSpecificType());
+                    keyVault.TryToFindSpecificCredentialType(
+                        LayerWithCredentials.URL,
+                        keyTokenOrCodeInputField.text
+                    );
                     break;
             }
         }
 
-        private void Awake()
+        private void OnCredentialTypeDetermined(string url, CredentialType type)
         {
-            defaultLabelText = keyTokenOrCodeLabel.text;
-        }
+            if(layerWithCredentials.URL != url)
+                return;
 
-        private void OnDisable()
-        {
-            if(LayerWithCredentials != null)
-                LayerWithCredentials.OnURLChanged.RemoveListener(TryToDetermineCredentialsType);
-        }
+            credentialTypeDropdown.value = (int)type;
+            credentialType = type;
 
-        private void TryToDetermineCredentialsType(string newURL)
-        {
-            credentialType = keyVault.DetermineCredentialType(newURL);
-            Debug.Log("Determined credential type: " + credentialType);
-
-            //Below we may want to transform input to detected credential types in the future
-            return;
-
-            if(credentialType == CredentialType.Key)
+            switch(type)
             {
-                credentialTypeDropdown.value = (int)credentialType;
-                keyTokenOrCodeLabel.text = "Sleutel";
-
-                headerDefault.gameObject.SetActive(true);
-                headerWithCredentialTypeDropdown.gameObject.SetActive(false);
+                case CredentialType.Key:
+                    layerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
+                    break;
+                case CredentialType.Token:
+                    layerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
+                    break;
+                case CredentialType.Code:
+                    layerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
+                    break;
+                case CredentialType.None:
+                    layerWithCredentials.ClearCredentials();
+                    break;
             }
-            else{
-                keyTokenOrCodeLabel.text = defaultLabelText;
-                headerDefault.gameObject.SetActive(false);
-                headerWithCredentialTypeDropdown.gameObject.SetActive(true);
-            }
-        }
-
-        /// <summary>
-        /// Try to find the specific type of credential (key, token or code) that is needed for the layer
-        /// </summary>
-        private IEnumerator TryToFindSpecificType()
-        {
-            // Try request without credentials
-            var noCredentialsRequest = UnityWebRequest.Get(LayerWithCredentials.URL);
-            yield return noCredentialsRequest.SendWebRequest();
-            if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Found no credentials needed for this layer: " + LayerWithCredentials.URL);
-                LayerWithCredentials.ClearCredentials();
-                yield break;
-            }
-
-            // Try input as bearer token
-            var bearerTokenRequest = UnityWebRequest.Get(LayerWithCredentials.URL);
-            bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + keyTokenOrCodeInputField.text);
-            yield return bearerTokenRequest.SendWebRequest();
-            if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Found bearer token needed for this layer: " + LayerWithCredentials.URL);
-                LayerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
-                yield break;
-            }
-            
-            // Try input as 'key' query parameter (remove a possible existing key query parameter and add the new one)
-            var uriBuilder = new UriBuilder(LayerWithCredentials.URL);
-            var queryParameters = new NameValueCollection();
-            uriBuilder.TryParseQueryString(queryParameters);
-            uriBuilder.AddQueryParameter("key", keyTokenOrCodeInputField.text);
-            var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return keyRequestUrl.SendWebRequest();
-            if(keyRequestUrl.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Found key needed for this layer: " + LayerWithCredentials.URL);
-                LayerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
-                yield break;
-            }
-
-            // Try input as 'code' query parameter (remove a possible existing code query parameter and add the new one)
-            uriBuilder.RemoveQueryParameter("key");
-            uriBuilder.RemoveQueryParameter("code");
-            uriBuilder.AddQueryParameter("code", keyTokenOrCodeInputField.text);
-            var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return codeRequestUrl.SendWebRequest();
-            if(codeRequestUrl.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Found code needed for this layer: " + LayerWithCredentials.URL);
-                LayerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
-                yield break;
-            }
-
-            Debug.Log("No credential type worked to get access for this layer: " + LayerWithCredentials.URL);
-            // Nothing worked, show error
-            serverErrorFeedback.gameObject.SetActive(true);
         }
 
         public void SetCredentialInputType(int type)
