@@ -73,6 +73,7 @@ namespace Netherlands3D.Twin
                     LayerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
                 case AuthorizationType.ToBeDetermined:
+                Debug.Log("Try to find specific credential type for: " + LayerWithCredentials.URL + " with key: " + keyTokenOrCodeInputField.text);
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text

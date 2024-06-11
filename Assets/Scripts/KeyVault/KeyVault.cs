@@ -90,6 +90,8 @@ namespace Netherlands3D.Twin
 
         private IEnumerator FindSpecificAuthorizationType(string url, string key)
         {
+            url = url.TrimEnd('?', '&');
+
             AuthorizationType foundType = AuthorizationType.Unknown;
 
             // Try a request without credentials
