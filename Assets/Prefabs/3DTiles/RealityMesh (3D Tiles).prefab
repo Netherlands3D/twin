@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: -5688274655914667246}
   - component: {fileID: -3892557586120215936}
   - component: {fileID: -5530517851291887029}
-  - component: {fileID: 379969814246679949}
   - component: {fileID: -5652853201437834613}
+  - component: {fileID: 379969814246679949}
   m_Layer: 6
   m_Name: RealityMesh (3D Tiles)
   m_TagString: Untagged
@@ -345,20 +345,6 @@ MonoBehaviour:
   idleMaximumScreenSpaceError: 10
   movingMaximumScreenSpaceError: 40
   detailIncrementStepPerFrame: 1
---- !u!114 &379969814246679949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
-    type: 3}
 --- !u!114 &-5652853201437834613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,3 +359,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: 4c49a4edecb014c439152023c23297db, type: 2}
   read3DTileset: {fileID: 5648866956155822156}
+  credentialsPropertySectionInstantiator: {fileID: 379969814246679949}
+--- !u!114 &379969814246679949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
+    type: 3}
+  OnCredentialsPropertySectionInstantiated:
+    m_PersistentCalls:
+      m_Calls: []

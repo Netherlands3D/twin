@@ -68,11 +68,16 @@ namespace Netherlands3D.Twin
             if(findKeyInVaultOnURLChange)
             {
                 storedAuthorization = keyVault.GetStoredAuthorization(newURL);    
-                authorizationType = storedAuthorization.authorizationType;
-
-                userNameInputField.text = storedAuthorization.username;
-                passwordInputField.text = storedAuthorization.password;
-                keyTokenOrCodeInputField.text = storedAuthorization.key;
+                if(storedAuthorization != null)
+                {
+                    authorizationType = storedAuthorization.authorizationType;
+                    userNameInputField.text = storedAuthorization.username;
+                    passwordInputField.text = storedAuthorization.password;
+                    keyTokenOrCodeInputField.text = storedAuthorization.key;    
+                }
+                else{
+                    authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+                }
                 
                 SetAuthorizationInputType(authorizationType);
             }
@@ -139,6 +144,16 @@ namespace Netherlands3D.Twin
         {
             authorizationType = (AuthorizationType)type;
             Debug.Log("Force AuthorizationType to: " + authorizationType);
+        }
+
+        /// <summary>
+        /// Fill the inputs with predefined values
+        /// </summary>
+        public void SetInputFieldsValues(string username = "", string password = "", string key = "")
+        {
+            if(username.Length > 0) userNameInputField.text = username;
+            if(password.Length > 0) passwordInputField.text = password;
+            if(key.Length > 0) keyTokenOrCodeInputField.text = key;
         }
 
         /// <summary>
