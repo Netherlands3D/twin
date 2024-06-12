@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CutoutTarget
   - 3DTileParent
+  - ProjectorCamera
+  - ScatterProjector
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Masks
   - Trees
   - ScatterPolygons
-  - 
+  - Projected
   - 
   - 
   - 

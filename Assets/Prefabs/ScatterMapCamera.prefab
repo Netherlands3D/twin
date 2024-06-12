@@ -142,5 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridSampleSize: 1
-  propertyPanelPrefab: {fileID: 6128059142548452485, guid: 268ed3efe96c84284a00792823db0330,
+  scatterProptertiesPrefab: {fileID: 6128059142548452485, guid: 268ed3efe96c84284a00792823db0330,
+    type: 3}
+  ToggleScatterPropertySection: {fileID: 3812163125236446964, guid: 78bb15813f932433888f9c5536c7f12a,
     type: 3}

@@ -10,7 +10,6 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -18,7 +17,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
-        [SerializeField] private Coordinate origin = new(CoordinateSystem.RD, 155207,462945, 300);
+        [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
 
         public string Title
@@ -36,6 +35,7 @@ namespace Netherlands3D.Twin.Configuration
             get => origin;
             set
             {
+               
                 var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.Points[0], (int)value.Points[1], (int)value.Points[2]);
                 origin = roundedValue;
                 OnOriginChanged.Invoke(roundedValue);
@@ -131,7 +131,13 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var functionality in Functionalities)
             {
                 var config = functionality.configuration as IConfiguration;
-                config?.Populate(queryParameters);
+                if (config == null) continue;
+                
+                config.Populate(queryParameters);
+                if (config.Validate().Count > 0 && functionality.IsEnabled)
+                {
+                    functionality.IsEnabled = false;
+                }
             }
         }
 
@@ -147,7 +153,8 @@ namespace Netherlands3D.Twin.Configuration
         {
             var enabledfunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
 
-            urlBuilder.AddQueryParameter("origin", $"{(int)Origin.Points[0]},{(int)origin.Points[1]},{(int)origin.Points[2]}");
+            var originRDNAP = origin.Convert(CoordinateSystem.RDNAP);
+            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.Points[0]},{(int)originRDNAP.Points[1]},{(int)originRDNAP.Points[2]}");
             urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledfunctionalities.ToArray()));
             foreach (var functionality in Functionalities)
             {
@@ -155,6 +162,11 @@ namespace Netherlands3D.Twin.Configuration
 
                 functionalityConfiguration.AddQueryParameters(urlBuilder);
             }
+        }
+
+        public List<string> Validate()
+        {
+            return new List<string>();
         }
 
         public void Populate(JSONNode jsonNode)
@@ -226,7 +238,8 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[1].Trim(), out int y);
             int.TryParse(originParts[2].Trim(), out int z);
 
-            Origin = new Coordinate(CoordinateSystem.RD, x, y, z);
+            Origin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
+            CoordinateSystems.SetOrigin(Origin);
             Debug.Log($"Set origin '{Origin}' from URL");
         }
 

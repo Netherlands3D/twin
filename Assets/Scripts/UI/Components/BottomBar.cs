@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin
                 Camera.main.transform.position.y,
                 Camera.main.transform.position.z
              );
-            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RD);
+            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RDNAP);
 
             //Replace the placeholders with the coordinates
             coordinatesText.text = coordinateFormat

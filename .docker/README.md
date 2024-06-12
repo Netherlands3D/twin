@@ -37,6 +37,9 @@ digital twin application while offering flexibility through a series of environm
 - `NL3D_INDICATORS_API_BASE_URI`: *The API endpoint's base URI used to retrieve the dossier and assets from, example: https://nl3d-backend-provincie-utrecht.azurewebsites.net/api/v1/indicators*
 - `NL3D_INDICATORS_API_KEY`: *The API key used to connect to the API endpoints, this is passed as a "code" query parameter*
 - `NL3D_CSV_COLORING`: *true/false, is the coloring of buildsings using CSV feature is enabled*
+- `NL3D_3DTILES`: *true/false, is 3D Tiles support enabled*
+- `NL3D_GOOGLE_REALITYMESH`: *true/false, can the Google 3D Tiles set be loaded, depends on NL3D_3DTILES*
+- `NL3D_GOOGLE_REALITYMESH_API_KEY`: *The API key used to connect to the Google 3D Tiles endpoint*
 - `NL3D_SUN`: *true/false, is the Sun and Shadows feature enabled*
 - `NL3D_TIMELINE`: *true/false, is the Timeline feature enabled*
 - `NL3D_TRAFFIC`: *true/false, is the Traffic Simulation feature enabled*
@@ -139,6 +142,16 @@ following section detailing each environment variable and its influence on the a
 ### NL3D_CSV_COLORING
 
 *true/false, is the building coloring by csv import feature enabled*
+
+### NL3D_3DTILES
+
+*true/false, is 3D Tiles support enabled*
+
+### NL3D_GOOGLE_REALITYMESH
+*true/false, can the Google 3D Tiles set be loaded, depends on NL3D_3DTILES*
+
+### NL3D_GOOGLE_REALITYMESH_API_KEY
+*The API key used to connect to the Google 3D Tiles endpoint, can be acquired from https://developers.google.com/maps/documentation/tile/3d-tiles*
 
 ### NL3D_SUN
 

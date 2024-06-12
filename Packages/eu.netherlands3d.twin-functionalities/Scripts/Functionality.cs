@@ -28,6 +28,15 @@ namespace Netherlands3D.Twin.Functionalities
             get => isEnabled;
             set
             {
+                var config = configuration as IConfiguration;
+                var targetValue = value;
+
+                //cant enable functionality if configuration is invalid
+                if (isEnabled && config != null && config.Validate().Count > 0){
+                    Debug.LogWarning($"Can't enable functionality {Title} because configuration is invalid");
+                    targetValue = false;
+                }
+
                 var wasEnabled = isEnabled;
                 isEnabled = value;
                 switch (wasEnabled)

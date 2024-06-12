@@ -13,11 +13,10 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Button))]
     public class ObjectLibraryButton : MonoBehaviour
     {
-        private Button button;
-        [SerializeField] private GameObject prefab;
-        [SerializeField] private Vector3 initialRotation = Vector3.zero;
-        [SerializeField] private Vector3 initialScale = Vector3.one;
-        // [SerializeField] private UnityEvent<GameObject> createdLibraryObject;
+        protected Button button;
+        [SerializeField] protected GameObject prefab;
+        [SerializeField] protected Vector3 initialRotation = Vector3.zero;
+        [SerializeField] protected Vector3 initialScale = Vector3.one;
 
         private void Awake()
         {
@@ -34,7 +33,7 @@ namespace Netherlands3D.Twin
             button.onClick.RemoveListener(CreateObject);
         }
 
-        private void CreateObject()
+        protected virtual void CreateObject()
         {
             StartCoroutine(CreateObjectCoroutine());
         }

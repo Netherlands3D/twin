@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.LayerInspector;
@@ -128,9 +129,12 @@ namespace Netherlands3D.Twin
             
             var instantiator = parsedObj.AddComponent<HierarchicalObjectPropertySectionInstantiator>();
             instantiator.PropertySectionPrefab = defaultPropertySection;
-            
-            parsedObj.AddComponent<HierarchicalObjectLayer>();
+
             parsedObj.AddComponent<MeshCollider>();
+            parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();     
+            parsedObj.AddComponent<HierarchicalObjectLayer>();
+            parsedObj.AddComponent<WorldTransform>();
+            
             CreatedMoveableGameObject.Invoke(parsedObj);
         }
     }

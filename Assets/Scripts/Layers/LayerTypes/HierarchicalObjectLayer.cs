@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.Layers
 {
     public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler, ILayerWithProperties
     {
+        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -32,6 +33,7 @@ namespace Netherlands3D.Twin.Layers
         protected override void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             base.Awake();
         }
 
@@ -78,8 +80,8 @@ namespace Netherlands3D.Twin.Layers
 
         public override void OnProxyTransformParentChanged()
         {
-            if (ReferencedProxy.ParentLayer is PolygonSelectionLayer)
-                ConvertToScatterLayer(this);
+            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
+                toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 
         public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
@@ -88,9 +90,11 @@ namespace Netherlands3D.Twin.Layers
             var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
 
-            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy));
+            var openProperties = objectLayer.ReferencedProxy.UI && objectLayer.ReferencedProxy.UI.PropertiesOpen;
+            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy), openProperties);
 
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
+            
             return layerComponent;
         }
 

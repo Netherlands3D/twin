@@ -521,6 +521,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2125279392852574923}
+  - component: {fileID: 5532159540410847097}
   m_Layer: 0
   m_Name: Pointer
   m_TagString: Untagged
@@ -544,6 +545,19 @@ Transform:
   - {fileID: 3790482540107165208}
   m_Father: {fileID: 5035265957184785311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5532159540410847097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4868054342503346395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f6482c3d267104b8b86d87be3c2419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleMultiplier: 0.02
 --- !u!1 &5035265957184785282
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +569,8 @@ GameObject:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
   - component: {fileID: 2971444630074657358}
+  - component: {fileID: 7163774462162175177}
+  - component: {fileID: 2078740147637220152}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -787,6 +803,55 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7163774462162175177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9ca290ddabb0948a82095a25e21e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonInput: {fileID: 2971444630074657358}
+  polygonShifted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2971444630074657358}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.PolygonInput, eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: SetCurrentInputPointsWithoutNotify
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2078740147637220152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6169829145916154088
@@ -1154,6 +1219,8 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 6819746166564945398}
+  - component: {fileID: 9185555297181203813}
+  - component: {fileID: 2460815277619546369}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1388,6 +1455,55 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9185555297181203813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9ca290ddabb0948a82095a25e21e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonInput: {fileID: 6819746166564945398}
+  polygonShifted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6819746166564945398}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.PolygonInput, eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: SetCurrentInputPointsWithoutNotify
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2460815277619546369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 0}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1416,7 +1532,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2125279392852574923}
@@ -1487,7 +1603,7 @@ GameObject:
   - component: {fileID: 3544518474178100614}
   m_Layer: 0
   m_Name: Projector
-  m_TagString: Untagged
+  m_TagString: ScatterProjector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
