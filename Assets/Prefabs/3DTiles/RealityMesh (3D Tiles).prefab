@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -3892557586120215936}
   - component: {fileID: -5530517851291887029}
   - component: {fileID: 379969814246679949}
+  - component: {fileID: -5652853201437834613}
   m_Layer: 6
   m_Name: RealityMesh (3D Tiles)
   m_TagString: Untagged
@@ -119,7 +120,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 690fb5d55d40ee7489dbfcbe44c9f716, type: 3}
   m_Name: 
@@ -358,3 +359,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
+--- !u!114 &-5652853201437834613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4551720aa9fb164aa78356d492117bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configuration: {fileID: 11400000, guid: 4c49a4edecb014c439152023c23297db, type: 2}
+  read3DTileset: {fileID: 5648866956155822156}
