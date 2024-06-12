@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
+    [RequireComponent(typeof(ObjectScatterLayer))]
     public class ScatterLayerShifter : WorldTransformShifter
     {
         private ObjectScatterLayer scatterLayer;
