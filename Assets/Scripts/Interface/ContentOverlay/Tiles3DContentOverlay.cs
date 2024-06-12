@@ -88,9 +88,8 @@ namespace Netherlands3D.Twin
                     break;
                 case AuthorizationType.SingleFieldGenericKey:
                 default:
-                    //Something went wrong, show the credentials section, starting with default
+                    //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(layerUrl);
-
                     credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);

@@ -67,7 +67,8 @@ namespace Netherlands3D.Twin
             //New url. If we already got this one in the vault, apply the credentials
             if(findKeyInVaultOnURLChange)
             {
-                storedAuthorization = keyVault.GetStoredAuthorization(newURL);    
+                storedAuthorization = keyVault.GetStoredAuthorization(newURL); 
+
                 if(storedAuthorization != null)
                 {
                     authorizationType = storedAuthorization.authorizationType;
@@ -75,7 +76,8 @@ namespace Netherlands3D.Twin
                     passwordInputField.text = storedAuthorization.password;
                     keyTokenOrCodeInputField.text = storedAuthorization.key;    
                 }
-                else{
+                else
+                {
                     authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
                 }
                 
