@@ -128,10 +128,10 @@ namespace Netherlands3D.Twin.Configuration
                 LoadFunctionalitiesFromString(functionalitiesFromQueryString);
             }
 
-            PopulateFeatureSpecificConfigurations(queryParameters);
+            PopulateFunctionalitySpecificConfigurations(queryParameters);
         }
 
-        private void PopulateFeatureSpecificConfigurations(NameValueCollection queryParameters)
+        private void PopulateFunctionalitySpecificConfigurations(NameValueCollection queryParameters)
         {
             foreach (var functionality in Functionalities)
             {
