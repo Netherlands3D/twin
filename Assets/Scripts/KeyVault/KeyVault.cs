@@ -36,6 +36,14 @@ namespace Netherlands3D.Twin
         private MonoBehaviour coroutineMonoBehaviour;
         public UnityEvent<string,AuthorizationType> OnAuthorizationTypeDetermined = new();
 
+        /// <summary>
+        /// Get the stored authorization for a specific URL
+        /// </summary>
+        public StoredAuthorization GetStoredAuthorization(string url)
+        {
+            return storedAuthorizations.Find(x => x.url == url);
+        }
+
         public AuthorizationType GetKnownAuthorizationTypeForURL(string url)
         {
             // Check if the url is known, like Google Maps or PDOK
