@@ -163,8 +163,13 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetAuthorizationInputType(AuthorizationType type)
         {
-            if(type == AuthorizationType.Key || type == AuthorizationType.BearerToken || type == AuthorizationType.Code)
-                type = AuthorizationType.SingleFieldGenericKey;
+            if(
+                type == AuthorizationType.Key 
+             || type == AuthorizationType.Token
+             || type == AuthorizationType.BearerToken 
+             || type == AuthorizationType.Code
+            )
+            type = AuthorizationType.SingleFieldGenericKey;
 
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;
