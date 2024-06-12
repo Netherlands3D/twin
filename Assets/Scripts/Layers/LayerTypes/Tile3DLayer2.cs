@@ -120,7 +120,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             tileSet.RefreshTiles();
         }
 
-        public void SetToken(string token)
+        public void SetBearerToken(string token)
         {
             tileSet.AddCustomHeader("Authorization", "Bearer " + token);
             tileSet.RefreshTiles();
@@ -130,6 +130,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             tileSet.publicKey = code;
             tileSet.QueryKeyName = "code";
+            tileSet.RefreshTiles();
+        }
+
+        public void SetToken(string token)
+        {
+            tileSet.publicKey = token;
+            tileSet.QueryKeyName = "token";
             tileSet.RefreshTiles();
         }
 

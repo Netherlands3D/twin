@@ -62,6 +62,12 @@ namespace Netherlands3D.Twin
                 LayerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
         }
 
+        public void ShowAuthorizationFailedFeedback()
+        {
+            //For now a standard text is shown.
+            serverErrorFeedback.gameObject.SetActive(true);
+        }
+
         private void UrlHasChanged(string newURL)
         {
             //New url. If we already got this one in the vault, apply the credentials
@@ -124,17 +130,23 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.UsernamePassword:
                     layerWithCredentials.SetCredentials(userNameInputField.text, passwordInputField.text);
                     break;
+                case AuthorizationType.BearerToken:
+                    layerWithCredentials.SetBearerToken(keyTokenOrCodeInputField.text);
+                    break;
                 case AuthorizationType.Key:
                     layerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
-                    break;
-                case AuthorizationType.BearerToken:
-                    layerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
                     break;
                 case AuthorizationType.Code:
                     layerWithCredentials.SetCode(keyTokenOrCodeInputField.text);
                     break;
+                case AuthorizationType.Token:
+                    layerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
+                    break;
                 case AuthorizationType.Public:
                     layerWithCredentials.ClearCredentials();
+                    break;
+                case AuthorizationType.Unknown:
+                    ShowAuthorizationFailedFeedback();
                     break;
             }
         }
