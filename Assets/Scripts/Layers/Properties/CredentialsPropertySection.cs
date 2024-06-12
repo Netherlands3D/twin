@@ -23,8 +23,12 @@ namespace Netherlands3D.Twin
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform serverErrorFeedback;
 
+        [Header("Settings")]
+        [SerializeField] private bool findKeyInVaultOnURLChange = true;
+
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
         private AuthorizationType authorizationType = AuthorizationType.Public;
+        private StoredAuthorization storedAuthorization;
 
         private ILayerWithCredentials layerWithCredentials;
         public ILayerWithCredentials LayerWithCredentials { 
@@ -60,11 +64,23 @@ namespace Netherlands3D.Twin
 
         private void UrlHasChanged(string newURL)
         {
-            authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+            //New url. If we already got this one in the vault, apply the credentials
+            if(findKeyInVaultOnURLChange)
+            {
+                storedAuthorization = keyVault.GetStoredAuthorization(newURL);    
+                authorizationType = storedAuthorization.authorizationType;
 
-            SetAuthorizationInputType(authorizationType);
+                userNameInputField.text = storedAuthorization.username;
+                passwordInputField.text = storedAuthorization.password;
+                keyTokenOrCodeInputField.text = storedAuthorization.key;
+                
+                SetAuthorizationInputType(authorizationType);
+            }
         }
 
+        /// <summary>
+        /// Apply the credentials input fields and start checking our authorization vault
+        /// </summary>
         public void ApplyCredentials()
         {
             serverErrorFeedback.gameObject.SetActive(false);
@@ -116,12 +132,18 @@ namespace Netherlands3D.Twin
             }
         }
 
+        /// <summary>
+        /// Set the authorization input type and update the UI
+        /// </summary>
         public void SetAuthorizationInputType(int type)
         {
             authorizationType = (AuthorizationType)type;
             Debug.Log("Force AuthorizationType to: " + authorizationType);
         }
 
+        /// <summary>
+        /// Set the authorization input type and update the UI
+        /// </summary>
         public void SetAuthorizationInputType(AuthorizationType type)
         {
             if(type == AuthorizationType.Key || type == AuthorizationType.Token || type == AuthorizationType.Code)
