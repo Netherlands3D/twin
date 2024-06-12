@@ -11,13 +11,15 @@ namespace Netherlands3D.Twin
 {
     public enum AuthorizationType
     {
+        //Specific order in items used in dropdown index
         Public = -1,
         UsernamePassword = 0,
         SingleFieldGenericKey = 1, //Single field key, token or code (we dont know specifically yet)
-        Key = 2,
-        Token = 3,
-        Code = 4,
-        Unknown = 5
+        Key,
+        BearerToken,
+        Code,
+        Token,
+        Unknown
     }
 
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
@@ -72,8 +74,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void NewURLAuthorizationDetermined(string url, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
         {
-            if(storedAuthorizations.Exists(x => x.url == url))
-                storedAuthorizations.RemoveAll(x => x.url == url);
+            ClearURLFromStoredAuthorizations(url);
 
             storedAuthorizations.Add(
                 new StoredAuthorization() { 
@@ -85,6 +86,12 @@ namespace Netherlands3D.Twin
                 });
 
             OnAuthorizationTypeDetermined.Invoke(url, authorizationType);
+        }
+
+        public void ClearURLFromStoredAuthorizations(string url)
+        {
+            if(storedAuthorizations.Exists(x => x.url == url))
+                storedAuthorizations.RemoveAll(x => x.url == url);
         }
 
         /// <summary>
@@ -138,6 +145,9 @@ namespace Netherlands3D.Twin
             url = url.TrimEnd('?', '&');
 
             AuthorizationType foundType = AuthorizationType.Unknown;
+            
+            //Start with resetting this url history to unkown
+            ClearURLFromStoredAuthorizations(url);
 
             // Try a request without credentials
             var noCredentialsRequest = UnityWebRequest.Get(url);
@@ -166,7 +176,7 @@ namespace Netherlands3D.Twin
             if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
             {
                 if(log) Debug.Log("Found bearer token needed for this layer: " + url);
-                foundType = AuthorizationType.Token;
+                foundType = AuthorizationType.BearerToken;
                 NewURLAuthorizationDetermined(url, foundType, key: key);
                 yield break;
             }
@@ -199,9 +209,22 @@ namespace Netherlands3D.Twin
                 NewURLAuthorizationDetermined(url, foundType, key: key);
                 yield break;
             }
-            Debug.Log("No credential type worked to get access for this layer: " + url);
+
+            // Try input key as 'token' query parameter (remove a possible existing code query parameter and add the new one)
+            uriBuilder.RemoveQueryParameter("code");
+            uriBuilder.AddQueryParameter("token", key);
+            var tokenRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
+            yield return tokenRequestUrl.SendWebRequest();
+            if(tokenRequestUrl.result == UnityWebRequest.Result.Success)
+            {
+                if(log) Debug.Log("Found token needed for this layer: " + url);
+                foundType = AuthorizationType.Token;
+                NewURLAuthorizationDetermined(url, foundType, key: key);
+                yield break;
+            }
 
             // Nothing worked, return unknown
+            Debug.Log("No credential type worked to get access for this layer: " + url);
             NewURLAuthorizationDetermined(url, AuthorizationType.Unknown);
         }
     }

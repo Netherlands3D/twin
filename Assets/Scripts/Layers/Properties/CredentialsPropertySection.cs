@@ -127,7 +127,7 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.Key:
                     layerWithCredentials.SetKey(keyTokenOrCodeInputField.text);
                     break;
-                case AuthorizationType.Token:
+                case AuthorizationType.BearerToken:
                     layerWithCredentials.SetToken(keyTokenOrCodeInputField.text);
                     break;
                 case AuthorizationType.Code:
@@ -163,7 +163,7 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetAuthorizationInputType(AuthorizationType type)
         {
-            if(type == AuthorizationType.Key || type == AuthorizationType.Token || type == AuthorizationType.Code)
+            if(type == AuthorizationType.Key || type == AuthorizationType.BearerToken || type == AuthorizationType.Code)
                 type = AuthorizationType.SingleFieldGenericKey;
 
             credentialTypeDropdown.value = (int)type;

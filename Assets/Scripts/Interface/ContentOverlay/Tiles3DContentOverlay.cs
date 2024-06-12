@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin
                 case AuthorizationType.Public:
                 case AuthorizationType.UsernamePassword:
                 case AuthorizationType.Key:
-                case AuthorizationType.Token:
+                case AuthorizationType.BearerToken:
                 case AuthorizationType.Code:
                     //We are in. Close overlay wizard.
                     Debug.Log("Close overlay;");
