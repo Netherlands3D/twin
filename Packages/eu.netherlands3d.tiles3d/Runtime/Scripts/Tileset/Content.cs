@@ -137,6 +137,11 @@ namespace Netherlands3D.Tiles3D
                 {
                     await gltf.InstantiateSceneAsync(transform, i);
                     scene = transform.GetChild(i).transform;
+                    foreach (var child in scene.GetComponentsInChildren<Transform>(true)) //getting the Transform components ensures the layer of each recursive child is set 
+                    {
+                        child.gameObject.layer = gameObject.layer;
+                    }
+                    
                     if(scene == null) continue;
 
                    // MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
