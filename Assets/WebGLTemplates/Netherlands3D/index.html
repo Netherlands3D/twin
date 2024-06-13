@@ -8,6 +8,7 @@
 	<meta name="mobile-web-app-capable" content="yes">
     <title>{{{ PRODUCT_NAME }}} | {{{ PRODUCT_VERSION  }}}</title>
 	<link rel="stylesheet" href="style.css?v={{{ PRODUCT_VERSION  }}}" />
+    <script src="js/mobile-detect.min.js"></script>
   </head>
   <body>
       <div id="unity-container" class="unity-desktop">
@@ -20,62 +21,100 @@
                   {{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION  }}}
               </div>
           </div>
-          <div id="unity-mobile-warning">
-              Unity WebGL is momenteel niet volledig ondersteund op mobiele apparaten.
+
+          <div id="unity-mobile-warning" class="dialog">
+              <div class="dialog--header">
+                <svg viewBox="0 0 22 17" class="dialog--header-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.07699 14.4335L10.176 1.19861C10.5733 0.620645 11.4267 0.620645 11.824 1.19861L20.923 14.4335C21.3792 15.097 20.9041 16 20.099 16H1.90103C1.09585 16 0.620831 15.097 1.07699 14.4335Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="10" y="12.0008" width="2" height="1.81818" fill="currentColor"/>
+                    <rect x="10" y="4.72772" width="2" height="6.36364" fill="currentColor"/>
+                </svg>
+                Waarschuwing mobiele weergave
+              </div>
+              <div class="paragraph-heading">Let op!</div>
+              <p>
+                  Netherlands 3D is nog niet geoptimaliseerd voor weergave op mobiele apparaten. Hierdoor kan het
+                  voorkomen dat de applicatie niet optimaal functioneert en kan daardoor voor onverwachte resultaten
+                  zorgen.
+              </p>
+          </div>
+
+          <div id="unity-load-error" class="dialog">
+              <div class="dialog--header">
+                <svg viewBox="0 0 22 17" class="dialog--header-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.07699 14.4335L10.176 1.19861C10.5733 0.620645 11.4267 0.620645 11.824 1.19861L20.923 14.4335C21.3792 15.097 20.9041 16 20.099 16H1.90103C1.09585 16 0.620831 15.097 1.07699 14.4335Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="10" y="12.0008" width="2" height="1.81818" fill="currentColor"/>
+                    <rect x="10" y="4.72772" width="2" height="6.36364" fill="currentColor"/>
+                </svg>
+                Er is iets misgegaan
+              </div>
+              <div class="paragraph-heading">Let op!</div>
+              <p>
+                  Tijdens het laden van Netherlands 3D is een fout opgetreden. Probeer het nogmaals of neem contact met ons op.
+              </p>
           </div>
       </div>
       <script>
-	  var unityInstance;
-	  var isMobileDevice = false;
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
-      var config = {
-          dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-          frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
-          codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
-#if MEMORY_FILENAME
-          memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
-#endif
-#if SYMBOLS_FILENAME
-          symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
-#endif
-          streamingAssetsUrl: "StreamingAssets",
-          companyName: "{{{ COMPANY_NAME }}}",
-          productName: "{{{ PRODUCT_NAME }}}",
-          productVersion: "{{{ PRODUCT_VERSION }}}",
-      };
 
-	  //dom element references
+      //dom element references
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
       var mobileWarning = document.querySelector("#unity-mobile-warning");
+      var loadError = document.querySelector("#unity-load-error");
 
-	  // Avoid draining fillrate performance on mobile devices,
+      // Avoid draining fillrate performance on mobile devices,
       // and default/override low DPI mode on mobile browsers by setting devicePixelRatio to 1.
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-		  isMobileDevice = true;
+      const md = new MobileDetect(window.navigator.userAgent);
+      var isMobileDevice = md.mobile();
+      if (isMobileDevice) {
           container.className = "unity-mobile";
-          config.devicePixelRatio = 2;
+          mobileWarning.classList.add('--visible');
+      } else {
+          var unityInstance;
+          var buildUrl = "Build";
+          var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+          var config = {
+              dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+              frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+              codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+              #if MEMORY_FILENAME
+              memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+              #endif
+              #if SYMBOLS_FILENAME
+              symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+              #endif
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "{{{ COMPANY_NAME }}}",
+              productName: "{{{ PRODUCT_NAME }}}",
+              productVersion: "{{{ PRODUCT_VERSION }}}",
+          };
+          if (isMobileDevice) {
+              config.devicePixelRatio = 2;
+          }
+
+          loadingBar.style.display = "block";
+
+          var script = document.createElement("script");
+          script.src = loaderUrl;
+          script.onerror = () => {
+              loadError.classList.add('--visible');
+              loadingBar.remove();
+          }
+          script.onload = () => {
+              createUnityInstance(canvas, config, (progress) => {
+                  progressBarFull.style.width = 100 * progress + "%";
+              }).then((instance) => {
+                  unityInstance = instance;
+                  loadingBar.style.display = "none";
+                  loadingBar.remove();
+              }).catch((message) => {
+                  alert(message);
+              });
+          };
+          document.body.appendChild(script);
       }
-
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-          createUnityInstance(canvas, config, (progress) => {
-              progressBarFull.style.width = 100 * progress + "%";
-          }).then((instance) => {
-              unityInstance = instance;
-              loadingBar.style.display = "none";
-			  loadingBar.remove();	  
-          }).catch((message) => {
-              alert(message);
-          });
-      };
-      document.body.appendChild(script); 
     </script>
   </body>
 </html>
