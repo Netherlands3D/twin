@@ -51,11 +51,14 @@ namespace Netherlands3D.Twin
                 for (int i = 0; i < frames; i++)
                 {
                     yield return new WaitForEndOfFrame();
-                    spawnPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport);
+                    var opticalSpawnPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport);
+                    if (opticalSpawnPoint != Vector3.zero)
+                    {
+                        spawnPoint = opticalSpawnPoint;
+                    }
                 }
             }
-
-
+            
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.Euler(initialRotation));
             newObject.transform.localScale = initialScale;
             newObject.name = prefab.name;
