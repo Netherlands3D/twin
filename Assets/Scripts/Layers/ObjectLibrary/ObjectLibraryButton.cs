@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
