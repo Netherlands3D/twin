@@ -77,10 +77,10 @@ namespace Netherlands3D.Twin
         public void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
         {
             if(webRequestResult == UnityWebRequest.Result.ConnectionError 
-            || webRequestResult == UnityWebRequest.Result.ProtocolError 
             || webRequestResult == UnityWebRequest.Result.DataProcessingError )
             {
                 //Disable credentials property section if we get a server error (not tied to credentials)
+                Debug.LogWarning("Server request failed: " + webRequestResult);
                 gameObject.SetActive(false);
             }
             else if(webRequestResult != UnityWebRequest.Result.Success)

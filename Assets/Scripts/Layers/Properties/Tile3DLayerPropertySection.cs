@@ -51,7 +51,6 @@ namespace Netherlands3D.Twin
         public void ShowServerWarningFeedback(UnityWebRequest.Result webRequestResult)
         {
             if(webRequestResult == UnityWebRequest.Result.ConnectionError 
-            || webRequestResult == UnityWebRequest.Result.ProtocolError 
             || webRequestResult == UnityWebRequest.Result.DataProcessingError )
             {
                 colorFeedbackImage.color = warningColor;
