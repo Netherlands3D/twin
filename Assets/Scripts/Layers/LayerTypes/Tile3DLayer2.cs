@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
-        [SerializeField] private bool usePropertySections;
+        [SerializeField] private bool usePropertySections = true;
         [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
         
