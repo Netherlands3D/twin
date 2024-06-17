@@ -2,7 +2,10 @@
 
 :root {
 	--color-blue-100: #DFE8F2;
+	--color-blue-200: #CCD7E4;
 	--color-blue-900: #2F3550;
+	--border-radius-default: .25rem;
+	--border-radius-md: .5rem;
 }
 
 html {
@@ -50,7 +53,28 @@ p:last-of-type {
 #unity-canvas { width: 100%; height: 100% }
 #unity-loading-bar { width: 200px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
 #unity-progress-bar-empty { width: 100%; height: 100%; margin-top: 10px; background-color:grey; }
-#unity-progress-bar-full { width: 0%; height: 10px; margin-top: 10px; background-color: #FFFFFF; }
+#unity-progress-bar-full { width: 0%; height: 10px; margin-top: 10px; background-color: white; }
+
+#nl3d-debug {
+	display: none;
+	height: auto;
+	background: rgba(255, 255, 255, .5);
+	align-items: center;
+	padding: .25rem .5rem;
+	font-size: .7rem;
+	border-bottom: 1px solid var(--color-blue-100);
+}
+#nl3d-debug.--visible {
+	display: flex;
+}
+
+.debug-badge {
+	display: inline-block;
+	background: var(--color-blue-100);
+	border-radius: 9999px;
+	padding: .2rem .5rem;
+	font-size: 80%;
+}
 
 #unity-mobile-warning,
 #unity-load-error {
@@ -75,13 +99,13 @@ p:last-of-type {
 	}
 }
 
-#unity-progress-text{
-	margin-top: 20px;
-    color: white;
-    font-family: sans-serif;
-    font-size: 15px;
+#unity-progress-text {
+	margin-top: .5rem;
+	color: var(--color-blue-900);
+    font-size: .7rem;
     font-weight: bold;
     text-align: center;
+	text-transform: uppercase;
 }
 
 /* try to handle mobile dialog */
@@ -112,8 +136,8 @@ canvas+* {
 
 .paragraph-heading {
 	border-left: 2px solid var(--color-blue-900);
-	margin-bottom: .5rem;
-	padding-left: .25rem;
+	margin-bottom: .75rem;
+	padding-left: var(--border-radius-default);
 }
 
 .dialog--header {
@@ -126,6 +150,27 @@ canvas+* {
 	font-weight: bold;
 }
 
+.dialog--footer {
+	text-align: right;
+	margin-top: .75rem;
+}
+
 .dialog--header-icon {
 	height: .8rem;
+}
+
+.button {
+	display: inline-block;
+	border: 1px solid var(--color-blue-200);
+	color: var(--color-blue-900);
+	text-decoration: none;
+	padding: .75rem;
+	border-radius: var(--border-radius-md);
+}
+
+#nl3d-back-button {
+	 display: none;
+}
+#nl3d-back-button.--visible {
+	display: inline-block;
 }

@@ -12,14 +12,13 @@
   </head>
   <body>
       <div id="unity-container" class="unity-desktop">
+          <div id="nl3d-debug"><p>{{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION  }}} &middot; Mobile: <span id="nl3d-on-mobile" class="debug-badge">Unknown</span> &middot; User Agent: <span id="nl3d-user-agent" class="debug-badge">Unknown</span></p></div>
           <canvas id="unity-canvas" width="100%" height="100%"></canvas>
-          <div id="unity-loading-bar" class="noselect">
+          <div id="unity-loading-bar" class="noselect dialog">
               <div id="unity-progress-bar-empty">
                   <div id="unity-progress-bar-full"></div>
               </div>
-              <div id="unity-progress-text" style="display:none">
-                  {{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION  }}}
-              </div>
+              <div id="unity-progress-text">Reticulating splines</div>
           </div>
 
           <div id="unity-mobile-warning" class="dialog">
@@ -37,6 +36,10 @@
                   voorkomen dat de applicatie niet optimaal functioneert en kan daardoor voor onverwachte resultaten
                   zorgen.
               </p>
+              <footer class="dialog--footer">
+                  <a href="#" onclick="history.back()" class="button" id="nl3d-back-button">Terug</a>
+                  <a href="#" onclick="LoadUnity()" class="button">Ok, begrepen</a>
+              </footer>                  
           </div>
 
           <div id="unity-load-error" class="dialog">
@@ -56,35 +59,44 @@
       </div>
       <script>
 
-      //dom element references
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var mobileWarning = document.querySelector("#unity-mobile-warning");
-      var loadError = document.querySelector("#unity-load-error");
-
-      // Avoid draining fillrate performance on mobile devices,
-      // and default/override low DPI mode on mobile browsers by setting devicePixelRatio to 1.
+      // Mobile detection - isMobileDevice can be used in jslib files.
       const md = new MobileDetect(window.navigator.userAgent);
-      var isMobileDevice = md.mobile();
-      if (isMobileDevice) {
-          container.className = "unity-mobile";
-          mobileWarning.classList.add('--visible');
-      } else {
-          var unityInstance;
+      const isMobileDevice = md.mobile() !== null;
+
+      // Global Unity instance, populated in LoadUnity and can be used by jslib files
+      let unityInstance;
+
+      // Dom element references
+      const container = document.querySelector("#unity-container");
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingBar = document.querySelector("#unity-loading-bar");
+      const progressBarFull = document.querySelector("#unity-progress-bar-full");
+      const mobileWarning = document.querySelector("#unity-mobile-warning");
+      const loadError = document.querySelector("#unity-load-error");
+
+      function ShowDebugPanel() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const debugMode = urlParams.get('debug') !== null;
+          if (debugMode) {
+              document.querySelector("#nl3d-debug").classList.add('--visible');
+              document.querySelector("#nl3d-on-mobile").innerHTML = isMobileDevice ? 'Yes' : 'No';
+              document.querySelector("#nl3d-user-agent").innerHTML = window.navigator.userAgent;
+          }
+      }
+
+      function LoadUnity() {
           var buildUrl = "Build";
           var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
           var config = {
               dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
               frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
               codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
-              #if MEMORY_FILENAME
+              // #if MEMORY_FILENAME
               memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
-              #endif
-              #if SYMBOLS_FILENAME
+              // #endif
+              // #if SYMBOLS_FILENAME
               symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
-              #endif
+              // #endif
               streamingAssetsUrl: "StreamingAssets",
               companyName: "{{{ COMPANY_NAME }}}",
               productName: "{{{ PRODUCT_NAME }}}",
@@ -94,6 +106,7 @@
               config.devicePixelRatio = 2;
           }
 
+          mobileWarning.classList.remove('--visible');
           loadingBar.style.display = "block";
 
           var script = document.createElement("script");
@@ -114,6 +127,18 @@
               });
           };
           document.body.appendChild(script);
+      }
+
+      ShowDebugPanel();
+
+      // Avoid draining fillrate performance on mobile devices,
+      // and default/override low DPI mode on mobile browsers by setting devicePixelRatio to 1.
+      if (isMobileDevice) {
+          container.className = "unity-mobile";
+          mobileWarning.classList.add('--visible');
+          document.querySelector('#nl3d-back-button').classList.toggle('--visible', history.length > 2);
+      } else {
+          LoadUnity();
       }
     </script>
   </body>
