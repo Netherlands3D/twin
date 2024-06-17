@@ -21,13 +21,14 @@ namespace Netherlands3D.Twin
         [SerializeField] private Transform headerDefault;
         [SerializeField] private Transform headerWithCredentialTypeDropdown;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
-        [SerializeField] private Transform serverErrorFeedback;
+        [SerializeField] private Transform errorMessage;
 
         [Header("Settings")]
         [SerializeField] private bool findKeyInVaultOnURLChange = true;
 
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
         private AuthorizationType authorizationType = AuthorizationType.Public;
+        private AuthorizationType lastAppliedAuthorizationType = AuthorizationType.Public;
         private StoredAuthorization storedAuthorization;
 
         private ILayerWithCredentials layerWithCredentials;
@@ -65,7 +66,16 @@ namespace Netherlands3D.Twin
         public void ShowAuthorizationFailedFeedback()
         {
             //For now a standard text is shown.
-            serverErrorFeedback.gameObject.SetActive(true);
+            errorMessage.gameObject.SetActive(true);
+        }
+
+        public void CloseFailedFeedback()
+        {
+            errorMessage.gameObject.SetActive(false);
+
+            //Gob back to our last applied type
+            authorizationType = lastAppliedAuthorizationType;
+            SetAuthorizationInputType(authorizationType);
         }
 
         private void UrlHasChanged(string newURL)
@@ -96,7 +106,9 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void ApplyCredentials()
         {
-            serverErrorFeedback.gameObject.SetActive(false);
+            errorMessage.gameObject.SetActive(false);
+
+            lastAppliedAuthorizationType = authorizationType;
 
             switch(authorizationType)
             {
@@ -158,6 +170,8 @@ namespace Netherlands3D.Twin
         {
             authorizationType = (AuthorizationType)type;
             Debug.Log("Force AuthorizationType to: " + authorizationType);
+
+            SetAuthorizationInputType(authorizationType);
         }
 
         /// <summary>
