@@ -35,6 +35,17 @@ namespace Netherlands3D.Twin
             credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
 
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+            layerWithCredentials.OnServerRequestFailed.AddListener(ServerRequestFailed);
+        }
+
+        private void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
+        {
+            //Hide the credentials explanation section if the server request failed due to a connection error or data processing error
+            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
+            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            {
+                credentialExplanation.gameObject.SetActive(false);
+            }
         }
 
         private void OnEnable()
