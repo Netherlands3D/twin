@@ -6,11 +6,10 @@ namespace Netherlands3D.Twin
 {
     public class UIErrorMessage : MonoBehaviour
     {
-
         public GameObject [] ToHide;
         public GameObject [] ToShow;
-        // Start is called before the first frame update
-        void Awake()
+
+        private void OnEnable()
         {
             foreach(GameObject hide in ToHide)
             {
@@ -21,9 +20,6 @@ namespace Netherlands3D.Twin
             {
                 show.SetActive(false);
             }
-
-        }
-
-      
+        }      
     }
 }
