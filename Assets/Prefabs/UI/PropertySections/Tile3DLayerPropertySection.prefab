@@ -213,31 +213,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3225469587343178743, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225469587343178743, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225469587343178743, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225469587343178743, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225469587343178743, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3708977114786087537, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -293,30 +268,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3968220228634060525, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
+    - target: {fileID: 4111184601041930796, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
         type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968220228634060525, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968220228634060525, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968220228634060525, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968220228634060525, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
+      propertyPath: m_text
+      value: Eigen 3D Tiles dataset URL
       objectReference: {fileID: 0}
     - target: {fileID: 4408114328304358916, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
         type: 3}

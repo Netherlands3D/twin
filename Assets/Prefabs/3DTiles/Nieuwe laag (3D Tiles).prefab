@@ -269,7 +269,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  allowURLEditInPropertySection: 1
+  usePropertySections: 1
   openPropertiesOnStart: 0
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
@@ -346,6 +346,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
+  OnCredentialsPropertySectionInstantiated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1194273570138351517
 MonoBehaviour:
   m_ObjectHideFlags: 0

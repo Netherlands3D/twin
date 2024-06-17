@@ -57,6 +57,8 @@ namespace Netherlands3D.Twin
         }
 
         private void OnEnable() {
+            errorMessage.gameObject.SetActive(false);
+            
             keyVault.OnAuthorizationTypeDetermined.AddListener(OnCredentialTypeDetermined);
         }
 
