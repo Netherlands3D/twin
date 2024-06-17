@@ -412,7 +412,7 @@
       "dependencies": {}
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.5.2",
+      "version": "1.5.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
