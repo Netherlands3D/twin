@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2370515775928771719}
   - component: {fileID: 2605067482200781903}
   m_Layer: 5
-  m_Name: URLOverlay
+  m_Name: GeoJSONImportOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1025,7 +1025,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5348192612710299352, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8054728817819763580}
   m_SourcePrefab: {fileID: 100100000, guid: eb072abfa5c622d4ba5e8e89f7f570d8, type: 3}
 --- !u!224 &2184347306411869292 stripped
 RectTransform:
@@ -1033,3 +1037,102 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3947484511726042902}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4588445360642877815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 676989654978860641, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3947484511726042902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5327780738530072458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9167178631255533724, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3947484511726042902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9002925349079501262 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5348192612710299352, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3947484511726042902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8054728817819763580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002925349079501262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab9b4a0e854d4e669f8a18818c0fef7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validFileExtensions:
+  - json
+  - geojson
+  onFileDownloaded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
+        m_MethodName: ProcessFile
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5327780738530072458}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2605067482200781903}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.OverlayInspector, Assembly-CSharp
+        m_MethodName: CloseOverlay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onFileDownloadFailed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5327780738530072458}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 4588445360642877815}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
