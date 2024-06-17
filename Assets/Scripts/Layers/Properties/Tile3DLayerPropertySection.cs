@@ -32,19 +32,10 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void OnEnable()
-        {
-            urlInputField.onEndEdit.AddListener(HandleURLChange);
-        }
-        
-        private void OnDisable()
-        {
-            urlInputField.onEndEdit.RemoveListener(HandleURLChange);
-        }
 
-        private void HandleURLChange(string newValue)
+        public void ApplyURL()
         {
-            var sanitizedURL = SanitizeURL(newValue);
+            var sanitizedURL = SanitizeURL(urlInputField.text);
             urlInputField.text = sanitizedURL;
 
             //Make sure its long enough to contain a domain

@@ -40,12 +40,17 @@ namespace Netherlands3D.Twin
             set
             {
                 if(layerWithCredentials != null)
+                {
                     layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-
+                    layerWithCredentials.OnServerRequestFailed.RemoveListener(ShowServerWarningFeedback);
+                }
                 layerWithCredentials = value;
 
-                if(layerWithCredentials != null){
+                if(layerWithCredentials != null)
+                {
                     layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+                    layerWithCredentials.OnServerRequestFailed.AddListener(ShowServerWarningFeedback);
+
                     UrlHasChanged(layerWithCredentials.URL);
                 }
             } 
@@ -63,7 +68,17 @@ namespace Netherlands3D.Twin
                 LayerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
         }
 
-        public void ShowAuthorizationFailedFeedback()
+        public void ShowServerWarningFeedback(UnityWebRequest.Result webRequestResult)
+        {
+            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
+            || webRequestResult == UnityWebRequest.Result.ProtocolError 
+            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            {
+                ShowServerWarningFeedback();
+            }
+        }
+
+        public void ShowServerWarningFeedback()
         {
             //For now a standard text is shown.
             errorMessage.gameObject.SetActive(true);
@@ -158,7 +173,7 @@ namespace Netherlands3D.Twin
                     layerWithCredentials.ClearCredentials();
                     break;
                 case AuthorizationType.Unknown:
-                    ShowAuthorizationFailedFeedback();
+                    ShowServerWarningFeedback();
                     break;
             }
         }
