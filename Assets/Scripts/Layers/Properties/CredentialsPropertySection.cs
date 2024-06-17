@@ -42,14 +42,14 @@ namespace Netherlands3D.Twin
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-                    layerWithCredentials.OnServerRequestFailed.RemoveListener(ShowServerWarningFeedback);
+                    layerWithCredentials.OnServerRequestFailed.RemoveListener(ServerRequestFailed);
                 }
                 layerWithCredentials = value;
 
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-                    layerWithCredentials.OnServerRequestFailed.AddListener(ShowServerWarningFeedback);
+                    layerWithCredentials.OnServerRequestFailed.AddListener(ServerRequestFailed);
 
                     UrlHasChanged(layerWithCredentials.URL);
                 }
@@ -68,20 +68,26 @@ namespace Netherlands3D.Twin
                 LayerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
         }
 
-        public void ShowServerWarningFeedback(UnityWebRequest.Result webRequestResult)
+        public void ShowCredentialsWarning()
+        {
+            //For now a standard text is shown.
+            errorMessage.gameObject.SetActive(true);
+        }
+
+        public void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
         {
             if(webRequestResult == UnityWebRequest.Result.ConnectionError 
             || webRequestResult == UnityWebRequest.Result.ProtocolError 
             || webRequestResult == UnityWebRequest.Result.DataProcessingError )
             {
-                ShowServerWarningFeedback();
+                //Disable credentials property section if we get a server error (not tied to credentials)
+                gameObject.SetActive(false);
             }
-        }
-
-        public void ShowServerWarningFeedback()
-        {
-            //For now a standard text is shown.
-            errorMessage.gameObject.SetActive(true);
+            else if(webRequestResult != UnityWebRequest.Result.Success)
+            {
+                //Show a credentials warning if the server request failed for another reason (probably tied to credentials)
+                ShowCredentialsWarning();
+            }
         }
 
         public void CloseFailedFeedback()
@@ -173,7 +179,7 @@ namespace Netherlands3D.Twin
                     layerWithCredentials.ClearCredentials();
                     break;
                 case AuthorizationType.Unknown:
-                    ShowServerWarningFeedback();
+                    ShowCredentialsWarning();
                     break;
             }
         }

@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
-        [SerializeField] private bool allowURLEditInPropertySection;
+        [SerializeField] private bool usePropertySections;
         [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
         
@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             base.Awake();
             tileSet = GetComponent<Read3DTileset>();
             
-            if (allowURLEditInPropertySection)
+            if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
                 propertySections = new();

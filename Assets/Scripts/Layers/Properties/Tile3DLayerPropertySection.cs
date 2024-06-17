@@ -6,6 +6,7 @@ using Netherlands3D.Twin.UI.LayerInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -13,6 +14,8 @@ namespace Netherlands3D.Twin
     public class Tile3DLayerPropertySection : MonoBehaviour
     {
         [SerializeField] private TMP_InputField urlInputField;
+        [SerializeField] private Transform input;
+        [SerializeField] private Transform errorMessage;
         [SerializeField] private Image colorFeedbackImage;
         [SerializeField] private Color defaultColor;
         [SerializeField] private Color warningColor;
@@ -23,15 +26,37 @@ namespace Netherlands3D.Twin
             get => layer;
             set
             {
+                if(layer != null)
+                {
+                    layer.OnURLChanged.RemoveListener(DisplayURL);
+                    layer.OnServerRequestFailed.RemoveListener(ShowServerWarningFeedback);
+                }
                 layer = value;
 
-                if(layer == null || !IsValidURL(layer.URL))
-                    return;
+                if(layer != null)
+                {
+                    layer.OnURLChanged.AddListener(DisplayURL);
+                    layer.OnServerRequestFailed.AddListener(ShowServerWarningFeedback);
+                }
 
                 urlInputField.text = layer.URL;
             }
         }
 
+        public void DisplayURL(string url)
+        {
+            urlInputField.text = url;
+        }
+
+        public void ShowServerWarningFeedback(UnityWebRequest.Result webRequestResult)
+        {
+            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
+            || webRequestResult == UnityWebRequest.Result.ProtocolError 
+            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            {
+                colorFeedbackImage.color = warningColor;
+            }
+        }
 
         public void ApplyURL()
         {
