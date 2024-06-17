@@ -40,11 +40,12 @@ namespace Netherlands3D.Twin
 
         private void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
         {
-            //Hide the credentials explanation section if the server request failed due to a connection error or data processing error
+            //Hide the credentials section if the server request failed due to a connection error or data processing error
             if(webRequestResult == UnityWebRequest.Result.ConnectionError 
             || webRequestResult == UnityWebRequest.Result.DataProcessingError )
             {
                 credentialExplanation.gameObject.SetActive(false);
+                credentialsPropertySection.gameObject.SetActive(false);
             }
         }
 
