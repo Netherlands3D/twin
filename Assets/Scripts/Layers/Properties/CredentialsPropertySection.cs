@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
 
         private void OnEnable() {
             errorMessage.gameObject.SetActive(false);
-            
+
             keyVault.OnAuthorizationTypeDetermined.AddListener(OnCredentialTypeDetermined);
         }
 
@@ -181,6 +181,7 @@ namespace Netherlands3D.Twin
                     layerWithCredentials.ClearCredentials();
                     break;
                 case AuthorizationType.Unknown:
+                    layerWithCredentials.ClearCredentials();
                     ShowCredentialsWarning();
                     break;
             }
