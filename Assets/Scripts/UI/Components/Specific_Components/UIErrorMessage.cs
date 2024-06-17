@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
 
             foreach (GameObject show in ToShow)
             {
-                show.SetActive(false);
+                show.SetActive(true);
             }
         }      
     }
