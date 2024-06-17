@@ -128,6 +128,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         
         public void SetCode(string code)
         {
+            tileSet.personalKey = code;
             tileSet.publicKey = code;
             tileSet.QueryKeyName = "code";
             tileSet.RefreshTiles();
@@ -135,6 +136,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetToken(string token)
         {
+            tileSet.personalKey = token;
             tileSet.publicKey = token;
             tileSet.QueryKeyName = "token";
             tileSet.RefreshTiles();
@@ -142,6 +144,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void ClearCredentials()
         {
+            tileSet.personalKey = "";
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
