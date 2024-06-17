@@ -54,9 +54,7 @@ namespace Netherlands3D.Twin.Layers
             this.material.enableInstancing = true;
 
             polygonLayer = polygon;
-
             
-
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
             if (!toggleScatterPropertySectionInstantiator)
@@ -72,10 +70,11 @@ namespace Netherlands3D.Twin.Layers
 
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
-            settings.ScatterSettingsChanged.AddListener(ResampleTexture);
-            settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
+
+            gameObject.AddComponent<ScatterLayerShifter>();
+            gameObject.AddComponent<WorldTransform>();
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
         }
@@ -90,21 +89,28 @@ namespace Netherlands3D.Twin.Layers
             }
 
             RecalculatePolygonsAndSamplerTexture();
-            polygon.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygon.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+            AddReScatterListeners();
 
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
-#if UNITY_EDITOR
-            gameObject.AddComponent<GridDebugger>();
-#endif
+// #if UNITY_EDITOR
+//             gameObject.AddComponent<GridDebugger>();
+// #endif
             ReferencedProxy.UI.ToggleProperties(openProperties);
             completedInitialization = true;
         }
 
-        protected override void OnDestroy()
+        public void AddReScatterListeners()
         {
-            base.OnDestroy();
+            settings.ScatterSettingsChanged.AddListener(ResampleTexture);
+            settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+        }
+        
+        public void RemoveReScatterListeners()
+        {
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
             settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
@@ -112,6 +118,12 @@ namespace Netherlands3D.Twin.Layers
             polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            RemoveReScatterListeners();
+        }
+        
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
         {
             foreach (var visualisation in visualisations)
@@ -188,6 +200,12 @@ namespace Netherlands3D.Twin.Layers
             return bounds;
         }
 
+        public void ReGeneratePointsWithoutResampling()
+        {
+            RecalculatePolygonsAndGetBounds();
+            ResampleTexture();
+        }
+        
         private void ResampleTexture()
         {
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
@@ -319,7 +337,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var initialActiveState = IsActiveInScene;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            var openProperties = ReferencedProxy.UI &&ReferencedProxy.UI.PropertiesOpen;
+            var openProperties = ReferencedProxy.UI && ReferencedProxy.UI.PropertiesOpen;
             StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));
         }
 
