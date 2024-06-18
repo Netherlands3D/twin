@@ -20,26 +20,26 @@ namespace Netherlands3D.Twin
         [SerializeField] private Color defaultColor;
         [SerializeField] private Color warningColor;
 
-        private Tile3DLayer2 layer;
-        public Tile3DLayer2 Layer
+        private Tile3DLayer tile3DLayer;
+        public Tile3DLayer Tile3DLayer
         {
-            get => layer;
+            get => tile3DLayer;
             set
             {
-                if(layer != null)
+                if(tile3DLayer != null)
                 {
-                    layer.OnURLChanged.RemoveListener(DisplayURL);
-                    layer.OnServerRequestFailed.RemoveListener(ShowServerWarningFeedback);
+                    tile3DLayer.OnURLChanged.RemoveListener(DisplayURL);
+                    tile3DLayer.OnServerResponseReceived.RemoveListener(ShowServerWarningFeedback);
                 }
-                layer = value;
+                tile3DLayer = value;
 
-                if(layer != null)
+                if(tile3DLayer != null)
                 {
-                    layer.OnURLChanged.AddListener(DisplayURL);
-                    layer.OnServerRequestFailed.AddListener(ShowServerWarningFeedback);
+                    tile3DLayer.OnURLChanged.AddListener(DisplayURL);
+                    tile3DLayer.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
                 }
 
-                urlInputField.text = layer.URL;
+                urlInputField.text = tile3DLayer.URL;
             }
         }
 
@@ -48,12 +48,18 @@ namespace Netherlands3D.Twin
             urlInputField.text = url;
         }
 
-        public void ShowServerWarningFeedback(UnityWebRequest.Result webRequestResult)
+        public void ShowServerWarningFeedback(UnityWebRequest webRequest)
         {
-            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
-            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            if(webRequest.ReturnedServerError())
             {
                 colorFeedbackImage.color = warningColor;
+                errorMessage.gameObject.SetActive(true);
+                input.gameObject.SetActive(false);
+            }
+            else
+            {
+                errorMessage.gameObject.SetActive(false);
+                input.gameObject.SetActive(true);
             }
         }
 
@@ -70,7 +76,7 @@ namespace Netherlands3D.Twin
             }        
 
             colorFeedbackImage.color = defaultColor;
-            layer.URL = sanitizedURL;
+            tile3DLayer.URL = sanitizedURL;
         }
 
         private string SanitizeURL(string url)

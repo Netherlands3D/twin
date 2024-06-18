@@ -28,7 +28,6 @@ namespace Netherlands3D.Twin
 
         [Tooltip("KeyVault Scriptable Object")] [SerializeField] private KeyVault keyVault;
         private AuthorizationType authorizationType = AuthorizationType.Public;
-        private AuthorizationType lastAppliedAuthorizationType = AuthorizationType.Public;
         private StoredAuthorization storedAuthorization;
 
         private ILayerWithCredentials layerWithCredentials;
@@ -42,14 +41,14 @@ namespace Netherlands3D.Twin
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-                    layerWithCredentials.OnServerRequestFailed.RemoveListener(ServerRequestFailed);
+                    layerWithCredentials.OnServerResponseReceived.RemoveListener(ServerRequestFailed);
                 }
                 layerWithCredentials = value;
 
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-                    layerWithCredentials.OnServerRequestFailed.AddListener(ServerRequestFailed);
+                    layerWithCredentials.OnServerResponseReceived.AddListener(ServerRequestFailed);
 
                     UrlHasChanged(layerWithCredentials.URL);
                 }
@@ -76,18 +75,17 @@ namespace Netherlands3D.Twin
             errorMessage.gameObject.SetActive(true);
         }
 
-        public void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
+        public void ServerRequestFailed(UnityWebRequest webRequest)
         {
-            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
-            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            if(webRequest.ReturnedServerError())
             {
                 //Disable credentials property section if we get a server error (not tied to credentials)
-                Debug.LogWarning("Server request failed: " + webRequestResult);
+                Debug.LogWarning("Server request failed: " + webRequest);
                 gameObject.SetActive(false);
             }
-            else if(webRequestResult != UnityWebRequest.Result.Success)
+            else if(webRequest.RequiresCredentials())
             {
-                //Show a credentials warning if the server request failed for another reason (probably tied to credentials)
+                //Show a credentials warning if the server request failed for another reason (probably tied to credential failure)
                 ShowCredentialsWarning();
             }
         }
@@ -96,8 +94,8 @@ namespace Netherlands3D.Twin
         {
             errorMessage.gameObject.SetActive(false);
 
-            //Gob back to our last applied type
-            authorizationType = lastAppliedAuthorizationType;
+            //Gob back to our generic guess field type so we can retry again
+            authorizationType = AuthorizationType.Guess;
             SetAuthorizationInputType(authorizationType);
         }
 
@@ -131,8 +129,6 @@ namespace Netherlands3D.Twin
         {
             errorMessage.gameObject.SetActive(false);
 
-            lastAppliedAuthorizationType = authorizationType;
-
             switch(authorizationType)
             {
                 case AuthorizationType.UsernamePassword:
@@ -142,7 +138,7 @@ namespace Netherlands3D.Twin
                         passwordInputField.text
                         );
                     break;
-                case AuthorizationType.SingleFieldGenericKey:
+                case AuthorizationType.Guess:
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
@@ -219,9 +215,14 @@ namespace Netherlands3D.Twin
              || type == AuthorizationType.BearerToken 
              || type == AuthorizationType.Code
             )
-            type = AuthorizationType.SingleFieldGenericKey;
+            type = AuthorizationType.Guess;
 
             credentialTypeDropdown.value = (int)type;
+
+            //Similar values are not reapplied, so make sure to the dropdown items appear
+            if (credentialTypeDropdown.TryGetComponent(out DropdownSelection dropdownSelection))
+                dropdownSelection.DropdownSelectItem(credentialTypeDropdown.value);
+
             authorizationType = type;
         }
     }

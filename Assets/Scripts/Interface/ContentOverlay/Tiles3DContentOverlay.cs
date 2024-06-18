@@ -22,27 +22,25 @@ namespace Netherlands3D.Twin
         [SerializeField] private CredentialsPropertySection credentialsPropertySection;
         [SerializeField] private RectTransform credentialExplanation;
 
-        private Tile3DLayer2 layerWithCredentials;
+        private Tile3DLayer layerWithCredentials;
         private AuthorizationType authorizationType = AuthorizationType.Unknown;
 
         public override void SetReferencedLayer(ReferencedLayer layer)
         {
             base.SetReferencedLayer(layer);
 
-            layerWithCredentials = layer as Tile3DLayer2;
+            layerWithCredentials = layer as Tile3DLayer;
 
-            tile3DLayerPropertySection.Layer = layerWithCredentials;
-            credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
-
+            tile3DLayerPropertySection.Tile3DLayer = layerWithCredentials;
+            
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-            layerWithCredentials.OnServerRequestFailed.AddListener(ServerRequestFailed);
+            layerWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
         }
 
-        private void ServerRequestFailed(UnityWebRequest.Result webRequestResult)
+        private void ServerResponseReceived(UnityWebRequest webRequestResult)
         {
             //Hide the credentials section if the server request failed due to a connection error or data processing error
-            if(webRequestResult == UnityWebRequest.Result.ConnectionError 
-            || webRequestResult == UnityWebRequest.Result.DataProcessingError )
+            if(webRequestResult.ReturnedServerError())
             {
                 credentialExplanation.gameObject.SetActive(false);
                 credentialsPropertySection.gameObject.SetActive(false);
@@ -59,6 +57,10 @@ namespace Netherlands3D.Twin
         }
 
         private void OnDestroy() {
+            //If we close the overlay without getting access to the layer we 'cancel' and remove the layer.
+            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.Guess)
+                layerWithCredentials.DestroyLayer();
+
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
@@ -66,15 +68,6 @@ namespace Netherlands3D.Twin
         private void UrlHasChanged(string newURL)
         {
             keyVault.TryToFindSpecificCredentialType(newURL, "");
-        }
-
-        public override void CloseOverlay()
-        {
-            base.CloseOverlay();
-
-            //If we close the overlay with close button without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.SingleFieldGenericKey)
-                layerWithCredentials.DestroyLayer();
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
@@ -99,10 +92,11 @@ namespace Netherlands3D.Twin
                     Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
-                case AuthorizationType.SingleFieldGenericKey:
+                case AuthorizationType.Guess:
                 default:
-                    //Something went wrong, show the credentials section, starting with a default authentication input type
+                    //Something went wrong, show the credentials section starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(layerUrl);
+                    credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
                     credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);

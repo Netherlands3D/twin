@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
         //Specific order in items used in dropdown index
         Public = -1,
         UsernamePassword = 0,
-        SingleFieldGenericKey = 1, //Single field key, token or code (we dont know specifically yet)
+        Guess = 1, //Single field key, token or code (we dont know specifically yet)
         Key,
         BearerToken,
         Code,
@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
             new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.Key },
+            new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.Token },
             new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
         public List<StoredAuthorization> storedAuthorizations = new();
@@ -164,7 +165,7 @@ namespace Netherlands3D.Twin
             if(key == "")
             {
                 Debug.Log("No key provided for this layer: " + url);
-                foundType = AuthorizationType.SingleFieldGenericKey;
+                foundType = AuthorizationType.Guess;
                 NewURLAuthorizationDetermined(url, foundType);
                 yield break;
             }

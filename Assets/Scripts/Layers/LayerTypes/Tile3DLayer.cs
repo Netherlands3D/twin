@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class Tile3DLayer2 : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
+    public class Tile3DLayer : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private UnityEvent<string> onURLChanged = new();
         public UnityEvent<string> OnURLChanged { get => onURLChanged; }
         public UnityEvent<string> UnsupportedExtensionsMessage;
-        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get => tileSet.OnServerRequestFailed;  }
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
         
         public string URL
         {

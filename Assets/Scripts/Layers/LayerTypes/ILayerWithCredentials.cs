@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public interface ILayerWithCredentials
     {
         public CredentialsPropertySection PropertySection { get; set; }
-        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed { get; }
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived { get; }
         public UnityEvent<string> OnURLChanged { get; }
 
         public string URL { get; set; } //The base URL to check the credentials for
