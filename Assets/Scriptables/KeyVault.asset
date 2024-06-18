@@ -19,7 +19,7 @@ MonoBehaviour:
   - baseUrl: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json
     authorizationType: 1
   storedAuthorizations:
-  - url: https://tile.googleapis.com/v1/3dtiles/root.json
+  - url: https://tile.googleapis.com:443/v1/3dtiles/root.json
     username: 
     password: 
     key: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0

@@ -7,6 +7,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
+        [SerializeField] private bool autoApplyCredentials = false;
         [SerializeField] private CredentialsPropertySection propertySectionPrefab;  
         [HideInInspector] public UnityEvent<CredentialsPropertySection> OnCredentialsPropertySectionInstantiated = new();
 
@@ -15,8 +16,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
+            settings.AutoApplyCredentials = autoApplyCredentials;
             settings.LayerWithCredentials = GetComponent<ILayerWithCredentials>();
-
             OnCredentialsPropertySectionInstantiated.Invoke(settings);
         }
     }

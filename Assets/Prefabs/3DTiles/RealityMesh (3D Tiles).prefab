@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 690fb5d55d40ee7489dbfcbe44c9f716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
+  tilesetUrl: https://tile.googleapis.com:443/v1/3dtiles/root.json
   publicKey: 
   personalKey: 
   queryKeyName: key
@@ -375,6 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoApplyCredentials: 1
   propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
   OnCredentialsPropertySectionInstantiated:

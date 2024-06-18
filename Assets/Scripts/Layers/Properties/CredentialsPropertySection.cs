@@ -31,6 +31,13 @@ namespace Netherlands3D.Twin
         private AuthorizationType authorizationType = AuthorizationType.Public;
         private StoredAuthorization storedAuthorization;
 
+        private bool autoApplyCredentials = false;
+        public bool AutoApplyCredentials 
+        { 
+            get => autoApplyCredentials; 
+            set => autoApplyCredentials = value; 
+        }
+
         private ILayerWithCredentials layerWithCredentials;
         public ILayerWithCredentials LayerWithCredentials { 
             get
@@ -117,6 +124,7 @@ namespace Netherlands3D.Twin
 
                 if(storedAuthorization != null)
                 {
+                    Debug.Log("Found stored authorization for: " + newURL + " with type: " + storedAuthorization.authorizationType);
                     authorizationType = storedAuthorization.authorizationType;
                     userNameInputField.text = storedAuthorization.username;
                     passwordInputField.text = storedAuthorization.password;
@@ -128,6 +136,9 @@ namespace Netherlands3D.Twin
                 }
                 
                 SetAuthorizationInputType(authorizationType);
+
+                if(AutoApplyCredentials)
+                    ApplyCredentials();
             }
         }
 
