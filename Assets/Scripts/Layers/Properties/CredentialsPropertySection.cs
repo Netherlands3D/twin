@@ -93,6 +93,7 @@ namespace Netherlands3D.Twin
             }
             else if(webRequest.RequiresCredentials())
             {
+                 Debug.LogWarning("Credentials required: " + webRequest);
                 //Show a credentials warning if the server request failed for another reason (probably tied to credential failure)
                 ShowCredentialsWarning();
             }
@@ -157,8 +158,6 @@ namespace Netherlands3D.Twin
 
         private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
-            if(url != layerWithCredentials.URL) return;
-
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;
 

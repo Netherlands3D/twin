@@ -72,11 +72,9 @@ namespace Netherlands3D.Twin
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
-            if(url != layerWithCredentials.URL) return;
-
             this.authorizationType = authorizationType;
+            Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
 
-            Debug.Log("Determined authorization type: " + authorizationType);
             // It appears the current url needs authentication/authorization
             switch(authorizationType)
             {
