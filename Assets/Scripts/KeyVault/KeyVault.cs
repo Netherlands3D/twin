@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin
             // Check if the url is known, like Google Maps or PDOK
             foreach (var knownUrlAuthorizationType in knownUrlAuthorizationTypes)
             {
-                if (url.StartsWith(knownUrlAuthorizationType.baseUrl))
+                if (url.Equals(knownUrlAuthorizationType.baseUrl))
                 {
                     return knownUrlAuthorizationType.authorizationType;
                 }
@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin
             // Check our own saved credentials.
             foreach (var storedAuthorization in storedAuthorizations)
             {
-                if (url.StartsWith(storedAuthorization.url))
+                if (url.Equals(storedAuthorization.url))
                 {
                     return storedAuthorization.authorizationType;
                 }
