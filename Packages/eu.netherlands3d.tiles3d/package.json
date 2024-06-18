@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.tiles3d",
   "displayName": "Netherlands 3D - 3DTiles",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "unity": "2022.2",
   "type": "library",
   "keywords": [
