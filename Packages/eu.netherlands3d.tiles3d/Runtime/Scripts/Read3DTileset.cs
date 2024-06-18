@@ -84,28 +84,31 @@ namespace Netherlands3D.Tiles3D
 
         public void ConstructURLWithKey()
         {
-            //Apppend API key to URL
-            if (tilesetUrl.Contains("?"))
+            UriBuilder uriBuilder = new UriBuilder(tilesetUrl);
+
+            //Keep an existing query
+            if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
             {
-                tilesetUrl = tilesetUrl + "&";
+                uriBuilder.Query = uriBuilder.Query.Substring(1) + "&";
             }
             else
             {
-                tilesetUrl = tilesetUrl + "?";
+                uriBuilder.Query = "";
             }
 
+            //Append the key query parameter
 #if UNITY_EDITOR
-            if (string.IsNullOrEmpty(personalKey) == false)
+            if (!string.IsNullOrEmpty(personalKey))
             {
-                tilesetUrl += $"{QueryKeyName}={personalKey}";
+                uriBuilder.Query += $"{QueryKeyName}={personalKey}";
             }
-
 #else
-            if (string.IsNullOrEmpty(publicKey)==false)
+            if (!string.IsNullOrEmpty(publicKey))
             {
-                tilesetUrl += $"{QueryKeyName}={publicKey}";
+                uriBuilder.Query += $"{QueryKeyName}={publicKey}";
             }
 #endif
+            tilesetUrl = uriBuilder.ToString();
         }
 
         void Start()
