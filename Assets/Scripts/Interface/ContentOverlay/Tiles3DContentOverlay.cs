@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy() {
             //If we close the overlay without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.Guess)
+            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.InferableSingleKey)
                 layerWithCredentials.DestroyLayer();
 
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin
                     Debug.Log("Close overlay;");
                     CloseOverlay();
                     break;
-                case AuthorizationType.Guess:
+                case AuthorizationType.InferableSingleKey:
                 default:
                     //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);

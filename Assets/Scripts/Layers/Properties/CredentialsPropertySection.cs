@@ -104,7 +104,7 @@ namespace Netherlands3D.Twin
             errorMessage.gameObject.SetActive(false);
 
             //Gob back to our generic guess field type so we can retry again
-            authorizationType = AuthorizationType.Guess;
+            authorizationType = AuthorizationType.InferableSingleKey;
             SetAuthorizationInputType(authorizationType);
         }
 
@@ -147,7 +147,7 @@ namespace Netherlands3D.Twin
                         passwordInputField.text
                         );
                     break;
-                case AuthorizationType.Guess:
+                case AuthorizationType.InferableSingleKey:
                     keyVault.TryToFindSpecificCredentialType(
                         LayerWithCredentials.URL,
                         keyTokenOrCodeInputField.text
@@ -220,7 +220,7 @@ namespace Netherlands3D.Twin
              || type == AuthorizationType.BearerToken 
              || type == AuthorizationType.Code
             )
-            type = AuthorizationType.Guess;
+            type = AuthorizationType.InferableSingleKey;
 
             credentialTypeDropdown.value = (int)type;
 

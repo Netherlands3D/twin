@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
         //Specific order in items used in dropdown index
         Public = -1,
         UsernamePassword = 0,
-        Guess = 1, //Single field key, token or code (we dont know specifically yet)
+        InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
         Key,
         BearerToken,
         Code,
@@ -29,8 +29,8 @@ namespace Netherlands3D.Twin
         public string Description = "";
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
-            new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.Key },
-            new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.Token },
+            new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.InferableSingleKey },
+            new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.InferableSingleKey },
             new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
         public List<StoredAuthorization> storedAuthorizations = new();
@@ -165,7 +165,7 @@ namespace Netherlands3D.Twin
             if(key == "")
             {
                 Debug.Log("No key provided for this layer: " + url);
-                foundType = AuthorizationType.Guess;
+                foundType = AuthorizationType.InferableSingleKey;
                 NewURLAuthorizationDetermined(url, foundType);
                 yield break;
             }

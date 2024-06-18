@@ -40,9 +40,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private string TilesetURLWithoutQuery(string value)
         {
+            if(!value.Contains("?"))
+                return value;
+
             var uriBuilder = new UriBuilder(value);
             uriBuilder.Query = "";
-            
+
             var urlWithoutQuery = uriBuilder.Uri.ToString();
             return urlWithoutQuery;
         }
