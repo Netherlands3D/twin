@@ -72,9 +72,7 @@ namespace Netherlands3D.Twin
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
-            //Trim trailing ? or & characters from the URL (TODO: should be stripped in 3DTiles package)
-            var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
-            if(url != layerUrl) return;
+            if(url != layerWithCredentials.URL) return;
 
             this.authorizationType = authorizationType;
 
@@ -94,8 +92,8 @@ namespace Netherlands3D.Twin
                     break;
                 case AuthorizationType.Guess:
                 default:
-                    //Something went wrong, show the credentials section starting with a default authentication input type
-                    var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(layerUrl);
+                    //Something went wrong, show the credentials section, starting with a default authentication input type
+                    var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
                     credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
                     credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);

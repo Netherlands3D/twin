@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Transform headerWithCredentialTypeDropdown;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         [SerializeField] private Transform errorMessage;
+        private bool skipFirstCredentialErrorMessage = true;
 
         [Header("Settings")]
         [SerializeField] private bool findKeyInVaultOnURLChange = true;
@@ -71,6 +72,13 @@ namespace Netherlands3D.Twin
 
         public void ShowCredentialsWarning()
         {
+            //First failure from server may be ignored, because we want to give the user a chance to fill in the credentials via the credentials panel
+            if(skipFirstCredentialErrorMessage)
+            {
+                skipFirstCredentialErrorMessage = false;
+                return;
+            }
+
             //For now a standard text is shown.
             errorMessage.gameObject.SetActive(true);
         }
@@ -149,9 +157,7 @@ namespace Netherlands3D.Twin
 
         private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
-            Debug.Log("Vault determined credential type: " + type + " for url: " + url);
-            var layerUrl = layerWithCredentials.URL.TrimEnd('?', '&');
-            if(url != layerUrl) return;
+            if(url != layerWithCredentials.URL) return;
 
             credentialTypeDropdown.value = (int)type;
             authorizationType = type;

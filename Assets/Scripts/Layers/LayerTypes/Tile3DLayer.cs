@@ -23,26 +23,33 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
         
+        private UriBuilder uriBuilder;
+
         public string URL
         {
             get => tileSet.tilesetUrl;
             set
             {
-                if (tileSet.tilesetUrl != value)
-                {
-                    OnURLChanged.Invoke(value);
-                    tileSet.tilesetUrl = value;
-                    if(!tileSet.enabled)
-                    {
-                        tileSet.enabled = true;
-                    }
-                    else
-                    {
-                        tileSet.RefreshTiles();
-                    }
-                }
+                //Always query parameters (tileset key's must be set via our credentials system)
+                uriBuilder = new UriBuilder(value);
+                uriBuilder.Query = "";
+                var urlWithoutQuery = uriBuilder.Uri.ToString();
+                
+                tileSet.tilesetUrl = urlWithoutQuery;
+                OnURLChanged.Invoke(urlWithoutQuery);
+
+                EnableTileset();
             }
         }
+
+        private void EnableTileset()
+        {
+            if(!tileSet.enabled)
+                tileSet.enabled = true;
+            else
+                tileSet.RefreshTiles();
+        }
+        
 
         public override bool IsActiveInScene
         {

@@ -143,8 +143,6 @@ namespace Netherlands3D.Twin
 
         private IEnumerator FindSpecificAuthorizationType(string url, string key)
         {
-            url = url.TrimEnd('?', '&');
-
             AuthorizationType foundType = AuthorizationType.Unknown;
             
             //Start with resetting this url history to unkown
