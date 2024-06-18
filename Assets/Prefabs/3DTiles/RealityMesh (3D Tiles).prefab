@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
-  publicKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
-  personalKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
+  publicKey: 
+  personalKey: 
   queryKeyName: key
   root:
     isLoading: 0
@@ -198,6 +198,9 @@ MonoBehaviour:
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
   unsupportedExtensionsParsed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerResponseReceived:
     m_PersistentCalls:
       m_Calls: []
   OnServerRequestFailed:
