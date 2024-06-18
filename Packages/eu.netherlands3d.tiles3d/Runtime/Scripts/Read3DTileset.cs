@@ -79,6 +79,8 @@ namespace Netherlands3D.Tiles3D
 
         [Space(2)]
         public UnityEvent<string[]> unsupportedExtensionsParsed;
+
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
         public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
 
 
@@ -346,6 +348,8 @@ namespace Netherlands3D.Tiles3D
                 usedExtensions = extensions.Item1;
                 unsupportedExtensionsParsed.Invoke(extensions.Item2);
             }
+
+            OnServerResponseReceived.Invoke(www);
         }
 
         private void RequestContentUpdate(Tile tile)
@@ -589,6 +593,7 @@ namespace Netherlands3D.Tiles3D
                         ParseTileset.ReadExplicitNode(node, tile);
                         nestedTreeLoaded = true;
                     }
+                    OnServerResponseReceived.Invoke(www);
                 }
 
                 tile.isLoading = false;
