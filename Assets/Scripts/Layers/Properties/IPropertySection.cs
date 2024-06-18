@@ -1,6 +1,6 @@
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public interface IPropertySection2
+    public interface IPropertySection
     {
     }
 }
