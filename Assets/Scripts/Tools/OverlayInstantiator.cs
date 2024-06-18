@@ -8,9 +8,21 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private OverlayInspector overlayPrefab;
 
-        public void InstantiateOverlay(bool clearExistingContent)
+        [Header("(Optional)")]
+        [SerializeField] private ReferencedLayer referencedLayer;
+        [SerializeField] private bool instantiateOnStart = false;
+
+        private void Start() {
+            if(instantiateOnStart)
+                InstantiateOverlay(true);
+        }
+
+        public void InstantiateOverlay(bool clearExistingContent = true)
         {
-            ContentOverlay.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
+            var spawnedOverlay = ContentOverlay.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
+
+            if(referencedLayer != null)
+                spawnedOverlay.SetReferencedLayer(referencedLayer);
         }
     }
 }

@@ -57,16 +57,17 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.11",
+      "version": "1.8.12",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.mathematics": "1.2.1"
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.2.0",
+      "version": "2.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -131,7 +132,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "14.0.9",
+      "version": "14.0.10",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
@@ -142,14 +143,14 @@
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "14.0.9",
+      "version": "14.0.10",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.burst": "1.8.9",
-        "com.unity.render-pipelines.core": "14.0.9",
-        "com.unity.shadergraph": "14.0.9",
+        "com.unity.render-pipelines.core": "14.0.10",
+        "com.unity.shadergraph": "14.0.10",
         "com.unity.render-pipelines.universal-config": "14.0.9"
       }
     },
@@ -169,11 +170,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "14.0.9",
+      "version": "14.0.10",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "14.0.9",
+        "com.unity.render-pipelines.core": "14.0.10",
         "com.unity.searcher": "4.9.2"
       }
     },
@@ -411,7 +412,7 @@
       "dependencies": {}
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.5.3",
+      "version": "1.6.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -455,7 +456,7 @@
       "url": "https://package.openupm.com"
     },
     "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.2.0",
+      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.3.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -478,7 +479,7 @@
         "eu.netherlands3d.address-search": "1.0.0",
         "eu.netherlands3d.geojson": "1.1.0"
       },
-      "hash": "734ec4551910d1d365d9c32f865bfd77dfbbeaac"
+      "hash": "a216383ee5fcc8e4d6a8b238424f1e58e1c98bf6"
     },
     "nl.netherlands3d.authentication": {
       "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",

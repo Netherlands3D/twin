@@ -34,13 +34,8 @@ namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
             }
         }
 
-        public void Populate(NameValueCollection queryParameters)
-        {
-        }
-
-        public void AddQueryParameters(UriBuilder urlBuilder)
-        {
-        }
+        public void Populate(NameValueCollection queryParameters) {}
+        public void AddQueryParameters(UriBuilder urlBuilder) {}
 
         public void Populate(JSONNode jsonNode)
         {
