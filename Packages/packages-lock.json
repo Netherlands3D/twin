@@ -412,7 +412,7 @@
       "dependencies": {}
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "https://github.com/Netherlands3D/3DTiles.git#feature/server-response-webrequest",
+      "version": "https://github.com/Netherlands3D/3DTiles.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -420,7 +420,7 @@
         "eu.netherlands3d.gltfast": "5.0.3",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "hash": "ea715206c4723bbba9fd8951137e2ea16d4a1a3d"
+      "hash": "321ca38c4ac66a0ca342047ed35377b676ec518d"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",

@@ -42,14 +42,14 @@ namespace Netherlands3D.Twin
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-                    layerWithCredentials.OnServerResponseReceived.RemoveListener(ServerRequestFailed);
+                    layerWithCredentials.OnServerResponseReceived.RemoveListener(HandleServerResponse);
                 }
                 layerWithCredentials = value;
 
                 if(layerWithCredentials != null)
                 {
                     layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-                    layerWithCredentials.OnServerResponseReceived.AddListener(ServerRequestFailed);
+                    layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
 
                     UrlHasChanged(layerWithCredentials.URL);
                 }
@@ -83,7 +83,7 @@ namespace Netherlands3D.Twin
             errorMessage.gameObject.SetActive(true);
         }
 
-        public void ServerRequestFailed(UnityWebRequest webRequest)
+        public void HandleServerResponse(UnityWebRequest webRequest)
         {
             if(webRequest.ReturnedServerError())
             {

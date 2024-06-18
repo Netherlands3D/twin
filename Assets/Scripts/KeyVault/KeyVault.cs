@@ -44,11 +44,13 @@ namespace Netherlands3D.Twin
         /// </summary>
         public StoredAuthorization GetStoredAuthorization(string url)
         {
+            if(log) Debug.Log("GetStoredAuthorization for: " + url);
             return storedAuthorizations.Find(x => x.url == url);
         }
 
         public AuthorizationType GetKnownAuthorizationTypeForURL(string url)
         {
+            if(log) Debug.Log("GetKnownAuthorizationTypeForURL for: " + url);
             // Check if the url is known, like Google Maps or PDOK
             foreach (var knownUrlAuthorizationType in knownUrlAuthorizationTypes)
             {
