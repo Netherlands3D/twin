@@ -219,15 +219,6 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "com.virgis.geojson.net": {
-      "version": "1.2.17",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
-      },
-      "url": "https://package.openupm.com"
-    },
     "eu.netherlands3d.address-search": {
       "version": "2.0.0",
       "depth": 0,
@@ -270,18 +261,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.geojson": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.2.0",
-        "com.virgis.geojson.net": "1.2.17",
-        "eu.netherlands3d.coordinates": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
-    },
     "eu.netherlands3d.gltfast": {
       "version": "5.0.3",
       "depth": 1,
@@ -291,27 +270,6 @@
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.mathematics": "1.2.6",
         "com.unity.burst": "1.6.6"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "eu.netherlands3d.indicators": {
-      "version": "file:eu.netherlands3d.indicators",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.2.0",
-        "eu.netherlands3d.geojson": "1.0.0",
-        "eu.netherlands3d.json": "1.0.1",
-        "eu.netherlands3d.coordinates": "1.1.0"
-      }
-    },
-    "eu.netherlands3d.json": {
-      "version": "1.0.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.2.0"
       },
       "url": "https://package.openupm.com"
     },
@@ -340,21 +298,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.1.0",
-      "depth": 1,
+      "version": "1.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "eu.netherlands3d.periodic-snapshots": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "eu.netherlands3d.sun": "1.0.0",
-        "eu.netherlands3d.snapshots": "1.0.0"
       },
       "url": "https://package.openupm.com"
     },
@@ -377,14 +325,7 @@
     },
     "eu.netherlands3d.simplejson": {
       "version": "1.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
-    "eu.netherlands3d.snapshots": {
-      "version": "1.0.0",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
@@ -395,21 +336,6 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
-    },
-    "eu.netherlands3d.sun": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "eu.netherlands3d.coordinates": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "eu.netherlands3d.tilehandler-styling": {
-      "version": "file:eu.netherlands3d.tilehandler-styling",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
     },
     "eu.netherlands3d.tiles3d": {
       "version": "1.6.1",
@@ -429,18 +355,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.twin-functionalities": {
-      "version": "file:eu.netherlands3d.twin-functionalities",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "eu.netherlands3d.ui-kit": {
-      "version": "file:eu.netherlands3d.ui-toolkit",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "eu.netherlands3d.web-cursors": {
       "version": "2.0.0",
       "depth": 0,
@@ -454,39 +368,6 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
-    },
-    "nl.netherlands3d": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/Netherlands3D/#v3.3.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.textmeshpro": "3.0.6",
-        "com.unity.inputsystem": "1.3.0",
-        "com.unity.render-pipelines.universal": "1.3.0",
-        "com.unity.nuget.newtonsoft-json": "3.1.0",
-        "com.unity.meshopt.decompress": "0.1.0-preview.5",
-        "eu.netherlands3d.coordinates": "1.1.0",
-        "eu.netherlands3d.snapshots": "1.0.0",
-        "eu.netherlands3d.sun": "1.0.0",
-        "eu.netherlands3d.periodic-snapshots": "1.0.0",
-        "eu.netherlands3d.filebrowser": "1.3.1",
-        "eu.netherlands3d.obj-importer": "1.1.0",
-        "eu.netherlands3d.poly2tri": "2.0.0",
-        "eu.netherlands3d.selection-tools": "1.0.1",
-        "eu.netherlands3d.web-cursors": "1.0.2",
-        "eu.netherlands3d.masking": "1.0.2",
-        "eu.netherlands3d.simplejson": "1.0.0",
-        "eu.netherlands3d.address-search": "1.0.0",
-        "eu.netherlands3d.geojson": "1.1.0"
-      },
-      "hash": "a216383ee5fcc8e4d6a8b238424f1e58e1c98bf6"
-    },
-    "nl.netherlands3d.authentication": {
-      "version": "https://github.com/Amsterdam/Netherlands3D.git?path=/Packages/nl.netherlands3d.authentication",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "52e7a6a4d20e94a85200f737e1e974145912412e"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
