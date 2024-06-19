@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 using Netherlands3D.T3DPipeline;
 using Netherlands3D.Events;
 
-namespace Netherlands3D.TileSystem
+namespace Netherlands3D.CartesianTiles
 {
     public class CityJSONLayer : Layer //todo: put in NL3D Package
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Netherlands3D.Events;
-using Netherlands3D.TileSystem;
+using Netherlands3D.CartesianTiles;
 
 
 public class CreateWFSLayer : MonoBehaviour

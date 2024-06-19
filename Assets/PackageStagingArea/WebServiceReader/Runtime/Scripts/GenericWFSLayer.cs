@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.WFSHandlers;
 using UnityEngine;
 
-namespace Netherlands3D.TileSystem
+namespace Netherlands3D.CartesianTiles
 {
     public class GenericWFSLayer : Layer
     {
