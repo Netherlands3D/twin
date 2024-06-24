@@ -23,6 +23,9 @@ namespace Netherlands3D.Minimap
         [Tooltip("The new rect delta size when hovered")]
         [SerializeField] private Vector2 hoverSize;
 
+        [SerializeField] private float scrollTimeOut = 0.05f;
+        private float lastScrollTime; 
+
         [Header("Components")]
         [SerializeField] private RectTransform mapTiles;
         [SerializeField] private RectTransform navigation;
@@ -69,6 +72,7 @@ namespace Netherlands3D.Minimap
             rectTransform.anchoredPosition -= anchorOffset;
 
             navigation.gameObject.SetActive(false);
+            lastScrollTime = -scrollTimeOut;
         }
 
         /// <summary>
@@ -211,13 +215,18 @@ namespace Netherlands3D.Minimap
 
         public void OnScroll(PointerEventData eventData)
         {
+            if(Time.time < lastScrollTime + scrollTimeOut)
+                return;
+
             if(eventData.scrollDelta.y > 0)
             {
                 ZoomIn();
+                lastScrollTime = Time.time;
             }
             else if(eventData.scrollDelta.y < 0)
             {
                 ZoomOut();
+                lastScrollTime = Time.time;
             }
         }
 
