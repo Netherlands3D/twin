@@ -1,11 +1,7 @@
 using GLTFast;
 using Netherlands3D.Coordinates;
-
-//using Netherlands3D.Core;
-
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,8 +17,10 @@ namespace Netherlands3D.Tiles3D
         public bool parseSubObjects = true;
 #endif
 
-        private Coroutine runningContentRequest;
+        public bool parseAssetMetaData = false;
 
+        private Coroutine runningContentRequest;
+        public Read3DTileset tilesetReader;
         [SerializeField] private Tile parentTile;
         public Tile ParentTile { get => parentTile; set => parentTile = value; }
 
@@ -144,7 +142,6 @@ namespace Netherlands3D.Tiles3D
                     
                     if(scene == null) continue;
 
-                   // MovingOriginFollower sceneOriginFollower = scene.gameObject.AddComponent<MovingOriginFollower>();
                     if (parsedGltf.rtcCenter != null)
                     {
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
@@ -161,10 +158,15 @@ namespace Netherlands3D.Tiles3D
 
                 this.gameObject.name = uri;
                 
-                //Check if mesh features addon is used to define subobjects
+                if(parseAssetMetaData)
+                {
+                    parsedGltf.ParseAssetMetaData(tilesetReader.OnLoadAssetMetaData);
+                }
 
+                //Check if mesh features addon is used to define subobjects
 #if SUBOBJECT
-                if(parseSubObjects){
+                if(parseSubObjects)
+                {
                     parsedGltf.ParseSubObjects(transform);
                 }
 #endif

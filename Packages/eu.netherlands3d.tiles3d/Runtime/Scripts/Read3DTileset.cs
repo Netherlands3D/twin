@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
 using UnityEngine.Events;
+using GLTFast;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -44,6 +46,7 @@ namespace Netherlands3D.Tiles3D
         public int tileCount;
         public int nestingDepth;
 
+        public bool parseAssetMetadata = false;
 #if SUBOBJECT
         public bool parseSubObjects = false;
 #endif
@@ -80,8 +83,9 @@ namespace Netherlands3D.Tiles3D
         [Space(2)]
         public UnityEvent<string[]> unsupportedExtensionsParsed;
 
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
-        public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
+        [HideInInspector] public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
+        [HideInInspector] public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
+        [HideInInspector] public UnityEvent<GltfMeshFeatures.Asset> OnLoadAssetMetaData = new();
 
 
         public void ConstructURLWithKey()
@@ -363,10 +367,11 @@ namespace Netherlands3D.Tiles3D
                 newContentGameObject.transform.SetParent(transform, false);
                 newContentGameObject.layer = gameObject.layer;
                 tile.content = newContentGameObject.AddComponent<Content>();
+                tile.content.tilesetReader = this;
                 tile.content.State = Content.ContentLoadState.NOTLOADING;
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
-
+                tile.content.parseAssetMetaData = parseAssetMetadata;
 #if SUBOBJECT
                 tile.content.parseSubObjects = parseSubObjects;
 #endif

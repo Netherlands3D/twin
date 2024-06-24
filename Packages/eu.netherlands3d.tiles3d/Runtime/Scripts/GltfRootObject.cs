@@ -38,6 +38,8 @@ namespace GltfMeshFeatures
     {
         public string generator { get; set; }
         public string version { get; set; }
+        public string copyright { get; set; }
+        public string minVersion { get; set; }
     }
 
     [Serializable]

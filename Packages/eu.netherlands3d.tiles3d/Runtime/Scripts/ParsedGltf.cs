@@ -11,6 +11,10 @@ using Unity.Collections;
 
 #if UNITY_EDITOR
 using System.Linq;
+using UnityEngine.Events;
+using GLTFast.Schema;
+
+
 #endif
 
 #if SUBOBJECT
@@ -50,6 +54,18 @@ namespace Netherlands3D.Tiles3D
                     await gltfImport.InstantiateSceneAsync(parent, i);
                 }
             }
+        }
+
+        public void ParseAssetMetaData(UnityEvent<GltfMeshFeatures.Asset> gotMetadataEvent)
+        {
+            //Extract json from glb
+            var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
+            var gltfJsonText = gltfAndBin.Item1;
+
+            //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
+            var gltfRoot = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
+
+            gotMetadataEvent.Invoke(gltfRoot.asset);
         }
 
         /// <summary>
@@ -257,7 +273,7 @@ namespace Netherlands3D.Tiles3D
 
             //Extract binary data as a byte array
             var binaryData = new byte[binaryChunkLength];
-            Buffer.BlockCopy(glbData, binaryChunkOffset, binaryData, 0, (int)binaryChunkLength);
+            System.Buffer.BlockCopy(glbData, binaryChunkOffset, binaryData, 0, (int)binaryChunkLength);
 
             return (json, binaryData);
         }
