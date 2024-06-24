@@ -8,7 +8,7 @@ namespace Netherlands3D.Interface
 	public class Memory : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI memoryOutputText;
-		[SerializeField] private string requiredQueryParameter = "memory=true";
+		[SerializeField] private string requiredQueryParameter = "memorystats";
 
 		private void Awake()
 		{
