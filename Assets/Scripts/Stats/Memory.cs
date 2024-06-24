@@ -16,6 +16,7 @@ namespace Netherlands3D.Interface
 				memoryOutputText = GetComponent<TextMeshProUGUI>();
 		}
 
+#if !UNITY_EDITOR && UNITY_WEBGL
 		private void Start()
 		{
 			if (requiredQueryParameter.Length > 0 && !Application.absoluteURL.ToLower().Contains(requiredQueryParameter))
@@ -24,6 +25,7 @@ namespace Netherlands3D.Interface
 				return;
 			}
 		}
+#endif 
 
 		private void OnEnable()
 		{
