@@ -56,7 +56,7 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
-        public void ParseAssetMetaData(UnityEvent<GltfMeshFeatures.Asset> gotMetadataEvent)
+        public void ParseAssetMetaData(Content content)
         {
             //Extract json from glb
             var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
@@ -64,8 +64,10 @@ namespace Netherlands3D.Tiles3D
 
             //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
             var gltfRoot = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
+            var metadata = content.gameObject.AddComponent<ContentMetadata>();
+            metadata.asset = gltfRoot.asset;
 
-            gotMetadataEvent.Invoke(gltfRoot.asset);
+            content.tilesetReader.OnLoadAssetMetadata.Invoke(metadata);
         }
 
         /// <summary>

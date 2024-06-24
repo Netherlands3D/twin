@@ -1,4 +1,5 @@
 using GLTFast;
+using GLTFast.Schema;
 using Netherlands3D.Coordinates;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Netherlands3D.Tiles3D
 
         public UnityEvent onDoneDownloading = new();
 
-        private Material overrideMaterial;
+        private UnityEngine.Material overrideMaterial;
 
         private GltfImport gltf;
 
@@ -82,7 +83,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load(Material overrideMaterial = null, Dictionary<string, string> headers = null)
+        public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null)
         {
             if(overrideMaterial != null)
             {
@@ -160,7 +161,7 @@ namespace Netherlands3D.Tiles3D
                 
                 if(parseAssetMetaData)
                 {
-                    parsedGltf.ParseAssetMetaData(tilesetReader.OnLoadAssetMetaData);
+                    parsedGltf.ParseAssetMetaData(this);
                 }
 
                 //Check if mesh features addon is used to define subobjects

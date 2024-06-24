@@ -85,7 +85,7 @@ namespace Netherlands3D.Tiles3D
 
         [HideInInspector] public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
         [HideInInspector] public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
-        [HideInInspector] public UnityEvent<GltfMeshFeatures.Asset> OnLoadAssetMetaData = new();
+        [HideInInspector] public UnityEvent<ContentMetadata> OnLoadAssetMetadata = new();
 
 
         public void ConstructURLWithKey()
