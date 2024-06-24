@@ -692,7 +692,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97780261ab924019b84c6f57188e254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  macScrollScaleValue: 0.2
+  scrollScaleValue: 0.1
+  useZoomScaleValue: 0
 --- !u!1 &977425587 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7591977281591091236, guid: 9963fec33e379324db2affcb3f83332f,
