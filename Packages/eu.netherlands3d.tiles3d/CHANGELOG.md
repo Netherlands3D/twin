@@ -5,12 +5,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.6.1] - 18-07-2024
+## [1.7.0] - 24-06-2024
+
+### Added
+- Added new event that returns new Metadata objects if meta data parsing is enabled. Metadata is read from gtlf/glb the Asset node
+
+## [1.6.1] - 18-06-2024
 
 ### Fixed
 - Fixed the way tileset urls and keys are combined, solving issue with empty url query parameters
 
-## [1.6.0] - 18-07-2024
+## [1.6.0] - 18-06-2024
 
 ### Added
 - Added new event that returns the internal UnityWebRequest after requesting the tileset .json
