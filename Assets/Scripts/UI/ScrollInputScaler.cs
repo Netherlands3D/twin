@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin
 
             SetOriginalProcessors(scrollAction);
 #if !UNITY_EDITOR
-        useZoomScaleValue = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX;
+        UseZoomScaleValue = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX;
             return;
 #endif
             if (UseZoomScaleValue)
