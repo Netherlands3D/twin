@@ -263,6 +263,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.event-containers": {
+      "version": "0.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "eu.netherlands3d.filebrowser": {
       "version": "2.0.2",
       "depth": 0,
