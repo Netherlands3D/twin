@@ -179,7 +179,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddLayer(LayerProjectData layer)
         {
-            layer.SetParent(rootLayer, -1);
+            layer.Initialize(rootLayer, -1);
         }
     }
 }

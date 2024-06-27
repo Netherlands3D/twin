@@ -9,12 +9,18 @@ namespace Netherlands3D.Twin
 {
     public abstract class ReferencedLayer : MonoBehaviour
     {
+        public string Name
+        {
+            get => ReferencedProxy.Name;
+            set => ReferencedProxy.Name = value;
+        }
+
         public abstract bool IsActiveInScene { get; set; }
         public ReferencedProxyLayer ReferencedProxy { get; set; }
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
-        
+
         protected virtual void Awake()
         {
             CreateProxy();
@@ -30,15 +36,19 @@ namespace Netherlands3D.Twin
             onHide.Invoke();
         }
 
-        public virtual void OnSelect() {}
+        public virtual void OnSelect()
+        {
+        }
 
-        public virtual void OnDeselect(){}
+        public virtual void OnDeselect()
+        {
+        }
 
         public void DestroyLayer()
         {
             Destroy(gameObject);
         }
-        
+
         protected virtual void OnDestroy()
         {
             DestroyProxy();

@@ -8,15 +8,28 @@ namespace Netherlands3D.Twin.Projects
     [Serializable]
     public class LayerProjectData
     {
-        public string Name;
-        public bool isActive;// { get; set; }
-        public LayerProjectData parent;// { get; private set; }
-        public List<LayerProjectData> children = new();
+        [SerializeField] private string name;
+        [SerializeField] private  bool isActive = true;
+        [SerializeField] private  LayerProjectData parent;
+        [SerializeField] private  List<LayerProjectData> children = new();
 
+        private LayerProjectData rootLayer; //todo make static?
+
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        public bool IsActive
+        {
+            get => isActive;
+            set => isActive = value;
+        }
+        
         // public void SetIsActive(bool active)
         // {
         //     isActive = active;
-        //     //event.invoke
         // }
         //
         // public bool GetIsActive()
@@ -26,7 +39,9 @@ namespace Netherlands3D.Twin.Projects
 
         public void SetParent(LayerProjectData newParent, int siblingIndex)
         {
-
+            if (newParent == null)
+                newParent = rootLayer;
+            
             if (parent != null)
                 parent.children.Remove(this);
 
@@ -35,6 +50,22 @@ namespace Netherlands3D.Twin.Projects
                     
             parent = newParent;
             newParent.children.Insert(siblingIndex,this);
+        }
+
+        // public string GetName()
+        // {
+        //     return name;
+        // }
+        //
+        // public void SetName(string newName)
+        // {
+        //     name = newName;
+        // }
+
+        public void Initialize(LayerProjectData root, int siblingIndex)
+        {
+            rootLayer = root;
+            SetParent(root, siblingIndex);
         }
     }
     

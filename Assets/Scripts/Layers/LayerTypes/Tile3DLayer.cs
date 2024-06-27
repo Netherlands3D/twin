@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (unsupportedExtensions.Length == 0)
                 return;
 
-            string message = name + " contains the following unsupported extensions: ";
+            string message = Name + " contains the following unsupported extensions: ";
             foreach (var extension in unsupportedExtensions)
             {
                 message += "\n"+ extension;

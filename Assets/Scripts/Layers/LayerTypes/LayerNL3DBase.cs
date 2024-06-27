@@ -10,6 +10,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public abstract class LayerNL3DBase : MonoBehaviour
     {
         public LayerProjectData ProjectData = new();
+        public string Name
+        {
+            get => ProjectData.Name;
+            set
+            {
+                gameObject.name = value;
+                ProjectData.Name = value;
+            }
+        }
         
         public LayerUI UI { get; set; }
 
@@ -17,10 +26,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public bool ActiveSelf
         {
-            get { return gameObject.activeSelf; }
+            get { return ProjectData.IsActive; }
             set
             {
                 gameObject.SetActive(value);
+                ProjectData.IsActive = value;
                 OnLayerActiveInHierarchyChanged(value);
                 foreach (var child in ChildrenLayers)
                 {
@@ -65,6 +75,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if(UI) UI.DestroyUI();
             
             LayerData.RemoveLayer(this);
+        }
+
+        private void Awake()
+        {
+            ProjectData.Name = name;
         }
 
         protected virtual void Start()

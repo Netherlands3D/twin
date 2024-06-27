@@ -179,7 +179,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case GeoJSONPointLayer:
                     return layerTypeSprites[9];
                 default:
-                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
             }
         }
@@ -197,7 +197,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case ObjectScatterLayer _:
                     return layerTypeSprites[4];
                 default:
-                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
             }
         }

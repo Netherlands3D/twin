@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
-        public string LayerName => Layer.name;
+        public string LayerName => Layer.Name;
         public bool PropertiesOpen => propertyToggle.isOn;
 
         private void Awake()
@@ -310,8 +310,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void UpdateName()
         {
-            layerNameText.text = Layer.name;
-            layerNameField.text = Layer.name;
+            layerNameText.text = Layer.Name;
+            layerNameField.text = Layer.Name;
         }
 
         private void RecalculateNameWidth()

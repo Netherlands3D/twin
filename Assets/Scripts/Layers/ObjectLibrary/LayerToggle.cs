@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin
             yield return new WaitForEndOfFrame();
             layer.ReferencedProxy.UI.Select();
             HighlightLayer(true);
-            layer.ReferencedProxy.name = prefab.name;
+            layer.ReferencedProxy.Name = prefab.name;
             layer.ReferencedProxy.UI.MarkLayerUIAsDirty();
         }
 

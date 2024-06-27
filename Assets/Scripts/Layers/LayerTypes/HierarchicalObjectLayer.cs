@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers
         public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
         {
             print("converting to scatter layer");
-            var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
+            var scatterLayer = new GameObject(objectLayer.Name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
 
             var openProperties = objectLayer.ReferencedProxy.UI && objectLayer.ReferencedProxy.UI.PropertiesOpen;

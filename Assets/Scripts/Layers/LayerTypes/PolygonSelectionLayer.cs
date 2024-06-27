@@ -33,11 +33,11 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent polygonMoved = new();
         public UnityEvent polygonChanged = new();
         private bool notifyOnPolygonChange = true;
-        
+
         private List<IPropertySectionInstantiator> propertySections = new();
 
         private PolygonWorldTransformShifter worldTransformShifter;
-        
+
         public ShapeType ShapeType
         {
             get => shapeType;
@@ -67,7 +67,7 @@ namespace Netherlands3D.Twin.Layers
             //Add shifter that manipulates the polygon if the world origin is shifted
             worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
             worldTransformShifter.polygonSelectionLayer = this;
-            gameObject.AddComponent<WorldTransform>(); 
+            gameObject.AddComponent<WorldTransform>();
             worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin.Layers
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
 
-        
+
         public void SelectPolygon()
         {
             if (UI)
@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.Layers
         /// <param name="shape">Contour</param>
         public void SetShape(List<Vector3> shape)
         {
-             if (shapeType == Layers.ShapeType.Line)
+            if (shapeType == Layers.ShapeType.Line)
                 SetLine(shape);
             else
                 SetPolygon(shape);
@@ -132,14 +132,15 @@ namespace Netherlands3D.Twin.Layers
 
             UpdateVisualisation(solidPolygon);
 
-            if(notifyOnPolygonChange){
+            if (notifyOnPolygonChange)
+            {
                 polygonChanged.Invoke();
             }
         }
-       
-       /// <summary>
-       /// Set the layer as a 'line'. This will create a rectangle polygon from the line with a given width.
-       /// </summary>
+
+        /// <summary>
+        /// Set the layer as a 'line'. This will create a rectangle polygon from the line with a given width.
+        /// </summary>
         private void SetLine(List<Vector3> line)
         {
             ShapeType = ShapeType.Line;
@@ -162,8 +163,8 @@ namespace Netherlands3D.Twin.Layers
 
             var rectangle3D = rectangle.ToVector3List();
             UpdateVisualisation(rectangle3D);
-            
-            if(notifyOnPolygonChange)
+
+            if (notifyOnPolygonChange)
             {
                 polygonChanged.Invoke();
             }
@@ -245,7 +246,7 @@ namespace Netherlands3D.Twin.Layers
             base.OnDestroy();
             PolygonSelectionCalculator.UnregisterPolygon(this);
 
-            if(PolygonVisualisation)
+            if (PolygonVisualisation)
                 Destroy(PolygonVisualisation.gameObject);
         }
 
