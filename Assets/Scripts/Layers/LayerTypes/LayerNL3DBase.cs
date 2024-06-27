@@ -1,11 +1,16 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public abstract class LayerNL3DBase : MonoBehaviour
     {
+        public LayerProjectData ProjectData = new();
+        
         public LayerUI UI { get; set; }
 
         public int Depth { get; private set; } = 0;
@@ -66,7 +71,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             if (!LayerData.AllLayers.Contains(this))
                 LayerData.AddStandardLayer(this);
-
+            
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
             OnTransformChildrenChanged();
@@ -127,6 +132,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
+
+            ProjectData.SetParent(newParentLayer?.ProjectData, siblingIndex);
         }
 
         private void RecalculateCurrentSubTreeDepthValuesRecursively()
