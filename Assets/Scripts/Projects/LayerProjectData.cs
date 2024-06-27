@@ -27,16 +27,12 @@ namespace Netherlands3D.Twin.Projects
             set => isActive = value;
         }
         
-        // public void SetIsActive(bool active)
-        // {
-        //     isActive = active;
-        // }
-        //
-        // public bool GetIsActive()
-        // {
-        //     return isActive;
-        // }
-
+        public void Initialize(LayerProjectData root, int siblingIndex)
+        {
+            rootLayer = root;
+            SetParent(root, siblingIndex);
+        }
+        
         public void SetParent(LayerProjectData newParent, int siblingIndex)
         {
             if (newParent == null)
@@ -50,22 +46,6 @@ namespace Netherlands3D.Twin.Projects
                     
             parent = newParent;
             newParent.children.Insert(siblingIndex,this);
-        }
-
-        // public string GetName()
-        // {
-        //     return name;
-        // }
-        //
-        // public void SetName(string newName)
-        // {
-        //     name = newName;
-        // }
-
-        public void Initialize(LayerProjectData root, int siblingIndex)
-        {
-            rootLayer = root;
-            SetParent(root, siblingIndex);
         }
     }
     
