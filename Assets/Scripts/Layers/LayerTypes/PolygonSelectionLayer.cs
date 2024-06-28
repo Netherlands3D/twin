@@ -218,14 +218,13 @@ namespace Netherlands3D.Twin.Layers
 
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
-            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
+            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
 
             return polygonVisualisation;
         }
 
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            print("setting active: " + activeInHierarchy);
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }
 

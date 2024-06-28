@@ -10,12 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 1184705508257499281}
   - component: {fileID: 817150493436941603}
-  - component: {fileID: 5108237057418043254}
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -2324982978833452817}
   - component: {fileID: -5633582009899978217}
+  - component: {fileID: 7164105335501555170}
+  - component: {fileID: 1194273570138351517}
+  - component: {fileID: 2740582493697960923}
+  - component: {fileID: 1859171214202950123}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -60,6 +63,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
@@ -103,34 +114,6 @@ MonoBehaviour:
     boundingRegion: []
   subtreeUrl: 
   isbusy: 0
---- !u!114 &5108237057418043254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1d54ea15f91053479c4b173b0d2c20a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
-  OnOriginChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5648866956155822156}
-        m_TargetAssemblyTypeName: Netherlands3D.Tiles3D.Read3DTileset, eu.Netherlands3D.Runtime.Tiles3D
-        m_MethodName: RecalculateBounds
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &5648866956155822156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +121,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 690fb5d55d40ee7489dbfcbe44c9f716, type: 3}
   m_Name: 
@@ -146,6 +129,7 @@ MonoBehaviour:
   tilesetUrl: 
   publicKey: 
   personalKey: 
+  queryKeyName: key
   root:
     isLoading: 0
     level: 0
@@ -156,6 +140,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
@@ -207,6 +199,9 @@ MonoBehaviour:
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
   unsupportedExtensionsParsed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerRequestFailed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7109194962515795805
@@ -268,7 +263,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowURLEditInPropertySection: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  usePropertySections: 1
+  openPropertiesOnStart: 0
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:
@@ -330,3 +332,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 5850609957860244483, guid: b70ba99e2cae844148e2ee6cddc2f301,
     type: 3}
+--- !u!114 &7164105335501555170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
+    type: 3}
+  OnCredentialsPropertySectionInstantiated:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1194273570138351517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayPrefab: {fileID: -5551926652888725166, guid: 3242028f86f3dad4a8d336a5e171cab1,
+    type: 3}
+  referencedLayer: {fileID: 4142489338678956943}
+  instantiateOnStart: 1
+--- !u!114 &2740582493697960923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 0}
+  worldTransformShifter: {fileID: 1859171214202950123}
+  referenceCoordinateSystem: 4326
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1859171214202950123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

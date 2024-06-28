@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
         {
             base.Awake();
             layerParent = GameObject.FindWithTag("3DTileParent").transform;
-            layer = layerParent.GetComponentsInChildren<Tile3DLayer2>().FirstOrDefault(l => l.name == prefab.name);
+            layer = layerParent.GetComponentsInChildren<Tile3DLayer>().FirstOrDefault(l => l.name == prefab.name);
         }
     }
 }

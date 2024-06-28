@@ -9,12 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1184705508257499281}
+  - component: {fileID: -5652853201437834613}
   - component: {fileID: 817150493436941603}
   - component: {fileID: 5648866956155822156}
+  - component: {fileID: 6390242371133718726}
   - component: {fileID: 7109194962515795805}
+  - component: {fileID: -5530517851291887029}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -5688274655914667246}
   - component: {fileID: -3892557586120215936}
+  - component: {fileID: 379969814246679949}
   m_Layer: 6
   m_Name: RealityMesh (3D Tiles)
   m_TagString: Untagged
@@ -37,6 +41,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5652853201437834613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4551720aa9fb164aa78356d492117bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configuration: {fileID: 11400000, guid: 4c49a4edecb014c439152023c23297db, type: 2}
+  read3DTileset: {fileID: 5648866956155822156}
+  credentialsPropertySectionInstantiator: {fileID: 379969814246679949}
 --- !u!114 &817150493436941603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,6 +78,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
@@ -114,9 +141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 690fb5d55d40ee7489dbfcbe44c9f716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesetUrl: https://tile.googleapis.com/v1/3dtiles/root.json
-  publicKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
-  personalKey: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
+  tilesetUrl: https://tile.googleapis.com:443/v1/3dtiles/root.json
+  publicKey: 
+  personalKey: 
+  queryKeyName: key
   root:
     isLoading: 0
     level: 0
@@ -127,6 +155,14 @@ MonoBehaviour:
     boundingVolume:
       boundingVolumeType: 0
       values: []
+    BottomLeft:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
+    TopRight:
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      Points: []
     requestedDispose: 0
     requestedUpdate: 0
     childrenCountDelayingDispose: 0
@@ -171,6 +207,7 @@ MonoBehaviour:
     boundingRegion: []
   tileCount: 0
   nestingDepth: 0
+  parseAssetMetadata: 1
   parseSubObjects: 0
   maxScreenHeightInPixels: 1080
   maximumScreenSpaceError: 40
@@ -180,6 +217,44 @@ MonoBehaviour:
   unsupportedExtensionsParsed:
     m_PersistentCalls:
       m_Calls: []
+  OnServerResponseReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerRequestFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadAssetMetadata:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6390242371133718726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75072f5fd93ad2849beedb1a9d7611cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilesetReader: {fileID: 5648866956155822156}
+  onReadCopyright:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  splitCopyrightCharacter: ;
 --- !u!114 &7109194962515795805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +302,21 @@ MonoBehaviour:
     m_RotationOrder: 4
   showPriorityNumbers: 0
   downloadAvailable: 0
+--- !u!114 &-5530517851291887029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe096534462cf714bb38d69e1ca829e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleMaximumScreenSpaceError: 10
+  movingMaximumScreenSpaceError: 40
+  detailIncrementStepPerFrame: 1
 --- !u!114 &4142489338678956943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,35 +331,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onShow:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 96e40d3fe6fed3343822056a2db329a1, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   onHide:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 96e40d3fe6fed3343822056a2db329a1, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  allowURLEditInPropertySection: 0
+      m_Calls: []
+  usePropertySections: 1
+  openPropertiesOnStart: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls: []
@@ -286,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
-  worldTransformShifter: {fileID: 0}
+  worldTransformShifter: {fileID: -3892557586120215936}
   referenceCoordinateSystem: 4326
   onPreShift:
     m_PersistentCalls:
@@ -306,3 +373,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &379969814246679949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoApplyCredentials: 1
+  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
+    type: 3}
+  OnCredentialsPropertySectionInstantiated:
+    m_PersistentCalls:
+      m_Calls: []

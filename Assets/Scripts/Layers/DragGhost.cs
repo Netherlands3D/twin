@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void CopyAppearance(LayerUI ui)
         {
             layerVisibilityImage.sprite = ui.VisibilitySprite;
-            colorImage.color = ui.Color;
+            colorImage.color = ui.Layer.Color;
             foldoutImage.enabled = ui.hasChildren;
             layerTypeImage.sprite = ui.LayerTypeSprite;
             layerNameText.text = ui.LayerName;

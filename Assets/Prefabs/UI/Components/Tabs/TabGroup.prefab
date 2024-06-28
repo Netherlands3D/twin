@@ -149,7 +149,7 @@ PrefabInstance:
     - target: {fileID: 5397067807146488847, guid: 26450489c9a976f43b2216eefb222714,
         type: 3}
       propertyPath: m_Name
-      value: Kwaliteitsinstellingen
+      value: Instellingen
       objectReference: {fileID: 0}
     - target: {fileID: 7086085682566548412, guid: 26450489c9a976f43b2216eefb222714,
         type: 3}
@@ -254,7 +254,7 @@ PrefabInstance:
     - target: {fileID: 7178047375767000050, guid: 26450489c9a976f43b2216eefb222714,
         type: 3}
       propertyPath: m_text
-      value: Kwaliteitsinstellingen
+      value: Instellingen
       objectReference: {fileID: 0}
     - target: {fileID: 7178047375767000050, guid: 26450489c9a976f43b2216eefb222714,
         type: 3}
