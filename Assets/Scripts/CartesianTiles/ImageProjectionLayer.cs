@@ -23,6 +23,14 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using GeoJSON.Net;
+using System.Linq;
+using UnityEditor.PackageManager.Requests;
+using System.Text.RegularExpressions;
+using Netherlands3D.Twin;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -30,8 +38,12 @@ namespace Netherlands3D.CartesianTiles
     {
         public bool compressLoadedTextures = false;
 
+
+        [SerializeField]
         private TextureProjectorBase projectorPrefab;
         public TextureProjectorBase ProjectorPrefab { get => projectorPrefab; set => projectorPrefab = value; }
+
+        private SensorDataController dataController;
 
         public UnityEvent<LogType, string> onLogMessage = new();
 
@@ -47,23 +59,23 @@ namespace Netherlands3D.CartesianTiles
                         tiles.Add(tileKey, newTile);
                         newTile.gameObject.SetActive(false);
                         //retrieve the image and put it on the tile
-                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadTexture(tileChange, callback));
+                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
                         break;
                     }
 
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;
-                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadTexture(tileChange, callback));
+                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
                     break;
                 case TileAction.Downgrade:
                     tiles[tileKey].unityLOD--;
-                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadTexture(tileChange, callback));
+                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
                     break;
                 case TileAction.Remove:
                     InteruptRunningProcesses(tileKey);
                     RemoveGameObjectFromTile(tileKey);
-                    tiles.Remove(tileKey);
-                    callback(tileChange);
+                    tiles.Remove(tileKey); 
+                    callback?.Invoke(tileChange);
                     return;
             }
         }
@@ -95,20 +107,26 @@ namespace Netherlands3D.CartesianTiles
             tile.layer = transform.gameObject.GetComponent<Layer>();
             tile.gameObject = Instantiate(ProjectorPrefab.gameObject);
             tile.gameObject.name = tileKey.x + "-" + tileKey.y;
-            tile.gameObject.transform.parent = transform.gameObject.transform;
+            tile.gameObject.transform.parent = transform.gameObject.transform;            
             tile.gameObject.layer = tile.gameObject.transform.parent.gameObject.layer;
-            Vector2Int origin = new Vector2Int(tileKey.x+(tileSize/2), tileKey.y + (tileSize / 2));
-            tile.gameObject.transform.position = CoordinateConverter.RDtoUnity(origin);
-
+            Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
+            Vector3 originCoordinate = CoordinateConverter.RDtoUnity(origin);
+            originCoordinate.y = 100;
+            tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?
+            if (dataController == null)
+            {
+                dataController = GetComponent<SensorDataController>();                
+            }
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
             {
                 projector.SetSize(tileSize, tileSize, tileSize);
+                projector.gameObject.SetActive(true);
+                projector.SetTexture(dataController.DataTexture);
             }
-
             return tile;
         }
 
-        IEnumerator DownloadTexture(TileChange tileChange, Action<TileChange> callback = null)
+        IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
@@ -118,37 +136,51 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
+            //https://.../buildings-{x}_{y}.2.2.bin
             Tile tile = tiles[tileKey];
-
-            string url = Datasets[tiles[tileKey].unityLOD].path;
-            var imageUrl = url.Replace("{X}", tileKey.x.ToString()).Replace("{Y}", tileKey.y.ToString());
-            var webRequest = UnityWebRequestTexture.GetTexture(imageUrl, compressLoadedTextures == false);
+            Coordinate worldCoordinate = GetLongLatPositionFromTile(tile);
+            
+            string url = Datasets[tiles[tileKey].unityLOD].path;            
+            var webRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
-
             tile.runningWebRequest = null;
-
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"Could not download {imageUrl}");
-
+                Debug.LogWarning($"Could not download {url}");
                 RemoveGameObjectFromTile(tileKey);
                 callback(tileChange);
             }
             else
             {
                 ClearPreviousTexture(tile);
+                dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
+                dataController.UpdateTexture();
 
-                Texture2D myTexture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-                if (compressLoadedTextures) myTexture.Compress(false);
 
-                myTexture.wrapMode = TextureWrapMode.Clamp;
 
-                SetProjectorTexture(tile,myTexture);
+                
 
+                //Texture2D myTexture = ;
+                //if (compressLoadedTextures) myTexture.Compress(false);
+                //myTexture.wrapMode = TextureWrapMode.Clamp;
+                //SetProjectorTexture(tile, myTexture);
                 callback(tileChange);
             }
-            yield return null;
+            yield return null;          
+        }
+
+        private Coordinate GetLongLatPositionFromTile(Tile tile)
+        {
+            var transformPosition = tile.gameObject.transform.position;
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                transformPosition.x,
+                transformPosition.y,
+                transformPosition.z
+            );
+
+            return CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
         }
 
         /// <summary>
