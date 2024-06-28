@@ -24,6 +24,7 @@ using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 using Netherlands3D.Twin;
+using System.Collections.Generic;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -39,6 +40,8 @@ namespace Netherlands3D.CartesianTiles
         private SensorDataController dataController;
 
         public UnityEvent<LogType, string> onLogMessage = new();
+        
+        public static readonly float ProjectorHeight = 100f;
 
         public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
@@ -47,15 +50,10 @@ namespace Netherlands3D.CartesianTiles
             switch (tileChange.action)
             {
                 case TileAction.Create:
-                    {
-                        Tile newTile = CreateNewTile(tileKey);
-                        tiles.Add(tileKey, newTile);
-                        newTile.gameObject.SetActive(false);
-                        //retrieve the image and put it on the tile
-                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
-                        break;
-                    }
-
+                    Tile newTile = CreateNewTile(tileKey);
+                    tiles.Add(tileKey, newTile);
+                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
+                    break;
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;
                     tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
@@ -104,7 +102,7 @@ namespace Netherlands3D.CartesianTiles
             tile.gameObject.layer = tile.gameObject.transform.parent.gameObject.layer;
             Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
             Vector3 originCoordinate = CoordinateConverter.RDtoUnity(origin);
-            originCoordinate.y = 100;
+            originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?
             if (dataController == null)
             {
@@ -129,11 +127,10 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            //https://.../buildings-{x}_{y}.2.2.bin
             Tile tile = tiles[tileKey];
-            Coordinate worldCoordinate = GetLongLatPositionFromTile(tile);
+            string polygonUrl = dataController.GeneratePolygonUrlForTile(tile);            
+            string url = Datasets[tiles[tileKey].unityLOD].path + polygonUrl;  
             
-            string url = Datasets[tiles[tileKey].unityLOD].path;            
             var webRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
@@ -150,8 +147,9 @@ namespace Netherlands3D.CartesianTiles
                 dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
                 dataController.UpdateTexture();
 
-
-
+              
+                //test
+                dataController.ProjectAllSensorPositions();
                 
 
                 //Texture2D myTexture = ;
