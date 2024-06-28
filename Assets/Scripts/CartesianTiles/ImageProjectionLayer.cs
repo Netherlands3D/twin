@@ -23,13 +23,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using UnityEngine.Events;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using GeoJSON.Net;
-using System.Linq;
-using UnityEditor.PackageManager.Requests;
-using System.Text.RegularExpressions;
 using Netherlands3D.Twin;
 
 namespace Netherlands3D.CartesianTiles
