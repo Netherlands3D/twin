@@ -32,12 +32,9 @@ namespace Netherlands3D.CartesianTiles
     {
         public bool compressLoadedTextures = false;
 
-
         [SerializeField]
         private TextureProjectorBase projectorPrefab;
         public TextureProjectorBase ProjectorPrefab { get => projectorPrefab; set => projectorPrefab = value; }
-
-        private SensorDataController dataController;
 
         public UnityEvent<LogType, string> onLogMessage = new();
         
@@ -71,7 +68,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private void RemoveGameObjectFromTile(Vector2Int tileKey)
+        protected void RemoveGameObjectFromTile(Vector2Int tileKey)
         {
             if (tiles.ContainsKey(tileKey))
             {
@@ -90,7 +87,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private Tile CreateNewTile(Vector2Int tileKey)
+        protected virtual Tile CreateNewTile(Vector2Int tileKey)
         {
             Tile tile = new();
             tile.unityLOD = 0;
@@ -103,21 +100,16 @@ namespace Netherlands3D.CartesianTiles
             Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
             Vector3 originCoordinate = CoordinateConverter.RDtoUnity(origin);
             originCoordinate.y = ProjectorHeight;
-            tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?
-            if (dataController == null)
-            {
-                dataController = GetComponent<SensorDataController>();                
-            }
+            tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
             {
                 projector.SetSize(tileSize, tileSize, tileSize);
                 projector.gameObject.SetActive(true);
-                projector.SetTexture(dataController.DataTexture);
             }
             return tile;
         }
 
-        IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
+        protected virtual IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
@@ -128,8 +120,7 @@ namespace Netherlands3D.CartesianTiles
             }
 
             Tile tile = tiles[tileKey];
-            string polygonUrl = dataController.GeneratePolygonUrlForTile(tile);            
-            string url = Datasets[tiles[tileKey].unityLOD].path + polygonUrl;  
+            string url = Datasets[tiles[tileKey].unityLOD].path;  
             
             var webRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = webRequest;
@@ -143,41 +134,16 @@ namespace Netherlands3D.CartesianTiles
             }
             else
             {
-                ClearPreviousTexture(tile);
-                dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
-                dataController.UpdateTexture();
-
-              
-                //test
-                dataController.ProjectAllSensorPositions();
-                
-
-                //Texture2D myTexture = ;
-                //if (compressLoadedTextures) myTexture.Compress(false);
-                //myTexture.wrapMode = TextureWrapMode.Clamp;
-                //SetProjectorTexture(tile, myTexture);
+                ClearPreviousTexture(tile);               
                 callback(tileChange);
             }
             yield return null;          
         }
 
-        private Coordinate GetLongLatPositionFromTile(Tile tile)
-        {
-            var transformPosition = tile.gameObject.transform.position;
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                transformPosition.x,
-                transformPosition.y,
-                transformPosition.z
-            );
-
-            return CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-        }
-
         /// <summary>
         /// Clear existing texture from tile projector
         /// </summary>
-        private void ClearPreviousTexture(Tile tile)
+        protected void ClearPreviousTexture(Tile tile)
         {
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
             {
@@ -185,7 +151,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private void SetProjectorTexture(Tile tile, Texture2D myTexture)
+        protected void SetProjectorTexture(Tile tile, Texture2D myTexture)
         {
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
             {

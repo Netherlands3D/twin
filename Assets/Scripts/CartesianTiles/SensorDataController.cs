@@ -12,20 +12,20 @@ namespace Netherlands3D.Twin
 {
     public class SensorDataController : MonoBehaviour
     {
-        public Texture2D DataTexture { get { return dataTexture; } }
-        private enum UrbanReleafPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
 
-        [SerializeField]
-        private Texture2D dataTexture;
+        public List<UrbanReleafCell> Cells { get { return urbanReleafCells; } }
 
+        public enum UrbanReleafPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
+        
         //TODO should this be cleared because of memory limitations?
         private List<UrbanReleafCell> urbanReleafCells = new List<UrbanReleafCell>();
 
         //values
         private const string areaKey = "&observation_area=";
         private const string seperate = "%2C";
+        
 
-        private struct UrbanReleafCell
+        public struct UrbanReleafCell
         {
             public float value;
             public float lat;
@@ -33,13 +33,8 @@ namespace Netherlands3D.Twin
             public float quality;
             public UrbanReleafPropertyType type;
         }
-
-        public void SetTexture(Texture2D texture)
-        {
-            dataTexture = texture;
-        }
-
-        public List<double[]> GetAllLongLatPositions()
+       
+        public List<double[]> GetAllLonLatPositions()
         {
             List<double[]> result = new List<double[]>();
             foreach(var cell in urbanReleafCells)
@@ -47,29 +42,41 @@ namespace Netherlands3D.Twin
             return result;
         }
 
+        public double[] GetLongLatFromPosition(Vector3 position, Tile tile)
+        {
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                position.x + tile.gameObject.transform.position.x,
+                position.y + tile.gameObject.transform.position.y,
+                position.z + tile.gameObject.transform.position.z
+            );
+            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+            return new double[2] { coord.Points[1], coord.Points[0] };
+        }
+
         //for testing only
         public void ProjectAllSensorPositions()
         {
-            List<double[]> positions = GetAllLongLatPositions();
+            List<double[]> positions = GetAllLonLatPositions();
             foreach (double[] position in positions)
             {
-                Vector3 unityPosition = GetProjectedPositionFromLongLat(position, ImageProjectionLayer.ProjectorHeight);
+                Vector3 unityPosition = GetProjectedPositionFromLonLat(position, ImageProjectionLayer.ProjectorHeight);
                 GameObject test = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 test.transform.position = unityPosition;
                 test.transform.localScale = Vector3.one * 50;
             }
         }
-
+        
         //TODO optimize with stringbuilder
         public string GeneratePolygonUrlForTile(Tile tile)
         {
             //make square polygon
             double[][] coords = new double[4][];
             int tileSize = tile.layer.tileSize;
-            coords[0] = GetLongLatFromPosition(tile.gameObject.transform.position + new Vector3(-tileSize * 0.5f, 0, tileSize * 0.5f));
-            coords[1] = GetLongLatFromPosition(tile.gameObject.transform.position + new Vector3(-tileSize * 0.5f, 0, -tileSize * 0.5f));
-            coords[2] = GetLongLatFromPosition(tile.gameObject.transform.position + new Vector3(tileSize * 0.5f, 0, -tileSize * 0.5f));
-            coords[3] = GetLongLatFromPosition(tile.gameObject.transform.position + new Vector3(tileSize * 0.5f, 0, tileSize * 0.5f));
+            coords[0] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f, 0, tileSize * 0.5f), tile);
+            coords[1] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f, 0, -tileSize * 0.5f), tile);
+            coords[2] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f, 0, -tileSize * 0.5f), tile);
+            coords[3] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f, 0, tileSize * 0.5f), tile);
             
             string polygonUrl = string.Empty;
             for (int i = 0; i < coords.Length; i++)
@@ -150,32 +157,9 @@ namespace Netherlands3D.Twin
                 cell.type = propertyType;
                 urbanReleafCells.Add(cell);
             }
-        }
+        }       
 
-        public void UpdateTexture()
-        {
-            //TODO: CREATE TEXTURE FROM DATA
-            //form hex grid based on LOD
-            //draw pixel set based on precalculated math
-            //setpixels32
-            //texture apply
-            //interval 30 sec update
-            //callbacks?
-        }
-
-        private double[] GetLongLatFromPosition(Vector3 position)
-        {
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                position.x,
-                position.y,
-                position.z
-            );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-            return new double[2] { coord.Points[1], coord.Points[0] };
-        }
-
-        private Vector3 GetProjectedPositionFromLongLat(double[] coordinate, float height)
+        public Vector3 GetProjectedPositionFromLonLat(double[] coordinate, float height)
         {
             var unityCoordinate = new Coordinate(
                 CoordinateSystem.WGS84,
