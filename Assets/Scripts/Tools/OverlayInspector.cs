@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.TileSystem;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
