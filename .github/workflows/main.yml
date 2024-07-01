@@ -45,8 +45,8 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
-          # Temporarily needed to circumvent issues with this action selecting the wrong image for Unity 2022LTS
-          customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
+          # A custom specific image can be used:
+          # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
 
       - name: 'Docker: Login to GitHub Container Registry'
         uses: docker/login-action@v3
