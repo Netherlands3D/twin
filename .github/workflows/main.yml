@@ -45,7 +45,8 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
-          # A custom specific image can be used:
+          unityVersion: auto
+          # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
           # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
 
       - name: 'Docker: Login to GitHub Container Registry'
