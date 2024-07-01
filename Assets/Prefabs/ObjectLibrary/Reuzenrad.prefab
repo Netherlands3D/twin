@@ -3898,7 +3898,7 @@ GameObject:
   - component: {fileID: 2811255133333936376}
   - component: {fileID: 5317880949296980364}
   m_Layer: 0
-  m_Name: FerrisWheel
+  m_Name: Reuzenrad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
