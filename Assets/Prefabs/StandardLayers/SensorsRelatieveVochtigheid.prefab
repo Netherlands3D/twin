@@ -64,6 +64,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5565219cb96084c409b50cc36c56c72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SensorPropertyType: 2
+  Maximum: 100
+  Minimum: 0
+  MaxColor: {r: 1, g: 0, b: 0.74774265, a: 0}
+  MinColor: {r: 0, g: 0.7234957, b: 1, a: 0}
 --- !u!114 &6731469812728504720
 MonoBehaviour:
   m_ObjectHideFlags: 0

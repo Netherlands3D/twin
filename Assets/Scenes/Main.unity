@@ -707,6 +707,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1770161019}
     m_Modifications:
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: Maximum
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: MaxColor.b
+      value: 0.74774265
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: MaxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: MinColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: MinColor.g
+      value: 0.7234957
+      objectReference: {fileID: 0}
+    - target: {fileID: -2045342922000072205, guid: a3423cc30b04fd74caa657b5830b8985,
+        type: 3}
+      propertyPath: SensorPropertyType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1762811913447571165, guid: a3423cc30b04fd74caa657b5830b8985,
         type: 3}
       propertyPath: m_Name
@@ -890,10 +920,40 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1770161019}
     m_Modifications:
+    - target: {fileID: -3033725012192930104, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: Maximum
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3033725012192930104, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: MaxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3033725012192930104, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: MinColor.b
+      value: 0.08118749
+      objectReference: {fileID: 0}
+    - target: {fileID: -3033725012192930104, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: MinColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3033725012192930104, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: SensorPropertyType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1762811913447571165, guid: 01cef4f031ccfda4aa53cc81dc95674a,
         type: 3}
       propertyPath: m_Name
       value: SensorsThermischOngemak
+      objectReference: {fileID: 0}
+    - target: {fileID: 1762811913447571165, guid: 01cef4f031ccfda4aa53cc81dc95674a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8942052645519180280, guid: 01cef4f031ccfda4aa53cc81dc95674a,
         type: 3}
@@ -978,6 +1038,36 @@ PrefabInstance:
     - target: {fileID: 1762811913447571165, guid: d128af3d82c1ec74ca2915dca7794e65,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: Maximum
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: Minimum
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: MaxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: MinColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: MinColor.g
+      value: 0.086503506
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269384734925648422, guid: d128af3d82c1ec74ca2915dca7794e65,
+        type: 3}
+      propertyPath: SensorPropertyType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8942052645519180280, guid: d128af3d82c1ec74ca2915dca7794e65,

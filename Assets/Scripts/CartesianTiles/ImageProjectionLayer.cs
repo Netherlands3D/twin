@@ -98,7 +98,17 @@ namespace Netherlands3D.CartesianTiles
             tile.gameObject.transform.parent = transform.gameObject.transform;            
             tile.gameObject.layer = tile.gameObject.transform.parent.gameObject.layer;
             Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
-            Vector3 originCoordinate = CoordinateConverter.RDtoUnity(origin);
+            //Vector3 originCoordinate = CoordinateConverter.ConvertTo(origin);
+
+            var rdCoordinate = new Coordinate(
+                CoordinateSystem.RD,
+                origin.x,
+                origin.y,
+                0.0d
+            );
+            var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+
+
             originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))

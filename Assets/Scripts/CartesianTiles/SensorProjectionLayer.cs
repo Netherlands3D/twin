@@ -43,7 +43,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 projector.SetSize(tileSize, tileSize, tileSize);
                 projector.gameObject.SetActive(true);
-                tileSensorData.CreateTexture();
+                tileSensorData.Initialize();
                 projector.SetTexture(tileSensorData.DataTexture);
             }
             return tile;
@@ -79,10 +79,13 @@ namespace Netherlands3D.CartesianTiles
                 ClearPreviousTexture(tile);
                 dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
                 TileSensorData tileSensorData = tile.gameObject.GetComponent<TileSensorData>();
+                tileSensorData.SetCells(dataController);
                 tileSensorData.UpdateTexture(tile, dataController);
 
-                //test
-                dataController.ProjectAllSensorPositions();
+                //free up memory
+                //tileSensorData.ClearCells();
+                dataController.ClearCells();
+              
                 callback(tileChange);
             }
             yield return null;

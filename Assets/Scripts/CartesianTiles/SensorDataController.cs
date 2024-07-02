@@ -12,18 +12,28 @@ namespace Netherlands3D.Twin
 {
     public class SensorDataController : MonoBehaviour
     {
+        public enum UrbanReleafPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
+        public UrbanReleafPropertyType SensorPropertyType;
+        public float Maximum;
+        public float Minimum;        
+        public Color MaxColor;
+        public Color MinColor;
 
         public List<UrbanReleafCell> Cells { get { return urbanReleafCells; } }
-
-        public enum UrbanReleafPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
-        
-        //TODO should this be cleared because of memory limitations?
+          
         private List<UrbanReleafCell> urbanReleafCells = new List<UrbanReleafCell>();
 
-        //values
+        //url keys
         private const string areaKey = "&observation_area=";
         private const string seperate = "%2C";
+        private const string timeStartKey = "&observation_datetime_start=";
+        private const string timeEndKey = "&observation_datetime_end=";
+        private const string observationLimitKey = "&observations_limit=";
+        private const string timeFormatSpecifier = "s";
         
+        private float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
+        private int observationLimit = 1000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
+        private int timeWindowSeconds = 3600 * 24 * 365 * 10; //for some reason sensors are not updated recently
 
         public struct UrbanReleafCell
         {
@@ -32,40 +42,20 @@ namespace Netherlands3D.Twin
             public float lon;
             public float quality;
             public UrbanReleafPropertyType type;
-        }
-       
-        public List<double[]> GetAllLonLatPositions()
-        {
-            List<double[]> result = new List<double[]>();
-            foreach(var cell in urbanReleafCells)
-                result.Add(new double[2] { cell.lon, cell.lat });
-            return result;
+            public Vector3 unityPosition;
         }
 
         public double[] GetLongLatFromPosition(Vector3 position, Tile tile)
         {
             var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                position.x + tile.gameObject.transform.position.x,
-                position.y + tile.gameObject.transform.position.y,
-                position.z + tile.gameObject.transform.position.z
+                CoordinateSystem.RD,
+                position.x + tile.tileKey.x + 0.5f * tile.layer.tileSize,
+                position.z + tile.tileKey.y + 0.5f * tile.layer.tileSize,
+                0
             );
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
             return new double[2] { coord.Points[1], coord.Points[0] };
-        }
-
-        //for testing only
-        public void ProjectAllSensorPositions()
-        {
-            List<double[]> positions = GetAllLonLatPositions();
-            foreach (double[] position in positions)
-            {
-                Vector3 unityPosition = GetProjectedPositionFromLonLat(position, ImageProjectionLayer.ProjectorHeight);
-                GameObject test = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                test.transform.position = unityPosition;
-                test.transform.localScale = Vector3.one * 50;
-            }
-        }
+        }       
         
         //TODO optimize with stringbuilder
         public string GeneratePolygonUrlForTile(Tile tile)
@@ -73,22 +63,45 @@ namespace Netherlands3D.Twin
             //make square polygon
             double[][] coords = new double[4][];
             int tileSize = tile.layer.tileSize;
-            coords[0] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f, 0, tileSize * 0.5f), tile);
-            coords[1] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f, 0, -tileSize * 0.5f), tile);
-            coords[2] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f, 0, -tileSize * 0.5f), tile);
-            coords[3] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f, 0, tileSize * 0.5f), tile);
+            coords[0] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f * edgeMultiplier, 0, tileSize * 0.5f * edgeMultiplier), tile);
+            coords[1] = GetLongLatFromPosition(new Vector3(-tileSize * 0.5f * edgeMultiplier, 0, -tileSize * 0.5f * edgeMultiplier), tile);
+            coords[2] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f * edgeMultiplier, 0, -tileSize * 0.5f * edgeMultiplier), tile);
+            coords[3] = GetLongLatFromPosition(new Vector3(tileSize * 0.5f * edgeMultiplier, 0, tileSize * 0.5f * edgeMultiplier), tile);
+
+            //debug
+            //tile.gameObject.GetComponent<TileSensorData>().SetCornerCoordsTest( coords );                        
             
             string polygonUrl = string.Empty;
+
+            //get the observationlimit
+            string observationUrl = observationLimitKey + observationLimit.ToString();
+            polygonUrl += observationUrl;
+
+            //add each vertex for the polygon
             for (int i = 0; i < coords.Length; i++)
                 polygonUrl += areaKey + coords[i][0].ToString() + seperate + coords[i][1].ToString();
 
             //add first vertex to complete the polygon
             polygonUrl += areaKey + coords[0][0].ToString() + seperate + coords[0][1].ToString();
-            return polygonUrl;
+
+            string timeUrl = GetTimeUrl();
+            return polygonUrl + timeUrl;
         }
 
+        public string GetTimeUrl()
+        {
+            //get the observation start time and end time and create a timewindow url            
+            DateTime end = DateTime.Now;
+            string sortableEndTime = end.ToString(timeFormatSpecifier);
+            DateTime start = end.AddSeconds(-timeWindowSeconds);
+            string sortableStartTime = start.ToString(timeFormatSpecifier);
+            string timeUrl = timeStartKey + sortableStartTime + timeEndKey + sortableEndTime;
+            return timeUrl;
+        }
+       
         public void ProcessDataFromJson(string json)
         {
+            //could be refactored to work with a recursive method and store a tree but this will store less memory
             urbanReleafCells.Clear();
             JArray jsonArray = JArray.Parse(json);
             List<JObject> jsonObjects = jsonArray.OfType<JObject>().ToList();
@@ -149,17 +162,32 @@ namespace Netherlands3D.Twin
                     }
                 }
 
-                UrbanReleafCell cell = new UrbanReleafCell();
-                cell.value = value;
-                cell.lon = lon;
-                cell.lat = lat;
-                cell.quality = quality;
-                cell.type = propertyType;
-                urbanReleafCells.Add(cell);
+                if (propertyType == SensorPropertyType)
+                {
+                    UrbanReleafCell cell = new UrbanReleafCell();
+                    cell.value = value;
+                    cell.lon = lon;
+                    cell.lat = lat;
+                    cell.quality = quality;
+                    cell.type = propertyType;
+
+                    double[] lonlat = new double[2];
+                    lonlat[0] = cell.lon;
+                    lonlat[1] = cell.lat;
+                    Vector3 unityPosition = GetProjectedPositionFromLonLat(lonlat, 0);
+                    cell.unityPosition = unityPosition;
+                    urbanReleafCells.Add(cell);
+                }
             }
         }       
 
-        public Vector3 GetProjectedPositionFromLonLat(double[] coordinate, float height)
+        public void ClearCells()
+        {
+            urbanReleafCells.Clear();
+        }
+
+        //TODO make this more oop
+        public static Vector3 GetProjectedPositionFromLonLat(double[] coordinate, float height)
         {
             var unityCoordinate = new Coordinate(
                 CoordinateSystem.WGS84,
