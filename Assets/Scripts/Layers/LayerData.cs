@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin
         {
             AllLayers.Add(newLayer);
             newLayer.transform.SetParent(Instance.transform);
-            projectData.AddLayer(newLayer.ProjectData);
+            // projectData.AddLayer(newLayer.ProjectData);
             LayerAdded.Invoke(newLayer);
         }
 
