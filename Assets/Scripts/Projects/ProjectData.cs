@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
+using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -39,7 +40,8 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] private bool isDirty = false;
         public bool IsDirty { 
             get => isDirty; 
-            set{
+            set
+            {
                 isDirty = value;
             }
         }
@@ -60,8 +62,7 @@ namespace Netherlands3D.Twin.Projects
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
             rootLayer = project.rootLayer;
-            rootLayer.LoadLayer();
-
+            
             IsDirty = true;
         }
 
@@ -90,7 +91,14 @@ namespace Netherlands3D.Twin.Projects
                         using Stream zipStream = zf.GetInputStream(zipEntry);
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
-                        ProjectData project = JsonConvert.DeserializeObject<ProjectData>(json);
+                        
+                        JsonSerializerSettings settings = new JsonSerializerSettings
+                        {
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            Formatting = Formatting.Indented
+                        };
+                        
+                        ProjectData project = JsonConvert.DeserializeObject<ProjectData>(json, settings);
                         CopyFrom(project);
                     }
                     else
@@ -122,7 +130,12 @@ namespace Netherlands3D.Twin.Projects
             zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
             // Generate the JSON data and add it to the project zip as the first file
-            var jsonProject = JsonConvert.SerializeObject(this, Formatting.Indented);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                Formatting = Formatting.Indented
+            };
+            var jsonProject = JsonConvert.SerializeObject(this, settings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
@@ -181,7 +194,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddLayer(LayerProjectData layer)
         {
-            layer.Initialize(rootLayer, -1);
+            // layer.Initialize(rootLayer, -1);
         }
     }
 }

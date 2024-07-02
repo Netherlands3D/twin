@@ -3,100 +3,119 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public abstract class LayerNL3DBase : MonoBehaviour
     {
-        public LayerProjectData ProjectData = new();
+        [SerializeField, JsonProperty] private string name;
+        [SerializeField, JsonProperty] private bool activeSelf = true;
+        [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        // [SerializeField, JsonProperty] private LayerProjectData parent;
+        // [SerializeField, JsonProperty] private List<LayerProjectData> children = new();
+
+        [JsonIgnore]
         public string Name
         {
-            get => ProjectData.Name;
+            get => name;
             set
             {
-                gameObject.name = value;
-                ProjectData.Name = value;
+                name = value;
+                NameChanged.Invoke(value);
             }
         }
-        
-        public LayerUI UI { get; set; }
 
-        public int Depth { get; private set; } = 0;
-
+        [JsonIgnore]
         public bool ActiveSelf
         {
-            get { return ProjectData.IsActive; }
+            get => activeSelf;
             set
             {
+                activeSelf = value;
                 gameObject.SetActive(value);
-                ProjectData.IsActive = value;
-                OnLayerActiveInHierarchyChanged(value);
                 foreach (var child in ChildrenLayers)
                 {
-                    child.OnLayerActiveInHierarchyChanged(child.ActiveInHierarchy);
+                    child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
                 }
 
-                UI?.UpdateEnabledToggle(value);
+                LayerActiveInHierarchyChanged.Invoke(value);
             }
         }
 
-        public bool ActiveInHierarchy
-        {
-            get { return gameObject.activeInHierarchy; }
-        }
-
-        private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [JsonIgnore]
         public Color Color
         {
             get => color;
             set
             {
                 color = value;
-                if (UI)
-                    UI.SetColor(value);
+                ColorChanged.Invoke(value);
             }
         }
 
-        protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
+        public UnityEvent<string> NameChanged = new();
+        public UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        public UnityEvent<Color> ColorChanged = new();
+        public UnityEvent LayerDestroyed = new();
 
-        public LayerNL3DBase ParentLayer { get; private set; } //=> transform.parent.GetComponent<LayerNL3DBase>();
+        public LayerUI UI { get; set; } //todo: remove
 
-        public LayerNL3DBase[] ChildrenLayers { get; private set; }
+        public int Depth { get; private set; } = 0; //todo: remove if possible
 
-        public virtual void OnSelect(){ }
+        public bool ActiveInHierarchy
+        {
+            get
+            {
+                if (ParentLayer != null) //todo: if root layer is also of this type, maybe this check is unneeded
+                    return ParentLayer.ActiveInHierarchy && activeSelf;
 
-        public virtual void OnDeselect(){ }
+                return activeSelf;
+            }
+        }
+
+        public LayerNL3DBase ParentLayer { get; private set; }
+
+        public List<LayerNL3DBase> ChildrenLayers { get; private set; }
+
+        public virtual void OnSelect()
+        {
+        }
+
+        public virtual void OnDeselect()
+        {
+        }
 
         protected virtual void OnDestroy()
         {
-            if(!Application.isPlaying) return;
+            if (!Application.isPlaying) return;
 
-            if(UI) UI.DestroyUI();
-            
+            LayerDestroyed.Invoke();
+
             LayerData.RemoveLayer(this);
         }
 
         private void Awake()
         {
-            ProjectData.Name = name;
+            Name = gameObject.name;
         }
 
         protected virtual void Start()
         {
             if (!LayerData.AllLayers.Contains(this))
                 LayerData.AddStandardLayer(this);
-            
+
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
             OnTransformChildrenChanged();
-
             foreach (var child in ChildrenLayers)
             {
                 child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
         }
-        
+
         protected virtual void OnTransformChildrenChanged()
         {
             LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
@@ -107,7 +126,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
             }
 
-            ChildrenLayers = childLayers;
+            ChildrenLayers = childLayers.ToList();
             UI?.RecalculateCurrentTreeStates();
         }
 
@@ -139,16 +158,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateCurrentSubTreeDepthValuesRecursively();
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
 
-            OnLayerActiveInHierarchyChanged(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
+            LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
 
             if (siblingIndex == -1)
-                siblingIndex = newParent.childCount -1;
+                siblingIndex = newParent.childCount - 1;
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
 
-            ProjectData.SetParent(newParentLayer?.ProjectData, siblingIndex);
+            // ProjectData.SetParent(newParentLayer?.ProjectData, siblingIndex);
         }
 
         private void RecalculateCurrentSubTreeDepthValuesRecursively()

@@ -224,7 +224,17 @@ namespace Netherlands3D.Twin.Layers
             return polygonVisualisation;
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnEnable()
+        {
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        private void OnDisable()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }

@@ -49,10 +49,6 @@ namespace Netherlands3D.Twin
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-        }
-
         public void ParseGeoJSON(string filePath)
         {
             StartCoroutine(ParseGeoJSON(filePath, 1000));

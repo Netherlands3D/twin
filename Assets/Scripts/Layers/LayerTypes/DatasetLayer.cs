@@ -11,7 +11,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnEnable()
+        { 
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        private void OnDisable()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+
+        }
+
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             ColorSetLayer.Enabled = activeInHierarchy;
             GeometryColorizer.RecalculatePrioritizedColors();

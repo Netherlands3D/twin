@@ -91,13 +91,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
         }
 
-
         private void OnDisable()
         {
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
+
+            Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
+            Layer.ColorChanged.RemoveListener(SetColor);
+            Layer.LayerDestroyed.RemoveListener(DestroyUI);
         }
-        
+
         public void RecalculateCurrentTreeStates()
         {
             RecalculateState();
@@ -187,6 +190,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void Start()
         {
+            Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
+            Layer.ColorChanged.AddListener(SetColor);
+            Layer.LayerDestroyed.AddListener(DestroyUI);
+            
             MarkLayerUIAsDirty();
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             SetColor(Layer.Color);

@@ -27,7 +27,17 @@ namespace Netherlands3D.Twin
             }
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnEnable()
+        {
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        private void OnDisable()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }

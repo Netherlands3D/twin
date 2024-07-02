@@ -10,8 +10,8 @@ namespace Netherlands3D.Twin
     public class ReferencedProxyLayer : LayerNL3DBase
     {
         public ReferencedLayer Reference { get; set; }
-
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             Reference.IsActiveInScene = activeInHierarchy;
         }
@@ -20,12 +20,16 @@ namespace Netherlands3D.Twin
         {
             if (Reference)
                 Reference.IsActiveInScene = true;
+            
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         private void OnDisable()
         {
             if (Reference)
                 Reference.IsActiveInScene = false;
+            
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
 
         protected override void OnDestroy()

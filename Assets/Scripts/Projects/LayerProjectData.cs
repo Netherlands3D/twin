@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Netherlands3D.Twin.Projects
         [SerializeField, JsonProperty] private LayerProjectData parent;
         [SerializeField, JsonProperty] private List<LayerProjectData> children = new();
 
-        private LayerProjectData rootLayer; //todo make static?
+        private ProjectData project;
 
         public string Name
         {
@@ -28,16 +29,21 @@ namespace Netherlands3D.Twin.Projects
             set => isActive = value;
         }
 
-        public void Initialize(LayerProjectData root, int siblingIndex)
+        public LayerProjectData Parent => parent;
+        public IReadOnlyCollection<LayerProjectData> Children => children;
+
+        public void Initialize(ProjectData projectData, int siblingIndex)
         {
-            rootLayer = root;
-            SetParent(root, siblingIndex);
+            project = projectData;
+            SetParent(projectData.rootLayer, siblingIndex);
         }
 
         public void SetParent(LayerProjectData newParent, int siblingIndex)
         {
+            Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
+            
             if (newParent == null)
-                newParent = rootLayer;
+                newParent = project.rootLayer;
 
             if (parent != null)
                 parent.children.Remove(this);
@@ -46,17 +52,9 @@ namespace Netherlands3D.Twin.Projects
                 siblingIndex = newParent.children.Count;
 
             parent = newParent;
+            Debug.Log("new parent: " + newParent);
+            Debug.Log("children: " + children);
             newParent.children.Insert(siblingIndex, this);
-        }
-
-        public void LoadLayer()
-        {
-            Debug.LogError(children.Count);
-            foreach (var child in children)
-            {
-                Debug.Log("Loading " + child.Name + "\t" + parent +"\t" + children.Count);
-                child.LoadLayer();
-            }
         }
     }
 }
