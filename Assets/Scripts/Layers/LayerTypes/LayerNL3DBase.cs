@@ -14,9 +14,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        // [SerializeField, JsonProperty] private LayerProjectData parent;
-        // [SerializeField, JsonProperty] private List<LayerProjectData> children = new();
-
+        [SerializeField, JsonProperty] private LayerNL3DBase parent;
+        [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
+        
+        private static LayerNL3DBase rootLayer;
+        public LayerNL3DBase ParentLayer => parent;
+        public List<LayerNL3DBase> ChildrenLayers => children;
+        
         [JsonIgnore]
         public string Name
         {
@@ -35,7 +39,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set
             {
                 activeSelf = value;
-                gameObject.SetActive(value);
+                // gameObject.SetActive(value);
                 foreach (var child in ChildrenLayers)
                 {
                     child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
@@ -76,9 +80,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public LayerNL3DBase ParentLayer { get; private set; }
-
-        public List<LayerNL3DBase> ChildrenLayers { get; private set; }
 
         public virtual void OnSelect()
         {
@@ -126,13 +127,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
             }
 
-            ChildrenLayers = childLayers.ToList();
+            children = childLayers.ToList();
             UI?.RecalculateCurrentTreeStates();
         }
 
         protected virtual void OnTransformParentChanged()
         {
-            ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
+            parent = transform.parent.GetComponent<LayerNL3DBase>();
         }
 
         protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same

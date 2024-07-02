@@ -11,25 +11,17 @@ namespace Netherlands3D.Twin
     {
         public ReferencedLayer Reference { get; set; }
         
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-            Reference.IsActiveInScene = activeInHierarchy;
-        }
-
         private void OnEnable()
         {
             if (Reference)
-                Reference.IsActiveInScene = true;
+                ActiveSelf = true;
             
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         private void OnDisable()
         {
             if (Reference)
-                Reference.IsActiveInScene = false;
-            
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+                ActiveSelf = false;
         }
 
         protected override void OnDestroy()

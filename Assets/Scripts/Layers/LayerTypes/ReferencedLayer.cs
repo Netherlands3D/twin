@@ -15,7 +15,6 @@ namespace Netherlands3D.Twin
             set => ReferencedProxy.Name = value;
         }
 
-        public abstract bool IsActiveInScene { get; set; }
         public ReferencedProxyLayer ReferencedProxy { get; set; }
 
         public UnityEvent onShow = new();
@@ -29,11 +28,17 @@ namespace Netherlands3D.Twin
         private void OnEnable()
         {
             onShow.Invoke();
+            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         private void OnDisable()
         {
             onHide.Invoke();
+            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
         }
 
         public virtual void OnSelect()

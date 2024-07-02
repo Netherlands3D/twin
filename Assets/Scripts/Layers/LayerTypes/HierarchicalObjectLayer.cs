@@ -15,16 +15,6 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI?.MarkLayerUIAsDirty();
-            }
-        }
-
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
@@ -40,6 +30,11 @@ namespace Netherlands3D.Twin.Layers
         private void Start()
         {
             objectCreated.Invoke(gameObject);
+        }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
 
         private void OnMouseClickNothing()

@@ -36,16 +36,6 @@ namespace Netherlands3D.Twin.Layers
 
         private bool completedInitialization;
 
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
-            }
-        }
-
         public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
         {
             this.originalObject = originalObject;
@@ -77,6 +67,11 @@ namespace Netherlands3D.Twin.Layers
             gameObject.AddComponent<WorldTransform>();
 
             StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
+        }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
 
         private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
@@ -335,7 +330,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            var initialActiveState = IsActiveInScene;
+            var initialActiveState = ReferencedProxy.ActiveSelf;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
             var openProperties = ReferencedProxy.UI && ReferencedProxy.UI.PropertiesOpen;
             StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));

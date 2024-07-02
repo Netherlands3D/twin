@@ -57,17 +57,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 tileSet.RefreshTiles();
         }
-        
-
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
-            }
-        }
 
         private CredentialsPropertySection propertySection;
         public CredentialsPropertySection PropertySection {
@@ -100,6 +89,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnDisable()
         {
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
+        }
+        
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+            // ReferencedProxy.UI.MarkLayerUIAsDirty();
         }
 
         private void InvokeUnsupportedExtensionsMessage(string[] unsupportedExtensions)
