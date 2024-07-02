@@ -67,7 +67,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public LayerUI UI { get; set; } //todo: remove
 
-        public int Depth { get; private set; } = 0; //todo: remove if possible
+        public int Depth //todo: remove if possible
+        {
+            get
+            {
+                if (transform.parent != LayerData.Instance.transform)
+                    return ParentLayer.Depth + 1;
+                else
+                    return 0;
+            }
+        } 
 
         public bool ActiveInHierarchy
         {
@@ -156,7 +165,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             transform.SetSiblingIndex(siblingIndex);
 
-            RecalculateCurrentSubTreeDepthValuesRecursively();
             UI?.SetParent(newParentLayer?.UI, siblingIndex);
 
             LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
@@ -166,24 +174,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
-            }
-
-            // ProjectData.SetParent(newParentLayer?.ProjectData, siblingIndex);
-        }
-
-        private void RecalculateCurrentSubTreeDepthValuesRecursively()
-        {
-            if (transform.parent != LayerData.Instance.transform)
-                Depth = ParentLayer.Depth + 1;
-            else
-                Depth = 0;
-
-            foreach (var child in GetComponentsInChildren<LayerNL3DBase>())
-            {
-                if (child == this)
-                    continue;
-
-                child.RecalculateCurrentSubTreeDepthValuesRecursively();
             }
         }
     }
