@@ -19,11 +19,9 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
-using System.Collections.Generic;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -59,32 +57,30 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            Tile tile = tiles[tileKey];         
-           
-            string polygonUrl = dataController.GeneratePolygonUrlForTile(tile);
-            string url = Datasets[tiles[tileKey].unityLOD].path + polygonUrl;
-
-            var webRequest = UnityWebRequest.Get(url);
+            Tile tile = tiles[tileKey]; 
+            UnityWebRequest webRequest = dataController.GetRequest(tile, Datasets[tiles[tileKey].unityLOD].path);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
             tile.runningWebRequest = null;
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"Could not download {url}");
+                Debug.LogWarning($"Could not download sensor data { webRequest.url }");
                 RemoveGameObjectFromTile(tileKey);
                 callback(tileChange);
             }
             else
             {
-                ClearPreviousTexture(tile);
                 dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
                 TileSensorData tileSensorData = tile.gameObject.GetComponent<TileSensorData>();
-                tileSensorData.SetCells(dataController);
+                tileSensorData.SetCells(tile, dataController);
                 tileSensorData.UpdateTexture(tile, dataController);
 
                 //free up memory
                 //tileSensorData.ClearCells();
-                dataController.ClearCells();
+
+                //when static sensor data we need to keep the cell data alive
+                if(!dataController.StaticSensorData)
+                    dataController.ClearCells();
               
                 callback(tileChange);
             }

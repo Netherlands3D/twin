@@ -10,7 +10,6 @@ namespace Netherlands3D.CartesianTiles
     {
         public Texture2D DataTexture { get { return dataTexture; } }
 
-        [SerializeField]
         private Texture2D dataTexture;
         private bool hexagonalPatternEnabled = true; //enabling gives a hexagon pattern, disabling only shows colored hexagons with data (disabling increases performance)
         private const float sqr3 = 1.73205080757f;
@@ -26,8 +25,7 @@ namespace Netherlands3D.CartesianTiles
         private const int rows = 11;
         private float hexagonEdgeWidth = 0.03f;
         private Vector2 tileHexagonOffset = Vector2.zero;
-        private List<SensorDataController.UrbanReleafCell> localCells;
-
+        private List<SensorDataController.SensorCell> localCells;
         
         public void Initialize()
         {
@@ -58,13 +56,13 @@ namespace Netherlands3D.CartesianTiles
             //int offsetIndexX = (tile.tileKey.x / tile.layer.tileSize) % 3;
             //if(offsetIndexX % 3 != 0)
             //    tileHexagonOffset.x = (offsetIndexX) * -hexWidth * ;
-
         }
 
-        public void SetCells(SensorDataController controller)
+        public void SetCells(Tile tile, SensorDataController controller)
         {
             ClearCells();
-            localCells = new List<SensorDataController.UrbanReleafCell>(controller.Cells);
+            List<SensorDataController.SensorCell> cells = controller.GetSensorCellsForTile(tile);
+            localCells = new List<SensorDataController.SensorCell>(cells);
         }       
 
         public void UpdateTexture(Tile tile, SensorDataController controller)
@@ -91,9 +89,6 @@ namespace Netherlands3D.CartesianTiles
                         position.x / columnsInner * tile.layer.tileSize + tile.gameObject.transform.position.x - tile.layer.tileSize * 0.5f,
                         position.y / rowsInner * tile.layer.tileSize + tile.gameObject.transform.position.z - tile.layer.tileSize * 0.5f
                         );
-
-                    //use this to test positions and radius for hexagons
-                    //TestHexagon(tile, tilePosition, columnsInner);
                     
                     //get the average cell value from datapoints
                     //because of floating point approximation lets add +0.001f * tilesize 
@@ -105,8 +100,8 @@ namespace Netherlands3D.CartesianTiles
                     Color valueColor = Color.gray;
                     if (hasValues)
                     {
-                        float total = controller.Maximum - controller.Minimum; //total value space
-                        float v = (value - controller.Minimum) / total; //bring it to 0 and devide with total to get a 0-1 value
+                        float total = controller.Maximum - controller.Minimum; 
+                        float v = (value - controller.Minimum) / total; 
                         v = Mathf.Clamp01(v);
                         valueColor = Color.Lerp(controller.MinColor, controller.MaxColor, v);
                         valueColor.a = 1f;
@@ -161,8 +156,7 @@ namespace Netherlands3D.CartesianTiles
 
             int cellsInHexagon = 0;
             float value = 0;
-            double[] lonlat = new double[2];
-            foreach(SensorDataController.UrbanReleafCell cell in localCells)
+            foreach(SensorDataController.SensorCell cell in localCells)
             {
                 Vector3 unityPosition = cell.unityPosition;
                 if(IsInsideHexagon(hexagonPosition.x, hexagonPosition.y, hexagonRadius * 2, unityPosition.x, unityPosition.z))
@@ -219,7 +213,8 @@ namespace Netherlands3D.CartesianTiles
         private void OnDestroy()
         {
             ClearCells();
-            //ClearSensorTestPositions();
+            if (dataTexture != null)
+                Destroy(dataTexture);
         }
 
         public void ClearCells()
@@ -227,9 +222,6 @@ namespace Netherlands3D.CartesianTiles
             if (localCells != null)
                 localCells.Clear();
         }
-
-
-
 
         //DEBUG//
 
@@ -265,6 +257,8 @@ namespace Netherlands3D.CartesianTiles
         //    return result;
         //}
 
+        //use this to test positions and radius for hexagons
+        //TestHexagon(tile, tilePosition, columnsInner); in updatetexture within the col and row loops
         //private void TestHexagon(Tile tile, Vector2 position, int innerColumns)
         //{
         //    GameObject t = GameObject.CreatePrimitive(PrimitiveType.Sphere);

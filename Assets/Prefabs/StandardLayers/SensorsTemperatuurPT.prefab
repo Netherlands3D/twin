@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 8942052645519180280}
   - component: {fileID: 7013426741443180255}
   - component: {fileID: 4798792025898717726}
-  - component: {fileID: 1263369775588610449}
-  - component: {fileID: -8558701900799187924}
-  - component: {fileID: 4683332348422220768}
-  - component: {fileID: 1953088678775989159}
+  - component: {fileID: -1267657624597856126}
+  - component: {fileID: -4477737208896735972}
+  - component: {fileID: -4680576856118889905}
+  - component: {fileID: -3794778542508352434}
   m_Layer: 0
-  m_Name: SensorsThermischOngemak
+  m_Name: SensorsTemperatuurPT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://platform-urbanreleaf.iccs.gr/api/public/observations?city=Utrecht&observation_type=Thermal%20Discomfort
+    path: https://services.platform.wecity.nl/pientere-tuinen-measurements
     pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1263369775588610449
+--- !u!114 &-1267657624597856126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,15 +100,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1762811913447571165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9483b6a6c1d04af4587a0940f5e2738e, type: 3}
+  m_Script: {fileID: 11500000, guid: f3619af3e0e4e5748be9885e8d84cef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyType: 3
-  Maximum: 1
-  Minimum: 0
-  MaxColor: {r: 1, g: 0, b: 0.18562794, a: 1}
-  MinColor: {r: 0, g: 1, b: 0.15729427, a: 1}
---- !u!114 &-8558701900799187924
+  StaticSensorData: 1
+  propertyType: 1
+  Maximum: 40
+  Minimum: -10
+  MaxColor: {r: 1, g: 0, b: 0, a: 1}
+  MinColor: {r: 0, g: 0.086298704, b: 1, a: 1}
+--- !u!114 &-4477737208896735972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +140,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4683332348422220768
+--- !u!114 &-4680576856118889905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
-  worldTransformShifter: {fileID: 1953088678775989159}
+  worldTransformShifter: {fileID: -3794778542508352434}
   referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
@@ -160,7 +161,7 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1953088678775989159
+--- !u!114 &-3794778542508352434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8942052645519180280}
   - component: {fileID: 7013426741443180255}
-  - component: {fileID: 4798792025898717726}
-  - component: {fileID: 1263369775588610449}
-  - component: {fileID: -8558701900799187924}
-  - component: {fileID: 4683332348422220768}
-  - component: {fileID: 1953088678775989159}
+  - component: {fileID: 8385893786410652466}
+  - component: {fileID: -2897324414735960087}
+  - component: {fileID: -3615321823364236960}
+  - component: {fileID: 8999195932812253715}
+  - component: {fileID: -5673596216332244454}
   m_Layer: 0
-  m_Name: SensorsThermischOngemak
+  m_Name: SensorsTemperatuurUR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4798792025898717726
+--- !u!114 &8385893786410652466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://platform-urbanreleaf.iccs.gr/api/public/observations?city=Utrecht&observation_type=Thermal%20Discomfort
+    path: https://platform-urbanreleaf.iccs.gr/api/public/observations?city=Utrecht&observation_type=Temperature
     pathQuery: 
     maximumDistance: 10000
     maximumDistanceSquared: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1263369775588610449
+--- !u!114 &-2897324414735960087
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,12 +103,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9483b6a6c1d04af4587a0940f5e2738e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyType: 3
-  Maximum: 1
-  Minimum: 0
-  MaxColor: {r: 1, g: 0, b: 0.18562794, a: 1}
-  MinColor: {r: 0, g: 1, b: 0.15729427, a: 1}
---- !u!114 &-8558701900799187924
+  propertyType: 1
+  Maximum: 40
+  Minimum: -10
+  MaxColor: {r: 1, g: 0, b: 0, a: 1}
+  MinColor: {r: 0, g: 0.07468295, b: 1, a: 1}
+--- !u!114 &-3615321823364236960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +139,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4683332348422220768
+--- !u!114 &8999195932812253715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
-  worldTransformShifter: {fileID: 1953088678775989159}
+  worldTransformShifter: {fileID: -5673596216332244454}
   referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
@@ -160,7 +160,7 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1953088678775989159
+--- !u!114 &-5673596216332244454
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
