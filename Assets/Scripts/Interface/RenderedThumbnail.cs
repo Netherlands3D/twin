@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin
 		[Header("Rendering")]
 		[SerializeField] private int thumbnailRendererIndex = 2;
 		[SerializeField] private bool orthographic = false;
+		[SerializeField] private float farClipPlaneCamera = 20000;
 		private RenderTexture thumbnailRenderTexture;
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace Netherlands3D.Twin
 			temporaryThumbnailCamera.clearFlags = CameraClearFlags.Color;
 			temporaryThumbnailCamera.backgroundColor = Color.grey;
 			temporaryThumbnailCamera.enabled = false; // Only render on demand
+			temporaryThumbnailCamera.farClipPlane = farClipPlaneCamera;
 			temporaryThumbnailCamera.targetTexture = thumbnailRenderTexture;
 			
 			// Determine distance to cover bounds with camera
