@@ -118,6 +118,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerDestroyed.Invoke();
 
             LayerData.RemoveLayer(this);
+            DeleteLayer();
         }
 
         private void Awake()
