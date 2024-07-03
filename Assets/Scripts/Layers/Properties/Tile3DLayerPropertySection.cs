@@ -6,6 +6,7 @@ using Netherlands3D.Twin.UI.LayerInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -13,31 +14,90 @@ namespace Netherlands3D.Twin
     public class Tile3DLayerPropertySection : MonoBehaviour
     {
         [SerializeField] private TMP_InputField urlInputField;
+        [SerializeField] private Transform input;
+        [SerializeField] private Transform errorMessage;
+        [SerializeField] private Image colorFeedbackImage;
+        [SerializeField] private Color defaultColor;
+        [SerializeField] private Color warningColor;
 
-        private Tile3DLayer2 layer;
-        public Tile3DLayer2 Layer
+        private Tile3DLayer tile3DLayer;
+        public Tile3DLayer Tile3DLayer
         {
-            get => layer;
+            get => tile3DLayer;
             set
             {
-                layer = value;
-                urlInputField.text = layer.URL;
+                if(tile3DLayer != null)
+                {
+                    tile3DLayer.OnURLChanged.RemoveListener(DisplayURL);
+                    tile3DLayer.OnServerResponseReceived.RemoveListener(ShowServerWarningFeedback);
+                }
+                tile3DLayer = value;
+
+                if(tile3DLayer != null)
+                {
+                    tile3DLayer.OnURLChanged.AddListener(DisplayURL);
+                    tile3DLayer.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
+                }
+
+                urlInputField.text = tile3DLayer.URL;
             }
         }
 
-        private void OnEnable()
+        public void DisplayURL(string url)
         {
-            urlInputField.onEndEdit.AddListener(HandleURLChange);
-        }
-        
-        private void OnDisable()
-        {
-            urlInputField.onEndEdit.RemoveListener(HandleURLChange);
+            urlInputField.text = url;
         }
 
-        private void HandleURLChange(string newValue)
+        public void ShowServerWarningFeedback(UnityWebRequest webRequest)
         {
-            layer.URL = newValue;
+            if(webRequest.ReturnedServerError())
+            {
+                colorFeedbackImage.color = warningColor;
+                errorMessage.gameObject.SetActive(true);
+                input.gameObject.SetActive(false);
+            }
+            else
+            {
+                errorMessage.gameObject.SetActive(false);
+                input.gameObject.SetActive(true);
+            }
+        }
+
+        public void ApplyURL()
+        {
+            var sanitizedURL = SanitizeURL(urlInputField.text);
+            urlInputField.text = sanitizedURL;
+
+            //Make sure its long enough to contain a domain
+            if (!IsValidURL(sanitizedURL))
+            {
+                colorFeedbackImage.color = warningColor;
+                return;
+            }        
+
+            colorFeedbackImage.color = defaultColor;
+            tile3DLayer.URL = sanitizedURL;
+        }
+
+        private string SanitizeURL(string url)
+        {
+            //Append https:// if http:// or https:// is not present
+            if (url.Length > 5 && !url.StartsWith("http://") && !url.StartsWith("https://"))
+            {
+                url = "https://" + url;
+            }
+
+            return url;
+        }
+
+        private bool IsValidURL(string url)
+        {
+            if(url.Length < 10)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

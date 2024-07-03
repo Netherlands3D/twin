@@ -12,19 +12,25 @@ namespace Netherlands3D.Twin
         public TMP_Dropdown Dropdownmenu;
         public int ItemNumber = 0;
 
-       public void DropdownSelectItem()
+        private void Awake()
+        {
+            DropdownSelectItem(Dropdownmenu.value);
+
+            //Listen to change in the dropdown menu
+            Dropdownmenu.onValueChanged.AddListener(DropdownSelectItem);
+        }
+
+        public void DropdownSelectItem(int changedToItem = 0)
         {
             ItemNumber = Dropdownmenu.value;
-           if(DropdownItems.Length >= ItemNumber)
+            if (DropdownItems.Length >= ItemNumber)
             {
                 foreach (GameObject GameObject in DropdownItems)
                 {
                     GameObject.SetActive(false);
                 }
                 DropdownItems[ItemNumber].SetActive(true);
-                
             }
-            
         }
     }
 }

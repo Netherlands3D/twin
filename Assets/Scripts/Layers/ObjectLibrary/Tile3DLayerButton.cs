@@ -14,9 +14,9 @@ namespace Netherlands3D.Twin
             var newObject = Instantiate(prefab, Vector3.zero, Quaternion.Euler(initialRotation), layerParent);
             newObject.transform.localScale = initialScale;
             newObject.name = prefab.name;
-            var layerComponent = newObject.GetComponent<Tile3DLayer2>();
+            var layerComponent = newObject.GetComponent<Tile3DLayer>();
             if (!layerComponent)
-                newObject.AddComponent<Tile3DLayer2>();            
+                newObject.AddComponent<Tile3DLayer>();            
         }
     }
 }

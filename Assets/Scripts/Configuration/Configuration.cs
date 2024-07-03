@@ -109,6 +109,36 @@ namespace Netherlands3D.Twin.Configuration
             Populate(queryParameters);
         }
 
+        public void Populate(JSONNode jsonNode)
+        {
+            if (jsonNode["title"])
+            {
+                Title = jsonNode["title"];
+            }
+
+            if (jsonNode["allowUserSettings"] != null)
+            {
+                AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
+            }
+
+            Origin = new Coordinate(
+                jsonNode["origin"]["epsg"],
+                jsonNode["origin"]["x"],
+                jsonNode["origin"]["y"],
+                jsonNode["origin"]["z"]
+            );
+            Debug.Log($"Set origin '{Origin}' from Configuration file");
+
+            foreach (var element in jsonNode["functionalities"])
+            {
+                var functionality = Functionalities.FirstOrDefault(functionality => functionality.Id == element.Key);
+                if (!functionality) continue;
+
+                functionality.Populate(element.Value);
+                if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from Configuration file");
+            }
+        }
+
         public void Populate(NameValueCollection queryParameters)
         {
             if (UrlContainsConfiguration(queryParameters))
@@ -128,11 +158,16 @@ namespace Netherlands3D.Twin.Configuration
                 LoadFunctionalitiesFromString(functionalitiesFromQueryString);
             }
 
+            PopulateFunctionalitySpecificConfigurations(queryParameters);
+        }
+
+        private void PopulateFunctionalitySpecificConfigurations(NameValueCollection queryParameters)
+        {
             foreach (var functionality in Functionalities)
             {
                 var config = functionality.configuration as IConfiguration;
                 if (config == null) continue;
-                
+
                 config.Populate(queryParameters);
                 if (config.Validate().Count > 0 && functionality.IsEnabled)
                 {
@@ -167,36 +202,6 @@ namespace Netherlands3D.Twin.Configuration
         public List<string> Validate()
         {
             return new List<string>();
-        }
-
-        public void Populate(JSONNode jsonNode)
-        {
-            if (jsonNode["title"])
-            {
-                Title = jsonNode["title"];
-            }
-
-            if (jsonNode["allowUserSettings"] != null)
-            {
-                AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
-            }
-
-            Origin = new Coordinate(
-                jsonNode["origin"]["epsg"],
-                jsonNode["origin"]["x"],
-                jsonNode["origin"]["y"],
-                jsonNode["origin"]["z"]
-            );
-            Debug.Log($"Set origin '{Origin}' from Configuration file");
-
-            foreach (var element in jsonNode["functionalities"])
-            {
-                var functionality = Functionalities.FirstOrDefault(functionality => functionality.Id == element.Key);
-                if (!functionality) continue;
-
-                functionality.Populate(element.Value);
-                if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from Configuration file");
-            }
         }
 
         public JSONNode ToJsonNode()

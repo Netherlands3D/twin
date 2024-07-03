@@ -23,13 +23,15 @@ namespace Netherlands3D.Twin
             Instance = this;
         }
 
-        public void ShowOverlay(OverlayInspector overlay, bool clear)
+        public OverlayInspector ShowOverlay(OverlayInspector overlay, bool clear)
         {
             if(clear)
                 ClearAllOverlays();
 
-            Instantiate(overlay, transform);
+            var newOverlay = Instantiate(overlay, transform);
             background.enabled = true;
+
+            return newOverlay;
         }
 
         private void ClearAllOverlays()
