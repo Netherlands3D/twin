@@ -24,6 +24,11 @@ MonoBehaviour:
     password: 
     key: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
     authorizationType: 2
+  - url: https://services.platform.wecity.nl/pientere-tuinen-measurements
+    username: 
+    password: 
+    key: 9471a986-7d17-41dd-baaf-dd9314b1987d
+    authorizationType: 2
   log: 1
   OnAuthorizationTypeDetermined:
     m_PersistentCalls:

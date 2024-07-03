@@ -109,6 +109,7 @@ MonoBehaviour:
   Minimum: 0
   MaxColor: {r: 1, g: 0, b: 0.8449569, a: 1}
   MinColor: {r: 0, g: 0.5544028, b: 1, a: 1}
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &-2213843962947523390
 MonoBehaviour:
   m_ObjectHideFlags: 0

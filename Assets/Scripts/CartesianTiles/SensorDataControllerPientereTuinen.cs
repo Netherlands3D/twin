@@ -11,11 +11,14 @@ using UnityEngine.Networking;
 namespace Netherlands3D.Twin
 {
     public class SensorDataControllerPientereTuinen : SensorDataController
-    {
-        private const string apiKey = ""; //removed it for now, TODO how to store this??
+    {        
+        [SerializeField]
+        private KeyVault keyVault;
 
         public override UnityWebRequest GetRequest(Tile tile, string baseUrl)
-        {
+        {   
+            StoredAuthorization auth = keyVault.GetStoredAuthorization(baseUrl);
+            string apiKey = auth.key;
             //TODO how to query the spatial data!?
             //string polygonUrl = GeneratePolygonUrlForTile(tile);
             string url = baseUrl + "?page=0&size=1000";// + polygonUrl;
