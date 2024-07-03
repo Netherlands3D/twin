@@ -114,11 +114,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void OnDestroy()
         {
             if (!Application.isPlaying) return;
-
+            
+            DeselectLayer();
             LayerDestroyed.Invoke();
 
             LayerData.RemoveLayer(this);
-            DeleteLayer();
         }
 
         private void Awake()
@@ -210,11 +210,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void DeleteLayer()
+        public void DestroyLayer()
         {
             DeselectLayer();
-            Destroy(UI.gameObject);
+            Destroy(gameObject);
         }
-        
     }
 }

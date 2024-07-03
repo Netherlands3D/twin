@@ -256,9 +256,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layer in ProjectData.RootLayer.SelectedLayers)
+            foreach (var layer in ProjectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
-                Destroy(layer.gameObject);
+                layer.DestroyLayer();
             }
         }
 
