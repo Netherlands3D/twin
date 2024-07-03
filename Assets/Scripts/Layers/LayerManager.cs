@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,8 +12,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class LayerManager : MonoBehaviour, IPointerDownHandler
     {
-        public List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
-        public List<LayerUI> SelectedLayers { get; set; } = new();
+        public List<LayerUI> LayerUIsVisibleInInspector { get; set; } = new List<LayerUI>();
 
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
@@ -78,36 +78,25 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             ReconstructHierarchyUIs();
             LayerData.LayerAdded.AddListener(CreateNewUI);
-            LayerData.LayerDeleted.AddListener(OnLayerDeleted);
+            // LayerData.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            DeselectAllLayers();
+            ProjectData.RootLayer.DeselectAllLayers();
             LayerData.LayerAdded.RemoveListener(CreateNewUI);
-            LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            // LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
-
+        
         private void CreateNewUI(LayerNL3DBase layer)
         {
             var layerUI = InstantiateLayerItem(layer, layer.transform.parent.GetComponent<LayerNL3DBase>());
-            layerUI.Select(true);
-        }
-
-        private void OnLayerDeleted(LayerNL3DBase layer)
-        {
-            if (SelectedLayers.Contains(layer.UI))
-            {
-                layer.OnDeselect();
-                SelectedLayers.Remove(layer.UI);
-            }
-
-            Destroy(layer.UI.gameObject);
+            layer.SelectLayer(true);
         }
 
         private void OnRectTransformDimensionsChange()
         {
-            foreach (var layer in LayersVisibleInInspector)
+            foreach (var layer in LayerUIsVisibleInInspector)
             {
                 layer.MarkLayerUIAsDirty();
             }
@@ -135,17 +124,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                DeselectAllLayers();
-        }
-
-        public void DeselectAllLayers()
-        {
-            // Make a copy of the SelectedLayers list because the Deselect function removes
-            // the selected layer from this list; and the enumeration fails without a copy
-            foreach (var selectedLayer in SelectedLayers.ToList())
-            {
-                selectedLayer.Deselect();
-            }
+                ProjectData.RootLayer.DeselectAllLayers();
         }
 
         public FolderLayer CreateFolderLayer()
@@ -244,29 +223,29 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void GroupSelectedLayers()
         {
             var newGroup = CreateFolderLayer();
-            var referenceLayerUI = SelectedLayers.Last();
-            newGroup.SetParent(referenceLayerUI.Layer.transform.parent.GetComponent<LayerNL3DBase>(), referenceLayerUI.transform.GetSiblingIndex());
+            var referenceLayer = ProjectData.RootLayer.SelectedLayers.Last();
+            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.transform.GetSiblingIndex());
             SortSelectedLayers();
-            foreach (var selectedLayer in SelectedLayers)
+            foreach (var selectedLayer in ProjectData.RootLayer.SelectedLayers)
             {
-                selectedLayer.Layer.SetParent(newGroup);
+                selectedLayer.SetParent(newGroup);
             }
         }
 
         public void SortSelectedLayersByVisibility()
         {
-            SelectedLayers.Sort((layer1, layer2) => LayersVisibleInInspector.IndexOf(layer1).CompareTo(LayersVisibleInInspector.IndexOf(layer2)));
+            ProjectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(layer1.UI).CompareTo(LayerUIsVisibleInInspector.IndexOf(layer2.UI)));
         }
 
         private void SortSelectedLayers()
         {
-            SelectedLayers.Sort((ui1, ui2) =>
+            ProjectData.RootLayer.SelectedLayers.Sort((layer1, layer2) =>
             {
                 // Primary sorting by Depth
-                int depthComparison = ui1.Layer.Depth.CompareTo(ui2.Layer.Depth);
+                int depthComparison = layer1.Depth.CompareTo(layer2.Depth);
 
                 // If depths are the same, use the order as visible in the hierarchy
-                return depthComparison != 0 ? depthComparison : LayersVisibleInInspector.IndexOf(ui1).CompareTo(LayersVisibleInInspector.IndexOf(ui2));
+                return depthComparison != 0 ? depthComparison : LayerUIsVisibleInInspector.IndexOf(layer1.UI).CompareTo(LayerUIsVisibleInInspector.IndexOf(layer2.UI));
             });
         }
 
@@ -277,19 +256,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layerUI in SelectedLayers)
+            foreach (var layer in ProjectData.RootLayer.SelectedLayers)
             {
-                Destroy(layerUI.Layer.gameObject);
+                Destroy(layer.gameObject);
             }
         }
 
         public void RemoveUI(LayerUI layerUI)
         {
-            if (SelectedLayers.Contains(layerUI))
-                SelectedLayers.Remove(layerUI);
+            if (ProjectData.RootLayer.SelectedLayers.Contains(layerUI.Layer))
+                ProjectData.RootLayer.SelectedLayers.Remove(layerUI.Layer);
 
-            if (LayersVisibleInInspector.Contains(layerUI))
-                LayersVisibleInInspector.Remove(layerUI);
+            if (LayerUIsVisibleInInspector.Contains(layerUI))
+                LayerUIsVisibleInInspector.Remove(layerUI);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -16,8 +17,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-        
-        private static LayerNL3DBase rootLayer;
+        [JsonIgnore] public bool IsSelected { get; private set; }
+
+        public RootLayer Root => ProjectData.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
         public LayerNL3DBase ParentLayer => parent;
         public List<LayerNL3DBase> ChildrenLayers => children;
         
@@ -65,6 +67,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public UnityEvent<Color> ColorChanged = new();
         public UnityEvent LayerDestroyed = new();
 
+        public UnityEvent<LayerNL3DBase> LayerSelected = new();
+        public UnityEvent<LayerNL3DBase> LayerDeselected = new();
+        
         public LayerUI UI { get; set; } //todo: remove
 
         public int Depth //todo: remove if possible
@@ -89,15 +94,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-
-        public virtual void OnSelect()
+        public void SelectLayer(bool deselectOthers = false)
         {
+            if(deselectOthers)
+                Root.DeselectAllLayers();
+            
+            IsSelected = true;
+            Root.AddLayerToSelection(this);
+            LayerSelected.Invoke(this);
         }
 
-        public virtual void OnDeselect()
+        public void DeselectLayer()
         {
+            IsSelected = false;
+            Root.RemoveLayerFromSelection(this);
+            LayerDeselected.Invoke(this);
         }
-
+        
         protected virtual void OnDestroy()
         {
             if (!Application.isPlaying) return;
@@ -149,6 +162,25 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
         }
 
+        // public void SetParent2(LayerNL3DBase newParent, int siblingIndex)
+        // {
+        //     Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
+        //     
+        //     if (newParent == null)
+        //         newParent = Root;
+        //
+        //     if (parent != null)
+        //         parent.children.Remove(this);
+        //
+        //     if (siblingIndex < 0)
+        //         siblingIndex = newParent.children.Count;
+        //
+        //     parent = newParent;
+        //     Debug.Log("new parent: " + newParent);
+        //     Debug.Log("children: " + children);
+        //     newParent.children.Insert(siblingIndex, this);
+        // }
+        
         public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
         {
             if (newParentLayer == this)
@@ -176,5 +208,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
         }
+
+        public void DeleteLayer()
+        {
+            DeselectLayer();
+            Destroy(UI.gameObject);
+        }
+        
     }
 }

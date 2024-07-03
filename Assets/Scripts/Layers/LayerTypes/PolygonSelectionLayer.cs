@@ -5,6 +5,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -82,26 +83,10 @@ namespace Netherlands3D.Twin.Layers
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
 
-
-        public void SelectPolygon()
-        {
-            if (UI)
-                UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
-        }
-
-        public void DeselectPolygon()
-        {
-            if (UI && UI.IsSelected)
-                UI.Deselect(); // processes OnDeselect as well
-            else
-                OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
-        }
-
         private void ShiftedPolygon(List<Vector3> newPolygon)
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             notifyOnPolygonChange = false;
-            DeselectPolygon();
             SetShape(newPolygon);
             polygonMoved.Invoke();
             notifyOnPolygonChange = true;
@@ -227,11 +212,15 @@ namespace Netherlands3D.Twin.Layers
         private void OnEnable()
         {
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            LayerSelected.AddListener(OnSelect);
+            LayerDeselected.AddListener(OnDeselect);
         }
 
         private void OnDisable()
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            LayerSelected.RemoveListener(OnSelect);
+            LayerDeselected.RemoveListener(OnDeselect);
         }
 
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
@@ -239,15 +228,13 @@ namespace Netherlands3D.Twin.Layers
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }
 
-        public override void OnSelect()
+        private void OnSelect(LayerNL3DBase layer)
         {
-            base.OnSelect();
             polygonSelected.Invoke(this);
         }
 
-        public override void OnDeselect()
+        private void OnDeselect(LayerNL3DBase layer)
         {
-            base.OnDeselect();
             polygonSelected.Invoke(null);
         }
 

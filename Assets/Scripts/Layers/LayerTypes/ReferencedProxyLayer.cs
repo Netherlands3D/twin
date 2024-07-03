@@ -16,12 +16,17 @@ namespace Netherlands3D.Twin
             if (Reference)
                 ActiveSelf = true;
             
+            LayerSelected.AddListener(OnSelect);
+            LayerDeselected.AddListener(OnDeselect);
         }
 
         private void OnDisable()
         {
             if (Reference)
                 ActiveSelf = false;
+
+            LayerSelected.RemoveListener(OnSelect);
+            LayerDeselected.RemoveListener(OnDeselect);
         }
 
         protected override void OnDestroy()
@@ -31,15 +36,13 @@ namespace Netherlands3D.Twin
                 Destroy(Reference.gameObject);
         }
 
-        public override void OnSelect()
+        private void OnSelect(LayerNL3DBase layer)
         {
-            base.OnSelect();
             Reference.OnSelect();
         }
 
-        public override void OnDeselect()
+        private void OnDeselect(LayerNL3DBase layer)
         {
-            base.OnDeselect();
             Reference.OnDeselect();
         }
 

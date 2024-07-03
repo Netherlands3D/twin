@@ -77,10 +77,10 @@ namespace Netherlands3D.Twin
             return layerComponent;
         }
 
-        private IEnumerator SelectAndHoverAtEndOfFrame()
+        private IEnumerator SelectAndHoverAtEndOfFrame() //todo: remove this coroutine after monobehaviours are removed from layers since ordering should no longer be an issue
         {
             yield return new WaitForEndOfFrame();
-            layer.ReferencedProxy.UI.Select();
+            layer.ReferencedProxy.SelectLayer();
             HighlightLayer(true);
             layer.ReferencedProxy.Name = prefab.name;
             layer.ReferencedProxy.UI.MarkLayerUIAsDirty();

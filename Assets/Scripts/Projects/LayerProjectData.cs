@@ -35,15 +35,15 @@ namespace Netherlands3D.Twin.Projects
         public void Initialize(ProjectData projectData, int siblingIndex)
         {
             project = projectData;
-            SetParent(projectData.rootLayer, siblingIndex);
+            // SetParent(projectData.RootLayer, siblingIndex);
         }
 
         public void SetParent(LayerProjectData newParent, int siblingIndex)
         {
             Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
             
-            if (newParent == null)
-                newParent = project.rootLayer;
+            // if (newParent == null)
+            //     newParent = project.RootLayer;
 
             if (parent != null)
                 parent.children.Remove(this);

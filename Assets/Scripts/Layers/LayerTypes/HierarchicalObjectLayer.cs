@@ -39,17 +39,15 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnMouseClickNothing()
         {
-            if (ReferencedProxy.UI.IsSelected)
+            if (ReferencedProxy.IsSelected)
             {
-                ReferencedProxy.UI.Deselect();
+                ReferencedProxy.DeselectLayer();
             }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (ReferencedProxy.UI == null) return;
-
-            ReferencedProxy.UI.Select(true);
+            ReferencedProxy.SelectLayer(true);
         }
 
         public override void OnSelect()
@@ -89,7 +87,7 @@ namespace Netherlands3D.Twin.Layers
             layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy), openProperties);
 
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
-            
+
             return layerComponent;
         }
 

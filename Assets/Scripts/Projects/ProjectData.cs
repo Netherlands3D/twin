@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.UI.LayerInspector;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -31,7 +32,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-        public LayerProjectData rootLayer = new();
+        public static RootLayer RootLayer = new(); //todo: make not static
   
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -61,7 +62,7 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
-            rootLayer = project.rootLayer;
+            // RootLayer = project.RootLayer;
             
             IsDirty = true;
         }

@@ -155,7 +155,7 @@ namespace Netherlands3D.Twin.Layers
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
             if(ActiveLayer)
-                ActiveLayer.DeselectPolygon(); 
+                ActiveLayer.DeselectLayer(); 
             
             polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
@@ -163,7 +163,7 @@ namespace Netherlands3D.Twin.Layers
         public void SetLineInputModeToCreate(bool isCreateMode)
         {
             if(ActiveLayer)
-                ActiveLayer.DeselectPolygon();
+                ActiveLayer.DeselectLayer();
 
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }

@@ -63,12 +63,12 @@ namespace Netherlands3D.Twin
                 bool wasSelected = ProcessPolygonSelection(layer, camera, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
-                    layer.SelectPolygon();
+                    layer.SelectLayer();
                     return; //select only one
                 }
                 else
                 {
-                    layer.DeselectPolygon(); //deselect if the click wasn't in the polygon and the multiselect modifier keys aren't pressed
+                    layer.DeselectLayer(); //deselect if the click wasn't in the polygon and the multiselect modifier keys aren't pressed
                 }
             }
         }
