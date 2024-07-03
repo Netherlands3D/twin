@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Masking_TestAssets/ColorMasking/ColorMasking_Poc.unity
+    guid: 37171ca9d3548cc4485f3f545f634826
+  - enabled: 1
     path: Assets/Scenes/ConfigLoader.unity
     guid: b0d6ae1cb9a140c4596aeb993a81fd2d
   - enabled: 1
