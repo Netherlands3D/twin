@@ -1362,7 +1362,7 @@ GameObject:
   - component: {fileID: 4247430226116721642}
   - component: {fileID: 8360637078574007450}
   m_Layer: 5
-  m_Name: AddFileViaURL
+  m_Name: URLInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
