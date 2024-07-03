@@ -429,7 +429,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnLayerSelected(LayerNL3DBase layer)
         {
-            SelectUI(AddToSelectionModifierKeyIsPressed());
+            SelectUI();
         }
         
         private void OnLayerDeselected(LayerNL3DBase layer)
