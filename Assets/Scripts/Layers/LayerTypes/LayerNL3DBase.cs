@@ -78,7 +78,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             get
             {
-                if (transform.parent != LayerData.Instance.transform)
+                if (ParentLayer != LayerData.Instance)
                     return ParentLayer.Depth + 1;
                 else
                     return 0;
