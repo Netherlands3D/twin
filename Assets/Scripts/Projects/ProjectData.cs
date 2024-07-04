@@ -206,8 +206,7 @@ namespace Netherlands3D.Twin.Projects
         public void AddStandardLayer(LayerNL3DBase layer)
         {
             // layer.Initialize(rootLayer, -1);
-            layer.transform.SetParent(LayerData.Instance.transform);
-            layer.SetParent(LayerData.Instance);
+            layer.SetParent(RootLayer);
             LayerAdded.Invoke(layer);
         }
         
@@ -215,8 +214,7 @@ namespace Netherlands3D.Twin.Projects
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
-            var referenceLayerObject = new GameObject(referenceName);
-            var proxyLayer = referenceLayerObject.AddComponent<ReferencedProxyLayer>(); 
+            var proxyLayer = new ReferencedProxyLayer(); 
             proxyLayer.CONSTRUCTOR(referenceName);
             proxyLayer.Reference = referencedLayer;
             referencedLayer.ReferencedProxy = proxyLayer;

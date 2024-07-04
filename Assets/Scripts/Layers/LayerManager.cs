@@ -38,10 +38,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            foreach (var layer in LayerData.Instance.ChildrenLayers)
+            foreach (var layer in projectData.RootLayer.ChildrenLayers)
             {
                 // var layer = t.GetComponent<LayerNL3DBase>();
-                ConstructHierarchyUIsRecursive(layer, LayerData.Instance);
+                ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
             }
         }
 
@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             InstantiateLayerItem(layer, parent);
             foreach (var child in layer.ChildrenLayers)
             {
-                ConstructHierarchyUIsRecursive(child.GetComponent<LayerNL3DBase>(), layer);
+                ConstructHierarchyUIsRecursive(child, layer);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         
         private void CreateNewUI(LayerNL3DBase layer)
         {
-            var layerUI = InstantiateLayerItem(layer, layer.transform.parent.GetComponent<LayerNL3DBase>());
+            var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             layer.SelectLayer(true);
         }
 
@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public FolderLayer CreateFolderLayer()
         {
             var newLayer = new GameObject("Folder");
-            var folder = newLayer.AddComponent<FolderLayer>();
+            var folder = new FolderLayer();
             folder.CONSTRUCTOR("Folder");
             return folder;
         }

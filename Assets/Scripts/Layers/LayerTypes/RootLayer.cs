@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class RootLayer //: LayerNL3DBase //todo: make an extension of base and make functions protected
+    public class RootLayer : LayerNL3DBase //todo: make an extension of base and make functions protected
     {
         // public override int Depth => 0;
         public List<LayerNL3DBase> SelectedLayers { get; set; } = new();

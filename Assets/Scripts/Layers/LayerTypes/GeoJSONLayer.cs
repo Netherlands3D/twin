@@ -124,8 +124,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var go = new GameObject("Polygonen");
-            var layer = go.AddComponent<GeoJSONPolygonLayer>();
+            var layer = new GeoJSONPolygonLayer();
             layer.CONSTRUCTOR("Polygonen");
             layer.Color = ReferencedProxy.Color;
             StartCoroutine(SetSubLayerParent(layer));
@@ -135,8 +134,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONLineLayer CreateLineLayer()
         {
-            var go = new GameObject("Lijnen");
-            var layer = go.AddComponent<GeoJSONLineLayer>();
+            var layer = new GeoJSONLineLayer();
             layer.CONSTRUCTOR("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
@@ -147,8 +145,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPointLayer CreatePointLayer()
         {
-            var go = new GameObject("Punten");
-            var layer = go.AddComponent<GeoJSONPointLayer>();
+            var layer = new GeoJSONPointLayer();
             layer.CONSTRUCTOR("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;

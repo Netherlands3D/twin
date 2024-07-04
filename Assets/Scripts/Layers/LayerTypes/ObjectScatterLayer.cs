@@ -310,13 +310,13 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
-            if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
+            if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
                 RevertToHierarchicalObjectLayer();
                 return;
             }
 
-            if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
+            if (newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
                 polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);

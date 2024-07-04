@@ -66,10 +66,9 @@ namespace Netherlands3D.Twin.Layers
             ClearSelection();
 
             ActiveLayer = layer;
-            if (layer)
+            if (layer != null)
             {
                 ReselectLayerPolygon(layer);
-                return;
             }    
         }
 
@@ -122,8 +121,7 @@ namespace Netherlands3D.Twin.Layers
         public void CreatePolygonLayer(List<Vector3> polygon)
         {
             Debug.Log("------------------------Create polygon layer");
-            var newPolygonObject = new GameObject("Polygon");
-            var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
+            var layerComponent = new PolygonSelectionLayer();
             layerComponent.CONSTRUCTOR("Polygon");
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
@@ -139,8 +137,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void CreateLineLayer(List<Vector3> line)
         {
-            var newLineObject = new GameObject("Line");
-            var layerComponent = newLineObject.AddComponent<PolygonSelectionLayer>();
+            var layerComponent = new PolygonSelectionLayer();
             layerComponent.CONSTRUCTOR("Line");
             layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);

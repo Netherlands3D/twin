@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public abstract class LayerNL3DBase : MonoBehaviour
+    public abstract class LayerNL3DBase //: MonoBehaviour
     {
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
         public LayerNL3DBase ParentLayer => parent;
         public List<LayerNL3DBase> ChildrenLayers => children;
-        
+
         [JsonIgnore]
         public string Name
         {
@@ -62,7 +62,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
+        public int SiblingIndex
+        {
+            get
+            {
+                if (ParentLayer == null) //todo: this is only needed for the initial SetParent and should be removed if possible
+                    return -1;
+                    
+                return parent.ChildrenLayers.IndexOf(this);
+            }
+        }
 
         public UnityEvent<string> NameChanged = new();
         public UnityEvent<bool> LayerActiveInHierarchyChanged = new();
@@ -71,19 +80,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public UnityEvent<LayerNL3DBase> LayerSelected = new();
         public UnityEvent<LayerNL3DBase> LayerDeselected = new();
-        
+
         public LayerUI UI { get; set; } //todo: remove
 
         public int Depth //todo: remove if possible
         {
             get
             {
-                if (ParentLayer != LayerData.Instance)
+                if (ParentLayer != Root)
                     return ParentLayer.Depth + 1;
-                else
-                    return 0;
+
+                return 0;
             }
-        } 
+        }
 
         public bool ActiveInHierarchy
         {
@@ -98,9 +107,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SelectLayer(bool deselectOthers = false)
         {
-            if(deselectOthers)
+            if (deselectOthers)
                 Root.DeselectAllLayers();
-            
+
             IsSelected = true;
             Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
@@ -113,25 +122,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerDeselected.Invoke(this);
         }
 
-        public void CONSTRUCTOR(string name) //todo: replace with constructor when this is no longer a monobehaviour
+        public virtual void CONSTRUCTOR(string name) //todo: replace with constructor when this is no longer a monobehaviour
         {
             Name = name;
+            
             // if (!LayerData.AllLayers.Contains(this))
-            // ProjectData.Current.AddLayer(this);
-            //
-            // //for initialization calculate the parent and children here
-            // OnTransformParentChanged();
-            // OnTransformChildrenChanged();
-            // foreach (var child in ChildrenLayers)
-            // {
-            //     child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
-            // }
-        }
-
-        protected virtual void Start()
-        {
-            // if (!LayerData.AllLayers.Contains(this))
-                ProjectData.Current.AddStandardLayer(this);
+            ProjectData.Current.AddStandardLayer(this);
 
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
@@ -144,21 +140,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnTransformChildrenChanged()
         {
-            LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
+            // LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
 
-            LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
-            if (selfLayer != null)
-            {
-                childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
-            }
+            // LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
+            // if (selfLayer != null)
+            // {
+            //     childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
+            // }
 
-            children = childLayers.ToList();
+            // children = childLayers.ToList();
             UI?.RecalculateCurrentTreeStates();
         }
 
         protected virtual void OnTransformParentChanged()
         {
-            parent = transform.parent?.GetComponent<LayerNL3DBase>();
         }
 
         protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
@@ -170,67 +165,69 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
         {
             Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
-         
-            if(newParent == this)
+
+            if (newParent == this)
                 return;
-            
+
             if (newParent == null)
-                newParent = LayerData.Instance;
-        
+                newParent = Root;
+
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
 
             if (parent != null)
                 parent.children.Remove(this);
-        
+
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
-        
+
             parent = newParent;
             Debug.Log("new parent: " + newParent);
             Debug.Log("children: " + children);
             newParent.children.Insert(siblingIndex, this);
-            
+
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
         }
-        
+
         // public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
         // {
-            // if (newParentLayer == this)
-            //     return;
+        // if (newParentLayer == this)
+        //     return;
 
-            // var parentChanged = ParentLayer != newParentLayer;
-            // var oldSiblingIndex = transform.GetSiblingIndex();
-            // var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
+        // var parentChanged = ParentLayer != newParentLayer;
+        // var oldSiblingIndex = transform.GetSiblingIndex();
+        // var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
 
-            // if (newParentLayer == null)
-            //     transform.SetParent(LayerData.Instance.transform);
-            // else
-            //     transform.SetParent(newParent);
+        // if (newParentLayer == null)
+        //     transform.SetParent(LayerData.Instance.transform);
+        // else
+        //     transform.SetParent(newParent);
 
-            // transform.SetSiblingIndex(siblingIndex);
+        // transform.SetSiblingIndex(siblingIndex);
 
-            // UI?.SetParent(newParentLayer?.UI, siblingIndex);
+        // UI?.SetParent(newParentLayer?.UI, siblingIndex);
 
-            // LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
+        // LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
 
-            // if (siblingIndex == -1)
-            //     siblingIndex = newParent.childCount - 1;
-            // if (parentChanged || siblingIndex != oldSiblingIndex)
-            // {
-            //     OnSiblingIndexOrParentChanged(siblingIndex);
-            // }
+        // if (siblingIndex == -1)
+        //     siblingIndex = newParent.childCount - 1;
+        // if (parentChanged || siblingIndex != oldSiblingIndex)
+        // {
+        //     OnSiblingIndexOrParentChanged(siblingIndex);
+        // }
         // }
 
         public virtual void DestroyLayer()
         {
             DeselectLayer();
             ProjectData.Current.RemoveLayer(this);
-            Destroy(gameObject); //todo: delete once this is no longer a monobehaviour
-            //todo: foreach child child.DestroyLayer()
+            foreach (var child in ChildrenLayers)
+            {
+                child.DestroyLayer();
+            }
             LayerDestroyed.Invoke();
         }
     }

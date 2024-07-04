@@ -66,19 +66,20 @@ namespace Netherlands3D.Twin.Layers
             this.lineWidth = defaultLineWidth;
 
             //Add shifter that manipulates the polygon if the world origin is shifted
-            worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
-            worldTransformShifter.polygonSelectionLayer = this;
-            gameObject.AddComponent<WorldTransform>();
-            worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
+            //todo: reset the worldTransformShifter
+            // worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
+            // worldTransformShifter.polygonSelectionLayer = this;
+            // gameObject.AddComponent<WorldTransform>();
+            // worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
 
             PolygonSelectionCalculator.RegisterPolygon(this);
         }
 
-        protected override void Start()
+        public override void CONSTRUCTOR(string name)
         {
-            base.Start();
+            base.CONSTRUCTOR(name);
             if (shapeType == ShapeType.Line)
                 UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
@@ -135,8 +136,9 @@ namespace Netherlands3D.Twin.Layers
 
             if (propertySections.Count == 0)
             {
-                var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
-                propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
+                Debug.LogError("Todo: re add property sections");
+                // var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+                // propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
             }
         }
 

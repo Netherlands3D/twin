@@ -110,7 +110,9 @@ namespace Netherlands3D.Twin
 
         private void HighlightLayer(bool isOn)
         {
-            if (!layer || !layer.ReferencedProxy || !layer.ReferencedProxy.UI)
+            //todo: is this check still needed?
+            Debug.LogError("todo: is this check still needed?", gameObject);
+            if (!layer || layer.ReferencedProxy == null || !layer.ReferencedProxy.UI)
                 return;
 
             var layerState = isOn ? InteractionState.Hover : InteractionState.Default;

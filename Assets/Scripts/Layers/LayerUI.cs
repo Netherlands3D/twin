@@ -239,8 +239,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerManager.LayerUIsVisibleInInspector.Clear();
             layerManager.LayerUIsVisibleInInspector = LayerBaseTransform.GetComponentsInChildren<LayerUI>(false).ToList();
 
-            if (Layer) // When the layer is deleted, this UI should not update
+            if (Layer != null) // When the layer is deleted, this UI should not update
+            {
+                Debug.LogError("this check should be removed if possible");
                 MarkLayerUIAsDirty();
+            }
         }
 
         private void RecalculateParentAndChildren()

@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
         {
             if (Layers.Contains(layer))
             {
-                Debug.LogError("layer " + layer + " is already registered", layer);
+                Debug.LogError("layer " + layer + " is already registered");
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin
         {
             if (!Layers.Contains(layer))
             {
-                Debug.LogError("layer " + layer + " is not registered", layer);
+                Debug.LogError("layer " + layer + " is not registered");
                 return;
             }
 
