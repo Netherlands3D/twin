@@ -205,6 +205,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             DeselectLayer();
             LayerData.RemoveLayer(this);
             Destroy(gameObject); //todo: delete once this is no longer a monobehaviour
+            //todo: foreach child child.DestroyLayer()
             LayerDestroyed.Invoke();
         }
     }

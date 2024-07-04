@@ -193,7 +193,7 @@ namespace Netherlands3D.Twin.Projects
             DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
         }
 
-        public void AddLayer(LayerProjectData layer)
+        public void AddLayer(LayerNL3DBase layer)
         {
             // layer.Initialize(rootLayer, -1);
         }
