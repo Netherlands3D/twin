@@ -12,10 +12,7 @@ namespace Netherlands3D.Twin
     public class LayerData : MonoBehaviour
     {
         public static LayerData Instance { get; private set; }
-        public static HashSet<LayerNL3DBase> AllLayers { get; set; } = new HashSet<LayerNL3DBase>();
-
-        public static UnityEvent<LayerNL3DBase> LayerAdded = new();
-        public static UnityEvent<LayerNL3DBase> LayerDeleted = new();
+        // public static HashSet<LayerNL3DBase> AllLayers { get; set; } = new HashSet<LayerNL3DBase>();
 
         [SerializeField] private ProjectData currentProject;
         private static ProjectData projectData;
@@ -28,21 +25,7 @@ namespace Netherlands3D.Twin
             Instance = this;
             projectData = currentProject;
         }
-
-        public static void AddStandardLayer(LayerNL3DBase newLayer)
-        {
-            AllLayers.Add(newLayer);
-            newLayer.transform.SetParent(Instance.transform);
-            // projectData.AddLayer(newLayer.ProjectData);
-            LayerAdded.Invoke(newLayer);
-        }
-
-        public static void RemoveLayer(LayerNL3DBase layer)
-        {
-            AllLayers.Remove(layer);
-            LayerDeleted.Invoke(layer);
-        }
-
+        
         public static void AddReferenceLayer(ReferencedLayer referencedLayer)
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();

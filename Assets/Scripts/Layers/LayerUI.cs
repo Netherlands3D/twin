@@ -379,10 +379,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void ProcessLayerSelection()
         {
-            if (SequentialSelectionModifierKeyIsPressed() && ProjectData.RootLayer.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            if (SequentialSelectionModifierKeyIsPressed() && Layer.Root.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
             {
                 // add all layers between the currently selected layer and the reference layer
-                var referenceLayer = ProjectData.RootLayer.SelectedLayers.Last(); //last element is always the last selected layer
+                var referenceLayer = Layer.Root.SelectedLayers.Last(); //last element is always the last selected layer
                 var myIndex = layerManager.LayerUIsVisibleInInspector.IndexOf(this);
                 var referenceIndex = layerManager.LayerUIsVisibleInInspector.IndexOf(referenceLayer.UI);
 
@@ -477,9 +477,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (!layerManager.IsDragOnButton()) //don't reparent when dragging on a button, since the button action should be called instead and handle any possible reparents
             {
                 layerManager.SortSelectedLayersByVisibility();
-                ProjectData.RootLayer.SelectedLayers.Reverse();
+                Layer.Root.SelectedLayers.Reverse();
 
-                foreach (var selectedLayer in ProjectData.RootLayer.SelectedLayers)
+                foreach (var selectedLayer in Layer.Root.SelectedLayers)
                 {
                     selectedLayer.SetParent(newParent?.Layer, newSiblingIndex);
                 }

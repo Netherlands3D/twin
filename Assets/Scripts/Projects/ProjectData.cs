@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-        public static RootLayer RootLayer = new(); //todo: make not static
+        public RootLayer RootLayer = new();
   
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -48,6 +48,8 @@ namespace Netherlands3D.Twin.Projects
         }
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
+        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerAdded = new();
+        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerDeleted = new();
 
         public void RefreshUUID()
         {
@@ -196,6 +198,13 @@ namespace Netherlands3D.Twin.Projects
         public void AddLayer(LayerNL3DBase layer)
         {
             // layer.Initialize(rootLayer, -1);
+            layer.transform.SetParent(LayerData.Instance.transform);
+            LayerAdded.Invoke(layer);
+        }
+
+        public void RemoveLayer(LayerNL3DBase layer)
+        {
+            LayerDeleted.Invoke(layer);
         }
     }
 }

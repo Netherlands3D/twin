@@ -539,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054dbe152f39f4f39b7a492ae71e5987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
   LayerUIPrefab: {fileID: 2127760596796970168, guid: 67f661495874545c8847acccfa777e7e,
     type: 3}
   layerTypeSprites:
@@ -1317,17 +1318,17 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 88.46
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
@@ -1342,7 +1343,7 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 7308550444611984942, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}

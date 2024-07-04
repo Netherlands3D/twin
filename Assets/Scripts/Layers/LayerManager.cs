@@ -14,11 +14,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public List<LayerUI> LayerUIsVisibleInInspector { get; set; } = new List<LayerUI>();
 
+        [SerializeField] private ProjectData projectData;
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
 
         [SerializeField] private RectTransform layerUIContainer;
 
+        public ProjectData ProjectData => projectData;
         public RectTransform LayerUIContainer => layerUIContainer;
 
         //Drag variables
@@ -77,14 +79,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            LayerData.LayerAdded.AddListener(CreateNewUI);
+            projectData.LayerAdded.AddListener(CreateNewUI);
             // LayerData.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            ProjectData.RootLayer.DeselectAllLayers();
-            LayerData.LayerAdded.RemoveListener(CreateNewUI);
+            projectData.RootLayer.DeselectAllLayers();
+            projectData.LayerAdded.RemoveListener(CreateNewUI);
             // LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
         
@@ -124,7 +126,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                ProjectData.RootLayer.DeselectAllLayers();
+                projectData.RootLayer.DeselectAllLayers();
         }
 
         public FolderLayer CreateFolderLayer()
@@ -223,10 +225,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void GroupSelectedLayers()
         {
             var newGroup = CreateFolderLayer();
-            var referenceLayer = ProjectData.RootLayer.SelectedLayers.Last();
+            var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.transform.GetSiblingIndex());
             SortSelectedLayers();
-            foreach (var selectedLayer in ProjectData.RootLayer.SelectedLayers)
+            foreach (var selectedLayer in projectData.RootLayer.SelectedLayers)
             {
                 selectedLayer.SetParent(newGroup);
             }
@@ -234,12 +236,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SortSelectedLayersByVisibility()
         {
-            ProjectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(layer1.UI).CompareTo(LayerUIsVisibleInInspector.IndexOf(layer2.UI)));
+            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(layer1.UI).CompareTo(LayerUIsVisibleInInspector.IndexOf(layer2.UI)));
         }
 
         private void SortSelectedLayers()
         {
-            ProjectData.RootLayer.SelectedLayers.Sort((layer1, layer2) =>
+            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) =>
             {
                 // Primary sorting by Depth
                 int depthComparison = layer1.Depth.CompareTo(layer2.Depth);
@@ -256,7 +258,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layer in ProjectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
+            foreach (var layer in projectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
                 layer.DestroyLayer();
             }
@@ -264,8 +266,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void RemoveUI(LayerUI layerUI)
         {
-            if (ProjectData.RootLayer.SelectedLayers.Contains(layerUI.Layer))
-                ProjectData.RootLayer.SelectedLayers.Remove(layerUI.Layer);
+            if (projectData.RootLayer.SelectedLayers.Contains(layerUI.Layer))
+                projectData.RootLayer.SelectedLayers.Remove(layerUI.Layer);
 
             if (LayerUIsVisibleInInspector.Contains(layerUI))
                 LayerUIsVisibleInInspector.Remove(layerUI);

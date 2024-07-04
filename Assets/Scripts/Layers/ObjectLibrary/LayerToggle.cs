@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,7 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        [SerializeField] protected ProjectData projectData;
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
         [SerializeField] protected ReferencedLayer layer;
@@ -31,14 +33,14 @@ namespace Netherlands3D.Twin
             toggle.isOn = layer != null;
             ShowBin(false);
 
-            LayerData.LayerDeleted.AddListener(OnLayerDeleted);
+            projectData.LayerDeleted.AddListener(OnLayerDeleted);
             toggle.onValueChanged.AddListener(CreateOrDestroyObject);
         }
 
 
         protected virtual void OnDisable()
         {
-            LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
         

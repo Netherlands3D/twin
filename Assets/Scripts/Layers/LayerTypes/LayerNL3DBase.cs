@@ -19,7 +19,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
         [JsonIgnore] public bool IsSelected { get; private set; }
 
-        public RootLayer Root => ProjectData.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
+        protected ProjectData projectData;
+        public RootLayer Root => projectData.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
         public LayerNL3DBase ParentLayer => parent;
         public List<LayerNL3DBase> ChildrenLayers => children;
         
@@ -118,8 +119,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void Start()
         {
-            if (!LayerData.AllLayers.Contains(this))
-                LayerData.AddStandardLayer(this);
+            // if (!LayerData.AllLayers.Contains(this))
+                projectData.AddLayer(this);
 
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
@@ -128,6 +129,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
+        }
+
+        public void Initialize(ProjectData project) //todo: replace with constructor
+        {
+            projectData = project;
         }
 
         protected virtual void OnTransformChildrenChanged()
@@ -203,7 +209,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public virtual void DestroyLayer()
         {
             DeselectLayer();
-            LayerData.RemoveLayer(this);
+            projectData.RemoveLayer(this);
             Destroy(gameObject); //todo: delete once this is no longer a monobehaviour
             //todo: foreach child child.DestroyLayer()
             LayerDestroyed.Invoke();
