@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -61,7 +62,7 @@ namespace Netherlands3D.Twin
 
         public virtual void CreateProxy()
         {
-            LayerData.AddReferenceLayer(this);
+            ProjectData.AddReferenceLayer(this);
         }
 
         public virtual void DestroyProxy()

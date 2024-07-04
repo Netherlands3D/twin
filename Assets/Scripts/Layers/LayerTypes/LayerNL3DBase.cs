@@ -62,6 +62,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
+        public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
+
         public UnityEvent<string> NameChanged = new();
         public UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         public UnityEvent<Color> ColorChanged = new();
@@ -129,7 +131,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void Start()
         {
             // if (!LayerData.AllLayers.Contains(this))
-                ProjectData.Current.AddLayer(this);
+                ProjectData.Current.AddStandardLayer(this);
 
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
@@ -156,59 +158,72 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnTransformParentChanged()
         {
-            parent = transform.parent.GetComponent<LayerNL3DBase>();
+            parent = transform.parent?.GetComponent<LayerNL3DBase>();
         }
 
         protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
         {
+            UI?.SetParent(ParentLayer?.UI, newSiblingIndex);
+            LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
         }
 
-        // public void SetParent2(LayerNL3DBase newParent, int siblingIndex)
-        // {
-        //     Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
-        //     
-        //     if (newParent == null)
-        //         newParent = Root;
-        //
-        //     if (parent != null)
-        //         parent.children.Remove(this);
-        //
-        //     if (siblingIndex < 0)
-        //         siblingIndex = newParent.children.Count;
-        //
-        //     parent = newParent;
-        //     Debug.Log("new parent: " + newParent);
-        //     Debug.Log("children: " + children);
-        //     newParent.children.Insert(siblingIndex, this);
-        // }
-        
-        public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
+        public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
         {
-            if (newParentLayer == this)
+            Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
+         
+            if(newParent == this)
                 return;
+            
+            if (newParent == null)
+                newParent = LayerData.Instance;
+        
+            var parentChanged = ParentLayer != newParent;
+            var oldSiblingIndex = SiblingIndex;
 
-            var parentChanged = ParentLayer != newParentLayer;
-            var oldSiblingIndex = transform.GetSiblingIndex();
-            var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
-
-            if (newParentLayer == null)
-                transform.SetParent(LayerData.Instance.transform);
-            else
-                transform.SetParent(newParent);
-
-            transform.SetSiblingIndex(siblingIndex);
-
-            UI?.SetParent(newParentLayer?.UI, siblingIndex);
-
-            LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
-
-            if (siblingIndex == -1)
-                siblingIndex = newParent.childCount - 1;
+            if (parent != null)
+                parent.children.Remove(this);
+        
+            if (siblingIndex < 0)
+                siblingIndex = newParent.children.Count;
+        
+            parent = newParent;
+            Debug.Log("new parent: " + newParent);
+            Debug.Log("children: " + children);
+            newParent.children.Insert(siblingIndex, this);
+            
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
         }
+        
+        // public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
+        // {
+            // if (newParentLayer == this)
+            //     return;
+
+            // var parentChanged = ParentLayer != newParentLayer;
+            // var oldSiblingIndex = transform.GetSiblingIndex();
+            // var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
+
+            // if (newParentLayer == null)
+            //     transform.SetParent(LayerData.Instance.transform);
+            // else
+            //     transform.SetParent(newParent);
+
+            // transform.SetSiblingIndex(siblingIndex);
+
+            // UI?.SetParent(newParentLayer?.UI, siblingIndex);
+
+            // LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
+
+            // if (siblingIndex == -1)
+            //     siblingIndex = newParent.childCount - 1;
+            // if (parentChanged || siblingIndex != oldSiblingIndex)
+            // {
+            //     OnSiblingIndexOrParentChanged(siblingIndex);
+            // }
+        // }
 
         public virtual void DestroyLayer()
         {

@@ -15,7 +15,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-    public class GeoJSONLayer : LayerNL3DBase
+    public class GeoJSONLayer : ReferencedLayer
     {
         public static float maxParseDuration = 0.01f;
 
@@ -34,17 +34,17 @@ namespace Netherlands3D.Twin
         private GeoJSONPointLayer pointFeatures;
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
 
-        protected override void Start()
-        {
-            base.Start();
-        }
+        // protected override void Start()
+        // {
+        //     base.Start();
+        // }
 
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
-            Color = layerColor;
+            ReferencedProxy.Color = layerColor;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
@@ -127,7 +127,7 @@ namespace Netherlands3D.Twin
             var go = new GameObject("Polygonen");
             var layer = go.AddComponent<GeoJSONPolygonLayer>();
             layer.CONSTRUCTOR("Polygonen");
-            layer.Color = Color;
+            layer.Color = ReferencedProxy.Color;
             StartCoroutine(SetSubLayerParent(layer));
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
             return layer;
@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin
             layer.CONSTRUCTOR("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
-            layer.Color = Color;
+            layer.Color = ReferencedProxy.Color;
             StartCoroutine(SetSubLayerParent(layer));
             return layer;
         }
@@ -152,15 +152,16 @@ namespace Netherlands3D.Twin
             layer.CONSTRUCTOR("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
-            layer.Color = Color;
+            layer.Color = ReferencedProxy.Color;
             StartCoroutine(SetSubLayerParent(layer));
             return layer;
         }
 
-        private IEnumerator SetSubLayerParent(LayerNL3DBase layer)
+        private IEnumerator SetSubLayerParent(LayerNL3DBase layer) //todo: remove coroutine
         {
+            Debug.LogError("remove this coroutine");
             yield return null; //wait a frame for layer to be initialized
-            layer.SetParent(this);
+            layer.SetParent(ReferencedProxy);
         }
         
         private void VisualizeFeature(Feature feature)

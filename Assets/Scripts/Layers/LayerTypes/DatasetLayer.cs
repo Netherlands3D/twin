@@ -7,30 +7,20 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class DatasetLayer : LayerNL3DBase
+    public class DatasetLayer : ReferencedLayer
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        private void OnEnable()
-        { 
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        private void OnDisable()
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-
-        }
-
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-            ColorSetLayer.Enabled = activeInHierarchy;
+            base.OnLayerActiveInHierarchyChanged(isActive);
+            ColorSetLayer.Enabled = isActive;
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        public override void DestroyLayer()
+        protected override void OnDestroy()
         {
-            base.DestroyLayer();
+            base.OnDestroy();
             RemoveCustomColorSet();
         }
 
@@ -54,21 +44,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set { transform.SetSiblingIndex(value); }
         }
 
-        protected override void OnTransformParentChanged()
-        {
-            base.OnTransformParentChanged();
-            var hierarchyList = LayerData.Instance.transform.GetComponentsInChildren<LayerNL3DBase>();
-            for (var i = 0; i < hierarchyList.Length; i++)
-            {
-                var layer = hierarchyList[i];
-                if (layer is DatasetLayer)
-                {
-                    var datasetLayer = (DatasetLayer)layer;
-                    datasetLayer.ColorSetLayer.PriorityIndex = i;
-                }
-            }
 
-            GeometryColorizer.RecalculatePrioritizedColors();
+        public override void OnProxyTransformParentChanged()
+        {
+            throw new Exception("need to implement this without GetComponentsInChildren");
+            
+            // base.OnProxyTransformParentChanged();
+            // var hierarchyList = LayerData.Instance.transform.GetComponentsInChildren<LayerNL3DBase>();
+            // for (var i = 0; i < hierarchyList.Length; i++)
+            // {
+            //     var layer = hierarchyList[i];
+            //     if (layer is DatasetLayer)
+            //     {
+            //         var datasetLayer = (DatasetLayer)layer;
+            //         datasetLayer.ColorSetLayer.PriorityIndex = i;
+            //     }
+            // }
+            //
+            // GeometryColorizer.RecalculatePrioritizedColors();
         }
     }
 }

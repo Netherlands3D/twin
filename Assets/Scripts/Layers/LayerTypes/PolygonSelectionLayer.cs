@@ -244,7 +244,7 @@ namespace Netherlands3D.Twin.Layers
             PolygonSelectionCalculator.UnregisterPolygon(this);
 
             if (PolygonVisualisation)
-                Destroy(PolygonVisualisation.gameObject);
+                GameObject.Destroy(PolygonVisualisation.gameObject);
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

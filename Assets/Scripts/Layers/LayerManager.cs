@@ -146,14 +146,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
-                case DatasetLayer _:
-                    return layerTypeSprites[5];
                 case PolygonSelectionLayer _:
                     if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
                         return layerTypeSprites[6];
                     return layerTypeSprites[7];
-                case GeoJSONLayer _:
-                    return layerTypeSprites[8]; //todo: split in points
                 case GeoJSONPolygonLayer:
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer:
@@ -178,6 +174,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[3];
                 case ObjectScatterLayer _:
                     return layerTypeSprites[4];
+                case DatasetLayer _:
+                    return layerTypeSprites[5];
+                case GeoJSONLayer _:
+                    return layerTypeSprites[8]; //todo: split in points
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];

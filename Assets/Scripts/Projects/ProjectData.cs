@@ -203,11 +203,22 @@ namespace Netherlands3D.Twin.Projects
             DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
         }
 
-        public void AddLayer(LayerNL3DBase layer)
+        public void AddStandardLayer(LayerNL3DBase layer)
         {
             // layer.Initialize(rootLayer, -1);
             layer.transform.SetParent(LayerData.Instance.transform);
             LayerAdded.Invoke(layer);
+        }
+        
+        public static void AddReferenceLayer(ReferencedLayer referencedLayer)
+        {
+            var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
+
+            var referenceLayerObject = new GameObject(referenceName);
+            var proxyLayer = referenceLayerObject.AddComponent<ReferencedProxyLayer>(); 
+            proxyLayer.CONSTRUCTOR(referenceName);
+            proxyLayer.Reference = referencedLayer;
+            referencedLayer.ReferencedProxy = proxyLayer;
         }
 
         public void RemoveLayer(LayerNL3DBase layer)

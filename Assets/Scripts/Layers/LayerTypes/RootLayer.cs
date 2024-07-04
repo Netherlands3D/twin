@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Layers
 {
     public class RootLayer //: LayerNL3DBase //todo: make an extension of base and make functions protected
     {
+        // public override int Depth => 0;
         public List<LayerNL3DBase> SelectedLayers { get; set; } = new();
         
         public void AddLayerToSelection(LayerNL3DBase layer) //todo: make protected once this is an extension of base
