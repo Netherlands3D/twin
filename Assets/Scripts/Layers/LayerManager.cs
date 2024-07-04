@@ -38,17 +38,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            foreach (Transform t in LayerData.Instance.transform)
+            foreach (var layer in LayerData.Instance.ChildrenLayers)
             {
-                var layer = t.GetComponent<LayerNL3DBase>();
-                ConstructHierarchyUIsRecursive(layer, null);
+                // var layer = t.GetComponent<LayerNL3DBase>();
+                ConstructHierarchyUIsRecursive(layer, LayerData.Instance);
             }
         }
 
         void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
             InstantiateLayerItem(layer, parent);
-            foreach (Transform child in layer.transform)
+            foreach (var child in layer.ChildrenLayers)
             {
                 if (child == layer.transform)
                     continue;
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layer.UI = layerUI;
-            layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
+            layer.UI.SetParent(parent?.UI, layer.SiblingIndex);
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             return layerUI;
@@ -227,7 +227,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var newGroup = CreateFolderLayer();
             var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
-            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.transform.GetSiblingIndex());
+            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             SortSelectedLayers();
             foreach (var selectedLayer in projectData.RootLayer.SelectedLayers)
             {

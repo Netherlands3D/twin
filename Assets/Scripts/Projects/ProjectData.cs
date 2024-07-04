@@ -207,6 +207,7 @@ namespace Netherlands3D.Twin.Projects
         {
             // layer.Initialize(rootLayer, -1);
             layer.transform.SetParent(LayerData.Instance.transform);
+            layer.SetParent(LayerData.Instance);
             LayerAdded.Invoke(layer);
         }
         

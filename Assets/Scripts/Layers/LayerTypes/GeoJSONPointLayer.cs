@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
         {
             base.DestroyLayer();
             if (Application.isPlaying)
-                Destroy(PointRenderer3D.gameObject);
+                GameObject.Destroy(PointRenderer3D.gameObject);
         }
     }
 }

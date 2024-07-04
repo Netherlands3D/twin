@@ -347,7 +347,7 @@ namespace Netherlands3D.Twin.Layers
                     child.SetParent(layer.ReferencedProxy);
             }
 
-            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
+            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             layer.ReferencedProxy.UI.ToggleProperties(openProperties);
             DestroyLayer();
