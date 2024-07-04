@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin
         {
             base.DestroyLayer();
             if (Reference)
-                Destroy(Reference.gameObject);
+                GameObject.Destroy(Reference.gameObject);
         }
 
         private void OnSelect(LayerNL3DBase layer)
