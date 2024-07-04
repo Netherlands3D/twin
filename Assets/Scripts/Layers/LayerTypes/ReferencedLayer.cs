@@ -23,18 +23,17 @@ namespace Netherlands3D.Twin
         protected virtual void Awake()
         {
             CreateProxy();
+            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             onShow.Invoke();
-            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
-        private void OnDisable()
+        protected virtual  void OnDisable()
         {
             onHide.Invoke();
-            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -56,6 +55,7 @@ namespace Netherlands3D.Twin
 
         protected virtual void OnDestroy()
         {
+            ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
             DestroyProxy();
         }
 

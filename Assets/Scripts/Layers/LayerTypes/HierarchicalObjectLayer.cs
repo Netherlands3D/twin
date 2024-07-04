@@ -14,17 +14,18 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-
-        private void OnEnable()
-        {
-            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
-        }
-
+        
         protected override void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             base.Awake();
+        }
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
         }
 
         private void Start()
@@ -34,6 +35,10 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
+            if (ReferencedProxy.IsSelected)
+            {
+                ReferencedProxy.DeselectLayer();
+            }
             gameObject.SetActive(isActive);
         }
 
