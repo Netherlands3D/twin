@@ -19,8 +19,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
         [JsonIgnore] public bool IsSelected { get; private set; }
 
-        protected ProjectData projectData;
-        public RootLayer Root => projectData.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
+        public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
         public LayerNL3DBase ParentLayer => parent;
         public List<LayerNL3DBase> ChildrenLayers => children;
         
@@ -120,7 +119,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected virtual void Start()
         {
             // if (!LayerData.AllLayers.Contains(this))
-                projectData.AddLayer(this);
+                ProjectData.Current.AddLayer(this);
 
             //for initialization calculate the parent and children here
             OnTransformParentChanged();
@@ -129,11 +128,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
-        }
-
-        public void Initialize(ProjectData project) //todo: replace with constructor
-        {
-            projectData = project;
         }
 
         protected virtual void OnTransformChildrenChanged()
@@ -209,7 +203,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public virtual void DestroyLayer()
         {
             DeselectLayer();
-            projectData.RemoveLayer(this);
+            ProjectData.Current.RemoveLayer(this);
             Destroy(gameObject); //todo: delete once this is no longer a monobehaviour
             //todo: foreach child child.DestroyLayer()
             LayerDestroyed.Invoke();

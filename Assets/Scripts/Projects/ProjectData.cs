@@ -19,6 +19,9 @@ namespace Netherlands3D.Twin.Projects
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Project", fileName = "Project", order = 0)]
     public class ProjectData : ScriptableObject
     {
+        private static ProjectData current;
+        public static ProjectData Current => current;
+        
         [DllImport("__Internal")] private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
         
@@ -54,6 +57,11 @@ namespace Netherlands3D.Twin.Projects
         public void RefreshUUID()
         {
             UUID = Guid.NewGuid().ToString();
+        }
+
+        public void SetCurrentProjectData(ProjectData project)
+        {
+            current = project;
         }
 
         public void CopyFrom(ProjectData project)
@@ -205,6 +213,11 @@ namespace Netherlands3D.Twin.Projects
         public void RemoveLayer(LayerNL3DBase layer)
         {
             LayerDeleted.Invoke(layer);
+        }
+
+        public static void SetCurrentProject(ProjectData initialProjectTemplate)
+        {
+            current = initialProjectTemplate;
         }
     }
 }
