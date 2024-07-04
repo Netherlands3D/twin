@@ -54,9 +54,9 @@ namespace Netherlands3D.Twin
             GeoJSONGeometryVisualizerUtility.VisualizePoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             if (Application.isPlaying)
                 Destroy(PointRenderer3D.gameObject);
         }

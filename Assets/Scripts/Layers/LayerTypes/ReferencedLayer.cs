@@ -66,9 +66,9 @@ namespace Netherlands3D.Twin
 
         public virtual void DestroyProxy()
         {
-            if (ReferencedProxy)
+            if (ReferencedProxy!=null)
             {
-                Destroy(ReferencedProxy.gameObject);
+                ReferencedProxy.DestroyLayer();
             }
         }
 

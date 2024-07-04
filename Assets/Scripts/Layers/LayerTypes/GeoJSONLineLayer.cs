@@ -53,11 +53,11 @@ namespace Netherlands3D.Twin
             GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             if (Application.isPlaying)
-                Destroy(LineRenderer3D.gameObject);
+                GameObject.Destroy(LineRenderer3D.gameObject);
         }
     }
 }

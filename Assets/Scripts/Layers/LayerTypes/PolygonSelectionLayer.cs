@@ -238,9 +238,9 @@ namespace Netherlands3D.Twin.Layers
             polygonSelected.Invoke(null);
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             PolygonSelectionCalculator.UnregisterPolygon(this);
 
             if (PolygonVisualisation)

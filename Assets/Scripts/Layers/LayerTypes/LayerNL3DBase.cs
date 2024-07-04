@@ -110,16 +110,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
         }
-        
-        protected virtual void OnDestroy()
-        {
-            if (!Application.isPlaying) return;
-            
-            DeselectLayer();
-            LayerDestroyed.Invoke();
-
-            LayerData.RemoveLayer(this);
-        }
 
         private void Awake()
         {
@@ -210,10 +200,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void DestroyLayer()
+        public virtual void DestroyLayer()
         {
             DeselectLayer();
-            Destroy(gameObject);
+            LayerData.RemoveLayer(this);
+            Destroy(gameObject); //todo: delete once this is no longer a monobehaviour
+            LayerDestroyed.Invoke();
         }
     }
 }

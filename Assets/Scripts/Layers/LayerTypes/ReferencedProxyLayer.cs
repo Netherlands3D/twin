@@ -29,9 +29,9 @@ namespace Netherlands3D.Twin
             LayerDeselected.RemoveListener(OnDeselect);
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             if (Reference)
                 Destroy(Reference.gameObject);
         }

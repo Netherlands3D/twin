@@ -60,14 +60,14 @@ namespace Netherlands3D.Twin
             PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             if (Application.isPlaying)
             {
                 foreach (var visualization in PolygonVisualisations)
                 {
-                    Destroy(visualization.gameObject);
+                    GameObject.Destroy(visualization.gameObject);
                 }
             }
         }
