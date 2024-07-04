@@ -133,6 +133,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var newLayer = new GameObject("Folder");
             var folder = newLayer.AddComponent<FolderLayer>();
+            folder.CONSTRUCTOR("Folder");
             return folder;
         }
 

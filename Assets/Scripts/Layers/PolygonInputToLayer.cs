@@ -124,6 +124,7 @@ namespace Netherlands3D.Twin.Layers
             Debug.Log("------------------------Create polygon layer");
             var newPolygonObject = new GameObject("Polygon");
             var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
+            layerComponent.CONSTRUCTOR("Polygon");
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
@@ -140,6 +141,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var newLineObject = new GameObject("Line");
             var layerComponent = newLineObject.AddComponent<PolygonSelectionLayer>();
+            layerComponent.CONSTRUCTOR("Line");
             layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);

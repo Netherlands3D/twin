@@ -32,6 +32,7 @@ namespace Netherlands3D.Twin
 
             var referenceLayerObject = new GameObject(referenceName);
             var proxyLayer = referenceLayerObject.AddComponent<ReferencedProxyLayer>(); 
+            proxyLayer.CONSTRUCTOR(referenceName);
             proxyLayer.Reference = referencedLayer;
             referencedLayer.ReferencedProxy = proxyLayer;
         }

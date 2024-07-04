@@ -32,6 +32,7 @@ namespace Netherlands3D.Twin
             }
 
             var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
+            datasetLayer.CONSTRUCTOR(file);
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
 

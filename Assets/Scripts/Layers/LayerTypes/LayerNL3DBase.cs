@@ -111,9 +111,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerDeselected.Invoke(this);
         }
 
-        private void Awake()
+        public void CONSTRUCTOR(string name) //todo: replace with constructor when this is no longer a monobehaviour
         {
-            Name = gameObject.name;
+            Name = name;
+            // if (!LayerData.AllLayers.Contains(this))
+            // ProjectData.Current.AddLayer(this);
+            //
+            // //for initialization calculate the parent and children here
+            // OnTransformParentChanged();
+            // OnTransformChildrenChanged();
+            // foreach (var child in ChildrenLayers)
+            // {
+            //     child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
+            // }
         }
 
         protected virtual void Start()
