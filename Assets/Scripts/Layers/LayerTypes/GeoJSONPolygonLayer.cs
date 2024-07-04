@@ -30,17 +30,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void OnEnable()
-        {
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        private void OnDisable()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in PolygonVisualisations)
             {

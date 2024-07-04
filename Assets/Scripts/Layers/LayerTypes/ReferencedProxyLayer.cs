@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using CsvHelper;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
@@ -10,24 +6,6 @@ namespace Netherlands3D.Twin
     public class ReferencedProxyLayer : LayerNL3DBase
     {
         public ReferencedLayer Reference { get; set; }
-        
-        private void OnEnable()
-        {
-            if (Reference)
-                ActiveSelf = true;
-            
-            LayerSelected.AddListener(OnSelect);
-            LayerDeselected.AddListener(OnDeselect);
-        }
-
-        private void OnDisable()
-        {
-            if (Reference)
-                ActiveSelf = false;
-
-            LayerSelected.RemoveListener(OnSelect);
-            LayerDeselected.RemoveListener(OnDeselect);
-        }
 
         public override void DestroyLayer()
         {
@@ -36,13 +14,15 @@ namespace Netherlands3D.Twin
                 GameObject.Destroy(Reference.gameObject);
         }
 
-        private void OnSelect(LayerNL3DBase layer)
+        public override void SelectLayer(bool deselectOthers = false)
         {
+            base.SelectLayer(deselectOthers);
             Reference.OnSelect();
         }
 
-        private void OnDeselect(LayerNL3DBase layer)
+        public override void DeselectLayer()
         {
+            base.DeselectLayer();
             Reference.OnDeselect();
         }
 

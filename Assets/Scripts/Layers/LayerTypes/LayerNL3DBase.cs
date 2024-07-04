@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public abstract class LayerNL3DBase //: MonoBehaviour
+    public abstract class LayerNL3DBase
     {
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
@@ -41,13 +41,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set
             {
                 activeSelf = value;
-                // gameObject.SetActive(value);
                 foreach (var child in ChildrenLayers)
                 {
                     child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
                 }
 
-                LayerActiveInHierarchyChanged.Invoke(value);
+                OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void SelectLayer(bool deselectOthers = false)
+        public virtual void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
                 Root.DeselectAllLayers();
@@ -115,11 +115,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerSelected.Invoke(this);
         }
 
-        public void DeselectLayer()
+        public virtual void DeselectLayer()
         {
             IsSelected = false;
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
+        }
+
+        protected virtual void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        {
         }
 
         public virtual void CONSTRUCTOR(string name) //todo: replace with constructor when this is no longer a monobehaviour
@@ -140,15 +144,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnTransformChildrenChanged()
         {
-            // LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
-
-            // LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
-            // if (selfLayer != null)
-            // {
-            //     childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
-            // }
-
-            // children = childLayers.ToList();
             UI?.RecalculateCurrentTreeStates();
         }
 
@@ -191,35 +186,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
         }
-
-        // public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
-        // {
-        // if (newParentLayer == this)
-        //     return;
-
-        // var parentChanged = ParentLayer != newParentLayer;
-        // var oldSiblingIndex = transform.GetSiblingIndex();
-        // var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
-
-        // if (newParentLayer == null)
-        //     transform.SetParent(LayerData.Instance.transform);
-        // else
-        //     transform.SetParent(newParent);
-
-        // transform.SetSiblingIndex(siblingIndex);
-
-        // UI?.SetParent(newParentLayer?.UI, siblingIndex);
-
-        // LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
-
-        // if (siblingIndex == -1)
-        //     siblingIndex = newParent.childCount - 1;
-        // if (parentChanged || siblingIndex != oldSiblingIndex)
-        // {
-        //     OnSiblingIndexOrParentChanged(siblingIndex);
-        // }
-        // }
-
+        
         public virtual void DestroyLayer()
         {
             DeselectLayer();

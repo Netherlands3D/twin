@@ -211,35 +211,23 @@ namespace Netherlands3D.Twin.Layers
             return polygonVisualisation;
         }
 
-        private void OnEnable()
-        {
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-            LayerSelected.AddListener(OnSelect);
-            LayerDeselected.AddListener(OnDeselect);
-        }
-
-        private void OnDisable()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-            LayerSelected.RemoveListener(OnSelect);
-            LayerDeselected.RemoveListener(OnDeselect);
-        }
-
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }
 
-        private void OnSelect(LayerNL3DBase layer)
+        public override void SelectLayer(bool deselectOthers = false)
         {
+            base.SelectLayer();
             polygonSelected.Invoke(this);
         }
 
-        private void OnDeselect(LayerNL3DBase layer)
+        public override void DeselectLayer()
         {
+            base.DeselectLayer();
             polygonSelected.Invoke(null);
         }
-
+        
         public override void DestroyLayer()
         {
             base.DestroyLayer();
