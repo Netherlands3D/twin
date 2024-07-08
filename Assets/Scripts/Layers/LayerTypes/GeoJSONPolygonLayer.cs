@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GeoJSON.Net;
@@ -11,6 +12,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
+    [Serializable]
     public class GeoJSONPolygonLayer : LayerNL3DBase
     {
         public List<Feature> PolygonFeatures = new();

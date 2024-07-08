@@ -1,12 +1,15 @@
 using System;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class ReferencedProxyLayer : LayerNL3DBase, IDisposable
+    [Serializable]
+    public class ReferencedProxyLayer : LayerNL3DBase
     {
+        [JsonIgnore]
         public ReferencedLayer Reference { get; }
 
         public override void DestroyLayer()
@@ -28,13 +31,12 @@ namespace Netherlands3D.Twin
             Reference.OnDeselect();
         }
 
-        protected override void OnChildrenChanged()
+        private void OnChildrenChanged()
         {
-            base.OnChildrenChanged();
             Reference.OnProxyTransformChildrenChanged();
         }
 
-        protected void OnParentChanged()
+        private void OnParentChanged()
         {
             Reference.OnProxyTransformParentChanged();
         }
@@ -50,27 +52,13 @@ namespace Netherlands3D.Twin
             Reference = reference;  
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
+            ChildrenChanged.AddListener(OnChildrenChanged);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        
-        // Protected dispose method to handle cleanup
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                ParentChanged.RemoveListener(OnParentChanged);
-            }
-        }
-
-        // Finalizer to ensure cleanup
         ~ReferencedProxyLayer()
         {
-            Dispose(false);
+            ParentChanged.RemoveListener(OnParentChanged);
+            ChildrenChanged.RemoveListener(OnChildrenChanged);
         }
     }
 }

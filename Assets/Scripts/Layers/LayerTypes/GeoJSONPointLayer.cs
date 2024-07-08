@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
@@ -10,6 +11,7 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin
 {
+    [Serializable]
     public class GeoJSONPointLayer : LayerNL3DBase
     {
         public List<Feature> PointFeatures = new();

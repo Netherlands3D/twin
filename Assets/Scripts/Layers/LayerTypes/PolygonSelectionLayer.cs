@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Layers
         Line = 2
     }
 
+    [Serializable]
     public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
     {
         private ShapeType shapeType;

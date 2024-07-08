@@ -10,18 +10,20 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public abstract class LayerNL3DBase
+    [Serializable]
+    public class LayerNL3DBase
     {
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
+
         [JsonIgnore] public bool IsSelected { get; private set; }
 
-        public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
-        public LayerNL3DBase ParentLayer => parent;
-        public List<LayerNL3DBase> ChildrenLayers => children;
+        [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
+        [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
+        [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
 
         [JsonIgnore]
         public string Name
@@ -62,6 +64,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
+        [JsonIgnore]
         public int SiblingIndex
         {
             get
@@ -85,9 +88,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public readonly UnityEvent ChildrenChanged = new();
         public readonly UnityEvent ParentOrSiblingIndexChanged = new();
 
-        
-        public LayerUI UI { get; set; } //todo: remove
 
+        [JsonIgnore] public LayerUI UI { get; set; } //todo: remove
+
+        [JsonIgnore] 
         public int Depth //todo: remove if possible
         {
             get
@@ -99,6 +103,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
+        [JsonIgnore] 
         public bool ActiveInHierarchy
         {
             get
@@ -136,15 +141,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Name = name;
         }
 
-        protected virtual void OnChildrenChanged()
-        {
-            UI?.RecalculateCurrentTreeStates();
-        }
-
-        // protected virtual void OnParentChanged()
-        // {
-        // }
-
         protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
         {
             UI?.SetParent(ParentLayer?.UI, newSiblingIndex);
@@ -169,7 +165,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 parent.children.Remove(this);
                 if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
                     siblingIndex--;
-                parent.OnChildrenChanged();
+
+                parent.UI?.RecalculateCurrentTreeStates(); //todo: move to LayerUI
+                parent.ChildrenChanged.Invoke();
             }
 
             if (siblingIndex < 0)
@@ -178,19 +176,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             parent = newParent;
             Debug.Log("new parent: " + newParent);
             Debug.Log("children: " + children);
-            
-            Debug.LogError(siblingIndex);
+
             newParent.children.Insert(siblingIndex, this);
 
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
-            
+
             if (parentChanged)
             {
                 ParentChanged.Invoke();
-                newParent.OnChildrenChanged();
+                newParent.UI?.RecalculateCurrentTreeStates(); //todo: move to LayerUI
+                newParent.ChildrenChanged.Invoke();
             }
         }
 
