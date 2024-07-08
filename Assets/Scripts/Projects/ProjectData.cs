@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-        public RootLayer RootLayer = new();
+        public RootLayer RootLayer;
   
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -58,12 +58,7 @@ namespace Netherlands3D.Twin.Projects
         {
             UUID = Guid.NewGuid().ToString();
         }
-
-        public void SetCurrentProjectData(ProjectData project)
-        {
-            current = project;
-        }
-
+        
         public void CopyFrom(ProjectData project)
         {
             // Explicit copy of fields. Will be more complex once bin. files are saved
@@ -214,9 +209,7 @@ namespace Netherlands3D.Twin.Projects
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
-            var proxyLayer = new ReferencedProxyLayer(); 
-            proxyLayer.CONSTRUCTOR(referenceName);
-            proxyLayer.Reference = referencedLayer;
+            var proxyLayer = new ReferencedProxyLayer(referenceName, referencedLayer); 
             referencedLayer.ReferencedProxy = proxyLayer;
         }
 
@@ -228,6 +221,7 @@ namespace Netherlands3D.Twin.Projects
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
             current = initialProjectTemplate;
+            current.RootLayer = new("RootLayer");
         }
     }
 }

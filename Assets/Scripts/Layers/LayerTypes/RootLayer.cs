@@ -11,6 +11,10 @@ namespace Netherlands3D.Twin.Layers
         // public override int Depth => 0;
         public List<LayerNL3DBase> SelectedLayers { get; set; } = new();
         
+        public RootLayer(string name) : base(name)
+        {
+        }
+        
         public void AddLayerToSelection(LayerNL3DBase layer) //todo: make protected once this is an extension of base
         {
             if (!SelectedLayers.Contains(layer))

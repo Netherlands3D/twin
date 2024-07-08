@@ -121,8 +121,7 @@ namespace Netherlands3D.Twin.Layers
         public void CreatePolygonLayer(List<Vector3> polygon)
         {
             Debug.Log("------------------------Create polygon layer");
-            var layerComponent = new PolygonSelectionLayer();
-            layerComponent.CONSTRUCTOR("Polygon");
+            var layerComponent = new PolygonSelectionLayer("Polygon");
             layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
@@ -137,8 +136,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void CreateLineLayer(List<Vector3> line)
         {
-            var layerComponent = new PolygonSelectionLayer();
-            layerComponent.CONSTRUCTOR("Line");
+            var layerComponent = new PolygonSelectionLayer("Line");
             layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
             layers.Add(layerComponent.PolygonVisualisation, layerComponent);
             layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);

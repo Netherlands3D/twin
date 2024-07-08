@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace Netherlands3D.Twin
 {
     public class ReferencedProxyLayer : LayerNL3DBase
     {
-        public ReferencedLayer Reference { get; set; }
+        public ReferencedLayer Reference { get; }
 
         public override void DestroyLayer()
         {
@@ -42,6 +43,12 @@ namespace Netherlands3D.Twin
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
+        }
+
+        public ReferencedProxyLayer(string name, ReferencedLayer reference) : base(name)
+        {
+            Reference = reference;  
+            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
         }
     }
 }

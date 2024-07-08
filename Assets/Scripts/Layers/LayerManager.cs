@@ -128,9 +128,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public FolderLayer CreateFolderLayer()
         {
-            var newLayer = new GameObject("Folder");
-            var folder = new FolderLayer();
-            folder.CONSTRUCTOR("Folder");
+            var folder = new FolderLayer("Folder");
             return folder;
         }
 

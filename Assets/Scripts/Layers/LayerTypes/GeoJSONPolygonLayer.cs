@@ -5,6 +5,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
@@ -30,6 +31,11 @@ namespace Netherlands3D.Twin
             }
         }
 
+        public GeoJSONPolygonLayer(string name) : base(name)
+        {
+            ProjectData.Current.AddStandardLayer(this);
+        }
+        
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in PolygonVisualisations)

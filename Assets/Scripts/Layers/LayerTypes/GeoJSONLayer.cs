@@ -124,8 +124,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var layer = new GeoJSONPolygonLayer();
-            layer.CONSTRUCTOR("Polygonen");
+            var layer = new GeoJSONPolygonLayer("Polygonen");
             layer.Color = ReferencedProxy.Color;
             StartCoroutine(SetSubLayerParent(layer));
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
@@ -134,8 +133,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONLineLayer CreateLineLayer()
         {
-            var layer = new GeoJSONLineLayer();
-            layer.CONSTRUCTOR("Lijnen");
+            var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
             layer.Color = ReferencedProxy.Color;
@@ -145,8 +143,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPointLayer CreatePointLayer()
         {
-            var layer = new GeoJSONPointLayer();
-            layer.CONSTRUCTOR("Punten");
+            var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
             layer.Color = ReferencedProxy.Color;

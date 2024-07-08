@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 if (ParentLayer == null) //todo: this is only needed for the initial SetParent and should be removed if possible
                     return -1;
-                    
+
                 return parent.ChildrenLayers.IndexOf(this);
             }
         }
@@ -126,18 +126,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
         }
 
-        public virtual void CONSTRUCTOR(string name) //todo: replace with constructor when this is no longer a monobehaviour
+        public LayerNL3DBase(string name) //todo: replace with constructor when this is no longer a monobehaviour
         {
             Name = name;
-            
+
+            if (this is RootLayer)
+                return;
+
             // if (!LayerData.AllLayers.Contains(this))
-            ProjectData.Current.AddStandardLayer(this);
+            // ProjectData.Current.AddStandardLayer(this);
 
             //for initialization calculate the parent and children here
-            OnTransformParentChanged();
-            OnTransformChildrenChanged();
+            // OnTransformParentChanged();
+            // OnTransformChildrenChanged();
             foreach (var child in ChildrenLayers)
             {
+                Debug.Log("child: "+child);
                 child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
             }
         }
@@ -161,11 +165,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
 
-            if (newParent == this)
-                return;
-
             if (newParent == null)
                 newParent = Root;
+
+            if (newParent == this)
+                return;
 
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
@@ -186,7 +190,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 OnSiblingIndexOrParentChanged(siblingIndex);
             }
         }
-        
+
         public virtual void DestroyLayer()
         {
             DeselectLayer();
@@ -195,6 +199,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 child.DestroyLayer();
             }
+
             LayerDestroyed.Invoke();
         }
     }
