@@ -1,10 +1,11 @@
+using System;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class ReferencedProxyLayer : LayerNL3DBase
+    public class ReferencedProxyLayer : LayerNL3DBase, IDisposable
     {
         public ReferencedLayer Reference { get; }
 
@@ -27,15 +28,14 @@ namespace Netherlands3D.Twin
             Reference.OnDeselect();
         }
 
-        protected override void OnTransformChildrenChanged()
+        protected override void OnChildrenChanged()
         {
-            base.OnTransformChildrenChanged();
+            base.OnChildrenChanged();
             Reference.OnProxyTransformChildrenChanged();
         }
 
-        protected override void OnTransformParentChanged()
+        protected void OnParentChanged()
         {
-            base.OnTransformParentChanged();
             Reference.OnProxyTransformParentChanged();
         }
 
@@ -49,6 +49,28 @@ namespace Netherlands3D.Twin
         {
             Reference = reference;  
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            ParentChanged.AddListener(OnParentChanged);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
+        // Protected dispose method to handle cleanup
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ParentChanged.RemoveListener(OnParentChanged);
+            }
+        }
+
+        // Finalizer to ensure cleanup
+        ~ReferencedProxyLayer()
+        {
+            Dispose(false);
         }
     }
 }

@@ -73,14 +73,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public UnityEvent<string> NameChanged = new();
-        public UnityEvent<bool> LayerActiveInHierarchyChanged = new();
-        public UnityEvent<Color> ColorChanged = new();
-        public UnityEvent LayerDestroyed = new();
+        public readonly UnityEvent<string> NameChanged = new();
+        public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        public readonly UnityEvent<Color> ColorChanged = new();
+        public readonly UnityEvent LayerDestroyed = new();
 
-        public UnityEvent<LayerNL3DBase> LayerSelected = new();
-        public UnityEvent<LayerNL3DBase> LayerDeselected = new();
+        public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
+        public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
 
+        public readonly UnityEvent ParentChanged = new();
+        public readonly UnityEvent ChildrenChanged = new();
+        public readonly UnityEvent ParentOrSiblingIndexChanged = new();
+
+        
         public LayerUI UI { get; set; } //todo: remove
 
         public int Depth //todo: remove if possible
@@ -126,34 +131,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
         }
 
-        public LayerNL3DBase(string name) //todo: replace with constructor when this is no longer a monobehaviour
+        public LayerNL3DBase(string name)
         {
             Name = name;
-
-            if (this is RootLayer)
-                return;
-
-            // if (!LayerData.AllLayers.Contains(this))
-            // ProjectData.Current.AddStandardLayer(this);
-
-            //for initialization calculate the parent and children here
-            // OnTransformParentChanged();
-            // OnTransformChildrenChanged();
-            foreach (var child in ChildrenLayers)
-            {
-                Debug.Log("child: "+child);
-                child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
-            }
         }
 
-        protected virtual void OnTransformChildrenChanged()
+        protected virtual void OnChildrenChanged()
         {
             UI?.RecalculateCurrentTreeStates();
         }
 
-        protected virtual void OnTransformParentChanged()
-        {
-        }
+        // protected virtual void OnParentChanged()
+        // {
+        // }
 
         protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
         {
@@ -175,7 +165,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var oldSiblingIndex = SiblingIndex;
 
             if (parent != null)
+            {
                 parent.children.Remove(this);
+                if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
+                    siblingIndex--;
+                parent.OnChildrenChanged();
+            }
 
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
@@ -183,11 +178,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             parent = newParent;
             Debug.Log("new parent: " + newParent);
             Debug.Log("children: " + children);
+            
+            Debug.LogError(siblingIndex);
             newParent.children.Insert(siblingIndex, this);
 
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 OnSiblingIndexOrParentChanged(siblingIndex);
+            }
+            
+            if (parentChanged)
+            {
+                ParentChanged.Invoke();
+                newParent.OnChildrenChanged();
             }
         }
 
