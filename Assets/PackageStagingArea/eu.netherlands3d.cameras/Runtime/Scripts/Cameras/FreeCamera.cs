@@ -125,6 +125,9 @@ public class FreeCamera : MonoBehaviour
     /// <param name="enableOrtographic">Ortographic mode enabled</param>
     public void EnableOrtographic(bool enableOrtographic)
     {
+        // TODO: Keep the heading/orientation of the camera, even when switching back end forth; and remember the pitch
+        // of the camera and restore it when switching back to perspective mode
+        
         if (enableOrtographic)
         {
             var cameraLookWorldPosition = GetWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0));

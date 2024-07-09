@@ -12,12 +12,26 @@ public class ToggleSpriteSwap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (toggle == null) GetComponent<Toggle>();
+
         if (toggle == null)
         {
             throw new NullReferenceException("Toggle hasn't been set in the inspector!");
         }
 
+        if (imageToSwap == null)
+        {
+            imageToSwap = toggle.graphic as Image;
+        }
+
+        // The graphic needs to be removed, because toggle will disable the SpriteRenderer otherwise, and we want to
+        // toggle
+        if (toggle.graphic == imageToSwap)
+        {
+            toggle.graphic = null;
+        }
         toggle.onValueChanged.AddListener(SwapSprites);
+        SwapSprites(toggle.isOn);
     }
 
     private void SwapSprites(bool isActive)
