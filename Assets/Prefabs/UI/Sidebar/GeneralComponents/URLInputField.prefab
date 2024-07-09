@@ -1360,6 +1360,7 @@ GameObject:
   - component: {fileID: 4951164014765191927}
   - component: {fileID: 5693691146077225599}
   - component: {fileID: 4247430226116721642}
+  - component: {fileID: 1146695361019999066}
   - component: {fileID: 8360637078574007450}
   m_Layer: 5
   m_Name: URLInputField
@@ -1469,6 +1470,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &1146695361019999066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5348192612710299352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37ea20068fd120849a07008a6d5d6a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8360637078574007450
 MonoBehaviour:
   m_ObjectHideFlags: 0
