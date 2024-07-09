@@ -13,9 +13,10 @@ namespace Netherlands3D.Twin
         [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
         private IDataTypeAdapter[] dataTypeAdapterInterfaces;
+        public UnityEvent OnAdapterFound = new();
 
         [Header("Events invoked on failures")] [Space(5)]
-        public UnityEvent<string> OnCouldNotDetermine = new();
+        public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
 
         private string targetUrl = "";
@@ -100,11 +101,12 @@ namespace Netherlands3D.Twin
                 if (adapter.Supports(urlAndData))
                 {
                     adapter.Execute(urlAndData);
+                    OnAdapterFound.Invoke();
                     yield break;
                 }
             }
 
-            OnCouldNotDetermine.Invoke(urlAndData.SourceUrl);
+            CouldNotFindAdapter.Invoke(urlAndData.SourceUrl);
         }
 
         private void OnValidate() {
