@@ -29,6 +29,9 @@ namespace Netherlands3D.Twin
 
         public bool Supports(LocalFile localFile)
         {
+            if(!localFile.LocalFilePath.ToLower().EndsWith(".csv"))
+                return false;
+
             // Check if we can read the CVS using our expected config
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var csv = new CsvReader(reader, config);

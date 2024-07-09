@@ -22,7 +22,12 @@ namespace Netherlands3D.Twin
         private string targetUrl = "";
         public string TargetUrl { get => targetUrl; set => targetUrl = value; }
 
-        private Coroutine coroutine;
+        private Coroutine chain;
+
+        private void OnDisable() {
+            if(chain != null)
+                StopCoroutine(chain);
+        }
 
         /// <summary>
         /// Determine the type of data using chain of responsibility
@@ -35,10 +40,10 @@ namespace Netherlands3D.Twin
         }
         public void DetermineAdapter()
         {
-            if(coroutine != null)
-                StopCoroutine(coroutine);
+            if(chain != null)
+                StopCoroutine(chain);
 
-            coroutine = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
         }
 
         private IEnumerator DownloadAndCheckSupport(string url)

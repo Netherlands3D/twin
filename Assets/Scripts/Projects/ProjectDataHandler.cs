@@ -71,7 +71,7 @@ namespace Netherlands3D.Twin.Projects
             var files = filePaths.Split(',');
             foreach (var filePath in files)
             {
-                if(filePath.EndsWith(".nl3d"))
+                if(filePath.ToLower().EndsWith(".nl3d"))
                 {
                     projectData.LoadFromFile(filePath);
                     return;
