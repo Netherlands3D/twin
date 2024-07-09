@@ -68,8 +68,18 @@ namespace Netherlands3D.Coordinates
         }
         public double northing
         {
-            get { return Points[converter.NorthingIndex()]; }
-            set { Points[converter.NorthingIndex()] = value; }
+            get {
+                if (converter == null)
+                {
+                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
+                }
+                return Points[converter.NorthingIndex()]; }
+            set {
+                if (converter == null)
+                {
+                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
+                }
+                Points[converter.NorthingIndex()] = value; }
         }
         public double height
         {
@@ -237,15 +247,24 @@ namespace Netherlands3D.Coordinates
                 return CoordinateSystems.connectedCRSToUnityUp;
             }
 
+            //return RotationToUnityUP();
             CoordinateSystemOperation myConverter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
             CoordinateSystemOperation connectedConverter = CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem];
 
             Vector3WGS orientationDifference = connectedConverter.Orientation() - myConverter.Orientation();
 
             Coordinate inConnectedCrs = this.Convert(CoordinateSystems.connectedCoordinateSystem);
+            
             Vector3WGS extraRotation = new Vector3WGS(inConnectedCrs.extraLongitudeRotation, inConnectedCrs.extraLattitudeRotation, 0);
-
+            
             orientationDifference += extraRotation;
+
+            //calculate the exrtaRotation in the connected coordainteSystem at the UnityOrigin
+            Coordinate pointAtOrigin = CoordinateSystems.CoordinateAtUnityOrigin.Convert(Coordinates.CoordinateSystem.WGS84_LatLon);
+            Vector3WGS ExtraRotationAtOrigin = new Vector3WGS(-pointAtOrigin.extraLongitudeRotation, -pointAtOrigin.extraLattitudeRotation, 0);
+           // ExtraRotationAtOrigin = new Vector3WGS(0, -pointAtOrigin.extraLattitudeRotation, 0);
+           // orientationDifference += ExtraRotationAtOrigin;
+
 
             Quaternion rotationToEast = Quaternion.AngleAxis((float)orientationDifference.lon, Vector3.up);
             if (myConverter.GetCoordinateSystemType() == CoordinateSystemType.Geocentric)
@@ -255,13 +274,15 @@ namespace Netherlands3D.Coordinates
             }
             /// Now we calculate the difference in lattitude between de localUP at the coordinate and the orientation of the coordinateSystem  
             Quaternion rotationToFlat = Quaternion.AngleAxis(-(float)orientationDifference.lat, Vector3.right);
+
             /// when we apply both rotations, we get the rotation required to get the coordinateSystem pointing Up and North at the Unity-Origin
-            Quaternion result = CoordinateSystems.connectedCRSToUnityUp * rotationToFlat * rotationToEast;
+            Quaternion result = Quaternion.AngleAxis(-(float)ExtraRotationAtOrigin.lon, Vector3.up) *CoordinateSystems.connectedCRSToUnityUp* rotationToFlat * rotationToEast ;
 
             return result;
 
         }
-       
+
+        
         public Vector3 ToUnity()
         {
             
