@@ -279,6 +279,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataTypeAdapters:
   - {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458, type: 2}
+  - {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}
+  - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+  - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
   OnCouldNotDetermine:
     m_PersistentCalls:
       m_Calls: []
@@ -2007,9 +2010,9 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.DownloadFile, Assembly-CSharp
-        m_MethodName: SetURL
+      - m_Target: {fileID: 3325231446690083424}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ChainOfResponsibility, Assembly-CSharp
+        m_MethodName: set_TargetUrl
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3095,8 +3098,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3325231446690083424}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DetermineAdapter
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.ChainOfResponsibility, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3371463156959114876, guid: 9b03494031e3bb643997bd5432bc015b, type: 3}

@@ -10,11 +10,18 @@ namespace Netherlands3D.Twin
 {
     public class ChainOfResponsibility : MonoBehaviour
     {
+        [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
         private IDataTypeAdapter[] dataTypeAdapterInterfaces;
 
+        [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> OnCouldNotDetermine = new();
         public UnityEvent<string> OnDownloadFailed = new();
+
+        private string targetUrl = "";
+        public string TargetUrl { get => targetUrl; set => targetUrl = value; }
+
+        private Coroutine coroutine;
 
         /// <summary>
         /// Determine the type of data using chain of responsibility
@@ -22,7 +29,15 @@ namespace Netherlands3D.Twin
         /// <param name="url">Url to file or service</param>
         public void DetermineAdapter(string url)
         {
-            StartCoroutine(DownloadAndCheckSupport(url));
+            TargetUrl = url;
+            DetermineAdapter();
+        }
+        public void DetermineAdapter()
+        {
+            if(coroutine != null)
+                StopCoroutine(coroutine);
+
+            coroutine = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
         }
 
         private IEnumerator DownloadAndCheckSupport(string url)
