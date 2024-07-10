@@ -44,6 +44,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 // var layer = t.GetComponent<LayerNL3DBase>();
                 ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
             }
+
+            RecalculateLayersVisibleInInspector();
         }
 
         private void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
@@ -60,8 +62,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layer.UI = layerUI;
-            // if(!(parent is RootLayer))
-                layerUI.SetParent(parent.UI, layer.SiblingIndex);
+            if(!(parent is RootLayer))
+                layerUI.SetParent(layerUIDictionary[parent], layer.SiblingIndex);
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             return layerUI;
