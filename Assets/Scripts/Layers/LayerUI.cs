@@ -95,12 +95,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
-
-            Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
-            Layer.ColorChanged.RemoveListener(SetColor);
-            Layer.LayerDestroyed.RemoveListener(DestroyUI);
-            Layer.LayerSelected.RemoveListener(OnLayerSelected);
-            Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
         }
 
         public void RecalculateCurrentTreeStates()
@@ -241,7 +235,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             if (Layer != null) // When the layer is deleted, this UI should not update
             {
-                Debug.LogError("this check should be removed if possible");
+                // Debug.LogError("this check should be removed if possible");
                 MarkLayerUIAsDirty();
             }
         }
@@ -264,6 +258,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void MarkLayerUIAsDirty()
         {
             isDirty = true;
+            foreach (var child in ChildrenUI)
+            {
+                child.MarkLayerUIAsDirty();
+            }
         }
 
         private void LateUpdate()
@@ -434,17 +432,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             SelectUI();
         }
-        
+
         private void OnLayerDeselected(LayerNL3DBase layer)
         {
             DeselectUI();
         }
-        
+
         private void SelectUI()
         {
             SetHighlight(InteractionState.Selected);
         }
-        
+
         private void DeselectUI()
         {
             if (propertyToggle.isOn) propertyToggle.isOn = false;
@@ -654,6 +652,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
             //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
 
+            Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
+            Layer.ColorChanged.RemoveListener(SetColor);
+            Layer.LayerDestroyed.RemoveListener(DestroyUI);
+            Layer.LayerSelected.RemoveListener(OnLayerSelected);
+            Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
+            
             layerManager.RemoveUI(this);
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
