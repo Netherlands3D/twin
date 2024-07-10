@@ -12,17 +12,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class LayerManager : MonoBehaviour, IPointerDownHandler
     {
-        public List<LayerUI> LayerUIsVisibleInInspector { get; set; } = new List<LayerUI>();
+        public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
         [SerializeField] private ProjectData projectData;
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
-
         [SerializeField] private RectTransform layerUIContainer;
 
         public ProjectData ProjectData => projectData;
         public RectTransform LayerUIContainer => layerUIContainer;
 
+        private Dictionary<LayerNL3DBase, LayerUI> layerUIDictionary = new();
+        
         //Drag variables
         [SerializeField] private DragGhost dragGhostPrefab;
         public DragGhost DragGhost { get; private set; }
@@ -45,9 +46,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
-            InstantiateLayerItem(layer, parent);
+            layerUIDictionary.Add(layer, InstantiateLayerItem(layer, parent));
             foreach (var child in layer.ChildrenLayers)
             {
                 ConstructHierarchyUIsRecursive(child, layer);
@@ -59,7 +60,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layer.UI = layerUI;
-            layer.UI.SetParent(parent?.UI, layer.SiblingIndex);
+            // if(!(parent is RootLayer))
+                layerUI.SetParent(parent.UI, layer.SiblingIndex);
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             return layerUI;
@@ -71,20 +73,22 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 Destroy(t.gameObject);
             }
+
+            layerUIDictionary = new();
         }
 
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
             projectData.LayerAdded.AddListener(CreateNewUI);
-            // LayerData.LayerDeleted.AddListener(OnLayerDeleted);
+            projectData.LayerDeleted.AddListener(OnLayerDeleted);
         }
-
+        
         private void OnDisable()
         {
             projectData.RootLayer.DeselectAllLayers();
             projectData.LayerAdded.RemoveListener(CreateNewUI);
-            // LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
         
         private void CreateNewUI(LayerNL3DBase layer)
@@ -259,6 +263,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layer.DestroyLayer();
             }
         }
+        
+        private void OnLayerDeleted(LayerNL3DBase layer)
+        {
+            layerUIDictionary.Remove(layer);
+        }
+
 
         public void RemoveUI(LayerUI layerUI)
         {
@@ -267,6 +277,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             if (LayerUIsVisibleInInspector.Contains(layerUI))
                 LayerUIsVisibleInInspector.Remove(layerUI);
+        }
+        
+        public void RecalculateLayersVisibleInInspector(){
+            LayerUIsVisibleInInspector.Clear();
+            LayerUIsVisibleInInspector = layerUIContainer.GetComponentsInChildren<LayerUI>(false).ToList();
+
         }
     }
 }

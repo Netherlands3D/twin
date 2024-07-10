@@ -228,16 +228,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateCurrentTreeStates();
         }
 
-        public void RecalculateVisibleHierarchyRecursive()
+        private void RecalculateVisibleHierarchyRecursive()
         {
-            layerManager.LayerUIsVisibleInInspector.Clear();
-            layerManager.LayerUIsVisibleInInspector = LayerBaseTransform.GetComponentsInChildren<LayerUI>(false).ToList();
+            layerManager.RecalculateLayersVisibleInInspector();
+            MarkLayerUIAsDirty();
 
-            if (Layer != null) // When the layer is deleted, this UI should not update
-            {
-                // Debug.LogError("this check should be removed if possible");
-                MarkLayerUIAsDirty();
-            }
+            // if (Layer != null) // When the layer is deleted, this UI should not update
+            // {
+            //     // Debug.LogError("this check should be removed if possible");
+            //     MarkLayerUIAsDirty();
+            // }
         }
 
         private void RecalculateParentAndChildren()
