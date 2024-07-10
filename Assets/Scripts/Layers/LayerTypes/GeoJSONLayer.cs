@@ -124,6 +124,12 @@ namespace Netherlands3D.Twin
                     startTime = Time.realtimeSinceStartup;
                 }
             }
+
+            //Aaply random colors to 
+            if (polygonFeatures)
+            {
+                polygonFeatures.PolygonVisualizationMaterial = defaultVisualizationMaterial;
+            }           
         }
 
         private GeoJSONPolygonLayer CreatePolygonLayer()

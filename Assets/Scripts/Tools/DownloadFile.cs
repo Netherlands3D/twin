@@ -50,6 +50,8 @@ namespace Netherlands3D.Twin
                 Uri uri = new Uri(url);
                 filename = Path.GetFileName(uri.AbsolutePath);
 
+                // use guid as filename if no filename is found
+                filename = filename == string.Empty ? Guid.NewGuid().ToString() + ".geojson" : filename;
                 if (filename == string.Empty)
                 {
                     Debug.LogError("The provided URL does not contain a valid filename: " + url);

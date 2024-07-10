@@ -25,7 +25,13 @@ namespace Netherlands3D.Twin
                 polygonVisualizationMaterial = value;
                 foreach (var visualization in PolygonVisualisations)
                 {
-                    visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
+                    var newMaterialInstance = new Material(polygonVisualizationMaterial);
+                    newMaterialInstance.color = new Color(
+                        polygonVisualizationMaterial.color.r + Random.Range(-0.3f, 0.3f),
+                        polygonVisualizationMaterial.color.g + Random.Range(-0.3f, 0.3f),
+                        polygonVisualizationMaterial.color.b + Random.Range(-0.3f, 0.3f)
+                    );
+                    visualization.GetComponent<MeshRenderer>().material = newMaterialInstance;
                 }
             }
         }
