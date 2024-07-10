@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 092ebe87c03e60f499482cfaffa0f5cc, type: 3}
   m_Name: TygronImportAdapter
   m_EditorClassIdentifier: 
-  geoJSONImportAdapter: {fileID: 0}
+  geoJSONImportAdapter: {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40,
+    type: 2}
+  onProjectParsed:
+    m_PersistentCalls:
+      m_Calls: []
+  onProjectFailed:
+    m_PersistentCalls:
+      m_Calls: []

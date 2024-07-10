@@ -27,12 +27,12 @@ namespace Netherlands3D.Twin
 
         private void OnProjectParsed()
         {
-            Debug.Log("Tygron project parsed");
+            onProjectParsed.Invoke();
         }
 
         private void OnProjectFailed()
         {
-            Debug.LogError("Tygron project failed");
+            onProjectParsed.Invoke();
         }
 
         public void SetURL(string url)
