@@ -106,6 +106,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerDeselected.AddListener(OnLayerDeselected);
             Layer.NameChanged.AddListener(OnNameChanged);
             Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
+            Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
 
             if (Layer.IsSelected)
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
@@ -113,6 +114,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             MarkLayerUIAsDirty();
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             SetColor(Layer.Color);
+        }
+
+        private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
+        {
+            SetParent(layerManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
         }
 
         private void OnNameChanged(string newName)
@@ -153,8 +159,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnabledToggleValueChanged(bool isOn)
         {
             Layer.ActiveSelf = isOn;
-            // RecalculateCurrentTreeStates();
-            // SetEnabledToggleInteractiveStateRecursive();
         }
 
         public void SetEnabledToggleInteractiveStateRecursive()
@@ -674,6 +678,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
             Layer.NameChanged.RemoveListener(OnNameChanged);
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
+            Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
 
             layerManager.RemoveUI(this);
             if (ParentUI)

@@ -41,9 +41,8 @@ namespace Netherlands3D.Twin
             Reference.OnProxyTransformParentChanged();
         }
 
-        protected override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        private void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
-            base.OnSiblingIndexOrParentChanged(newSiblingIndex);
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
         }
 
@@ -53,12 +52,14 @@ namespace Netherlands3D.Twin
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
+            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
         }
 
         ~ReferencedProxyLayer()
         {
             ParentChanged.RemoveListener(OnParentChanged);
             ChildrenChanged.RemoveListener(OnChildrenChanged);
+            ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
         }
     }
 }

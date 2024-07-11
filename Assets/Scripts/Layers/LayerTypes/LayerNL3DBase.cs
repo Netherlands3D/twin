@@ -116,7 +116,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public readonly UnityEvent ParentChanged = new();
         public readonly UnityEvent ChildrenChanged = new();
-        public readonly UnityEvent ParentOrSiblingIndexChanged = new();
+        public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
 
         [JsonIgnore] public LayerUI UI { get; set; } //todo: remove
@@ -145,12 +145,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public LayerNL3DBase(string name)
         {
             Name = name;
-        }
-
-        protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
-        {
-            UI?.SetParent(ParentLayer?.UI, newSiblingIndex);
-            LayerActiveInHierarchyChanged.Invoke(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
         }
 
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
@@ -186,7 +180,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
-                OnSiblingIndexOrParentChanged(siblingIndex);
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy); // Update the active state to match the calculated state
+                ParentOrSiblingIndexChanged.Invoke(siblingIndex);
             }
 
             if (parentChanged)
