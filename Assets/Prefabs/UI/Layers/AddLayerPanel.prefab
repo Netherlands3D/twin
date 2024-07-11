@@ -5990,7 +5990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &350238214394081567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9188,7 +9188,7 @@ RectTransform:
   m_Father: {fileID: 1523966239772666417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11030,9 +11030,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'RealityMesh
+  m_text: 'Fotorealisti-
 
-    (Google)'
+    sche Wereld'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -13936,10 +13936,10 @@ RectTransform:
   - {fileID: 3829764692954429636}
   m_Father: {fileID: 550364512664361664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 951.23, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 471.23, y: -9}
+  m_SizeDelta: {x: 88.46, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
 CanvasRenderer:
@@ -14991,7 +14991,7 @@ RectTransform:
   m_Father: {fileID: 1603225108621937301}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17108,6 +17108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlayPrefab: {fileID: 2605067482200781903, guid: 5a8099188fadb4cc1ab5bb27902bf38a,
     type: 3}
+  referencedLayer: {fileID: 0}
+  instantiateOnStart: 0
 --- !u!1 &8269209386390192098
 GameObject:
   m_ObjectHideFlags: 0
@@ -17956,7 +17958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7909634184744812864
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18380,6 +18382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 67748899823263108}
+  openToggle: {fileID: 0}
 --- !u!114 &2670768480989047758
 MonoBehaviour:
   m_ObjectHideFlags: 0
