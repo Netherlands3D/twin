@@ -137,9 +137,9 @@ namespace Netherlands3D.Twin.Layers
 
             if (propertySections.Count == 0)
             {
-                Debug.LogError("Todo: re add property sections");
-                // var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
-                // propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
+                var lineProperties = PolygonVisualisation.gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+                lineProperties.PolygonLayer = this;
+                propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
             }
         }
 
