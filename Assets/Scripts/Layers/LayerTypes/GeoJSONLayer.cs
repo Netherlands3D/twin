@@ -33,12 +33,7 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPointLayer pointFeatures;
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
-
-        // protected override void Start()
-        // {
-        //     base.Start();
-        // }
-
+        
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
