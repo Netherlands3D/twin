@@ -121,8 +121,8 @@ namespace Netherlands3D.Twin
         {
             var layer = new GeoJSONPolygonLayer("Polygonen");
             layer.Color = ReferencedProxy.Color;
-            StartCoroutine(SetSubLayerParent(layer));
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
@@ -132,7 +132,7 @@ namespace Netherlands3D.Twin
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
             layer.Color = ReferencedProxy.Color;
-            StartCoroutine(SetSubLayerParent(layer));
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
@@ -142,15 +142,8 @@ namespace Netherlands3D.Twin
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
             layer.Color = ReferencedProxy.Color;
-            StartCoroutine(SetSubLayerParent(layer));
-            return layer;
-        }
-
-        private IEnumerator SetSubLayerParent(LayerNL3DBase layer) //todo: remove coroutine
-        {
-            Debug.LogError("remove this coroutine");
-            yield return null; //wait a frame for layer to be initialized
             layer.SetParent(ReferencedProxy);
+            return layer;
         }
         
         private void VisualizeFeature(Feature feature)
