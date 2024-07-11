@@ -105,6 +105,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerSelected.AddListener(OnLayerSelected);
             Layer.LayerDeselected.AddListener(OnLayerDeselected);
             Layer.NameChanged.AddListener(OnNameChanged);
+            Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
 
             if (Layer.IsSelected)
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
@@ -117,6 +118,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnNameChanged(string newName)
         {
             gameObject.name = newName;
+        }
+        
+        private void OnLayerChildrenChanged()
+        {
+            RecalculateCurrentTreeStates();
         }
 
         public void RecalculateCurrentTreeStates()
@@ -667,6 +673,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerSelected.RemoveListener(OnLayerSelected);
             Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
             Layer.NameChanged.RemoveListener(OnNameChanged);
+            Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
 
             layerManager.RemoveUI(this);
             if (ParentUI)

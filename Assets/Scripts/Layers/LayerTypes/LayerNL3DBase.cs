@@ -172,7 +172,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
                     siblingIndex--;
 
-                parent.UI?.RecalculateCurrentTreeStates(); //todo: move to LayerUI
                 parent.ChildrenChanged.Invoke();
             }
 
@@ -193,7 +192,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (parentChanged)
             {
                 ParentChanged.Invoke();
-                newParent.UI?.RecalculateCurrentTreeStates(); //todo: move to LayerUI
                 newParent.ChildrenChanged.Invoke();
             }
         }
