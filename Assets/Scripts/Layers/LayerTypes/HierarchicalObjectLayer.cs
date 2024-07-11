@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (ReferencedProxy.IsSelected)
+            if (!isActive && ReferencedProxy.IsSelected)
             {
                 ReferencedProxy.DeselectLayer();
             }
@@ -89,9 +89,10 @@ namespace Netherlands3D.Twin.Layers
             var scatterLayer = new GameObject(objectLayer.Name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
 
-            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy));
-
+            var originalGameObject = objectLayer.gameObject;
+            objectLayer.ReferencedProxy.KeepReferenceOnDestroy = true;
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
+            layerComponent.Initialize(originalGameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayer.ReferencedProxy));
 
             return layerComponent;
         }

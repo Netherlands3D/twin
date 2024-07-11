@@ -12,10 +12,12 @@ namespace Netherlands3D.Twin
         [JsonIgnore]
         public ReferencedLayer Reference { get; }
 
+        [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
+
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            if (Reference)
+            if (!KeepReferenceOnDestroy && Reference)
                 GameObject.Destroy(Reference.gameObject);
         }
 

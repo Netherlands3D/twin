@@ -36,13 +36,14 @@ namespace Netherlands3D.Twin.Layers
 
         private bool completedInitialization;
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerNL3DBase> children)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
             this.material.enableInstancing = true;
 
+            originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
             polygonLayer = polygon;
 
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
@@ -74,9 +75,7 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
-
-            ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
-
+            
 // #if UNITY_EDITOR
 //          gameObject.AddComponent<GridDebugger>();
 // #endif
@@ -323,23 +322,17 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            var initialActiveState = ReferencedProxy.ActiveSelf;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState)); //todo: remove coroutine
-        }
-
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)
-        {
-            originalObject.gameObject.SetActive(true); //activate to initialize the added component.
+            originalObject.SetActive(true);
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
-            yield return new WaitForEndOfFrame(); //wait for layer component to initialize
+            layer.ReferencedProxy.ActiveSelf = true;
+
             foreach (var child in ReferencedProxy.ChildrenLayers)
             {
                 child.SetParent(layer.ReferencedProxy);
             }
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
-            layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
             DestroyLayer();
         }
 
