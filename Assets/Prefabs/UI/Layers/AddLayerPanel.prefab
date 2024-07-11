@@ -381,6 +381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 4311489376399559593, guid: cc9d0f9a5a1724c9695a1bef5ecccaec, type: 3}
@@ -2351,6 +2352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}
@@ -3657,6 +3659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
@@ -4680,6 +4683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3712503248906199988, guid: 6915dd70276474a0688a5fb1a9c248c0, type: 3}
@@ -9830,6 +9834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 4137703543855384620, guid: c3ba1b0d37f2843cf973cb1d03a3bd3c, type: 3}
@@ -10771,6 +10776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 2907779477277976049, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
@@ -11608,6 +11614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 915834300300047598, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
@@ -14531,6 +14538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3354824856556962616, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
@@ -16042,6 +16050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3712503248906199988, guid: 65e87ace5e7c94c2dba27317474f1179, type: 3}
@@ -18069,8 +18078,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4194749933784222526}
   m_HandleRect: {fileID: 1952508586956662896}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18866,6 +18875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 416bb3a0b4137324d860b58a6e8f484e, type: 3}

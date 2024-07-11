@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected ProjectData projectData;
+        [SerializeField] protected LayerManager layerManager;
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
         [SerializeField] protected ReferencedLayer layer;
@@ -43,18 +44,18 @@ namespace Netherlands3D.Twin
             projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
-        
+
         private void OnLayerDeleted(LayerNL3DBase deletedLayer)
         {
-            if(!toggle.isOn)
+            if (!toggle.isOn)
                 return;
-            
+
             if (deletedLayer == layer.ReferencedProxy)
             {
                 toggle.onValueChanged.RemoveListener(CreateOrDestroyObject); //the layer was already deleted, it should only update the toggle
                 toggle.isOn = false; //use the regular way instead of SetIsOnWithoutNotify because the toggle graphics should update.
                 toggle.onValueChanged.AddListener(CreateOrDestroyObject);
-            } 
+            }
         }
 
         private void CreateOrDestroyObject(bool isOn)
@@ -73,50 +74,30 @@ namespace Netherlands3D.Twin
             var layerComponent = newObject.GetComponent<ReferencedLayer>();
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<ReferencedLayer>();
-
-            StartCoroutine(SelectAndHoverAtEndOfFrame()); //wait until layer and UI are initialized.
-
+            
             return layerComponent;
-        }
-
-        private IEnumerator SelectAndHoverAtEndOfFrame() //todo: remove this coroutine after monobehaviours are removed from layers since ordering should no longer be an issue
-        {
-            yield return new WaitForEndOfFrame();
-            layer.ReferencedProxy.SelectLayer();
-            HighlightLayer(true);
-            layer.ReferencedProxy.Name = prefab.name;
-            layer.ReferencedProxy.UI.MarkLayerUIAsDirty();
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             ShowBin(toggle.isOn);
             GetComponent<Image>().sprite = hoverSprite;
-            HighlightLayer(true);
+            if (layer)
+                layerManager.HighlightLayerUI(layer.ReferencedProxy, true);
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             ShowBin(false);
             GetComponent<Image>().sprite = defaultSprite;
-            HighlightLayer(false);
+            if (layer)
+                layerManager.HighlightLayerUI(layer.ReferencedProxy, false);
         }
 
         //also called in the inspector to update after a press
         public void ShowBin(bool isOn)
         {
             binImage.SetActive(isOn);
-        }
-
-        private void HighlightLayer(bool isOn)
-        {
-            //todo: is this check still needed?
-            Debug.LogError("todo: is this check still needed?", gameObject);
-            if (!layer || layer.ReferencedProxy == null || !layer.ReferencedProxy.UI)
-                return;
-
-            var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
-            layer.ReferencedProxy.UI.SetHighlight(layerState);
         }
     }
 }

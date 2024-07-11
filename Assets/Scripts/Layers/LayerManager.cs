@@ -99,6 +99,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
             layer.SelectLayer(true);
+            layerUI.SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer
         }
 
         private void OnRectTransformDimensionsChange()
@@ -229,7 +230,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void GroupSelectedLayers()
         {
             var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-            
+
             var newGroup = CreateFolderLayer();
             var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
@@ -294,6 +295,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public LayerUI GetLayerUI(LayerNL3DBase layer)
         {
             return layerUIDictionary[layer];
+        }
+
+        public void HighlightLayerUI(LayerNL3DBase layer, bool isOn)
+        {
+            if (layer.IsSelected)
+                return;
+
+            var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
+            var ui = GetLayerUI(layer);
+            // layer.ReferencedProxy.UI.SetHighlight(layerState);
+            ui.SetHighlight(layerState);
+            ui.MarkLayerUIAsDirty();
         }
     }
 }
