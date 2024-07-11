@@ -11,8 +11,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class RootLayer : LayerNL3DBase //todo: make an extension of base and make functions protected
     {
-        // public override int Depth => 0;
-        [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; set; } = new();
+        [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; private set; } = new();
 
         public RootLayer(string name) : base(name)
         {

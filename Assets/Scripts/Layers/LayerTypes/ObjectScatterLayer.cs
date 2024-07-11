@@ -66,17 +66,6 @@ namespace Netherlands3D.Twin.Layers
             gameObject.AddComponent<ScatterLayerShifter>();
             gameObject.AddComponent<WorldTransform>();
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties)); //todo: remove this coroutine
-        }
-
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-            gameObject.SetActive(isActive);
-        }
-
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
-        {
-            yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
             foreach (var child in children)
             {
@@ -89,10 +78,15 @@ namespace Netherlands3D.Twin.Layers
             ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
 
 // #if UNITY_EDITOR
-//             gameObject.AddComponent<GridDebugger>();
+//          gameObject.AddComponent<GridDebugger>();
 // #endif
             ReferencedProxy.PropertiesOpen = openProperties;
             completedInitialization = true;
+        }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
 
         public void AddReScatterListeners()
