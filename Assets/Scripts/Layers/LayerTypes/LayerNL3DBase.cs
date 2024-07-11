@@ -18,12 +18,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-
-        [JsonIgnore] public bool IsSelected { get; private set; }
-
+        
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
         [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
+        [JsonIgnore] public bool IsSelected { get; private set; }
 
         [JsonIgnore]
         public string Name
@@ -76,6 +75,30 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
+        [JsonIgnore] 
+        public bool ActiveInHierarchy
+        {
+            get
+            {
+                if (ParentLayer != null) //todo: if root layer is also of this type, maybe this check is unneeded
+                    return ParentLayer.ActiveInHierarchy && activeSelf;
+
+                return activeSelf;
+            }
+        }
+
+        [JsonIgnore] 
+        public int Depth //todo: remove if possible
+        {
+            get
+            {
+                if (ParentLayer != Root)
+                    return ParentLayer.Depth + 1;
+
+                return 0;
+            }
+        }
+        
         public readonly UnityEvent<string> NameChanged = new();
         public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         public readonly UnityEvent<Color> ColorChanged = new();
@@ -90,30 +113,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
 
         [JsonIgnore] public LayerUI UI { get; set; } //todo: remove
-
-        [JsonIgnore] 
-        public int Depth //todo: remove if possible
-        {
-            get
-            {
-                if (ParentLayer != Root)
-                    return ParentLayer.Depth + 1;
-
-                return 0;
-            }
-        }
-
-        [JsonIgnore] 
-        public bool ActiveInHierarchy
-        {
-            get
-            {
-                if (ParentLayer != null) //todo: if root layer is also of this type, maybe this check is unneeded
-                    return ParentLayer.ActiveInHierarchy && activeSelf;
-
-                return activeSelf;
-            }
-        }
 
         public virtual void SelectLayer(bool deselectOthers = false)
         {

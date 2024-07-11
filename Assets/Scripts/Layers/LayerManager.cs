@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUI.Layer = layer;
             layer.UI = layerUI;
             if(!(parent is RootLayer))
-                layerUI.SetParent(layerUIDictionary[parent], layer.SiblingIndex);
+                layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
             layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             return layerUI;
@@ -285,6 +285,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerUIsVisibleInInspector.Clear();
             LayerUIsVisibleInInspector = layerUIContainer.GetComponentsInChildren<LayerUI>(false).ToList();
 
+        }
+
+        public LayerUI GetLayerUI(LayerNL3DBase layer)
+        {
+            return layerUIDictionary[layer];
         }
     }
 }

@@ -385,7 +385,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 // add all layers between the currently selected layer and the reference layer
                 var referenceLayer = Layer.Root.SelectedLayers.Last(); //last element is always the last selected layer
                 var myIndex = layerManager.LayerUIsVisibleInInspector.IndexOf(this);
-                var referenceIndex = layerManager.LayerUIsVisibleInInspector.IndexOf(referenceLayer.UI);
+                var referenceIndex = layerManager.LayerUIsVisibleInInspector.IndexOf(layerManager.GetLayerUI(referenceLayer));
 
                 var startIndex = referenceIndex > myIndex ? myIndex + 1 : referenceIndex + 1;
                 var endIndex = referenceIndex > myIndex ? referenceIndex - 1 : myIndex - 1;
