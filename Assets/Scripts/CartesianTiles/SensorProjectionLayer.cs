@@ -22,16 +22,26 @@ using System;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.CartesianTiles
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        
-        private SensorDataController dataController;        
+        private SensorDataController dataController;
+
+        public override void Start()
+        {
+            base.Start();
+            //by default update the ui when the layer is disabled on startup
+            CartesianTileLayer tileLayer = gameObject.GetComponent<CartesianTileLayer>();
+            tileLayer.ReferencedProxy.ActiveSelf = isEnabled;
+        }
 
         protected override Tile CreateNewTile(Vector2Int tileKey)
         {
             Tile tile = base.CreateNewTile(tileKey);
+
             TileSensorData tileSensorData = tile.gameObject.AddComponent<TileSensorData>();
             if (dataController == null)
             {
@@ -40,7 +50,7 @@ namespace Netherlands3D.CartesianTiles
             if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
             {
                 projector.SetSize(tileSize, tileSize, tileSize);
-                projector.gameObject.SetActive(true);
+                projector.gameObject.SetActive(isEnabled);
                 tileSensorData.Initialize();
                 projector.SetTexture(tileSensorData.DataTexture);
             }
@@ -76,7 +86,7 @@ namespace Netherlands3D.CartesianTiles
                 tileSensorData.UpdateTexture(tile, dataController);
 
                 //free up memory
-                //tileSensorData.ClearCells();
+                tileSensorData.ClearCells();
 
                 //when static sensor data we need to keep the cell data alive
                 if(!dataController.StaticSensorData)
