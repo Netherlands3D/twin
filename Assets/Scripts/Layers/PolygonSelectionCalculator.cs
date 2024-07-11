@@ -13,18 +13,13 @@ namespace Netherlands3D.Twin
     {
         public static List<PolygonSelectionLayer> Layers = new();
         private OpticalRaycaster opticalRaycaster;
+        private static bool polygonAddedThisFrame;
 
-        public static void RegisterPolygon(PolygonSelectionLayer layer)
+        private void Awake()
         {
-            if (Layers.Contains(layer))
-            {
-                Debug.LogError("layer " + layer + " is already registered");
-                return;
-            }
-
-            Layers.Add(layer);
+            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
         }
-
+        
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
@@ -34,8 +29,19 @@ namespace Netherlands3D.Twin
         {
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
+        
+        public static void RegisterPolygon(PolygonSelectionLayer layer)
+        {
+            if (Layers.Contains(layer))
+            {
+                Debug.LogError("layer " + layer + " is already registered");
+                return;
+            }
 
-
+            Layers.Add(layer);
+            polygonAddedThisFrame = true;
+        }
+        
         public static void UnregisterPolygon(PolygonSelectionLayer layer)
         {
             if (!Layers.Contains(layer))
@@ -47,13 +53,14 @@ namespace Netherlands3D.Twin
             Layers.Remove(layer);
         }
 
-        private void Awake()
-        {
-            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-        }
-
         private void ProcessClick()
         {
+            if (polygonAddedThisFrame) //don't immediately deselect a just created polygon
+            {
+                polygonAddedThisFrame = false;
+                return;
+            }
+            
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
             var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(camera, Pointer.current.position.ReadValue());

@@ -59,13 +59,9 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public PolygonSelectionLayer(string name) : base(name)
+        public PolygonSelectionLayer(string name, List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f) : base(name)
         {
-            ProjectData.Current.AddStandardLayer(this);
-        }
-        
-        public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f)
-        {
+
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
@@ -79,8 +75,8 @@ namespace Netherlands3D.Twin.Layers
             // worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
-
             PolygonSelectionCalculator.RegisterPolygon(this);
+            ProjectData.Current.AddStandardLayer(this);
         }
 
         private void ShiftedPolygon(List<Vector3> newPolygon)
@@ -218,14 +214,12 @@ namespace Netherlands3D.Twin.Layers
         public override void SelectLayer(bool deselectOthers = false)
         {
             base.SelectLayer();
-            Debug.LogError("Selecting p" + Name);
             polygonSelected.Invoke(this);
         }
 
         public override void DeselectLayer()
         {
             base.DeselectLayer();
-            Debug.LogError("Deselecting p" + Name);
             polygonSelected.Invoke(null);
         }
         
