@@ -75,9 +75,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 propertySections = new();
         }
      
-        private IEnumerator Start() //todo: remove this coroutine
+        private void Start()
         {
-            yield return null; //wait for UI to initialize
             ReferencedProxy.PropertiesOpen = openPropertiesOnStart;
         }
 
@@ -94,7 +93,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             gameObject.SetActive(isActive);
-            // ReferencedProxy.UI.MarkLayerUIAsDirty();
         }
 
         private void InvokeUnsupportedExtensionsMessage(string[] unsupportedExtensions)
