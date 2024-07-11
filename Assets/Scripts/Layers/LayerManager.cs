@@ -62,8 +62,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUI.Layer = layer;
             layerUIDictionary.Add(layer, layerUI);
             layerUI.name = layer.Name;
-            layer.UI = layerUI;
-            if (!(parent is RootLayer))
+            if (parent is not RootLayer)
                 layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
 
             return layerUI;

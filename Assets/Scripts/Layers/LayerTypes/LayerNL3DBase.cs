@@ -98,15 +98,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 return 0;
             }
         }
-
-        public bool openPropertiesAtStart;
-        
-        // [JsonIgnore]
-        // public bool PropertiesOpen
-        // {
-        //     get => UI && UI.PropertiesOpen;
-        //     set => UI.ToggleProperties(value);
-        // }
         
         public readonly UnityEvent<string> NameChanged = new();
         public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
@@ -119,10 +110,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public readonly UnityEvent ParentChanged = new();
         public readonly UnityEvent ChildrenChanged = new();
         public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
-
-
-        [JsonIgnore] public LayerUI UI { get; set; } //todo: remove
-
+        
         public virtual void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
