@@ -518,7 +518,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 layerManager.SortSelectedLayersByVisibility();
                 Layer.Root.SelectedLayers.Reverse();
 
-                foreach (var selectedLayer in Layer.Root.SelectedLayers)
+                foreach (var selectedLayer in Layer.Root.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
                 {
                     selectedLayer.SetParent(newParent?.Layer, newSiblingIndex);
                 }
@@ -686,9 +686,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnDestroy()
         {
-            // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
-            //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
-
             Layer.NameChanged.RemoveListener(OnNameChanged);
             Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
             Layer.ColorChanged.RemoveListener(UpdateColor);
@@ -697,8 +694,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-
-            layerManager.RemoveUI(this);
+            
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 

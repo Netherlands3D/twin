@@ -275,16 +275,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUIDictionary.Remove(layer);
         }
 
-
-        public void RemoveUI(LayerUI layerUI)
-        {
-            if (projectData.RootLayer.SelectedLayers.Contains(layerUI.Layer))
-                projectData.RootLayer.SelectedLayers.Remove(layerUI.Layer);
-
-            if (LayerUIsVisibleInInspector.Contains(layerUI))
-                LayerUIsVisibleInInspector.Remove(layerUI);
-        }
-
         public void RecalculateLayersVisibleInInspector()
         {
             LayerUIsVisibleInInspector.Clear();
