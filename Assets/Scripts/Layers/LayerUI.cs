@@ -127,6 +127,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             UpdateColor(Layer.Color);
+            RegisterWithPropertiesPanel(Properties.Instance);
         }
         
         private void OnNameChanged(string newName)
@@ -328,17 +329,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             SetLayerTypeImage();
             RecalculateNameWidth();
             UpdateFoldout();
-
-            UpdatePropertiesToggle();
-        }
-
-        private void UpdatePropertiesToggle()
-        {
-            // only show properties button if the layer has any property sections to show
-            var layerWithProperties = Properties.TryFindProperties(Layer);
-            propertyToggle.gameObject.SetActive(
-                layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
-            );
         }
 
         private void SetLayerTypeImage()
@@ -696,8 +686,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void RegisterWithPropertiesPanel(Properties propertiesPanel)
         {
+            var layerWithProperties = Properties.TryFindProperties(Layer);
+            var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
+            propertyToggle.gameObject.SetActive(hasProperties);
+            
+            if(!hasProperties)
+                return;
+            
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
             propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
+            ToggleProperties(true, propertiesPanel);
         }
 
         private void ToggleProperties(bool onOrOff, Properties properties)
@@ -718,11 +716,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 // To prevent confusion with the user, also immediately select this layer.
                 Layer.SelectLayer(true);
             }
-        }
-
-        public void ToggleProperties(bool isOn)
-        {
-            propertyToggle.isOn = isOn;
         }
     }
 }

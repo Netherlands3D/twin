@@ -24,28 +24,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             Destroy(gameObject);
         }
 
-        private void OnEnable()
-        {
-            ProjectData.Current.LayerAdded.AddListener(OnLayerAdded);
-        }
-
-        private void OnDisable()
-        {
-            ProjectData.Current.LayerAdded.RemoveListener(OnLayerAdded);
-        }
-
         private void Start()
         {
             Hide();
-        }
-        
-        private void OnLayerAdded(LayerNL3DBase layer)
-        {
-            var propertiesLayer = TryFindProperties(layer);
-            if (propertiesLayer != null)
-            {
-                Show(propertiesLayer);
-            }
         }
         
         public void Show(ILayerWithProperties layer)

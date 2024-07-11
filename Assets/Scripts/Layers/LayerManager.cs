@@ -65,7 +65,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layer.UI = layerUI;
             if (!(parent is RootLayer))
                 layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
-            layerUI.RegisterWithPropertiesPanel(Properties.Instance);
 
             return layerUI;
         }
