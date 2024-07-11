@@ -293,6 +293,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public LayerUI GetLayerUI(LayerNL3DBase layer)
         {
+            if (layer is RootLayer)
+                return null;
+            
             return layerUIDictionary[layer];
         }
 
