@@ -14,14 +14,14 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        
+
         protected override void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             base.Awake();
         }
-        
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -39,6 +39,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 ReferencedProxy.DeselectLayer();
             }
+
             gameObject.SetActive(isActive);
         }
 
@@ -100,10 +101,7 @@ namespace Netherlands3D.Twin.Layers
             var list = new List<LayerNL3DBase>();
             foreach (var child in layer.ChildrenLayers)
             {
-                if (child.Depth == layer.Depth + 1)
-                {
-                    list.Add(child);
-                }
+                list.Add(child);
             }
 
             foreach (var directChild in list)

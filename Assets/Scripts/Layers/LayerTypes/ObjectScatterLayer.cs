@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Layers
             this.material.enableInstancing = true;
 
             polygonLayer = polygon;
-            
+
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
             if (!toggleScatterPropertySectionInstantiator)
@@ -97,7 +97,7 @@ namespace Netherlands3D.Twin.Layers
             polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
         }
-        
+
         public void RemoveReScatterListeners()
         {
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
@@ -112,7 +112,7 @@ namespace Netherlands3D.Twin.Layers
             base.OnDestroy();
             RemoveReScatterListeners();
         }
-        
+
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
         {
             foreach (var visualisation in visualisations)
@@ -194,7 +194,7 @@ namespace Netherlands3D.Twin.Layers
             RecalculatePolygonsAndGetBounds();
             ResampleTexture();
         }
-        
+
         private void ResampleTexture()
         {
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
@@ -336,8 +336,7 @@ namespace Netherlands3D.Twin.Layers
             yield return new WaitForEndOfFrame(); //wait for layer component to initialize
             foreach (var child in ReferencedProxy.ChildrenLayers)
             {
-                if (child.Depth == ReferencedProxy.Depth + 1)
-                    child.SetParent(layer.ReferencedProxy);
+                child.SetParent(layer.ReferencedProxy);
             }
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
