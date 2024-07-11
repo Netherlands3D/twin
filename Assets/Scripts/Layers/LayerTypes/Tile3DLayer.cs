@@ -75,10 +75,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 propertySections = new();
         }
      
-        private IEnumerator Start()
+        private IEnumerator Start() //todo: remove this coroutine
         {
             yield return null; //wait for UI to initialize
-            ReferencedProxy.UI.ToggleProperties(openPropertiesOnStart);
+            ReferencedProxy.PropertiesOpen = openPropertiesOnStart;
         }
 
         private void OnEnable()

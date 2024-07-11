@@ -242,7 +242,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SortSelectedLayersByVisibility()
         {
-            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(layer1.UI).CompareTo(LayerUIsVisibleInInspector.IndexOf(layer2.UI)));
+            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
         private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)

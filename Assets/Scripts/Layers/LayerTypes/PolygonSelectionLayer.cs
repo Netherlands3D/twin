@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.Layers
         {
             ProjectData.Current.AddStandardLayer(this);
             if (shapeType == ShapeType.Line)
-                UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
+                PropertiesOpen = true; //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
         
         public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f)

@@ -88,8 +88,7 @@ namespace Netherlands3D.Twin.Layers
             var scatterLayer = new GameObject(objectLayer.Name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
 
-            var openProperties = objectLayer.ReferencedProxy.UI && objectLayer.ReferencedProxy.UI.PropertiesOpen;
-            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy), openProperties);
+            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy), objectLayer.ReferencedProxy.PropertiesOpen);
 
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
 

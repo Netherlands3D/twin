@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
             gameObject.AddComponent<ScatterLayerShifter>();
             gameObject.AddComponent<WorldTransform>();
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
+            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties)); //todo: remove this coroutine
         }
 
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -91,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
 // #if UNITY_EDITOR
 //             gameObject.AddComponent<GridDebugger>();
 // #endif
-            ReferencedProxy.UI.ToggleProperties(openProperties);
+            ReferencedProxy.PropertiesOpen = openProperties;
             completedInitialization = true;
         }
 
@@ -332,8 +332,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var initialActiveState = ReferencedProxy.ActiveSelf;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            var openProperties = ReferencedProxy.UI && ReferencedProxy.UI.PropertiesOpen;
-            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));
+            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, ReferencedProxy.PropertiesOpen)); //todo: remove coroutine
         }
 
         private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState, bool openProperties)
@@ -349,7 +348,7 @@ namespace Netherlands3D.Twin.Layers
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
-            layer.ReferencedProxy.UI.ToggleProperties(openProperties);
+            layer.ReferencedProxy.PropertiesOpen = openProperties;
             DestroyLayer();
         }
 

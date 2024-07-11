@@ -99,6 +99,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
         
+        [JsonIgnore]
+        public bool PropertiesOpen
+        {
+            get => UI && UI.PropertiesOpen;
+            set => UI.ToggleProperties(value);
+        }
+        
         public readonly UnityEvent<string> NameChanged = new();
         public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         public readonly UnityEvent<Color> ColorChanged = new();
