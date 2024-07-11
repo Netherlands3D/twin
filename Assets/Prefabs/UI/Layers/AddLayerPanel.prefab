@@ -380,8 +380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 4311489376399559593, guid: cc9d0f9a5a1724c9695a1bef5ecccaec, type: 3}
@@ -2351,8 +2349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b50469f0b5b4c1eab29d73a3411c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}
@@ -3658,8 +3654,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b50469f0b5b4c1eab29d73a3411c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
@@ -4682,8 +4676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3712503248906199988, guid: 6915dd70276474a0688a5fb1a9c248c0, type: 3}
@@ -5998,7 +5990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &350238214394081567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9196,7 +9188,7 @@ RectTransform:
   m_Father: {fileID: 1523966239772666417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9833,8 +9825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 4137703543855384620, guid: c3ba1b0d37f2843cf973cb1d03a3bd3c, type: 3}
@@ -10775,8 +10765,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 2907779477277976049, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
@@ -11042,9 +11030,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'RealityMesh
+  m_text: 'Fotorealisti-
 
-    (Google)'
+    sche Wereld'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -11613,8 +11601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 915834300300047598, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
@@ -13952,7 +13938,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -0.77000046, y: -9}
+  m_AnchoredPosition: {x: 471.23, y: -9}
   m_SizeDelta: {x: 88.46, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6110239506998098202
@@ -14537,8 +14523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3354824856556962616, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
@@ -15007,7 +14991,7 @@ RectTransform:
   m_Father: {fileID: 1603225108621937301}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16049,8 +16033,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbecbfdaf7be44c6a54b6d1b0b643dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 3712503248906199988, guid: 65e87ace5e7c94c2dba27317474f1179, type: 3}
@@ -17976,7 +17958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7909634184744812864
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18874,8 +18856,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b50469f0b5b4c1eab29d73a3411c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  layerManager: {fileID: 0}
   layerParent: {fileID: 0}
   layer: {fileID: 0}
   prefab: {fileID: 7974831043381414785, guid: 416bb3a0b4137324d860b58a6e8f484e, type: 3}
