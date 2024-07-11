@@ -609,7 +609,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private static void RemoveHoverHighlight(LayerUI ui)
+        private void RemoveHoverHighlight(LayerUI ui)
         {
             if (!ui) return;
             
