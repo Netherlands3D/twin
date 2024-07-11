@@ -99,7 +99,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
             layer.SelectLayer(true);
-            layerUI.SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer
         }
 
         private void OnRectTransformDimensionsChange()
