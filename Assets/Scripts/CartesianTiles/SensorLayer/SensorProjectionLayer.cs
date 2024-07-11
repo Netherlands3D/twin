@@ -42,7 +42,7 @@ namespace Netherlands3D.CartesianTiles
         {
             Tile tile = base.CreateNewTile(tileKey);
 
-            TileSensorData tileSensorData = tile.gameObject.AddComponent<TileSensorData>();
+            TileSensorDataController tileSensorData = tile.gameObject.AddComponent<TileSensorDataController>();
             if (dataController == null)
             {
                 dataController = GetComponent<SensorDataController>();
@@ -81,7 +81,7 @@ namespace Netherlands3D.CartesianTiles
             else
             {
                 dataController.ProcessDataFromJson(webRequest.downloadHandler.text);
-                TileSensorData tileSensorData = tile.gameObject.GetComponent<TileSensorData>();
+                TileSensorDataController tileSensorData = tile.gameObject.GetComponent<TileSensorDataController>();
                 tileSensorData.SetCells(tile, dataController);
                 tileSensorData.UpdateTexture(tile, dataController);
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.CartesianTiles
 {
-    public class TileSensorData : MonoBehaviour
+    public class TileSensorDataController : MonoBehaviour
     {
         public Texture2D DataTexture { get { return dataTexture; } }
 
