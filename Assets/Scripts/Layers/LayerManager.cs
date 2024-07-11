@@ -41,7 +41,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             DestroyAllUIs();
             foreach (var layer in projectData.RootLayer.ChildrenLayers)
             {
-                // var layer = t.GetComponent<LayerNL3DBase>();
                 ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
             }
 
@@ -62,6 +61,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layerUIDictionary.Add(layer, layerUI);
+            layerUI.name = layer.Name;
             layer.UI = layerUI;
             if (!(parent is RootLayer))
                 layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
@@ -97,6 +97,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void CreateNewUI(LayerNL3DBase layer)
         {
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
+            RecalculateLayersVisibleInInspector();
             layer.SelectLayer(true);
         }
 
@@ -231,12 +232,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             
             var newGroup = CreateFolderLayer();
             var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
-            print("reference layer: " + referenceLayer.Name);
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             SortSelectedLayers(layersToGroup);
             foreach (var selectedLayer in layersToGroup)
             {
-                print("selected layer: " + selectedLayer.Name);
                 selectedLayer.SetParent(newGroup);
             }
         }

@@ -96,6 +96,25 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
+        
+        private void Start()
+        {
+            Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
+            Layer.ColorChanged.AddListener(SetColor);
+            Layer.LayerDestroyed.AddListener(DestroyUI);
+            Layer.LayerSelected.AddListener(OnLayerSelected);
+            Layer.LayerDeselected.AddListener(OnLayerDeselected);
+            Layer.NameChanged.AddListener(OnNameChanged);
+
+            MarkLayerUIAsDirty();
+            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
+            SetColor(Layer.Color);
+        }
+
+        private void OnNameChanged(string newName)
+        {
+            gameObject.name = newName;
+        }
 
         public void RecalculateCurrentTreeStates()
         {
@@ -182,19 +201,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             UpdateFoldout();
             RecalculateVisibleHierarchyRecursive();
-        }
-
-        private void Start()
-        {
-            Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
-            Layer.ColorChanged.AddListener(SetColor);
-            Layer.LayerDestroyed.AddListener(DestroyUI);
-            Layer.LayerSelected.AddListener(OnLayerSelected);
-            Layer.LayerDeselected.AddListener(OnLayerDeselected);
-
-            MarkLayerUIAsDirty();
-            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
-            SetColor(Layer.Color);
         }
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
@@ -657,7 +663,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
             Layer.LayerSelected.RemoveListener(OnLayerSelected);
             Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
-            
+            Layer.NameChanged.RemoveListener(OnNameChanged);
+
             layerManager.RemoveUI(this);
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
