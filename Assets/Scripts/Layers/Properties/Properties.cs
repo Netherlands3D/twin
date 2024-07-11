@@ -1,4 +1,7 @@
+using System;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -7,8 +10,9 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public static Properties Instance { get; private set; }
 
+        [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-
+        
         private void Awake()
         {
             if (Instance == null)
@@ -20,16 +24,34 @@ namespace Netherlands3D.Twin.Layers.Properties
             Destroy(gameObject);
         }
 
+        private void OnEnable()
+        {
+            ProjectData.Current.LayerAdded.AddListener(OnLayerAdded);
+        }
+
+        private void OnDisable()
+        {
+            ProjectData.Current.LayerAdded.RemoveListener(OnLayerAdded);
+        }
+
         private void Start()
         {
             Hide();
         }
         
+        private void OnLayerAdded(LayerNL3DBase layer)
+        {
+            var propertiesLayer = TryFindProperties(layer);
+            if (propertiesLayer != null)
+            {
+                Show(propertiesLayer);
+            }
+        }
+        
         public void Show(ILayerWithProperties layer)
         {
-            gameObject.SetActive(true);
+            card.SetActive(true);
             sections.ClearAllChildren();
-            Debug.Log("Showing properties for " + layer);
             foreach (var propertySection in layer.GetPropertySections())
             {
                 propertySection.AddToProperties(sections);
@@ -38,9 +60,15 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void Hide()
         {
-            Debug.Log("Hiding properties");
-            gameObject.SetActive(false);
+            card.gameObject.SetActive(false);
             sections.ClearAllChildren();
+        }
+        
+        public static ILayerWithProperties TryFindProperties(LayerNL3DBase layer)
+        {
+            var layerProxy = layer as ReferencedProxyLayer;
+
+            return (layerProxy == null) ? layer as ILayerWithProperties : layerProxy.Reference as ILayerWithProperties;
         }
     }
 }

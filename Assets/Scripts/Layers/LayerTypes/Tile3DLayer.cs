@@ -74,11 +74,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 propertySections = new();
         }
-     
-        private void Start()
-        {
-            ReferencedProxy.PropertiesOpen = openPropertiesOnStart;
-        }
 
         private void OnEnable()
         {

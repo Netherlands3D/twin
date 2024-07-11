@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.Layers
 
         private bool completedInitialization;
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -80,7 +80,6 @@ namespace Netherlands3D.Twin.Layers
 // #if UNITY_EDITOR
 //          gameObject.AddComponent<GridDebugger>();
 // #endif
-            ReferencedProxy.PropertiesOpen = openProperties;
             completedInitialization = true;
         }
 
@@ -326,10 +325,10 @@ namespace Netherlands3D.Twin.Layers
         {
             var initialActiveState = ReferencedProxy.ActiveSelf;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, ReferencedProxy.PropertiesOpen)); //todo: remove coroutine
+            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState)); //todo: remove coroutine
         }
 
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState, bool openProperties)
+        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState)
         {
             originalObject.gameObject.SetActive(true); //activate to initialize the added component.
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
@@ -341,7 +340,6 @@ namespace Netherlands3D.Twin.Layers
 
             layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
             layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
-            layer.ReferencedProxy.PropertiesOpen = openProperties;
             DestroyLayer();
         }
 

@@ -62,8 +62,6 @@ namespace Netherlands3D.Twin.Layers
         public PolygonSelectionLayer(string name) : base(name)
         {
             ProjectData.Current.AddStandardLayer(this);
-            if (shapeType == ShapeType.Line)
-                PropertiesOpen = true; //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
         }
         
         public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f)
@@ -220,12 +218,14 @@ namespace Netherlands3D.Twin.Layers
         public override void SelectLayer(bool deselectOthers = false)
         {
             base.SelectLayer();
+            Debug.LogError("Selecting p" + Name);
             polygonSelected.Invoke(this);
         }
 
         public override void DeselectLayer()
         {
             base.DeselectLayer();
+            Debug.LogError("Deselecting p" + Name);
             polygonSelected.Invoke(null);
         }
         

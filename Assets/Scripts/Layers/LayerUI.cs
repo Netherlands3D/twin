@@ -335,17 +335,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void UpdatePropertiesToggle()
         {
             // only show properties button if the layer has any property sections to show
-            var layerWithProperties = TryFindProperties();
+            var layerWithProperties = Properties.TryFindProperties(Layer);
             propertyToggle.gameObject.SetActive(
                 layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
             );
-        }
-
-        private ILayerWithProperties TryFindProperties()
-        {
-            var layerProxy = Layer as ReferencedProxyLayer;
-
-            return (layerProxy == null) ? Layer as ILayerWithProperties : layerProxy.Reference as ILayerWithProperties;
         }
 
         private void SetLayerTypeImage()
@@ -709,7 +702,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void ToggleProperties(bool onOrOff, Properties properties)
         {
-            var layerWithProperties = TryFindProperties();
+            var layerWithProperties = Properties.TryFindProperties(Layer);
             if (layerWithProperties == null) return; // no properties, no action
 
             if (!onOrOff)
