@@ -97,41 +97,88 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
 
+        private void OnEnabledToggleValueChanged(bool isOn)
+        {
+            Layer.ActiveSelf = isOn;
+        }
+        
+        private void OnFoldoutToggleValueChanged(bool isOn)
+        {
+            UpdateFoldout();
+            RecalculateVisibleHierarchyRecursive();
+        }
+
+        
         private void Start()
         {
+            Layer.NameChanged.AddListener(OnNameChanged);
             Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
-            Layer.ColorChanged.AddListener(SetColor);
-            Layer.LayerDestroyed.AddListener(DestroyUI);
+            Layer.ColorChanged.AddListener(UpdateColor);
             Layer.LayerSelected.AddListener(OnLayerSelected);
             Layer.LayerDeselected.AddListener(OnLayerDeselected);
-            Layer.NameChanged.AddListener(OnNameChanged);
             Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
+            Layer.LayerDestroyed.AddListener(DestroyUI);
 
+            MarkLayerUIAsDirty();
+            
+            //Match initial layer states
             if (Layer.IsSelected)
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
-            
-            MarkLayerUIAsDirty();
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
-            SetColor(Layer.Color);
+            UpdateColor(Layer.Color);
         }
-
-        private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
-        {
-            SetParent(layerManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
-        }
-
+        
         private void OnNameChanged(string newName)
         {
             gameObject.name = newName;
+        }
+        
+        private void UpdateEnabledToggle(bool isOn)
+        {
+            enabledToggle.SetIsOnWithoutNotify(isOn);
+            RecalculateCurrentTreeStates();
+            SetEnabledToggleInteractiveStateRecursive();
+        }
+        
+        private void UpdateColor(Color newColor)
+        {
+            colorButton.targetGraphic.color = newColor;
+        }
+        
+        private void OnLayerSelected(LayerNL3DBase layer)
+        {
+            SelectUI();
+        }
+
+        private void OnLayerDeselected(LayerNL3DBase layer)
+        {
+            DeselectUI();
         }
         
         private void OnLayerChildrenChanged()
         {
             RecalculateCurrentTreeStates();
         }
+        
+        private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
+        {
+            SetParent(layerManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
+        }
+        
+        private void DestroyUI()
+        {
+            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
+            // consequence of Destroying the parent)
+            SetParent(null);
 
-        public void RecalculateCurrentTreeStates()
+            // Make sure to remove the properties when removing the UI
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+
+            Destroy(gameObject);
+        }
+
+        private void RecalculateCurrentTreeStates()
         {
             RecalculateState();
             RecalculateChildrenStates();
@@ -156,26 +203,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void OnEnabledToggleValueChanged(bool isOn)
-        {
-            Layer.ActiveSelf = isOn;
-        }
-
-        public void SetEnabledToggleInteractiveStateRecursive()
+        private void SetEnabledToggleInteractiveStateRecursive()
         {
             enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
 
             foreach (var child in ChildrenUI)
                 child.SetEnabledToggleInteractiveStateRecursive();
         }
-
-        public void UpdateEnabledToggle(bool isOn)
-        {
-            enabledToggle.SetIsOnWithoutNotify(isOn);
-            RecalculateCurrentTreeStates();
-            SetEnabledToggleInteractiveStateRecursive();
-        }
-
+        
         private void SetVisibilitySprite()
         {
             debugIndexText.text = State.ToString();
@@ -209,13 +244,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             SetVisibilitySprite();
         }
-
-        private void OnFoldoutToggleValueChanged(bool isOn)
-        {
-            UpdateFoldout();
-            RecalculateVisibleHierarchyRecursive();
-        }
-
+        
         public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
         {
             if (newParent == this)
@@ -447,16 +476,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void OnLayerSelected(LayerNL3DBase layer)
-        {
-            SelectUI();
-        }
-
-        private void OnLayerDeselected(LayerNL3DBase layer)
-        {
-            DeselectUI();
-        }
-
         private void SelectUI()
         {
             SetHighlight(InteractionState.Selected);
@@ -590,15 +609,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void RemoveHoverHighlight(LayerUI ui)
+        private static void RemoveHoverHighlight(LayerUI ui)
         {
-            if (ui)
-            {
-                var state = InteractionState.Default;
-                if (ui.Layer.IsSelected)
-                    state = InteractionState.Selected;
-                ui.SetHighlight(state);
-            }
+            if (!ui) return;
+            
+            var state = InteractionState.Default;
+            if (ui.Layer.IsSelected)
+                state = InteractionState.Selected;
+            ui.SetHighlight(state);
         }
 
         public void SetHighlight(InteractionState state)
@@ -671,32 +689,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
             //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
 
+            Layer.NameChanged.RemoveListener(OnNameChanged);
             Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
-            Layer.ColorChanged.RemoveListener(SetColor);
-            Layer.LayerDestroyed.RemoveListener(DestroyUI);
+            Layer.ColorChanged.RemoveListener(UpdateColor);
             Layer.LayerSelected.RemoveListener(OnLayerSelected);
             Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
-            Layer.NameChanged.RemoveListener(OnNameChanged);
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
+            Layer.LayerDestroyed.RemoveListener(DestroyUI);
 
             layerManager.RemoveUI(this);
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
             RecalculateParentStates();
-        }
-
-        public void DestroyUI()
-        {
-            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
-            // consequence of Destroying the parent)
-            SetParent(null);
-
-            // Make sure to remove the properties when removing the UI
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
-
-            Destroy(gameObject);
         }
 
         public void RegisterWithPropertiesPanel(Properties propertiesPanel)
@@ -728,11 +734,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ToggleProperties(bool isOn)
         {
             propertyToggle.isOn = isOn;
-        }
-
-        public void SetColor(Color c)
-        {
-            colorButton.targetGraphic.color = c;
         }
     }
 }
