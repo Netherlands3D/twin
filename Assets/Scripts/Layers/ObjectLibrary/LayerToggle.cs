@@ -13,7 +13,6 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected ProjectData projectData;
         [SerializeField] protected LayerManager layerManager;
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
@@ -34,14 +33,14 @@ namespace Netherlands3D.Twin
             toggle.isOn = layer != null;
             ShowBin(false);
 
-            projectData.LayerDeleted.AddListener(OnLayerDeleted);
+            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
             toggle.onValueChanged.AddListener(CreateOrDestroyObject);
         }
 
 
         protected virtual void OnDisable()
         {
-            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
 
