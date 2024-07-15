@@ -19,8 +19,8 @@ namespace Netherlands3D.Twin.Projects
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Project", fileName = "Project", order = 0)]
     public class ProjectData : ScriptableObject
     {
-        private static ProjectData current;
-        public static ProjectData Current => current;
+        [JsonIgnore] private static ProjectData current;
+        [JsonIgnore] public static ProjectData Current => current;
         
         [DllImport("__Internal")] private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);

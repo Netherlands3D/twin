@@ -91,17 +91,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public readonly UnityEvent<string> NameChanged = new();
-        public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
-        public readonly UnityEvent<Color> ColorChanged = new();
-        public readonly UnityEvent LayerDestroyed = new();
+        [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
+        [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
 
-        public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
-        public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
 
-        public readonly UnityEvent ParentChanged = new();
-        public readonly UnityEvent ChildrenChanged = new();
-        public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent ParentChanged = new();
+        [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
+        [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
         public virtual void SelectLayer(bool deselectOthers = false)
         {
