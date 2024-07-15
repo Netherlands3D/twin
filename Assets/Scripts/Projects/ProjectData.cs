@@ -67,7 +67,6 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
-            // RootLayer = project.RootLayer;
             
             IsDirty = true;
         }
