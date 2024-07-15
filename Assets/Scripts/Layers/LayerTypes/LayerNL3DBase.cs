@@ -139,15 +139,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
-
-            if (parent != null)
-            {
-                parent.children.Remove(this);
-                if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
-                    siblingIndex--;
-
-                parent.ChildrenChanged.Invoke();
-            }
+            
+            parent.children.Remove(this);
+            if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
+                siblingIndex--;
+            parent.ChildrenChanged.Invoke(); //call event on old parent
 
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
@@ -165,7 +161,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (parentChanged)
             {
                 ParentChanged.Invoke();
-                newParent.ChildrenChanged.Invoke();
+                newParent.ChildrenChanged.Invoke(); //call event on new parent
             }
         }
 

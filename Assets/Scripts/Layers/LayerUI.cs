@@ -125,6 +125,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             MarkLayerUIAsDirty();
             
             //Match initial layer states
+            SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), Layer.SiblingIndex); // needed because eventListener is not assigned yet when calling layer.SetParent immediately after creating a layer object
             if (Layer.IsSelected)
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
