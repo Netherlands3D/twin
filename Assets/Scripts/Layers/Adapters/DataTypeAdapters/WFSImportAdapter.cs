@@ -5,11 +5,7 @@ using GeoJSON.Net.Feature;
 using Newtonsoft.Json;
 using System;
 using Netherlands3D.Web;
-using System.Collections.Specialized;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Netherlands3D.CartesianTiles;
-
-
 
 namespace Netherlands3D.Twin
 {

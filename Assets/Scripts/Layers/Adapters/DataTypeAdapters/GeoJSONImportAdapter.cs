@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);
 
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-            layer.ParseGeoJSON(fullPath);
+            layer.StreamParseGeoJSON(fullPath);
             return layer;
         }
     }

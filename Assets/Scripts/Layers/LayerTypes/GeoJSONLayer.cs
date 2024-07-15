@@ -44,17 +44,55 @@ namespace Netherlands3D.Twin
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
-        public void ParseGeoJSON(string filePath)
+        /// <summary>
+        /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
+        /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void AdditiveParseGeoJSON(string filePath)
         {
-            StartCoroutine(ParseGeoJSON(filePath, 1000));
+            // Read filepath and deserialize the GeoJSON using GeoJSON.net in one go
+            var jsonText = File.ReadAllText(filePath);
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
+            
+            // Compare Feature's (They override GetHashCode to compare geometry, so they do not need to be the same object)
+            var removeList = new List<Feature>();
+            var addList = new List<Feature>();
+            foreach (var feature in featureCollection.Features)
+            {     
+                if (Features.Contains(feature))
+                    removeList.Add(feature);
+                else
+                    addList.Add(feature);
+            }
+
+            foreach (var feature in removeList)
+            {
+                Features.Remove(feature);
+                RemoveFeatureVisuals(feature);
+            }          
+
+            foreach (var feature in addList)
+            {
+                Features.Add(feature);
+                VisualizeFeature(feature);
+            }  
         }
 
-        private IEnumerator ParseGeoJSON(string filePath, int maxParsesPerFrame = Int32.MaxValue)
+        /// <summary>
+        /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
+        /// Ideal for large single files.
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void StreamParseGeoJSON(string filePath)
+        {
+            StartCoroutine(ParseGeoJSONStream(filePath, 1000));
+        }
+
+        private IEnumerator ParseGeoJSONStream(string filePath, int maxParsesPerFrame = Int32.MaxValue)
         {
             var startFrame = Time.frameCount;
-
             var reader = new StreamReader(filePath);
-
             var jsonReader = new JsonTextReader(reader);
 
             JsonSerializer serializer = new JsonSerializer();
@@ -205,6 +243,66 @@ namespace Netherlands3D.Twin
                 }
             }
         }
+
+        private void RemoveFeatureVisuals(Feature feature)
+        {
+             switch (feature.Geometry.Type)
+            {
+                case GeoJSONObjectType.MultiPolygon:
+                {
+                    if (polygonFeatures == null)
+                        return;
+
+                    polygonFeatures.RemoveFeature(feature);
+                    break;
+                }
+                case GeoJSONObjectType.Polygon:
+                {
+                    if (polygonFeatures == null)
+                        return;
+
+                    polygonFeatures.RemoveFeature(feature);
+                    break;
+                }
+                case GeoJSONObjectType.MultiLineString:
+                {
+                    if (lineFeatures == null)
+                        return;
+
+                    lineFeatures.RemoveFeature(feature);
+                    break;
+                }
+                case GeoJSONObjectType.LineString:
+                {
+                    if (lineFeatures == null)
+                        return;
+
+                    lineFeatures.RemoveFeature(feature);
+                    break;
+                }
+                case GeoJSONObjectType.MultiPoint:
+                {
+                    if (pointFeatures == null)
+                        return;
+
+                    pointFeatures.RemoveFeature(feature);
+                    break;
+                }
+                case GeoJSONObjectType.Point:
+                {
+                    if (pointFeatures == null)
+                        return;
+                    
+                    pointFeatures.RemoveFeature(feature);
+                    break;
+                }
+                default:
+                {
+                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
+                }
+            }
+        }
+
 
         private CoordinateSystem GetCoordinateSystem()
         {
