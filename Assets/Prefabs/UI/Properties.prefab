@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65beb2836204bef80f95a2939ed935f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  card: {fileID: 278569769419280114}
   sections: {fileID: 196147295931165467}
 --- !u!114 &4886931328279182371
 MonoBehaviour:
@@ -331,6 +332,12 @@ PrefabInstance:
       addedObject: {fileID: 196147295931165467}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62dde099e0fc216429c989590f165412, type: 3}
+--- !u!1 &278569769419280114 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4832593037280561620, guid: 62dde099e0fc216429c989590f165412,
+    type: 3}
+  m_PrefabInstance: {fileID: 4669525251347203878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4051989295808076046 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8716420975242452520, guid: 62dde099e0fc216429c989590f165412,

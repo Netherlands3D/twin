@@ -3,18 +3,25 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.LayerInspector;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
+using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin.Projects
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Project", fileName = "Project", order = 0)]
     public class ProjectData : ScriptableObject
     {
+        private static ProjectData current;
+        public static ProjectData Current => current;
+        
         [DllImport("__Internal")] private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
         [DllImport("__Internal")] private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
         
@@ -28,6 +35,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
+        public RootLayer RootLayer;
   
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -36,18 +44,21 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] private bool isDirty = false;
         public bool IsDirty { 
             get => isDirty; 
-            set{
+            set
+            {
                 isDirty = value;
             }
         }
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
+        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerAdded = new();
+        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerDeleted = new();
 
         public void RefreshUUID()
         {
             UUID = Guid.NewGuid().ToString();
         }
-
+        
         public void CopyFrom(ProjectData project)
         {
             // Explicit copy of fields. Will be more complex once bin. files are saved
@@ -56,7 +67,7 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
-
+            
             IsDirty = true;
         }
 
@@ -85,7 +96,14 @@ namespace Netherlands3D.Twin.Projects
                         using Stream zipStream = zf.GetInputStream(zipEntry);
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
-                        ProjectData project = JsonConvert.DeserializeObject<ProjectData>(json);
+                        
+                        JsonSerializerSettings settings = new JsonSerializerSettings
+                        {
+                            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                            Formatting = Formatting.Indented
+                        };
+                        
+                        ProjectData project = JsonConvert.DeserializeObject<ProjectData>(json, settings);
                         CopyFrom(project);
                     }
                     else
@@ -117,7 +135,12 @@ namespace Netherlands3D.Twin.Projects
             zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
             // Generate the JSON data and add it to the project zip as the first file
-            var jsonProject = JsonConvert.SerializeObject(this, Formatting.Indented);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                Formatting = Formatting.Indented
+            };
+            var jsonProject = JsonConvert.SerializeObject(this, settings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
@@ -172,6 +195,31 @@ namespace Netherlands3D.Twin.Projects
         {
             var fileName = Path.GetFileName(lastSavePath);
             DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
+        }
+
+        public void AddStandardLayer(LayerNL3DBase layer)
+        {
+            layer.Root = RootLayer;
+            LayerAdded.Invoke(layer);
+        }
+        
+        public static void AddReferenceLayer(ReferencedLayer referencedLayer)
+        {
+            var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
+
+            var proxyLayer = new ReferencedProxyLayer(referenceName, referencedLayer); 
+            referencedLayer.ReferencedProxy = proxyLayer;
+        }
+
+        public void RemoveLayer(LayerNL3DBase layer)
+        {
+            LayerDeleted.Invoke(layer);
+        }
+
+        public static void SetCurrentProject(ProjectData initialProjectTemplate)
+        {
+            current = initialProjectTemplate;
+            current.RootLayer = new("RootLayer");
         }
     }
 }

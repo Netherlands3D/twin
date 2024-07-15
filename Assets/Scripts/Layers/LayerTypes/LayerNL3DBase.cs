@@ -1,148 +1,184 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public abstract class LayerNL3DBase : MonoBehaviour
+    [Serializable]
+    public class LayerNL3DBase
     {
-        public LayerUI UI { get; set; }
+        [SerializeField, JsonProperty] private string name;
+        [SerializeField, JsonProperty] private bool activeSelf = true;
+        [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [SerializeField, JsonProperty] private LayerNL3DBase parent;
+        [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
 
-        public int Depth { get; private set; } = 0;
+        [JsonIgnore] private RootLayer root;
 
-        public bool ActiveSelf
+        [JsonIgnore]
+        public RootLayer Root
         {
-            get { return gameObject.activeSelf; }
+            get => root;
             set
             {
-                gameObject.SetActive(value);
-                OnLayerActiveInHierarchyChanged(value);
-                foreach (var child in ChildrenLayers)
-                {
-                    child.OnLayerActiveInHierarchyChanged(child.ActiveInHierarchy);
-                }
-
-                UI?.UpdateEnabledToggle(value);
+                root = value;
+                parent = root;
+                root.children.Add(this);
+                root.ChildrenChanged.Invoke();
             }
         }
 
-        public bool ActiveInHierarchy
+        [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
+        [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
+        [JsonIgnore] public bool IsSelected { get; private set; }
+
+        [JsonIgnore]
+        public string Name
         {
-            get { return gameObject.activeInHierarchy; }
+            get => name;
+            set
+            {
+                name = value;
+                NameChanged.Invoke(value);
+            }
         }
 
-        private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [JsonIgnore]
+        public bool ActiveSelf
+        {
+            get => activeSelf;
+            set
+            {
+                activeSelf = value;
+                foreach (var child in ChildrenLayers)
+                {
+                    child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
+                }
+
+                OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
+            }
+        }
+
+        [JsonIgnore]
         public Color Color
         {
             get => color;
             set
             {
                 color = value;
-                if (UI)
-                    UI.SetColor(value);
+                ColorChanged.Invoke(value);
             }
         }
 
-        protected abstract void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
+        [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
-        public LayerNL3DBase ParentLayer { get; private set; } //=> transform.parent.GetComponent<LayerNL3DBase>();
-
-        public LayerNL3DBase[] ChildrenLayers { get; private set; }
-
-        public virtual void OnSelect(){ }
-
-        public virtual void OnDeselect(){ }
-
-        protected virtual void OnDestroy()
+        [JsonIgnore]
+        public bool ActiveInHierarchy
         {
-            if(!Application.isPlaying) return;
-
-            if(UI) UI.DestroyUI();
-            
-            LayerData.RemoveLayer(this);
-        }
-
-        protected virtual void Start()
-        {
-            if (!LayerData.AllLayers.Contains(this))
-                LayerData.AddStandardLayer(this);
-
-            //for initialization calculate the parent and children here
-            OnTransformParentChanged();
-            OnTransformChildrenChanged();
-
-            foreach (var child in ChildrenLayers)
+            get
             {
-                child.UI.SetParent(UI); //Update the parents to be sure the hierarchy matches. needed for example when grouping selected layers that make multiple hierarchy adjustments in one frame
+                if (this is RootLayer)
+                    return activeSelf;
+
+                return ParentLayer.ActiveInHierarchy && activeSelf;
             }
         }
-        
-        protected virtual void OnTransformChildrenChanged()
+
+        public readonly UnityEvent<string> NameChanged = new();
+        public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        public readonly UnityEvent<Color> ColorChanged = new();
+        public readonly UnityEvent LayerDestroyed = new();
+
+        public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
+        public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
+
+        public readonly UnityEvent ParentChanged = new();
+        public readonly UnityEvent ChildrenChanged = new();
+        public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+
+        public virtual void SelectLayer(bool deselectOthers = false)
         {
-            LayerNL3DBase[] childLayers = GetComponentsInChildren<LayerNL3DBase>(true);
+            if (deselectOthers)
+                Root.DeselectAllLayers();
 
-            LayerNL3DBase selfLayer = GetComponent<LayerNL3DBase>();
-            if (selfLayer != null)
-            {
-                childLayers = childLayers.Where(layer => layer != selfLayer).ToArray();
-            }
-
-            ChildrenLayers = childLayers;
-            UI?.RecalculateCurrentTreeStates();
+            IsSelected = true;
+            Root.AddLayerToSelection(this);
+            LayerSelected.Invoke(this);
         }
 
-        protected virtual void OnTransformParentChanged()
+        public virtual void DeselectLayer()
         {
-            ParentLayer = transform.parent.GetComponent<LayerNL3DBase>();
+            IsSelected = false;
+            Root.RemoveLayerFromSelection(this);
+            LayerDeselected.Invoke(this);
         }
 
-        protected virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex) //called when the sibling index changes, or when the parent changes but the sibling index stays the same
+        protected virtual void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
         }
 
-        public void SetParent(LayerNL3DBase newParentLayer, int siblingIndex = -1)
+        public LayerNL3DBase(string name)
         {
-            if (newParentLayer == this)
+            Name = name;
+        }
+
+        public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
+        {
+            if (newParent == null)
+                newParent = Root;
+
+            if (newParent == this)
                 return;
 
-            var parentChanged = ParentLayer != newParentLayer;
-            var oldSiblingIndex = transform.GetSiblingIndex();
-            var newParent = newParentLayer ? newParentLayer.transform : LayerData.Instance.transform;
+            var parentChanged = ParentLayer != newParent;
+            var oldSiblingIndex = SiblingIndex;
 
-            if (newParentLayer == null)
-                transform.SetParent(LayerData.Instance.transform);
-            else
-                transform.SetParent(newParent);
+            if (parent != null)
+            {
+                parent.children.Remove(this);
+                if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
+                    siblingIndex--;
 
-            transform.SetSiblingIndex(siblingIndex);
+                parent.ChildrenChanged.Invoke();
+            }
 
-            RecalculateCurrentSubTreeDepthValuesRecursively();
-            UI?.SetParent(newParentLayer?.UI, siblingIndex);
+            if (siblingIndex < 0)
+                siblingIndex = newParent.children.Count;
 
-            OnLayerActiveInHierarchyChanged(UI?.State == LayerActiveState.Enabled || UI?.State == LayerActiveState.Mixed); // Update the active state to match the calculated state
+            parent = newParent;
 
-            if (siblingIndex == -1)
-                siblingIndex = newParent.childCount -1;
+            newParent.children.Insert(siblingIndex, this);
+
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
-                OnSiblingIndexOrParentChanged(siblingIndex);
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy); // Update the active state to match the calculated state
+                ParentOrSiblingIndexChanged.Invoke(siblingIndex);
+            }
+
+            if (parentChanged)
+            {
+                ParentChanged.Invoke();
+                newParent.ChildrenChanged.Invoke();
             }
         }
 
-        private void RecalculateCurrentSubTreeDepthValuesRecursively()
+        public virtual void DestroyLayer()
         {
-            if (transform.parent != LayerData.Instance.transform)
-                Depth = ParentLayer.Depth + 1;
-            else
-                Depth = 0;
-
-            foreach (var child in GetComponentsInChildren<LayerNL3DBase>())
+            DeselectLayer();
+            ProjectData.Current.RemoveLayer(this);
+            foreach (var child in ChildrenLayers)
             {
-                if (child == this)
-                    continue;
-
-                child.RecalculateCurrentSubTreeDepthValuesRecursively();
+                child.DestroyLayer();
             }
+
+            LayerDestroyed.Invoke();
         }
     }
 }

@@ -15,7 +15,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-    public class GeoJSONLayer : LayerNL3DBase
+    public class GeoJSONLayer : ReferencedLayer
     {
         public static float maxParseDuration = 0.01f;
 
@@ -33,24 +33,15 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPointLayer pointFeatures;
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
-
-        protected override void Start()
-        {
-            base.Start();
-        }
-
+        
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
-            Color = layerColor;
+            ReferencedProxy.Color = layerColor;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
-        }
-
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
         }
 
         public void ParseGeoJSON(string filePath)
@@ -89,7 +80,7 @@ namespace Netherlands3D.Twin
             jsonReader.Close();
 
             var frameCount = Time.frameCount - startFrame;
-            print(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
+            Debug.Log(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
 
             if (frameCount == 0)
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
@@ -128,40 +119,31 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var go = new GameObject("Polygonen");
-            var layer = go.AddComponent<GeoJSONPolygonLayer>();
-            layer.Color = Color;
-            StartCoroutine(SetSubLayerParent(layer));
+            var layer = new GeoJSONPolygonLayer("Polygonen");
+            layer.Color = ReferencedProxy.Color;
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
         private GeoJSONLineLayer CreateLineLayer()
         {
-            var go = new GameObject("Lijnen");
-            var layer = go.AddComponent<GeoJSONLineLayer>();
+            var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
-            layer.Color = Color;
-            StartCoroutine(SetSubLayerParent(layer));
+            layer.Color = ReferencedProxy.Color;
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
         private GeoJSONPointLayer CreatePointLayer()
         {
-            var go = new GameObject("Punten");
-            var layer = go.AddComponent<GeoJSONPointLayer>();
+            var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
-            layer.Color = Color;
-            StartCoroutine(SetSubLayerParent(layer));
+            layer.Color = ReferencedProxy.Color;
+            layer.SetParent(ReferencedProxy);
             return layer;
-        }
-
-        private IEnumerator SetSubLayerParent(LayerNL3DBase layer)
-        {
-            yield return null; //wait a frame for layer to be initialized
-            layer.SetParent(this);
         }
         
         private void VisualizeFeature(Feature feature)
@@ -171,7 +153,7 @@ namespace Netherlands3D.Twin
             {
                 case GeoJSONObjectType.MultiPolygon:
                 {
-                    if (!polygonFeatures)
+                    if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
                     polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPolygon, originalCoordinateSystem);
@@ -179,7 +161,7 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.Polygon:
                 {
-                    if (!polygonFeatures)
+                    if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
                     polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Polygon, originalCoordinateSystem);
@@ -187,7 +169,7 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.MultiLineString:
                 {
-                    if (!lineFeatures)
+                    if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
                     lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiLineString, originalCoordinateSystem);
@@ -195,7 +177,7 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.LineString:
                 {
-                    if (!lineFeatures)
+                    if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
                     lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as LineString, originalCoordinateSystem);
@@ -203,7 +185,7 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.MultiPoint:
                 {
-                    if (!pointFeatures)
+                    if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
 
                     pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPoint, originalCoordinateSystem);
@@ -211,7 +193,7 @@ namespace Netherlands3D.Twin
                 }
                 case GeoJSONObjectType.Point:
                 {
-                    if (!pointFeatures)
+                    if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
                     
                     pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Point, originalCoordinateSystem);
