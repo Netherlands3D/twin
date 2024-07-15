@@ -684,7 +684,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateParentStates();
         }
 
-        public void RegisterWithPropertiesPanel(Properties propertiesPanel)
+        private void RegisterWithPropertiesPanel(Properties propertiesPanel)
         {
             var layerWithProperties = Properties.TryFindProperties(Layer);
             var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
@@ -698,6 +698,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ToggleProperties(true, propertiesPanel);
         }
 
+        public void ToggleProperties(bool onOrOff)
+        {
+            propertyToggle.isOn = onOrOff;
+        }
+        
         private void ToggleProperties(bool onOrOff, Properties properties)
         {
             var layerWithProperties = Properties.TryFindProperties(Layer);
