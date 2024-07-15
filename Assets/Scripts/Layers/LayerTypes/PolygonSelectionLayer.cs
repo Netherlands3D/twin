@@ -67,16 +67,16 @@ namespace Netherlands3D.Twin.Layers
             this.polygonMeshMaterial = polygonMeshMaterial;
             this.lineWidth = defaultLineWidth;
 
-            //Add shifter that manipulates the polygon if the world origin is shifted
-            //todo: reset the worldTransformShifter
-            // worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
-            // worldTransformShifter.polygonSelectionLayer = this;
-            // gameObject.AddComponent<WorldTransform>();
-            // worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
             PolygonSelectionCalculator.RegisterPolygon(this);
             ProjectData.Current.AddStandardLayer(this);
+            
+            //Add shifter that manipulates the polygon if the world origin is shifted
+            worldTransformShifter = PolygonVisualisation.gameObject.AddComponent<PolygonWorldTransformShifter>();
+            worldTransformShifter.polygonSelectionLayer = this;
+            PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
+            worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
         }
 
         private void ShiftedPolygon(List<Vector3> newPolygon)
