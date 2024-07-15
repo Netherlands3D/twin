@@ -1,9 +1,12 @@
 using System.IO;
 using System.Xml;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using GeoJSON.Net.Feature;
 using Newtonsoft.Json;
+using System;
+using Netherlands3D.Web;
+using System.Collections.Specialized;
+
 
 
 namespace Netherlands3D.Twin
@@ -11,6 +14,8 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSImportAdapter : ScriptableObject, IDataTypeAdapter
     {
+        [SerializeField] private GameObject cartesianTileWFSLayerPrefab;
+
         public bool Supports(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
@@ -85,6 +90,7 @@ namespace Netherlands3D.Twin
                     return true;
             }
 
+            Debug.LogWarning("WFS GetFeature operation does not support GeoJSON output format.");
             return false;
         }
 
@@ -101,16 +107,80 @@ namespace Netherlands3D.Twin
                 }
             }
 
+            if (getFeatureOperationNode == null)
+                Debug.LogWarning("WFS GetFeature operation not found.");
+
             return getFeatureOperationNode;
         }
 
         public void Execute(LocalFile localFile)
         {
-            // GetCapabilities? Retrieve all possible feature types
-            // GetFeature? Retrieve specific feature type
+            var sourceUrl = localFile.SourceUrl;
 
-            // Construct specific bbox query URL's from source url for CartesianTiles layer
-            // Generate the layer
+            var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
+            if(getCapabilitiesRequest)
+            {
+                var featureTypes = GetFeatureTypes(localFile);
+                foreach (var featureType in featureTypes)
+                    AddWFSCartesianTileLayer(featureType, sourceUrl);
+                return;
+            }
+
+            var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
+            if(getFeatureRequest)
+            {
+                //Get the feature type from the url
+                var featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
+                AddWFSCartesianTileLayer(featureType, sourceUrl);
+                return;
+            }
+        }
+
+        //Get the list of feature types
+        private string[] GetFeatureTypes(LocalFile localFile)
+        {
+            // Read the XML data to find the list of feature types
+            var cachedDataPath = localFile.LocalFilePath;
+            var dataAsText = File.ReadAllText(cachedDataPath);
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(dataAsText);
+
+            // Find the FeatureTypeList in the root of the XMLdocucument
+            var featureTypeListNodeInRoot = xmlDocument.SelectSingleNode("wfs:WFS_Capabilities/wfs:FeatureTypeList");
+            var featureTypes = new string[featureTypeListNodeInRoot.ChildNodes.Count];
+            for (int i = 0; i < featureTypeListNodeInRoot.ChildNodes.Count; i++)
+            {
+                featureTypes[i] = featureTypeListNodeInRoot.ChildNodes[i].SelectSingleNode("Name").InnerText;
+            }
+
+            return featureTypes;
+        }
+
+
+        private void AddWFSCartesianTileLayer(string featureType, string sourceUrl)
+        {
+            Debug.Log("Adding WFS layer: " + featureType);
+
+            //Start by removing any query parameters we want to inject
+            var uriBuilder = new UriBuilder(sourceUrl);
+            uriBuilder.RemoveQueryParameter("bbox");
+            uriBuilder.RemoveQueryParameter("typeNames");
+            uriBuilder.RemoveQueryParameter("request");
+
+            uriBuilder.AddQueryParameter("bbox", "{bbox}"); //The exact bbox coordinates will be managed by CartesianTileWFSLayer
+            uriBuilder.AddQueryParameter("typeNames", featureType);
+            uriBuilder.AddQueryParameter("request", "GetFeature");
+
+            var path = uriBuilder.Uri.ToString();
+
+
+            //TODO: Use path to create a WFS layer via the ProjectData methods.
+            //For now we use the old way; spawning a prefab from here.
+
+            
+            /*var cartesianTileWFSLayer = Instantiate(cartesianTileWFSLayerPrefab);
+            var wfsCartesianTileLayer = cartesianTileWFSLayer.GetComponent<WFSLayer>();
+            wfsCartesianTileLayer.SetPath(path);*/
         }
     }
 }
