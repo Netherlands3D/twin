@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
-        [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [SerializeField, JsonIgnore] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
 
