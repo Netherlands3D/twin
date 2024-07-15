@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Globalization;
 using System.Threading;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,7 @@ namespace Netherlands3D.Twin.Configuration
 {
     public class ConfiguratorStarter : MonoBehaviour
     {
+        [SerializeField] private ProjectData initialProjectTemplate;
         [SerializeField] private Configurator configurator;
         public UnityEvent<Configuration> OnLoadedConfiguration = new();
 
@@ -25,6 +27,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private IEnumerator Start()
         {
+            ProjectData.SetCurrentProject(initialProjectTemplate);
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
         }

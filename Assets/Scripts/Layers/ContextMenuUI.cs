@@ -105,7 +105,7 @@ namespace Netherlands3D.Twin
         //called by button inspector todo: this should not be here, but I placed it here as a hotfix
         public void GroupLayers()
         {
-            GetComponentInParent<LayerManager>().GroupSelectedLayers();
+            GetComponentInParent<LayerUIManager>().GroupSelectedLayers();
         }
     }
 }

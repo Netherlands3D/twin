@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    public class ContentOverlay : MonoBehaviour
+    public class ContentOverlayContainer : MonoBehaviour
     {
-        public static ContentOverlay Instance { get; private set; }
+        public static ContentOverlayContainer Instance { get; private set; }
         [SerializeField] private Image background;
 
         private void Awake()
@@ -30,7 +31,7 @@ namespace Netherlands3D.Twin
 
             var newOverlay = Instantiate(overlay, transform);
             background.enabled = true;
-
+            
             return newOverlay;
         }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,17 +10,18 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class LayerManager : MonoBehaviour, IPointerDownHandler
+    public class LayerUIManager : MonoBehaviour, IPointerDownHandler
     {
-        public List<LayerUI> LayersVisibleInInspector { get; set; } = new List<LayerUI>();
-        public List<LayerUI> SelectedLayers { get; set; } = new();
+        public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
+        [SerializeField] private ProjectData projectData;
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
-
         [SerializeField] private RectTransform layerUIContainer;
 
         public RectTransform LayerUIContainer => layerUIContainer;
+
+        private Dictionary<LayerNL3DBase, LayerUI> layerUIDictionary = new();
 
         //Drag variables
         [SerializeField] private DragGhost dragGhostPrefab;
@@ -36,22 +38,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            foreach (Transform t in LayerData.Instance.transform)
+            foreach (var layer in projectData.RootLayer.ChildrenLayers)
             {
-                var layer = t.GetComponent<LayerNL3DBase>();
-                ConstructHierarchyUIsRecursive(layer, null);
+                ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
             }
+
+            RecalculateLayersVisibleInInspector();
         }
 
-        void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
             InstantiateLayerItem(layer, parent);
-            foreach (Transform child in layer.transform)
+            foreach (var child in layer.ChildrenLayers)
             {
-                if (child == layer.transform)
-                    continue;
-
-                ConstructHierarchyUIsRecursive(child.GetComponent<LayerNL3DBase>(), layer);
+                ConstructHierarchyUIsRecursive(child, layer);
             }
         }
 
@@ -59,9 +59,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
-            layer.UI = layerUI;
-            layer.UI.SetParent(parent?.UI, layer.transform.GetSiblingIndex());
-            layerUI.RegisterWithPropertiesPanel(Properties.Instance);
+            layerUIDictionary.Add(layer, layerUI);
+            layerUI.name = layer.Name;
+            if (parent is not RootLayer)
+                layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
 
             return layerUI;
         }
@@ -72,42 +73,34 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             {
                 Destroy(t.gameObject);
             }
+
+            layerUIDictionary = new();
         }
 
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            LayerData.LayerAdded.AddListener(CreateNewUI);
-            LayerData.LayerDeleted.AddListener(OnLayerDeleted);
+            projectData.LayerAdded.AddListener(CreateNewUI);
+            projectData.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            DeselectAllLayers();
-            LayerData.LayerAdded.RemoveListener(CreateNewUI);
-            LayerData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            projectData.RootLayer.DeselectAllLayers();
+            projectData.LayerAdded.RemoveListener(CreateNewUI);
+            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
 
         private void CreateNewUI(LayerNL3DBase layer)
         {
-            var layerUI = InstantiateLayerItem(layer, layer.transform.parent.GetComponent<LayerNL3DBase>());
-            layerUI.Select(true);
-        }
-
-        private void OnLayerDeleted(LayerNL3DBase layer)
-        {
-            if (SelectedLayers.Contains(layer.UI))
-            {
-                layer.OnDeselect();
-                SelectedLayers.Remove(layer.UI);
-            }
-
-            Destroy(layer.UI.gameObject);
+            var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
+            RecalculateLayersVisibleInInspector();
+            layer.SelectLayer(true);
         }
 
         private void OnRectTransformDimensionsChange()
         {
-            foreach (var layer in LayersVisibleInInspector)
+            foreach (var layer in LayerUIsVisibleInInspector)
             {
                 layer.MarkLayerUIAsDirty();
             }
@@ -135,23 +128,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                DeselectAllLayers();
-        }
-
-        public void DeselectAllLayers()
-        {
-            // Make a copy of the SelectedLayers list because the Deselect function removes
-            // the selected layer from this list; and the enumeration fails without a copy
-            foreach (var selectedLayer in SelectedLayers.ToList())
-            {
-                selectedLayer.Deselect();
-            }
+                projectData.RootLayer.DeselectAllLayers();
         }
 
         public FolderLayer CreateFolderLayer()
         {
-            var newLayer = new GameObject("Folder");
-            var folder = newLayer.AddComponent<FolderLayer>();
+            var folder = new FolderLayer("Folder");
             return folder;
         }
 
@@ -164,14 +146,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
-                case DatasetLayer _:
-                    return layerTypeSprites[5];
                 case PolygonSelectionLayer _:
                     if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
                         return layerTypeSprites[6];
                     return layerTypeSprites[7];
-                case GeoJSONLayer _:
-                    return layerTypeSprites[8]; //todo: split in points
                 case GeoJSONPolygonLayer:
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer:
@@ -179,7 +157,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case GeoJSONPointLayer:
                     return layerTypeSprites[9];
                 default:
-                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
             }
         }
@@ -196,8 +174,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[3];
                 case ObjectScatterLayer _:
                     return layerTypeSprites[4];
+                case DatasetLayer _:
+                    return layerTypeSprites[5];
+                case GeoJSONLayer _:
+                    return layerTypeSprites[8]; //todo: split in points
                 default:
-                    Debug.LogError("layer type of " + layer.name + " is not specified");
+                    Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
             }
         }
@@ -243,31 +225,29 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void GroupSelectedLayers()
         {
+            if (projectData.RootLayer.SelectedLayers.Count == 0) 
+                return;
+            
+            var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+
             var newGroup = CreateFolderLayer();
-            var referenceLayerUI = SelectedLayers.Last();
-            newGroup.SetParent(referenceLayerUI.Layer.transform.parent.GetComponent<LayerNL3DBase>(), referenceLayerUI.transform.GetSiblingIndex());
-            SortSelectedLayers();
-            foreach (var selectedLayer in SelectedLayers)
+            var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
+            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
+            SortSelectedLayers(layersToGroup);
+            foreach (var selectedLayer in layersToGroup)
             {
-                selectedLayer.Layer.SetParent(newGroup);
+                selectedLayer.SetParent(newGroup);
             }
         }
 
         public void SortSelectedLayersByVisibility()
         {
-            SelectedLayers.Sort((layer1, layer2) => LayersVisibleInInspector.IndexOf(layer1).CompareTo(LayersVisibleInInspector.IndexOf(layer2)));
+            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
-        private void SortSelectedLayers()
+        private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)
         {
-            SelectedLayers.Sort((ui1, ui2) =>
-            {
-                // Primary sorting by Depth
-                int depthComparison = ui1.Layer.Depth.CompareTo(ui2.Layer.Depth);
-
-                // If depths are the same, use the order as visible in the hierarchy
-                return depthComparison != 0 ? depthComparison : LayersVisibleInInspector.IndexOf(ui1).CompareTo(LayersVisibleInInspector.IndexOf(ui2));
-            });
+            selectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
         public bool IsDragOnButton()
@@ -277,19 +257,40 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layerUI in SelectedLayers)
+            foreach (var layer in projectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
-                Destroy(layerUI.Layer.gameObject);
+                layer.DestroyLayer();
             }
         }
 
-        public void RemoveUI(LayerUI layerUI)
+        private void OnLayerDeleted(LayerNL3DBase layer)
         {
-            if (SelectedLayers.Contains(layerUI))
-                SelectedLayers.Remove(layerUI);
+            layerUIDictionary.Remove(layer);
+        }
 
-            if (LayersVisibleInInspector.Contains(layerUI))
-                LayersVisibleInInspector.Remove(layerUI);
+        public void RecalculateLayersVisibleInInspector()
+        {
+            LayerUIsVisibleInInspector.Clear();
+            LayerUIsVisibleInInspector = layerUIContainer.GetComponentsInChildren<LayerUI>(false).ToList();
+        }
+
+        public LayerUI GetLayerUI(LayerNL3DBase layer)
+        {
+            if (layer is RootLayer)
+                return null;
+            
+            return layerUIDictionary[layer];
+        }
+
+        public void HighlightLayerUI(LayerNL3DBase layer, bool isOn)
+        {
+            if (layer.IsSelected)
+                return;
+
+            var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
+            var ui = GetLayerUI(layer);
+            ui.SetHighlight(layerState);
+            ui.MarkLayerUIAsDirty();
         }
     }
 }

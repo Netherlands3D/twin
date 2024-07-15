@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,11 +32,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public LayerNL3DBase Layer { get; set; }
-        public bool IsSelected => layerManager.SelectedLayers.Contains(this);
 
         private RectTransform rectTransform;
-        private LayerManager layerManager;
-        public Transform LayerBaseTransform => layerManager.LayerUIContainer;
+        private LayerUIManager layerUIManager;
+        public Transform LayerBaseTransform => layerUIManager.LayerUIContainer;
 
         private VerticalLayoutGroup childVerticalLayoutGroup;
         [SerializeField] private RectTransform parentRowRectTransform;
@@ -74,13 +74,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
-        public string LayerName => Layer.name;
+        public string LayerName => Layer.Name;
         public bool PropertiesOpen => propertyToggle.isOn;
+        
+        private int Depth => ParentUI ? ParentUI.Depth + 1 : 0;
 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
-            layerManager = GetComponentInParent<LayerManager>();
+            layerUIManager = GetComponentInParent<LayerUIManager>();
             childVerticalLayoutGroup = childrenPanel.GetComponent<VerticalLayoutGroup>();
             spacerStartWidth = spacer.sizeDelta.x;
         }
@@ -91,14 +93,96 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
         }
 
-
         private void OnDisable()
         {
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
         }
+
+        private void OnEnabledToggleValueChanged(bool isOn)
+        {
+            Layer.ActiveSelf = isOn;
+        }
         
-        public void RecalculateCurrentTreeStates()
+        private void OnFoldoutToggleValueChanged(bool isOn)
+        {
+            UpdateFoldout();
+            RecalculateVisibleHierarchyRecursive();
+        }
+
+        
+        private void Start()
+        {
+            Layer.NameChanged.AddListener(OnNameChanged);
+            Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
+            Layer.ColorChanged.AddListener(UpdateColor);
+            Layer.LayerSelected.AddListener(OnLayerSelected);
+            Layer.LayerDeselected.AddListener(OnLayerDeselected);
+            Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
+            Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
+            Layer.LayerDestroyed.AddListener(DestroyUI);
+
+            MarkLayerUIAsDirty();
+            
+            //Match initial layer states
+            SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), Layer.SiblingIndex); // needed because eventListener is not assigned yet when calling layer.SetParent immediately after creating a layer object
+            if (Layer.IsSelected)
+                SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
+            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
+            UpdateColor(Layer.Color);
+            RegisterWithPropertiesPanel(Properties.Instance);
+        }
+        
+        private void OnNameChanged(string newName)
+        {
+            gameObject.name = newName;
+        }
+        
+        private void UpdateEnabledToggle(bool isOn)
+        {
+            enabledToggle.SetIsOnWithoutNotify(isOn);
+            RecalculateCurrentTreeStates();
+            SetEnabledToggleInteractiveStateRecursive();
+        }
+        
+        private void UpdateColor(Color newColor)
+        {
+            colorButton.targetGraphic.color = newColor;
+        }
+        
+        private void OnLayerSelected(LayerNL3DBase layer)
+        {
+            SelectUI();
+        }
+
+        private void OnLayerDeselected(LayerNL3DBase layer)
+        {
+            DeselectUI();
+        }
+        
+        private void OnLayerChildrenChanged()
+        {
+            RecalculateCurrentTreeStates();
+        }
+        
+        private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
+        {
+            SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
+        }
+        
+        private void DestroyUI()
+        {
+            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
+            // consequence of Destroying the parent)
+            SetParent(null);
+
+            // Make sure to remove the properties when removing the UI
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+
+            Destroy(gameObject);
+        }
+
+        private void RecalculateCurrentTreeStates()
         {
             RecalculateState();
             RecalculateChildrenStates();
@@ -123,28 +207,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void OnEnabledToggleValueChanged(bool isOn)
-        {
-            Layer.ActiveSelf = isOn;
-            // RecalculateCurrentTreeStates();
-            // SetEnabledToggleInteractiveStateRecursive();
-        }
-
-        public void SetEnabledToggleInteractiveStateRecursive()
+        private void SetEnabledToggleInteractiveStateRecursive()
         {
             enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
 
             foreach (var child in ChildrenUI)
                 child.SetEnabledToggleInteractiveStateRecursive();
         }
-
-        public void UpdateEnabledToggle(bool isOn)
-        {
-            enabledToggle.SetIsOnWithoutNotify(isOn);
-            RecalculateCurrentTreeStates();
-            SetEnabledToggleInteractiveStateRecursive();
-        }
-
+        
         private void SetVisibilitySprite()
         {
             debugIndexText.text = State.ToString();
@@ -178,20 +248,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             SetVisibilitySprite();
         }
-
-        private void OnFoldoutToggleValueChanged(bool isOn)
-        {
-            UpdateFoldout();
-            RecalculateVisibleHierarchyRecursive();
-        }
-
-        private void Start()
-        {
-            MarkLayerUIAsDirty();
-            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
-            SetColor(Layer.Color);
-        }
-
+        
         public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
         {
             if (newParent == this)
@@ -223,13 +280,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateCurrentTreeStates();
         }
 
-        public void RecalculateVisibleHierarchyRecursive()
+        private void RecalculateVisibleHierarchyRecursive()
         {
-            layerManager.LayersVisibleInInspector.Clear();
-            layerManager.LayersVisibleInInspector = LayerBaseTransform.GetComponentsInChildren<LayerUI>(false).ToList();
+            layerUIManager.RecalculateLayersVisibleInInspector();
+            MarkLayerUIAsDirty();
 
-            if (Layer) // When the layer is deleted, this UI should not update
-                MarkLayerUIAsDirty();
+            // if (Layer != null) // When the layer is deleted, this UI should not update
+            // {
+            //     // Debug.LogError("this check should be removed if possible");
+            //     MarkLayerUIAsDirty();
+            // }
         }
 
         private void RecalculateParentAndChildren()
@@ -250,6 +310,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void MarkLayerUIAsDirty()
         {
             isDirty = true;
+            foreach (var child in ChildrenUI)
+            {
+                child.MarkLayerUIAsDirty();
+            }
         }
 
         private void LateUpdate()
@@ -261,36 +325,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        void UpdateLayerUI()
+        private void UpdateLayerUI()
         {
             UpdateName();
-            RecalculateIndent(Layer.Depth);
+            RecalculateIndent(Depth);
             SetLayerTypeImage();
             RecalculateNameWidth();
             UpdateFoldout();
-
-            UpdatePropertiesToggle();
-        }
-
-        private void UpdatePropertiesToggle()
-        {
-            // only show properties button if the layer has any property sections to show
-            var layerWithProperties = TryFindProperties();
-            propertyToggle.gameObject.SetActive(
-                layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0
-            );
-        }
-
-        private ILayerWithProperties TryFindProperties()
-        {
-            var layerProxy = Layer as ReferencedProxyLayer;
-
-            return (layerProxy == null) ? Layer as ILayerWithProperties : layerProxy.Reference as ILayerWithProperties;
         }
 
         private void SetLayerTypeImage()
         {
-            var sprite = layerManager.GetLayerTypeSprite(Layer);
+            var sprite = layerUIManager.GetLayerTypeSprite(Layer);
             layerTypeImage.sprite = sprite;
         }
 
@@ -310,8 +356,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void UpdateName()
         {
-            layerNameText.text = Layer.name;
-            layerNameField.text = Layer.name;
+            layerNameText.text = Layer.Name;
+            layerNameField.text = Layer.Name;
         }
 
         private void RecalculateNameWidth()
@@ -341,12 +387,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnLeftButtonDown(PointerEventData eventData)
         {
-            layerManager.DragStartOffset = (Vector2)transform.position - eventData.position;
+            layerUIManager.DragStartOffset = (Vector2)transform.position - eventData.position;
             referenceLayerUnderMouse = this;
 
             //if the layer under mouse is already selected, this can be the beginning of a drag, so don't deselect anything yet. wait for the pointer up event that is not a drag
             waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
-            if (layerManager.SelectedLayers.Contains(this))
+            if (Layer.IsSelected)
             {
                 waitForFullClickToDeselect = true;
                 return;
@@ -358,7 +404,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnRightButtonDown(PointerEventData eventData)
         {
             referenceLayerUnderMouse = this;
-            if (!layerManager.SelectedLayers.Contains(this))
+            if (!Layer.IsSelected)
             {
                 ProcessLayerSelection();
             }
@@ -368,69 +414,63 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void ProcessLayerSelection()
         {
-            if (SequentialSelectionModifierKeyIsPressed() && layerManager.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            if (SequentialSelectionModifierKeyIsPressed() && Layer.Root.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
             {
                 // add all layers between the currently selected layer and the reference layer
-                var referenceLayer = layerManager.SelectedLayers.Last(); //last element is always the last selected layer
-                var myIndex = layerManager.LayersVisibleInInspector.IndexOf(this);
-                var referenceIndex = layerManager.LayersVisibleInInspector.IndexOf(referenceLayer);
+                var referenceLayer = Layer.Root.SelectedLayers.Last(); //last element is always the last selected layer
+                var myIndex = layerUIManager.LayerUIsVisibleInInspector.IndexOf(this);
+                var referenceIndex = layerUIManager.LayerUIsVisibleInInspector.IndexOf(layerUIManager.GetLayerUI(referenceLayer));
 
                 var startIndex = referenceIndex > myIndex ? myIndex + 1 : referenceIndex + 1;
                 var endIndex = referenceIndex > myIndex ? referenceIndex - 1 : myIndex - 1;
 
-                var addLayers = !layerManager.SelectedLayers.Contains(this); //add or subtract layers?
+                var addLayers = !Layer.IsSelected; //add or subtract layers?
 
                 for (int i = startIndex; i <= endIndex; i++)
                 {
-                    var newLayer = layerManager.LayersVisibleInInspector[i];
+                    var ui = layerUIManager.LayerUIsVisibleInInspector[i];
 
-                    if (addLayers && !layerManager.SelectedLayers.Contains(newLayer))
+                    if (addLayers && !ui.Layer.IsSelected)
                     {
-                        newLayer.Select();
+                        ui.Layer.SelectLayer();
                     }
-                    else if (!addLayers && layerManager.SelectedLayers.Contains(newLayer))
+                    else if (!addLayers && ui.Layer.IsSelected)
                     {
-                        newLayer.Deselect();
+                        ui.Layer.DeselectLayer();
                     }
                 }
 
                 if (!addLayers)
                 {
-                    referenceLayer.Deselect();
-                    Deselect();
+                    // referenceLayer.DeselectUI();
+                    // DeselectUI();
+                    referenceLayer.DeselectLayer();
+                    Layer.DeselectLayer();
                 }
             }
 
             if (!AddToSelectionModifierKeyIsPressed() && !SequentialSelectionModifierKeyIsPressed())
-                layerManager.DeselectAllLayers();
+                Layer.Root.DeselectAllLayers();
 
-            if (layerManager.SelectedLayers.Contains(this))
+            if (Layer.IsSelected)
             {
-                Deselect();
+                Layer.DeselectLayer();
             }
             else
             {
-                Select();
+                Layer.SelectLayer();
             }
         }
 
-        public void Deselect(bool alreadyRemovedFromSelectedLayers = false)
+        private void SelectUI()
         {
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
-
-            layerManager.SelectedLayers.Remove(this);
-            Layer.OnDeselect();
-            SetHighlight(InteractionState.Default);
+            SetHighlight(InteractionState.Selected);
         }
 
-        public void Select(bool deselectOthers = false)
+        private void DeselectUI()
         {
-            if (deselectOthers)
-                layerManager.DeselectAllLayers();
-
-            layerManager.SelectedLayers.Add(this);
-            Layer.OnSelect();
-            SetHighlight(InteractionState.Selected);
+            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            SetHighlight(InteractionState.Default);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -451,7 +491,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            layerManager.StartDragLayer(this);
+            layerUIManager.StartDragLayer(this);
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -459,20 +499,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            if (!layerManager.IsDragOnButton()) //don't reparent when dragging on a button, since the button action should be called instead and handle any possible reparents
+            if (!layerUIManager.IsDragOnButton()) //don't reparent when dragging on a button, since the button action should be called instead and handle any possible reparents
             {
-                layerManager.SortSelectedLayersByVisibility();
-                layerManager.SelectedLayers.Reverse();
+                layerUIManager.SortSelectedLayersByVisibility();
+                Layer.Root.SelectedLayers.Reverse();
 
-                foreach (var selectedLayer in layerManager.SelectedLayers)
+                foreach (var selectedLayer in Layer.Root.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
                 {
-                    selectedLayer.Layer.SetParent(newParent?.Layer, newSiblingIndex);
+                    selectedLayer.SetParent(newParent?.Layer, newSiblingIndex);
                 }
             }
 
             RemoveHoverHighlight(referenceLayerUnderMouse);
 
-            layerManager.EndDragLayer();
+            layerUIManager.EndDragLayer();
         }
 
         public void OnDrag(PointerEventData eventData) //has to be here or OnBeginDrag and OnEndDrag won't work
@@ -488,8 +528,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 var hoverTransform = referenceLayerUnderMouse.parentRowRectTransform; // as RectTransform;
                 var correctedSize = (hoverTransform.rect.size + new Vector2(0, childVerticalLayoutGroup.padding.top)) * hoverTransform.lossyScale;
 
-                var spacingOffset = (childVerticalLayoutGroup.spacing / 2) * layerManager.DragLine.lossyScale.y;
-                spacingOffset -= layerManager.DragLine.rect.height / 2 * layerManager.DragLine.lossyScale.y;
+                var spacingOffset = (childVerticalLayoutGroup.spacing / 2) * layerUIManager.DragLine.lossyScale.y;
+                spacingOffset -= layerUIManager.DragLine.rect.height / 2 * layerUIManager.DragLine.lossyScale.y;
                 float leftOffset = referenceLayerUnderMouse.parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left +
                                    referenceLayerUnderMouse.layerTypeImage.rectTransform.anchoredPosition.x +
                                    referenceLayerUnderMouse.layerTypeImage.rectTransform.rect.width * referenceLayerUnderMouse.layerTypeImage.rectTransform.pivot.x;
@@ -498,9 +538,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     // print("higher than " + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = true;
-                    layerManager.DragLine.gameObject.SetActive(true);
-                    layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y + correctedSize.y / 2 - spacingOffset);
-                    layerManager.DragLine.SetLeft(leftOffset);
+                    layerUIManager.DragLine.gameObject.SetActive(true);
+                    layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y + correctedSize.y / 2 - spacingOffset);
+                    layerUIManager.DragLine.SetLeft(leftOffset);
 
                     newParent = referenceLayerUnderMouse.ParentUI;
                     newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex();
@@ -512,21 +552,21 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 {
                     // print("lower than" + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
-                    layerManager.DragLine.gameObject.SetActive(true);
-                    layerManager.DragLine.position = new Vector2(layerManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y - correctedSize.y / 2 - spacingOffset);
+                    layerUIManager.DragLine.gameObject.SetActive(true);
+                    layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y - correctedSize.y / 2 - spacingOffset);
 
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
                     if (referenceLayerUnderMouse.ChildrenUI.Length > 0 && referenceLayerUnderMouse.foldoutToggle.isOn)
                     {
                         // print("edge case for: " + referenceLayerUnderMouse.Layer.name);
                         leftOffset += indentWidth;
-                        layerManager.DragLine.SetLeft(leftOffset);
+                        layerUIManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse;
                         newSiblingIndex = 0;
                     }
                     else
                     {
-                        layerManager.DragLine.SetLeft(leftOffset);
+                        layerUIManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse.ParentUI;
                         newSiblingIndex = referenceLayerUnderMouse.transform.GetSiblingIndex() + 1;
                         if (newParent == ParentUI && newSiblingIndex > transform.GetSiblingIndex()) //account for self being included
@@ -536,8 +576,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     if (relativeYValue < -hoverTransform.rect.height / 2 - spacingOffset) // if dragging below last layer, the dragged layer should SetParent to null, and the dragline should indicate that 
                     {
                         //if mouse is fully to the bottom, set parent to null
-                        var defaultLeftOffset = leftOffset - referenceLayerUnderMouse.Layer.Depth * indentWidth;
-                        layerManager.DragLine.SetLeft(defaultLeftOffset);
+                        var defaultLeftOffset = leftOffset - referenceLayerUnderMouse.Depth * indentWidth;
+                        layerUIManager.DragLine.SetLeft(defaultLeftOffset);
                         newParent = null;
                         newSiblingIndex = LayerBaseTransform.childCount;
                     }
@@ -547,7 +587,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     // print("reparent to " + referenceLayerUnderMouse.Layer.name);
                     referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
-                    layerManager.DragLine.gameObject.SetActive(false);
+                    layerUIManager.DragLine.gameObject.SetActive(false);
 
                     newParent = referenceLayerUnderMouse;
                     newSiblingIndex = referenceLayerUnderMouse.childrenPanel.childCount;
@@ -555,15 +595,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void RemoveHoverHighlight(LayerUI layer)
+        private void RemoveHoverHighlight(LayerUI ui)
         {
-            if (layer)
-            {
-                var state = InteractionState.Default;
-                if (layerManager.SelectedLayers.Contains(layer))
-                    state = InteractionState.Selected;
-                layer.SetHighlight(state);
-            }
+            if (!ui) return;
+            
+            var state = InteractionState.Default;
+            if (ui.Layer.IsSelected)
+                state = InteractionState.Selected;
+            ui.SetHighlight(state);
         }
 
         public void SetHighlight(InteractionState state)
@@ -573,13 +612,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
         {
-            var ghostRectTransform = layerManager.DragGhost.GetComponent<RectTransform>();
+            var ghostRectTransform = layerUIManager.DragGhost.GetComponent<RectTransform>();
             var ghostSize = ghostRectTransform.rect.size * ghostRectTransform.lossyScale;
-            var mousePos = (Vector2)layerManager.DragGhost.transform.position - ghostSize / 2;
+            var mousePos = (Vector2)layerUIManager.DragGhost.transform.position - ghostSize / 2;
 
-            for (var i = layerManager.LayersVisibleInInspector.Count - 1; i >= 0; i--)
+            for (var i = layerUIManager.LayerUIsVisibleInInspector.Count - 1; i >= 0; i--)
             {
-                var layer = layerManager.LayersVisibleInInspector[i];
+                var layer = layerUIManager.LayerUIsVisibleInInspector[i];
                 var correctedSize = layer.parentRowRectTransform.rect.size * layer.parentRowRectTransform.lossyScale;
                 correctedSize.y += childVerticalLayoutGroup.spacing * layer.parentRowRectTransform.lossyScale.y;
                 var layerPosTop = (Vector2)layer.parentRowRectTransform.position + correctedSize / 2;
@@ -592,14 +631,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 }
             }
 
-            var firstLayer = layerManager.LayersVisibleInInspector[0];
+            var firstLayer = layerUIManager.LayerUIsVisibleInInspector[0];
             if (mousePos.y >= firstLayer.rectTransform.position.y)
             {
                 relativeYValue = (mousePos.y - firstLayer.parentRowRectTransform.position.y) / firstLayer.parentRowRectTransform.lossyScale.y;
                 return firstLayer; //above first
             }
 
-            var lastLayer = layerManager.LayersVisibleInInspector.Last();
+            var lastLayer = layerUIManager.LayerUIsVisibleInInspector.Last();
             relativeYValue = (mousePos.y - lastLayer.parentRowRectTransform.position.y) / firstLayer.parentRowRectTransform.lossyScale.y;
             return lastLayer; //below last
         }
@@ -621,49 +660,55 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!layerManager.DragGhost && !IsSelected)
+            if (!layerUIManager.DragGhost && !Layer.IsSelected)
                 SetHighlight(InteractionState.Hover);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (!IsSelected)
+            if (!Layer.IsSelected)
                 SetHighlight(InteractionState.Default);
         }
 
         private void OnDestroy()
         {
-            // if(Layer) //todo in case the layer still exists, because for example this ui was a child of a UI that was destroyed
-            //     Destroy(Layer.gameObject); //this will also delete the ui when closing the layers panel, because that destroys the UI as well
-
-            layerManager.RemoveUI(this);
+            Layer.NameChanged.RemoveListener(OnNameChanged);
+            Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
+            Layer.ColorChanged.RemoveListener(UpdateColor);
+            Layer.LayerSelected.RemoveListener(OnLayerSelected);
+            Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
+            Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
+            Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
+            Layer.LayerDestroyed.RemoveListener(DestroyUI);
+            
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
             RecalculateParentStates();
         }
 
-        public void DestroyUI()
+        private void RegisterWithPropertiesPanel(Properties propertiesPanel)
         {
-            // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
-            // consequence of Destroying the parent)
-            SetParent(null);
-
-            // Make sure to remove the properties when removing the UI
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
-
-            Destroy(gameObject);
-        }
-
-        public void RegisterWithPropertiesPanel(Properties propertiesPanel)
-        {
+            var layerWithProperties = Properties.TryFindProperties(Layer);
+            var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
+            propertyToggle.gameObject.SetActive(hasProperties);
+            
+            if(!hasProperties)
+                return;
+            
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
             propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
+            ToggleProperties(true, propertiesPanel);
         }
 
+        public void ToggleProperties(bool onOrOff)
+        {
+            propertyToggle.isOn = onOrOff;
+        }
+        
         private void ToggleProperties(bool onOrOff, Properties properties)
         {
-            var layerWithProperties = TryFindProperties();
+            var layerWithProperties = Properties.TryFindProperties(Layer);
             if (layerWithProperties == null) return; // no properties, no action
 
             if (!onOrOff)
@@ -674,21 +719,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             properties.Show(layerWithProperties);
 
-            if (!IsSelected)
+            if (!Layer.IsSelected)
             {
                 // To prevent confusion with the user, also immediately select this layer.
-                Select(true);
+                Layer.SelectLayer(true);
             }
-        }
-
-        public void ToggleProperties(bool isOn)
-        {
-            propertyToggle.isOn = isOn;
-        }
-
-        public void SetColor(Color c)
-        {
-            colorButton.targetGraphic.color = c;
         }
     }
 }

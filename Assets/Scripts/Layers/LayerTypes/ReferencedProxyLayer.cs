@@ -1,68 +1,67 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using CsvHelper;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
+    [Serializable]
     public class ReferencedProxyLayer : LayerNL3DBase
     {
-        public ReferencedLayer Reference { get; set; }
+        [JsonIgnore]
+        public ReferencedLayer Reference { get; }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
+
+        public override void DestroyLayer()
         {
-            Reference.IsActiveInScene = activeInHierarchy;
+            base.DestroyLayer();
+            if (!KeepReferenceOnDestroy && Reference)
+                GameObject.Destroy(Reference.gameObject);
         }
 
-        private void OnEnable()
+        public override void SelectLayer(bool deselectOthers = false)
         {
-            if (Reference)
-                Reference.IsActiveInScene = true;
-        }
-
-        private void OnDisable()
-        {
-            if (Reference)
-                Reference.IsActiveInScene = false;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            if (Reference)
-                Destroy(Reference.gameObject);
-        }
-
-        public override void OnSelect()
-        {
-            base.OnSelect();
+            base.SelectLayer(deselectOthers);
             Reference.OnSelect();
         }
 
-        public override void OnDeselect()
+        public override void DeselectLayer()
         {
-            base.OnDeselect();
+            base.DeselectLayer();
             Reference.OnDeselect();
         }
 
-        protected override void OnTransformChildrenChanged()
+        private void OnChildrenChanged()
         {
-            base.OnTransformChildrenChanged();
             Reference.OnProxyTransformChildrenChanged();
         }
 
-        protected override void OnTransformParentChanged()
+        private void OnParentChanged()
         {
-            base.OnTransformParentChanged();
             Reference.OnProxyTransformParentChanged();
         }
 
-        protected override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        private void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
-            base.OnSiblingIndexOrParentChanged(newSiblingIndex);
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
+        }
+
+        public ReferencedProxyLayer(string name, ReferencedLayer reference) : base(name)
+        {
+            Reference = reference;  
+            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            ParentChanged.AddListener(OnParentChanged);
+            ChildrenChanged.AddListener(OnChildrenChanged);
+            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+        }
+
+        ~ReferencedProxyLayer()
+        {
+            ParentChanged.RemoveListener(OnParentChanged);
+            ChildrenChanged.RemoveListener(OnChildrenChanged);
+            ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
         }
     }
 }

@@ -5,6 +5,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +20,7 @@ namespace Netherlands3D.Twin.Layers
         Line = 2
     }
 
+    [Serializable]
     public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
     {
         private ShapeType shapeType;
@@ -33,11 +35,11 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent polygonMoved = new();
         public UnityEvent polygonChanged = new();
         private bool notifyOnPolygonChange = true;
-        
+
         private List<IPropertySectionInstantiator> propertySections = new();
 
         private PolygonWorldTransformShifter worldTransformShifter;
-        
+
         public ShapeType ShapeType
         {
             get => shapeType;
@@ -57,51 +59,30 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void Initialize(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f)
+        public PolygonSelectionLayer(string name, List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f) : base(name)
         {
+
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
             this.lineWidth = defaultLineWidth;
 
-            //Add shifter that manipulates the polygon if the world origin is shifted
-            worldTransformShifter = gameObject.AddComponent<PolygonWorldTransformShifter>();
-            worldTransformShifter.polygonSelectionLayer = this;
-            gameObject.AddComponent<WorldTransform>(); 
-            worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
 
             SetShape(polygon);
-
             PolygonSelectionCalculator.RegisterPolygon(this);
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            if (shapeType == ShapeType.Line)
-                UI.ToggleProperties(true); //start with the properties section opened. this is done in Start, because we need to wait for the UI to initialize in base.Start()
-        }
-
-        
-        public void SelectPolygon()
-        {
-            if (UI)
-                UI.Select(!LayerUI.SequentialSelectionModifierKeyIsPressed() && !LayerUI.AddToSelectionModifierKeyIsPressed()); //if there is no UI, this will do nothing. this is intended as when the layer panel is closed the polygon should not be (accidentally) selectable
-        }
-
-        public void DeselectPolygon()
-        {
-            if (UI && UI.IsSelected)
-                UI.Deselect(); // processes OnDeselect as well
-            else
-                OnDeselect(); // only call this if the UI does not exist. This should not happen with the intended behaviour being that polygon selection is only active when the layer panel is open
+            ProjectData.Current.AddStandardLayer(this);
+            
+            //Add shifter that manipulates the polygon if the world origin is shifted
+            worldTransformShifter = PolygonVisualisation.gameObject.AddComponent<PolygonWorldTransformShifter>();
+            worldTransformShifter.polygonSelectionLayer = this;
+            PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
+            worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
         }
 
         private void ShiftedPolygon(List<Vector3> newPolygon)
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             notifyOnPolygonChange = false;
-            DeselectPolygon();
             SetShape(newPolygon);
             polygonMoved.Invoke();
             notifyOnPolygonChange = true;
@@ -113,7 +94,7 @@ namespace Netherlands3D.Twin.Layers
         /// <param name="shape">Contour</param>
         public void SetShape(List<Vector3> shape)
         {
-             if (shapeType == Layers.ShapeType.Line)
+            if (shapeType == Layers.ShapeType.Line)
                 SetLine(shape);
             else
                 SetPolygon(shape);
@@ -132,14 +113,15 @@ namespace Netherlands3D.Twin.Layers
 
             UpdateVisualisation(solidPolygon);
 
-            if(notifyOnPolygonChange){
+            if (notifyOnPolygonChange)
+            {
                 polygonChanged.Invoke();
             }
         }
-       
-       /// <summary>
-       /// Set the layer as a 'line'. This will create a rectangle polygon from the line with a given width.
-       /// </summary>
+
+        /// <summary>
+        /// Set the layer as a 'line'. This will create a rectangle polygon from the line with a given width.
+        /// </summary>
         private void SetLine(List<Vector3> line)
         {
             ShapeType = ShapeType.Line;
@@ -149,7 +131,8 @@ namespace Netherlands3D.Twin.Layers
 
             if (propertySections.Count == 0)
             {
-                var lineProperties = gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+                var lineProperties = PolygonVisualisation.gameObject.AddComponent<PolygonPropertySectionInstantiator>();
+                lineProperties.PolygonLayer = this;
                 propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
             }
         }
@@ -162,8 +145,8 @@ namespace Netherlands3D.Twin.Layers
 
             var rectangle3D = rectangle.ToVector3List();
             UpdateVisualisation(rectangle3D);
-            
-            if(notifyOnPolygonChange)
+
+            if (notifyOnPolygonChange)
             {
                 polygonChanged.Invoke();
             }
@@ -228,25 +211,25 @@ namespace Netherlands3D.Twin.Layers
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }
 
-        public override void OnSelect()
+        public override void SelectLayer(bool deselectOthers = false)
         {
-            base.OnSelect();
+            base.SelectLayer();
             polygonSelected.Invoke(this);
         }
 
-        public override void OnDeselect()
+        public override void DeselectLayer()
         {
-            base.OnDeselect();
+            base.DeselectLayer();
             polygonSelected.Invoke(null);
         }
-
-        protected override void OnDestroy()
+        
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             PolygonSelectionCalculator.UnregisterPolygon(this);
 
-            if(PolygonVisualisation)
-                Destroy(PolygonVisualisation.gameObject);
+            if (PolygonVisualisation)
+                GameObject.Destroy(PolygonVisualisation.gameObject);
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

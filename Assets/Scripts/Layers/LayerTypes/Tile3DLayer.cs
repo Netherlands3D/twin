@@ -57,17 +57,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 tileSet.RefreshTiles();
         }
-        
-
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
-            }
-        }
 
         private CredentialsPropertySection propertySection;
         public CredentialsPropertySection PropertySection {
@@ -85,12 +74,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             else
                 propertySections = new();
         }
-     
-        private IEnumerator Start()
-        {
-            yield return null; //wait for UI to initialize
-            ReferencedProxy.UI.ToggleProperties(openPropertiesOnStart);
-        }
 
         private void OnEnable()
         {
@@ -101,13 +84,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
         }
+        
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+        }
 
         private void InvokeUnsupportedExtensionsMessage(string[] unsupportedExtensions)
         {
             if (unsupportedExtensions.Length == 0)
                 return;
 
-            string message = name + " contains the following unsupported extensions: ";
+            string message = Name + " contains the following unsupported extensions: ";
             foreach (var extension in unsupportedExtensions)
             {
                 message += "\n"+ extension;
