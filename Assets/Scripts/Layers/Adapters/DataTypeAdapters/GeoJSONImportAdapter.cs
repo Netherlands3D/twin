@@ -9,7 +9,6 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private string[] allowedFileExtensions = new string[] { ".geojson", ".json" };
         [SerializeField] private Material visualizationMaterial;
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
@@ -17,10 +16,6 @@ namespace Netherlands3D.Twin
 
         public bool Supports(LocalFile localFile)
         {
-            var extention = Path.GetExtension(localFile.SourceUrl).ToLower();
-            if(!allowedFileExtensions.Contains(extention))
-                return false;
-
             //Streamread untill we found some geojson properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
@@ -40,7 +35,7 @@ namespace Netherlands3D.Twin
 
         public void Execute(LocalFile localFile)
         {
-            throw new System.NotImplementedException();
+            ParseGeoJSON(localFile.LocalFilePath);
         }
 
         public void ParseGeoJSON(string fileName)
