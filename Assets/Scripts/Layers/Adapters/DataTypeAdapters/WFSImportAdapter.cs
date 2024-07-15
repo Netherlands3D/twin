@@ -7,6 +7,7 @@ using System;
 using Netherlands3D.Web;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.CartesianTiles;
 
 
 
@@ -15,7 +16,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private GameObject cartesianTileWFSLayerPrefab;
+        [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSDataLayerPrefab;
 
         public bool Supports(LocalFile localFile)
         {
@@ -172,7 +173,7 @@ namespace Netherlands3D.Twin
             uriBuilder.AddQueryParameter("typeNames", featureType);
             uriBuilder.AddQueryParameter("request", "GetFeature");
 
-            var path = uriBuilder.Uri.ToString();
+            var getFeatureUrl = uriBuilder.Uri.ToString();
 
             // Create folder layer for WFS
             // GeoJSONLayer <- WFSCartesianTileLayer
@@ -193,9 +194,15 @@ namespace Netherlands3D.Twin
             // Create WFSCartesianTileLayer that uses url to fetch small tiles of geojson data that can be fed to GeoJSONLayer
             // Create a GeoJSONLayer (and add methods to append/replace with new geojson data, using Feature.GetHashCode to determine if it's the same data)
 
-            var layer =  new FolderLayer("WFS Layer");
-            var pointsLayer = new GeoJSONPointLayer("Points");
-            pointsLayer.SetParent(layer);
+            // Create a new GeoJSON layer per feature, with a 'live' datasource
+            var go = new GameObject(featureType);
+            var layer = go.AddComponent<GeoJSONLayer>();
+            var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();
+            cartesianTileLayer.GeoJSONLayer = layer;
+            cartesianTileLayer.WfsUrl = getFeatureUrl;
+
+            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
+            layer.ParseGeoJSON(fullPath);
 
             //var newCartesianTileLayer = ;
             //newCartesianTileLayer.SetParent(pointsLayer);
