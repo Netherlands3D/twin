@@ -16,8 +16,7 @@ namespace Netherlands3D.Twin
 
         public override void OnDrop(PointerEventData eventData)
         {
-            if (layerUIManager.ProjectData.RootLayer.SelectedLayers.Count > 0) //todo: replace layerManager reference with ProjectData reference
-                layerUIManager.GroupSelectedLayers();
+            layerUIManager.GroupSelectedLayers();
         }
     }
 }

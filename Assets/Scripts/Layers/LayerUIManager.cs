@@ -19,7 +19,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private List<Sprite> layerTypeSprites;
         [SerializeField] private RectTransform layerUIContainer;
 
-        public ProjectData ProjectData => projectData;
         public RectTransform LayerUIContainer => layerUIContainer;
 
         private Dictionary<LayerNL3DBase, LayerUI> layerUIDictionary = new();
@@ -226,6 +225,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void GroupSelectedLayers()
         {
+            if (projectData.RootLayer.SelectedLayers.Count == 0) 
+                return;
+            
             var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = CreateFolderLayer();
@@ -287,7 +289,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
             var ui = GetLayerUI(layer);
-            // layer.ReferencedProxy.UI.SetHighlight(layerState);
             ui.SetHighlight(layerState);
             ui.MarkLayerUIAsDirty();
         }

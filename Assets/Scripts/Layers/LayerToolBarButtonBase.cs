@@ -17,7 +17,6 @@ namespace Netherlands3D.Twin
         private void Awake()
         {
             button = GetComponent<Button>();
-            // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()
