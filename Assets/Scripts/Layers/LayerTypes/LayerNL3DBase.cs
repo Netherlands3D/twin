@@ -18,8 +18,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-        
-        [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer; //todo: when creating a layer the root layer reference should be set instead of this static reference
+
+        [JsonIgnore] private RootLayer root;
+        [JsonIgnore]
+        public RootLayer Root
+        {
+            get
+            {
+                return root;
+            }
+            set
+            {
+                root = value;
+                parent = root;
+                root.children.Add(this);
+                root.ChildrenChanged.Invoke();
+            }
+        }
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
         [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected { get; private set; }
@@ -64,16 +79,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
 
         [JsonIgnore]
-        public int SiblingIndex
-        {
-            get
-            {
-                if (ParentLayer == null) //todo: this is only needed for the initial SetParent and should be removed if possible
-                    return -1;
-
-                return parent.ChildrenLayers.IndexOf(this);
-            }
-        }
+        public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
         [JsonIgnore] 
         public bool ActiveInHierarchy
@@ -127,8 +133,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
         {
-            Debug.Log("setting parent of: " + Name + " to: " + newParent?.Name);
-
             if (newParent == null)
                 newParent = Root;
 
@@ -151,8 +155,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 siblingIndex = newParent.children.Count;
 
             parent = newParent;
-            Debug.Log("new parent: " + newParent);
-            Debug.Log("children: " + children);
 
             newParent.children.Insert(siblingIndex, this);
 
