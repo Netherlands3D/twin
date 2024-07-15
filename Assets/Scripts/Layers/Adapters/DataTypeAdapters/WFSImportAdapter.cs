@@ -198,11 +198,11 @@ namespace Netherlands3D.Twin
             var go = new GameObject(featureType);
             var layer = go.AddComponent<GeoJSONLayer>();
             var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();
+            
             cartesianTileLayer.GeoJSONLayer = layer;
             cartesianTileLayer.WfsUrl = getFeatureUrl;
 
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-            layer.ParseGeoJSON(fullPath);
+           
 
             //var newCartesianTileLayer = ;
             //newCartesianTileLayer.SetParent(pointsLayer);

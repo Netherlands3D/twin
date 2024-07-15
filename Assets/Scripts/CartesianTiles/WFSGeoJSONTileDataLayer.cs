@@ -26,7 +26,7 @@ namespace Netherlands3D.CartesianTiles
         private TileHandler tileHandler;
 
         private void Awake() {
-            geoJSONLayer.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
+            geoJSONLayer.ReferencedProxy.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
 
             //Make sure we live in a tilehandler
             tileHandler = GetComponentInParent<TileHandler>();
