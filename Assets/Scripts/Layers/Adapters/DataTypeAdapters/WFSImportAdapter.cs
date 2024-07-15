@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using Netherlands3D.Web;
 using System.Collections.Specialized;
+using Netherlands3D.Twin.UI.LayerInspector;
 
 
 
@@ -122,7 +123,7 @@ namespace Netherlands3D.Twin
             {
                 var featureTypes = GetFeatureTypes(localFile);
                 foreach (var featureType in featureTypes)
-                    AddWFSCartesianTileLayer(featureType, sourceUrl);
+                    AddWFSLayer(featureType, sourceUrl);
                 return;
             }
 
@@ -131,7 +132,7 @@ namespace Netherlands3D.Twin
             {
                 //Get the feature type from the url
                 var featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
-                AddWFSCartesianTileLayer(featureType, sourceUrl);
+                AddWFSLayer(featureType, sourceUrl);
                 return;
             }
         }
@@ -157,7 +158,7 @@ namespace Netherlands3D.Twin
         }
 
 
-        private void AddWFSCartesianTileLayer(string featureType, string sourceUrl)
+        private void AddWFSLayer(string featureType, string sourceUrl)
         {
             Debug.Log("Adding WFS layer: " + featureType);
 
@@ -173,6 +174,33 @@ namespace Netherlands3D.Twin
 
             var path = uriBuilder.Uri.ToString();
 
+            // Create folder layer for WFS
+            // GeoJSONLayer <- WFSCartesianTileLayer
+            // GeoJSONLayer/Points
+            // GeoJSONLayer/Lines
+            // GeoJSONLayer/Polygons
+
+            // GeoJSONLayer <- WFSCartesianTileLayer
+            // GeoJSONLayer/Points
+            // GeoJSONLayer/Lines
+            // GeoJSONLayer/Polygons
+
+            // GeoJSONLayer <- WFSCartesianTileLayer
+            // GeoJSONLayer/Points
+            // GeoJSONLayer/Lines
+            // GeoJSONLayer/Polygons
+
+            // Create WFSCartesianTileLayer that uses url to fetch small tiles of geojson data that can be fed to GeoJSONLayer
+            // Create a GeoJSONLayer (and add methods to append/replace with new geojson data, using Feature.GetHashCode to determine if it's the same data)
+
+            var layer =  new FolderLayer("WFS Layer");
+            var pointsLayer = new GeoJSONPointLayer("Points");
+            pointsLayer.SetParent(layer);
+
+            //var newCartesianTileLayer = ;
+            //newCartesianTileLayer.SetParent(pointsLayer);
+
+            //pointsLayer.LayerDestroyed.AddListener()
 
             //TODO: Use path to create a WFS layer via the ProjectData methods.
             //For now we use the old way; spawning a prefab from here.
