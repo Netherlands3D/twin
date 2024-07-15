@@ -1,4 +1,6 @@
+using DG.Tweening;
 using Netherlands3D.Events;
+using Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime.Scripts.Cameras;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -94,10 +96,13 @@ public class FreeCamera : MonoBehaviour
     private Vector3 dragStartPointerPosition;
     private Quaternion previousRotation;
     private Vector3 previousPosition;
+    public OrthographicSwitcher orthographicSwitcher;
 
     void Awake()
     {
         cameraComponent = GetComponent<Camera>();
+        orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();
+
         worldPlane = new Plane(Vector3.up, Vector3.zero);
 
         horizontalInput.AddListenerStarted(MoveHorizontally);
@@ -125,21 +130,13 @@ public class FreeCamera : MonoBehaviour
     /// <param name="enableOrtographic">Ortographic mode enabled</param>
     public void EnableOrtographic(bool enableOrtographic)
     {
-        // TODO: Keep the heading/orientation of the camera, even when switching back end forth; and remember the pitch
-        // of the camera and restore it when switching back to perspective mode
-        
-        if (enableOrtographic)
+        if (!orthographicSwitcher)
         {
-            var cameraLookWorldPosition = GetWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0));
-            cameraLookWorldPosition.y = this.transform.position.y;
-            this.transform.position = cameraLookWorldPosition;
-
-            var flattenedForward = this.transform.forward;
-            flattenedForward.y = 0;
-            this.transform.rotation = Quaternion.LookRotation(Vector3.down, flattenedForward);
+            cameraComponent.orthographic = enableOrtographic;
+            return;
         }
 
-        cameraComponent.orthographic = enableOrtographic;
+        orthographicSwitcher.EnableOrthographic(enableOrtographic);
     }
 
     /// <summary>
@@ -163,12 +160,6 @@ public class FreeCamera : MonoBehaviour
             this.transform.Translate(Vector3.back * focusDistanceMultiplier, Space.Self);
         }
 
-    }
-
-    private void OrtographicLimitations()
-    {
-        //Link size and camera height to support features depending on camera height
-        cameraComponent.orthographicSize = this.transform.position.y;
     }
 
     /// <summary>
@@ -319,8 +310,6 @@ public class FreeCamera : MonoBehaviour
 	{
         EaseDragTarget();
         Clamp();
-
-        if (cameraComponent.orthographic) OrtographicLimitations();
     }
 
     /// <summary>
