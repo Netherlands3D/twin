@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
@@ -10,6 +9,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     public class DatasetLayer : ReferencedLayer
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+
+        private void Start()
+        {
+            RecalculateColorPriorities();
+        }
 
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -47,21 +51,45 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public override void OnProxyTransformParentChanged()
         {
-            throw new Exception("need to implement this without GetComponentsInChildren");
-            
-            // base.OnProxyTransformParentChanged();
-            // var hierarchyList = LayerData.Instance.transform.GetComponentsInChildren<LayerNL3DBase>();
-            // for (var i = 0; i < hierarchyList.Length; i++)
-            // {
-            //     var layer = hierarchyList[i];
-            //     if (layer is DatasetLayer)
-            //     {
-            //         var datasetLayer = (DatasetLayer)layer;
-            //         datasetLayer.ColorSetLayer.PriorityIndex = i;
-            //     }
-            // }
-            //
-            // GeometryColorizer.RecalculatePrioritizedColors();
+            base.OnProxyTransformParentChanged();
+            RecalculateColorPriorities();
+        }
+
+        private void RecalculateColorPriorities()
+        {
+            var hierarchyList = GetFlatHierarchy(ReferencedProxy.Root);
+            for (var i = 0; i < hierarchyList.Count; i++)
+            {
+                var datasetLayer = hierarchyList[i];
+                datasetLayer.ColorSetLayer.PriorityIndex = i;
+            }
+
+            GeometryColorizer.RecalculatePrioritizedColors();
+        }
+
+        private List<DatasetLayer> GetFlatHierarchy(LayerNL3DBase root)
+        {
+            var list = new List<DatasetLayer>();
+
+            AddLayersRecursive(root, list);
+
+            return list;
+        }
+
+        private void AddLayersRecursive(LayerNL3DBase layer, List<DatasetLayer> list)
+        {
+            if (layer is ReferencedProxyLayer proxyLayer)
+            {
+                if (proxyLayer.Reference is DatasetLayer datasetLayer)
+                {
+                    list.Add(datasetLayer);
+                }
+            }
+
+            foreach (var child in layer.ChildrenLayers)
+            {
+                AddLayersRecursive(child, list);
+            }
         }
     }
 }
