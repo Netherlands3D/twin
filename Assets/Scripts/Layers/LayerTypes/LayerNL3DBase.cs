@@ -86,18 +86,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 return activeSelf;
             }
         }
-
-        [JsonIgnore] 
-        public int Depth //todo: remove if possible
-        {
-            get
-            {
-                if (ParentLayer != Root)
-                    return ParentLayer.Depth + 1;
-
-                return 0;
-            }
-        }
         
         public readonly UnityEvent<string> NameChanged = new();
         public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();

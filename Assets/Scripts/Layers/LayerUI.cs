@@ -76,6 +76,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
         public string LayerName => Layer.Name;
         public bool PropertiesOpen => propertyToggle.isOn;
+        
+        private int Depth => ParentUI ? ParentUI.Depth + 1 : 0;
 
         private void Awake()
         {
@@ -322,10 +324,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        void UpdateLayerUI()
+        private void UpdateLayerUI()
         {
             UpdateName();
-            RecalculateIndent(Layer.Depth);
+            RecalculateIndent(Depth);
             SetLayerTypeImage();
             RecalculateNameWidth();
             UpdateFoldout();
@@ -573,7 +575,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     if (relativeYValue < -hoverTransform.rect.height / 2 - spacingOffset) // if dragging below last layer, the dragged layer should SetParent to null, and the dragline should indicate that 
                     {
                         //if mouse is fully to the bottom, set parent to null
-                        var defaultLeftOffset = leftOffset - referenceLayerUnderMouse.Layer.Depth * indentWidth;
+                        var defaultLeftOffset = leftOffset - referenceLayerUnderMouse.Depth * indentWidth;
                         layerManager.DragLine.SetLeft(defaultLeftOffset);
                         newParent = null;
                         newSiblingIndex = LayerBaseTransform.childCount;

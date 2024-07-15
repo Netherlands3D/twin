@@ -245,14 +245,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)
         {
-            selectedLayers.Sort((layer1, layer2) =>
-            {
-                // Primary sorting by Depth
-                int depthComparison = layer1.Depth.CompareTo(layer2.Depth);
-                print(layer1.Name + " " + layer1.Depth + "\t" + layer2.Name + " " + layer2.Depth);
-                // If depths are the same, use the order as visible in the hierarchy
-                return depthComparison != 0 ? depthComparison : LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2)));
-            });
+            selectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
         public bool IsDragOnButton()
