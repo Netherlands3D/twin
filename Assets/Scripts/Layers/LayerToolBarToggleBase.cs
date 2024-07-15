@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -12,13 +11,12 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public abstract class LayerToolBarToggleBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [FormerlySerializedAs("layerManager")] [SerializeField] protected LayerUIManager layerUIManager;
+        [SerializeField] protected LayerUIManager layerUIManager;
         protected Toggle toggle;
 
         private void Awake()
         {
             toggle = GetComponent<Toggle>();
-            // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()
