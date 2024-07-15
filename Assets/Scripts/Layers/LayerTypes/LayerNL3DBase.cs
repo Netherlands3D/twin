@@ -20,13 +20,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
 
         [JsonIgnore] private RootLayer root;
+
         [JsonIgnore]
         public RootLayer Root
         {
-            get
-            {
-                return root;
-            }
+            get => root;
             set
             {
                 root = value;
@@ -35,6 +33,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 root.ChildrenChanged.Invoke();
             }
         }
+
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
         [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected { get; private set; }
@@ -78,21 +77,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        [JsonIgnore]
-        public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
+        [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
-        [JsonIgnore] 
+        [JsonIgnore]
         public bool ActiveInHierarchy
         {
             get
             {
-                if (ParentLayer != null) //todo: if root layer is also of this type, maybe this check is unneeded
-                    return ParentLayer.ActiveInHierarchy && activeSelf;
+                if (this is RootLayer)
+                    return activeSelf;
 
-                return activeSelf;
+                return ParentLayer.ActiveInHierarchy && activeSelf;
             }
         }
-        
+
         public readonly UnityEvent<string> NameChanged = new();
         public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         public readonly UnityEvent<Color> ColorChanged = new();
@@ -104,7 +102,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public readonly UnityEvent ParentChanged = new();
         public readonly UnityEvent ChildrenChanged = new();
         public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
-        
+
         public virtual void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
