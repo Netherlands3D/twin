@@ -111,7 +111,7 @@ namespace Netherlands3D.Twin
                 if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
                 {
                     jsonReader.Read(); //start array
-                    yield return ReadFeaturesArray(jsonReader, serializer);
+                    yield return ReadFeaturesArrayStream(jsonReader, serializer);
                 }
             }
 
@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin
             OnParseError.Invoke("Er was een probleem met het inladen van dit GeoJSON bestand:\n\n" + args.ErrorContext.Error.Message);
         }
 
-        private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
+        private IEnumerator ReadFeaturesArrayStream(JsonTextReader jsonReader, JsonSerializer serializer)
         {
             Features = new List<Feature>();
             var startTime = Time.realtimeSinceStartup;

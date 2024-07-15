@@ -52,6 +52,12 @@ namespace Netherlands3D.Twin
             GeoJSONGeometryVisualizerUtility.VisualizePoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
         }
 
+        public void RemoveFeature(Feature feature)
+        {
+            PointFeatures.Remove(feature);
+            //TODO: Remove points from renderer
+        }
+
         public override void DestroyLayer()
         {
             base.DestroyLayer();

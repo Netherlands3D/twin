@@ -58,6 +58,12 @@ namespace Netherlands3D.Twin
             PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
         }
 
+        public void RemoveFeature(Feature feature)
+        {
+            PolygonFeatures.Remove(feature);
+            //TODO: Remove points from renderer
+        }
+
         public override void DestroyLayer()
         {
             base.DestroyLayer();
