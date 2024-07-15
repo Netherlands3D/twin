@@ -168,12 +168,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public virtual void DestroyLayer()
         {
             DeselectLayer();
-            ProjectData.Current.RemoveLayer(this);
-            foreach (var child in ChildrenLayers)
+            
+            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
                 child.DestroyLayer();
             }
+            
+            ParentLayer.ChildrenLayers.Remove(this);
+            parent.ChildrenChanged.Invoke(); //call event on old parent
 
+            ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
     }
