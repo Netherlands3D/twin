@@ -42,6 +42,7 @@ namespace Netherlands3D.Twin.Projects
         private string lastSavePath = "";
 
         [NonSerialized] private bool isDirty = false;
+        [JsonIgnore]
         public bool IsDirty { 
             get => isDirty; 
             set
