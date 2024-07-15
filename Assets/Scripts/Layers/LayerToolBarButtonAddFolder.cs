@@ -11,13 +11,13 @@ namespace Netherlands3D.Twin
     {
         public override void ButtonAction()
         {
-            layerManager.CreateFolderLayer();
+            layerUIManager.CreateFolderLayer();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            if (layerManager.ProjectData.RootLayer.SelectedLayers.Count > 0) //todo: replace layerManager reference with ProjectData reference
-                layerManager.GroupSelectedLayers();
+            if (layerUIManager.ProjectData.RootLayer.SelectedLayers.Count > 0) //todo: replace layerManager reference with ProjectData reference
+                layerUIManager.GroupSelectedLayers();
         }
     }
 }

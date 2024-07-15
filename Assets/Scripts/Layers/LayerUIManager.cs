@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class LayerManager : MonoBehaviour, IPointerDownHandler
+    public class LayerUIManager : MonoBehaviour, IPointerDownHandler
     {
         public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 

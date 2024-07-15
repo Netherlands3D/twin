@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected LayerManager layerManager;
+        [FormerlySerializedAs("layerManager")] [SerializeField] protected LayerUIManager layerUIManager;
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
         [SerializeField] protected ReferencedLayer layer;
@@ -82,7 +83,7 @@ namespace Netherlands3D.Twin
             ShowBin(toggle.isOn);
             GetComponent<Image>().sprite = hoverSprite;
             if (layer)
-                layerManager.HighlightLayerUI(layer.ReferencedProxy, true);
+                layerUIManager.HighlightLayerUI(layer.ReferencedProxy, true);
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
@@ -90,7 +91,7 @@ namespace Netherlands3D.Twin
             ShowBin(false);
             GetComponent<Image>().sprite = defaultSprite;
             if (layer)
-                layerManager.HighlightLayerUI(layer.ReferencedProxy, false);
+                layerUIManager.HighlightLayerUI(layer.ReferencedProxy, false);
         }
 
         //also called in the inspector to update after a press

@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin
 
         private void CloseRightProperties(LayerNL3DBase layer)
         {
-            var layerManager = FindAnyObjectByType<LayerManager>();
+            var layerManager = FindAnyObjectByType<LayerUIManager>();
             var ui = layerManager.GetLayerUI(layer);
             ui.ToggleProperties(false);
         }

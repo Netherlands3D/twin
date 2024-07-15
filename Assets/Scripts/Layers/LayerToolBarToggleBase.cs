@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
@@ -11,7 +12,7 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Toggle))]
     public abstract class LayerToolBarToggleBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected LayerManager layerManager;
+        [FormerlySerializedAs("layerManager")] [SerializeField] protected LayerUIManager layerUIManager;
         protected Toggle toggle;
 
         private void Awake()
@@ -34,12 +35,12 @@ namespace Netherlands3D.Twin
         public abstract void OnDrop(PointerEventData eventData);
         public void OnPointerEnter(PointerEventData eventData)
         {
-            layerManager.MouseIsOverButton = true;
+            layerUIManager.MouseIsOverButton = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            layerManager.MouseIsOverButton = false;
+            layerUIManager.MouseIsOverButton = false;
         }
     }
 }
