@@ -107,7 +107,8 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            UpdateVisuals();
+            if(Application.isPlaying)
+                UpdateVisuals();
         }
 
 #endif
