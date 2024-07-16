@@ -142,7 +142,17 @@ namespace Netherlands3D.Twin
             if(getFeatureRequest)
             {
                 //Get the feature type from the url
-                var featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
+                var featureType = string.Empty;
+                if (sourceUrl.ToLower().Contains("typename="))
+                {
+                    //WFS 1.0.0
+                    featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
+                }
+                else if (sourceUrl.ToLower().Contains("typenames="))
+                {
+                    //WFS 2
+                    featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
+                }
                 AddWFSLayer(featureType, sourceUrl);
                 return;
             }
