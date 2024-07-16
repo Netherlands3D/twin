@@ -195,45 +195,14 @@ namespace Netherlands3D.Twin
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
-            // Create folder layer for WFS
-            // GeoJSONLayer <- WFSCartesianTileLayer
-            // GeoJSONLayer/Points
-            // GeoJSONLayer/Lines
-            // GeoJSONLayer/Polygons
-
-            // GeoJSONLayer <- WFSCartesianTileLayer
-            // GeoJSONLayer/Points
-            // GeoJSONLayer/Lines
-            // GeoJSONLayer/Polygons
-
-            // GeoJSONLayer <- WFSCartesianTileLayer
-            // GeoJSONLayer/Points
-            // GeoJSONLayer/Lines
-            // GeoJSONLayer/Polygons
-
-            // Create WFSCartesianTileLayer that uses url to fetch small tiles of geojson data that can be fed to GeoJSONLayer
-            // Create a GeoJSONLayer (and add methods to append/replace with new geojson data, using Feature.GetHashCode to determine if it's the same data)
-
             // Create a new GeoJSON layer per feature, with a 'live' datasource
             var go = new GameObject(featureType);
             var layer = go.AddComponent<GeoJSONLayer>();
-            var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();
-            
+
+            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
+            var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();              
             cartesianTileLayer.GeoJSONLayer = layer;
             cartesianTileLayer.WfsUrl = getFeatureUrl;
-
-            //var newCartesianTileLayer = ;
-            //newCartesianTileLayer.SetParent(pointsLayer);
-
-            //pointsLayer.LayerDestroyed.AddListener()
-
-            //TODO: Use path to create a WFS layer via the ProjectData methods.
-            //For now we use the old way; spawning a prefab from here.
-
-            
-            /*var cartesianTileWFSLayer = Instantiate(cartesianTileWFSLayerPrefab);
-            var wfsCartesianTileLayer = cartesianTileWFSLayer.GetComponent<WFSLayer>();
-            wfsCartesianTileLayer.SetPath(path);*/
         }
     }
 }

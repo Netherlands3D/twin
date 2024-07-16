@@ -56,11 +56,11 @@ namespace Netherlands3D.Twin
                     addList.Add(feature);
             }
 
-            /*foreach (var feature in removeList)
+            foreach (var feature in removeList)
             {
                 Features.Remove(feature);
                 RemoveFeatureVisuals(feature);
-            }      */    
+            } 
 
             foreach (var feature in addList)
             {
