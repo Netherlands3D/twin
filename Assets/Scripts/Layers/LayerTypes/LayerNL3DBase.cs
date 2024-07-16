@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers
         public RootLayer Root
         {
             get => root;
-            set
+            set //todo: maybe replace with =>Project.Current.RootLayer; once we can fully load a project then the children list won't need to be updated here, and the parent will be set by ReconstructParentsRecursive 
             {
                 root = value;
                 if (parent == null)

@@ -35,7 +35,18 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-        public RootLayer RootLayer;
+
+        [SerializeField] private RootLayer rootLayer;
+
+        public RootLayer RootLayer
+        {
+            get => rootLayer;
+            private set
+            {
+                rootLayer = value;
+                rootLayer.ReconstructParentsRecursive();
+            }
+        }
 
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -76,7 +87,7 @@ namespace Netherlands3D.Twin.Projects
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
             RootLayer = project.RootLayer;
-
+            
             IsDirty = true;
         }
 
@@ -117,7 +128,6 @@ namespace Netherlands3D.Twin.Projects
                         string json = sr.ReadToEnd();
 
                         ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
-                        RootLayer.ReconstructParentsRecursive();
                         CopyFrom(tempProject);
                     }
                     else
@@ -227,7 +237,7 @@ namespace Netherlands3D.Twin.Projects
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
             current = initialProjectTemplate;
-            current.RootLayer = new("RootLayer");
+            current.RootLayer = new RootLayer("RootLayer");
         }
     }
 }

@@ -63,7 +63,6 @@ namespace Netherlands3D.Twin.Layers
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
-
         }
 
         ~ReferencedProxyLayer()
