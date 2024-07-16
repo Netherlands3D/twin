@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json;
 using UnityEngine;
 using GeoJSON.Net;
@@ -13,7 +12,7 @@ using Netherlands3D.Coordinates;
 using SimpleJSON;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     public class GeoJSONLayer : ReferencedLayer
     {

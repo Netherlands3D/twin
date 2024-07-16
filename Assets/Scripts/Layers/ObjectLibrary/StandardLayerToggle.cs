@@ -1,8 +1,8 @@
 using System.Linq;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class StandardLayerToggle : LayerToggle
     {

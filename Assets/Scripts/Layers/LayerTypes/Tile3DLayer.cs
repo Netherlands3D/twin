@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     public class Tile3DLayer : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {

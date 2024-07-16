@@ -1,8 +1,8 @@
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class Tiles3DContentOverlayInspector : OverlayInspector
     {

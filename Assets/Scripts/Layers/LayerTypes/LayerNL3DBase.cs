@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
     public class LayerNL3DBase

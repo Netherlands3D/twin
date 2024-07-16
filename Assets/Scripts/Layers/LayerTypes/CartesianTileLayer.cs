@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     [RequireComponent(typeof(CartesianTiles.Layer))]
     public class CartesianTileLayer : ReferencedLayer

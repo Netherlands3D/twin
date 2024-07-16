@@ -1,10 +1,9 @@
 using System;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
     public class ReferencedProxyLayer : LayerNL3DBase

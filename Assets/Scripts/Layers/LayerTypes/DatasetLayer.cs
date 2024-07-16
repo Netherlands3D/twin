@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.SubObjects;
-using UnityEngine;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     public class DatasetLayer : ReferencedLayer
     {

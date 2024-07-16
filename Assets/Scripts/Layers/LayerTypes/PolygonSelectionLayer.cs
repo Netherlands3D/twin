@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.PlayerLoop;
 
 namespace Netherlands3D.Twin.Layers
 {

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
