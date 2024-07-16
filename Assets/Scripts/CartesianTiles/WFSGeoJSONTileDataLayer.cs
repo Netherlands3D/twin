@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.UI.LayerInspector;
+using System.IO;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -99,7 +100,9 @@ namespace Netherlands3D.CartesianTiles
 
 		private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
 		{
-			string url = $"{WfsUrl}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
+			var bboxQuery = $"bbox={tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
+			string url = WfsUrl.Replace("{bbox}", bboxQuery);
+			Debug.Log("Downloading GeoJSON from: " + url);
 
 			var geoJsonRequest = UnityWebRequest.Get(url);
 			tile.runningWebRequest = geoJsonRequest;
@@ -107,7 +110,12 @@ namespace Netherlands3D.CartesianTiles
 
 			if (geoJsonRequest.result == UnityWebRequest.Result.Success)
 			{
-                
+                var localCacheFileName = Path.Combine(Application.persistentDataPath, $"{gameObject.name}{tileChange.X}_{tileChange.Y}.json");
+				File.WriteAllText(localCacheFileName, geoJsonRequest.downloadHandler.text);
+
+				geoJSONLayer.AdditiveParseGeoJSON(localCacheFileName);
+
+				File.Delete(localCacheFileName);
 			}
 			callback?.Invoke(tileChange);
 		}
