@@ -9,23 +9,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         private CartesianTiles.Layer layer;
         private CartesianTiles.TileHandler tileHandler;
-        
-        public override bool IsActiveInScene
+
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            get
-            {
-                return (layer && layer.isEnabled);
-            }
-            set
-            {
-                if (layer && layer.isEnabled != value)
-                    layer.isEnabled = value;
-
-                if(ReferencedProxy && ReferencedProxy.UI)
-                    ReferencedProxy.UI.MarkLayerUIAsDirty();
-            }
+            if (layer && layer.isEnabled != isActive)
+                layer.isEnabled = isActive;
         }
-
+        
         protected override void Awake()
         {
             base.Awake();

@@ -66,10 +66,9 @@ namespace Netherlands3D.Twin.Layers
             ClearSelection();
 
             ActiveLayer = layer;
-            if (layer)
+            if (layer != null)
             {
                 ReselectLayerPolygon(layer);
-                return;
             }    
         }
 
@@ -119,51 +118,42 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void CreatePolygonLayer(List<Vector3> polygon)
+        private void CreatePolygonLayer(List<Vector3> polygon)
         {
-            Debug.Log("------------------------Create polygon layer");
-            var newPolygonObject = new GameObject("Polygon");
-            var layerComponent = newPolygonObject.AddComponent<PolygonSelectionLayer>();
-            layerComponent.Initialize(polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
-            layers.Add(layerComponent.PolygonVisualisation, layerComponent);
-            layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
-            
-            ActiveLayer = layerComponent;
+            var layer = new PolygonSelectionLayer("Polygon", polygon, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Polygon);
+            layers.Add(layer.PolygonVisualisation, layer);
+            layer.polygonSelected.AddListener(ProcessPolygonSelection);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
+            ProcessPolygonSelection(layer);
         }
-        public void UpdatePolygonLayer(List<Vector3> editedPolygon)
+        private void UpdatePolygonLayer(List<Vector3> editedPolygon)
         {
             ActiveLayer.SetShape(editedPolygon);
         }
 
-        public void CreateLineLayer(List<Vector3> line)
+        private void CreateLineLayer(List<Vector3> line)
         {
-            var newLineObject = new GameObject("Line");
-            var layerComponent = newLineObject.AddComponent<PolygonSelectionLayer>();
-            layerComponent.Initialize(line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
-            layers.Add(layerComponent.PolygonVisualisation, layerComponent);
-            layerComponent.polygonSelected.AddListener(ProcessPolygonSelection);
-            
-            ActiveLayer = layerComponent;
+            var layer = new PolygonSelectionLayer("Line", line, polygonExtrusionHeight, polygonMeshMaterial, ShapeType.Line, defaultLineWidth);
+            layers.Add(layer.PolygonVisualisation, layer);
+            layer.polygonSelected.AddListener(ProcessPolygonSelection);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
+            ProcessPolygonSelection(layer);
         }
-        public void UpdateLineLayer(List<Vector3> editedLine)
+        private void UpdateLineLayer(List<Vector3> editedLine)
         {
             ActiveLayer.SetShape(editedLine);
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
-            if(ActiveLayer)
-                ActiveLayer.DeselectPolygon(); 
-            
+            ActiveLayer?.DeselectLayer();
+
             polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
 
         public void SetLineInputModeToCreate(bool isCreateMode)
         {
-            if(ActiveLayer)
-                ActiveLayer.DeselectPolygon();
+            ActiveLayer?.DeselectLayer();
 
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }

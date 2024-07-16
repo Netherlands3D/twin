@@ -11,13 +11,12 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(Button))]
     public abstract class LayerToolBarButtonBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected LayerManager layerManager;
+        [SerializeField] protected LayerUIManager layerUIManager;
         protected Button button;
 
         private void Awake()
         {
             button = GetComponent<Button>();
-            // layerManager = GetComponentInParent<LayerManager>();
         }
 
         private void OnEnable()
@@ -34,12 +33,12 @@ namespace Netherlands3D.Twin
         public abstract void OnDrop(PointerEventData eventData);
         public void OnPointerEnter(PointerEventData eventData)
         {
-            layerManager.MouseIsOverButton = true;
+            layerUIManager.MouseIsOverButton = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            layerManager.MouseIsOverButton = false;
+            layerUIManager.MouseIsOverButton = false;
         }
     }
 }
