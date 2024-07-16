@@ -12,6 +12,9 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSImportAdapter : ScriptableObject, IDataTypeAdapter
     {
+        [SerializeField] private Material visualizationMaterial;
+        [SerializeField] private LineRenderer3D lineRenderer3D;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSDataLayerPrefab;
 
         public bool Supports(LocalFile localFile)
@@ -198,6 +201,7 @@ namespace Netherlands3D.Twin
             // Create a new GeoJSON layer per feature, with a 'live' datasource
             var go = new GameObject(featureType);
             var layer = go.AddComponent<GeoJSONLayer>();
+            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
 
             // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
             var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();              

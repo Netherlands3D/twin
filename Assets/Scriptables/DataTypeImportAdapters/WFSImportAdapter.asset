@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a2d597f7681b1469a034f55db094cd, type: 3}
   m_Name: WFSImportAdapter
   m_EditorClassIdentifier: 
+  visualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
+    type: 2}
+  lineRenderer3D: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
+    type: 3}
+  pointRenderer3D: {fileID: -4723935055048165154, guid: 5174e2e7a4c654e2ead494648a2604fd,
+    type: 3}
+  cartesianTileWFSDataLayerPrefab: {fileID: 0}

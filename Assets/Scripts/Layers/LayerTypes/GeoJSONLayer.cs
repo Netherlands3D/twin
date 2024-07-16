@@ -44,8 +44,34 @@ namespace Netherlands3D.Twin
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
+        public void RemoveFeaturesOutOfView()
+        {
+            /*if (polygonFeatures != null)
+                polygonFeatures.RemoveFeaturesOutOfView();
+
+            if (lineFeatures != null)
+                lineFeatures.RemoveFeaturesOutOfView();
+
+            if (pointFeatures != null)
+                pointFeatures.RemoveFeaturesOutOfView();*/
+        }
+
         public void AppendFeatureCollection(FeatureCollection featureCollection)
         {
+            var collectionCRS = featureCollection.CRS;
+            //Determine if CRS is LinkedCRS or NamedCRS
+            if (collectionCRS is NamedCRS)
+            {
+                if (CoordinateSystems.FindCoordinateSystem((collectionCRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
+                {
+                    CRS = collectionCRS as NamedCRS;
+                }
+            }
+            else if (collectionCRS is LinkedCRS)
+            {
+                Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
+            }
+
             var removeList = new List<Feature>();
             var addList = new List<Feature>();
             foreach (var feature in featureCollection.Features)

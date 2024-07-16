@@ -15,7 +15,7 @@ namespace Netherlands3D.CartesianTiles
 {
     /// <summary>
     /// A custom CartesianTile layer that uses the cartesian tiling system to 'stream' parts of 
-    /// a WFS service to the client using the bbox parameter.
+    /// a WFS service to the client using the 'bbox' parameter.
     /// The Twin GeoJSONLayer is used to render the GeoJSON data.
     /// </summary>
 	public class WFSGeoJSONTileDataLayer : Layer
@@ -99,6 +99,8 @@ namespace Netherlands3D.CartesianTiles
 					tiles[tileKey].unityLOD--;
 					break;
 				case TileAction.Remove:
+					geoJSONLayer.RemoveFeaturesOutOfView();
+					
 					InteruptRunningProcesses(tileKey);
 					tiles.Remove(tileKey);
 					callback?.Invoke(tileChange);
@@ -138,7 +140,9 @@ namespace Netherlands3D.CartesianTiles
 		private void ParseGeoJSON(string jsonText)
 		{	
             var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-			geoJSONLayer.AppendFeatureCollection(featureCollection);
+
+			if(featureCollection.Features.Count > 0)
+				geoJSONLayer.AppendFeatureCollection(featureCollection);
 		}
 	}
 }
