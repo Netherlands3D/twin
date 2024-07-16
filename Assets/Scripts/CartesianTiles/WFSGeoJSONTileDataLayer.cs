@@ -21,13 +21,21 @@ namespace Netherlands3D.CartesianTiles
         public string WfsUrl { get => wfsUrl; set => wfsUrl = value; }
 
         private GeoJSONLayer geoJSONLayer;
-        public GeoJSONLayer GeoJSONLayer { get => geoJSONLayer; set => geoJSONLayer = value; }
+        public GeoJSONLayer GeoJSONLayer { 
+			get => geoJSONLayer; 
+			set
+			{
+				if(geoJSONLayer != null)
+					geoJSONLayer.ReferencedProxy.LayerDestroyed.RemoveListener(OnGeoJSONLayerDestroyed);
+
+				geoJSONLayer = value;
+				geoJSONLayer.ReferencedProxy.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
+			}
+		}
 
         private TileHandler tileHandler;
 
         private void Awake() {
-            geoJSONLayer.ReferencedProxy.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
-
             //Make sure we live in a tilehandler
             tileHandler = GetComponentInParent<TileHandler>();
             

@@ -105,6 +105,7 @@ namespace Netherlands3D.Twin
             {
                 if (adapter.Supports(urlAndData))
                 {
+                    Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
                     adapter.Execute(urlAndData);
                     OnAdapterFound.Invoke();
                     yield break;

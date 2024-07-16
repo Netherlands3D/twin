@@ -19,12 +19,17 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
+            Debug.Log("Checking source WFS url: " + sourceUrl);
+
             // There are a lot of different WFS urls formats in the wild. This is a very basic check to see if it's a WFS service url.
             var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
             var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
 
-            if(!getCapabilitiesRequest || getFeatureRequest)
+            if(!getCapabilitiesRequest && !getFeatureRequest)
+            {
+                Debug.Log("<color=orange>WFS url does not contain a GetCapabilities or GetFeature request.</color>");
                 return false;
+            }
 
 
             //Check if a GetFeature operation with GeoJSON as output format is supported
@@ -36,18 +41,24 @@ namespace Netherlands3D.Twin
 
                 // Can we request specific features via GetFeature requests?
                 XmlNode getFeatureOperationNode = ReadGetFeatureNode(xmlDocument);
-                if (getFeatureOperationNode == null)
+                if (getFeatureOperationNode == null){
+                    Debug.Log("<color=orange>WFS GetFeature operation not found.</color>");
                     return false;
+                }
 
                 // Is there a bbox filter? We need it to do per-tile requests.
                 bool bboxFilterCapability = WFSBboxFilterCapability(xmlDocument);
-                if (!bboxFilterCapability)
+                if (!bboxFilterCapability){
+                    Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                     return false;
+                }
 
                 // Does the GetFeature operation support GeoJSON output?
                 bool getFeatureNodeHasGeoJsonOutput = NodeHasGeoJSONOutput(getFeatureOperationNode);
-                if(!getFeatureNodeHasGeoJsonOutput)
+                if(!getFeatureNodeHasGeoJsonOutput){
+                    Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                     return false;
+                }
             }
 
             if(getFeatureRequest)
@@ -55,10 +66,13 @@ namespace Netherlands3D.Twin
                 //Check if text is GeoJSON by trying to parse feature collection
                 var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(dataAsText);
                 if(featureCollection == null || featureCollection.Features.Count == 0)
+                {
+                    Debug.Log("<color=orange>WFS GetFeature request does not contain GeoJSON data.</color>");
                     return false;
+                }
             }
 
-            return false;
+            return true;
         }
 
         private static bool WFSBboxFilterCapability(XmlDocument xmlDocument)
@@ -197,8 +211,6 @@ namespace Netherlands3D.Twin
             
             cartesianTileLayer.GeoJSONLayer = layer;
             cartesianTileLayer.WfsUrl = getFeatureUrl;
-
-           
 
             //var newCartesianTileLayer = ;
             //newCartesianTileLayer.SetParent(pointsLayer);
