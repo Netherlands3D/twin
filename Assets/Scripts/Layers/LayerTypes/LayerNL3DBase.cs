@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -16,9 +14,8 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        [SerializeField, JsonProperty] private LayerNL3DBase parent;
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-
+        [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a self reference
         [JsonIgnore] private RootLayer root;
 
         [JsonIgnore]
@@ -28,13 +25,15 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 root = value;
-                parent = root;
+                if (parent == null)
+                    parent = root;
                 root.children.Add(this);
                 root.ChildrenChanged.Invoke();
             }
         }
 
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
+
         [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected { get; private set; }
 
@@ -103,6 +102,24 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
+        //needed because after deserialization of the Layer objects, the parent field is not set yet.
+        public void ReconstructParentsRecursive()
+        {
+            foreach (var layer in ChildrenLayers.ToList())
+            {
+                ReconstructParentsRecursive(layer, this);
+            }
+        }
+
+        private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        {
+            layer.parent = parent;
+            foreach (var child in layer.ChildrenLayers.ToList())
+            {
+                ReconstructParentsRecursive(child, layer);
+            }
+        }
+
         public virtual void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
@@ -139,7 +156,7 @@ namespace Netherlands3D.Twin.Layers
 
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
-            
+
             parent.children.Remove(this);
             if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
                 siblingIndex--;
@@ -168,12 +185,12 @@ namespace Netherlands3D.Twin.Layers
         public virtual void DestroyLayer()
         {
             DeselectLayer();
-            
+
             foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
                 child.DestroyLayer();
             }
-            
+
             ParentLayer.ChildrenLayers.Remove(this);
             parent.ChildrenChanged.Invoke(); //call event on old parent
 

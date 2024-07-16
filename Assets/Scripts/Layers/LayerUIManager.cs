@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private ContextMenuUI contextMenuPrefab;
         private ContextMenuUI contextMenu;
 
-        public void ReconstructHierarchyUIs()
+        private void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
             foreach (var layer in projectData.RootLayer.ChildrenLayers)
@@ -61,6 +61,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUI.Layer = layer;
             layerUIDictionary.Add(layer, layerUI);
             layerUI.name = layer.Name;
+            
             if (parent is not RootLayer)
                 layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
 
@@ -82,13 +83,20 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ReconstructHierarchyUIs();
             projectData.LayerAdded.AddListener(CreateNewUI);
             projectData.LayerDeleted.AddListener(OnLayerDeleted);
+            // projectData.OnDataChanged.AddListener(OnProjectDataChanged);
         }
+
+        // private void OnProjectDataChanged(ProjectData newProject) //currently this explicit rebuild is not needed, because LayerUI.Start already correctly initializes newly parsed layers
+        // {
+        //     ReconstructHierarchyUIs();
+        // }
 
         private void OnDisable()
         {
             projectData.RootLayer.DeselectAllLayers();
             projectData.LayerAdded.RemoveListener(CreateNewUI);
             projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            // projectData.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
         private void CreateNewUI(LayerNL3DBase layer)

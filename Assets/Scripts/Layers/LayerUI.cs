@@ -248,7 +248,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             SetVisibilitySprite();
         }
         
-        public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
+        public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
             if (newParent == this)
                 return;

@@ -50,10 +50,20 @@ namespace Netherlands3D.Twin.Layers
         public ReferencedProxyLayer(string name, ReferencedLayer reference) : base(name)
         {
             Reference = reference;  
+            
+            if (reference == null) //todo: this should never happen
+            {
+                Debug.LogError("reference not found, creating temp layer");
+                Reference = new GameObject("REFERENCENOTFOUND").AddComponent<HierarchicalObjectLayer>();
+                Reference.ReferencedProxy.KeepReferenceOnDestroy = true;
+                Reference.ReferencedProxy.DestroyLayer();
+            }
+            
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+
         }
 
         ~ReferencedProxyLayer()
