@@ -72,6 +72,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             foreach (Transform t in LayerUIContainer)
             {
+                t.gameObject.SetActive(false); //ensure it won't get re-added in RecalculateLayersInInspector
                 Destroy(t.gameObject);
             }
 

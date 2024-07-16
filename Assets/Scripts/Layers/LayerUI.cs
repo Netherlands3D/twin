@@ -178,7 +178,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // Make sure to remove the properties when removing the UI
             if (propertyToggle.isOn) propertyToggle.isOn = false;
 
+            gameObject.SetActive(false); //ensure it won't get re-added in LayerManager.RecalculateLayersInInspector
             Destroy(gameObject);
+            layerUIManager.RecalculateLayersVisibleInInspector();
         }
 
         private void RecalculateCurrentTreeStates()
