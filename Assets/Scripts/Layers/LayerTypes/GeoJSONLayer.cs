@@ -44,6 +44,31 @@ namespace Netherlands3D.Twin
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
+        public void AppendFeatureCollection(FeatureCollection featureCollection)
+        {
+            var removeList = new List<Feature>();
+            var addList = new List<Feature>();
+            foreach (var feature in featureCollection.Features)
+            {     
+                if (Features.Contains(feature))
+                    removeList.Add(feature);
+                else
+                    addList.Add(feature);
+            }
+
+            /*foreach (var feature in removeList)
+            {
+                Features.Remove(feature);
+                RemoveFeatureVisuals(feature);
+            }      */    
+
+            foreach (var feature in addList)
+            {
+                Features.Add(feature);
+                VisualizeFeature(feature);
+            }  
+        }
+
         /// <summary>
         /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
         /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
@@ -55,28 +80,7 @@ namespace Netherlands3D.Twin
             var jsonText = File.ReadAllText(filePath);
             var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
             
-            // Compare Feature's (They override GetHashCode to compare geometry, so they do not need to be the same object)
-            var removeList = new List<Feature>();
-            var addList = new List<Feature>();
-            foreach (var feature in featureCollection.Features)
-            {     
-                if (Features.Contains(feature))
-                    removeList.Add(feature);
-                else
-                    addList.Add(feature);
-            }
-
-            foreach (var feature in removeList)
-            {
-                Features.Remove(feature);
-                RemoveFeatureVisuals(feature);
-            }          
-
-            foreach (var feature in addList)
-            {
-                Features.Add(feature);
-                VisualizeFeature(feature);
-            }  
+            AppendFeatureCollection(featureCollection);
         }
 
         /// <summary>

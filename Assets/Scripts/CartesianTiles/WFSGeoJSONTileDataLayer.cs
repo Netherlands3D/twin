@@ -7,6 +7,9 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.UI.LayerInspector;
 using System.IO;
+using Newtonsoft.Json;
+using GeoJSON.Net.Feature;
+using UnityEngine.Events;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -127,17 +130,15 @@ namespace Netherlands3D.CartesianTiles
 
 			if (geoJsonRequest.result == UnityWebRequest.Result.Success)
 			{
-				var fileName = $"{gameObject.name}{tileChange.X}_{tileChange.Y}.json";
-				fileName = fileName.Replace(":", "_").Replace("/", "_").Replace("\\", "_");
-
-                var localCacheFileName = Path.Combine(Application.persistentDataPath, fileName);
-				File.WriteAllText(localCacheFileName, geoJsonRequest.downloadHandler.text);
-
-				geoJSONLayer.AdditiveParseGeoJSON(localCacheFileName);
-
-				File.Delete(localCacheFileName);
+				ParseGeoJSON(geoJsonRequest.downloadHandler.text);		
 			}
 			callback?.Invoke(tileChange);
+		}
+
+		private void ParseGeoJSON(string jsonText)
+		{	
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
+			geoJSONLayer.AppendFeatureCollection(featureCollection);
 		}
 	}
 }
