@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 9102993721382938854}
   - component: {fileID: 2641264866974248947}
   - component: {fileID: 6166820316774732587}
+  - component: {fileID: 4265766509306616427}
   - component: {fileID: 4501474533227037879}
   m_Layer: 5
   m_Name: LayerSelectionForImport
@@ -487,6 +488,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4265766509306616427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149042649253660173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37ea20068fd120849a07008a6d5d6a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4501474533227037879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1259,7 +1272,7 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 44.605
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
