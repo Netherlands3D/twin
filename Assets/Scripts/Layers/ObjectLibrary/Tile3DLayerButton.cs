@@ -13,10 +13,11 @@ namespace Netherlands3D.Twin
             var layerParent = GameObject.FindWithTag("3DTileParent").transform;
             var newObject = Instantiate(prefab, Vector3.zero, Quaternion.Euler(initialRotation), layerParent);
             newObject.transform.localScale = initialScale;
-            newObject.name = prefab.name;
             var layerComponent = newObject.GetComponent<Tile3DLayer>();
             if (!layerComponent)
-                newObject.AddComponent<Tile3DLayer>();            
+                layerComponent = newObject.AddComponent<Tile3DLayer>();            
+            
+            layerComponent.Name = prefab.name;
         }
     }
 }

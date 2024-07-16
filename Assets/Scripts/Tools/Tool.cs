@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin
                 }
                 else
                 {
-                    ContentOverlay.Instance.CloseOverlay(); //close any active overlays when closing/switching tools
+                    ContentOverlayContainer.Instance.CloseOverlay(); //close any active overlays when closing/switching tools
                     onClose.Invoke();
                 }
             }

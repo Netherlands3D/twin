@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,51 +10,66 @@ namespace Netherlands3D.Twin
 {
     public abstract class ReferencedLayer : MonoBehaviour
     {
-        public abstract bool IsActiveInScene { get; set; }
+        public string Name
+        {
+            get => ReferencedProxy.Name;
+            set => ReferencedProxy.Name = value;
+        }
+
         public ReferencedProxyLayer ReferencedProxy { get; set; }
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
-        
+
         protected virtual void Awake()
         {
             CreateProxy();
+            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             onShow.Invoke();
         }
 
-        private void OnDisable()
+        protected virtual  void OnDisable()
         {
             onHide.Invoke();
         }
 
-        public virtual void OnSelect() {}
+        protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+        }
 
-        public virtual void OnDeselect(){}
+        public virtual void OnSelect()
+        {
+        }
+
+        public virtual void OnDeselect()
+        {
+        }
 
         public void DestroyLayer()
         {
             Destroy(gameObject);
         }
-        
+
         protected virtual void OnDestroy()
         {
+            ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
             DestroyProxy();
         }
 
         public virtual void CreateProxy()
         {
-            LayerData.AddReferenceLayer(this);
+            ProjectData.AddReferenceLayer(this);
         }
 
         public virtual void DestroyProxy()
         {
-            if (ReferencedProxy)
+            if (ReferencedProxy!=null)
             {
-                Destroy(ReferencedProxy.gameObject);
+                ReferencedProxy.DestroyLayer();
             }
         }
 

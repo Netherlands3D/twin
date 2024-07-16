@@ -1,4 +1,3 @@
-
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,11 +8,12 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private KeyVault keyVault;
 
-        [Tooltip("The same URL input is used here, as the one used in the property panel")]
-        [SerializeField] private Tile3DLayerPropertySection tile3DLayerPropertySection;
+        [Tooltip("The same URL input is used here, as the one used in the property panel")] [SerializeField]
+        private Tile3DLayerPropertySection tile3DLayerPropertySection;
 
-        [Tooltip("The same credentials input is used here, as the one used in the property panel")]
-        [SerializeField] private CredentialsPropertySection credentialsPropertySection;
+        [Tooltip("The same credentials input is used here, as the one used in the property panel")] [SerializeField]
+        private CredentialsPropertySection credentialsPropertySection;
+
         [SerializeField] private RectTransform credentialExplanation;
 
         private Tile3DLayer layerWithCredentials;
@@ -24,17 +24,25 @@ namespace Netherlands3D.Twin
             base.SetReferencedLayer(layer);
 
             layerWithCredentials = layer as Tile3DLayer;
+            CloseRightProperties(layer.ReferencedProxy);
 
             tile3DLayerPropertySection.Tile3DLayer = layerWithCredentials;
-            
+
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
+        }
+
+        private void CloseRightProperties(LayerNL3DBase layer)
+        {
+            var layerManager = FindAnyObjectByType<LayerUIManager>();
+            var ui = layerManager.GetLayerUI(layer);
+            ui.ToggleProperties(false);
         }
 
         private void ServerResponseReceived(UnityWebRequest webRequestResult)
         {
             //Hide the credentials section if the server request failed due to a connection error or data processing error
-            if(webRequestResult.ReturnedServerError())
+            if (webRequestResult.ReturnedServerError())
             {
                 credentialExplanation.gameObject.SetActive(false);
                 credentialsPropertySection.gameObject.SetActive(false);
@@ -50,9 +58,10 @@ namespace Netherlands3D.Twin
             credentialExplanation.gameObject.SetActive(false);
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             //If we close the overlay without getting access to the layer we 'cancel' and remove the layer.
-            if(authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.InferableSingleKey)
+            if (authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.InferableSingleKey)
                 layerWithCredentials.DestroyLayer();
 
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
@@ -70,7 +79,7 @@ namespace Netherlands3D.Twin
             Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
 
             // It appears the current url needs authentication/authorization
-            switch(authorizationType)
+            switch (authorizationType)
             {
                 case AuthorizationType.Public:
                 case AuthorizationType.UsernamePassword:

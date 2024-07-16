@@ -15,21 +15,6 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI?.MarkLayerUIAsDirty();
-            }
-        }
-
-        private void OnEnable()
-        {
-            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
-        }
-
         protected override void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -37,24 +22,38 @@ namespace Netherlands3D.Twin.Layers
             base.Awake();
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
+        }
+
         private void Start()
         {
             objectCreated.Invoke(gameObject);
         }
 
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (!isActive && ReferencedProxy.IsSelected)
+            {
+                ReferencedProxy.DeselectLayer();
+            }
+
+            gameObject.SetActive(isActive);
+        }
+
         private void OnMouseClickNothing()
         {
-            if (ReferencedProxy.UI.IsSelected)
+            if (ReferencedProxy.IsSelected)
             {
-                ReferencedProxy.UI.Deselect();
+                ReferencedProxy.DeselectLayer();
             }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (ReferencedProxy.UI == null) return;
-
-            ReferencedProxy.UI.Select(true);
+            ReferencedProxy.SelectLayer(true);
         }
 
         public override void OnSelect()
@@ -87,14 +86,14 @@ namespace Netherlands3D.Twin.Layers
         public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
         {
             print("converting to scatter layer");
-            var scatterLayer = new GameObject(objectLayer.name + "_Scatter");
+            var scatterLayer = new GameObject(objectLayer.Name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
 
-            var openProperties = objectLayer.ReferencedProxy.UI && objectLayer.ReferencedProxy.UI.PropertiesOpen;
-            layerComponent.Initialize(objectLayer.gameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, objectLayer.ReferencedProxy.ActiveSelf, UnparentDirectChildren(objectLayer.ReferencedProxy), openProperties);
-
+            var originalGameObject = objectLayer.gameObject;
+            objectLayer.ReferencedProxy.KeepReferenceOnDestroy = true;
             Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
-            
+            layerComponent.Initialize(originalGameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayer.ReferencedProxy));
+
             return layerComponent;
         }
 
@@ -103,10 +102,7 @@ namespace Netherlands3D.Twin.Layers
             var list = new List<LayerNL3DBase>();
             foreach (var child in layer.ChildrenLayers)
             {
-                if (child.Depth == layer.Depth + 1)
-                {
-                    list.Add(child);
-                }
+                list.Add(child);
             }
 
             foreach (var directChild in list)

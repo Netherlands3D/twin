@@ -7,19 +7,20 @@ namespace Netherlands3D.Twin
     public class OverlayInstantiator : MonoBehaviour
     {
         [SerializeField] private OverlayInspector overlayPrefab;
-
+        
         [Header("(Optional)")]
         [SerializeField] private ReferencedLayer referencedLayer;
         [SerializeField] private bool instantiateOnStart = false;
-
-        private void Start() {
+        
+        private void Start() 
+        {   
             if(instantiateOnStart)
                 InstantiateOverlay(true);
         }
 
         public void InstantiateOverlay(bool clearExistingContent = true)
         {
-            var spawnedOverlay = ContentOverlay.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
+            var spawnedOverlay = ContentOverlayContainer.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
 
             if(referencedLayer != null)
                 spawnedOverlay.SetReferencedLayer(referencedLayer);

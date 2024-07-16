@@ -36,25 +36,16 @@ namespace Netherlands3D.Twin.Layers
 
         private bool completedInitialization;
 
-        public override bool IsActiveInScene
-        {
-            get => gameObject.activeSelf;
-            set
-            {
-                gameObject.SetActive(value);
-                ReferencedProxy.UI.MarkLayerUIAsDirty();
-            }
-        }
-
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerNL3DBase> children)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
             this.material.enableInstancing = true;
 
+            originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
             polygonLayer = polygon;
-            
+
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
             if (!toggleScatterPropertySectionInstantiator)
@@ -76,12 +67,6 @@ namespace Netherlands3D.Twin.Layers
             gameObject.AddComponent<ScatterLayerShifter>();
             gameObject.AddComponent<WorldTransform>();
 
-            StartCoroutine(InitializeAfterReferencedProxy(polygon, initialActiveState, children, openProperties));
-        }
-
-        private IEnumerator InitializeAfterReferencedProxy(PolygonSelectionLayer polygon, bool initialActiveState, List<LayerNL3DBase> children, bool openProperties)
-        {
-            yield return null; //wait for ReferencedProxy layer to be initialized
             ReferencedProxy.SetParent(polygon);
             foreach (var child in children)
             {
@@ -90,14 +75,16 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
-
-            ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
-
+            
 // #if UNITY_EDITOR
-//             gameObject.AddComponent<GridDebugger>();
+//          gameObject.AddComponent<GridDebugger>();
 // #endif
-            ReferencedProxy.UI.ToggleProperties(openProperties);
             completedInitialization = true;
+        }
+
+        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
 
         public void AddReScatterListeners()
@@ -108,7 +95,7 @@ namespace Netherlands3D.Twin.Layers
             polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
         }
-        
+
         public void RemoveReScatterListeners()
         {
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
@@ -123,7 +110,7 @@ namespace Netherlands3D.Twin.Layers
             base.OnDestroy();
             RemoveReScatterListeners();
         }
-        
+
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
         {
             foreach (var visualisation in visualisations)
@@ -205,7 +192,7 @@ namespace Netherlands3D.Twin.Layers
             RecalculatePolygonsAndGetBounds();
             ResampleTexture();
         }
-        
+
         private void ResampleTexture()
         {
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
@@ -315,13 +302,13 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
-            if (!newPolygonParent) //new parent is not a polygon, so the scatter layer should revert to its original object
+            if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
                 RevertToHierarchicalObjectLayer();
                 return;
             }
 
-            if (newPolygonParent && newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
+            if (newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
                 polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
@@ -335,26 +322,17 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            var initialActiveState = IsActiveInScene;
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            var openProperties = ReferencedProxy.UI && ReferencedProxy.UI.PropertiesOpen;
-            StartCoroutine(ConvertToHierarchicalObjectAtEndOfFrame(initialActiveState, openProperties));
-        }
-
-        private IEnumerator ConvertToHierarchicalObjectAtEndOfFrame(bool initialActiveState, bool openProperties)
-        {
-            originalObject.gameObject.SetActive(true); //activate to initialize the added component.
+            originalObject.SetActive(true);
             var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
-            yield return new WaitForEndOfFrame(); //wait for layer component to initialize
+            layer.ReferencedProxy.ActiveSelf = true;
+
             foreach (var child in ReferencedProxy.ChildrenLayers)
             {
-                if (child.Depth == ReferencedProxy.Depth + 1)
-                    child.SetParent(layer.ReferencedProxy);
+                child.SetParent(layer.ReferencedProxy);
             }
 
-            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.transform.GetSiblingIndex());
-            layer.ReferencedProxy.ActiveSelf = initialActiveState; //set to same state as current layer
-            layer.ReferencedProxy.UI.ToggleProperties(openProperties);
+            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
             DestroyLayer();
         }
 

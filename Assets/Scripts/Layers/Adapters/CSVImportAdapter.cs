@@ -23,11 +23,11 @@ namespace Netherlands3D.Twin
 
         public void ParseCSVFile(string file)
         {
-            if (activeDatasetLayer) //todo: temp fix to allow only 1 dataset layer
+            if (activeDatasetLayer != null) //todo: temp fix to allow only 1 dataset layer
             {
                 activeDatasetLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
 
-                Destroy(activeDatasetLayer.gameObject);
+                activeDatasetLayer.DestroyLayer();
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
 
