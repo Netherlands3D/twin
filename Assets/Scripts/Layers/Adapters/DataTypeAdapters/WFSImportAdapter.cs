@@ -15,7 +15,6 @@ namespace Netherlands3D.Twin
         [SerializeField] private Material visualizationMaterial;
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
-        [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSDataLayerPrefab;
 
         public bool Supports(LocalFile localFile)
         {
@@ -144,16 +143,16 @@ namespace Netherlands3D.Twin
             var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
             if(getFeatureRequest)
             {
-                //Get the feature type from the url
+                // Get the feature type from the url
                 var featureType = string.Empty;
                 if (sourceUrl.ToLower().Contains("typename="))
                 {
-                    //WFS 1.0.0
+                    //WFS 1.0.0 uses 'typename'
                     featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
                 }
                 else if (sourceUrl.ToLower().Contains("typenames="))
                 {
-                    //WFS 2
+                    //WFS 2 uses plural 'typenames'
                     featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
                 }
                 AddWFSLayer(featureType, sourceUrl);
@@ -161,7 +160,6 @@ namespace Netherlands3D.Twin
             }
         }
 
-        //Get the list of feature types
         private string[] GetFeatureTypes(LocalFile localFile)
         {
             // Read the XML data to find the list of feature types
@@ -181,18 +179,18 @@ namespace Netherlands3D.Twin
             return featureTypes;
         }
 
-
         private void AddWFSLayer(string featureType, string sourceUrl)
         {
             Debug.Log("Adding WFS layer: " + featureType);
 
-            //Start by removing any query parameters we want to inject
+            // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
             uriBuilder.RemoveQueryParameter("bbox");
             uriBuilder.RemoveQueryParameter("typeNames");
             uriBuilder.RemoveQueryParameter("request");
 
-            uriBuilder.AddQueryParameter("bbox", "{bbox}"); //The exact bbox coordinates will be managed by CartesianTileWFSLayer
+            // The exact bbox coordinates will be managed by CartesianTileWFSLayer
+            uriBuilder.AddQueryParameter("bbox", "{bbox}");
             uriBuilder.AddQueryParameter("typeNames", featureType);
             uriBuilder.AddQueryParameter("request", "GetFeature");
 

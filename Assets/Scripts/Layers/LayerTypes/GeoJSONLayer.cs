@@ -46,14 +46,14 @@ namespace Netherlands3D.Twin
 
         public void RemoveFeaturesOutOfView()
         {
-            /*if (polygonFeatures != null)
+            if (polygonFeatures != null)
                 polygonFeatures.RemoveFeaturesOutOfView();
 
             if (lineFeatures != null)
                 lineFeatures.RemoveFeaturesOutOfView();
 
             if (pointFeatures != null)
-                pointFeatures.RemoveFeaturesOutOfView();*/
+                pointFeatures.RemoveFeaturesOutOfView();
         }
 
         public void AppendFeatureCollection(FeatureCollection featureCollection)

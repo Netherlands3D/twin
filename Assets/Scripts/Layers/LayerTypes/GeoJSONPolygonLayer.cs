@@ -75,5 +75,10 @@ namespace Netherlands3D.Twin
                 }
             }
         }
+
+        public void RemoveFeaturesOutOfView()
+        {
+            
+        }
     }
 }

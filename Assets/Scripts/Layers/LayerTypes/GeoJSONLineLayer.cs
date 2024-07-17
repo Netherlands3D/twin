@@ -63,5 +63,10 @@ namespace Netherlands3D.Twin
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
         }
+
+        public void RemoveFeaturesOutOfView()
+        {
+            
+        }
     }
 }
