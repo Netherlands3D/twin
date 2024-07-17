@@ -46,16 +46,19 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public void AddAndVisualizeFeature(Feature feature, MultiPolygon geometry, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
+            where T : GeoJSONObject
         {
             PolygonFeatures.Add(feature);
-            PolygonVisualisations.AddRange(GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
-        }
-
-        public void AddAndVisualizeFeature(Feature feature, Polygon geometry, CoordinateSystem originalCoordinateSystem)
-        {
-            PolygonFeatures.Add(feature);
-            PolygonVisualisations.Add(GeoJSONGeometryVisualizerUtility.VisualizePolygon(geometry, originalCoordinateSystem, PolygonVisualizationMaterial));
+        
+            if (feature.Geometry is MultiPolygon multiPolygon)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, PolygonVisualizationMaterial);
+            }
+            else if(feature.Geometry is Polygon polygon)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, PolygonVisualizationMaterial);
+            }
         }
 
         public void RemoveFeature(Feature feature)

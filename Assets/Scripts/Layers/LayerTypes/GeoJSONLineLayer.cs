@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -39,16 +40,19 @@ namespace Netherlands3D.Twin
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, MultiLineString featureGeometry, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
+            where T : GeoJSONObject
         {
             LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
-        }
-
-        public void AddAndVisualizeFeature(Feature feature, LineString featureGeometry, CoordinateSystem originalCoordinateSystem)
-        {
-            LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
+        
+            if (feature.Geometry is MultiLineString multiLineString)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+            }
+            else if(feature.Geometry is LineString lineString)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+            }
         }
 
         public void RemoveFeature(Feature feature)
