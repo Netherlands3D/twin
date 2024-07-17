@@ -233,7 +233,7 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.coordinates": "1.6.2"
+        "eu.netherlands3d.coordinates": "1.6.3"
       },
       "url": "https://package.openupm.com"
     },
