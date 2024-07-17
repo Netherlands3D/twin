@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class GeoJSONLineLayer : LayerNL3DBase
     {
-        public List<Feature> LineFeatures = new();
+        public Dictionary<Feature,BoundingBox> LineFeatures = new();
 
         private LineRenderer3D lineRenderer3D;
 
@@ -43,16 +43,29 @@ namespace Netherlands3D.Twin
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
             where T : GeoJSONObject
         {
-            LineFeatures.Add(feature);
-        
+            BoundingBox boundingBox = new BoundingBox();
             if (feature.Geometry is MultiLineString multiLineString)
             {
+                boundingBox = BoundingBoxFromMultilineString(multiLineString);
                 GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
             }
             else if(feature.Geometry is LineString lineString)
             {
+                boundingBox = BoundingBoxFromLineString(lineString);
                 GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
             }
+
+            LineFeatures.Add(feature);
+        }
+
+        private BoundingBox BoundingBoxFromMultilineString(MultiLineString multiLingString)
+        {
+            return new BoundingBox();
+        }
+
+        private BoundingBox BoundingBoxFromLineString(LineString lineString)
+        {
+            return new BoundingBox();
         }
 
         public void RemoveFeature(Feature feature)
@@ -70,7 +83,8 @@ namespace Netherlands3D.Twin
 
         public void RemoveFeaturesOutOfView()
         {
-            
+            // For all line features, determine their points BoundingBox, and check if it is still in  view of Camera.main
+
         }
     }
 }
