@@ -90,8 +90,10 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
+            // RootLayer.DeselectAllLayers();
             RootLayer = project.RootLayer;
-            
+            RootLayer.DeselectAllLayers();
+
             IsDirty = true;
         }
 
@@ -222,8 +224,6 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddStandardLayer(LayerNL3DBase layer)
         {
-            // layer.Root = RootLayer;
-            layer.TempInit();
             LayerAdded.Invoke(layer);
         }
 

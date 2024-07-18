@@ -16,26 +16,12 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
         [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a circular reference
-        // [JsonIgnore] private RootLayer root;
 
-        [JsonIgnore]
-        public RootLayer Root => ProjectData.Current.RootLayer;
-        // {
-        //     get => root;
-        //     set //todo: maybe replace with =>Project.Current.RootLayer; once we can fully load a project then the children list won't need to be updated here, and the parent will be set by ReconstructParentsRecursive 
-        //     {
-        //         root = value;
-        //         if (parent == null)
-        //             parent = root;
-        //         root.children.Add(this);
-        //         root.ChildrenChanged.Invoke();
-        //     }
-        // }
-
+        [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
 
         [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
-        [JsonIgnore] public bool IsSelected { get; private set; }
+        [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
 
         [JsonIgnore]
         public string Name
@@ -102,22 +88,20 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
-        public void TempInit() //todo: this must be deleted
+        public void InitializeParent()
         {
-            if (parent == null)
+            if (parent == null) 
             {
-                Debug.Log("setting parent to root");
                 parent = Root;
-            }
 
-            if (!Root.children.Contains(this))
-            {
-                Debug.Log("Root did not contain child: " + Name);
-                Root.children.Add(this);
-                Root.ChildrenChanged.Invoke();
+                if (!Root.children.Contains(this))
+                {
+                    Root.children.Add(this);
+                    Root.ChildrenChanged.Invoke();
+                }
             }
         }
-        
+
         //needed because after deserialization of the Layer objects, the parent field is not set yet.
         public void ReconstructParentsRecursive()
         {
@@ -141,14 +125,13 @@ namespace Netherlands3D.Twin.Layers
             if (deselectOthers)
                 Root.DeselectAllLayers();
 
-            IsSelected = true;
             Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
+            Debug.Log("sel " + Name);
         }
 
         public virtual void DeselectLayer()
         {
-            IsSelected = false;
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
         }
@@ -160,6 +143,8 @@ namespace Netherlands3D.Twin.Layers
         public LayerNL3DBase(string name)
         {
             Name = name;
+            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+                InitializeParent();
         }
 
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
