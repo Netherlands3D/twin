@@ -127,7 +127,6 @@ namespace Netherlands3D.Twin.Layers
 
             Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
-            Debug.Log("sel " + Name);
         }
 
         public virtual void DeselectLayer()
@@ -198,40 +197,5 @@ namespace Netherlands3D.Twin.Layers
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
-
-        // public IEnumerable<LayerNL3DBase> FindLayersInSubHierarchy(Func<LayerNL3DBase, bool> predicate)
-        // {
-        //     if (predicate(this))
-        //     {
-        //         yield return this;
-        //     }
-        //
-        //     foreach (var child in ChildrenLayers)
-        //     {
-        //         foreach (var match in child.FindLayersInSubHierarchy(predicate))
-        //         {
-        //             yield return match;
-        //         }
-        //     }
-        // }
-        //
-        // public LayerNL3DBase FindFirstLayer(Func<LayerNL3DBase, bool> predicate)
-        // {
-        //     if (predicate(this))
-        //     {
-        //         return this;
-        //     }
-        //
-        //     foreach (var child in ChildrenLayers)
-        //     {
-        //         var match = child.FindFirstLayer(predicate);
-        //         if (match != null)
-        //         {
-        //             return match;
-        //         }
-        //     }
-        //
-        //     return null;
-        // }
     }
 }
