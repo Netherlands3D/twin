@@ -60,6 +60,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonConstructor]
         public ReferencedProxyLayer(string name, string prefabId) : base(name)
         {
+            this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.ReferencedProxy = this;

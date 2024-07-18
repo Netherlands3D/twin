@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
 
         [SerializeField] private RootLayer rootLayer;
-        [SerializeField, JsonIgnore] private PrefabLibrary prefabLibrary;
+        [JsonIgnore] public PrefabLibrary PrefabLibrary;
         
         [JsonIgnore]
         public RootLayer RootLayer
@@ -49,9 +49,7 @@ namespace Netherlands3D.Twin.Projects
                 rootLayer.ReconstructParentsRecursive();
             }
         }
-
-        [JsonIgnore] public PrefabLibrary PrefabLibrary => prefabLibrary;
-
+        
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
