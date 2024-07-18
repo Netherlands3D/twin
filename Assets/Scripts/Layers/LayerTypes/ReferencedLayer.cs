@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 if (referencedProxy == null) //todo: this should never be true
                 {
-                    Debug.LogError("ReferencedProxy is null, creating new layer");
+                    Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
                 }
                     

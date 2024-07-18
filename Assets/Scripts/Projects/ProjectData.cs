@@ -88,9 +88,7 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
-            // RootLayer.DeselectAllLayers();
             RootLayer = project.RootLayer;
-            RootLayer.DeselectAllLayers();
 
             IsDirty = true;
         }

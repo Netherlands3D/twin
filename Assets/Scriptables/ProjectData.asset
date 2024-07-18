@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20240718143658
-  UUID: e843d896-62d0-4ec2-bfcc-93783c68faf5
+  SavedTimestamp: 20240718164010
+  UUID: a64fb7fe-2e5a-4c91-8b81-9d6f1356fd31
   CameraPosition:
-  - 155000
-  - 462800
-  - 300
+  - 154997.75
+  - 462800.59375
+  - -43.226139068603516
   CameraRotation:
   - 60.000003814697266
   - 0
@@ -26,6 +26,22 @@ MonoBehaviour:
   rootLayer:
     name: RootLayer
     activeSelf: 1
-    color: {r: 0.3359375, g: 0.625, b: 0.8901961, a: 1}
-    children: []
-  prefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
+    color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+    children:
+    - name: Folder
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+    - name: Folder
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children:
+      - name: Folder
+        activeSelf: 1
+        color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+        children: []
+    - name: Folder
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+  PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
