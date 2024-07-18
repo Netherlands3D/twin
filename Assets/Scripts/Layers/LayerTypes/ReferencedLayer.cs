@@ -19,7 +19,21 @@ namespace Netherlands3D.Twin.Layers
             set => ReferencedProxy.Name = value;
         }
 
-        public ReferencedProxyLayer ReferencedProxy { get; set; }
+        private ReferencedProxyLayer referencedProxy;
+        public ReferencedProxyLayer ReferencedProxy
+        {
+            get
+            {
+                if (referencedProxy == null) //todo: this should never be true
+                {
+                    Debug.LogError("ReferencedProxy is null, creating new layer");
+                    CreateProxy();
+                }
+                    
+                return referencedProxy;
+            }
+            set => referencedProxy = value;
+        }
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
