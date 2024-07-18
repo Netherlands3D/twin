@@ -20,26 +20,26 @@ namespace Netherlands3D.Twin
         [SerializeField] private Color defaultColor;
         [SerializeField] private Color warningColor;
 
-        private Tile3DLayer tile3DLayer;
-        public Tile3DLayer Tile3DLayer
+        private Tile3DLayerGameObject tile3DLayerGameObject;
+        public Tile3DLayerGameObject Tile3DLayerGameObject
         {
-            get => tile3DLayer;
+            get => tile3DLayerGameObject;
             set
             {
-                if(tile3DLayer != null)
+                if(tile3DLayerGameObject != null)
                 {
-                    tile3DLayer.OnURLChanged.RemoveListener(DisplayURL);
-                    tile3DLayer.OnServerResponseReceived.RemoveListener(ShowServerWarningFeedback);
+                    tile3DLayerGameObject.OnURLChanged.RemoveListener(DisplayURL);
+                    tile3DLayerGameObject.OnServerResponseReceived.RemoveListener(ShowServerWarningFeedback);
                 }
-                tile3DLayer = value;
+                tile3DLayerGameObject = value;
 
-                if(tile3DLayer != null)
+                if(tile3DLayerGameObject != null)
                 {
-                    tile3DLayer.OnURLChanged.AddListener(DisplayURL);
-                    tile3DLayer.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
+                    tile3DLayerGameObject.OnURLChanged.AddListener(DisplayURL);
+                    tile3DLayerGameObject.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
                 }
 
-                urlInputField.text = tile3DLayer.URL;
+                urlInputField.text = tile3DLayerGameObject.URL;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin
             }        
 
             colorFeedbackImage.color = defaultColor;
-            tile3DLayer.URL = sanitizedURL;
+            tile3DLayerGameObject.URL = sanitizedURL;
         }
 
         private string SanitizeURL(string url)

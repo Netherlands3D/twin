@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public RectTransform LayerUIContainer => layerUIContainer;
 
-        private Dictionary<LayerNL3DBase, LayerUI> layerUIDictionary = new();
+        private Dictionary<LayerData, LayerUI> layerUIDictionary = new();
 
         //Drag variables
         [SerializeField] private DragGhost dragGhostPrefab;
@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateLayersVisibleInInspector();
         }
 
-        private void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ConstructHierarchyUIsRecursive(LayerData layer, LayerData parent)
         {
             InstantiateLayerItem(layer, parent);
             foreach (var child in layer.ChildrenLayers)
@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private LayerUI InstantiateLayerItem(LayerNL3DBase layer, LayerNL3DBase parent)
+        private LayerUI InstantiateLayerItem(LayerData layer, LayerData parent)
         {
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
@@ -100,7 +100,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // projectData.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
-        private void CreateNewUI(LayerNL3DBase layer)
+        private void CreateNewUI(LayerData layer)
         {
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
@@ -146,12 +146,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return folder;
         }
 
-        public Sprite GetLayerTypeSprite(LayerNL3DBase layer)
+        public Sprite GetLayerTypeSprite(LayerData layer)
         {
             switch (layer)
             {
-                case ReferencedProxyLayer _:
-                    var reference = ((ReferencedProxyLayer)layer).Reference;
+                case ReferencedLayerData _:
+                    var reference = ((ReferencedLayerData)layer).Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
@@ -171,24 +171,24 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private Sprite GetProxyLayerSprite(ReferencedLayer layer)
+        private Sprite GetProxyLayerSprite(LayerGameObject layerGameObject)
         {
-            switch (layer)
+            switch (layerGameObject)
             {
-                case CartesianTileLayer _:
+                case CartesianTileLayerGameObject _:
                     return layerTypeSprites[1];
-                case Tile3DLayer _:
+                case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
-                case HierarchicalObjectLayer _:
+                case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
-                case ObjectScatterLayer _:
+                case ObjectScatterLayerGameObject _:
                     return layerTypeSprites[4];
-                case DatasetLayer _:
+                case DatasetLayerGameObject _:
                     return layerTypeSprites[5];
-                case GeoJSONLayer _:
+                case GeoJsonLayerGameObject _:
                     return layerTypeSprites[8]; //todo: split in points
                 default:
-                    Debug.LogError("layer type of " + layer.Name + " is not specified");
+                    Debug.LogError("layer type of " + layerGameObject.Name + " is not specified");
                     return layerTypeSprites[0];
             }
         }
@@ -237,7 +237,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (projectData.RootLayer.SelectedLayers.Count == 0) 
                 return;
             
-            var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = new List<LayerData>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = CreateFolderLayer();
             var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
@@ -254,7 +254,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
-        private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)
+        private void SortSelectedLayers(List<LayerData> selectedLayers)
         {
             selectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
@@ -272,7 +272,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private void OnLayerDeleted(LayerNL3DBase layer)
+        private void OnLayerDeleted(LayerData layer)
         {
             layerUIDictionary.Remove(layer);
         }
@@ -283,7 +283,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerUIsVisibleInInspector = layerUIContainer.GetComponentsInChildren<LayerUI>(false).ToList();
         }
 
-        public LayerUI GetLayerUI(LayerNL3DBase layer)
+        public LayerUI GetLayerUI(LayerData layer)
         {
             if (layer is RootLayer)
                 return null;
@@ -291,7 +291,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return layerUIDictionary[layer];
         }
 
-        public void HighlightLayerUI(LayerNL3DBase layer, bool isOn)
+        public void HighlightLayerUI(LayerData layer, bool isOn)
         {
             if (layer.IsSelected)
                 return;

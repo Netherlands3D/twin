@@ -9,18 +9,18 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class LayerNL3DBase
+    public class LayerData
     {
         [SerializeField, JsonProperty] private string name;
         [SerializeField, JsonProperty] private bool activeSelf = true;
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-        [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a circular reference
+        [SerializeField, JsonProperty] private List<LayerData> children = new();
+        [JsonIgnore] private LayerData parent; //not serialized to avoid a circular reference
 
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
-        [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
+        [JsonIgnore] public LayerData ParentLayer => parent;
 
-        [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
+        [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
 
         [JsonIgnore]
@@ -81,8 +81,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
 
-        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
-        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
@@ -111,7 +111,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ReconstructParentsRecursive(LayerData layer, LayerData parent)
         {
             layer.parent = parent;
             foreach (var child in layer.ChildrenLayers.ToList())
@@ -139,14 +139,14 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public LayerNL3DBase(string name)
+        public LayerData(string name)
         {
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
         }
 
-        public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
+        public void SetParent(LayerData newParent, int siblingIndex = -1)
         {
             if (newParent == null)
                 newParent = Root;

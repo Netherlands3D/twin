@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class HierarchicalObjectLayer : ReferencedLayer, IPointerClickHandler, ILayerWithProperties
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithProperties
     {
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
@@ -34,9 +34,9 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (!isActive && ReferencedProxy.IsSelected)
+            if (!isActive && LayerData.IsSelected)
             {
-                ReferencedProxy.DeselectLayer();
+                LayerData.DeselectLayer();
             }
 
             gameObject.SetActive(isActive);
@@ -44,15 +44,15 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnMouseClickNothing()
         {
-            if (ReferencedProxy.IsSelected)
+            if (LayerData.IsSelected)
             {
-                ReferencedProxy.DeselectLayer();
+                LayerData.DeselectLayer();
             }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            ReferencedProxy.SelectLayer(true);
+            LayerData.SelectLayer(true);
         }
 
         public override void OnSelect()
@@ -82,23 +82,23 @@ namespace Netherlands3D.Twin.Layers
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 
-        public static ObjectScatterLayer ConvertToScatterLayer(HierarchicalObjectLayer objectLayer)
+        public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
         {
             print("converting to scatter layer");
-            var scatterLayer = new GameObject(objectLayer.Name + "_Scatter");
-            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayer>();
+            var scatterLayer = new GameObject(objectLayerGameObject.Name + "_Scatter");
+            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayerGameObject>();
 
-            var originalGameObject = objectLayer.gameObject;
-            objectLayer.ReferencedProxy.KeepReferenceOnDestroy = true;
-            Destroy(objectLayer); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
-            layerComponent.Initialize(originalGameObject, objectLayer.ReferencedProxy.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayer.ReferencedProxy));
+            var originalGameObject = objectLayerGameObject.gameObject;
+            objectLayerGameObject.LayerData.KeepReferenceOnDestroy = true;
+            Destroy(objectLayerGameObject); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
+            layerComponent.Initialize(originalGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
 
             return layerComponent;
         }
 
-        private static List<LayerNL3DBase> UnparentDirectChildren(LayerNL3DBase layer)
+        private static List<LayerData> UnparentDirectChildren(LayerData layer)
         {
-            var list = new List<LayerNL3DBase>();
+            var list = new List<LayerData>();
             foreach (var child in layer.ChildrenLayers)
             {
                 list.Add(child);

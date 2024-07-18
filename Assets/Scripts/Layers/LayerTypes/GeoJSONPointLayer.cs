@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class GeoJSONPointLayer : LayerNL3DBase
+    public class GeoJSONPointLayer : LayerData
     {
         public List<Feature> PointFeatures = new();
 

@@ -22,12 +22,12 @@ namespace Netherlands3D.Twin
             CreateGeoJSONLayer(fileName, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
+        public static GeoJsonLayerGameObject CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, fileName);
 
             var go = new GameObject(fileName);
-            var layer = go.AddComponent<GeoJSONLayer>();
+            var layer = go.AddComponent<GeoJsonLayerGameObject>();
 
             if (onErrorCallback != null)
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);

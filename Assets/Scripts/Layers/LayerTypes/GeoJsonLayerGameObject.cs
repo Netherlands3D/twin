@@ -14,7 +14,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJSONLayer : ReferencedLayer
+    public class GeoJsonLayerGameObject : LayerGameObject
     {
         public static float maxParseDuration = 0.01f;
 
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
-            ReferencedProxy.Color = layerColor;
+            LayerData.Color = layerColor;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
@@ -119,9 +119,9 @@ namespace Netherlands3D.Twin.Layers
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
             var layer = new GeoJSONPolygonLayer("Polygonen");
-            layer.Color = ReferencedProxy.Color;
+            layer.Color = LayerData.Color;
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
-            layer.SetParent(ReferencedProxy);
+            layer.SetParent(LayerData);
             return layer;
         }
 
@@ -130,8 +130,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
-            layer.Color = ReferencedProxy.Color;
-            layer.SetParent(ReferencedProxy);
+            layer.Color = LayerData.Color;
+            layer.SetParent(LayerData);
             return layer;
         }
 
@@ -140,8 +140,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
-            layer.Color = ReferencedProxy.Color;
-            layer.SetParent(ReferencedProxy);
+            layer.Color = LayerData.Color;
+            layer.SetParent(LayerData);
             return layer;
         }
         

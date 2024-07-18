@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin
 {
     public class GridDebugger : MonoBehaviour
     {
-        private ObjectScatterLayer layer;
+        private ObjectScatterLayerGameObject layerGameObject;
         private CompoundPolygon poly;
         private Vector2[] grid;
         private int startIndex = 0;
@@ -19,18 +19,18 @@ namespace Netherlands3D.Twin
         
         private void Start()
         {
-            layer = GetComponent<ObjectScatterLayer>();
+            layerGameObject = GetComponent<ObjectScatterLayerGameObject>();
             UpdateGrid();
-            layer.polygonLayer.polygonChanged.AddListener(UpdateGrid);
-            layer.Settings.ScatterSettingsChanged.AddListener(UpdateGrid);
+            layerGameObject.polygonLayer.polygonChanged.AddListener(UpdateGrid);
+            layerGameObject.Settings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }
 
         private void UpdateGrid()
         {
-            poly = layer.polygonLayer.Polygon;
-            var angle = layer.Settings.Angle;
+            poly = layerGameObject.polygonLayer.Polygon;
+            var angle = layerGameObject.Settings.Angle;
             
-            var densityPerSquareUnit = layer.Settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            var densityPerSquareUnit = layerGameObject.Settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out gridBounds);
         }

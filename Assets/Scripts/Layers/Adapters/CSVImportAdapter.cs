@@ -18,26 +18,26 @@ namespace Netherlands3D.Twin
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         [SerializeField] private UnityEvent<float> progressEvent = new();
         public int maxParsesPerFrame = 100;
-        private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
+        private static DatasetLayerGameObject activeDatasetLayerGameObject; //todo: allow multiple datasets to exist
 
         public void ParseCSVFile(string file)
         {
-            if (activeDatasetLayer != null) //todo: temp fix to allow only 1 dataset layer
+            if (activeDatasetLayerGameObject != null) //todo: temp fix to allow only 1 dataset layer
             {
-                activeDatasetLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
+                activeDatasetLayerGameObject.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
 
-                activeDatasetLayer.DestroyLayer();
+                activeDatasetLayerGameObject.DestroyLayer();
                 csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
             }
 
-            var datasetLayer = new GameObject(file).AddComponent<DatasetLayer>();
+            var datasetLayer = new GameObject(file).AddComponent<DatasetLayerGameObject>();
             var fullPath = Path.Combine(Application.persistentDataPath, file);
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
 
-            activeDatasetLayer = datasetLayer;
+            activeDatasetLayerGameObject = datasetLayer;
         }
 
-        private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
+        private IEnumerator StreamReadCSV(string path, DatasetLayerGameObject layerGameObject, int maxParsesPerFrame)
         {
             yield return null; //wait a frame for the created layer to be reparented and set up correctly to ensure the correct priority index
             
@@ -77,8 +77,8 @@ namespace Netherlands3D.Twin
                 //return the remaining elements of the part not divisible by maxParsesPerFrame 
                 if (dictionary.Count > 0)
                 {
-                    var cl = GeometryColorizer.AddAndMergeCustomColorSet(layer.PriorityIndex, dictionary);
-                    layer.SetColorSetLayer(cl, false);
+                    var cl = GeometryColorizer.AddAndMergeCustomColorSet(layerGameObject.PriorityIndex, dictionary);
+                    layerGameObject.SetColorSetLayer(cl, false);
                     progressEvent.Invoke(1f);
                 }
             }

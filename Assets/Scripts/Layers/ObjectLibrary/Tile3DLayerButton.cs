@@ -10,9 +10,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerParent = GameObject.FindWithTag("3DTileParent").transform;
             var newObject = Instantiate(prefab, Vector3.zero, Quaternion.Euler(initialRotation), layerParent);
             newObject.transform.localScale = initialScale;
-            var layerComponent = newObject.GetComponent<Tile3DLayer>();
+            var layerComponent = newObject.GetComponent<Tile3DLayerGameObject>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<Tile3DLayer>();            
+                layerComponent = newObject.AddComponent<Tile3DLayerGameObject>();            
             
             layerComponent.Name = prefab.name;
         }

@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers
         Stroke,
     }
 
-    public class ObjectScatterLayer : ReferencedLayer, ILayerWithProperties
+    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithProperties
     {
         private GameObject originalObject;
         private Mesh mesh;
@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers
 
         private bool completedInitialization;
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerNL3DBase> children)
+        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
         {
             this.originalObject = originalObject;
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
@@ -65,10 +65,10 @@ namespace Netherlands3D.Twin.Layers
             gameObject.AddComponent<ScatterLayerShifter>();
             gameObject.AddComponent<WorldTransform>();
 
-            ReferencedProxy.SetParent(polygon);
+            LayerData.SetParent(polygon);
             foreach (var child in children)
             {
-                child.SetParent(ReferencedProxy);
+                child.SetParent(LayerData);
             }
 
             RecalculatePolygonsAndSamplerTexture();
@@ -299,7 +299,7 @@ namespace Netherlands3D.Twin.Layers
             if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
                 return;
 
-            var newPolygonParent = ReferencedProxy.ParentLayer as PolygonSelectionLayer;
+            var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
                 RevertToHierarchicalObjectLayer();
@@ -322,15 +322,15 @@ namespace Netherlands3D.Twin.Layers
         {
             gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
             originalObject.SetActive(true);
-            var layer = originalObject.AddComponent<HierarchicalObjectLayer>();
-            layer.ReferencedProxy.ActiveSelf = true;
+            var layer = originalObject.AddComponent<HierarchicalObjectLayerGameObject>();
+            layer.LayerData.ActiveSelf = true;
 
-            foreach (var child in ReferencedProxy.ChildrenLayers)
+            foreach (var child in LayerData.ChildrenLayers)
             {
-                child.SetParent(layer.ReferencedProxy);
+                child.SetParent(layer.LayerData);
             }
 
-            layer.ReferencedProxy.SetParent(ReferencedProxy.ParentLayer, ReferencedProxy.SiblingIndex);
+            layer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
             DestroyLayer();
         }
 

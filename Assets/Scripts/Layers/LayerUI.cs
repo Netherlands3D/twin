@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
     public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        public LayerNL3DBase Layer { get; set; }
+        public LayerData Layer { get; set; }
 
         private RectTransform rectTransform;
         private LayerUIManager layerUIManager;
@@ -149,12 +149,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             colorButton.targetGraphic.color = newColor;
         }
         
-        private void OnLayerSelected(LayerNL3DBase layer)
+        private void OnLayerSelected(LayerData layer)
         {
             SelectUI();
         }
 
-        private void OnLayerDeselected(LayerNL3DBase layer)
+        private void OnLayerDeselected(LayerData layer)
         {
             DeselectUI();
         }

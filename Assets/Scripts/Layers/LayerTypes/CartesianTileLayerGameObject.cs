@@ -5,7 +5,7 @@ using Netherlands3D.CartesianTiles;
 namespace Netherlands3D.Twin.Layers
 {
     [RequireComponent(typeof(CartesianTiles.Layer))]
-    public class CartesianTileLayer : ReferencedLayer
+    public class CartesianTileLayerGameObject : LayerGameObject
     {
         private CartesianTiles.Layer layer;
         private CartesianTiles.TileHandler tileHandler;
