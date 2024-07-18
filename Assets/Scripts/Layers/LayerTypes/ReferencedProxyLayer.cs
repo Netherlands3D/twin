@@ -8,9 +8,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class ReferencedProxyLayer : LayerNL3DBase
     {
-        [JsonIgnore]
-        public ReferencedLayer Reference { get; }
-
+        [JsonIgnore] public ReferencedLayer Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
 
         public override void DestroyLayer()

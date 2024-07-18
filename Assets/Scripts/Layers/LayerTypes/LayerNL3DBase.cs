@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] private bool activeSelf = true;
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
-        [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a self reference
+        [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a circular reference
         [JsonIgnore] private RootLayer root;
 
         [JsonIgnore]

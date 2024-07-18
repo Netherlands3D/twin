@@ -67,7 +67,7 @@ namespace Netherlands3D.Twin.Projects
 
         [NonSerialized] private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
         {
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects, //todo: still needed?
             TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
