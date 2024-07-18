@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
     public class PrefabLibrary : ScriptableObject
     {
+        [JsonIgnore, SerializeField] private ReferencedLayer fallbackPrefab;
         [JsonIgnore] public List<PrefabGroup> prefabGroups;
 
         public ReferencedLayer GetPrefabById(string id)
@@ -34,7 +35,7 @@ namespace Netherlands3D.Twin
                 }
             }
 
-            return null;
+            return fallbackPrefab;
         }
     }
 }

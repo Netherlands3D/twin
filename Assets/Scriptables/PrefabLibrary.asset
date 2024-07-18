@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a8644b52b7e46a2b6fd0fd6066d300, type: 3}
   m_Name: PrefabLibrary
   m_EditorClassIdentifier: 
+  fallbackPrefab: {fileID: 221556199992705649, guid: 754eb7a73e57a46f8bb8de137184cc10,
+    type: 3}
   prefabGroups:
   - groupName: Basislagen
     prefabs:
@@ -22,3 +24,5 @@ MonoBehaviour:
     - {fileID: 4447745080902320339, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
     - {fileID: 4913964984048323131, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
     - {fileID: 1737505678239128256, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
+  - groupName: ObjectenBibliotheek
+    prefabs: []
