@@ -10,58 +10,27 @@ using UnityEditor;
 namespace Netherlands3D.Twin
 {
     [Serializable]
-    public class PrefabEntry
+    public class PrefabGroup
     {
-        public string id;
-        public ReferencedLayer prefab;
+        public string groupName;
+        public List<ReferencedLayer> prefabs;
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
     public class PrefabLibrary : ScriptableObject
     {
-        [JsonIgnore] public List<ReferencedLayer> prefabs;
-        
-// #if UNITY_EDITOR
-//         private void OnValidate()
-//         {
-//             MatchPrefabIds(); //todo: add dictionary of historical ids to ensure backwards compatability if prefab ids change? 
-//         }
-//
-//         private void MatchPrefabIds()
-//         {
-//             //check if prefab id's still match meta ids, or set it to these ids
-//             foreach (var prefabEntry in prefabEntries)
-//             {
-//                 if (prefabEntry.prefab == null)
-//                 {
-//                     continue;
-//                 }
-//
-//                 var pathToPrefabAsset = AssetDatabase.GUIDToAssetPath(prefabEntry.id);
-//                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(pathToPrefabAsset);
-//
-//                 if (prefab == prefabEntry.prefab)
-//                 {
-//                     Debug.Log(prefabEntry.prefab.name + " has a correct id");
-//                 }
-//                 else
-//                 {
-//                     var pathToPrefab = AssetDatabase.GetAssetPath(prefabEntry.prefab);
-//                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
-//                     prefabEntry.id = metaID.ToString();
-//                     Debug.Log(prefabEntry.prefab.name + " has incorrect id, setting id to: " + prefabEntry.id);
-//                 }
-//             }
-//         }
-// #endif
+        [JsonIgnore] public List<PrefabGroup> prefabGroups;
 
         public ReferencedLayer GetPrefabById(string id)
         {
-            foreach (var entry in prefabs)
+            foreach (var group in prefabGroups)
             {
-                if (entry.PrefabIdentifier == id)
+                foreach (var prefab in group.prefabs)
                 {
-                    return entry;
+                    if (prefab.PrefabIdentifier == id)
+                    {
+                        return prefab;
+                    }
                 }
             }
 
