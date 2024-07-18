@@ -16,21 +16,21 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] private List<LayerNL3DBase> children = new();
         [JsonIgnore] private LayerNL3DBase parent; //not serialized to avoid a circular reference
-        [JsonIgnore] private RootLayer root;
+        // [JsonIgnore] private RootLayer root;
 
         [JsonIgnore]
-        public RootLayer Root
-        {
-            get => root;
-            set //todo: maybe replace with =>Project.Current.RootLayer; once we can fully load a project then the children list won't need to be updated here, and the parent will be set by ReconstructParentsRecursive 
-            {
-                root = value;
-                if (parent == null)
-                    parent = root;
-                root.children.Add(this);
-                root.ChildrenChanged.Invoke();
-            }
-        }
+        public RootLayer Root => ProjectData.Current.RootLayer;
+        // {
+        //     get => root;
+        //     set //todo: maybe replace with =>Project.Current.RootLayer; once we can fully load a project then the children list won't need to be updated here, and the parent will be set by ReconstructParentsRecursive 
+        //     {
+        //         root = value;
+        //         if (parent == null)
+        //             parent = root;
+        //         root.children.Add(this);
+        //         root.ChildrenChanged.Invoke();
+        //     }
+        // }
 
         [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
 
@@ -102,6 +102,22 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
+        public void TempInit() //todo: this must be deleted
+        {
+            if (parent == null)
+            {
+                Debug.Log("setting parent to root");
+                parent = Root;
+            }
+
+            if (!Root.children.Contains(this))
+            {
+                Debug.Log("Root did not contain child: " + Name);
+                Root.children.Add(this);
+                Root.ChildrenChanged.Invoke();
+            }
+        }
+        
         //needed because after deserialization of the Layer objects, the parent field is not set yet.
         public void ReconstructParentsRecursive()
         {
@@ -197,5 +213,40 @@ namespace Netherlands3D.Twin.Layers
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
+
+        // public IEnumerable<LayerNL3DBase> FindLayersInSubHierarchy(Func<LayerNL3DBase, bool> predicate)
+        // {
+        //     if (predicate(this))
+        //     {
+        //         yield return this;
+        //     }
+        //
+        //     foreach (var child in ChildrenLayers)
+        //     {
+        //         foreach (var match in child.FindLayersInSubHierarchy(predicate))
+        //         {
+        //             yield return match;
+        //         }
+        //     }
+        // }
+        //
+        // public LayerNL3DBase FindFirstLayer(Func<LayerNL3DBase, bool> predicate)
+        // {
+        //     if (predicate(this))
+        //     {
+        //         return this;
+        //     }
+        //
+        //     foreach (var child in ChildrenLayers)
+        //     {
+        //         var match = child.FindFirstLayer(predicate);
+        //         if (match != null)
+        //         {
+        //             return match;
+        //         }
+        //     }
+        //
+        //     return null;
+        // }
     }
 }

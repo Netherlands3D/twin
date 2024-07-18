@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Newtonsoft.Json;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,7 +19,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
     public class PrefabLibrary : ScriptableObject
     {
-        public List<ReferencedLayer> prefabs;
+        [JsonIgnore] public List<ReferencedLayer> prefabs;
         
 // #if UNITY_EDITOR
 //         private void OnValidate()

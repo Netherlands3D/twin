@@ -19,7 +19,8 @@ namespace Netherlands3D.Twin.Layers
         protected override void Awake()
         {
             base.Awake();
-            tileHandler = GetComponentInParent<CartesianTiles.TileHandler>();
+            tileHandler = GameObject.FindAnyObjectByType<CartesianTiles.TileHandler>();
+            transform.SetParent(tileHandler.transform);
             layer = GetComponent<CartesianTiles.Layer>();
 
             tileHandler.AddLayer(layer);

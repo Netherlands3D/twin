@@ -222,7 +222,8 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddStandardLayer(LayerNL3DBase layer)
         {
-            layer.Root = RootLayer;
+            // layer.Root = RootLayer;
+            layer.TempInit();
             LayerAdded.Invoke(layer);
         }
 
