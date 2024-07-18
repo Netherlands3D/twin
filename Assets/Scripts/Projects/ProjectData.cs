@@ -37,7 +37,9 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
 
         [SerializeField] private RootLayer rootLayer;
-
+        [SerializeField, JsonIgnore] private PrefabLibrary prefabLibrary;
+        
+        [JsonIgnore]
         public RootLayer RootLayer
         {
             get => rootLayer;
@@ -47,6 +49,8 @@ namespace Netherlands3D.Twin.Projects
                 rootLayer.ReconstructParentsRecursive();
             }
         }
+
+        [JsonIgnore] public PrefabLibrary PrefabLibrary => prefabLibrary;
 
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -67,7 +71,7 @@ namespace Netherlands3D.Twin.Projects
 
         [NonSerialized] private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
         {
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects, //todo: still needed?
+            // PreserveReferencesHandling = PreserveReferencesHandling.Objects, //todo: still needed?
             TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
@@ -128,6 +132,7 @@ namespace Netherlands3D.Twin.Projects
                         string json = sr.ReadToEnd();
 
                         ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
+                        rootLayer.ReconstructParentsRecursive();
                         CopyFrom(tempProject);
                     }
                     else

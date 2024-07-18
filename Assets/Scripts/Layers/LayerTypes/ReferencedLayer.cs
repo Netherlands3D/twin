@@ -1,11 +1,18 @@
+using System;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Netherlands3D.Twin.Layers
 {
     public abstract class ReferencedLayer : MonoBehaviour
     {
+        [SerializeField] private string prefabIdentifier;
+        public string PrefabIdentifier => prefabIdentifier;
+
         public string Name
         {
             get => ReferencedProxy.Name;
@@ -17,10 +24,41 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
-        protected virtual void Awake()
+        protected virtual void Awake() //todo: no longer needed?
         {
-            CreateProxy();
-            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+            // CreateProxy();
+            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+        }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(prefabIdentifier) || prefabIdentifier == "00000000000000000000000000000000")
+            {
+                var pathToPrefab = AssetDatabase.GetAssetPath(this);
+                if (!string.IsNullOrEmpty(pathToPrefab))
+                {
+                    var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
+                    prefabIdentifier = metaID.ToString();
+                    print("setting prefab id to : " + prefabIdentifier);
+                    EditorUtility.SetDirty(this);
+                    // AssetDatabase.SaveAssets();
+                }
+            }
+        }
+#endif
+        private void Start()
+        {
+            if (ReferencedProxy == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
+                CreateProxy();
+
+            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
+            OnLayerActiveInHierarchyChanged(ReferencedProxy.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+        }
+
+        private void CreateProxy()
+        {
+            ProjectData.AddReferenceLayer(this);
         }
 
         protected virtual void OnEnable()
@@ -28,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
             onShow.Invoke();
         }
 
-        protected virtual  void OnDisable()
+        protected virtual void OnDisable()
         {
             onHide.Invoke();
         }
@@ -56,14 +94,9 @@ namespace Netherlands3D.Twin.Layers
             DestroyProxy();
         }
 
-        public virtual void CreateProxy()
-        {
-            ProjectData.AddReferenceLayer(this);
-        }
-
         public virtual void DestroyProxy()
         {
-            if (ReferencedProxy!=null)
+            if (ReferencedProxy != null)
             {
                 ReferencedProxy.DestroyLayer();
             }

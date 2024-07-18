@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class ReferencedProxyLayer : LayerNL3DBase
     {
+        [SerializeField, JsonProperty] private string prefabId;
         [JsonIgnore] public ReferencedLayer Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
 
@@ -47,20 +48,29 @@ namespace Netherlands3D.Twin.Layers
 
         public ReferencedProxyLayer(string name, ReferencedLayer reference) : base(name)
         {
-            Reference = reference;  
-            
+            Reference = reference;
+            Debug.Log("reference has prefab id: " + reference.PrefabIdentifier);
+            prefabId = reference.PrefabIdentifier;
             if (reference == null) //todo: this should never happen
             {
                 Debug.LogError("reference not found, creating temp layer");
                 Reference = new GameObject("REFERENCENOTFOUND").AddComponent<HierarchicalObjectLayer>();
-                Reference.ReferencedProxy.KeepReferenceOnDestroy = true;
-                Reference.ReferencedProxy.DestroyLayer();
+                // Reference.ReferencedProxy.KeepReferenceOnDestroy = true;
+                // Reference.ReferencedProxy.DestroyLayer();
             }
-            
+
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+        }
+
+        [JsonConstructor]
+        public ReferencedProxyLayer(string name, string prefabId) : base(name)
+        {
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            Reference = GameObject.Instantiate(prefab);
+            Reference.ReferencedProxy = this;
         }
 
         ~ReferencedProxyLayer()

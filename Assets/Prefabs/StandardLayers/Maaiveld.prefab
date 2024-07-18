@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
   onShow:
     m_PersistentCalls:
       m_Calls: []
