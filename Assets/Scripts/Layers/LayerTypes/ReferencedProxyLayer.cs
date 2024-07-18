@@ -71,6 +71,11 @@ namespace Netherlands3D.Twin.Layers
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.ReferencedProxy = this;
+            
+            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            ParentChanged.AddListener(OnParentChanged);
+            ChildrenChanged.AddListener(OnChildrenChanged);
+            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
         }
 
         ~ReferencedProxyLayer()
