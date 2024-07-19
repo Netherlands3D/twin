@@ -309,7 +309,7 @@ public class FreeCamera : MonoBehaviour
     void Update()
 	{
         EaseDragTarget();
-        Clamp();
+        // Clamp();
     }
 
     /// <summary>

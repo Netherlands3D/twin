@@ -491,7 +491,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16eaffca77434cc9978ea0d1335f9e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationDuration: 0.3
+  repositioningDuration: 0.3
+  perspectiveShiftDuration: 0.2
+  simulatedOrthoFov: 0.1
+  maxCameraHeightWhenSimulating: 8000
+  preventSwitchToOrthographicSetting: 0
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6203,6 +6207,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3973749745212064541, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: tooltipText
+      value: Wissel tussen ortografisch/perspectief
       objectReference: {fileID: 0}
     - target: {fileID: 4144388695555363675, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}

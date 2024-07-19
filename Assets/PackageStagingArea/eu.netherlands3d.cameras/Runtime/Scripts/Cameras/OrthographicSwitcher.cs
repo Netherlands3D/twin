@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,10 +12,18 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private FreeCamera freeCamera;
         private Transform cameraTransform;
         private float previousPitchWhenSwitchingToAndFromOrtho = 60f;
+        private float previousFovWhenSwitchingToAndFromOrtho = 60f;
         private Sequence animationSequence;
 
-        [FormerlySerializedAs("durationOfRepositioning")]
-        [SerializeField] private float animationDuration = 0.3f;
+        [Header("Animation tweaks")]
+        [SerializeField] private float repositioningDuration = 0.3f;
+        [SerializeField] private float perspectiveShiftDuration = 1f;
+        [Range(0f, 60f)] [SerializeField] private float simulatedOrthoFov = 2f;
+        [Tooltip("The animation dynamically heightens the Simulated Orthogonal FOV if the predicted height of the camera exceeds this number")]
+        [SerializeField] private float maxCameraHeightWhenSimulating = 8000f;
+
+        [Header("Debug options - use with care")] 
+        [SerializeField] private bool preventSwitchToOrthographicSetting = false;
 
         private void Awake()
         {
@@ -27,6 +36,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             
             // Initialize cached value with a preset
             previousPitchWhenSwitchingToAndFromOrtho = cameraTransform.eulerAngles.x;
+            previousFovWhenSwitchingToAndFromOrtho = cameraComponent.fieldOfView;
         }
 
         private void Update()
@@ -35,7 +45,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             {
                 // By dividing it by the field of view divided by 100, the size matches close to what you would see
                 // in perspective mode
-                cameraComponent.orthographicSize = transform.position.y * (cameraComponent.fieldOfView / 100);
+                cameraComponent.orthographicSize = transform.position.y * (previousFovWhenSwitchingToAndFromOrtho / 100f); 
             }
         }
 
@@ -111,24 +121,94 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             {
                 animationSequence.Complete(true);
             }
+
+            if (intoOrtho)
+            {
+                previousFovWhenSwitchingToAndFromOrtho = cameraComponent.fieldOfView;
+            }
+
+            var simulatedHeight = cameraTransform.position.y;
+            var moveTo = new Vector3(newPosition.x, simulatedHeight, newPosition.z);
+
+            var idealEndFov = intoOrtho ? simulatedOrthoFov : previousFovWhenSwitchingToAndFromOrtho;
+
+            var endFov = Mathf.Clamp(
+                idealEndFov, 
+                simulatedHeight * previousFovWhenSwitchingToAndFromOrtho / maxCameraHeightWhenSimulating, 
+                previousFovWhenSwitchingToAndFromOrtho
+            );
             
+#if UNITY_EDITOR
+            if (!Mathf.Approximately(idealEndFov, endFov))
+            {
+                Debug.LogWarning(
+                    $"When switching to orthogonal: Ideal FOV of {idealEndFov} would result in the camera simulation to go too high, clamped at: {endFov}");
+            }
+#else
+            // Just to be sure: prevent this setting from being on in a production environment
+            preventSwitchToOrthographicSetting = false;
+#endif
+
             animationSequence = DOTween.Sequence(cameraTransform);
-            animationSequence.SetEase(intoOrtho ? Ease.InCubic : Ease.OutCubic);
-            
+            animationSequence.SetEase(Ease.Linear);
+
             animationSequence.AppendCallback(() => {
-                cameraComponent.orthographic = !intoOrtho;
+                if (preventSwitchToOrthographicSetting == false)
+                {
+                    cameraComponent.orthographic = !intoOrtho;
+                }
             });
 
-            // Pull camera and rotate to point downwards as if we are smoothing towards ortho
-            animationSequence.Insert(0f, cameraTransform.DOMoveX(newPosition.x, animationDuration));
-            animationSequence.Insert(0f, cameraTransform.DOMoveZ(newPosition.z, animationDuration));
-            animationSequence.Insert(0f, cameraTransform.DORotate(newRotation.eulerAngles, animationDuration));
-            
-            animationSequence.AppendCallback(() => {
-                cameraComponent.orthographic = intoOrtho;
+            if (intoOrtho)
+            {
+                AnimateRepositioningOfCamera(newRotation, moveTo);
+                AnimateTransitionToAndFromOrthogonal(endFov, simulatedHeight);
+            }
+            else
+            {
+                cameraComponent.fieldOfView = previousFovWhenSwitchingToAndFromOrtho;
+                AnimateRepositioningOfCamera(newRotation, moveTo);
+            }
+
+            animationSequence.AppendCallback(() =>
+            {
+                cameraTransform.position = new Vector3(cameraTransform.position.x, simulatedHeight, cameraTransform.position.z);
+                if (preventSwitchToOrthographicSetting == false)
+                {
+                    cameraComponent.orthographic = intoOrtho;
+                }
             });
 
             animationSequence.Play();
+        }
+
+        private void AnimateRepositioningOfCamera(Quaternion newRotation, Vector3 moveTo)
+        {
+            // Pull camera and rotate to point downwards as if we are smoothing towards ortho
+            animationSequence.Append(cameraTransform.DOMove(moveTo, repositioningDuration));
+            animationSequence.Join(cameraTransform.DORotate(newRotation.eulerAngles, repositioningDuration));
+        }
+
+        private void AnimateTransitionToAndFromOrthogonal(float endFov, float simulatedHeight)
+        {
+            animationSequence.Append(
+                cameraComponent
+                    .DOFieldOfView(endFov, perspectiveShiftDuration)
+                    .SetEase(Ease.Linear)
+                    .OnUpdate(() =>
+                        {
+                            // Someone smarter than me might actually figure out how to write
+                            // an easing function out of this to use DOMoveY with a custom easing,
+                            // but I am just not that smart :)
+                            var actualHeight = simulatedHeight * ((previousFovWhenSwitchingToAndFromOrtho / cameraComponent.fieldOfView) * 1.1f);
+                            cameraTransform.position = new Vector3(
+                                cameraTransform.position.x, 
+                                actualHeight,
+                                cameraTransform.position.z
+                            );
+                        }
+                    )
+            );
         }
     }
 }
