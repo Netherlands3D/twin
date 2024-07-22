@@ -136,17 +136,21 @@ namespace Netherlands3D.Twin.Projects
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        // var newProject = ScriptableObject.CreateInstance<ProjectData>();
-                        Debug.Log("old root childcount: " + current.RootLayer.ChildrenLayers.Count);
+                        var newProject = ScriptableObject.CreateInstance<ProjectData>();
+                        JsonConvert.PopulateObject(json, newProject, serializerSettings);
+                        Debug.Log("temp project root childcount: " + newProject.RootLayer.ChildrenLayers.Count);
+                        foreach (var child in newProject.RootLayer.ChildrenLayers)
+                        {
+                            Debug.Log("np child: " + child.Name);
+                        }
+                        
                         JsonConvert.PopulateObject(json, current, serializerSettings);
-                        Debug.Log("newproject root childcount: " + current.RootLayer.ChildrenLayers.Count);
+                        Debug.Log("current populated root childcount: " + current.RootLayer.ChildrenLayers.Count);
                         foreach (var child in current.RootLayer.ChildrenLayers)
                         {
                             Debug.Log("child: " + child.Name);
                         }
-                        // ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
-                        // current = newProject;
-                        Debug.Log("postparse current: " + current.RootLayer.ChildrenLayers.Count);
+
                         RootLayer.ReconstructParentsRecursive();
                         Debug.Log("new uuid: " + UUID);
                         // CopyFrom(newProject);
