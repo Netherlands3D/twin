@@ -32,9 +32,10 @@ namespace Netherlands3D.Twin
             {
                 if (visualisations.Count > 0)
                 {
-                    bounds = visualisations[0].GetBounds();
+                    bounds = GetVisualisationBounds(visualisations[0]);
+                    
                     for(int i = 1; i < visualisations.Count; i++)
-                        bounds.Encapsulate(visualisations[i].GetBounds());
+                        GetVisualisationBounds(visualisations[i]);
                 }
 
                 // Expand bounds to ceiling to steps of 1000
@@ -48,6 +49,15 @@ namespace Netherlands3D.Twin
                     Mathf.Round(bounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
                     Mathf.Round(bounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
                 );
+            }
+
+            /// <summary>
+            /// A nice addition to PolygonVisualisation script in package can be to add a method there to get the bounds of the visualisation (with cached MeshRenderer)
+            /// </summary>
+            /// <returns></returns>
+            public static Bounds GetVisualisationBounds(PolygonVisualisation polygonVisualisation)
+            {
+                return polygonVisualisation.GetComponent<MeshRenderer>().bounds;
             }
         }
 
@@ -98,7 +108,6 @@ namespace Netherlands3D.Twin
                 newFeatureVisualisation.visualisations.Append(singlePolygonVisualisation);
             }
             
-            newFeatureVisualisation.CalculateBounds();
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
@@ -120,11 +129,14 @@ namespace Netherlands3D.Twin
         /// to remove visualisations that are out of view
         /// </summary>
         public void RemoveFeaturesOutOfView()
-        {
+        {         
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
             {
+                // Make sure to recalculate bounds because they can change due to shifts
+                SpawnedVisualisations[i].CalculateBounds();
+
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
                 if (inCameraFrustum)
                     continue;
