@@ -20,6 +20,7 @@ namespace Netherlands3D.CartesianTiles
     /// </summary>
 	public class WFSGeoJSONTileDataLayer : Layer
 	{		
+        private TileHandler tileHandler;
         private string wfsUrl = "";
         public string WfsUrl { get => wfsUrl; set => wfsUrl = value; }
 
@@ -35,8 +36,6 @@ namespace Netherlands3D.CartesianTiles
 				geoJSONLayer.ReferencedProxy.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
 			}
 		}
-
-        private TileHandler tileHandler;
 
         private void Awake() {
 			//Make sure Datasets at least has one item
@@ -57,7 +56,7 @@ namespace Netherlands3D.CartesianTiles
 		{
 			yield return null;
 
-			//Make sure we live in a tilehandler
+			//Find a required TileHandler in our parent, or else in the scene
             tileHandler = GetComponentInParent<TileHandler>();
             
             if(!tileHandler)
@@ -71,17 +70,7 @@ namespace Netherlands3D.CartesianTiles
             Debug.LogError("No TileHandler found.", gameObject);
 		}
 
-        private void OnGeoJSONLayerDestroyed()
-        {
-            Destroy(gameObject);
-        }
-
-        private void OnDestroy() {
-            if(tileHandler)
-                tileHandler.RemoveLayer(this);
-        }
-
-        public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
+		public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
 		{
 			TileAction action = tileChange.action;
 			var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -110,14 +99,26 @@ namespace Netherlands3D.CartesianTiles
 			}
 		}
 
+        private void OnGeoJSONLayerDestroyed()
+        {
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy() {
+            if(tileHandler)
+                tileHandler.RemoveLayer(this);
+        }
+
 		private Tile CreateNewTile(Vector2Int tileKey)
 		{
-			Tile tile = new Tile();
-			tile.unityLOD = 0;
-			tile.tileKey = tileKey;
-			tile.layer = transform.gameObject.GetComponent<Layer>();
-			
-			return tile;
+            Tile tile = new()
+            {
+                unityLOD = 0,
+                tileKey = tileKey,
+                layer = transform.gameObject.GetComponent<Layer>()
+            };
+
+            return tile;
 		}
 
 		private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)

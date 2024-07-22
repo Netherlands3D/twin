@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
             where T : GeoJSONObject
         {
-            BoundingBox boundingBox = new BoundingBox();
+            BoundingBox boundingBox = new();
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 boundingBox = BoundingBoxFromMultilineString(multiLineString);
@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin
                 GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
             }
 
-            LineFeatures.Add(feature);
+            LineFeatures.Add(feature,boundingBox);
         }
 
         private BoundingBox BoundingBoxFromMultilineString(MultiLineString multiLingString)

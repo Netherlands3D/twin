@@ -72,27 +72,15 @@ namespace Netherlands3D.Twin
                 Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
             }
 
-            var removeList = new List<Feature>();
             var addList = new List<Feature>();
             foreach (var feature in featureCollection.Features)
             {     
-                if (Features.Contains(feature))
-                    removeList.Add(feature);
-                else
-                    addList.Add(feature);
-            }
-
-            foreach (var feature in removeList)
-            {
-                Features.Remove(feature);
-                RemoveFeatureVisuals(feature);
-            } 
-
-            foreach (var feature in addList)
-            {
+                if (Features.Contains(feature)) //Contains for GeoJSON Features in done by comparing geometry
+                    continue;
+                
                 Features.Add(feature);
                 VisualizeFeature(feature);
-            }  
+            }
         }
 
         /// <summary>
@@ -273,66 +261,6 @@ namespace Netherlands3D.Twin
                 }
             }
         }
-
-        private void RemoveFeatureVisuals(Feature feature)
-        {
-             switch (feature.Geometry.Type)
-            {
-                case GeoJSONObjectType.MultiPolygon:
-                {
-                    if (polygonFeatures == null)
-                        return;
-
-                    polygonFeatures.RemoveFeature(feature);
-                    break;
-                }
-                case GeoJSONObjectType.Polygon:
-                {
-                    if (polygonFeatures == null)
-                        return;
-
-                    polygonFeatures.RemoveFeature(feature);
-                    break;
-                }
-                case GeoJSONObjectType.MultiLineString:
-                {
-                    if (lineFeatures == null)
-                        return;
-
-                    lineFeatures.RemoveFeature(feature);
-                    break;
-                }
-                case GeoJSONObjectType.LineString:
-                {
-                    if (lineFeatures == null)
-                        return;
-
-                    lineFeatures.RemoveFeature(feature);
-                    break;
-                }
-                case GeoJSONObjectType.MultiPoint:
-                {
-                    if (pointFeatures == null)
-                        return;
-
-                    pointFeatures.RemoveFeature(feature);
-                    break;
-                }
-                case GeoJSONObjectType.Point:
-                {
-                    if (pointFeatures == null)
-                        return;
-                    
-                    pointFeatures.RemoveFeature(feature);
-                    break;
-                }
-                default:
-                {
-                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
-                }
-            }
-        }
-
 
         private CoordinateSystem GetCoordinateSystem()
         {
