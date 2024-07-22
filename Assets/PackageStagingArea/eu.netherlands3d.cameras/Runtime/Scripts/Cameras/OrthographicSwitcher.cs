@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using DG.Tweening;
 using UnityEngine;
@@ -21,9 +22,6 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         [Range(0f, 60f)] [SerializeField] private float simulatedOrthoFov = 2f;
         [Tooltip("The animation dynamically heightens the Simulated Orthogonal FOV if the predicted height of the camera exceeds this number")]
         [SerializeField] private float maxCameraHeightWhenSimulating = 8000f;
-
-        [Header("Debug options - use with care")] 
-        [SerializeField] private bool preventSwitchToOrthographicSetting = false;
 
         private void Awake()
         {
@@ -82,9 +80,9 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             // Look downwards
             var flattenedForward = cameraTransform.forward;
             flattenedForward.y = 0;
-            var newRotation = Quaternion.LookRotation(Vector3.down, flattenedForward);
+            var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
 
-            StartAnimation(cameraLookWorldPosition, newRotation, true);
+            StartAnimation(cameraLookWorldPosition, rotateTo, true);
         }
 
         private void SwitchToPerspectiveMode()
@@ -92,29 +90,20 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             if (!cameraComponent.orthographic) return;
 
             var currentCameraRotation = cameraTransform.rotation;
-            
-            // Look back in the original direction. 
-            var newRotation = Quaternion.Euler(
+            var rotateTo = Quaternion.Euler(
                 previousPitchWhenSwitchingToAndFromOrtho, 
-                cameraTransform.rotation.eulerAngles.y, 
-                cameraTransform.rotation.eulerAngles.z
+                currentCameraRotation.eulerAngles.y, 
+                currentCameraRotation.eulerAngles.z
             );
             
-            // Temporarily rotate it to calculate the position of the camera using transform.forward 
-            cameraTransform.rotation = newRotation;
+            var moveTo = CalculateCameraPositionWhenSwitchingToPerspective(rotateTo, currentCameraRotation);
 
-            // Pull back camera to make sure that what is in center of the screen stays there
-            var currentPosition = cameraTransform.position;
-            var distance = currentPosition.y / Mathf.Sin(previousPitchWhenSwitchingToAndFromOrtho * Mathf.Deg2Rad);
-            var newPosition = new Vector3(currentPosition.x, 0, currentPosition.z) - cameraTransform.forward * distance;
-
-            // Restore rotation to make for a smooth animation
-            cameraTransform.rotation = currentCameraRotation;
-            
-            StartAnimation(newPosition, newRotation, false);
+            StartAnimation(moveTo, rotateTo, false);
         }
 
-        private void StartAnimation(Vector3 newPosition, Quaternion newRotation, bool intoOrtho)
+        #region Animation
+
+        private void StartAnimation(Vector3 newPosition, Quaternion rotateTo, bool shouldSwitchToOrthogonal)
         {
             // If the animation is playing, quickly complete it and then start a new one
             if (animationSequence != null && animationSequence.IsPlaying())
@@ -122,85 +111,111 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
                 animationSequence.Complete(true);
             }
 
-            if (intoOrtho)
+            // Only cache the previous FOV when entering orthogonal mode, otherwise the camera is not restored to
+            // the same FOV when switching back
+            if (shouldSwitchToOrthogonal)
             {
                 previousFovWhenSwitchingToAndFromOrtho = cameraComponent.fieldOfView;
             }
 
-            var simulatedHeight = cameraTransform.position.y;
-            var moveTo = new Vector3(newPosition.x, simulatedHeight, newPosition.z);
-
-            var idealEndFov = intoOrtho ? simulatedOrthoFov : previousFovWhenSwitchingToAndFromOrtho;
-
-            var endFov = Mathf.Clamp(
-                idealEndFov, 
-                simulatedHeight * previousFovWhenSwitchingToAndFromOrtho / maxCameraHeightWhenSimulating, 
-                previousFovWhenSwitchingToAndFromOrtho
+            // Find the tile handlers that are currently active, to disable them at the start of the animation
+            // and reactivate them after the animation to prevent glitching from LOD switches
+            var activeTileHandlers = FindObjectsByType<CartesianTiles.TileHandler>(
+                FindObjectsInactive.Exclude, 
+                FindObjectsSortMode.None
             );
-            
-#if UNITY_EDITOR
-            if (!Mathf.Approximately(idealEndFov, endFov))
-            {
-                Debug.LogWarning(
-                    $"When switching to orthogonal: Ideal FOV of {idealEndFov} would result in the camera simulation to go too high, clamped at: {endFov}");
-            }
-#else
-            // Just to be sure: prevent this setting from being on in a production environment
-            preventSwitchToOrthographicSetting = false;
-#endif
 
-            animationSequence = DOTween.Sequence(cameraTransform);
-            animationSequence.SetEase(Ease.Linear);
-
-            animationSequence.AppendCallback(() => {
-                if (preventSwitchToOrthographicSetting == false)
-                {
-                    cameraComponent.orthographic = !intoOrtho;
-                }
-            });
-
-            if (intoOrtho)
-            {
-                AnimateRepositioningOfCamera(newRotation, moveTo);
-                AnimateTransitionToAndFromOrthogonal(endFov, simulatedHeight);
-            }
-            else
-            {
-                cameraComponent.fieldOfView = previousFovWhenSwitchingToAndFromOrtho;
-                AnimateRepositioningOfCamera(newRotation, moveTo);
-            }
-
-            animationSequence.AppendCallback(() =>
-            {
-                cameraTransform.position = new Vector3(cameraTransform.position.x, simulatedHeight, cameraTransform.position.z);
-                if (preventSwitchToOrthographicSetting == false)
-                {
-                    cameraComponent.orthographic = intoOrtho;
-                }
-            });
-
+            animationSequence = CreateAnimationSequence(
+                new Vector3(newPosition.x, cameraTransform.position.y, newPosition.z), 
+                rotateTo, 
+                shouldSwitchToOrthogonal, 
+                activeTileHandlers
+            );
             animationSequence.Play();
         }
 
-        private void AnimateRepositioningOfCamera(Quaternion newRotation, Vector3 moveTo)
-        {
-            // Pull camera and rotate to point downwards as if we are smoothing towards ortho
-            animationSequence.Append(cameraTransform.DOMove(moveTo, repositioningDuration));
-            animationSequence.Join(cameraTransform.DORotate(newRotation.eulerAngles, repositioningDuration));
+        private Sequence CreateAnimationSequence(
+            Vector3 moveTo,
+            Quaternion rotateTo,
+            bool shouldSwitchToOrthogonal,
+            CartesianTiles.TileHandler[] activeTileHandlers
+        ) {
+            var sequence = DOTween.Sequence(cameraTransform);
+            sequence.SetEase(Ease.Linear);
+            sequence.AppendCallback(CreateAnimationInitializer(shouldSwitchToOrthogonal, activeTileHandlers));
+
+            if (shouldSwitchToOrthogonal)
+            {
+                AppendRepositioningOfCamera(sequence, rotateTo, moveTo);
+                AppendTransitionToAndFromOrthogonal(sequence, CalculateSmallestFovForAnimation(moveTo.y, maxCameraHeightWhenSimulating), moveTo.y);
+            }
+            else
+            {
+                // Going back, we do not animate the field of view as that feels more snappy
+                sequence.AppendCallback(() => cameraComponent.fieldOfView = previousFovWhenSwitchingToAndFromOrtho);
+                AppendRepositioningOfCamera(sequence, rotateTo, moveTo);
+            }
+
+            sequence.AppendCallback(CreateAnimationFinalizer(shouldSwitchToOrthogonal, moveTo.y, activeTileHandlers));
+            
+            // Ensure animation sequence is nulled after completing to clean up
+            sequence.OnComplete(() => animationSequence = null);
+
+            return sequence;
         }
 
-        private void AnimateTransitionToAndFromOrthogonal(float endFov, float simulatedHeight)
+        private TweenCallback CreateAnimationInitializer(
+            bool shouldSwitchToOrthogonal, 
+            CartesianTiles.TileHandler[] activeTileHandlers
+        ) {
+            // Yes, we indeed return a callback here
+            return () =>
+            {
+                LockBeforePerspectiveSwitch(activeTileHandlers);
+                cameraComponent.orthographic = !shouldSwitchToOrthogonal;
+            };
+        }
+
+        private TweenCallback CreateAnimationFinalizer(
+            bool shouldSwitchToOrthogonal, 
+            float simulatedHeight, 
+            CartesianTiles.TileHandler[] activeTileHandlers
+        ) {
+            // Yes, we indeed return a callback here
+            return () =>
+            {
+                // Force height to be the simulated height exactly to prevent rounding errors in the animation
+                cameraTransform.position = new Vector3(
+                    cameraTransform.position.x, 
+                    simulatedHeight, 
+                    cameraTransform.position.z
+                );
+                
+                // Perform the actual switch
+                cameraComponent.orthographic = shouldSwitchToOrthogonal;
+                UnlockAfterPerspectiveSwitch(activeTileHandlers);
+            };
+        }
+
+        private void AppendRepositioningOfCamera(Sequence sequence, Quaternion rotateTo, Vector3 moveTo)
         {
-            animationSequence.Append(
+            // Pull camera and rotate to point downwards as if we are smoothing towards ortho
+            sequence.Append(cameraTransform.DOMove(moveTo, repositioningDuration));
+            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, repositioningDuration));
+        }
+
+        private void AppendTransitionToAndFromOrthogonal(Sequence sequence, float smallestFov, float toHeight)
+        {
+            sequence.Append(
                 cameraComponent
-                    .DOFieldOfView(endFov, perspectiveShiftDuration)
+                    .DOFieldOfView(smallestFov, perspectiveShiftDuration)
                     .SetEase(Ease.Linear)
                     .OnUpdate(() =>
                         {
                             // Someone smarter than me might actually figure out how to write
                             // an easing function out of this to use DOMoveY with a custom easing,
                             // but I am just not that smart :)
-                            var actualHeight = simulatedHeight * ((previousFovWhenSwitchingToAndFromOrtho / cameraComponent.fieldOfView) * 1.1f);
+                            var actualHeight = toHeight * ((previousFovWhenSwitchingToAndFromOrtho / cameraComponent.fieldOfView) * 1.1f);
                             cameraTransform.position = new Vector3(
                                 cameraTransform.position.x, 
                                 actualHeight,
@@ -210,5 +225,77 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
                     )
             );
         }
+
+        #endregion
+
+        #region Calculations
+
+        private Vector3 CalculateCameraPositionWhenSwitchingToPerspective(
+            Quaternion rotateTo, 
+            Quaternion currentCameraRotation
+        ) {
+            // Temporarily rotate it to calculate the position of the camera using transform.forward 
+            cameraTransform.rotation = rotateTo;
+
+            // Pull back camera to make sure that what is in center of the screen stays there
+            var currentPosition = cameraTransform.position;
+            var distance = currentPosition.y / Mathf.Sin(previousPitchWhenSwitchingToAndFromOrtho * Mathf.Deg2Rad);
+            var moveTo = new Vector3(currentPosition.x, 0, currentPosition.z) - cameraTransform.forward * distance;
+
+            // Restore rotation to make for a smooth animation
+            cameraTransform.rotation = currentCameraRotation;
+            
+            return moveTo;
+        }
+
+        /// <summary>
+        /// For the FOV animation to work best, we need to get as near to FOV 0 as possible. But the height of the
+        /// camera is restrained to maxHeight to prevent issues with fog, levels of detail and the camera clipping
+        /// range. This method takes the `simulatedOrthoFov` setting and calculates whether we can use that, or
+        /// the smallest possible FOV to approach this number.
+        /// </summary>
+        /// <returns></returns>
+        private float CalculateSmallestFovForAnimation(float simulatedHeight, float maxHeight)
+        {
+            var idealEndFov = simulatedOrthoFov;
+            var smallestFov = Mathf.Clamp(
+                idealEndFov, 
+                simulatedHeight * previousFovWhenSwitchingToAndFromOrtho / maxHeight, 
+                previousFovWhenSwitchingToAndFromOrtho
+            );
+#if UNITY_EDITOR
+            if (!Mathf.Approximately(idealEndFov, smallestFov))
+            {
+                Debug.LogWarning(
+                    $"When switching to orthogonal: Ideal FOV of {idealEndFov} would result in the camera simulation to go too high, clamped at: {smallestFov}");
+            }
+#endif
+            return smallestFov;
+        }
+
+        #endregion
+
+        #region LockingAndUnlockingTheView
+
+        private void LockBeforePerspectiveSwitch(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers)
+        {
+            freeCamera.LockDragging(true);
+            foreach (var handler in activeTileHandlers)
+            {
+                handler.enabled = false;
+            }
+        }
+
+        private void UnlockAfterPerspectiveSwitch(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers)
+        {
+            foreach (var handler in activeTileHandlers)
+            {
+                handler.enabled = true;
+            }
+
+            freeCamera.LockDragging(false);
+        }
+
+        #endregion
     }
 }

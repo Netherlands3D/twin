@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   repositioningDuration: 0.3
-  perspectiveShiftDuration: 0.2
+  perspectiveShiftDuration: 0.4
   simulatedOrthoFov: 0.1
   maxCameraHeightWhenSimulating: 8000
   preventSwitchToOrthographicSetting: 0

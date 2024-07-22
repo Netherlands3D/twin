@@ -309,7 +309,10 @@ public class FreeCamera : MonoBehaviour
     void Update()
 	{
         EaseDragTarget();
-        // Clamp();
+        if (!lockDraggingInput)
+        {
+            Clamp();
+        }
     }
 
     /// <summary>
