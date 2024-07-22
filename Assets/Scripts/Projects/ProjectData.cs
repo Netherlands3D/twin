@@ -129,13 +129,13 @@ namespace Netherlands3D.Twin.Projects
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        Debug.Log("preparse: " + rootLayer.ChildrenLayers.Count);
+                        Debug.Log("preparse: " + RootLayer.ChildrenLayers.Count);
                         var newProject = ScriptableObject.CreateInstance<ProjectData>();
                         JsonConvert.PopulateObject(json, newProject, serializerSettings);
                         // ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
                         current = newProject;
-                        Debug.Log("postparse: " + rootLayer.ChildrenLayers.Count);
-                        rootLayer.ReconstructParentsRecursive();
+                        Debug.Log("postparse: " + RootLayer.ChildrenLayers.Count);
+                        // RootLayer.ReconstructParentsRecursive();
                         CopyFrom(newProject);
                     }
                     else
