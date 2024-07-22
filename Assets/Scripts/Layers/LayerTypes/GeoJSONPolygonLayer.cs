@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin
             public List<PolygonVisualisation> visualisations = new();
             public Bounds bounds;
 
+
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
 
@@ -33,12 +34,12 @@ namespace Netherlands3D.Twin
                 if (visualisations.Count > 0)
                 {
                     bounds = GetVisualisationBounds(visualisations[0]);
-                    
+
                     for(int i = 1; i < visualisations.Count; i++)
                         GetVisualisationBounds(visualisations[i]);
                 }
 
-                // Expand bounds to ceiling to steps of 1000
+                // Expand bounds to ceiling to steps
                 bounds.size = new Vector3(
                     Mathf.Ceil(bounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
                     Mathf.Ceil(bounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
@@ -63,6 +64,8 @@ namespace Netherlands3D.Twin
 
         public List<FeatureSpawnedVisualisation> SpawnedVisualisations = new();
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
+        private bool randomizeColorPerFeature = false;
+        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         private Material polygonVisualizationMaterial;
 
@@ -95,16 +98,28 @@ namespace Netherlands3D.Twin
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
             where T : GeoJSONObject
         {
-            var newFeatureVisualisation = new FeatureSpawnedVisualisation { feature = feature };
+            // Skip if feature already exists (comparison is done using hashcode based on geometry)
+            if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
+                return;
 
+            // Create visual with random color if enabled
+            var featureMaterial = PolygonVisualizationMaterial;
+            if (RandomizeColorPerFeature){
+                featureMaterial = new Material(PolygonVisualizationMaterial)
+                {
+                    color = UnityEngine.Random.ColorHSV()
+                };
+            }
+
+            var newFeatureVisualisation = new FeatureSpawnedVisualisation { feature = feature };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
-                var polygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, PolygonVisualizationMaterial);
-                newFeatureVisualisation.visualisations = polygonVisualisation;
+                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureMaterial);
+                newFeatureVisualisation.visualisations = polygonVisualisations;
             }
             else if(feature.Geometry is Polygon polygon)
             {
-                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, PolygonVisualizationMaterial);
+                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureMaterial);
                 newFeatureVisualisation.visualisations.Append(singlePolygonVisualisation);
             }
             
@@ -116,10 +131,10 @@ namespace Netherlands3D.Twin
             base.DestroyLayer();
             if (Application.isPlaying)
             {
-                foreach (var visualization in PolygonVisualisations)
+                // Remove all SpawnedVisualisations
+                foreach (var featureVisualisation in SpawnedVisualisations)
                 {
-                    if(visualization.gameObject)
-                        GameObject.Destroy(visualization.gameObject);
+                    RemoveFeature(featureVisualisation);
                 }
             }
         }

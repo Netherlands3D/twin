@@ -199,6 +199,7 @@ namespace Netherlands3D.Twin
             // Create a new GeoJSON layer per feature, with a 'live' datasource
             var go = new GameObject(featureType);
             var layer = go.AddComponent<GeoJSONLayer>();
+            layer.RandomizeColorPerFeature = true;
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
 
             // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer

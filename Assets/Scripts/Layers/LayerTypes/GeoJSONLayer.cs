@@ -21,10 +21,11 @@ namespace Netherlands3D.Twin
 
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
-        public List<Feature> Features = new();
 
         private GeoJSONPolygonLayer polygonFeatures;
         private Material defaultVisualizationMaterial;
+        private bool randomizeColorPerFeature = false;
+        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         private GeoJSONLineLayer lineFeatures;
         private LineRenderer3D lineRenderer3DPrefab; //todo: set this in the inspector somehow
@@ -70,17 +71,11 @@ namespace Netherlands3D.Twin
             else if (collectionCRS is LinkedCRS)
             {
                 Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
+                return;
             }
 
-            var addList = new List<Feature>();
-            foreach (var feature in featureCollection.Features)
-            {     
-                if (Features.Contains(feature)) //Contains for GeoJSON Features in done by comparing geometry
-                    continue;
-                
-                Features.Add(feature);
+            foreach (var feature in featureCollection.Features)              
                 VisualizeFeature(feature);
-            }
         }
 
         /// <summary>
@@ -136,8 +131,6 @@ namespace Netherlands3D.Twin
             jsonReader.Close();
 
             var frameCount = Time.frameCount - startFrame;
-            Debug.Log(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
-
             if (frameCount == 0)
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
         }
@@ -149,7 +142,7 @@ namespace Netherlands3D.Twin
 
         private IEnumerator ReadFeaturesArrayStream(JsonTextReader jsonReader, JsonSerializer serializer)
         {
-            Features = new List<Feature>();
+            var features = new List<Feature>();
             var startTime = Time.realtimeSinceStartup;
 
             while (jsonReader.Read())
@@ -161,7 +154,7 @@ namespace Netherlands3D.Twin
                 }
 
                 var feature = serializer.Deserialize<Feature>(jsonReader);
-                Features.Add(feature);
+                features.Add(feature);
                 VisualizeFeature(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
@@ -178,6 +171,7 @@ namespace Netherlands3D.Twin
             var layer = new GeoJSONPolygonLayer("Polygonen");
             layer.Color = ReferencedProxy.Color;
             layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
+            layer.RandomizeColorPerFeature = RandomizeColorPerFeature;
             layer.SetParent(ReferencedProxy);
             return layer;
         }
