@@ -88,8 +88,11 @@ namespace Netherlands3D.Twin.Projects
             UUID = project.UUID;
             CameraPosition = project.CameraPosition;
             CameraRotation = project.CameraRotation;
+            Debug.Log("Setting my root to project.root");
+            Debug.Log("Root childCount: " + project.RootLayer.ChildrenLayers.Count);
             RootLayer = project.RootLayer;
-
+Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
+            
             IsDirty = true;
         }
 
@@ -129,12 +132,13 @@ namespace Netherlands3D.Twin.Projects
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        Debug.Log("preparse: " + RootLayer.ChildrenLayers.Count);
                         var newProject = ScriptableObject.CreateInstance<ProjectData>();
                         JsonConvert.PopulateObject(json, newProject, serializerSettings);
+                        Debug.Log("newproject root childcount: " + newProject.RootLayer.ChildrenLayers.Count);
+
                         // ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
                         current = newProject;
-                        Debug.Log("postparse: " + RootLayer.ChildrenLayers.Count);
+                        Debug.Log("postparse current: " + current.RootLayer.ChildrenLayers.Count);
                         // RootLayer.ReconstructParentsRecursive();
                         CopyFrom(newProject);
                     }
