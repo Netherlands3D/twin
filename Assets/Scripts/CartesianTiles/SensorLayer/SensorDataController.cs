@@ -30,6 +30,11 @@ namespace Netherlands3D.Twin
             public Vector3 unityPosition;
         }
 
+        public virtual void Start()
+        {
+
+        }
+
         public abstract UnityWebRequest GetRequest(Tile tile, string baseUrl);
 
         public double[] GetLongLatFromPosition(Vector3 position, Tile tile)

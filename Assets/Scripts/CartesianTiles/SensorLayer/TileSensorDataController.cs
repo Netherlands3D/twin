@@ -1,6 +1,4 @@
 using Netherlands3D.Twin;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,24 +36,14 @@ namespace Netherlands3D.CartesianTiles
                 dataTexture.filterMode = FilterMode.Bilinear;
                 dataTexture.wrapMode = TextureWrapMode.Clamp;
             }
-        }        
+        }
 
+        //flat top hexagons, to have a fitting hexagon grid matching a tile grid, we need to offset the height with 1/3 hexagon height so every 3 tiles in the vertical direction will start at the y = 0
         private void UpdateCellOffset(Tile tile)
-        {
-            //flat top hexagons
-            //to have a fitting hexagon grid matching a tile grid, we need to offset the height with 1/3 hexagon height so every 3 tiles in the vertical direction will start at the y = 0
-            //tile 0,0 hex 0,0 at 0,0
-            //tile 0,1 hex 0,0 at 0, -hexheight * 1/3
-            //tile 0,2 hex 0,0 at 0, -hexheight * 2/3
-            //tile 0,3 hex 0,0 at 0,0
+        {            
             int offsetIndexY = (tile.tileKey.y / tile.layer.tileSize) % 3;
             if (offsetIndexY % 3 != 0)
                 tileHexagonOffset.y = (offsetIndexY) * -hexHeight * hexagonSize;
-
-            //TODO offset for different scales 
-            //int offsetIndexX = (tile.tileKey.x / tile.layer.tileSize) % 3;
-            //if(offsetIndexX % 3 != 0)
-            //    tileHexagonOffset.x = (offsetIndexX) * -hexWidth * ;
         }
 
         public void SetCells(Tile tile, SensorDataController controller)
@@ -222,94 +210,5 @@ namespace Netherlands3D.CartesianTiles
             if (localCells != null)
                 localCells.Clear();
         }
-
-        //DEBUG//
-
-        //private List<GameObject> sensorTestPositions = new List<GameObject>();
-        //public void ProjectAllSensorPositions()
-        //{
-        //    if (sensorTestPositions.Count > 0)
-        //    {
-        //        for (int i = sensorTestPositions.Count - 1; i >= 0; i--)
-        //            Destroy(sensorTestPositions[i]);
-        //    }
-
-        //    sensorTestPositions.Clear();
-        //    List<double[]> positions = GetAllLonLatPositions();
-        //    foreach (double[] position in positions)
-        //    {
-        //        Vector3 unityPosition = SensorDataController.GetProjectedPositionFromLonLat(position, ImageProjectionLayer.ProjectorHeight);
-        //        GameObject test = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //        test.transform.position = unityPosition + Vector3.up * (float)position[2];
-        //        test.transform.localScale = Vector3.one * 50;
-        //        sensorTestPositions.Add(test);
-        //    }
-        //}
-
-        //public List<double[]> GetAllLonLatPositions()
-        //{
-        //    List<double[]> result = new List<double[]>();
-        //    if (localCells == null)
-        //        return result;
-
-        //    foreach (var cell in localCells)
-        //        result.Add(new double[3] { cell.lon, cell.lat, (int)cell.type * 50 });
-        //    return result;
-        //}
-
-        //use this to test positions and radius for hexagons
-        //TestHexagon(tile, tilePosition, columnsInner); in updatetexture within the col and row loops
-        //private void TestHexagon(Tile tile, Vector2 position, int innerColumns)
-        //{
-        //    GameObject t = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //    t.GetComponent<MeshRenderer>().material.color = Color.yellow;
-        //    t.transform.position = new Vector3(position.x, 50, position.y);
-        //    t.transform.localScale = Vector3.one * hexHeight * 0.5f / innerColumns * tile.layer.tileSize * div2_sqr3 * 2;
-        //}
-
-        //public void SetCornerCoordsTest(double[][] cornerCoords)
-        //{
-        //    this.cornerCoords = cornerCoords;
-        //}
-
-        //private void ClearSensorTestPositions()
-        //{
-        //    if (sensorTestPositions.Count == 0)
-        //        return;
-
-        //    for (int i = sensorTestPositions.Count - 1; i >= 0; i--)
-        //        Destroy(sensorTestPositions[i]);
-
-        //    sensorTestPositions.Clear();
-        //}
-
-        //Vector3[] corners = new Vector3[4];
-        //double[][] cornerCoords = new double[4][];
-        //private void OnDrawGizmos()
-        //{
-        //    for(int i = 0; i < 4; i++) 
-        //    {
-        //        corners[i] = SensorDataController.GetProjectedPositionFromLonLat(cornerCoords[i], SensorProjectionLayer.ProjectorHeight);
-        //    }
-
-        //    Debug.DrawLine(corners[0], corners[1], Color.red);
-        //    Debug.DrawLine(corners[1], corners[2], Color.red);
-        //    Debug.DrawLine(corners[2], corners[3], Color.red);
-        //    Debug.DrawLine(corners[3], corners[0], Color.red);
-        //    Debug.DrawLine(corners[0], corners[2], Color.red);
-        //    Debug.DrawLine(corners[1], corners[3], Color.red);
-
-        //    if (localCells == null)
-        //        return;
-
-        //    double[] lonlat = new double[2];
-        //    foreach (SensorDataController.UrbanReleafCell cell in localCells)
-        //    {
-        //        lonlat[0] = cell.lon;
-        //        lonlat[1] = cell.lat;
-        //        Vector3 unityPosition = SensorDataController.GetProjectedPositionFromLonLat(lonlat, 0);
-        //        Debug.DrawLine(gameObject.transform.position, unityPosition, Color.cyan);
-        //    }
-        //}
     }
 }

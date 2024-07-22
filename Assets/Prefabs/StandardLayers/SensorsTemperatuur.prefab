@@ -105,8 +105,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StaticSensorData: 0
   propertyType: 1
-  Maximum: 40
-  Minimum: -10
+  Maximum: 30
+  Minimum: 10
   MaxColor: {r: 1, g: 0, b: 0, a: 1}
   MinColor: {r: 0, g: 0.07468295, b: 1, a: 1}
 --- !u!114 &-3615321823364236960

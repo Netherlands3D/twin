@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,8 +20,15 @@ namespace Netherlands3D.Twin
         private const string observationLimitKey = "&observations_limit=";
         private const string timeFormatSpecifier = "s";
 
-        private int observationLimit = 1000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
+        private int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
         private int timeWindowSeconds = 3600 * 24 * 365 * 10; //for some reason sensors are not updated recently
+
+        private static StringBuilder strBuilder;
+
+        public override void Start()
+        {
+            strBuilder = new StringBuilder();
+        }
 
         public override UnityWebRequest GetRequest(Tile tile, string baseUrl)
         {
@@ -29,32 +37,30 @@ namespace Netherlands3D.Twin
             UnityWebRequest webRequest = UnityWebRequest.Get(url);
             return webRequest;
         }
-
-        //TODO optimize with stringbuilder
+                
         public override string GeneratePolygonUrlForTile(Tile tile)
         {
             //make square polygon
             double[][] coords = GetLongLatCornersFromTile(tile);
-            string polygonUrl = string.Empty;
-
+            strBuilder.Clear();
+                        
             //get the observationlimit
             string observationUrl = observationLimitKey + observationLimit.ToString();
-            polygonUrl += observationUrl;
+            strBuilder.Append(observationUrl);
 
             //add each vertex for the polygon
             for (int i = 0; i < coords.Length; i++)
-                polygonUrl += areaKey + coords[i][0].ToString() + seperate + coords[i][1].ToString();
+                strBuilder.Append(areaKey + coords[i][0].ToString() + seperate + coords[i][1].ToString());
 
             //add first vertex to complete the polygon
-            polygonUrl += areaKey + coords[0][0].ToString() + seperate + coords[0][1].ToString();
-
-            string timeUrl = GetTimeUrl();
-            return polygonUrl + timeUrl;
+            strBuilder.Append(areaKey + coords[0][0].ToString() + seperate + coords[0][1].ToString());
+            strBuilder.Append(GetTimeUrl());
+            return strBuilder.ToString();
         }
 
+        //get the observation start time and end time and create a timewindow url            
         public string GetTimeUrl()
         {
-            //get the observation start time and end time and create a timewindow url            
             DateTime end = DateTime.Now;
             string sortableEndTime = end.ToString(timeFormatSpecifier);
             DateTime start = end.AddSeconds(-timeWindowSeconds);
@@ -63,15 +69,14 @@ namespace Netherlands3D.Twin
             return timeUrl;
         }
 
+        //the results are already filtered so return the cells
         public override List<SensorCell> GetSensorCellsForTile(Tile tile)
-        {
-            //the results are already filtered so return the cells
+        {            
             return Cells;
         }
 
         public override void ProcessDataFromJson(string json)
         {
-            //could be refactored to work with a recursive method and store a tree but this will store less memory
             base.ProcessDataFromJson(json);
             JArray jsonArray = JArray.Parse(json);
             List<JObject> jsonObjects = jsonArray.OfType<JObject>().ToList();
@@ -80,7 +85,6 @@ namespace Netherlands3D.Twin
                 float value = 0;
                 float lat = 0;
                 float lon = 0;
-                //float quality = 0;
                 SensorPropertyType sensorType = SensorPropertyType.None;
                 Dictionary<string, object> values = JObject.FromObject(j).ToObject<Dictionary<string, object>>();
                 foreach (KeyValuePair<string, object> kv in values)
@@ -107,10 +111,6 @@ namespace Netherlands3D.Twin
                                     }
                                 }
                             }
-                            //if (gKv.Key == "quality")
-                            //{
-                            //    quality = float.Parse(gKv.Value.ToString());
-                            //}
                         }
                     }
                     if (kv.Key == "observed_property")
@@ -138,7 +138,6 @@ namespace Netherlands3D.Twin
                     cell.value = value;
                     cell.lon = lon;
                     cell.lat = lat;
-                    //cell.quality = quality;
                     cell.type = sensorType;
 
                     double[] lonlat = new double[2];
