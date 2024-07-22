@@ -88,19 +88,19 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
-        public void InitializeParent()
-        {
-            if (parent == null) 
-            {
-                parent = Root;
-
-                if (!Root.children.Contains(this))
-                {
-                    Root.children.Add(this);
-                    Root.ChildrenChanged.Invoke();
-                }
-            }
-        }
+        // public void InitializeParent()
+        // {
+        //     if (parent == null) 
+        //     {
+        //         parent = Root;
+        //
+        //         if (!Root.children.Contains(this))
+        //         {
+        //             Root.children.Add(this);
+        //             Root.ChildrenChanged.Invoke();
+        //         }
+        //     }
+        // }
 
         //needed because after deserialization of the Layer objects, the parent field is not set yet.
         public void ReconstructParentsRecursive()
@@ -144,8 +144,17 @@ namespace Netherlands3D.Twin.Layers
         public LayerNL3DBase(string name)
         {
             Name = name;
-            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent();
+            // if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+            //     InitializeParent();
+
+            Debug.Log(parent);
+            if (this is not RootLayer)
+            {
+                if (parent == null)
+                    parent = Root;
+            }
+
+            // Root.ReconstructParentsRecursive();
         }
 
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
