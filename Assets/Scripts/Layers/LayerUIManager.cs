@@ -14,7 +14,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
-        [SerializeField] private ProjectData projectData;
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
         [SerializeField] private RectTransform layerUIContainer;
@@ -38,9 +37,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            foreach (var layer in projectData.RootLayer.ChildrenLayers)
+            foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
             {
-                ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
+                ConstructHierarchyUIsRecursive(layer, ProjectData.Current.RootLayer);
             }
 
             RecalculateLayersVisibleInInspector();
@@ -82,8 +81,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            projectData.LayerAdded.AddListener(CreateNewUI);
-            projectData.LayerDeleted.AddListener(OnLayerDeleted);
+            ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
+            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
             // projectData.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
@@ -94,9 +93,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnDisable()
         {
-            projectData.RootLayer.DeselectAllLayers();
-            projectData.LayerAdded.RemoveListener(CreateNewUI);
-            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
+            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
             // projectData.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
@@ -137,7 +136,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                projectData.RootLayer.DeselectAllLayers();
+                ProjectData.Current.RootLayer.DeselectAllLayers();
         }
 
         public FolderLayer CreateFolderLayer()
@@ -234,13 +233,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void GroupSelectedLayers()
         {
-            if (projectData.RootLayer.SelectedLayers.Count == 0) 
+            if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
                 return;
             
-            var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = new List<LayerNL3DBase>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = CreateFolderLayer();
-            var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
+            var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             SortSelectedLayers(layersToGroup);
             foreach (var selectedLayer in layersToGroup)
@@ -251,7 +250,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SortSelectedLayersByVisibility()
         {
-            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
+            ProjectData.Current.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
         private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)
@@ -266,7 +265,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layer in projectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
+            foreach (var layer in ProjectData.Current.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
                 layer.DestroyLayer();
             }

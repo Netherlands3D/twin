@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin
 {
     public class ProjectDataCameraUpdater : MonoBehaviour
     {
-        [SerializeField] private ProjectData project;
+        // [SerializeField] private ProjectData project;
 
         private Matrix4x4 lastSavedCameraTransformMatrix = Matrix4x4.identity;
 
@@ -25,18 +25,18 @@ namespace Netherlands3D.Twin
             var cameraCoordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.Unity,transform.position[0], transform.position[1],transform.position[2]), CoordinateSystem.RD);
             var cameraRotation = transform.eulerAngles;
 
-            project.CameraPosition = new double[] { cameraCoordinate.Points[0], cameraCoordinate.Points[1], cameraCoordinate.Points[2] };
-            project.CameraRotation = new double[] { cameraRotation.x, cameraRotation.y, cameraRotation.z };
+            ProjectData.Current.CameraPosition = new double[] { cameraCoordinate.Points[0], cameraCoordinate.Points[1], cameraCoordinate.Points[2] };
+            ProjectData.Current.CameraRotation = new double[] { cameraRotation.x, cameraRotation.y, cameraRotation.z };
         }
 
         private void OnEnable()
         {
-            project.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
         private void OnDisable()
         {
-            project.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
         private void OnProjectDataChanged(ProjectData project)
