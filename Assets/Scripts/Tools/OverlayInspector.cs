@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
 
         public virtual void CloseOverlay()
         {
-            ContentOverlay.Instance.CloseOverlay();
+            ContentOverlayContainer.Instance.CloseOverlay();
         }
     }
 }

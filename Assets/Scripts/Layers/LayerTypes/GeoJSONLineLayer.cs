@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
+    [Serializable]
     public class GeoJSONLineLayer : LayerNL3DBase
     {
         public List<Feature> LineFeatures = new();
@@ -26,6 +29,11 @@ namespace Netherlands3D.Twin
             }
         }
 
+        public GeoJSONLineLayer(string name) : base(name)
+        {
+            ProjectData.Current.AddStandardLayer(this);
+        }
+        
         protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
@@ -43,11 +51,11 @@ namespace Netherlands3D.Twin
             GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
         }
 
-        protected override void OnDestroy()
+        public override void DestroyLayer()
         {
-            base.OnDestroy();
+            base.DestroyLayer();
             if (Application.isPlaying)
-                Destroy(LineRenderer3D.gameObject);
+                GameObject.Destroy(LineRenderer3D.gameObject);
         }
     }
 }

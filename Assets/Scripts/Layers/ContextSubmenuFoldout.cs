@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin
         private IEnumerator ShowSubmenuAfterDelay()
         {
             yield return new WaitForSecondsRealtime(appearTime);
-            submenu = Instantiate(submenuPrefab, GetComponentInParent<LayerManager>().transform);
+            submenu = Instantiate(submenuPrefab, GetComponentInParent<LayerUIManager>().transform);
             submenu.RecalculatePosition(this);
             timerCoroutine = null;
         }
