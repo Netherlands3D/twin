@@ -29,15 +29,10 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 foreach (Transform child in contentComponent.transform)
                 {
-                    var baseCoordinate = new Coordinate(
-                        CoordinateSystem.Unity, 
-                        child.position.x, 
-                        child.position.y, 
-                        child.position.z
-                    );
+                    var baseCoordinate = new Coordinate(child.position);
                     tilesToShift.Add(
                         child, 
-                        CoordinateConverter.ConvertTo(baseCoordinate, worldTransform.ReferenceCoordinateSystem)
+                        baseCoordinate
                     );
                 }
             }
@@ -51,7 +46,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
             foreach (KeyValuePair<Transform,Coordinate> tile in tilesToShift)
             {
-                var newPosition = CoordinateConverter.ConvertTo(tile.Value, CoordinateSystem.Unity).ToVector3();
+                var coordinate = tile.Value;
+                var newPosition = coordinate.ToUnity();
 #if UNITY_EDITOR
                 if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>| Shifting {tile.Key.gameObject.name} from {tile.Key.position} to {newPosition}</color>");
 #endif
