@@ -52,8 +52,6 @@ namespace Netherlands3D.Twin.Layers
         public void ReconstructParentsRecursive()
         {
             Debug.Log("reconstructing recursive: " + Name + "\t" + ChildrenLayers.Count);
-            children = ChildrenLayers.Distinct().ToList();
-            Debug.Log("childCount after removing duplicates:  " + ChildrenLayers.Count);
 
             foreach (var layer in ChildrenLayers)
             {
