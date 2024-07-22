@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Projects
             
             // Copy the current projectData to a new project instance for our undo history
             var newProject = ScriptableObject.CreateInstance<ProjectData>();
-            newProject.CopyFrom(projectData);
+            // newProject.CopyFrom(projectData);
             undoStack.Add(newProject);
 
             // Clear the redo stack

@@ -79,28 +79,28 @@ namespace Netherlands3D.Twin.Projects
             UUID = Guid.NewGuid().ToString();
         }
 
-        public void CopyFrom(ProjectData project)
-        {
-            // Explicit copy of fields. Will be more complex once bin. files are saved
-            Debug.Log("replacing project " + UUID + " with: " + project.UUID);
-            Version = project.Version;
-            SavedTimestamp = project.SavedTimestamp;
-            UUID = project.UUID;
-            CameraPosition = project.CameraPosition;
-            CameraRotation = project.CameraRotation;
-            Debug.Log("Setting my root to project.root");
-            Debug.Log("Root childCount: " + project.RootLayer.ChildrenLayers.Count);
-            RootLayer = project.RootLayer;
-Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
-            
-            IsDirty = true;
-        }
+//         public void CopyFrom(ProjectData project)
+//         {
+//             // Explicit copy of fields. Will be more complex once bin. files are saved
+//             Debug.Log("replacing project " + UUID + " with: " + project.UUID);
+//             Version = project.Version;
+//             SavedTimestamp = project.SavedTimestamp;
+//             UUID = project.UUID;
+//             CameraPosition = project.CameraPosition;
+//             CameraRotation = project.CameraRotation;
+//             Debug.Log("Setting my root to project.root");
+//             Debug.Log("Root childCount: " + project.RootLayer.ChildrenLayers.Count);
+//             RootLayer = project.RootLayer;
+// Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
+//             
+//             IsDirty = true;
+//         }
 
         public void CopyUndoFrom(ProjectData project)
         {
             //TODO: Implement undo copy with just the data we want to move between undo/redo states
             //Now we simply copy everything
-            CopyFrom(project);
+            // CopyFrom(project);
         }
 
 #if UNITY_EDITOR
@@ -116,6 +116,7 @@ Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
         {
             Debug.Log("Loading project file: " + fileName);
             RootLayer.DestroyLayer();
+            Debug.Log("old uuid: " + UUID);
 
             // Open the zip file
             using (FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName)))
@@ -132,15 +133,20 @@ Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        var newProject = ScriptableObject.CreateInstance<ProjectData>();
-                        JsonConvert.PopulateObject(json, newProject, serializerSettings);
-                        Debug.Log("newproject root childcount: " + newProject.RootLayer.ChildrenLayers.Count);
-
+                        // var newProject = ScriptableObject.CreateInstance<ProjectData>();
+                        Debug.Log("old root childcount: " + current.RootLayer.ChildrenLayers.Count);
+                        JsonConvert.PopulateObject(json, current, serializerSettings);
+                        Debug.Log("newproject root childcount: " + current.RootLayer.ChildrenLayers.Count);
+                        foreach (var child in current.RootLayer.ChildrenLayers)
+                        {
+                            Debug.Log("child: " + child.Name);
+                        }
                         // ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
-                        current = newProject;
+                        // current = newProject;
                         Debug.Log("postparse current: " + current.RootLayer.ChildrenLayers.Count);
-                        // RootLayer.ReconstructParentsRecursive();
-                        CopyFrom(newProject);
+                        RootLayer.ReconstructParentsRecursive();
+                        Debug.Log("new uuid: " + UUID);
+                        // CopyFrom(newProject);
                     }
                     else
                     {
