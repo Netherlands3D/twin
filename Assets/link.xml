@@ -1,4 +1,5 @@
 <linker>
 	<assembly fullname="GeoJSON.NET" preserve="all"></assembly>
 	<assembly fullname="eu.netherlands3d.json.Runtime" preserve="all"></assembly>
+	<assembly fullname="jillejr.newtonsoft.json-for-unity.converters" preserve="all"></assembly>
 </linker>
