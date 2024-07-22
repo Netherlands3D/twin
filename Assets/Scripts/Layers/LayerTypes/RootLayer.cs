@@ -44,23 +44,23 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.DestroyLayer();
             }
-            
+
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
-        
+
         public void ReconstructParentsRecursive()
         {
-            Debug.Log( "reconstructing recursive: " + Name +"\t"+ ChildrenLayers.Count);
+            Debug.Log("reconstructing recursive: " + Name + "\t" + ChildrenLayers.Count);
             children = ChildrenLayers.Distinct().ToList();
             Debug.Log("childCount after removing duplicates:  " + ChildrenLayers.Count);
-            
+
             foreach (var layer in ChildrenLayers)
             {
                 ReconstructParentsRecursive(layer, this);
             }
         }
-        
+
         private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
             Debug.Log(layer.Name + " setting parent to: " + parent.Name);
@@ -68,6 +68,15 @@ namespace Netherlands3D.Twin.Layers
             foreach (var child in layer.ChildrenLayers)
             {
                 ReconstructParentsRecursive(child, layer);
+            }
+        }
+
+        public void AddChild(LayerNL3DBase layer)
+        {
+            if (!ChildrenLayers.Contains(layer))
+            {
+                ChildrenLayers.Add(layer);
+                ChildrenChanged.Invoke();
             }
         }
     }

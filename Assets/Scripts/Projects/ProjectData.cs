@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Projects
     [Serializable]
     public class ProjectData : ScriptableObject
     {
+        [JsonIgnore, NonSerialized] private bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
+        
         [JsonIgnore] private static ProjectData current;
         [JsonIgnore] public static ProjectData Current => current;
 
@@ -114,6 +116,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void LoadFromFile(string fileName)
         {
+            isLoading = true;
             Debug.Log("Loading project file: " + fileName);
             RootLayer.DestroyLayer();
             Debug.Log("old uuid: " + UUID);
@@ -158,6 +161,7 @@ namespace Netherlands3D.Twin.Projects
 
             IsDirty = true;
             OnDataChanged.Invoke(this);
+            isLoading = false;
         }
 
         public void SaveAsFile(ProjectDataHandler projectDataHandler)
@@ -235,6 +239,10 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddStandardLayer(LayerNL3DBase layer)
         {
+            if (!isLoading)
+            {
+                RootLayer.AddChild(layer);
+            }
             LayerAdded.Invoke(layer);
         }
 
