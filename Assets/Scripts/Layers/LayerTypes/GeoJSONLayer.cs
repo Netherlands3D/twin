@@ -46,14 +46,14 @@ namespace Netherlands3D.Twin
 
         public void RemoveFeaturesOutOfView()
         {
-            /*if (polygonFeatures != null)
+            if (polygonFeatures != null)
                 polygonFeatures.RemoveFeaturesOutOfView();
 
             if (lineFeatures != null)
                 lineFeatures.RemoveFeaturesOutOfView();
 
             if (pointFeatures != null)
-                pointFeatures.RemoveFeaturesOutOfView();*/
+                pointFeatures.RemoveFeaturesOutOfView();
         }
 
         public void AppendFeatureCollection(FeatureCollection featureCollection)
@@ -224,7 +224,7 @@ namespace Netherlands3D.Twin
                     if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
-                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPolygon, originalCoordinateSystem);
+                    polygonFeatures.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
@@ -232,7 +232,7 @@ namespace Netherlands3D.Twin
                     if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
-                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Polygon, originalCoordinateSystem);
+                    polygonFeatures.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
@@ -240,7 +240,7 @@ namespace Netherlands3D.Twin
                     if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
-                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiLineString, originalCoordinateSystem);
+                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.LineString:
@@ -248,7 +248,7 @@ namespace Netherlands3D.Twin
                     if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
-                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as LineString, originalCoordinateSystem);
+                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiPoint:
@@ -256,7 +256,7 @@ namespace Netherlands3D.Twin
                     if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
 
-                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPoint, originalCoordinateSystem);
+                    pointFeatures.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Point:
@@ -264,7 +264,7 @@ namespace Netherlands3D.Twin
                     if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
                     
-                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Point, originalCoordinateSystem);
+                    pointFeatures.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
                     break;
                 }
                 default:

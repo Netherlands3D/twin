@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class GeoJSONLineLayer : LayerNL3DBase
     {
-        public List<Feature> LineFeatures = new();
+        public Dictionary<Feature,BoundingBox> LineFeatures = new();
 
         private LineRenderer3D lineRenderer3D;
 
@@ -39,16 +40,32 @@ namespace Netherlands3D.Twin
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, MultiLineString featureGeometry, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
+            where T : GeoJSONObject
         {
+            BoundingBox boundingBox = new BoundingBox();
+            if (feature.Geometry is MultiLineString multiLineString)
+            {
+                boundingBox = BoundingBoxFromMultilineString(multiLineString);
+                GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+            }
+            else if(feature.Geometry is LineString lineString)
+            {
+                boundingBox = BoundingBoxFromLineString(lineString);
+                GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+            }
+
             LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, LineString featureGeometry, CoordinateSystem originalCoordinateSystem)
+        private BoundingBox BoundingBoxFromMultilineString(MultiLineString multiLingString)
         {
-            LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
+            return new BoundingBox();
+        }
+
+        private BoundingBox BoundingBoxFromLineString(LineString lineString)
+        {
+            return new BoundingBox();
         }
 
         public void RemoveFeature(Feature feature)
@@ -62,6 +79,12 @@ namespace Netherlands3D.Twin
             base.DestroyLayer();
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
+        }
+
+        public void RemoveFeaturesOutOfView()
+        {
+            // For all line features, determine their points BoundingBox, and check if it is still in  view of Camera.main
+
         }
     }
 }

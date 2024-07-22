@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -40,16 +41,19 @@ namespace Netherlands3D.Twin
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, MultiPoint featureGeometry, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
+            where T : GeoJSONObject
         {
             PointFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
-        }
-
-        public void AddAndVisualizeFeature(Feature feature, Point featureGeometry, CoordinateSystem originalCoordinateSystem)
-        {
-            PointFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizePoint(featureGeometry, originalCoordinateSystem, PointRenderer3D);
+        
+            if (feature.Geometry is MultiPoint multiPoint)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(multiPoint, originalCoordinateSystem, PointRenderer3D);
+            }
+            else if(feature.Geometry is Point point)
+            {
+                GeoJSONGeometryVisualizerUtility.VisualizePoint(point, originalCoordinateSystem, PointRenderer3D);
+            }
         }
 
         public void RemoveFeature(Feature feature)
@@ -63,6 +67,11 @@ namespace Netherlands3D.Twin
             base.DestroyLayer();
             if (Application.isPlaying)
                 GameObject.Destroy(PointRenderer3D.gameObject);
+        }
+
+        public void RemoveFeaturesOutOfView()
+        {
+           
         }
     }
 }
