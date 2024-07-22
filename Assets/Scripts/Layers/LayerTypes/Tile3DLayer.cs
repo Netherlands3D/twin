@@ -64,9 +64,8 @@ namespace Netherlands3D.Twin.Layers
             set => propertySection = value;
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             tileSet = GetComponent<Read3DTileset>();
             
             if (usePropertySections)

@@ -38,12 +38,6 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
-        protected virtual void Awake() //todo: no longer needed?
-        {
-            // CreateProxy();
-            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
-        }
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -56,7 +50,6 @@ namespace Netherlands3D.Twin.Layers
                     prefabIdentifier = metaID.ToString();
                     print("setting prefab id to : " + prefabIdentifier);
                     EditorUtility.SetDirty(this);
-                    // AssetDatabase.SaveAssets();
                 }
             }
         }

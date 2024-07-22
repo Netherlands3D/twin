@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using Netherlands3D.CartesianTiles;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -16,10 +14,9 @@ namespace Netherlands3D.Twin.Layers
                 layer.isEnabled = isActive;
         }
         
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-            tileHandler = GameObject.FindAnyObjectByType<CartesianTiles.TileHandler>();
+            tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<CartesianTiles.Layer>();
 

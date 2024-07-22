@@ -14,11 +14,10 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        protected override void Awake()
+        protected void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-            base.Awake();
         }
 
         protected override void OnEnable()
