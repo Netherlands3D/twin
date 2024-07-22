@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using Netherlands3D.Web;
 using Netherlands3D.CartesianTiles;
+using System.Collections.Generic;
 
 namespace Netherlands3D.Twin
 {
@@ -87,6 +88,7 @@ namespace Netherlands3D.Twin
         {
             XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
             XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
+            namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");   
 
             if (elementsWithNamespaces != null)
             {
@@ -94,11 +96,9 @@ namespace Netherlands3D.Twin
                 {
                     if (!string.IsNullOrEmpty(element.NamespaceURI))
                     {
-                        // Add namespace with prefix if not already added
-                        string prefix = xmlDocument.GetPrefixOfNamespace(element.NamespaceURI);
+                        string prefix = element.Name.Split(':')[0];
                         if (!string.IsNullOrEmpty(prefix) && namespaceManager.LookupNamespace(prefix) == null)
                         {
-                            Debug.Log("Found namespace: " + prefix + " - " + element.NamespaceURI);
                             namespaceManager.AddNamespace(prefix, element.NamespaceURI);
                         }
                     }
@@ -128,7 +128,7 @@ namespace Netherlands3D.Twin
         {
             // Check if operation GetFeature has a outputFormat of something like json/geojson
             var featureOutputFormat = xmlNode.SelectSingleNode("ows:Parameter[@name='outputFormat']", namespaceManager);
-            var owsAllowedValues = featureOutputFormat.SelectSingleNode("ows:AllowedValues");
+            var owsAllowedValues = featureOutputFormat.SelectSingleNode("ows:AllowedValues", namespaceManager);
             foreach (XmlNode owsValue in owsAllowedValues.ChildNodes)
             {
                 if (owsValue.InnerText.Contains("json") || owsValue.InnerText.Contains("geojson"))
@@ -191,15 +191,20 @@ namespace Netherlands3D.Twin
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(dataAsText);
 
-            // Find the FeatureTypeList in the root of the XMLdocucument
-            var featureTypeListNodeInRoot = xmlDocument.SelectSingleNode("wfs:WFS_Capabilities/wfs:FeatureTypeList");
-            var featureTypes = new string[featureTypeListNodeInRoot.ChildNodes.Count];
-            for (int i = 0; i < featureTypeListNodeInRoot.ChildNodes.Count; i++)
+            XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
+
+            // Find the FeatureTypeList node somewhere in xmldocument(that might not start with wfs:)
+            var featureTypeListNodeInRoot = xmlDocument.SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
+            var featureTypeChildNodes = featureTypeListNodeInRoot.ChildNodes;
+            var featureTypes = new List<string>();
+
+            foreach(XmlNode featureTypeNode in featureTypeChildNodes)
             {
-                featureTypes[i] = featureTypeListNodeInRoot.ChildNodes[i].SelectSingleNode("Name").InnerText;
+                var featureTypeName = featureTypeNode.SelectSingleNode("//*[local-name()='Name']", namespaceManager).InnerText;
+                featureTypes.Add(featureTypeName);
             }
 
-            return featureTypes;
+            return featureTypes.ToArray();
         }
 
         private void AddWFSLayer(string featureType, string sourceUrl)
@@ -211,11 +216,13 @@ namespace Netherlands3D.Twin
             uriBuilder.RemoveQueryParameter("bbox");
             uriBuilder.RemoveQueryParameter("typeNames");
             uriBuilder.RemoveQueryParameter("request");
+            uriBuilder.RemoveQueryParameter("outputFormat");
 
             // The exact bbox coordinates will be managed by CartesianTileWFSLayer
             uriBuilder.AddQueryParameter("bbox", "{bbox}");
             uriBuilder.AddQueryParameter("typeNames", featureType);
             uriBuilder.AddQueryParameter("request", "GetFeature");
+            uriBuilder.AddQueryParameter("outputFormat", "geojson");
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
