@@ -10,11 +10,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
-using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin.Projects
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Project", fileName = "Project", order = 0)]
+    [Serializable]
     public class ProjectData : ScriptableObject
     {
         [JsonIgnore] private static ProjectData current;
@@ -128,10 +128,11 @@ namespace Netherlands3D.Twin.Projects
                         using Stream zipStream = zf.GetInputStream(zipEntry);
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
-
-                        ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
+                        
+                        JsonConvert.PopulateObject(json ,current, serializerSettings);
+                        // ProjectData tempProject = JsonConvert.DeserializeObject<ProjectData>(json, serializerSettings);
                         rootLayer.ReconstructParentsRecursive();
-                        CopyFrom(tempProject);
+                        // CopyFrom(tempProject);
                     }
                     else
                     {
