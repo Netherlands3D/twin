@@ -111,6 +111,7 @@ namespace Netherlands3D.Twin
                 };
             }
 
+            // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
             var newFeatureVisualisation = new FeatureSpawnedVisualisation { feature = feature };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
