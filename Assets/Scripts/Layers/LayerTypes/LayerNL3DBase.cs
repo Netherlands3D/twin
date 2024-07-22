@@ -105,7 +105,7 @@ namespace Netherlands3D.Twin.Layers
         //needed because after deserialization of the Layer objects, the parent field is not set yet.
         public void ReconstructParentsRecursive()
         {
-            Debug.Log(Name +"\t"+ ChildrenLayers);
+            Debug.Log( "reconstructing recursive: " + Name +"\t"+ ChildrenLayers.Count);
             foreach (var layer in ChildrenLayers)
             {
                 ReconstructParentsRecursive(layer, this);
@@ -114,6 +114,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
+            Debug.Log(layer.Name + " setting parent to: " + parent.name);
             layer.parent = parent;
             foreach (var child in layer.ChildrenLayers)
             {
