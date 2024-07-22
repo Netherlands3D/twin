@@ -114,7 +114,7 @@ namespace Netherlands3D.Twin.Layers
         private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
             layer.parent = parent;
-            foreach (var child in layer.ChildrenLayers.ToList())
+            foreach (var child in layer.ChildrenLayers)
             {
                 ReconstructParentsRecursive(child, layer);
             }
