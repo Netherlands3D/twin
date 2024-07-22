@@ -46,23 +46,27 @@ namespace Netherlands3D.Twin
 
         public void Execute(LocalFile localFile)
         {
-            ParseGeoJSON(localFile.LocalFilePath);
+            ParseGeoJSON(localFile);
         }
 
-        public void ParseGeoJSON(string fileName)
+        public void ParseGeoJSON(LocalFile localFile)
         {
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
             var randomColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
             randomColor.a = visualizationMaterial.color.a;
             randomColorVisualisationMaterial.color = randomColor;
-            CreateGeoJSONLayer(fileName, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
+            CreateGeoJSONLayer(localFile, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(string fileName, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
+        public static GeoJSONLayer CreateGeoJSONLayer(LocalFile localFile, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
         {
-            var fullPath = Path.Combine(Application.persistentDataPath, fileName);
+            var fullPath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
+            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
 
-            var go = new GameObject(fileName);
+            if(localFile.SourceUrl.Length > 0)
+                geoJsonLayerName = localFile.SourceUrl;    
+
+            var go = new GameObject(geoJsonLayerName);
             var layer = go.AddComponent<GeoJSONLayer>();
 
             if (onErrorCallback != null)
