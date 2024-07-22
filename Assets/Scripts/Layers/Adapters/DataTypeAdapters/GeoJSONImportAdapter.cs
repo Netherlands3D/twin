@@ -16,7 +16,11 @@ namespace Netherlands3D.Twin
 
         public bool Supports(LocalFile localFile)
         {
-            //Streamread untill we found some geojson properties
+            // Check if the file has JSON content
+            if (!LooksLikeAJSONFile(localFile.LocalFilePath))
+                return false;
+
+            // Streamread the JSON until we find some GeoJSON properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
@@ -31,6 +35,13 @@ namespace Netherlands3D.Twin
             }
 
             return true;
+        }
+
+        private bool LooksLikeAJSONFile(string filePath)
+        {
+            using var reader = new StreamReader(filePath);
+            var firstChar = reader.Read();
+            return firstChar == '{' || firstChar == '[';
         }
 
         public void Execute(LocalFile localFile)

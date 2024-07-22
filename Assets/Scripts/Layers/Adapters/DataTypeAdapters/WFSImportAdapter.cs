@@ -41,29 +41,35 @@ namespace Netherlands3D.Twin
                 var xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(dataAsText);
 
+                // Read namespace managers from the root WFS_Capabilities node
+                XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
+                
                 // Can we request specific features via GetFeature requests?
-                XmlNode getFeatureOperationNode = ReadGetFeatureNode(xmlDocument);
-                if (getFeatureOperationNode == null){
+                XmlNode getFeatureOperationNode = ReadGetFeatureNode(xmlDocument, namespaceManager);
+                if (getFeatureOperationNode == null)
+                {
                     Debug.Log("<color=orange>WFS GetFeature operation not found.</color>");
                     return false;
                 }
 
                 // Is there a bbox filter? We need it to do per-tile requests.
-                bool bboxFilterCapability = WFSBboxFilterCapability(xmlDocument);
-                if (!bboxFilterCapability){
+                bool bboxFilterCapability = WFSBboxFilterCapability(xmlDocument, namespaceManager);
+                if (!bboxFilterCapability)
+                {
                     Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                     return false;
                 }
 
                 // Does the GetFeature operation support GeoJSON output?
-                bool getFeatureNodeHasGeoJsonOutput = NodeHasGeoJSONOutput(getFeatureOperationNode);
-                if(!getFeatureNodeHasGeoJsonOutput){
+                bool getFeatureNodeHasGeoJsonOutput = NodeHasGeoJSONOutput(getFeatureOperationNode, namespaceManager);
+                if (!getFeatureNodeHasGeoJsonOutput)
+                {
                     Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                     return false;
                 }
             }
 
-            if(getFeatureRequest)
+            if (getFeatureRequest)
             {
                 //Check if text is GeoJSON by trying to parse feature collection
                 var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(dataAsText);
@@ -77,10 +83,35 @@ namespace Netherlands3D.Twin
             return true;
         }
 
-        private static bool WFSBboxFilterCapability(XmlDocument xmlDocument)
+        private XmlNamespaceManager ReadNameSpaceManager(XmlDocument xmlDocument)
         {
-            // Find the Filter_Capabilities in the root of the XMLdocucument
-            var filterCapabilitiesNodeInRoot = xmlDocument.SelectSingleNode("wfs:WFS_Capabilities/fes:Filter_Capabilities/fes:Spatial_Capabilities/fes:SpatialOperators");
+            XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
+            XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
+
+            if (elementsWithNamespaces != null)
+            {
+                foreach (XmlElement element in elementsWithNamespaces)
+                {
+                    if (!string.IsNullOrEmpty(element.NamespaceURI))
+                    {
+                        // Add namespace with prefix if not already added
+                        string prefix = xmlDocument.GetPrefixOfNamespace(element.NamespaceURI);
+                        if (!string.IsNullOrEmpty(prefix) && namespaceManager.LookupNamespace(prefix) == null)
+                        {
+                            Debug.Log("Found namespace: " + prefix + " - " + element.NamespaceURI);
+                            namespaceManager.AddNamespace(prefix, element.NamespaceURI);
+                        }
+                    }
+                }
+            }
+
+            return namespaceManager;
+        }
+
+        private static bool WFSBboxFilterCapability(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
+        {
+            // Find the SpatialOperators
+            var filterCapabilitiesNodeInRoot = xmlDocument.SelectSingleNode("//fes:SpatialOperators", namespaceManager);
             var bboxFilter = false;
             foreach (XmlNode spatialOperator in filterCapabilitiesNodeInRoot.ChildNodes)
             {
@@ -93,10 +124,10 @@ namespace Netherlands3D.Twin
             return bboxFilter;
         }
 
-        private static bool NodeHasGeoJSONOutput(XmlNode xmlNode)
+        private static bool NodeHasGeoJSONOutput(XmlNode xmlNode, XmlNamespaceManager namespaceManager = null)
         {
             // Check if operation GetFeature has a outputFormat of something like json/geojson
-            var featureOutputFormat = xmlNode.SelectSingleNode("ows:Parameter[@name='outputFormat']");
+            var featureOutputFormat = xmlNode.SelectSingleNode("ows:Parameter[@name='outputFormat']", namespaceManager);
             var owsAllowedValues = featureOutputFormat.SelectSingleNode("ows:AllowedValues");
             foreach (XmlNode owsValue in owsAllowedValues.ChildNodes)
             {
@@ -108,19 +139,11 @@ namespace Netherlands3D.Twin
             return false;
         }
 
-        private static XmlNode ReadGetFeatureNode(XmlDocument xmlDocument)
+        private static XmlNode ReadGetFeatureNode(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
         {
-            // Find the ows:Operation node with name GetFeature
-            var operationNodes = xmlDocument.GetElementsByTagName("ows:Operation");
-            XmlNode getFeatureOperationNode = null;
-            foreach (XmlNode operationNode in operationNodes)
-            {
-                if (operationNode.Attributes["name"].Value == "GetFeature")
-                {
-                    getFeatureOperationNode = operationNode;
-                }
-            }
-
+            // Find the <ows:Operation name="GetFeature"> node
+            var getFeatureOperationNode = xmlDocument.SelectSingleNode("//ows:Operation[@name='GetFeature']", namespaceManager);
+            
             if (getFeatureOperationNode == null)
                 Debug.LogWarning("WFS GetFeature operation not found.");
 
