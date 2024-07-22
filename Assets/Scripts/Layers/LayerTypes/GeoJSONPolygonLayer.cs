@@ -132,8 +132,9 @@ namespace Netherlands3D.Twin
             if (Application.isPlaying)
             {
                 // Remove all SpawnedVisualisations
-                foreach (var featureVisualisation in SpawnedVisualisations)
+                for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
                 {
+                    var featureVisualisation = SpawnedVisualisations[i];
                     RemoveFeature(featureVisualisation);
                 }
             }
