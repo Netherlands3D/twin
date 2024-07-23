@@ -11,8 +11,7 @@ namespace Netherlands3D.Twin.Projects
     public class ProjectDataHandler : MonoBehaviour
     {
         [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
-        [SerializeField] private ProjectData projectData;
-        private ChainOfResponsibility fileImporter;
+        private ChainOfResponsibility fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
 
         public List<ProjectData> undoStack = new();
@@ -21,13 +20,13 @@ namespace Netherlands3D.Twin.Projects
         public int undoStackSize = 10;
 
         private void Awake() {
-            if(projectData == null) {
-                Debug.LogError("ProjectData object reference is not set in ProjectStateHandler", this.gameObject);
+            if(ProjectData.Current == null) {
+                Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
                 return;
             }
 
             fileImporter = GetComponent<ChainOfResponsibility>();
-            projectData.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             //Prevent default browser shortcuts for saving and undo/redo
@@ -71,12 +70,11 @@ namespace Netherlands3D.Twin.Projects
 
         public void SaveProject()
         {
-            projectData.SaveAsFile(this);
+            ProjectData.Current.SaveAsFile(this);
         }
 
         private void LoadDefaultProject()
         {
-
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
@@ -98,7 +96,7 @@ namespace Netherlands3D.Twin.Projects
                 if(filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);
-                    projectData.LoadFromFile(filePath);
+                    ProjectData.Current.LoadFromFile(filePath);
                     return;
                 }
             }  
@@ -110,7 +108,7 @@ namespace Netherlands3D.Twin.Projects
             if (redoStack.Count > 0)
             {
                 var lastState = redoStack[redoStack.Count - 1];
-                projectData.CopyUndoFrom(lastState);
+                ProjectData.Current.CopyUndoFrom(lastState);
                 redoStack.RemoveAt(redoStack.Count - 1);
             }       
         }
@@ -120,7 +118,7 @@ namespace Netherlands3D.Twin.Projects
             if (undoStack.Count > 0)
             {
                 var lastState = undoStack[undoStack.Count - 1];
-                projectData.CopyUndoFrom(lastState);
+                ProjectData.Current.CopyUndoFrom(lastState);
                 undoStack.RemoveAt(undoStack.Count - 1);
             }
         }
@@ -130,7 +128,7 @@ namespace Netherlands3D.Twin.Projects
         /// </summary>
         public void ProjectSavedToIndexedDB()
         {
-            projectData.ProjectSavedToIndexedDB();
+            ProjectData.Current.ProjectSavedToIndexedDB();
         }
         public void DownloadedProject()
         {
