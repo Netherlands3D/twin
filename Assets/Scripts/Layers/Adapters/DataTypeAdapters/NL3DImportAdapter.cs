@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin
     {
         public bool Supports(LocalFile localFile)
         {
-            return localFile.LocalFilePath.ToLower().EndsWith(".nl3d");
+            return localFile.SourceUrl.ToLower().EndsWith(".nl3d");      
         }
 
         public void Execute(LocalFile localFile)
