@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Layers
                 {
                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
                     prefabIdentifier = metaID.ToString();
-                    print("setting prefab id to : " + prefabIdentifier);
+                    // print("setting prefab id to : " + prefabIdentifier);
                     EditorUtility.SetDirty(this);
                 }
             }

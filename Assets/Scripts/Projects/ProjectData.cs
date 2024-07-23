@@ -87,9 +87,7 @@ namespace Netherlands3D.Twin.Projects
         public void LoadFromFile(string fileName)
         {
             isLoading = true;
-            Debug.Log("Loading project file: " + fileName);
             RootLayer.DestroyLayer();
-            Debug.Log("old uuid: " + UUID);
 
             // Open the zip file
             using (FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName)))
