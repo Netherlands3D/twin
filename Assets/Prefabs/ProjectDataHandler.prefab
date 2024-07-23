@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
-  defaultProjectFileName: Test.nl3d
+  defaultProjectFileName: ProjectTemplate.nl3d
   undoStack: []
   redoStack: []
   undoStackSize: 10
