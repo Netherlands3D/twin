@@ -76,9 +76,10 @@ namespace Netherlands3D.Twin
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
             var url = urlAndData.SourceUrl;
+            var optionalExtention = Path.GetExtension(url);
             var uwr = UnityWebRequest.Get(url);
-            var guid = Guid.NewGuid().ToString();
-            string path = Path.Combine(Application.persistentDataPath, guid);
+            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
+            string path = Path.Combine(Application.persistentDataPath, guidFilename);
 
             uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
