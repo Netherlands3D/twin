@@ -230,10 +230,10 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Append single line to the current list of lines
         /// </summary>
-        public void AppendLine(List<Coordinate> linePoints)
+        public int AppendLine(List<Coordinate> linePoints)
         {
             var validLine = ValidateLine(linePoints);
-            if (!validLine) return;
+            if (!validLine) return -1;
 
             if (Lines == null)
                 Lines = new List<List<Coordinate>>();
@@ -241,17 +241,45 @@ namespace Netherlands3D.Twin
             var startIndex = Lines.Count;
             Lines.Add(linePoints);
             GenerateTransformMatrixCache(startIndex);
+
+            return startIndex;
+        }
+
+        /// <summary>
+        /// Remove a line using start and length
+        /// </summary>
+        public void RemoveLine(int startIndex, int length)
+        {
+            if (startIndex < 0 || startIndex >= Lines.Count)
+            {
+                Debug.LogWarning($"Index {startIndex} is out of range");
+                return;
+            }
+
+            if (length < 1)
+            {
+                Debug.LogWarning("Length should be at least 1");
+                return;
+            }
+
+            Lines.RemoveRange(startIndex, length);
+            GenerateTransformMatrixCache(startIndex);
+        }
+
+        public void RemoveLines(int startIndex, int combinedLineLength)
+        {
+            RemoveLine(startIndex, combinedLineLength);
         }
 
         /// <summary>
         /// Append multiple lines to the current list of lines
         /// </summary>
-        public void AppendLines(List<List<Coordinate>> lines)
+        public int AppendLines(List<List<Coordinate>> lines)
         {
             foreach (List<Coordinate> line in lines)
             {
                 var validLine = ValidateLine(line);
-                if (!validLine) return;
+                if (!validLine) return -1;
             }
 
             if (this.Lines == null)
@@ -260,6 +288,8 @@ namespace Netherlands3D.Twin
             var startIndex = Lines.Count;
             this.Lines.AddRange(lines);
             GenerateTransformMatrixCache(startIndex);
+
+            return startIndex;
         }
 
         /// <summary>
@@ -326,6 +356,29 @@ namespace Netherlands3D.Twin
             if (hasColors)
                 materialPropertyBlockCache.Clear();
             hasColors = false;
+        }
+
+        private void RemoveTransformMatrixCacheForLine(int lineStartIndex, int length)
+        {
+            var jointIndices = GetJointMatrixIndices(lineStartIndex); 
+            var segmentIndices = GetSegmentMatrixIndices(lineStartIndex);       
+
+            //Use joinIndices.batchIndex to determine the first batch where this line starts. Remove the range. If the range exceeds the batchs, make sure to go through all batches untill line is removed
+            for (int i = jointIndices.batchIndex; i < jointsTransformMatrixCache.Count; i++)
+            {
+                if (length <= 0) break;
+
+                if (i == jointIndices.batchIndex)
+                {
+                    jointsTransformMatrixCache[i].RemoveRange(jointIndices.matrixIndex, Mathf.Min(jointsTransformMatrixCache[i].Count - jointIndices.matrixIndex, length));
+                    length -= jointsTransformMatrixCache[i].Count - jointIndices.matrixIndex;
+                }
+                else
+                {
+                    jointsTransformMatrixCache[i].RemoveRange(0, Mathf.Min(jointsTransformMatrixCache[i].Count, length));
+                    length -= jointsTransformMatrixCache[i].Count;
+                }
+            }
         }
 
         public void GenerateTransformMatrixCache(int lineStartIndex = -1)
