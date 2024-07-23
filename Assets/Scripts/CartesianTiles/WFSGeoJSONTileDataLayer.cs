@@ -25,10 +25,10 @@ namespace Netherlands3D.CartesianTiles
 			set
 			{
 				if(geoJSONLayer != null)
-					geoJSONLayer.ReferencedProxy.LayerDestroyed.RemoveListener(OnGeoJSONLayerDestroyed);
+					geoJSONLayer.LayerData.LayerDestroyed.RemoveListener(OnGeoJSONLayerDestroyed);
 
 				geoJSONLayer = value;
-				geoJSONLayer.ReferencedProxy.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
+				geoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
 			}
 		}
 

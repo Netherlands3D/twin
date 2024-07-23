@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ReconstructParentsRecursive(LayerData layer, LayerData parent)
         {
             layer.InitializeParent(parent);
             foreach (var child in layer.ChildrenLayers)
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void AddChild(LayerNL3DBase layer)
+        public void AddChild(LayerData layer)
         {
             if (!ChildrenLayers.Contains(layer))
             {
