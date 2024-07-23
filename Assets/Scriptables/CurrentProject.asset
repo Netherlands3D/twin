@@ -28,4 +28,4 @@ MonoBehaviour:
     activeSelf: 1
     color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
     children: []
-  prefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
+  PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}

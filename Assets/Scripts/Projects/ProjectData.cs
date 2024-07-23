@@ -38,8 +38,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
         [SerializeField, JsonProperty] private RootLayer rootLayer;
-
-        [SerializeField, JsonIgnore] public PrefabLibrary prefabLibrary;
+        [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
         
         [JsonIgnore]
         public RootLayer RootLayer
@@ -52,8 +51,6 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        [JsonIgnore] public PrefabLibrary PrefabLibrary => prefabLibrary;
-        
         [NonSerialized] private ProjectDataHandler projectDataHandler;
         [NonSerialized] private ZipOutputStream zipOutputStream;
         [NonSerialized] private string lastSavePath = "";
