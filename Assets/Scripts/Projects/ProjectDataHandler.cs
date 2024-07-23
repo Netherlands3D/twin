@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.Projects
             foreach (var filePath in files)
             {
                 print("attempting to load file: " + filePath);
-                if(filePath.EndsWith(".nl3d"))
+                if(filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);
                     projectData.LoadFromFile(filePath);
