@@ -60,6 +60,7 @@ namespace Netherlands3D.Twin.Configuration
         public UnityEvent OnCloseInterface = new();
         public UnityEvent OnOpen { get => OnOpenInterface; }
         public UnityEvent OnClose { get => OnCloseInterface; }
+        public UnityEvent<string> loadProjectTemplate = new();
 
         public bool SetupSceneLoaded { 
             get{
@@ -204,7 +205,7 @@ namespace Netherlands3D.Twin.Configuration
             if (!configuration.ShouldStartSetup) return;
 
             Open();
-            ProjectData.Current.LoadFromFile(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
+            loadProjectTemplate.Invoke(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
         
         public void Open()
