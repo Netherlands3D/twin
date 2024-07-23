@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class GeoJSONPolygonLayer : LayerNL3DBase
     {
-        public class FeatureSpawnedVisualisation
+        public class FeaturePolygonVisualisations
         {
             public Feature feature;
             public List<PolygonVisualisation> visualisations = new();
@@ -53,16 +53,16 @@ namespace Netherlands3D.Twin
             }
 
             /// <summary>
-            /// A nice addition to PolygonVisualisation script in package can be to add a method there to get the bounds of the visualisation (with cached MeshRenderer)
+            /// A nice addition/optimisation would be to cache this inside the PolygonVisualisation class (needs change in package)
             /// </summary>
-            /// <returns></returns>
-            public static Bounds GetVisualisationBounds(PolygonVisualisation polygonVisualisation)
+            /// <returns>The bounds of the MeshRenderer</returns>
+            private Bounds GetVisualisationBounds(PolygonVisualisation polygonVisualisation)
             {
                 return polygonVisualisation.GetComponent<MeshRenderer>().bounds;
             }
         }
 
-        public List<FeatureSpawnedVisualisation> SpawnedVisualisations = new();
+        public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
@@ -112,7 +112,7 @@ namespace Netherlands3D.Twin
             }
 
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
-            var newFeatureVisualisation = new FeatureSpawnedVisualisation { feature = feature };
+            var newFeatureVisualisation = new FeaturePolygonVisualisations { feature = feature };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
                 var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureMaterial);
@@ -163,7 +163,7 @@ namespace Netherlands3D.Twin
             }
         }
         
-        private void RemoveFeature(FeatureSpawnedVisualisation featureVisualisation)
+        private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
             foreach (var polygonVisualisation in featureVisualisation.visualisations)
             {

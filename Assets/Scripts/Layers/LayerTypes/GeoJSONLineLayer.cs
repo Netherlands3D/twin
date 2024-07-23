@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Visualisers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -14,7 +16,45 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class GeoJSONLineLayer : LayerNL3DBase
     {
-        public Dictionary<Feature,BoundingBox> LineFeatures = new();
+        public class FeatureLineVisualisations
+        {
+            public Feature feature;
+            public List<List<Coordinate>> lines = new();
+            public Bounds bounds;
+
+            private float boundsRoundingCeiling = 1000;
+            public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
+
+            /// <summary>
+            /// Calculate bounds by combining all visualisation bounds
+            /// </summary>
+            public void CalculateBounds()
+            {
+                // Create combined rounded bounds of all lines
+                bounds = new Bounds();
+                foreach (var line in lines)
+                {
+                    foreach (var coordinate in line)
+                    {
+                        bounds.Encapsulate(coordinate.ToUnity());
+                    }
+                }
+
+                // Expand bounds to ceiling to steps
+                bounds.size = new Vector3(
+                    Mathf.Ceil(bounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(bounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(bounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+                bounds.center = new Vector3(
+                    Mathf.Round(bounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(bounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(bounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+            }
+        }
+
+        public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
         private LineRenderer3D lineRenderer3D;
 
@@ -43,35 +83,54 @@ namespace Netherlands3D.Twin
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
             where T : GeoJSONObject
         {
-            BoundingBox boundingBox = new();
+            // Skip if feature already exists (comparison is done using hashcode based on geometry)
+            if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
+                return;
+
+            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+
             if (feature.Geometry is MultiLineString multiLineString)
             {
-                boundingBox = BoundingBoxFromMultilineString(multiLineString);
-                GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.lines.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
-                boundingBox = BoundingBoxFromLineString(lineString);
-                GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.lines.Add(newLine);
             }
 
-            LineFeatures.Add(feature,boundingBox);
+            SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-        private BoundingBox BoundingBoxFromMultilineString(MultiLineString multiLingString)
-        {
-            return new BoundingBox();
-        }
+        /// <summary>
+        /// Checks the Bounds of the visualisations and checks them against the camera frustum
+        /// to remove visualisations that are out of view
+        /// </summary>
+        public void RemoveFeaturesOutOfView()
+        {         
+            // Remove visualisations that are out of view
+            var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
+            {
+                // Make sure to recalculate bounds because they can change due to shifts
+                SpawnedVisualisations[i].CalculateBounds();
 
-        private BoundingBox BoundingBoxFromLineString(LineString lineString)
-        {
-            return new BoundingBox();
-        }
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
+                if (inCameraFrustum)
+                    continue;
 
-        public void RemoveFeature(Feature feature)
+                var featureVisualisation = SpawnedVisualisations[i];
+                RemoveFeature(featureVisualisation);
+            }
+        }
+        
+        private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
-            LineFeatures.Remove(feature);
-            //TODO: Remove points from renderer
+            foreach (var line in featureVisualisation.lines)
+                lineRenderer3D.RemoveLine(line);
+
+            SpawnedVisualisations.Remove(featureVisualisation);
         }
 
         public override void DestroyLayer()
@@ -79,12 +138,6 @@ namespace Netherlands3D.Twin
             base.DestroyLayer();
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
-        }
-
-        public void RemoveFeaturesOutOfView()
-        {
-            // For all line features, determine their points BoundingBox, and check if it is still in  view of Camera.main
-
         }
     }
 }

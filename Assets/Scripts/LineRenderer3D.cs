@@ -251,16 +251,16 @@ namespace Netherlands3D.Twin
         public void RemoveLine(List<Coordinate> linePoints)
         {
             Lines.Remove(linePoints);
-            GenerateTransformMatrixCache(0);
+
+            GenerateTransformMatrixCache(-1);
         }
 
         public void RemoveLines(List<List<Coordinate>> lines)
         {
             foreach (List<Coordinate> line in lines)
-            {
                 Lines.Remove(line);
-            }
-            GenerateTransformMatrixCache(0);
+                
+            GenerateTransformMatrixCache(-1);
         }
 
 

@@ -93,7 +93,10 @@ namespace Netherlands3D.Twin
             {
                 var featureTypes = GetFeatureTypes(localFile);
                 foreach (var featureType in featureTypes)
+                {
+                    Debug.Log("Adding WFS layer for featureType: " + featureType);
                     AddWFSLayer(featureType, sourceUrl);
+                }
                 return;
             }
 
@@ -201,7 +204,7 @@ namespace Netherlands3D.Twin
 
             foreach(XmlNode featureTypeNode in featureTypeChildNodes)
             {
-                var featureTypeName = featureTypeNode.SelectSingleNode("//*[local-name()='Name']", namespaceManager).InnerText;
+                var featureTypeName = featureTypeNode.SelectSingleNode(".//*[local-name()='Name']", namespaceManager).InnerText;
                 featureTypes.Add(featureTypeName);
             }
 
