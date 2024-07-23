@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
 
-        [SerializeField] private RootLayer rootLayer;
+        [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary;
         
         [JsonIgnore]

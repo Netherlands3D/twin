@@ -8,7 +8,7 @@ using UnityEngine.Scripting;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable, Preserve]
+    [Serializable]
     public class RootLayer : LayerNL3DBase
     {
         [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; private set; } = new();

@@ -9,7 +9,7 @@ using UnityEngine.Scripting;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable, Preserve]
+    [Serializable]
     public class LayerNL3DBase
     {
         [SerializeField, JsonProperty] protected string name;
