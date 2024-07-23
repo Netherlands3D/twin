@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Layers
         {
             get
             {
-                if (referencedProxy == null) //todo: this should never be true
+                if (referencedProxy == null)
                 {
                     Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers
             if (ReferencedProxy == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
-            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
+            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
             OnLayerActiveInHierarchyChanged(ReferencedProxy.ActiveInHierarchy); //initialize the visualizations with the correct visibility
         }
 
@@ -77,11 +77,7 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-
-        protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-        }
-
+        
         public virtual void OnSelect()
         {
         }
@@ -97,7 +93,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDestroy()
         {
-            ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+            // ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
             DestroyProxy();
         }
 
@@ -122,6 +118,11 @@ namespace Netherlands3D.Twin.Layers
         public virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
+        }
+        
+        public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            //called when the Proxy's active state changes.          
         }
     }
 }

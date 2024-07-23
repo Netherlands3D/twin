@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Layers
             objectCreated.Invoke(gameObject);
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (!isActive && ReferencedProxy.IsSelected)
             {

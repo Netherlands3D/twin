@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.Layers
         private CartesianTiles.Layer layer;
         private CartesianTiles.TileHandler tileHandler;
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (layer && layer.isEnabled != isActive)
                 layer.isEnabled = isActive;
