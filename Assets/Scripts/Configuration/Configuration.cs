@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;
@@ -19,7 +20,8 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
-
+        [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
+        
         public string Title
         {
             get => title;
@@ -42,6 +44,8 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        public string DefaultProjectFileName => defaultProjectFileName;
+        
         /// <summary>
         /// By default, the options to change settings are enabled for the user.
         /// The configuration file can disable this.

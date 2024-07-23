@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Configuration
 {
     public class ConfiguratorStarter : MonoBehaviour
     {
-        [SerializeField] private ProjectData initialProjectTemplate;
+        [SerializeField] private ProjectData currentProjectData;
         [SerializeField] private Configurator configurator;
         public UnityEvent<Configuration> OnLoadedConfiguration = new();
 
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private IEnumerator Start()
         {
-            ProjectData.SetCurrentProject(initialProjectTemplate);
+            ProjectData.SetCurrentProject(currentProjectData); //initialize a new project to work on, this sets ProjectData.Current
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();
         }

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20240718164010
-  UUID: a64fb7fe-2e5a-4c91-8b81-9d6f1356fd31
+  SavedTimestamp: 20240722125345
+  UUID: 275580d2-9063-47e0-bf00-988a4c8a2d9c
   CameraPosition:
-  - 154997.75
-  - 462800.59375
-  - -43.226139068603516
+  - 154049.9584350586
+  - 461671.857421875
+  - 1452.616455078125
   CameraRotation:
   - 60.000003814697266
   - 0
@@ -28,19 +28,19 @@ MonoBehaviour:
     activeSelf: 1
     color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
     children:
-    - name: Folder
+    - name: TestFolder
       activeSelf: 1
       color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
       children: []
-    - name: Folder
+    - name: Parent1
       activeSelf: 1
       color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
       children:
-      - name: Folder
+      - name: ParentMiddle
         activeSelf: 1
         color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
         children: []
-    - name: Folder
+    - name: Goen
       activeSelf: 1
       color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
       children: []

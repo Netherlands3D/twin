@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 #endif
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
+using Netherlands3D.Twin.Projects;
 using SimpleJSON;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -203,6 +204,7 @@ namespace Netherlands3D.Twin.Configuration
             if (!configuration.ShouldStartSetup) return;
 
             Open();
+            ProjectData.Current.LoadFromFile(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
         
         public void Open()

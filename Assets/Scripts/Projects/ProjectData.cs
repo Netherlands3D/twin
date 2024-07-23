@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
+using UnityEngine.Assertions;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -55,15 +56,6 @@ namespace Netherlands3D.Twin.Projects
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
         private string lastSavePath = "";
-
-        [NonSerialized] private bool isDirty = false;
-
-        [JsonIgnore]
-        public bool IsDirty
-        {
-            get => isDirty;
-            set { isDirty = value; }
-        }
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<LayerNL3DBase> LayerAdded = new();
@@ -136,36 +128,54 @@ namespace Netherlands3D.Twin.Projects
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        // var newProject = ScriptableObject.CreateInstance<ProjectData>();
-                        JsonConvert.PopulateObject(json, Current, serializerSettings);
-                        Debug.Log("temp project root childcount: " + Current.RootLayer.ChildrenLayers.Count);
-                        var jsonProject = JsonConvert.SerializeObject(Current, serializerSettings);
-                        Debug.Log("json: " + jsonProject);
-                        foreach (var child in Current.RootLayer.ChildrenLayers)
-                        {
-                            Debug.Log("np child: " + child.Name);
-                        }
+                        LoadJSON(json);
                         
-                        JsonConvert.PopulateObject(json, current, serializerSettings);
-                        Debug.Log("current populated root childcount: " + current.RootLayer.ChildrenLayers.Count);
-                        foreach (var child in current.RootLayer.ChildrenLayers)
-                        {
-                            Debug.Log("child: " + child.Name);
-                        }
-
-                        RootLayer.ReconstructParentsRecursive();
-                        Debug.Log("new uuid: " + UUID);
-                        // CopyFrom(newProject);
                     }
                     else
                     {
                         //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
                         Debug.Log("Other file found in Project zip. Ignoring for now.");
+                        isLoading = false;
+                        
+                        //todo add failed loading event
                     }
                 }
             }
 
-            IsDirty = true;
+
+        }
+
+        public static void LoadProjectData(ProjectData data)
+        {
+            Debug.Log(Current.serializerSettings.TypeNameHandling);
+            var jsonProject = JsonConvert.SerializeObject(data, Current.serializerSettings);
+            Debug.Log("JSON of project to load: \n\n\n"+jsonProject);
+            Current.LoadJSON(jsonProject);
+        }
+        
+        private void LoadJSON(string json)
+        {
+            // var newProject = ScriptableObject.CreateInstance<ProjectData>();
+            // JsonConvert.PopulateObject(json, Current, serializerSettings);
+            // Debug.Log("temp project root childcount: " + Current.RootLayer.ChildrenLayers.Count);
+            // var jsonProject = JsonConvert.SerializeObject(Current, serializerSettings);
+            // Debug.Log("json: " + jsonProject);
+            // foreach (var child in Current.RootLayer.ChildrenLayers)
+            // {
+            //     Debug.Log("np child: " + child.Name);
+            // }
+
+            JsonConvert.PopulateObject(json, Current, serializerSettings);
+            Debug.Log("current populated root childcount: " + Current.RootLayer.ChildrenLayers.Count);
+            foreach (var child in Current.RootLayer.ChildrenLayers)
+            {
+                Debug.Log("child: " + child.Name);
+            }
+
+            RootLayer.ReconstructParentsRecursive();
+            Debug.Log("new uuid: " + UUID);
+            // CopyFrom(newProject);
+            
             OnDataChanged.Invoke(this);
             isLoading = false;
         }
@@ -200,9 +210,7 @@ namespace Netherlands3D.Twin.Projects
             // Finish the zip
             zipOutputStream.Finish();
             zipOutputStream.Close();
-
-            IsDirty = false;
-
+            
             // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
             SyncFilesToIndexedDB(projectDataHandler.name, "ProjectSavedToIndexedDB");
@@ -267,8 +275,10 @@ namespace Netherlands3D.Twin.Projects
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
+            Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
+            Debug.Log("initialized current");
         }
     }
 }
