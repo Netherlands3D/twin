@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
     public class FileTypeEvent
     {
         public string Extension;
-        public UnityEvent<string> FileReceived;
+        public UnityEvent<LocalFile> FileReceived;
     }
     
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
@@ -37,7 +37,13 @@ namespace Netherlands3D.Twin
             
             if(fileTypeEvent != null)
             {
-                fileTypeEvent.FileReceived.Invoke(file);
+                var localFile = new LocalFile()
+                {
+                    SourceUrl = file,
+                    LocalFilePath = file
+                };
+
+                fileTypeEvent.FileReceived.Invoke(localFile);
             }
             else
             {
