@@ -74,6 +74,7 @@ namespace Netherlands3D.Twin.Projects
                 if(filePath.EndsWith(".nl3d"))
                 {
                     projectData.LoadFromFile(filePath);
+                    Debug.Log("loading nl3d file: " + filePath);
                     return;
                 }
             }  
