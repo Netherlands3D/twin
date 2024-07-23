@@ -84,6 +84,40 @@ namespace Netherlands3D.Twin
             return true;
         }
 
+        public void Execute(LocalFile localFile)
+        {
+            var sourceUrl = localFile.SourceUrl;
+
+            var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
+            if(getCapabilitiesRequest)
+            {
+                var featureTypes = GetFeatureTypes(localFile);
+                foreach (var featureType in featureTypes)
+                    AddWFSLayer(featureType, sourceUrl);
+                return;
+            }
+
+            var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
+            if(getFeatureRequest)
+            {
+                // Get the feature type from the url
+                var featureType = string.Empty;
+                if (sourceUrl.ToLower().Contains("typename="))
+                {
+                    //WFS 1.0.0 uses 'typename'
+                    featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
+                }
+                else if (sourceUrl.ToLower().Contains("typenames="))
+                {
+                    //WFS 2 uses plural 'typenames'
+                    featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
+                }
+                AddWFSLayer(featureType, sourceUrl);
+                return;
+            }
+        }
+
+
         private XmlNamespaceManager ReadNameSpaceManager(XmlDocument xmlDocument)
         {
             XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
@@ -150,39 +184,6 @@ namespace Netherlands3D.Twin
             return getFeatureOperationNode;
         }
 
-        public void Execute(LocalFile localFile)
-        {
-            var sourceUrl = localFile.SourceUrl;
-
-            var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
-            if(getCapabilitiesRequest)
-            {
-                var featureTypes = GetFeatureTypes(localFile);
-                foreach (var featureType in featureTypes)
-                    AddWFSLayer(featureType, sourceUrl);
-                return;
-            }
-
-            var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
-            if(getFeatureRequest)
-            {
-                // Get the feature type from the url
-                var featureType = string.Empty;
-                if (sourceUrl.ToLower().Contains("typename="))
-                {
-                    //WFS 1.0.0 uses 'typename'
-                    featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
-                }
-                else if (sourceUrl.ToLower().Contains("typenames="))
-                {
-                    //WFS 2 uses plural 'typenames'
-                    featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
-                }
-                AddWFSLayer(featureType, sourceUrl);
-                return;
-            }
-        }
-
         private string[] GetFeatureTypes(LocalFile localFile)
         {
             // Read the XML data to find the list of feature types
@@ -230,7 +231,7 @@ namespace Netherlands3D.Twin
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
-            // Create a new GeoJSON layer per feature, with a 'live' datasource
+            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
             var go = new GameObject(featureType);
             var layer = go.AddComponent<GeoJSONLayer>();
             layer.RandomizeColorPerFeature = true;

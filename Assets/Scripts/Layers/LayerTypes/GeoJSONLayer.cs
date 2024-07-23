@@ -168,10 +168,12 @@ namespace Netherlands3D.Twin
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var layer = new GeoJSONPolygonLayer("Polygonen");
-            layer.Color = ReferencedProxy.Color;
-            layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
-            layer.RandomizeColorPerFeature = RandomizeColorPerFeature;
+            var layer = new GeoJSONPolygonLayer("Polygonen")
+            {
+                Color = ReferencedProxy.Color,
+                PolygonVisualizationMaterial = defaultVisualizationMaterial,
+                RandomizeColorPerFeature = RandomizeColorPerFeature
+            };
             layer.SetParent(ReferencedProxy);
             return layer;
         }
