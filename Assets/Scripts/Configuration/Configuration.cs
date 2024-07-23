@@ -20,7 +20,6 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
-        [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         
         public string Title
         {
@@ -43,8 +42,6 @@ namespace Netherlands3D.Twin.Configuration
                 OnOriginChanged.Invoke(roundedValue);
             }
         }
-
-        public string DefaultProjectFileName => defaultProjectFileName;
         
         /// <summary>
         /// By default, the options to change settings are enabled for the user.

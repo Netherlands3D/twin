@@ -60,8 +60,7 @@ namespace Netherlands3D.Twin.Configuration
         public UnityEvent OnCloseInterface = new();
         public UnityEvent OnOpen { get => OnOpenInterface; }
         public UnityEvent OnClose { get => OnCloseInterface; }
-        public UnityEvent<string> loadProjectTemplate = new();
-
+        
         public bool SetupSceneLoaded { 
             get{
                 return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
@@ -132,18 +131,11 @@ namespace Netherlands3D.Twin.Configuration
             SceneManager.sceneLoaded += (scene, mode) => {
                 if(scene.name == mainSceneName && Configuration.ShouldStartSetup)
                 {
-                    LoadDefaultProject();
                     StartSetup();
                 }
             };
 
             yield return null;
-        }
-
-        private void LoadDefaultProject()
-        {
-            Debug.Log("loading default project file: " + Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
-            loadProjectTemplate.Invoke(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
 
         private T GetFunctionalityConfigurationOfType<T>() where T : ScriptableObject,IConfiguration

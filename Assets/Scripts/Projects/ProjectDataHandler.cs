@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace Netherlands3D.Twin.Projects
     {
         [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
         [SerializeField] private ProjectData projectData;
+        private ChainOfResponsibility fileImporter;
+        [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
@@ -23,12 +26,18 @@ namespace Netherlands3D.Twin.Projects
                 return;
             }
 
+            fileImporter = GetComponent<ChainOfResponsibility>();
             projectData.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
+        }
+
+        private void Start()
+        {
+            LoadDefaultProject(); //todo: when undo is implemented, assign the listener after loading this, so the initial load cannot be undone
         }
 
         private void OnProjectDataChanged(ProjectData project)
@@ -65,6 +74,20 @@ namespace Netherlands3D.Twin.Projects
             projectData.SaveAsFile(this);
         }
 
+        private void LoadDefaultProject()
+        {
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+            Debug.Log("loading default project file: " + url);
+            fileImporter.DetermineAdapter(url);
+#else
+            var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+            Debug.Log("loading default project file: " + filePath);
+            ProjectData.Current.LoadFromFile(filePath);
+#endif
+        }
+        
         public void LoadFromFile(string filePaths)
         {
             var files = filePaths.Split(',');
