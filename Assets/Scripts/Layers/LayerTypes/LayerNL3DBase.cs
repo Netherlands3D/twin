@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
-        public void InitializeParent(LayerNL3DBase initialParent)
+        public void InitializeParent(LayerNL3DBase initialParent = null)
         { 
             parent = initialParent;
             
@@ -96,33 +96,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 parent = Root;
             }
-
-            // if (!parent.ChildrenLayers.Contains(this))
-            // {
-            //     parent.ChildrenLayers.Add(this);
-            //     parent.ChildrenChanged.Invoke();
-            // }
         }
-
-        //needed because after deserialization of the Layer objects, the parent field is not set yet.
-        // public void ReconstructParentsRecursive()
-        // {
-        //     Debug.Log( "reconstructing recursive: " + Name +"\t"+ ChildrenLayers.Count);
-        //     foreach (var layer in ChildrenLayers)
-        //     {
-        //         ReconstructParentsRecursive(layer, this);
-        //     }
-        // }
-
-        // public void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
-        // {
-        //     Debug.Log(layer.Name + " setting parent to: " + parent.name);
-        //     layer.parent = parent;
-        //     foreach (var child in layer.ChildrenLayers)
-        //     {
-        //         ReconstructParentsRecursive(child, layer);
-        //     }
-        // }
 
         public virtual void SelectLayer(bool deselectOthers = false)
         {
@@ -147,16 +121,7 @@ namespace Netherlands3D.Twin.Layers
         {
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent(null);
-
-            // Debug.Log(parent);
-            // if (this is not RootLayer)
-            // {
-            //     if (parent == null)
-            //         parent = Root;
-            // }
-
-            // Root.ReconstructParentsRecursive();
+                InitializeParent();
         }
 
         public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
@@ -184,7 +149,7 @@ namespace Netherlands3D.Twin.Layers
 
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
-                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy); // Update the active state to match the calculated state
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
                 ParentOrSiblingIndexChanged.Invoke(siblingIndex);
             }
 

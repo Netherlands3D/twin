@@ -51,8 +51,6 @@ namespace Netherlands3D.Twin.Layers
 
         public void ReconstructParentsRecursive()
         {
-            Debug.Log("reconstructing recursive: " + Name + "\t" + ChildrenLayers.Count);
-
             foreach (var layer in ChildrenLayers)
             {
                 ReconstructParentsRecursive(layer, this);
@@ -61,7 +59,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
         {
-            Debug.Log(layer.Name + " setting parent to: " + parent.Name);
             layer.InitializeParent(parent);
             foreach (var child in layer.ChildrenLayers)
             {

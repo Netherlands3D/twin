@@ -130,12 +130,20 @@ namespace Netherlands3D.Twin.Configuration
             indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
 
             SceneManager.sceneLoaded += (scene, mode) => {
-                if(scene.name == mainSceneName && Configuration.ShouldStartSetup){
+                if(scene.name == mainSceneName && Configuration.ShouldStartSetup)
+                {
+                    LoadDefaultProject();
                     StartSetup();
                 }
             };
 
             yield return null;
+        }
+
+        private void LoadDefaultProject()
+        {
+            Debug.Log("loading default project file: " + Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
+            loadProjectTemplate.Invoke(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
 
         private T GetFunctionalityConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
@@ -205,8 +213,6 @@ namespace Netherlands3D.Twin.Configuration
             if (!configuration.ShouldStartSetup) return;
 
             Open();
-            Debug.Log("loading file: " + Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
-            loadProjectTemplate.Invoke(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
         
         public void Open()

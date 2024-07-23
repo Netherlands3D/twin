@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Netherlands3D.Twin.Projects
 {
