@@ -90,12 +90,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
+            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
         }
 
         private void OnDisable()
         {
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
+            layerNameField.onEndEdit.RemoveListener(OnInputFieldChanged);
         }
 
         private void OnEnabledToggleValueChanged(bool isOn)
@@ -108,7 +110,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateFoldout();
             RecalculateVisibleHierarchyRecursive();
         }
-
+        
+        private void OnInputFieldChanged(string newName)
+        {
+            Layer.Name = newName;
+        }
         
         private void Start()
         {
@@ -376,6 +382,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             width += parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left;
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
             layerNameText.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
+            layerNameField.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
 
         public void OnPointerDown(PointerEventData eventData)

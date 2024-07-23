@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Layers
             RecalculateColorPriorities();
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
             ColorSetLayer.Enabled = isActive;

@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin.Layers
             completedInitialization = true;
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             gameObject.SetActive(isActive);
         }

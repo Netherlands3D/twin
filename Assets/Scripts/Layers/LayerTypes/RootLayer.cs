@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -43,9 +44,35 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.DestroyLayer();
             }
-            
+
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
+        }
+
+        public void ReconstructParentsRecursive()
+        {
+            foreach (var layer in ChildrenLayers)
+            {
+                ReconstructParentsRecursive(layer, this);
+            }
+        }
+
+        private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        {
+            layer.InitializeParent(parent);
+            foreach (var child in layer.ChildrenLayers)
+            {
+                ReconstructParentsRecursive(child, layer);
+            }
+        }
+
+        public void AddChild(LayerNL3DBase layer)
+        {
+            if (!ChildrenLayers.Contains(layer))
+            {
+                ChildrenLayers.Add(layer);
+                ChildrenChanged.Invoke();
+            }
         }
     }
 }

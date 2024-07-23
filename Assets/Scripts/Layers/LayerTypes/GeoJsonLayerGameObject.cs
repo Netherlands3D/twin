@@ -14,19 +14,20 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJsonLayerGameObject : LayerGameObject
+    public class GeoJSONLayer : ReferencedLayer
     {
         public static float maxParseDuration = 0.01f;
 
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
-        public List<Feature> Features = new();
 
         private GeoJSONPolygonLayer polygonFeatures;
         private Material defaultVisualizationMaterial;
+        private bool randomizeColorPerFeature = false;
+        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         private GeoJSONLineLayer lineFeatures;
-        private LineRenderer3D lineRenderer3DPrefab; //todo: set this in the inspector somehow
+        private LineRenderer3D lineRenderer3DPrefab;
 
         public UnityEvent<string> OnParseError = new();
 
@@ -38,22 +39,75 @@ namespace Netherlands3D.Twin.Layers
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
-            LayerData.Color = layerColor;
+            ReferencedProxy.Color = layerColor;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
-        public void ParseGeoJSON(string filePath)
+        /// <summary>
+        /// Removes features based on the bounds of their visualisations
+        /// </summary>
+        public void RemoveFeaturesOutOfView()
         {
-            StartCoroutine(ParseGeoJSON(filePath, 1000));
+            if (polygonFeatures != null)
+                polygonFeatures.RemoveFeaturesOutOfView();
+
+            if (lineFeatures != null)
+                lineFeatures.RemoveFeaturesOutOfView();
+
+            if (pointFeatures != null)
+                pointFeatures.RemoveFeaturesOutOfView();
         }
 
-        private IEnumerator ParseGeoJSON(string filePath, int maxParsesPerFrame = Int32.MaxValue)
+        public void AppendFeatureCollection(FeatureCollection featureCollection)
+        {
+            var collectionCRS = featureCollection.CRS;
+            //Determine if CRS is LinkedCRS or NamedCRS
+            if (collectionCRS is NamedCRS)
+            {
+                if (CoordinateSystems.FindCoordinateSystem((collectionCRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
+                {
+                    CRS = collectionCRS as NamedCRS;
+                }
+            }
+            else if (collectionCRS is LinkedCRS)
+            {
+                Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
+                return;
+            }
+
+            foreach (var feature in featureCollection.Features)              
+                VisualizeFeature(feature);
+        }
+
+        /// <summary>
+        /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
+        /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void AdditiveParseGeoJSON(string filePath)
+        {
+            // Read filepath and deserialize the GeoJSON using GeoJSON.net in one go
+            var jsonText = File.ReadAllText(filePath);
+            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
+            
+            AppendFeatureCollection(featureCollection);
+        }
+
+        /// <summary>
+        /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
+        /// Ideal for large single files.
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void StreamParseGeoJSON(string filePath)
+        {
+            StartCoroutine(ParseGeoJSONStream(filePath, 1000));
+        }
+
+        private IEnumerator ParseGeoJSONStream(string filePath, int maxParsesPerFrame = Int32.MaxValue)
         {
             var startFrame = Time.frameCount;
-
             var reader = new StreamReader(filePath);
-
             var jsonReader = new JsonTextReader(reader);
 
             JsonSerializer serializer = new JsonSerializer();
@@ -72,15 +126,13 @@ namespace Netherlands3D.Twin.Layers
                 if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
                 {
                     jsonReader.Read(); //start array
-                    yield return ReadFeaturesArray(jsonReader, serializer);
+                    yield return ReadFeaturesArrayStream(jsonReader, serializer);
                 }
             }
 
             jsonReader.Close();
 
             var frameCount = Time.frameCount - startFrame;
-            Debug.Log(Features.Count + " features parsed and visualized: " + " in " + frameCount + " frames");
-
             if (frameCount == 0)
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
         }
@@ -90,9 +142,9 @@ namespace Netherlands3D.Twin.Layers
             OnParseError.Invoke("Er was een probleem met het inladen van dit GeoJSON bestand:\n\n" + args.ErrorContext.Error.Message);
         }
 
-        private IEnumerator ReadFeaturesArray(JsonTextReader jsonReader, JsonSerializer serializer)
+        private IEnumerator ReadFeaturesArrayStream(JsonTextReader jsonReader, JsonSerializer serializer)
         {
-            Features = new List<Feature>();
+            var features = new List<Feature>();
             var startTime = Time.realtimeSinceStartup;
 
             while (jsonReader.Read())
@@ -104,7 +156,7 @@ namespace Netherlands3D.Twin.Layers
                 }
 
                 var feature = serializer.Deserialize<Feature>(jsonReader);
-                Features.Add(feature);
+                features.Add(feature);
                 VisualizeFeature(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
@@ -118,10 +170,13 @@ namespace Netherlands3D.Twin.Layers
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var layer = new GeoJSONPolygonLayer("Polygonen");
-            layer.Color = LayerData.Color;
-            layer.PolygonVisualizationMaterial = defaultVisualizationMaterial;
-            layer.SetParent(LayerData);
+            var layer = new GeoJSONPolygonLayer("Polygonen")
+            {
+                Color = ReferencedProxy.Color,
+                PolygonVisualizationMaterial = defaultVisualizationMaterial,
+                RandomizeColorPerFeature = RandomizeColorPerFeature
+            };
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
@@ -130,8 +185,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
-            layer.Color = LayerData.Color;
-            layer.SetParent(LayerData);
+            layer.Color = ReferencedProxy.Color;
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
 
@@ -140,8 +195,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
-            layer.Color = LayerData.Color;
-            layer.SetParent(LayerData);
+            layer.Color = ReferencedProxy.Color;
+            layer.SetParent(ReferencedProxy);
             return layer;
         }
         
@@ -155,7 +210,7 @@ namespace Netherlands3D.Twin.Layers
                     if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
-                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPolygon, originalCoordinateSystem);
+                    polygonFeatures.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Polygon:
@@ -163,7 +218,7 @@ namespace Netherlands3D.Twin.Layers
                     if (polygonFeatures == null)
                         polygonFeatures = CreatePolygonLayer();
 
-                    polygonFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Polygon, originalCoordinateSystem);
+                    polygonFeatures.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiLineString:
@@ -171,7 +226,7 @@ namespace Netherlands3D.Twin.Layers
                     if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
-                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiLineString, originalCoordinateSystem);
+                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.LineString:
@@ -179,7 +234,7 @@ namespace Netherlands3D.Twin.Layers
                     if (lineFeatures == null)
                         lineFeatures = CreateLineLayer();
 
-                    lineFeatures.AddAndVisualizeFeature(feature, feature.Geometry as LineString, originalCoordinateSystem);
+                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.MultiPoint:
@@ -187,7 +242,7 @@ namespace Netherlands3D.Twin.Layers
                     if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
 
-                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as MultiPoint, originalCoordinateSystem);
+                    pointFeatures.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
                     break;
                 }
                 case GeoJSONObjectType.Point:
@@ -195,7 +250,7 @@ namespace Netherlands3D.Twin.Layers
                     if (pointFeatures == null)
                         pointFeatures = CreatePointLayer();
                     
-                    pointFeatures.AddAndVisualizeFeature(feature, feature.Geometry as Point, originalCoordinateSystem);
+                    pointFeatures.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
                     break;
                 }
                 default:

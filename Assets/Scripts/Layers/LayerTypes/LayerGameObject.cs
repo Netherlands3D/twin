@@ -8,41 +8,35 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public abstract class LayerGameObject : MonoBehaviour
+    public abstract class ReferencedLayer : MonoBehaviour
     {
         [SerializeField] private string prefabIdentifier;
         public string PrefabIdentifier => prefabIdentifier;
 
         public string Name
         {
-            get => LayerData.Name;
-            set => LayerData.Name = value;
+            get => ReferencedProxy.Name;
+            set => ReferencedProxy.Name = value;
         }
 
-        private ReferencedLayerData layerData;
-        public ReferencedLayerData LayerData
+        private ReferencedProxyLayer referencedProxy;
+        public ReferencedProxyLayer ReferencedProxy
         {
             get
             {
-                if (layerData == null) //todo: this should never be true
+                if (referencedProxy == null)
                 {
-                    Debug.LogError("ReferencedProxy is null, creating new layer");
+                    Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
                 }
                     
-                return layerData;
+                return referencedProxy;
             }
-            set => layerData = value;
+            set => referencedProxy = value;
         }
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
-
-        protected virtual void Awake() //todo: no longer needed?
-        {
-            // CreateProxy();
-            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
-        }
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -54,20 +48,19 @@ namespace Netherlands3D.Twin.Layers
                 {
                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
                     prefabIdentifier = metaID.ToString();
-                    print("setting prefab id to : " + prefabIdentifier);
+                    // print("setting prefab id to : " + prefabIdentifier);
                     EditorUtility.SetDirty(this);
-                    // AssetDatabase.SaveAssets();
                 }
             }
         }
 #endif
         private void Start()
         {
-            if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
+            if (ReferencedProxy == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
-            LayerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
-            OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
+            OnLayerActiveInHierarchyChanged(ReferencedProxy.ActiveInHierarchy); //initialize the visualizations with the correct visibility
         }
 
         private void CreateProxy()
@@ -84,11 +77,7 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-
-        protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-        }
-
+        
         public virtual void OnSelect()
         {
         }
@@ -104,15 +93,15 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDestroy()
         {
-            LayerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+            // ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
             DestroyProxy();
         }
 
         public virtual void DestroyProxy()
         {
-            if (LayerData != null)
+            if (ReferencedProxy != null)
             {
-                LayerData.DestroyLayer();
+                ReferencedProxy.DestroyLayer();
             }
         }
 
@@ -129,6 +118,11 @@ namespace Netherlands3D.Twin.Layers
         public virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
+        }
+        
+        public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            //called when the Proxy's active state changes.          
         }
     }
 }

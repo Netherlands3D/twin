@@ -9,18 +9,18 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class LayerData
+    public class LayerNL3DBase
     {
-        [SerializeField, JsonProperty] private string name;
-        [SerializeField, JsonProperty] private bool activeSelf = true;
-        [SerializeField, JsonProperty] private Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        [SerializeField, JsonProperty] private List<LayerData> children = new();
-        [JsonIgnore] private LayerData parent; //not serialized to avoid a circular reference
+        [SerializeField, JsonProperty] protected string name;
+        [SerializeField, JsonProperty] protected bool activeSelf = true;
+        [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [SerializeField, JsonProperty] protected List<LayerNL3DBase> children = new();
+        [JsonIgnore] protected LayerNL3DBase parent; //not serialized to avoid a circular reference
 
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
-        [JsonIgnore] public LayerData ParentLayer => parent;
+        [JsonIgnore] public LayerNL3DBase ParentLayer => parent;
 
-        [JsonIgnore] public List<LayerData> ChildrenLayers => children;
+        [JsonIgnore] public List<LayerNL3DBase> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
 
         [JsonIgnore]
@@ -81,42 +81,20 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
 
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerNL3DBase> LayerDeselected = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
 
-        public void InitializeParent()
-        {
-            if (parent == null) 
+        public void InitializeParent(LayerNL3DBase initialParent = null)
+        { 
+            parent = initialParent;
+            
+            if (initialParent == null)
             {
                 parent = Root;
-
-                if (!Root.children.Contains(this))
-                {
-                    Root.children.Add(this);
-                    Root.ChildrenChanged.Invoke();
-                }
-            }
-        }
-
-        //needed because after deserialization of the Layer objects, the parent field is not set yet.
-        public void ReconstructParentsRecursive()
-        {
-            foreach (var layer in ChildrenLayers.ToList())
-            {
-                ReconstructParentsRecursive(layer, this);
-            }
-        }
-
-        private void ReconstructParentsRecursive(LayerData layer, LayerData parent)
-        {
-            layer.parent = parent;
-            foreach (var child in layer.ChildrenLayers.ToList())
-            {
-                ReconstructParentsRecursive(child, layer);
             }
         }
 
@@ -139,14 +117,14 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public LayerData(string name)
+        public LayerNL3DBase(string name)
         {
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
         }
 
-        public void SetParent(LayerData newParent, int siblingIndex = -1)
+        public void SetParent(LayerNL3DBase newParent, int siblingIndex = -1)
         {
             if (newParent == null)
                 newParent = Root;
@@ -171,7 +149,7 @@ namespace Netherlands3D.Twin.Layers
 
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
-                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy); // Update the active state to match the calculated state
+                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
                 ParentOrSiblingIndexChanged.Invoke(siblingIndex);
             }
 
