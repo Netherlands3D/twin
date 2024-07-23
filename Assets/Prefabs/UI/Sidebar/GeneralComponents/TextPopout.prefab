@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 4560498607101375923}
   - component: {fileID: 8124129717987208936}
   - component: {fileID: 3234993608563359173}
+  - component: {fileID: 3977518503646692406}
   m_Layer: 5
   m_Name: TextPopout
   m_TagString: Untagged
@@ -268,5 +269,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
+  m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &3977518503646692406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8839345434989706548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe99f0b221687174f873781520b22e37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textField: {fileID: 1637122457073355876}

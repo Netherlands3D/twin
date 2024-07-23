@@ -17,6 +17,8 @@
  */
 
 using System;
+using System.Security.Cryptography.X509Certificates;
+using GG.Extensions;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
@@ -39,12 +41,22 @@ namespace Netherlands3D.Twin.Interface.BAG
         [SerializeField] private TMP_InputField westExtentTextField;
         [SerializeField] private Button copyNorthEastExtentButton;
         [SerializeField] private Button copySouthWestExtentButton;
+        [SerializeField] private TextPopout popoutPrefab;
+
+        private TextPopout northEastTooltip;
+        private TextPopout southWestTooltip;
 
         private void OnEnable()
         {
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
             copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
+
+            var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
+            northEastTooltip = Instantiate(popoutPrefab, canvasTransform);
+            northEastTooltip.RectTransform().SetPivot(PivotPresets.BottomLeft);
+            southWestTooltip = Instantiate(popoutPrefab, canvasTransform);
+            southWestTooltip.RectTransform().SetPivot(PivotPresets.TopRight);
         }
 
         private void OnDisable()
@@ -52,6 +64,9 @@ namespace Netherlands3D.Twin.Interface.BAG
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
             copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
+            
+            Destroy(northEastTooltip);
+            Destroy(southWestTooltip);
         }
 
         private void OnSelectionBoundsChanged(Bounds selectedArea)
@@ -64,6 +79,10 @@ namespace Netherlands3D.Twin.Interface.BAG
             southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("F");
             eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("F");
             westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("F");
+            
+            // manipulate coordinates to show at the center of the height
+            southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
+            northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
         }
 
         private void CopySouthWestToClipboard()
@@ -78,10 +97,10 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         private Tuple<Coordinate, Coordinate> ConvertBoundsToCoordinates(Bounds bounds)
         {
-            var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.min.y, bounds.min.z);
+            var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.center.y, bounds.min.z);
             var southWest = CoordinateConverter.ConvertTo(min, DisplayCrs);
             
-            var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.max.y, bounds.max.z);
+            var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.center.y, bounds.max.z);
             var northEast = CoordinateConverter.ConvertTo(max, DisplayCrs);
 
             return new Tuple<Coordinate, Coordinate>(southWest, northEast);

@@ -1125,6 +1125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f021c5c7d64594ebce2be668fc3689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayCrs: 28992
   areaSelection: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
   renderedThumbnail: {fileID: 6867477000835044279}
   northExtentTextField: {fileID: 3135639470450376762}
@@ -1133,6 +1134,8 @@ MonoBehaviour:
   westExtentTextField: {fileID: 1784231394480833021}
   copyNorthEastExtentButton: {fileID: 197758433612143890}
   copySouthWestExtentButton: {fileID: 2551304673583623924}
+  popoutPrefab: {fileID: 3977518503646692406, guid: 0c75754029f6c6940848c9f8bfe7edb9,
+    type: 3}
 --- !u!1 &3758227681740954705
 GameObject:
   m_ObjectHideFlags: 0
