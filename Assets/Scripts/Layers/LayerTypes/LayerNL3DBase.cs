@@ -5,10 +5,11 @@ using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Scripting;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable]
+    [Serializable, Preserve]
     public class LayerNL3DBase
     {
         [SerializeField, JsonProperty] protected string name;

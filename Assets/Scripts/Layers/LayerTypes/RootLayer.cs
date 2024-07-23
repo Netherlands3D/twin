@@ -4,10 +4,11 @@ using System.Linq;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable]
+    [Serializable, Preserve]
     public class RootLayer : LayerNL3DBase
     {
         [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; private set; } = new();
