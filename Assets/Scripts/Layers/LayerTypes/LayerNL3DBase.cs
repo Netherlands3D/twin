@@ -5,7 +5,6 @@ using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Scripting;
 
 namespace Netherlands3D.Twin.Layers
 {
