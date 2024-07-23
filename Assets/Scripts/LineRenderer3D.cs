@@ -248,28 +248,21 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Remove a line using start and length
         /// </summary>
-        public void RemoveLine(int startIndex, int length)
+        public void RemoveLine(List<Coordinate> linePoints)
         {
-            if (startIndex < 0 || startIndex >= Lines.Count)
-            {
-                Debug.LogWarning($"Index {startIndex} is out of range");
-                return;
-            }
-
-            if (length < 1)
-            {
-                Debug.LogWarning("Length should be at least 1");
-                return;
-            }
-
-            Lines.RemoveRange(startIndex, length);
-            GenerateTransformMatrixCache(startIndex);
+            Lines.Remove(linePoints);
+            GenerateTransformMatrixCache(0);
         }
 
-        public void RemoveLines(int startIndex, int combinedLineLength)
+        public void RemoveLines(List<List<Coordinate>> lines)
         {
-            RemoveLine(startIndex, combinedLineLength);
+            foreach (List<Coordinate> line in lines)
+            {
+                Lines.Remove(line);
+            }
+            GenerateTransformMatrixCache(0);
         }
+
 
         /// <summary>
         /// Append multiple lines to the current list of lines
