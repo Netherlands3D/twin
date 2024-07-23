@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Layers
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            if (Application.isPlaying && PointRenderer3D.gameObject)
+            if (Application.isPlaying && PointRenderer3D && PointRenderer3D.gameObject)
                 GameObject.Destroy(PointRenderer3D.gameObject);
         }
     }
