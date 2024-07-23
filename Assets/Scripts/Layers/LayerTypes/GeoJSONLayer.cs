@@ -13,7 +13,7 @@ using Netherlands3D.Coordinates;
 using SimpleJSON;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     public class GeoJSONLayer : ReferencedLayer
     {

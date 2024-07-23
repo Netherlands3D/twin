@@ -60,16 +60,21 @@ namespace Netherlands3D.Twin
             return line;
         }
 
-        public static void VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoints = ConvertToUnityCoordinates(multipoint, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
+
+            return convertedPoints;
         }
 
-        public static void VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, point.Coordinates);
-            renderer.AppendCollection(new List<Coordinate>() { convertedPoint });
+            var singlePointList = new List<Coordinate>() { convertedPoint };
+            renderer.AppendCollection(singlePointList);
+
+            return singlePointList;
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<List<Vector3>> contours, float polygonExtrusionHeight, Material polygonMeshMaterial)

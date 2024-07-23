@@ -11,57 +11,11 @@ using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class GeoJSONPolygonLayer : LayerNL3DBase
+    public partial class GeoJSONPolygonLayer : LayerNL3DBase
     {
-        public class FeaturePolygonVisualisations
-        {
-            public Feature feature;
-            public List<PolygonVisualisation> visualisations = new();
-            public Bounds bounds;
-
-
-            private float boundsRoundingCeiling = 1000;
-            public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
-
-            /// <summary>
-            /// Calculate bounds by combining all visualisation bounds
-            /// </summary>
-            public void CalculateBounds()
-            {
-                if (visualisations.Count > 0)
-                {
-                    bounds = GetVisualisationBounds(visualisations[0]);
-
-                    for(int i = 1; i < visualisations.Count; i++)
-                        GetVisualisationBounds(visualisations[i]);
-                }
-
-                // Expand bounds to ceiling to steps
-                bounds.size = new Vector3(
-                    Mathf.Ceil(bounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Ceil(bounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Ceil(bounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-                );
-                bounds.center = new Vector3(
-                    Mathf.Round(bounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Round(bounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Round(bounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-                );
-            }
-
-            /// <summary>
-            /// A nice addition/optimisation would be to cache this inside the PolygonVisualisation class (needs change in package)
-            /// </summary>
-            /// <returns>The bounds of the MeshRenderer</returns>
-            private Bounds GetVisualisationBounds(PolygonVisualisation polygonVisualisation)
-            {
-                return polygonVisualisation.GetComponent<MeshRenderer>().bounds;
-            }
-        }
-
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
         private bool randomizeColorPerFeature = false;

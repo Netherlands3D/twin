@@ -1,15 +1,10 @@
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Netherlands3D.Coordinates;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.UI.LayerInspector;
-using System.IO;
 using Newtonsoft.Json;
 using GeoJSON.Net.Feature;
-using UnityEngine.Events;
+using Netherlands3D.Twin.Layers;
 
 namespace Netherlands3D.CartesianTiles
 {
