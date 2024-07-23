@@ -1,51 +1,90 @@
 /*
-*  Copyright (C) X Gemeente
-*                X Amsterdam
-*                X Economic Services Departments
-*
-*  Licensed under the EUPL, Version 1.2 or later (the "License");
-*  You may not use this work except in compliance with the License.
-*  You may obtain a copy of the License at:
-*
-*    https://github.com/Amsterdam/Netherlands3D/blob/main/LICENSE.txt
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" basis,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-*  implied. See the License for the specific language governing
-*  permissions and limitations under the License.
-*/
+ *  Copyright (C) X Gemeente
+ *                X Amsterdam
+ *                X Economic Services Departments
+ *
+ *  Licensed under the EUPL, Version 1.2 or later (the "License");
+ *  You may not use this work except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *    https://github.com/Amsterdam/Netherlands3D/blob/main/LICENSE.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" basis,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied. See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.GeoJSON;
-using Netherlands3D.SubObjects;
-using Netherlands3D.Twin;
+using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
-
-using UnityEngine.InputSystem;
-
-
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
-	public class DownloadInspector : MonoBehaviour
-	{
-		[SerializeField] private AreaSelection areaSelection;
-		[SerializeField] private RenderedThumbnail renderedThumbnail;
+    public class DownloadInspector : MonoBehaviour
+    {
+        [Header("Settings")]
+        [Tooltip("In what coordinate system should the coordinates be shown to the user?")]
+        [SerializeField] private CoordinateSystem DisplayCrs = CoordinateSystem.RD;
+        
+        [Header("References")]
+        [SerializeField] private AreaSelection areaSelection;
+        [SerializeField] private RenderedThumbnail renderedThumbnail;
+        [SerializeField] private TMP_InputField northExtentTextField;
+        [SerializeField] private TMP_InputField southExtentTextField;
+        [SerializeField] private TMP_InputField eastExtentTextField;
+        [SerializeField] private TMP_InputField westExtentTextField;
+        [SerializeField] private Button copyNorthEastExtentButton;
+        [SerializeField] private Button copySouthWestExtentButton;
 
-		private void OnEnable() {
-			areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
-		}	
+        private void OnEnable()
+        {
+            areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
+            copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
+            copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
+        }
 
-		private void OnDisable() {
-			areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
-		}
+        private void OnDisable()
+        {
+            areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
+            copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
+            copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
+        }
 
-		private void OnSelectionBoundsChanged(Bounds selectedArea)
-		{
-			renderedThumbnail.RenderThumbnail(selectedArea);
-		}
+        private void OnSelectionBoundsChanged(Bounds selectedArea)
+        {
+            renderedThumbnail.RenderThumbnail(selectedArea);
+
+            var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
+            
+            northExtentTextField.text = southWestAndNorthEast.Item2.Points[0].ToString("F");
+            southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("F");
+            eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("F");
+            westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("F");
+        }
+
+        private void CopySouthWestToClipboard()
+        {
+            GUIUtility.systemCopyBuffer = $"{southExtentTextField.text},{westExtentTextField.text}";
+        }
+
+        private void CopyNorthEastToClipboard()
+        {
+            GUIUtility.systemCopyBuffer = $"{northExtentTextField.text},{eastExtentTextField.text}";
+        }
+
+        private Tuple<Coordinate, Coordinate> ConvertBoundsToCoordinates(Bounds bounds)
+        {
+            var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.min.y, bounds.min.z);
+            var southWest = CoordinateConverter.ConvertTo(min, DisplayCrs);
+            
+            var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.max.y, bounds.max.z);
+            var northEast = CoordinateConverter.ConvertTo(max, DisplayCrs);
+
+            return new Tuple<Coordinate, Coordinate>(southWest, northEast);
+        }
     }
 }
