@@ -136,10 +136,12 @@ namespace Netherlands3D.Twin.Projects
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
                         
-                        var newProject = ScriptableObject.CreateInstance<ProjectData>();
-                        JsonConvert.PopulateObject(json, newProject, serializerSettings);
-                        Debug.Log("temp project root childcount: " + newProject.RootLayer.ChildrenLayers.Count);
-                        foreach (var child in newProject.RootLayer.ChildrenLayers)
+                        // var newProject = ScriptableObject.CreateInstance<ProjectData>();
+                        JsonConvert.PopulateObject(json, Current, serializerSettings);
+                        Debug.Log("temp project root childcount: " + Current.RootLayer.ChildrenLayers.Count);
+                        var jsonProject = JsonConvert.SerializeObject(Current, serializerSettings);
+                        Debug.Log("json: " + jsonProject);
+                        foreach (var child in Current.RootLayer.ChildrenLayers)
                         {
                             Debug.Log("np child: " + child.Name);
                         }
