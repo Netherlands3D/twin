@@ -18,10 +18,9 @@ namespace Netherlands3D.Twin.Projects
     [Serializable]
     public class ProjectData : ScriptableObject
     {
-        [JsonIgnore, NonSerialized] private bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
-        
         [JsonIgnore] private static ProjectData current;
         [JsonIgnore] public static ProjectData Current => current;
+        [JsonIgnore, NonSerialized] private bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
 
         [DllImport("__Internal")]
         private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
@@ -38,9 +37,9 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
-
         [SerializeField, JsonProperty] private RootLayer rootLayer;
-        [JsonIgnore] public PrefabLibrary PrefabLibrary;
+
+        [SerializeField, JsonIgnore] public PrefabLibrary prefabLibrary;
         
         [JsonIgnore]
         public RootLayer RootLayer
@@ -52,10 +51,12 @@ namespace Netherlands3D.Twin.Projects
                 rootLayer.ReconstructParentsRecursive();
             }
         }
+
+        [JsonIgnore] public PrefabLibrary PrefabLibrary => prefabLibrary;
         
-        private ProjectDataHandler projectDataHandler;
-        private ZipOutputStream zipOutputStream;
-        private string lastSavePath = "";
+        [NonSerialized] private ProjectDataHandler projectDataHandler;
+        [NonSerialized] private ZipOutputStream zipOutputStream;
+        [NonSerialized] private string lastSavePath = "";
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<LayerNL3DBase> LayerAdded = new();
@@ -63,7 +64,6 @@ namespace Netherlands3D.Twin.Projects
 
         [NonSerialized] private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
         {
-            // PreserveReferencesHandling = PreserveReferencesHandling.Objects, //todo: still needed?
             TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
@@ -72,29 +72,10 @@ namespace Netherlands3D.Twin.Projects
         {
             UUID = Guid.NewGuid().ToString();
         }
-
-//         public void CopyFrom(ProjectData project)
-//         {
-//             // Explicit copy of fields. Will be more complex once bin. files are saved
-//             Debug.Log("replacing project " + UUID + " with: " + project.UUID);
-//             Version = project.Version;
-//             SavedTimestamp = project.SavedTimestamp;
-//             UUID = project.UUID;
-//             CameraPosition = project.CameraPosition;
-//             CameraRotation = project.CameraRotation;
-//             Debug.Log("Setting my root to project.root");
-//             Debug.Log("Root childCount: " + project.RootLayer.ChildrenLayers.Count);
-//             RootLayer = project.RootLayer;
-// Debug.Log("Root childCount: " + RootLayer.ChildrenLayers.Count);
-//             
-//             IsDirty = true;
-//         }
-
+        
         public void CopyUndoFrom(ProjectData project)
         {
             //TODO: Implement undo copy with just the data we want to move between undo/redo states
-            //Now we simply copy everything
-            // CopyFrom(project);
         }
 
 #if UNITY_EDITOR
@@ -147,35 +128,15 @@ namespace Netherlands3D.Twin.Projects
 
         public static void LoadProjectData(ProjectData data)
         {
-            Debug.Log(Current.serializerSettings.TypeNameHandling);
             var jsonProject = JsonConvert.SerializeObject(data, Current.serializerSettings);
-            Debug.Log("JSON of project to load: \n\n\n"+jsonProject);
             Current.LoadJSON(jsonProject);
         }
         
         private void LoadJSON(string json)
         {
-            // var newProject = ScriptableObject.CreateInstance<ProjectData>();
-            // JsonConvert.PopulateObject(json, Current, serializerSettings);
-            // Debug.Log("temp project root childcount: " + Current.RootLayer.ChildrenLayers.Count);
-            // var jsonProject = JsonConvert.SerializeObject(Current, serializerSettings);
-            // Debug.Log("json: " + jsonProject);
-            // foreach (var child in Current.RootLayer.ChildrenLayers)
-            // {
-            //     Debug.Log("np child: " + child.Name);
-            // }
-
             JsonConvert.PopulateObject(json, Current, serializerSettings);
-            Debug.Log("current populated root childcount: " + Current.RootLayer.ChildrenLayers.Count);
-            foreach (var child in Current.RootLayer.ChildrenLayers)
-            {
-                Debug.Log("child: " + child.Name);
-            }
-
             RootLayer.ReconstructParentsRecursive();
-            Debug.Log("new uuid: " + UUID);
-            // CopyFrom(newProject);
-            
+            Debug.Log("loaded project with uuid: " + UUID);
             OnDataChanged.Invoke(this);
             isLoading = false;
         }
@@ -278,7 +239,6 @@ namespace Netherlands3D.Twin.Projects
             Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
-            Debug.Log("initialized current");
         }
     }
 }
