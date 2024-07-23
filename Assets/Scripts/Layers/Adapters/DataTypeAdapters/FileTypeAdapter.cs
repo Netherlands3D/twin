@@ -20,20 +20,9 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
     public class FileTypeAdapter : ScriptableObject
     {
-        // [SerializeField] private StringEvent fileOpenEvent;
-        // [SerializeField] private Dictionary<string, UnityEvent<string>> fileTypeEvents = new();
         [SerializeField] private List<FileTypeEvent> fileTypeEvents;
-        // private void OnEnable()
-        // {
-        //     fileOpenEvent.AddListenerStarted(ProcessFile);
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     fileOpenEvent.RemoveListenerStarted(ProcessFile);
-        // }
 
-        public void ProcessFile(string file) //todo: this currently does not support multi select
+        public void ProcessFile(string file)
         {
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);

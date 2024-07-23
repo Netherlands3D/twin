@@ -117,7 +117,7 @@ namespace Netherlands3D.Twin.Projects
             using (FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName)))
             {
                 //Extract specific project.json from zip using CsharpLib
-                using ZipFile zf = new ZipFile(fs);
+                using ZipFile zf = new(fs);
 
                 foreach (ZipEntry zipEntry in zf)
                 {
