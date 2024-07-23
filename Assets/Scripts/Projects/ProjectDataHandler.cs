@@ -69,12 +69,14 @@ namespace Netherlands3D.Twin.Projects
         public void LoadFromFile(string filePaths)
         {
             var files = filePaths.Split(',');
+            print("processing " + files.Length + " files");
             foreach (var filePath in files)
             {
+                print("attempting to load file: " + filePath);
                 if(filePath.EndsWith(".nl3d"))
                 {
-                    projectData.LoadFromFile(filePath);
                     Debug.Log("loading nl3d file: " + filePath);
+                    projectData.LoadFromFile(filePath);
                     return;
                 }
             }  

@@ -205,6 +205,7 @@ namespace Netherlands3D.Twin.Configuration
             if (!configuration.ShouldStartSetup) return;
 
             Open();
+            Debug.Log("loading file: " + Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
             loadProjectTemplate.Invoke(Path.Combine(Application.streamingAssetsPath, configuration.DefaultProjectFileName));
         }
         
