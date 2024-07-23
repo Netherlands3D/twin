@@ -19,7 +19,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458, type: 2}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjImportAdapter, Assembly-CSharp
-          m_MethodName: ParseFiles
+          m_MethodName: Execute
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -35,7 +35,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.CSVImportAdapter, Assembly-CSharp
-          m_MethodName: ParseCSVFile
+          m_MethodName: Execute
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.GeoJSONImportAdapter, Assembly-CSharp
-          m_MethodName: ParseGeoJSON
+          m_MethodName: Execute
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -81,9 +81,9 @@ MonoBehaviour:
     FileReceived:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11400000, guid: 4d4bb419d2cfa2f43ba6e0f427c11a30, type: 2}
-          m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
-          m_MethodName: InvokeStarted
+        - m_Target: {fileID: 11400000, guid: 7ced692139442654998e5e20d4f711a2, type: 2}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.NL3DImportAdapter, Assembly-CSharp
+          m_MethodName: Execute
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         private GeoJSONLineLayer lineFeatures;
-        private LineRenderer3D lineRenderer3DPrefab; //todo: set this in the inspector somehow
+        private LineRenderer3D lineRenderer3DPrefab;
 
         public UnityEvent<string> OnParseError = new();
 
@@ -44,6 +44,9 @@ namespace Netherlands3D.Twin.Layers
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
 
+        /// <summary>
+        /// Removes features based on the bounds of their visualisations
+        /// </summary>
         public void RemoveFeaturesOutOfView()
         {
             if (polygonFeatures != null)

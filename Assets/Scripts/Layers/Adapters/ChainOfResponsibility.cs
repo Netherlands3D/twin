@@ -117,6 +117,9 @@ namespace Netherlands3D.Twin
         }
 
         private void OnValidate() {
+            if(!Application.isPlaying || !gameObject.activeInHierarchy)
+                return;
+
             // Make sure all scriptable objects we plug in are of the correct type
             for (int i = 0; i < dataTypeAdapters.Length; i++)
             {
