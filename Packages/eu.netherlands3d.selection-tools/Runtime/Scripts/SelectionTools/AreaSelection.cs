@@ -18,9 +18,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 
 namespace Netherlands3D.SelectionTools
 {
@@ -33,6 +31,9 @@ namespace Netherlands3D.SelectionTools
 
         [Header("Invoke")]
         [SerializeField] private UnityEvent<bool> blockCameraDragging;
+        [Tooltip("Fires while an area is being selected and the grid is drawn")]
+        [SerializeField] private UnityEvent<Bounds> selectionAreaBounds;
+        [Tooltip("Fires when an area is selected and the definitive bounds are known")]
         [SerializeField] private UnityEvent<Bounds> selectedAreaBounds;
 
         [Header("Settings")]
@@ -136,7 +137,6 @@ namespace Netherlands3D.SelectionTools
                 DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
             }
         }
-
         
         private void Tap()
         {
@@ -175,7 +175,6 @@ namespace Netherlands3D.SelectionTools
 
         private void MakeSelection()
         {
-            Debug.Log($"Make selection.");
             var bounds = boundsMeshRenderer.bounds;
             selectedAreaBounds.Invoke(bounds);
         }
@@ -220,6 +219,9 @@ namespace Netherlands3D.SelectionTools
                     (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
                     gridSize,
                     (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
+            
+            var bounds = boundsMeshRenderer.bounds;
+            selectionAreaBounds.Invoke(bounds);
         }
     }
 }
