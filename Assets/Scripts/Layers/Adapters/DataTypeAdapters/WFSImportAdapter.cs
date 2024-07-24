@@ -218,20 +218,14 @@ namespace Netherlands3D.Twin
 
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
-            uriBuilder.RemoveQueryParameter("bbox");
-            uriBuilder.RemoveQueryParameter("typeNames");
-            uriBuilder.RemoveQueryParameter("request");
-            uriBuilder.RemoveQueryParameter("outputFormat");
-            uriBuilder.RemoveQueryParameter("service");
-            uriBuilder.RemoveQueryParameter("version");
 
             // The exact bbox coordinates will be managed by CartesianTileWFSLayer
-            uriBuilder.AddQueryParameter("bbox", "{bbox}");
-            uriBuilder.AddQueryParameter("typeNames", featureType);
-            uriBuilder.AddQueryParameter("request", "GetFeature");
-            uriBuilder.AddQueryParameter("outputFormat", "geojson");
-            uriBuilder.AddQueryParameter("service", "WFS");
-            uriBuilder.AddQueryParameter("version", "2.0.0");
+            uriBuilder.SetQueryParameter("bbox", "{bbox}");
+            uriBuilder.SetQueryParameter("typeNames", featureType);
+            uriBuilder.SetQueryParameter("request", "GetFeature");
+            uriBuilder.SetQueryParameter("outputFormat", "geojson");
+            uriBuilder.SetQueryParameter("service", "WFS");
+            uriBuilder.SetQueryParameter("version", "2.0.0");
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
