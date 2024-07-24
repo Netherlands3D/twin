@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Layers
     {
         public static float maxParseDuration = 0.01f;
         
-        private int maxFeatureVisualsPerFrame = 100;
+        private int maxFeatureVisualsPerFrame = 20;
 
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
