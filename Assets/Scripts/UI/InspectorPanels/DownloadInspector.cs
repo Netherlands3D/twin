@@ -54,9 +54,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
             northEastTooltip = Instantiate(popoutPrefab, canvasTransform);
-            northEastTooltip.RectTransform().SetPivot(PivotPresets.BottomLeft);
+            northEastTooltip.RectTransform().SetPivot(PivotPresets.BottomCenter);
             southWestTooltip = Instantiate(popoutPrefab, canvasTransform);
-            southWestTooltip.RectTransform().SetPivot(PivotPresets.TopRight);
+            southWestTooltip.RectTransform().SetPivot(PivotPresets.TopCenter);
         }
 
         private void OnDisable()
