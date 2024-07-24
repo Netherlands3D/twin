@@ -35,11 +35,11 @@ namespace Netherlands3D.Web
                 var exisitingValue = nameValueCollection[key];
                 isUpperCase = exisitingValue == exisitingValue.ToUpper();
 
-                nameValueCollection.Remove(key);
             }
             if(isUpperCase) 
                 value = value.ToUpper();
 
+            nameValueCollection.Remove(key);
             nameValueCollection.Add(key, value);
 
             uriBuilder.Query = nameValueCollection.ToQueryString();

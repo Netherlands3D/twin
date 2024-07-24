@@ -119,7 +119,7 @@ namespace Netherlands3D.CartesianTiles
 		private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
 		{
 			var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-			string url = WfsUrl.Replace("{bbox}", bboxValue);
+			string url = WfsUrl.Replace("{0}", bboxValue);
 			Debug.Log("Downloading GeoJSON from: " + url);
 
 			var geoJsonRequest = UnityWebRequest.Get(url);

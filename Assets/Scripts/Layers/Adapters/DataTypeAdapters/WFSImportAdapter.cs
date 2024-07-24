@@ -85,12 +85,13 @@ namespace Netherlands3D.Twin
             {
                 // Get wfs version from url
                 wfsVersion = GetWFSVersion(sourceUrl);
+                geoJsonOutputFormat = "geojson";
 
                 //Check if text is GeoJSON by trying to parse feature collection
                 var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(dataAsText);
-                if(featureCollection == null || featureCollection.Features.Count == 0)
+                if(featureCollection == null)
                 {
-                    Debug.Log("<color=orange>WFS GetFeature request does not contain GeoJSON data.</color>");
+                    Debug.Log("<color=orange>WFS GetFeature request does not return a FeatureCollection.</color>");
                     return false;
                 }
             }
@@ -271,7 +272,7 @@ namespace Netherlands3D.Twin
             uriBuilder.SetQueryParameter("version", wfsVersion);
             uriBuilder.SetQueryParameter("typeNames", featureType);
             uriBuilder.SetQueryParameter("outputFormat", geoJsonOutputFormat);
-            uriBuilder.SetQueryParameter("bbox", "{bbox}"); // Bbox value is injected by CartesianTileWFSLayer
+            uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
