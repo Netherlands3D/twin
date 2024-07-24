@@ -8,6 +8,7 @@ using Netherlands3D.Web;
 using Netherlands3D.CartesianTiles;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.Twin
 {
@@ -102,13 +103,17 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
 
             var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
+            var wfsFolder = new FolderLayer(sourceUrl);
+
             if(getCapabilitiesRequest)
             {
                 var featureTypes = GetFeatureTypes(localFile);
+
+                //Create a folder layer 
                 foreach (var featureType in featureTypes)
                 {
                     Debug.Log("Adding WFS layer for featureType: " + featureType);
-                    AddWFSLayer(featureType, sourceUrl);
+                    AddWFSLayer(featureType, sourceUrl, wfsFolder);
                 }
                 return;
             }
@@ -128,7 +133,7 @@ namespace Netherlands3D.Twin
                     //WFS 2 uses plural 'typenames'
                     featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
                 }
-                AddWFSLayer(featureType, sourceUrl);
+                AddWFSLayer(featureType, sourceUrl, wfsFolder);
                 return;
             }
         }
@@ -246,7 +251,7 @@ namespace Netherlands3D.Twin
             return featureTypes.ToArray();
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl)
+        private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer)
         {
             Debug.Log("Adding WFS layer: " + featureType);
 
@@ -271,13 +276,14 @@ namespace Netherlands3D.Twin
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
             // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var go = new GameObject(featureType);
-            var layer = go.AddComponent<GeoJSONLayer>();
+            var layerGameObject = new GameObject(featureType);
+            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
+            layer.ReferencedProxy.SetParent(folderLayer);
             layer.RandomizeColorPerFeature = true;
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
 
             // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();              
+            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();              
             cartesianTileLayer.GeoJSONLayer = layer;
             cartesianTileLayer.WfsUrl = getFeatureUrl;
         }
