@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.Security.Cryptography.X509Certificates;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using TMPro;
@@ -48,6 +47,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         private void OnEnable()
         {
+            areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
             copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
@@ -62,6 +62,7 @@ namespace Netherlands3D.Twin.Interface.BAG
         private void OnDisable()
         {
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
+            areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
             
@@ -69,32 +70,38 @@ namespace Netherlands3D.Twin.Interface.BAG
             Destroy(southWestTooltip);
         }
 
-        private void OnSelectionBoundsChanged(Bounds selectedArea)
+        private void WhenSelectionBoundsChanged(Bounds selectedArea)
         {
-            renderedThumbnail.RenderThumbnail(selectedArea);
-
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
             northExtentTextField.text = southWestAndNorthEast.Item2.Points[0].ToString("F");
             southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("F");
             eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("F");
             westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("F");
-            
-            // manipulate coordinates to show at the center of the height
+
             southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
         }
 
+        private void OnSelectionBoundsChanged(Bounds selectedArea)
+        {
+            renderedThumbnail.RenderThumbnail(selectedArea);
+        }
+
         private void CopySouthWestToClipboard()
         {
+            // TODO: As expected, this does not work in WebGL
             GUIUtility.systemCopyBuffer = $"{southExtentTextField.text},{westExtentTextField.text}";
         }
 
         private void CopyNorthEastToClipboard()
         {
+            // TODO: As expected, this does not work in WebGL
             GUIUtility.systemCopyBuffer = $"{northExtentTextField.text},{eastExtentTextField.text}";
         }
 
+        // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where
+        // the y equals the center of the bound) or a 3D results (containing the full bounds)
         private Tuple<Coordinate, Coordinate> ConvertBoundsToCoordinates(Bounds bounds)
         {
             var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.center.y, bounds.min.z);

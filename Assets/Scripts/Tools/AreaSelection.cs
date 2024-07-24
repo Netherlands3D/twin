@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using Netherlands3D.Collada;
 using Netherlands3D.MeshClipping;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,8 +28,12 @@ namespace Netherlands3D.Twin
         [SerializeField] private float minClipBoundsHeight = 1000.0f; 
 
         [Header("Invoke events")]
+        [Tooltip("Once a selection is confirmed, this is called")]
         public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
+        [Tooltip("Once a selection is confirmed, this is called")]
         public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();
+        [Tooltip("While a selection is being made, this is called")]
+        public UnityEvent<Bounds> WhenSelectionAreaBoundsChanged = new();
         public UnityEvent<ExportFormat> OnExportFormatChanged = new();
         public UnityEvent<float> modelExportProgressChanged = new();
         public UnityEvent<string> modelExportStatusChanged = new();
@@ -39,6 +42,11 @@ namespace Netherlands3D.Twin
         private ExportFormat selectedExportFormat = ExportFormat.Collada;
 
         [SerializeField] private LayerMask includedLayers;
+
+        public void SetDuringSelectionAreaBounds(Bounds selectedAreaBounds)
+        {
+            WhenSelectionAreaBoundsChanged.Invoke(selectedAreaBounds);
+        }
 
         public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
@@ -141,7 +149,7 @@ namespace Netherlands3D.Twin
 
             //Save the file
             #if UNITY_EDITOR
-                var localFile = UnityEditor.EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
+                var localFile = EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
                 if(localFile.Length > 0)
                 {
                     File.WriteAllText(localFile, colladaFile.GetColladaXML());
