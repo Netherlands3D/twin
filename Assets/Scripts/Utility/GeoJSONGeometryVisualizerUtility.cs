@@ -33,6 +33,7 @@ namespace Netherlands3D.Twin
                 {
                     unityRing.Add(coord.ToUnity());
                 }
+
                 ringList.Add(unityRing);
             }
 
