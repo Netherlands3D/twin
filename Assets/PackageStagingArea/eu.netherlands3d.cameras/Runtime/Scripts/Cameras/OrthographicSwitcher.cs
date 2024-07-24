@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
 
         [Header("Animation tweaks")]
         [SerializeField] private float repositioningDuration = 0.3f;
-        [SerializeField] private float perspectiveShiftDuration = 1f;
         [Range(0f, 60f)] [SerializeField] private float simulatedOrthoFov = 2f;
         [Tooltip("The animation dynamically heightens the Simulated Orthogonal FOV if the predicted height of the camera exceeds this number")]
         [SerializeField] private float maxCameraHeightWhenSimulating = 8000f;
@@ -147,7 +146,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             if (shouldSwitchToOrthogonal)
             {
                 AppendRepositioningOfCamera(sequence, rotateTo, moveTo);
-                AppendTransitionToAndFromOrthogonal(sequence, CalculateSmallestFovForAnimation(moveTo.y, maxCameraHeightWhenSimulating), moveTo.y);
+                JoinTransitionToAndFromOrthogonal(sequence, CalculateSmallestFovForAnimation(moveTo.y, maxCameraHeightWhenSimulating), moveTo.y);
             }
             else
             {
@@ -200,15 +199,16 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private void AppendRepositioningOfCamera(Sequence sequence, Quaternion rotateTo, Vector3 moveTo)
         {
             // Pull camera and rotate to point downwards as if we are smoothing towards ortho
-            sequence.Append(cameraTransform.DOMove(moveTo, repositioningDuration));
+            sequence.Append(cameraTransform.DOMoveX(moveTo.x, repositioningDuration));
+            sequence.Join(cameraTransform.DOMoveZ(moveTo.z, repositioningDuration));
             sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, repositioningDuration));
         }
 
-        private void AppendTransitionToAndFromOrthogonal(Sequence sequence, float smallestFov, float toHeight)
+        private void JoinTransitionToAndFromOrthogonal(Sequence sequence, float smallestFov, float toHeight)
         {
-            sequence.Append(
+            sequence.Join(
                 cameraComponent
-                    .DOFieldOfView(smallestFov, perspectiveShiftDuration)
+                    .DOFieldOfView(smallestFov, repositioningDuration)
                     .SetEase(Ease.Linear)
                     .OnUpdate(() =>
                         {

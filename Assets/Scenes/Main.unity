@@ -492,10 +492,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   repositioningDuration: 0.3
-  perspectiveShiftDuration: 0.4
   simulatedOrthoFov: 0.1
   maxCameraHeightWhenSimulating: 8000
-  preventSwitchToOrthographicSetting: 0
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6211,7 +6209,7 @@ PrefabInstance:
     - target: {fileID: 3973749745212064541, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: tooltipText
-      value: Wissel tussen ortografisch/perspectief
+      value: Wissel tussen orthografisch/perspectief
       objectReference: {fileID: 0}
     - target: {fileID: 4144388695555363675, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
