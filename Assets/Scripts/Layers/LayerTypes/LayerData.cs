@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-
+        [SerializeField] private List<LayerProperty> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -75,6 +75,8 @@ namespace Netherlands3D.Twin.Layers
                 return ParentLayer.ActiveInHierarchy && activeSelf;
             }
         }
+
+        public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
@@ -174,6 +176,16 @@ namespace Netherlands3D.Twin.Layers
 
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
+        }
+
+        public void AddProperty(LayerProperty property)
+        {
+            layerProperties.Add(property);
+        }
+
+        public void RemoveProperty(LayerProperty property)
+        {
+            layerProperties.Remove(property);
         }
     }
 }
