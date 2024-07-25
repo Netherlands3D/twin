@@ -12,7 +12,7 @@ public class ToggleSpriteSwap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (toggle == null) GetComponent<Toggle>();
+        if (toggle == null) toggle = GetComponent<Toggle>();
 
         if (toggle == null)
         {
