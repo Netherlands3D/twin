@@ -279,7 +279,7 @@ namespace Netherlands3D.Twin
             // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
             var layerGameObject = new GameObject(featureType);
             var layer = layerGameObject.AddComponent<GeoJSONLayer>();
-            layer.ReferencedProxy.SetParent(folderLayer);
+            layer.LayerData.SetParent(folderLayer);
             layer.RandomizeColorPerFeature = true;
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
 
