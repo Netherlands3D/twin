@@ -10,6 +10,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class Origin : MonoBehaviour, IHasCoordinate
     {
         public Coordinate Coordinate { get; set; }
+
+        public static Origin current;
         public Transform mainShifter;
         //public CoordinateSystem referenceCoordinateSystem;
 
@@ -31,6 +33,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         public bool LogShifts = false;
         
+        private void Awake()
+        {
+            current = this;
+        }
+
         private void Start()
         {
             mainShifter = mainShifter == null ? Camera.main.transform : mainShifter;

@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Layers
     public class GeoJSONLayer : ReferencedLayer
     {
         public static float maxParseDuration = 0.01f;
+        
+        private int maxFeatureVisualsPerFrame = 20;
 
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
@@ -25,6 +27,7 @@ namespace Netherlands3D.Twin.Layers
         private Material defaultVisualizationMaterial;
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
+        public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         private GeoJSONLineLayer lineFeatures;
         private LineRenderer3D lineRenderer3DPrefab;
@@ -76,8 +79,24 @@ namespace Netherlands3D.Twin.Layers
                 return;
             }
 
-            foreach (var feature in featureCollection.Features)              
+            StartCoroutine(VisualizeQueue(featureCollection.Features));
+        }
+
+        IEnumerator VisualizeQueue(List<Feature> features)
+        {
+            for (int i = 0; i < features.Count; i++)
+            {
+                var feature = features[i];
+
+                //If a feature was not found, stop queue
+                if (feature == null)
+                    yield break;
+                
                 VisualizeFeature(feature);
+
+                if (i % MaxFeatureVisualsPerFrame == 0)
+                    yield return null;
+            }
         }
 
         /// <summary>

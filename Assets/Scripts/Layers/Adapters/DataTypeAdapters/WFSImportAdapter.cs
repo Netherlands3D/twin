@@ -8,6 +8,7 @@ using Netherlands3D.Web;
 using Netherlands3D.CartesianTiles;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.Twin
 {
@@ -17,6 +18,10 @@ namespace Netherlands3D.Twin
         [SerializeField] private Material visualizationMaterial;
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+
+        private string geoJsonOutputFormat = "";
+        private string wfsVersion = "";
+        private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
         public bool Supports(LocalFile localFile)
         {
@@ -54,7 +59,7 @@ namespace Netherlands3D.Twin
                     return false;
                 }
 
-                // Is there a bbox filter? We need it to do per-tile requests.
+                // Is there a bbox filter? We need it that capability to do per-tile requests.
                 bool bboxFilterCapability = WFSBboxFilterCapability(xmlDocument, namespaceManager);
                 if (!bboxFilterCapability)
                 {
@@ -63,21 +68,30 @@ namespace Netherlands3D.Twin
                 }
 
                 // Does the GetFeature operation support GeoJSON output?
-                bool getFeatureNodeHasGeoJsonOutput = NodeHasGeoJSONOutput(getFeatureOperationNode, namespaceManager);
-                if (!getFeatureNodeHasGeoJsonOutput)
+                geoJsonOutputFormat = GetGeoJSONOutputFormat(getFeatureOperationNode, namespaceManager);
+                if (string.IsNullOrEmpty(geoJsonOutputFormat))
                 {
                     Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                     return false;
                 }
+
+                // Get the WFS version
+                wfsVersion = GetWFSVersion(sourceUrl);
+                if(string.IsNullOrEmpty(wfsVersion))
+                    wfsVersion = GetWFSVersion(xmlDocument, namespaceManager);
             }
 
             if (getFeatureRequest)
             {
+                // Get wfs version from url
+                wfsVersion = GetWFSVersion(sourceUrl);
+                geoJsonOutputFormat = "geojson";
+
                 //Check if text is GeoJSON by trying to parse feature collection
                 var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(dataAsText);
-                if(featureCollection == null || featureCollection.Features.Count == 0)
+                if(featureCollection == null)
                 {
-                    Debug.Log("<color=orange>WFS GetFeature request does not contain GeoJSON data.</color>");
+                    Debug.Log("<color=orange>WFS GetFeature request does not return a FeatureCollection.</color>");
                     return false;
                 }
             }
@@ -90,13 +104,17 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
 
             var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
+            var wfsFolder = new FolderLayer(sourceUrl);
+
             if(getCapabilitiesRequest)
             {
                 var featureTypes = GetFeatureTypes(localFile);
+
+                //Create a folder layer 
                 foreach (var featureType in featureTypes)
                 {
                     Debug.Log("Adding WFS layer for featureType: " + featureType);
-                    AddWFSLayer(featureType, sourceUrl);
+                    AddWFSLayer(featureType, sourceUrl, wfsFolder);
                 }
                 return;
             }
@@ -116,7 +134,7 @@ namespace Netherlands3D.Twin
                     //WFS 2 uses plural 'typenames'
                     featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
                 }
-                AddWFSLayer(featureType, sourceUrl);
+                AddWFSLayer(featureType, sourceUrl, wfsFolder);
                 return;
             }
         }
@@ -162,19 +180,41 @@ namespace Netherlands3D.Twin
             return bboxFilter;
         }
 
-        private static bool NodeHasGeoJSONOutput(XmlNode xmlNode, XmlNamespaceManager namespaceManager = null)
+        private static string GetGeoJSONOutputFormat(XmlNode xmlNode, XmlNamespaceManager namespaceManager = null)
         {
             // Check if operation GetFeature has a outputFormat of something like json/geojson
             var featureOutputFormat = xmlNode.SelectSingleNode("ows:Parameter[@name='outputFormat']", namespaceManager);
             var owsAllowedValues = featureOutputFormat.SelectSingleNode("ows:AllowedValues", namespaceManager);
             foreach (XmlNode owsValue in owsAllowedValues.ChildNodes)
             {
-                if (owsValue.InnerText.Contains("json") || owsValue.InnerText.Contains("geojson"))
-                    return true;
+                // GeoJSON would be the best match, but a lot of different notations are used in the wild
+                if (owsValue.InnerText.ToLower().Contains("geojson") || owsValue.InnerText.ToLower().Contains("json"))
+                    return "geojson";
             }
 
             Debug.LogWarning("WFS GetFeature operation does not support GeoJSON output format.");
-            return false;
+            return "";
+        }
+
+        private static string GetWFSVersion(XmlNode xmlNode, XmlNamespaceManager namespaceManager = null)
+        {
+            // Get ServiceTypeVersion node inner text
+            var serviceTypeVersion = xmlNode.SelectSingleNode("//ows:ServiceTypeVersion", namespaceManager);
+            if(serviceTypeVersion != null)
+            {
+                Debug.Log("WFS version found: " + serviceTypeVersion.InnerText);
+                return serviceTypeVersion.InnerText;
+            }
+            return "";
+        }
+        private static string GetWFSVersion(string url)
+        {
+            var urlLower = url.ToLower();
+            var versionQueryKey = "version=";
+            if (urlLower.Contains(versionQueryKey))
+                return urlLower.Split(versionQueryKey)[1].Split("&")[0];
+
+            return "";
         }
 
         private static XmlNode ReadGetFeatureNode(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
@@ -212,37 +252,39 @@ namespace Netherlands3D.Twin
             return featureTypes.ToArray();
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl)
+        private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer)
         {
             Debug.Log("Adding WFS layer: " + featureType);
 
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
-            uriBuilder.RemoveQueryParameter("bbox");
-            uriBuilder.RemoveQueryParameter("typeNames");
-            uriBuilder.RemoveQueryParameter("request");
-            uriBuilder.RemoveQueryParameter("outputFormat");
-            uriBuilder.RemoveQueryParameter("service");
-            uriBuilder.RemoveQueryParameter("version");
 
-            // The exact bbox coordinates will be managed by CartesianTileWFSLayer
-            uriBuilder.AddQueryParameter("bbox", "{bbox}");
-            uriBuilder.AddQueryParameter("typeNames", featureType);
-            uriBuilder.AddQueryParameter("request", "GetFeature");
-            uriBuilder.AddQueryParameter("outputFormat", "geojson");
-            uriBuilder.AddQueryParameter("service", "WFS");
-            uriBuilder.AddQueryParameter("version", "2.0.0");
+            // Make sure we have a wfsVersion set
+            if(string.IsNullOrEmpty(wfsVersion))
+            {
+                Debug.LogWarning("WFS version could not be determined, defaulting to " + defaultFallbackVersion);
+                wfsVersion = defaultFallbackVersion;
+            }
+
+            // Set the required query parameters for the GetFeature request
+            uriBuilder.SetQueryParameter("service", "WFS");
+            uriBuilder.SetQueryParameter("request", "GetFeature");
+            uriBuilder.SetQueryParameter("version", wfsVersion);
+            uriBuilder.SetQueryParameter("typeNames", featureType);
+            uriBuilder.SetQueryParameter("outputFormat", geoJsonOutputFormat);
+            uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
 
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
             // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var go = new GameObject(featureType);
-            var layer = go.AddComponent<GeoJSONLayer>();
+            var layerGameObject = new GameObject(featureType);
+            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
+            layer.ReferencedProxy.SetParent(folderLayer);
             layer.RandomizeColorPerFeature = true;
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
 
             // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = go.AddComponent<WFSGeoJSONTileDataLayer>();              
+            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();              
             cartesianTileLayer.GeoJSONLayer = layer;
             cartesianTileLayer.WfsUrl = getFeatureUrl;
         }
