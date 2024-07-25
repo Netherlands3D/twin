@@ -6,7 +6,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class WorldTransform : MonoBehaviour, IHasCoordinate
     {
-        [SerializeField] private Origin origin;
         [SerializeField] private WorldTransformShifter worldTransformShifter;
         [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
         public Coordinate Coordinate {
@@ -15,18 +14,13 @@ namespace Netherlands3D.Twin.FloatingOrigin
         }
 
         public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
-        public Origin Origin => origin;
+        public Origin Origin => Origin.current;
 
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
         public UnityEvent<WorldTransform, Coordinate> onPostShift = new();
 
         private void Awake()
         {
-            if (origin == null)
-            {
-                origin = FindObjectOfType<Origin>();
-            }
-
             worldTransformShifter = GetComponent<WorldTransformShifter>();
             if (worldTransformShifter == null)
             {
@@ -51,14 +45,14 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void OnEnable()
         {
-            origin.onPreShift.AddListener(PrepareToShift);
-            origin.onPostShift.AddListener(ShiftTo);
+            Origin.onPreShift.AddListener(PrepareToShift);
+            Origin.onPostShift.AddListener(ShiftTo);
         }
 
         private void OnDisable()
         {
-            origin.onPreShift.RemoveListener(PrepareToShift);
-            origin.onPostShift.RemoveListener(ShiftTo);
+            Origin.onPreShift.RemoveListener(PrepareToShift);
+            Origin.onPostShift.RemoveListener(ShiftTo);
         }
 
         private void PrepareToShift(Coordinate fromOrigin, Coordinate toOrigin)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
@@ -10,7 +11,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
-    public class ObjImportAdapter : ScriptableObject
+    public class ObjImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [Header("Required input")]
         [SerializeField] private Material baseMaterial;
@@ -51,16 +52,44 @@ namespace Netherlands3D.Twin
 
         private ObjImporter.ObjImporter importer;
 
-        public void ParseFiles(string value)
+        public bool Supports(LocalFile localFile)
         {
-            Debug.Log("receiveid files: " + value);
+            var hasObjExtention = localFile.SourceUrl.EndsWith(".obj");
+            if(!hasObjExtention)
+                return false;
 
-            if (value == "") //empty string received, so no selection was made
+            // Streamread and check if the obj at least has 3 newlines
+            using StreamReader reader = new StreamReader(localFile.LocalFilePath);
+            int lineCount = 0;
+            while (lineCount < 3 && reader.ReadLine() != null)
+                lineCount++;
+
+            if (lineCount >= 3)
+                return true;
+
+            return false;
+        }
+
+        public void Execute(LocalFile localFile)
+        {
+            objfilename = localFile.LocalFilePath;
+            StartImport();
+        }
+
+        /// <summary>
+        /// Parse the files and start importing the obj file
+        /// An .obj can be a collection of files, so we need to parse them all
+        /// </summary>
+        /// <param name="commaSeperatedFiles"></param>
+        public void ParseFiles(string commaSeperatedFiles)
+        {
+            Debug.Log("receiveid files: " + commaSeperatedFiles);
+            if (commaSeperatedFiles == "") //empty string received, so no selection was made
             {
                 return;
             }
 
-            string[] filenames = value.Split(',');
+            string[] filenames = commaSeperatedFiles.Split(',');
 
             foreach (var file in filenames)
             {
@@ -84,12 +113,10 @@ namespace Netherlands3D.Twin
             }
 
             if (objfilename != "")
-            {
-                OnStartImporting();
-            }
+                StartImport();
         }
 
-        private void OnStartImporting()
+        private void StartImport()
         {
             ConnectToImporter();
 

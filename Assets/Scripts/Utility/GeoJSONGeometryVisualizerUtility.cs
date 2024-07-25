@@ -33,40 +33,49 @@ namespace Netherlands3D.Twin
                 {
                     unityRing.Add(coord.ToUnity());
                 }
+
                 ringList.Add(unityRing);
             }
 
             return CreatePolygonMesh(ringList, 10f, visualizationMaterial);
         }
 
-        public static void VisualizeMultiLineString(MultiLineString multiLineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
+        public static List<List<Coordinate>> VisualizeMultiLineString(MultiLineString multiLineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
         {
-            var convertedLineStrings = new List<List<Coordinate>>(multiLineString.Coordinates.Count);
+            var lines = new List<List<Coordinate>>(multiLineString.Coordinates.Count);
             foreach (var lineString in multiLineString.Coordinates)
             {
                 var convertedLineString = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
-                convertedLineStrings.Add(convertedLineString);
+                lines.Add(convertedLineString);
             }
+            renderer.AppendLines(lines);
 
-            renderer.AppendLines(convertedLineStrings);
+            return lines;
         }
 
-        public static void VisualizeLineString(LineString lineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
+        public static List<Coordinate> VisualizeLineString(LineString lineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
         {
-            var convertedLineString = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
-            renderer.AppendLine(convertedLineString);
+            var line = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+            renderer.AppendLine(line);
+
+            return line;
         }
 
-        public static void VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoints = ConvertToUnityCoordinates(multipoint, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
+
+            return convertedPoints;
         }
 
-        public static void VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, point.Coordinates);
-            renderer.AppendCollection(new List<Coordinate>() { convertedPoint });
+            var singlePointList = new List<Coordinate>() { convertedPoint };
+            renderer.AppendCollection(singlePointList);
+
+            return singlePointList;
         }
 
         public static PolygonVisualisation CreatePolygonMesh(List<List<Vector3>> contours, float polygonExtrusionHeight, Material polygonMeshMaterial)
