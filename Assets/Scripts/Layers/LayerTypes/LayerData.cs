@@ -16,13 +16,12 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [SerializeField] private List<LayerProperty> layerProperties = new();
+        [SerializeField, JsonProperty] private List<LayerProperty> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-
         [JsonIgnore]
         public string Name
         {
@@ -76,7 +75,8 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public bool HasProperties => layerProperties.Count > 0;
+        [JsonIgnore] public List<LayerProperty> LayerProperties => layerProperties;
+        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();

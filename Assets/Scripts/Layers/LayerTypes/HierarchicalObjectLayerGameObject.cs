@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -13,9 +15,15 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
+        public TransformLayerProperty TransformProperty { get; } = new TransformLayerProperty();
 
         protected void Awake()
         {
+            TransformProperty.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            TransformProperty.EulerRotation = transform.eulerAngles;
+            TransformProperty.LocalScale = transform.localScale;
+
+            LayerData.AddProperty(TransformProperty);
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
         }
@@ -24,11 +32,51 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnEnable();
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
+            TransformProperty.OnPositionChanged.AddListener(UpdatePosition);
+            TransformProperty.OnRotationChanged.AddListener(UpdateRotation);
+            TransformProperty.OnScaleChanged.AddListener(UpdateScale);
         }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            TransformProperty.OnPositionChanged.RemoveListener(UpdatePosition);
+            TransformProperty.OnRotationChanged.RemoveListener(UpdateRotation);
+            TransformProperty.OnScaleChanged.RemoveListener(UpdateScale);
+        }
+
+        private void UpdatePosition(Coordinate newPosition)
+        {
+            transform.position = newPosition.ToUnity();
+        }
+
+        private void UpdateRotation(Vector3 newAngles)
+        {
+            transform.eulerAngles = newAngles;
+        }
+
+        private void UpdateScale(Vector3 newScale)
+        {
+            transform.localScale = newScale;
+        }
+
 
         private void Start()
         {
             objectCreated.Invoke(gameObject);
+        }
+
+        private void Update()
+        {
+            if (transform.hasChanged) //todo: why is this flag not correctly set when using the RuntimeTransformHandles?
+            {
+                var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+                TransformProperty.Position = rdCoordinate;
+                TransformProperty.EulerRotation = transform.eulerAngles;
+                TransformProperty.LocalScale = transform.localScale;
+
+                transform.hasChanged = false;
+            }
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
