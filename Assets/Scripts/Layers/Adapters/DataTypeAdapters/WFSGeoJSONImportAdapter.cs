@@ -13,7 +13,7 @@ using Netherlands3D.Twin.UI.LayerInspector;
 namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
-    public class WFSImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private Material visualizationMaterial;
         [SerializeField] private LineRenderer3D lineRenderer3D;
