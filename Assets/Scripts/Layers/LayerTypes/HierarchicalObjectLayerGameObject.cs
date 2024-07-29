@@ -16,6 +16,9 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
         public TransformLayerProperty TransformProperty { get; } = new TransformLayerProperty();
+        private Vector3 previousPosition;
+        private Quaternion previousRotation;
+        private Vector3 previousScale;
 
         protected void Awake()
         {
@@ -47,35 +50,54 @@ namespace Netherlands3D.Twin.Layers
 
         private void UpdatePosition(Coordinate newPosition)
         {
-            transform.position = newPosition.ToUnity();
+            if(newPosition.ToUnity() != transform.position)
+                transform.position = newPosition.ToUnity();
         }
 
         private void UpdateRotation(Vector3 newAngles)
         {
-            transform.eulerAngles = newAngles;
+            if(newAngles != transform.eulerAngles)
+                transform.eulerAngles = newAngles;
         }
 
         private void UpdateScale(Vector3 newScale)
         {
-            transform.localScale = newScale;
+            if(newScale != transform.localScale)
+                transform.localScale = newScale;
         }
-
-
+        
         private void Start()
         {
+            previousPosition = transform.position;
+            previousRotation = transform.rotation;
+            previousScale = transform.localScale;
+            
             objectCreated.Invoke(gameObject);
         }
-
+        
         private void Update()
         {
-            if (transform.hasChanged) //todo: why is this flag not correctly set when using the RuntimeTransformHandles?
+            // We cannot user transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
+            // Check for position change
+            if (transform.position != previousPosition)
             {
                 var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
                 TransformProperty.Position = rdCoordinate;
-                TransformProperty.EulerRotation = transform.eulerAngles;
-                TransformProperty.LocalScale = transform.localScale;
+                previousPosition = transform.position;
+            }
 
-                transform.hasChanged = false;
+            // Check for rotation change
+            if (transform.rotation != previousRotation)
+            {
+                TransformProperty.EulerRotation = transform.eulerAngles;
+                previousRotation = transform.rotation;
+            }
+
+            // Check for scale change
+            if (transform.localScale != previousScale)
+            {
+                TransformProperty.LocalScale = transform.localScale;
+                previousScale = transform.localScale;
             }
         }
 
