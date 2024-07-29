@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
-    public class ChainOfResponsibility : MonoBehaviour
+    public class DataTypeChain : MonoBehaviour
     {
         [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
