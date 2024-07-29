@@ -123,13 +123,12 @@ namespace Netherlands3D.Twin
             // Check data type per adapter using order set in inspector
             foreach (var adapter in dataTypeAdapterInterfaces)
             {
-                if (adapter.Supports(urlAndData))
-                {
-                    if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
-                    adapter.Execute(urlAndData);
-                    OnAdapterFound.Invoke(adapter);
-                    yield break;
-                }
+                if (!adapter.Supports(urlAndData)) continue;
+
+                if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
+                adapter.Execute(urlAndData);
+                OnAdapterFound.Invoke(adapter);
+                yield break;
             }
 
             CouldNotFindAdapter.Invoke(urlAndData.SourceUrl);
