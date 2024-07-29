@@ -55,16 +55,7 @@ namespace Netherlands3D.Twin
         public bool Supports(LocalFile localFile)
         {
             var hasObjExtention = localFile.SourceUrl.EndsWith(".obj");
-            if(!hasObjExtention)
-                return false;
-
-            // Streamread and check if the obj at least has 3 newlines
-            using StreamReader reader = new StreamReader(localFile.LocalFilePath);
-            int lineCount = 0;
-            while (lineCount < 3 && reader.ReadLine() != null)
-                lineCount++;
-
-            if (lineCount >= 3)
+            if(hasObjExtention)
                 return true;
 
             return false;
