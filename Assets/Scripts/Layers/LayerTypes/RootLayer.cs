@@ -24,8 +24,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void RemoveLayerFromSelection(LayerData layer)
         {
-            if (SelectedLayers.Contains(layer))
-                SelectedLayers.Remove(layer);
+            SelectedLayers.Remove(layer);
         }
 
         public void DeselectAllLayers()

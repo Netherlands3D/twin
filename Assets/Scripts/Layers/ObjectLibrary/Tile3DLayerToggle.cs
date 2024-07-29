@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             base.Awake();
             layerParent = GameObject.FindWithTag("3DTileParent").transform;
-            layerGameObject = layerParent.GetComponentsInChildren<Tile3DLayerGameObject>().FirstOrDefault(l => l.Name == prefab.name);
+            layerGameObject = layerParent.GetComponentsInChildren<Tile3DLayerGameObject>().FirstOrDefault(l => l.PrefabIdentifier == prefab.GetComponent<Tile3DLayerGameObject>().PrefabIdentifier);
         }
     }
 }
