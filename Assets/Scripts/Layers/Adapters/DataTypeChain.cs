@@ -118,7 +118,15 @@ namespace Netherlands3D.Twin
             // Get our interface references
             dataTypeAdapterInterfaces = new IDataTypeAdapter[dataTypeAdapters.Length];
             for (int i = 0; i < dataTypeAdapters.Length; i++)
+            {
+                if(dataTypeAdapters[i] == null)
+                {
+                    Debug.LogError("An adapter in chain is null. Please check your dataTypeAdapters list.",this.gameObject);
+                    yield break;
+                }
+
                 dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter;
+            }
 
             // Check data type per adapter using order set in inspector
             foreach (var adapter in dataTypeAdapterInterfaces)
