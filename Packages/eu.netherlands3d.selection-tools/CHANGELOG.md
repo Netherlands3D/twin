@@ -5,13 +5,20 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-[2.4.0]
+## [2.5.0]
+
+### Added
+
+- selectionAreaBounds event in AreaSelection that is triggered whenever the selection area is (re)drawn while in the 
+  process of selecting an area
+
+## [2.4.0]
 
 ### Added
 
 - Added SetCurrentInputPointsWithoutNotify() method to override current list of positions without invoking edit or create events
 
-[2.3.0]
+## [2.3.0]
 
 ### Added
 
@@ -43,13 +50,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Auto draw is now disabled in edit mode
 
 
-[2.2.0]
+## [2.2.0]
 
 ### Added
 
 - Added a mode selection to allow only creating or only editing polygons. Doing both at once is still possible with the mode CreateAndEdit
 
-[2.1.0]
+## [2.1.0]
 
 ### Added
 

@@ -18,9 +18,8 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.SelectionTools
 {
@@ -32,8 +31,12 @@ namespace Netherlands3D.SelectionTools
         private MeshRenderer boundsMeshRenderer;
 
         [Header("Invoke")]
-        [SerializeField] private UnityEvent<bool> blockCameraDragging;
-        [SerializeField] private UnityEvent<Bounds> selectedAreaBounds;
+        [SerializeField] private UnityEvent<bool> blockCameraDragging = new();
+        [Tooltip("Fires while a new area is being drawn")]
+        [SerializeField] private UnityEvent<Bounds> whenDrawingArea = new();
+        [FormerlySerializedAs("selectedAreaBounds")]
+        [Tooltip("Fires when an area is selected")]
+        [SerializeField] private UnityEvent<Bounds> whenAreaIsSelected = new();
 
         [Header("Settings")]
         [SerializeField] private float gridSize = 100;
@@ -136,7 +139,6 @@ namespace Netherlands3D.SelectionTools
                 DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
             }
         }
-
         
         private void Tap()
         {
@@ -175,9 +177,8 @@ namespace Netherlands3D.SelectionTools
 
         private void MakeSelection()
         {
-            Debug.Log($"Make selection.");
             var bounds = boundsMeshRenderer.bounds;
-            selectedAreaBounds.Invoke(bounds);
+            whenAreaIsSelected.Invoke(bounds);
         }
 
         /// <summary>
@@ -220,6 +221,9 @@ namespace Netherlands3D.SelectionTools
                     (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
                     gridSize,
                     (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
+            
+            var bounds = boundsMeshRenderer.bounds;
+            whenDrawingArea.Invoke(bounds);
         }
     }
 }
