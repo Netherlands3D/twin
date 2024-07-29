@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
@@ -18,6 +19,7 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         [SerializeField] private UnityEvent<float> progressEvent = new();
+        private string[] requiredHeaders = { "BagId", "HexColor" };
         public int maxParsesPerFrame = 100;
         private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
 
@@ -32,11 +34,22 @@ namespace Netherlands3D.Twin
             if(!localFile.LocalFilePath.ToLower().EndsWith(".csv"))
                 return false;
 
-            // Check if we can read the CVS using our expected config
-            using var reader = new StreamReader(localFile.LocalFilePath);
-            using var csv = new CsvReader(reader, config);
+            //Streamread first line to check if all required headers are present, and the config delimiter is used
+            using var streamReader = new StreamReader(localFile.LocalFilePath);
+            using var csv = new CsvReader(streamReader, config);
 
-            return csv.Read();
+            bool canReadWithConfig = csv.Read();
+            bool hasHeader = csv.ReadHeader();
+            if (!canReadWithConfig || !hasHeader)
+                return false;
+
+            foreach (var header in requiredHeaders)
+            {
+                if (!csv.Context.HeaderRecord.Contains(header))
+                    return false;
+            }
+
+            return true;
         }
 
         public void Execute(LocalFile localFile)
