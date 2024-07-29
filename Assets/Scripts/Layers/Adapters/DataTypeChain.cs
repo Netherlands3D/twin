@@ -20,6 +20,11 @@ namespace Netherlands3D.Twin
         public UnityEvent<string> OnDownloadFailed = new();
 
         private string targetUrl = "";
+
+        /// <summary>
+        /// The target url can be set directly from an input field.
+        /// Using <ref> DetermineAdapter </ref> without an url will start the chain of responsibility using the set url.
+        /// </summary>
         public string TargetUrl 
         { 
             get => targetUrl; 
@@ -33,8 +38,7 @@ namespace Netherlands3D.Twin
         private Coroutine chain;
 
         private void OnDisable() {
-            if(chain != null)
-                StopCoroutine(chain);
+            AbortChain();
         }
 
         /// <summary>
