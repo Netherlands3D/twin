@@ -19,15 +19,9 @@ namespace Netherlands3D.Twin
         [SerializeField] private FunctionalityAndPrefab[] functionalityAndLayers;
 
         private void Awake() {
-            return;
             foreach (var functionalityAndlayer in functionalityAndLayers)
             {
                 functionalityAndlayer.functionality.OnEnable.AddListener(() => Spawn(functionalityAndlayer.spawnedObject));
-
-                //Start with default spawns
-                if(functionalityAndlayer.functionality.IsEnabled){
-                    Spawn(functionalityAndlayer.spawnedObject);
-                }
             }
         }
 

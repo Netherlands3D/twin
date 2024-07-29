@@ -83,20 +83,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ReconstructHierarchyUIs();
             ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
-            // projectData.OnDataChanged.AddListener(OnProjectDataChanged);
         }
-
-        // private void OnProjectDataChanged(ProjectData newProject) //currently this explicit rebuild is not needed, because LayerUI.Start already correctly initializes newly parsed layers
-        // {
-        //     ReconstructHierarchyUIs();
-        // }
 
         private void OnDisable()
         {
             ProjectData.Current.RootLayer.DeselectAllLayers();
             ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
-            // projectData.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
         private void CreateNewUI(LayerData layer)
