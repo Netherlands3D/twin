@@ -18,6 +18,21 @@ namespace Netherlands3D.Twin.Projects
 
         public int undoStackSize = 10;
 
+        private static ProjectDataHandler instance;
+        public static ProjectDataHandler Instance 
+        { 
+            get{
+                if(instance == null)
+                    instance = FindObjectOfType<ProjectDataHandler>();
+
+                return instance;
+            }
+            set
+            {
+                instance = value;
+            }
+        }
+
         private void Awake() {
             if(projectData == null) {
                 Debug.LogError("ProjectData object reference is not set in ProjectStateHandler", this.gameObject);
