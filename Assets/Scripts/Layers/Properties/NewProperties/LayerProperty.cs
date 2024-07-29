@@ -8,6 +8,8 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class LayerProperty
     {
-        
+        public virtual void Load()
+        {
+        }
     }
 }

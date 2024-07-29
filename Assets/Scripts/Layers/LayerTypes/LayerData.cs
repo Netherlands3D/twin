@@ -124,6 +124,11 @@ namespace Netherlands3D.Twin.Layers
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
+
+            foreach (var property in layerProperties)
+            {
+                property.Load();
+            }
         }
 
         public void SetParent(LayerData newParent, int siblingIndex = -1)

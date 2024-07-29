@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
 using RuntimeHandle;
-using TMPro;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -91,18 +90,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             TransformProperty.OnRotationChanged.RemoveListener(UpdateRotationFields);
             TransformProperty.OnScaleChanged.RemoveListener(UpdateScalingFields);        
         }
-
-        // private void Update()
-        // {
-        //     if (layerGameObject.transform.hasChanged)
-        //     {
-        //         UpdatePositionFields();
-        //         UpdateRotationFields();
-        //         UpdateScalingFields();
-        //         layerGameObject.transform.hasChanged = false;
-        //     }
-        // }
-
+        
         private void SetTransformLocks()
         {
             if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
