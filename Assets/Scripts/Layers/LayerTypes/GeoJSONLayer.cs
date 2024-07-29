@@ -37,6 +37,8 @@ namespace Netherlands3D.Twin.Layers
 
         private GeoJSONPointLayer pointFeatures;
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
+
+        private Coroutine streamParseCoroutine;
         
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
@@ -121,7 +123,10 @@ namespace Netherlands3D.Twin.Layers
         /// <param name="filePath"></param>
         public void StreamParseGeoJSON(string filePath)
         {
-            StartCoroutine(ParseGeoJSONStream(filePath, 1000));
+            if (streamParseCoroutine != null)
+                StopCoroutine(streamParseCoroutine);
+
+            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(filePath, 1000));
         }
 
         private IEnumerator ParseGeoJSONStream(string filePath, int maxParsesPerFrame = Int32.MaxValue)
