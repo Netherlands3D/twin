@@ -10,10 +10,13 @@ namespace Netherlands3D.Twin
 {
     public class DataTypeChain : MonoBehaviour
     {
+        [Header("Settings")]
+        [SerializeField] private bool debugLog = false;
+
         [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
         private IDataTypeAdapter[] dataTypeAdapterInterfaces;
-        public UnityEvent OnAdapterFound = new();
+        public UnityEvent<IDataTypeAdapter> OnAdapterFound = new();
 
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
@@ -106,7 +109,7 @@ namespace Netherlands3D.Twin
             else
             {
                 urlAndData.LocalFilePath = "";
-                Debug.LogError("Download failed: " + uwr.error);
+                if(debugLog) Debug.LogError("Download failed: " + uwr.error);
             }
         }
 
@@ -122,9 +125,9 @@ namespace Netherlands3D.Twin
             {
                 if (adapter.Supports(urlAndData))
                 {
-                    Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
+                    if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
                     adapter.Execute(urlAndData);
-                    OnAdapterFound.Invoke();
+                    OnAdapterFound.Invoke(adapter);
                     yield break;
                 }
             }
@@ -141,7 +144,7 @@ namespace Netherlands3D.Twin
             {
                 if (dataTypeAdapters[i] is not IDataTypeAdapter)
                 {
-                    Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
+                    if(debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
                     dataTypeAdapters[i] = null;
                 }
             }
