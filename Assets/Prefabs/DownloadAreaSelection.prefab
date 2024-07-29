@@ -147,7 +147,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  selectionAreaBounds:
+  whenDrawingArea:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
@@ -162,7 +162,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  selectedAreaBounds:
+  whenAreaIsSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2387899072786983831}

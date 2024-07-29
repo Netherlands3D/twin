@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using TMPro;
@@ -27,6 +28,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 {
     public class DownloadInspector : MonoBehaviour
     {
+        [DllImport("__Internal")]
+        private static extern void CopyToClipboard(string textToCopy);
+
         [Header("Settings")]
         [Tooltip("In what coordinate system should the coordinates be shown to the user?")]
         [SerializeField] private CoordinateSystem DisplayCrs = CoordinateSystem.RD;
@@ -54,9 +58,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
             northEastTooltip = Instantiate(popoutPrefab, canvasTransform);
-            northEastTooltip.RectTransform().SetPivot(PivotPresets.BottomCenter);
+            northEastTooltip.RectTransform().SetPivot(PivotPresets.MiddleLeft);
             southWestTooltip = Instantiate(popoutPrefab, canvasTransform);
-            southWestTooltip.RectTransform().SetPivot(PivotPresets.TopCenter);
+            southWestTooltip.RectTransform().SetPivot(PivotPresets.MiddleRight);
         }
 
         private void OnDisable()
@@ -91,13 +95,22 @@ namespace Netherlands3D.Twin.Interface.BAG
         private void CopySouthWestToClipboard()
         {
             // TODO: As expected, this does not work in WebGL
-            GUIUtility.systemCopyBuffer = $"{southExtentTextField.text},{westExtentTextField.text}";
+            var text = $"{southExtentTextField.text},{westExtentTextField.text}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
         }
 
         private void CopyNorthEastToClipboard()
         {
-            // TODO: As expected, this does not work in WebGL
-            GUIUtility.systemCopyBuffer = $"{northExtentTextField.text},{eastExtentTextField.text}";
+            var text = $"{northExtentTextField.text},{eastExtentTextField.text}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
         }
 
         // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where
