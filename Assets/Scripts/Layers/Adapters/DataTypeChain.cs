@@ -20,7 +20,15 @@ namespace Netherlands3D.Twin
         public UnityEvent<string> OnDownloadFailed = new();
 
         private string targetUrl = "";
-        public string TargetUrl { get => targetUrl; set => targetUrl = value; }
+        public string TargetUrl 
+        { 
+            get => targetUrl; 
+            set
+            {
+                AbortChain();
+                targetUrl = value;   
+            }
+        }
 
         private Coroutine chain;
 
@@ -40,10 +48,14 @@ namespace Netherlands3D.Twin
         }
         public void DetermineAdapter()
         {
+            AbortChain();
+            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+        }
+
+        private void AbortChain()
+        {
             if(chain != null)
                 StopCoroutine(chain);
-
-            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
         }
 
         private IEnumerator DownloadAndCheckSupport(string url)
