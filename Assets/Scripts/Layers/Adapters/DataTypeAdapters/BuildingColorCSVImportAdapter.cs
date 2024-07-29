@@ -15,7 +15,7 @@ using Application = UnityEngine.Application;
 namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
-    public class CSVImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class BuildingColorCSVImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         [SerializeField] private UnityEvent<float> progressEvent = new();
