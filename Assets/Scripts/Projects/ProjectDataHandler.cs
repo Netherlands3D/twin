@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Projects
     public class ProjectDataHandler : MonoBehaviour
     {
         [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
-        private ChainOfResponsibility fileImporter; // don't remove, this is used in LoadDefaultProject()
+        private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
 
         public List<ProjectData> undoStack = new();
@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Projects
                 return;
             }
 
-            fileImporter = GetComponent<ChainOfResponsibility>();
+            fileImporter = GetComponent<DataTypeChain>();
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
