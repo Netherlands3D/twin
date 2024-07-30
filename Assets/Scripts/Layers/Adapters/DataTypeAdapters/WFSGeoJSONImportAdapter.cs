@@ -29,29 +29,29 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
+            var wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
 
-            var wfs = new GeoJSONWFS();
-            if (!wfs.ValidateURL(sourceUrl))
+            if (!wfs.ValidateURL())
             {
                 Debug.Log("<color=orange>WFS url does not contain a GetCapabilities or GetFeature request.</color>");
                 return false;
             }
 
-            if (!wfs.CheckBboxFilterCapability(cachedDataPath))
+            if (!wfs.CheckBboxFilterCapability())
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;
             }
 
-            if (!wfs.CheckGeoJSONOutputFormat(cachedDataPath))
+            if (!wfs.CheckGeoJSONOutputFormat())
             {
                 Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                 return false;
             }
 
-            wfsVersion = wfs.GetWFSVersion(sourceUrl, cachedDataPath);
+            wfsVersion = wfs.GetWFSVersionFromUrl();
             if (string.IsNullOrEmpty(wfsVersion))
-                wfsVersion = wfs.GetWFSVersionFromXml(cachedDataPath);
+                wfsVersion = wfs.GetWFSVersionFromBody();
 
             return true;
         }
@@ -59,16 +59,16 @@ namespace Netherlands3D.Twin
         public void Execute(LocalFile localFile)
         {
             var sourceUrl = localFile.SourceUrl;
+            var wfs = new GeoJSONWFS(localFile.SourceUrl, localFile.LocalFilePath);
 
-            var wfs = new GeoJSONWFS();
-            if (wfs.ValidateURL(sourceUrl))
+            if (wfs.ValidateURL())
             {
                 var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
                 var wfsFolder = new FolderLayer(sourceUrl);
 
                 if (getCapabilitiesRequest)
                 {
-                    var featureTypes = wfs.GetFeatureTypes(localFile);
+                    var featureTypes = wfs.GetFeatureTypes();
 
                     //Create a folder layer 
                     foreach (var featureType in featureTypes)
@@ -139,34 +139,40 @@ namespace Netherlands3D.Twin
 
         private class GeoJSONWFS
         {
-            public bool ValidateURL(string sourceUrl)
+            private readonly string sourceUrl;
+            private readonly string cachedBodyContent;
+
+            private readonly XmlDocument xmlDocument;
+            private readonly XmlNamespaceManager namespaceManager;
+
+            public GeoJSONWFS(string sourceUrl, string cachedBodyFilePath)
             {
-                var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
-                var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
+                this.sourceUrl = sourceUrl;
+                this.cachedBodyContent = cachedBodyFilePath;
+
+                var dataAsText = File.ReadAllText(this.cachedBodyContent);
+                xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(dataAsText);
+
+                namespaceManager = ReadNameSpaceManager(xmlDocument);
+            }
+
+            public bool ValidateURL()
+            {
+                var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
+                var getFeatureRequest = this.sourceUrl.ToLower().Contains("request=getfeature");
 
                 return getCapabilitiesRequest || getFeatureRequest;
             }
 
-            public bool CheckBboxFilterCapability(string cachedDataPath)
+            public bool CheckBboxFilterCapability()
             {
-                var dataAsText = File.ReadAllText(cachedDataPath);
-                var xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(dataAsText);
-
-                XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
-
-                return WFSBboxFilterCapability(xmlDocument, namespaceManager);
+                return WFSBboxFilterCapability(this.xmlDocument, this.namespaceManager);
             }
 
-            public bool CheckGeoJSONOutputFormat(string cachedDataPath)
+            public bool CheckGeoJSONOutputFormat()
             {
-                var dataAsText = File.ReadAllText(cachedDataPath);
-                var xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(dataAsText);
-
-                XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
-
-                XmlNode getFeatureOperationNode = ReadGetFeatureNode(xmlDocument, namespaceManager);
+                XmlNode getFeatureOperationNode = ReadGetFeatureNode(this.xmlDocument, this.namespaceManager);
                 if (getFeatureOperationNode == null)
                 {
                     Debug.Log("<color=orange>WFS GetFeature operation not found.</color>");
@@ -183,19 +189,19 @@ namespace Netherlands3D.Twin
                 return true;
             }
 
-            public string GetWFSVersion(string sourceUrl, string cachedDataPath)
+            public string GetWFSVersionFromUrl()
             {
                 var urlLower = sourceUrl.ToLower();
                 var versionQueryKey = "version=";
                 if (urlLower.Contains(versionQueryKey))
                     return urlLower.Split(versionQueryKey)[1].Split("&")[0];
 
-                return GetWFSVersionFromXml(cachedDataPath);
+                return GetWFSVersionFromBody();
             }
 
-            public string GetWFSVersionFromXml(string cachedDataPath)
+            public string GetWFSVersionFromBody()
             {
-                var dataAsText = File.ReadAllText(cachedDataPath);
+                var dataAsText = File.ReadAllText(this.cachedBodyContent);
                 var xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(dataAsText);
 
@@ -210,10 +216,9 @@ namespace Netherlands3D.Twin
                 return "";
             }
 
-            public string[] GetFeatureTypes(LocalFile localFile)
+            public string[] GetFeatureTypes()
             {
-                var cachedDataPath = localFile.LocalFilePath;
-                var dataAsText = File.ReadAllText(cachedDataPath);
+                var dataAsText = File.ReadAllText(this.cachedBodyContent);
                 var xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(dataAsText);
 
