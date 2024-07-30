@@ -8,14 +8,14 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-   [Serializable]
-    public class TransformLayerProperty: LayerProperty
+    [Serializable]
+    public class TransformLayerProperty : LayerProperty
     {
-        private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
-        private Vector3 eulerRotation;
-        private Vector3 localScale;
+        [SerializeField, JsonProperty] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
+        [SerializeField, JsonProperty] private Vector3 eulerRotation;
+        [SerializeField, JsonProperty] private Vector3 localScale;
 
-        [JsonProperty]
+        [JsonIgnore]
         public Coordinate Position
         {
             get => position;
@@ -25,8 +25,8 @@ namespace Netherlands3D.Twin
                 OnPositionChanged.Invoke(position);
             }
         }
-        
-        [JsonProperty]
+
+        [JsonIgnore]
         public Vector3 EulerRotation
         {
             get => eulerRotation;
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        [JsonProperty]
+        [JsonIgnore]
         public Vector3 LocalScale
         {
             get => localScale;
@@ -48,23 +48,8 @@ namespace Netherlands3D.Twin
             }
         }
 
-        [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new(); 
-        [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new(); 
+        [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
-
-        public TransformLayerProperty()
-        {
-        }
-
-        [JsonConstructor]
-        public TransformLayerProperty(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
-        {
-            Debug.Log("constructing layer property fron json");
-            Debug.Log(position.ToUnity());
-
-            this.position = position;
-            this.eulerRotation = eulerRotation;
-            this.localScale = localScale;
-        }
     }
 }

@@ -96,7 +96,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         private void OnProjectDataChanged(ProjectData data)
         {
-            ReconstructHierarchyUIs();
+            ReconstructHierarchyUIs(); //ensure a clean ui hierarchy after a project is loaded 
         }
 
         private void CreateNewUI(LayerData layer)
