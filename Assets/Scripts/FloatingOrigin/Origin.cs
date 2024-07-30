@@ -53,25 +53,25 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 yield return new WaitForEndOfFrame();
 
-                var mainShifterPosition = mainShifter.position;
-                var originPosition = transform.position;
-                var newPosition = new Vector3(mainShifterPosition.x, originPosition.y, mainShifterPosition.z);
-                
-                // We use newPosition instead of mainShifterPosition so that the Y component is the same and we 
-                // calculate the distance on a flat plane. This prevents origin shifts when the only change of the
-                // shifter is the height.
-                var distanceBetweenMainShifterAndOrigin = newPosition - originPosition;
-
-                // sqrMagnitude is used because it outperforms magnitude quite a bit: https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
-                if (distanceBetweenMainShifterAndOrigin.sqrMagnitude < sqrDistanceBeforeShifting)
+                if (((mainShifter.position.x-transform.position.x)* (mainShifter.position.x - transform.position.x))+ ((mainShifter.position.z - transform.position.z) * (mainShifter.position.z - transform.position.z))< sqrDistanceBeforeShifting)
                 {
                     continue;
                 }
 
+
+                var mainShifterPosition = mainShifter.position;
+                Coordinate mainShifterCoordinate = new Coordinate(mainShifterPosition);
+                Coordinate mainShifterWGS = mainShifterCoordinate.Convert(CoordinateSystem.WGS84_LatLonHeight);
+
+                Coordinate originCoordinateWGS = new Coordinate(transform.position).Convert(CoordinateSystem.WGS84_LatLonHeight);
+
+                Coordinate newOriginCoordinate = mainShifterWGS;
+                newOriginCoordinate.height = originCoordinateWGS.height;
+
                 Profiler.BeginSample("PerformOriginShift");
 
                 // Move this Origin to the camera's position, but keep the same height as it is now. 
-                MoveOriginTo(new Coordinate(newPosition));
+                MoveOriginTo(newOriginCoordinate);
 
                 Profiler.EndSample();
             }
@@ -88,19 +88,20 @@ namespace Netherlands3D.Twin.FloatingOrigin
         /// <param name="destination"></param>
         public void MoveOriginTo(Coordinate destination)
         {
-            Coordinate mainShifterRD = new Coordinate(mainShifter.position).Convert(CoordinateSystem.RDNAP);
-           
+            Coordinate CurrentOrigin = new Coordinate(transform.position);
+
 #if UNITY_EDITOR
+            Coordinate mainShifterRD = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
             Coordinate destinationRD = destination.Convert(CoordinateSystem.RDNAP);
             if (LogShifts) Debug.Log($"Moving origin from {mainShifterRD.ToVector3()} (EPSG:7415) to {destinationRD.ToVector3()} (EPSG:7415)");
 #endif
 
-            onPreShift.Invoke(mainShifterRD, destination);
+            onPreShift.Invoke(CurrentOrigin, destination);
 
             CoordinateSystems.SetOrigin(destination);
 
             // Shout to the world that the origin has changed to this coordinate
-            onPostShift.Invoke(mainShifterRD, destination);
+            onPostShift.Invoke(CurrentOrigin, destination);
         }
     }
 }

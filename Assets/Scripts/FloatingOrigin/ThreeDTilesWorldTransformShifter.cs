@@ -7,8 +7,19 @@ namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class ThreeDTilesWorldTransformShifter : WorldTransformShifter
     {
-        private Dictionary<Transform, Coordinate> tilesToShift = new();
+        private Dictionary<Transform, PositionAndRotation> tilesToShift = new();
         private Read3DTileset tilesetReader;
+        private struct PositionAndRotation
+        {
+            public Coordinate coordinateInConnectedCRS;
+            public Quaternion rotationInConnectedCRS;
+            public PositionAndRotation(Coordinate coordinate, Quaternion rotation)
+            {
+                coordinateInConnectedCRS = coordinate;
+                rotationInConnectedCRS = rotation;
+            }
+        }
+        
 
         private void Awake() {
             tilesetReader = GetComponent<Read3DTileset>();
@@ -27,35 +38,35 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var contentComponents = transform.GetComponentsInChildren<Content>();
             foreach (Content contentComponent in contentComponents)
             {
-                foreach (Transform child in contentComponent.transform)
-                {
-                    var baseCoordinate = new Coordinate(child.position);
-                    tilesToShift.Add(
-                        child, 
-                        baseCoordinate
-                    );
-                }
+                Coordinate position = new Coordinate(transform.position);
+                Quaternion rotation = Quaternion.Inverse(position.RotationToLocalGravityUp()) * transform.rotation;
+
+                tilesToShift.Add(
+                    contentComponent.transform,
+                    new PositionAndRotation(position, rotation)
+                );
             }
         }
         
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
+
+public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
 #if UNITY_EDITOR
-            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} tiles</color>");
+            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} children</color>");
 #endif
-
-            foreach (KeyValuePair<Transform,Coordinate> tile in tilesToShift)
+            foreach (KeyValuePair<Transform, PositionAndRotation> tile in tilesToShift)
             {
-                var coordinate = tile.Value;
-                var newPosition = coordinate.ToUnity();
+                var newPosition = tile.Value.coordinateInConnectedCRS.ToUnity();
+                var newRotation = tile.Value.coordinateInConnectedCRS.RotationToLocalGravityUp() * tile.Value.rotationInConnectedCRS;
 #if UNITY_EDITOR
                 if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>| Shifting {tile.Key.gameObject.name} from {tile.Key.position} to {newPosition}</color>");
 #endif
                 tile.Key.position = newPosition;
+                tile.Key.rotation = newRotation;
             }
 
-            //Refresh 3D Tiles internal Bounds calculations
-            tilesetReader.RecalculateBounds();
+        //Refresh 3D Tiles internal Bounds calculations
+        tilesetReader.RecalculateBounds();
         }
     }
 }

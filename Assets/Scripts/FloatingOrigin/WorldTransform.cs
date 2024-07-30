@@ -12,7 +12,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
             get;
             set;
         }
-
+        public Quaternion Rotation
+        {
+            get;
+            set;
+        }
         public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
         public Origin Origin => Origin.current;
 
@@ -26,9 +30,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
-
-            // Pre-initialize the coordinates before using them
-            Coordinate = new Coordinate(ReferenceCoordinateSystem, 0, 0, 0);
         }
 
         private void OnValidate()
@@ -39,7 +40,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                     "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
                     "otherwise the Origin's location won't be taken into account."
                 );
-                referenceCoordinateSystem = CoordinateSystem.WGS84_ECEF;
+                referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
             }
         }
 
