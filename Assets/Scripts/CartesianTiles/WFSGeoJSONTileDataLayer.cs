@@ -17,7 +17,14 @@ namespace Netherlands3D.CartesianTiles
     {
         private TileHandler tileHandler;
         private string wfsUrl = "";
-        public string WfsUrl { get => wfsUrl; set => wfsUrl = value; }
+        public string WfsUrl { 
+            get => wfsUrl; 
+            set {
+                wfsUrl = value;
+                if(!wfsUrl.Contains("{0}"))
+                    Debug.LogError("WFS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
+            }
+        }
 
         private GeoJSONLayer geoJSONLayer;
         public GeoJSONLayer GeoJSONLayer
