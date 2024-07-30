@@ -15,16 +15,19 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        public TransformLayerProperty TransformProperty { get; } = new TransformLayerProperty();
+        public TransformLayerProperty TransformProperty;
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
 
         protected void Awake()
         {
-            TransformProperty.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            TransformProperty.EulerRotation = transform.eulerAngles;
-            TransformProperty.LocalScale = transform.localScale;
+            TransformProperty = new TransformLayerProperty
+            {
+                Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z),
+                EulerRotation = transform.eulerAngles,
+                LocalScale = transform.localScale
+            };
 
             LayerData.AddProperty(TransformProperty);
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -50,31 +53,31 @@ namespace Netherlands3D.Twin.Layers
 
         private void UpdatePosition(Coordinate newPosition)
         {
-            if(newPosition.ToUnity() != transform.position)
+            if (newPosition.ToUnity() != transform.position)
                 transform.position = newPosition.ToUnity();
         }
 
         private void UpdateRotation(Vector3 newAngles)
         {
-            if(newAngles != transform.eulerAngles)
+            if (newAngles != transform.eulerAngles)
                 transform.eulerAngles = newAngles;
         }
 
         private void UpdateScale(Vector3 newScale)
         {
-            if(newScale != transform.localScale)
+            if (newScale != transform.localScale)
                 transform.localScale = newScale;
         }
-        
+
         private void Start()
         {
             previousPosition = transform.position;
             previousRotation = transform.rotation;
             previousScale = transform.localScale;
-            
+
             objectCreated.Invoke(gameObject);
         }
-        
+
         private void Update()
         {
             // We cannot user transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
@@ -149,6 +152,26 @@ namespace Netherlands3D.Twin.Layers
         {
             if (toggleScatterPropertySectionInstantiator.PropertySection != null)
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
+        }
+
+        protected override void LoadProperties(List<LayerProperty> layerDataLayerProperties)
+        {
+            var transformProperty = (TransformLayerProperty)LayerData.LayerProperties.FirstOrDefault(p => p is TransformLayerProperty);
+            if (transformProperty != null)
+            {
+                TransformProperty = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+                print("loading properties " );
+
+                UpdatePosition(TransformProperty.Position);
+                UpdateRotation(TransformProperty.EulerRotation);
+                UpdateScale(TransformProperty.LocalScale);
+            }
+            else
+            {
+                print("adding properties " + layerDataLayerProperties.Count);
+                LayerData.AddProperty(TransformProperty); //the layer does not yet have a TransformProperty, so add the one of this class to link it to the layerData
+            }
+
         }
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)

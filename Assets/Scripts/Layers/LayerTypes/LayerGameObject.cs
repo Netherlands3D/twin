@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,8 +33,16 @@ namespace Netherlands3D.Twin.Layers
                     
                 return layerData;
             }
-            set => layerData = value;
+            set
+            {
+                layerData = value;
+                LoadProperties(layerData.LayerProperties);
+            }
         }
+
+        protected virtual void LoadProperties(List<LayerProperty> layerDataLayerProperties)
+        {
+        }//todo make abstract when implemented in all inherited classes 
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();

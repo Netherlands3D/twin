@@ -11,26 +11,22 @@ namespace Netherlands3D.Twin
    [Serializable]
     public class TransformLayerProperty: LayerProperty
     {
-        [SerializeField, JsonProperty] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
-        // [SerializeField, JsonProperty] private double[] rdPosition = new double[3];
-        [SerializeField, JsonProperty] private Vector3 eulerRotation;
-        [SerializeField, JsonProperty] private Vector3 localScale;
+        [NonSerialized] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
+        [NonSerialized] private Vector3 eulerRotation;
+        [NonSerialized] private Vector3 localScale;
 
-        [JsonIgnore]
+        [JsonProperty]
         public Coordinate Position
         {
             get => position;
             set
             {
                 position = value.Convert(CoordinateSystem.RDNAP);
-                // rdPosition[0] = rd.x;
-                // rdPosition[1] = rd.y;
-                // rdPosition[2] = rd.z;
-                OnPositionChanged.Invoke(value);
+                OnPositionChanged.Invoke(position);
             }
         }
         
-        [JsonIgnore]
+        [JsonProperty]
         public Vector3 EulerRotation
         {
             get => eulerRotation;
@@ -41,7 +37,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        [JsonIgnore]
+        [JsonProperty]
         public Vector3 LocalScale
         {
             get => localScale;
@@ -55,14 +51,5 @@ namespace Netherlands3D.Twin
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new(); 
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new(); 
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
-
-        public override void Load()
-        {
-            Debug.Log("loading Position: " + position.ToUnity());
-
-            Position = position;
-            EulerRotation = eulerRotation;
-            LocalScale = localScale;
-        }
     }
 }
