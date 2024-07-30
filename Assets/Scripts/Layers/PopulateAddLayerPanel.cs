@@ -65,6 +65,7 @@ namespace Netherlands3D.Twin
             //todo: add functionality listener if needed
             
             button.onClick.AddListener(()=>mainButtonPanel.gameObject.SetActive(false));
+            button.onClick.AddListener(()=>title.SetActive(true));
             button.onClick.AddListener(()=>groupPanel.SetActive(true));
             button.onClick.AddListener(addLayerPanel.GetComponent<AdvancedScrollView>().ResetScrollActive);
             
