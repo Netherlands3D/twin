@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.Properties
 {
     [Serializable]
     public class TransformLayerPropertyData : LayerPropertyData
