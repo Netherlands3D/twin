@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace Netherlands3D.Twin.Editor
 {
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             }
 
-            if (state == PlayModeStateChange.EnteredPlayMode)
+            if (state == PlayModeStateChange.EnteredPlayMode && SceneManager.GetActiveScene().buildIndex != 0)
             {
                 EditorSceneManager.LoadScene(0);
             }

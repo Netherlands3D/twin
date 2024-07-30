@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,12 +90,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
+            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
         }
 
         private void OnDisable()
         {
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
+            layerNameField.onEndEdit.RemoveListener(OnInputFieldChanged);
         }
 
         private void OnEnabledToggleValueChanged(bool isOn)
@@ -109,7 +110,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateFoldout();
             RecalculateVisibleHierarchyRecursive();
         }
-
+        
+        private void OnInputFieldChanged(string newName)
+        {
+            Layer.Name = newName;
+        }
         
         private void Start()
         {
@@ -179,7 +184,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // Make sure to remove the properties when removing the UI
             if (propertyToggle.isOn) propertyToggle.isOn = false;
 
+            gameObject.SetActive(false); //ensure it won't get re-added in LayerManager.RecalculateLayersInInspector
             Destroy(gameObject);
+            layerUIManager.RecalculateLayersVisibleInInspector();
         }
 
         private void RecalculateCurrentTreeStates()
@@ -249,7 +256,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             SetVisibilitySprite();
         }
         
-        public void SetParent(LayerUI newParent, int siblingIndex = -1) //todo: make this only change the UI parent, move all data logic to LayerNL3DBase
+        public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
             if (newParent == this)
                 return;
@@ -375,6 +382,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             width += parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left;
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
             layerNameText.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
+            layerNameField.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
 
         public void OnPointerDown(PointerEventData eventData)
