@@ -1,6 +1,7 @@
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class OverlayInspector : MonoBehaviour
     {

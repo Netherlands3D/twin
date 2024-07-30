@@ -1,30 +1,71 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     public abstract class ReferencedLayer : MonoBehaviour
     {
+        [SerializeField] private string prefabIdentifier;
+        public string PrefabIdentifier => prefabIdentifier;
+
         public string Name
         {
             get => ReferencedProxy.Name;
             set => ReferencedProxy.Name = value;
         }
 
-        public ReferencedProxyLayer ReferencedProxy { get; set; }
+        private ReferencedProxyLayer referencedProxy;
+        public ReferencedProxyLayer ReferencedProxy
+        {
+            get
+            {
+                if (referencedProxy == null)
+                {
+                    Debug.Log("ReferencedProxy is null, creating new layer");
+                    CreateProxy();
+                }
+                    
+                return referencedProxy;
+            }
+            set => referencedProxy = value;
+        }
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
-        protected virtual void Awake()
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            CreateProxy();
-            ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+            if (string.IsNullOrEmpty(prefabIdentifier) || prefabIdentifier == "00000000000000000000000000000000")
+            {
+                var pathToPrefab = AssetDatabase.GetAssetPath(this);
+                if (!string.IsNullOrEmpty(pathToPrefab))
+                {
+                    var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
+                    prefabIdentifier = metaID.ToString();
+                    // print("setting prefab id to : " + prefabIdentifier);
+                    EditorUtility.SetDirty(this);
+                }
+            }
+        }
+#endif
+        private void Start()
+        {
+            if (ReferencedProxy == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
+                CreateProxy();
+
+            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
+            OnLayerActiveInHierarchyChanged(ReferencedProxy.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+        }
+
+        private void CreateProxy()
+        {
+            ProjectData.AddReferenceLayer(this);
         }
 
         protected virtual void OnEnable()
@@ -32,15 +73,11 @@ namespace Netherlands3D.Twin
             onShow.Invoke();
         }
 
-        protected virtual  void OnDisable()
+        protected virtual void OnDisable()
         {
             onHide.Invoke();
         }
-
-        protected virtual void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-        }
-
+        
         public virtual void OnSelect()
         {
         }
@@ -56,18 +93,13 @@ namespace Netherlands3D.Twin
 
         protected virtual void OnDestroy()
         {
-            ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
+            // ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
             DestroyProxy();
-        }
-
-        public virtual void CreateProxy()
-        {
-            ProjectData.AddReferenceLayer(this);
         }
 
         public virtual void DestroyProxy()
         {
-            if (ReferencedProxy!=null)
+            if (ReferencedProxy != null)
             {
                 ReferencedProxy.DestroyLayer();
             }
@@ -86,6 +118,11 @@ namespace Netherlands3D.Twin
         public virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
+        }
+        
+        public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            //called when the Proxy's active state changes.          
         }
     }
 }

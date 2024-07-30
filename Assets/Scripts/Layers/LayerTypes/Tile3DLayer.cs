@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     public class Tile3DLayer : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
     {
@@ -64,9 +64,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             set => propertySection = value;
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             tileSet = GetComponent<Read3DTileset>();
             
             if (usePropertySections)
@@ -85,7 +84,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
         }
         
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             gameObject.SetActive(isActive);
         }

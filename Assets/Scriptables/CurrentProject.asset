@@ -10,16 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b2293ded97497ba4e8743e34c11901, type: 3}
-  m_Name: ProjectData
+  m_Name: CurrentProject
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20240527144746
-  UUID: 70af4089-049b-49a0-b270-cf801addc09d
+  SavedTimestamp: 20240718163932
+  UUID: 31c167f0-37aa-424f-aced-b54092629d47
   CameraPosition:
-  - 155207
-  - 462945
+  - -2.2524240016937256
   - 300
+  - -199.41415405273438
   CameraRotation:
   - 60.000003814697266
   - 0
   - 0
+  rootLayer:
+    name: RootLayer
+    activeSelf: 1
+    color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+    children: []
+  PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}

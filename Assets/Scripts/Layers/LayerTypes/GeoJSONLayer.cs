@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json;
 using UnityEngine;
 using GeoJSON.Net;
