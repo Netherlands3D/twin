@@ -18,6 +18,9 @@
 
 using System;
 using UnityEngine;
+#if NEWTONSOFT
+using Newtonsoft.Json;
+#endif
 
 namespace Netherlands3D.Coordinates
 {
@@ -31,10 +34,12 @@ namespace Netherlands3D.Coordinates
         /// The CoordinateSystem is defined as an int and not as CoordinateSystem enum so that third-parties can
         /// add their own EPSG conversions that are not (yet) included in the enum.
         /// </remarks>
-        /// 
+        ///
+#if NEWTONSOFT
+        [JsonProperty]
+#endif
+        public int CoordinateSystem { get; }
         
-        public readonly int CoordinateSystem;
-
         /// <summary>
         /// Array representing all points for this coordinate.
         ///
@@ -47,9 +52,12 @@ namespace Netherlands3D.Coordinates
         [HideInInspector]
         public double extraLattitudeRotation;
         public double[] Points;
+        
+        private CoordinateSystemOperation converter;
 
-        CoordinateSystemOperation converter;
-
+#if NEWTONSOFT
+        [JsonIgnore]
+#endif
         public double easting { 
             get {
                 if (converter==null)
@@ -66,6 +74,9 @@ namespace Netherlands3D.Coordinates
                 Points[converter.EastingIndex()] = value; 
             }
         }
+#if NEWTONSOFT
+        [JsonIgnore]
+#endif
         public double northing
         {
             get {
@@ -81,6 +92,9 @@ namespace Netherlands3D.Coordinates
                 }
                 Points[converter.NorthingIndex()] = value; }
         }
+#if NEWTONSOFT
+        [JsonIgnore]
+#endif
         public double height
         {
             get
@@ -109,7 +123,19 @@ namespace Netherlands3D.Coordinates
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
-
+        
+#if NEWTONSOFT
+        [JsonConstructor]
+#endif
+        public Coordinate(int coordinateSystem, double[] points, double extraLongitudeRotation, double extraLatitudeRotation)
+        {
+            converter = null;
+            CoordinateSystem = coordinateSystem;
+            Points = points;
+            this.extraLongitudeRotation = extraLongitudeRotation;
+            this.extraLattitudeRotation = extraLatitudeRotation;
+        }
+        
         public Coordinate(int coordinateSystem, params double[] points)
         {
             converter = null;
