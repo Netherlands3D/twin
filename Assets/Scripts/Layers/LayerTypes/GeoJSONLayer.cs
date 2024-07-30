@@ -329,6 +329,9 @@ namespace Netherlands3D.Twin.Layers
             bool crsFound = false;
             do //process the found object, and continue reading after processing is done
             {
+                // Log the current token
+                Debug.Log("Token: " + reader.TokenType + " Value: " + reader.Value);
+
                 if (!IsAtTypeToken(reader) && !IsAtCRSToken(reader))
                 {
                     reader.Skip(); //if the found token is is not "type" or "crs", skip this object
@@ -394,16 +397,25 @@ namespace Netherlands3D.Twin.Layers
 
         private static bool IsAtTypeToken(JsonTextReader reader)
         {
+            if(reader.TokenType != JsonToken.PropertyName)
+                    return false;
+
             return reader.Value.ToString().ToLower() == "type";
         }
 
         private static bool IsAtCRSToken(JsonTextReader reader)
         {
+            if(reader.TokenType != JsonToken.PropertyName)
+                return false;
+
             return reader.Value.ToString().ToLower() == "crs";
         }
 
         private static bool IsAtFeaturesToken(JsonTextReader reader)
         {
+            if(reader.TokenType != JsonToken.PropertyName)
+                return false;
+
             return reader.Value.ToString().ToLower() == "features";
         }
     }
