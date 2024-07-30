@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonConstructor]
-        public ReferencedLayerData(string name, string prefabId, List<LayerProperty> layerProperties) : base(name, layerProperties)
+        public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
             this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);

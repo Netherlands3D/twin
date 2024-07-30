@@ -15,20 +15,20 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        private TransformLayerProperty transformProperty = new();
+        private TransformLayerPropertyData transformPropertyData = new();
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
 
-        public TransformLayerProperty TransformProperty => transformProperty;
+        public TransformLayerPropertyData TransformPropertyData => transformPropertyData;
 
         protected void Awake()
         {
-            transformProperty.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            transformProperty.EulerRotation = transform.eulerAngles;
-            transformProperty.LocalScale = transform.localScale;
+            transformPropertyData.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            transformPropertyData.EulerRotation = transform.eulerAngles;
+            transformPropertyData.LocalScale = transform.localScale;
 
-            LayerData.AddProperty(transformProperty);
+            LayerData.AddProperty(transformPropertyData);
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
         }
@@ -37,17 +37,17 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnEnable();
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
-            transformProperty.OnPositionChanged.AddListener(UpdatePosition);
-            transformProperty.OnRotationChanged.AddListener(UpdateRotation);
-            transformProperty.OnScaleChanged.AddListener(UpdateScale);
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            transformProperty.OnPositionChanged.RemoveListener(UpdatePosition);
-            transformProperty.OnRotationChanged.RemoveListener(UpdateRotation);
-            transformProperty.OnScaleChanged.RemoveListener(UpdateScale);
+            transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -68,16 +68,16 @@ namespace Netherlands3D.Twin.Layers
                 transform.localScale = newScale;
         }
         
-        protected override void LoadProperties(List<LayerProperty> layerDataLayerProperties)
+        protected override void LoadProperties(List<LayerPropertyData> properties)
         {
-            var transformProperty = (TransformLayerProperty)LayerData.LayerProperties.FirstOrDefault(p => p is TransformLayerProperty);
+            var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)
             {
-                this.transformProperty = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+                this.transformPropertyData = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
 
-                UpdatePosition(this.transformProperty.Position);
-                UpdateRotation(this.transformProperty.EulerRotation);
-                UpdateScale(this.transformProperty.LocalScale);
+                UpdatePosition(this.transformPropertyData.Position);
+                UpdateRotation(this.transformPropertyData.EulerRotation);
+                UpdateScale(this.transformPropertyData.LocalScale);
             }
         }
 
@@ -97,21 +97,21 @@ namespace Netherlands3D.Twin.Layers
             if (transform.position != previousPosition)
             {
                 var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-                transformProperty.Position = rdCoordinate;
+                transformPropertyData.Position = rdCoordinate;
                 previousPosition = transform.position;
             }
 
             // Check for rotation change
             if (transform.rotation != previousRotation)
             {
-                transformProperty.EulerRotation = transform.eulerAngles;
+                transformPropertyData.EulerRotation = transform.eulerAngles;
                 previousRotation = transform.rotation;
             }
 
             // Check for scale change
             if (transform.localScale != previousScale)
             {
-                transformProperty.LocalScale = transform.localScale;
+                transformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
         }

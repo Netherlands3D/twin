@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin
 {
     [Serializable]
-    public class TransformLayerProperty : LayerProperty
+    public class TransformLayerPropertyData : LayerPropertyData
     {
         [SerializeField, JsonProperty] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
         [SerializeField, JsonProperty] private Vector3 eulerRotation;

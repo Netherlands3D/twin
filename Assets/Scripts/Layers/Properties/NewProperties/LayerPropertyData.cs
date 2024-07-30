@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin
 {
     [Serializable]
-    public class LayerProperty
+    public class LayerPropertyData
     {
     }
 }

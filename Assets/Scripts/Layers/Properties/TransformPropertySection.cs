@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class TransformPropertySection : AbstractHierarchicalObjectPropertySection
     {
-        private TransformLayerProperty transformProperty;
+        private TransformLayerPropertyData transformPropertyData;
         private HierarchicalObjectLayerGameObject layerGameObject;
 
         [Serializable]
@@ -31,31 +31,31 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 layerGameObject = value;
-                TransformProperty = layerGameObject.TransformProperty;
+                TransformPropertyData = layerGameObject.TransformPropertyData;
             } 
         }
 
-        private TransformLayerProperty TransformProperty
+        private TransformLayerPropertyData TransformPropertyData
         {
-            get => transformProperty;
+            get => transformPropertyData;
             set
             {
-                if (transformProperty != null)
+                if (transformPropertyData != null)
                 {
-                    TransformProperty.OnPositionChanged.RemoveListener(UpdatePositionFields);
-                    TransformProperty.OnRotationChanged.RemoveListener(UpdateRotationFields);
-                    TransformProperty.OnScaleChanged.RemoveListener(UpdateScalingFields);        
+                    TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+                    TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+                    TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);        
                 }
                 
-                transformProperty = value;
+                transformPropertyData = value;
                 
-                transformProperty.OnPositionChanged.AddListener(UpdatePositionFields);
-                transformProperty.OnRotationChanged.AddListener(UpdateRotationFields);
-                transformProperty.OnScaleChanged.AddListener(UpdateScalingFields);
+                transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
+                transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
+                transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
                 
-                UpdatePositionFields(transformProperty.Position);
-                UpdateRotationFields(transformProperty.EulerRotation);
-                UpdateScalingFields(transformProperty.LocalScale);
+                UpdatePositionFields(transformPropertyData.Position);
+                UpdateRotationFields(transformPropertyData.EulerRotation);
+                UpdateScalingFields(transformPropertyData.LocalScale);
 
                 SetTransformLocks();
             }
@@ -86,9 +86,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             scale.yField.onEndEdit.RemoveListener(OnScaleChanged);
             scale.zField.onEndEdit.RemoveListener(OnScaleChanged);
             
-            TransformProperty.OnPositionChanged.RemoveListener(UpdatePositionFields);
-            TransformProperty.OnRotationChanged.RemoveListener(UpdateRotationFields);
-            TransformProperty.OnScaleChanged.RemoveListener(UpdateScalingFields);        
+            TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+            TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+            TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);        
         }
         
         private void SetTransformLocks()
@@ -126,7 +126,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             double.TryParse(position.zField.Text, out var z);
             
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-            TransformProperty.Position = rdCoordinate;
+            TransformPropertyData.Position = rdCoordinate;
         }
         
         private void OnRotationChanged(string axisValue)
@@ -135,7 +135,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(rotation.yField.Text, out var y);
             float.TryParse(rotation.zField.Text, out var z);
 
-            TransformProperty.EulerRotation = new Vector3(x, y, z);
+            TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
         
         private void OnScaleChanged(string axisValue)
@@ -144,7 +144,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
             float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
 
-            TransformProperty.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
+            TransformPropertyData.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
         }
         
         private void UpdatePositionFields(Coordinate coordinate)

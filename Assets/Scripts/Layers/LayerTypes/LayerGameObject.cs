@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        protected virtual void LoadProperties(List<LayerProperty> layerDataLayerProperties)
+        protected virtual void LoadProperties(List<LayerPropertyData> properties)
         {
         }//todo make abstract when implemented in all inherited classes 
 
