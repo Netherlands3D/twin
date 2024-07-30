@@ -57,10 +57,8 @@ namespace Netherlands3D.Twin.Interface.BAG
             copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
-            northEastTooltip = Instantiate(popoutPrefab, canvasTransform);
-            northEastTooltip.RectTransform().SetPivot(PivotPresets.MiddleLeft);
-            southWestTooltip = Instantiate(popoutPrefab, canvasTransform);
-            southWestTooltip.RectTransform().SetPivot(PivotPresets.MiddleRight);
+            northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
+            southWestTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleRight);
         }
 
         private void OnDisable()
@@ -78,10 +76,10 @@ namespace Netherlands3D.Twin.Interface.BAG
         {
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
-            northExtentTextField.text = southWestAndNorthEast.Item2.Points[0].ToString("F");
-            southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("F");
-            eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("F");
-            westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("F");
+            northExtentTextField.text = southWestAndNorthEast.Item2.Points[0].ToString("0");
+            southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("0");
+            eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("0");
+            westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("0");
 
             southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
@@ -94,7 +92,6 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         private void CopySouthWestToClipboard()
         {
-            // TODO: As expected, this does not work in WebGL
             var text = $"{southExtentTextField.text},{westExtentTextField.text}";
 #if UNITY_WEBGL && !UNITY_EDITOR
             CopyToClipboard(text);
@@ -111,6 +108,15 @@ namespace Netherlands3D.Twin.Interface.BAG
 #else
             GUIUtility.systemCopyBuffer = text;
 #endif
+        }
+
+        private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
+        {
+            var popout = Instantiate(popoutPrefab, canvasTransform);
+            popout.RectTransform().SetPivot(pivotPoint);
+            popout.transform.SetSiblingIndex(0);
+
+            return popout;
         }
 
         // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where

@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 5641219528846961176}
   - component: {fileID: 7998320360004482743}
   - component: {fileID: 2551304673583623924}
+  - component: {fileID: 3177769586178089132}
   m_Layer: 5
   m_Name: CopyButton
   m_TagString: Untagged
@@ -845,6 +846,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3177769586178089132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151530549593389260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Kopieer lokatie van zuid-westelijk hoekpunt naar klembord
 --- !u!1 &3174215481905318090
 GameObject:
   m_ObjectHideFlags: 0
@@ -2604,6 +2618,7 @@ GameObject:
   - component: {fileID: 5828125082498423}
   - component: {fileID: 787842662272771560}
   - component: {fileID: 197758433612143890}
+  - component: {fileID: 6023870537466161713}
   m_Layer: 5
   m_Name: CopyButton
   m_TagString: Untagged
@@ -2712,6 +2727,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6023870537466161713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253567253135300580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Kopieer lokatie van noord-oostelijk hoekpunt naar klembord
 --- !u!1 &8286746908998859155
 GameObject:
   m_ObjectHideFlags: 0
@@ -3139,7 +3167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00068696856}
+  m_AnchoredPosition: {x: 0, y: 0.0010153782}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4009584302880459875
@@ -4811,7 +4839,7 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.99999887
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
@@ -5262,8 +5290,8 @@ PrefabInstance:
     - target: {fileID: 7764135182217992251, guid: b0101f50a9b51dd45915dafbf0ffab81,
         type: 3}
       propertyPath: m_text
-      value: Door de shift-toets ingedrukt te houden kunt u tegels toevoegen aan
-        de huidige selectie.
+      value: "<b>Tip</b>: door de combinatie shift-klik+sleep kunt u meerdere tegels
+        selecteren en zo het downloadgebied vergroten\r"
       objectReference: {fileID: 0}
     - target: {fileID: 7764135182217992251, guid: b0101f50a9b51dd45915dafbf0ffab81,
         type: 3}
