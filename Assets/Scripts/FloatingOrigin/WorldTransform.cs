@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
                     "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
                     "otherwise the Origin's location won't be taken into account."
                 );
-                referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
+                referenceCoordinateSystem = CoordinateSystem.WGS84_ECEF;
             }
         }
 
