@@ -270,7 +270,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.filebrowser": {
-      "version": "2.0.2",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -424,6 +424,13 @@
     },
     "eu.netherlands3d.webgl-copy-paste": {
       "version": "1.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "jillejr.newtonsoft.json-for-unity.converters": {
+      "version": "1.6.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

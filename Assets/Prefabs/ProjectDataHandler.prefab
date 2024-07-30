@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3822504923427240547}
   - component: {fileID: 4759327881244281210}
-  - component: {fileID: 5506336900963845778}
+  - component: {fileID: 840209856476251670}
   m_Layer: 0
   m_Name: ProjectDataHandler
   m_TagString: Untagged
@@ -46,10 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+  defaultProjectFileName: ProjectTemplate.nl3d
   undoStack: []
   redoStack: []
   undoStackSize: 10
---- !u!114 &5506336900963845778
+--- !u!114 &840209856476251670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,23 +59,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2174600510305605328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42e0c5bc301d6444a8cc7d3da9ce4b50, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b258de7d0c67bb438bcc70b871ecf0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 4d4bb419d2cfa2f43ba6e0f427c11a30, type: 2}
-  trigger:
+  dataTypeAdapters:
+  - {fileID: 11400000, guid: 7ced692139442654998e5e20d4f711a2, type: 2}
+  OnAdapterFound:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4759327881244281210}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataHandler,
-          Assembly-CSharp
-        m_MethodName: LoadFromFile
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  CouldNotFindAdapter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDownloadFailed:
+    m_PersistentCalls:
+      m_Calls: []

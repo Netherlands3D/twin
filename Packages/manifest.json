@@ -18,7 +18,7 @@
     "eu.netherlands3d.collada": "0.1.1",
     "eu.netherlands3d.coordinates": "1.6.3",
     "eu.netherlands3d.event-containers": "0.1.0",
-    "eu.netherlands3d.filebrowser": "2.0.2",
+    "eu.netherlands3d.filebrowser": "2.0.3",
     "eu.netherlands3d.geojson": "1.1.0",
     "eu.netherlands3d.gltfast": "5.0.3",
     "eu.netherlands3d.json": "1.0.1",
@@ -35,6 +35,7 @@
     "eu.netherlands3d.transform-handles": "1.1.2",
     "eu.netherlands3d.web-cursors": "2.0.0",
     "eu.netherlands3d.webgl-copy-paste": "1.1.0",
+    "jillejr.newtonsoft.json-for-unity.converters": "1.6.3",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -79,7 +80,8 @@
         "com.joshclose.csvhelper",
         "com.greener-games.sharp-zip-lib",
         "com.greener-games.unity-extensions",
-        "com.svermeulen.asyncawaitutil"
+        "com.svermeulen.asyncawaitutil",
+        "jillejr.newtonsoft"
       ]
     }
   ]

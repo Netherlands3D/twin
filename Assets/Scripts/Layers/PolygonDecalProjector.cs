@@ -1,5 +1,5 @@
 using System;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 

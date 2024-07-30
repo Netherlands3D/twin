@@ -22,11 +22,6 @@ namespace Netherlands3D.Twin
             foreach (var functionalityAndlayer in functionalityAndLayers)
             {
                 functionalityAndlayer.functionality.OnEnable.AddListener(() => Spawn(functionalityAndlayer.spawnedObject));
-
-                //Start with default spawns
-                if(functionalityAndlayer.functionality.IsEnabled){
-                    Spawn(functionalityAndlayer.spawnedObject);
-                }
             }
         }
 
