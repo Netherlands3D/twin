@@ -11,9 +11,9 @@ namespace Netherlands3D.Twin
    [Serializable]
     public class TransformLayerProperty: LayerProperty
     {
-        [NonSerialized] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
-        [NonSerialized] private Vector3 eulerRotation;
-        [NonSerialized] private Vector3 localScale;
+        private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
+        private Vector3 eulerRotation;
+        private Vector3 localScale;
 
         [JsonProperty]
         public Coordinate Position
@@ -51,5 +51,20 @@ namespace Netherlands3D.Twin
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new(); 
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new(); 
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
+
+        public TransformLayerProperty()
+        {
+        }
+
+        [JsonConstructor]
+        public TransformLayerProperty(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
+        {
+            Debug.Log("constructing layer property fron json");
+            Debug.Log(position.ToUnity());
+
+            this.position = position;
+            this.eulerRotation = eulerRotation;
+            this.localScale = localScale;
+        }
     }
 }

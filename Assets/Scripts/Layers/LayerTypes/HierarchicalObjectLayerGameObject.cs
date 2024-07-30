@@ -15,19 +15,20 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        public TransformLayerProperty TransformProperty;
+        public TransformLayerProperty TransformProperty = new TransformLayerProperty();
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
 
         protected void Awake()
         {
-            TransformProperty = new TransformLayerProperty
-            {
-                Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z),
-                EulerRotation = transform.eulerAngles,
-                LocalScale = transform.localScale
-            };
+            // var pos = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            // TransformProperty = new TransformLayerProperty();
+
+            TransformProperty.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            TransformProperty.EulerRotation = transform.eulerAngles;
+            TransformProperty.LocalScale = transform.localScale;
+
 
             LayerData.AddProperty(TransformProperty);
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -160,23 +161,15 @@ namespace Netherlands3D.Twin.Layers
             if (transformProperty != null)
             {
                 TransformProperty = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-                print("loading properties " );
 
                 UpdatePosition(TransformProperty.Position);
                 UpdateRotation(TransformProperty.EulerRotation);
                 UpdateScale(TransformProperty.LocalScale);
             }
-            else
-            {
-                print("adding properties " + layerDataLayerProperties.Count);
-                LayerData.AddProperty(TransformProperty); //the layer does not yet have a TransformProperty, so add the one of this class to link it to the layerData
-            }
-
         }
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
         {
-            print("converting to scatter layer");
             var scatterLayer = new GameObject(objectLayerGameObject.Name + "_Scatter");
             var layerComponent = scatterLayer.AddComponent<ObjectScatterLayerGameObject>();
 

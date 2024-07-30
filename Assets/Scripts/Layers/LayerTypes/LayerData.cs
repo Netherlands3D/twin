@@ -16,12 +16,13 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [SerializeField, JsonProperty] private List<LayerProperty> layerProperties = new();
+        [SerializeField, JsonProperty] protected List<LayerProperty> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
+
         [JsonIgnore]
         public string Name
         {
@@ -119,11 +120,19 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public LayerData(string name)
+        public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
+        }
+
+        public LayerData(string name, List<LayerProperty> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
+        {
+            Name = name;
+            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+                InitializeParent();
+            this.layerProperties = layerProperties;
         }
 
         public void SetParent(LayerData newParent, int siblingIndex = -1)

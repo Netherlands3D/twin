@@ -83,6 +83,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ReconstructHierarchyUIs();
             ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
         private void OnDisable()
@@ -90,6 +91,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             ProjectData.Current.RootLayer.DeselectAllLayers();
             ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+        }
+
+        private void OnProjectDataChanged(ProjectData data)
+        {
+            ReconstructHierarchyUIs();
         }
 
         private void CreateNewUI(LayerData layer)
