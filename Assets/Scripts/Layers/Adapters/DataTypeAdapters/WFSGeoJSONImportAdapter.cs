@@ -49,9 +49,7 @@ namespace Netherlands3D.Twin
                 return false;
             }
 
-            wfsVersion = wfs.GetWFSVersionFromUrl();
-            if (string.IsNullOrEmpty(wfsVersion))
-                wfsVersion = wfs.GetWFSVersionFromBody();
+            wfsVersion = wfs.GetWFSVersion();
 
             return true;
         }
@@ -189,7 +187,7 @@ namespace Netherlands3D.Twin
                 return true;
             }
 
-            public string GetWFSVersionFromUrl()
+            public string GetWFSVersion()
             {
                 var urlLower = sourceUrl.ToLower();
                 var versionQueryKey = "version=";
