@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 #endif
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
+using Netherlands3D.Twin.Projects;
 using SimpleJSON;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -59,7 +60,7 @@ namespace Netherlands3D.Twin.Configuration
         public UnityEvent OnCloseInterface = new();
         public UnityEvent OnOpen { get => OnOpenInterface; }
         public UnityEvent OnClose { get => OnCloseInterface; }
-
+        
         public bool SetupSceneLoaded { 
             get{
                 return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
@@ -128,7 +129,8 @@ namespace Netherlands3D.Twin.Configuration
             indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
 
             SceneManager.sceneLoaded += (scene, mode) => {
-                if(scene.name == mainSceneName && Configuration.ShouldStartSetup){
+                if(scene.name == mainSceneName && Configuration.ShouldStartSetup)
+                {
                     StartSetup();
                 }
             };

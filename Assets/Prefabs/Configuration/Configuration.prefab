@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda0b13c6ae56744a940de64ddcbc7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialProjectTemplate: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef,
-    type: 2}
+  currentProjectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
   configurator: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   OnLoadedConfiguration:
     m_PersistentCalls:

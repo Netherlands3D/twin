@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -15,11 +14,10 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        protected override void Awake()
+        protected void Awake()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-            base.Awake();
         }
 
         protected override void OnEnable()
@@ -33,7 +31,7 @@ namespace Netherlands3D.Twin.Layers
             objectCreated.Invoke(gameObject);
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (!isActive && ReferencedProxy.IsSelected)
             {

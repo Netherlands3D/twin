@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
-using Netherlands3D.CartesianTiles;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     [RequireComponent(typeof(CartesianTiles.Layer))]
     public class CartesianTileLayer : ReferencedLayer
@@ -10,16 +8,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private CartesianTiles.Layer layer;
         private CartesianTiles.TileHandler tileHandler;
 
-        protected override void OnLayerActiveInHierarchyChanged(bool isActive)
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (layer && layer.isEnabled != isActive)
                 layer.isEnabled = isActive;
         }
         
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-            tileHandler = GetComponentInParent<CartesianTiles.TileHandler>();
+            tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>();
+            transform.SetParent(tileHandler.transform);
             layer = GetComponent<CartesianTiles.Layer>();
 
             tileHandler.AddLayer(layer);
