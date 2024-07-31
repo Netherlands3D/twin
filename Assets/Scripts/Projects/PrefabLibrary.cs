@@ -13,16 +13,16 @@ namespace Netherlands3D.Twin
     public class PrefabGroup
     {
         public string groupName;
-        public List<ReferencedLayer> prefabs;
+        public List<LayerGameObject> prefabs;
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
     public class PrefabLibrary : ScriptableObject
     {
-        [JsonIgnore, SerializeField] private ReferencedLayer fallbackPrefab;
+        [JsonIgnore] public LayerGameObject fallbackPrefab;
         [JsonIgnore] public List<PrefabGroup> prefabGroups;
 
-        public ReferencedLayer GetPrefabById(string id)
+        public LayerGameObject GetPrefabById(string id)
         {
             foreach (var group in prefabGroups)
             {

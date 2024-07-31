@@ -56,8 +56,8 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] private string lastSavePath = "";
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
-        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerAdded = new();
-        [NonSerialized] public UnityEvent<LayerNL3DBase> LayerDeleted = new();
+        [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
+        [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 
         [NonSerialized] private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
         {
@@ -207,7 +207,7 @@ namespace Netherlands3D.Twin.Projects
             DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
         }
 
-        public void AddStandardLayer(LayerNL3DBase layer)
+        public void AddStandardLayer(LayerData layer)
         {
             if (!isLoading)
             {
@@ -216,15 +216,15 @@ namespace Netherlands3D.Twin.Projects
             LayerAdded.Invoke(layer);
         }
 
-        public static void AddReferenceLayer(ReferencedLayer referencedLayer)
+        public static void AddReferenceLayer(LayerGameObject referencedLayer)
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
-            var proxyLayer = new ReferencedProxyLayer(referenceName, referencedLayer);
-            referencedLayer.ReferencedProxy = proxyLayer;
+            var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
+            referencedLayer.LayerData = proxyLayer;
         }
 
-        public void RemoveLayer(LayerNL3DBase layer)
+        public void RemoveLayer(LayerData layer)
         {
             LayerDeleted.Invoke(layer);
         }

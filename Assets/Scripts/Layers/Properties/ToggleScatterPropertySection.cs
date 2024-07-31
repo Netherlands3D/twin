@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         [SerializeField] private Toggle convertToggle;
 
-        public ReferencedLayer Layer { get; set; }
+        public LayerGameObject LayerGameObject { get; set; }
 
         private void OnEnable()
         {
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             if (IsObjectLayer())
             {
-                if (Layer.ReferencedProxy.ParentLayer is PolygonSelectionLayer)
+                if (LayerGameObject.LayerData.ParentLayer is PolygonSelectionLayer)
                 {
                     gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(false);
@@ -53,24 +53,24 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (IsScatterLayer())
             {
-                var scatterLayer = Layer as ObjectScatterLayer;
+                var scatterLayer = LayerGameObject as ObjectScatterLayerGameObject;
                 scatterLayer.RevertToHierarchicalObjectLayer();
             }
             else if (IsObjectLayer())
             {
-                var objectLayer = Layer as HierarchicalObjectLayer;
-                HierarchicalObjectLayer.ConvertToScatterLayer(objectLayer);
+                var objectLayer = LayerGameObject as HierarchicalObjectLayerGameObject;
+                HierarchicalObjectLayerGameObject.ConvertToScatterLayer(objectLayer);
             }
         }
 
         public bool IsObjectLayer()
         {
-            return Layer is HierarchicalObjectLayer;
+            return LayerGameObject is HierarchicalObjectLayerGameObject;
         }
 
         public bool IsScatterLayer()
         {
-            return Layer is ObjectScatterLayer;
+            return LayerGameObject is ObjectScatterLayerGameObject;
         }
     }
 }

@@ -3,7 +3,7 @@ using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class DatasetLayer : ReferencedLayer
+    public class DatasetLayerGameObject : LayerGameObject
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void RecalculateColorPriorities()
         {
-            var hierarchyList = GetFlatHierarchy(ReferencedProxy.Root);
+            var hierarchyList = GetFlatHierarchy(LayerData.Root);
             for (var i = 0; i < hierarchyList.Count; i++)
             {
                 var datasetLayer = hierarchyList[i];
@@ -64,20 +64,20 @@ namespace Netherlands3D.Twin.Layers
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        private List<DatasetLayer> GetFlatHierarchy(LayerNL3DBase root)
+        private List<DatasetLayerGameObject> GetFlatHierarchy(LayerData root)
         {
-            var list = new List<DatasetLayer>();
+            var list = new List<DatasetLayerGameObject>();
 
             AddLayersRecursive(root, list);
 
             return list;
         }
 
-        private void AddLayersRecursive(LayerNL3DBase layer, List<DatasetLayer> list)
+        private void AddLayersRecursive(LayerData layer, List<DatasetLayerGameObject> list)
         {
-            if (layer is ReferencedProxyLayer proxyLayer)
+            if (layer is ReferencedLayerData proxyLayer)
             {
-                if (proxyLayer.Reference is DatasetLayer datasetLayer)
+                if (proxyLayer.Reference is DatasetLayerGameObject datasetLayer)
                 {
                     list.Add(datasetLayer);
                 }

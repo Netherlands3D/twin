@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [FormerlySerializedAs("layerManager")] [SerializeField] protected LayerUIManager layerUIManager;
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
-        [SerializeField] protected ReferencedLayer layer;
+        [FormerlySerializedAs("layer")] [SerializeField] protected LayerGameObject layerGameObject;
         [SerializeField] protected GameObject prefab;
         [SerializeField] protected GameObject binImage;
         [SerializeField] protected Sprite hoverSprite;
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         protected virtual void OnEnable()
         {
-            toggle.isOn = layer != null;
+            toggle.isOn = layerGameObject != null;
             ShowBin(false);
 
             ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
@@ -41,12 +41,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
 
-        private void OnLayerDeleted(LayerNL3DBase deletedLayer)
+        private void OnLayerDeleted(LayerData deletedLayer)
         {
             if (!toggle.isOn)
                 return;
 
-            if (deletedLayer == layer.ReferencedProxy)
+            if (deletedLayer == layerGameObject.LayerData)
             {
                 toggle.onValueChanged.RemoveListener(CreateOrDestroyObject); //the layer was already deleted, it should only update the toggle
                 toggle.isOn = false; //use the regular way instead of SetIsOnWithoutNotify because the toggle graphics should update.
@@ -57,19 +57,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void CreateOrDestroyObject(bool isOn)
         {
             if (isOn)
-                layer = CreateObject();
+                layerGameObject = CreateObject();
             else
-                layer.DestroyLayer();
+                layerGameObject.DestroyLayer();
         }
 
-        private ReferencedLayer CreateObject()
+        private LayerGameObject CreateObject()
         {
             var newObject = Instantiate(prefab, Vector3.zero, Quaternion.identity, layerParent);
             newObject.name = prefab.name;
 
-            var layerComponent = newObject.GetComponent<ReferencedLayer>();
+            var layerComponent = newObject.GetComponent<LayerGameObject>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<ReferencedLayer>();
+                layerComponent = newObject.AddComponent<LayerGameObject>();
             
             return layerComponent;
         }
@@ -78,16 +78,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             ShowBin(toggle.isOn);
             GetComponent<Image>().sprite = hoverSprite;
-            if (layer)
-                layerUIManager.HighlightLayerUI(layer.ReferencedProxy, true);
+            if (layerGameObject)
+                layerUIManager.HighlightLayerUI(layerGameObject.LayerData, true);
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             ShowBin(false);
             GetComponent<Image>().sprite = defaultSprite;
-            if (layer)
-                layerUIManager.HighlightLayerUI(layer.ReferencedProxy, false);
+            if (layerGameObject)
+                layerUIManager.HighlightLayerUI(layerGameObject.LayerData, false);
         }
 
         //also called in the inspector to update after a press

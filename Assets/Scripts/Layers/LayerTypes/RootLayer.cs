@@ -8,21 +8,21 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class RootLayer : LayerNL3DBase
+    public class RootLayer : LayerData
     {
-        [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; private set; } = new();
+        [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();
 
         public RootLayer(string name) : base(name)
         {
         }
 
-        public void AddLayerToSelection(LayerNL3DBase layer)
+        public void AddLayerToSelection(LayerData layer)
         {
             if (!SelectedLayers.Contains(layer))
                 SelectedLayers.Add(layer);
         }
 
-        public void RemoveLayerFromSelection(LayerNL3DBase layer)
+        public void RemoveLayerFromSelection(LayerData layer)
         {
             SelectedLayers.Remove(layer);
         }
@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private void ReconstructParentsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ReconstructParentsRecursive(LayerData layer, LayerData parent)
         {
             layer.InitializeParent(parent);
             foreach (var child in layer.ChildrenLayers)
@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void AddChild(LayerNL3DBase layer)
+        public void AddChild(LayerData layer)
         {
             if (!ChildrenLayers.Contains(layer))
             {

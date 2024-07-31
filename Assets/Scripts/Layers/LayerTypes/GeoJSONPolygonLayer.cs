@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerNL3DBase
+    public partial class GeoJSONPolygonLayer : LayerData
     {
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
         public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();

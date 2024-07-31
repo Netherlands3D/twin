@@ -159,7 +159,7 @@ namespace Netherlands3D.Twin
 
             parsedObj.AddComponent<MeshCollider>();
             parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();     
-            parsedObj.AddComponent<HierarchicalObjectLayer>();
+            parsedObj.AddComponent<HierarchicalObjectLayerGameObject>();
             parsedObj.AddComponent<WorldTransform>();
             
             CreatedMoveableGameObject.Invoke(parsedObj);

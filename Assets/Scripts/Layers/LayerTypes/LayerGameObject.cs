@@ -8,31 +8,31 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public abstract class ReferencedLayer : MonoBehaviour
+    public abstract class LayerGameObject : MonoBehaviour
     {
         [SerializeField] private string prefabIdentifier;
         public string PrefabIdentifier => prefabIdentifier;
 
         public string Name
         {
-            get => ReferencedProxy.Name;
-            set => ReferencedProxy.Name = value;
+            get => LayerData.Name;
+            set => LayerData.Name = value;
         }
 
-        private ReferencedProxyLayer referencedProxy;
-        public ReferencedProxyLayer ReferencedProxy
+        private ReferencedLayerData layerData;
+        public ReferencedLayerData LayerData
         {
             get
             {
-                if (referencedProxy == null)
+                if (layerData == null)
                 {
                     Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
                 }
                     
-                return referencedProxy;
+                return layerData;
             }
-            set => referencedProxy = value;
+            set => layerData = value;
         }
 
         public UnityEvent onShow = new();
@@ -56,11 +56,11 @@ namespace Netherlands3D.Twin.Layers
 #endif
         private void Start()
         {
-            if (ReferencedProxy == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
+            if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
             // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
-            OnLayerActiveInHierarchyChanged(ReferencedProxy.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+            OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
         }
 
         private void CreateProxy()
@@ -99,9 +99,9 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void DestroyProxy()
         {
-            if (ReferencedProxy != null)
+            if (LayerData != null)
             {
-                ReferencedProxy.DestroyLayer();
+                LayerData.DestroyLayer();
             }
         }
 
