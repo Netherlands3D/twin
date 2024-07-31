@@ -66,7 +66,7 @@ public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigi
             }
 
         //Refresh 3D Tiles internal Bounds calculations
-        tilesetReader.RecalculateBounds();
+        tilesetReader.InvalidateBounds();
         }
     }
 }
