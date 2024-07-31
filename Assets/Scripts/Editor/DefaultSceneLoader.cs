@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Netherlands3D.Twin.Editor
@@ -25,6 +26,7 @@ namespace Netherlands3D.Twin.Editor
 
             if (state == PlayModeStateChange.EnteredPlayMode && SceneManager.GetActiveScene().buildIndex != 0)
             {
+                Debug.Log("Switching to ConfigLoader scene via DefaultSceneLoader.cs"); //added this log to make sure devs who don't know about this script know why their scene keeps switching when entering play mode
                 EditorSceneManager.LoadScene(0);
             }
         }
