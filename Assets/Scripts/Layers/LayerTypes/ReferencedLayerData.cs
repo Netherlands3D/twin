@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin.Layers
         {
             this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            Debug.Log("loading prefab: " + prefab + " with id: " +prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.LayerData = this;
 
