@@ -1,3 +1,20 @@
 {
-	"name": "eu.netherlands3d.coordinates.Runtime"
+    "name": "eu.netherlands3d.coordinates.Runtime",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "",
+            "define": "NEWTONSOFT"
+        }
+    ],
+    "noEngineReferences": false
 }
