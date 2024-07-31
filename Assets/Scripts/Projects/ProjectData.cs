@@ -228,7 +228,6 @@ namespace Netherlands3D.Twin.Projects
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
             foreach (var property in layersWithPropertyData)
             {
-                Debug.Log("adding property:  " + property.PropertyData.GetType());
                 referencedLayer.LayerData.AddProperty(property.PropertyData);
             }
         }
