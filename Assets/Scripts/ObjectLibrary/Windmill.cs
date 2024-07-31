@@ -1,73 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.ObjectLibrary
 {
-    public class Windmill : MonoBehaviour
+    [RequireComponent(typeof(LayerGameObject))]
+    public class Windmill : MonoBehaviour, ILayerWithPropertyData
     {
         public float RotorDiameter
         {
-            get => rotorDiameter;
-            set
-            {
-                rotorDiameter = value;
-                Resize();
-            }
+            get => propertyData.RotorDiameter;
+            set => propertyData.RotorDiameter = value;
         }
+        private WindmillPropertyData propertyData;
+        public LayerPropertyData PropertyData => propertyData;
 
         public float AxisHeight
         {
-            get => axisHeight;
-            set
-            {
-                axisHeight = value;
-                Resize();
-            }
+            get => propertyData.AxisHeight;
+            set => propertyData.AxisHeight = value;
         }
+        // public WindmillPropertyData PropertyData => propertyData;
 
-        [Header("Settings")]
-        [SerializeField] private float rotationSpeed = 10f;
-        [SerializeField] private float axisHeight = 120f;
-        [SerializeField] private float rotorDiameter = 120f;
+        [Header("Settings")] [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float defaultHeight = 120f;
         [SerializeField] private float defaultDiameter = 120f;
 
-        [Header("Models")]
-        [SerializeField] private Transform windmillBase;
+        [Header("Models")] [SerializeField] private Transform windmillBase;
         [SerializeField] private Transform windmillAxis;
         [SerializeField] private Transform windmillRotor;
         [SerializeField] private Transform[] windmillBlades;
 
         [SerializeField] private float baseModelHeight = 1.679f;
-        [SerializeField] private float baseModelDiameter = 0.79405f; 
+        [SerializeField] private float baseModelDiameter = 0.79405f;
         [SerializeField] private float rotorModelLength = 13.2f;
         [SerializeField] private float basePercentage = 0.1f;
 
         private MeshRenderer baseRenderer;
 
-        private void Start()
+        private void Awake()
         {
             baseRenderer = windmillBase.GetComponent<MeshRenderer>();
-
-            // Do initial resize, in case properties were set in inspector
-            Resize();
         }
 
-        private void Resize()
+        private void Start()
         {
-            if (axisHeight == 0)
+            UpdateAxisHeight(propertyData.AxisHeight);
+            UpdateRotorDiameter(propertyData.RotorDiameter);
+        }
+
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
+            if (windmillProperties != null)
             {
-                Debug.LogWarning($"Windmill {name} has no height, using fallback height");
-                axisHeight = defaultHeight;
+                propertyData = windmillProperties;
+                print("LOADED RD: " + propertyData.RotorDiameter);
+                print("LOADED AH: " + propertyData.AxisHeight);
             }
 
-            if (rotorDiameter == 0)
+            if (propertyData == null)
             {
-                Debug.LogWarning($"Windmill {name} has no diameter, using fallback diameter");
-                rotorDiameter = defaultDiameter;
+                propertyData = new()
+                {
+                    AxisHeight = defaultHeight,
+                    RotorDiameter = defaultDiameter
+                };
             }
 
-            var rotorsLength = rotorDiameter * 0.5f;
-            var baseHeight = axisHeight / baseModelHeight;
+            AddListeners();
+        }
+
+        private void AddListeners()
+        {
+            propertyData.OnAxisHeightChanged.AddListener(UpdateAxisHeight);
+            propertyData.OnRotorDiameterChanged.AddListener(UpdateRotorDiameter);
+        }
+
+        private void RemoveListeners()
+        {
+            propertyData.OnAxisHeightChanged.RemoveListener(UpdateAxisHeight);
+            propertyData.OnRotorDiameterChanged.RemoveListener(UpdateRotorDiameter);
+        }
+
+        private void UpdateAxisHeight(float height)
+        {
+            // if (height == 0)
+            // {
+            //     Debug.LogWarning($"Windmill {name} has no height, using fallback height");
+            //     height = defaultHeight;
+            // }
+
+            var baseHeight = height / baseModelHeight;
 
             var baseScale = baseHeight * basePercentage;
             baseScale /= baseModelDiameter;
@@ -77,7 +105,17 @@ namespace Netherlands3D.ObjectLibrary
 
             var axisPosition = baseRenderer.bounds.size.y;
             windmillAxis.localPosition = new Vector3(0, axisPosition, 0);
-            
+        }
+
+        private void UpdateRotorDiameter(float diameter)
+        {
+            // if (diameter == 0)
+            // {
+            //     Debug.LogWarning($"Windmill {name} has no diameter, using fallback diameter");
+            //     diameter = defaultDiameter;
+            // }
+
+            var rotorsLength = diameter * 0.5f;
             //Scale the windmillRotors
             foreach (var windmillBlade in windmillBlades)
             {
@@ -91,6 +129,11 @@ namespace Netherlands3D.ObjectLibrary
         private void Update()
         {
             windmillRotor.Rotate(Vector3.forward, Time.deltaTime * rotationSpeed, Space.Self);
+        }
+
+        private void OnDestroy()
+        {
+            RemoveListeners();
         }
     }
 }

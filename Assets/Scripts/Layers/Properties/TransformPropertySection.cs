@@ -31,8 +31,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 layerGameObject = value;
-                TransformPropertyData = layerGameObject.TransformPropertyData;
-            } 
+                var layerWithPropertyData = layerGameObject as ILayerWithPropertyData;
+                TransformPropertyData = layerWithPropertyData.PropertyData as TransformLayerPropertyData;
+            }
         }
 
         private TransformLayerPropertyData TransformPropertyData
@@ -44,15 +45,15 @@ namespace Netherlands3D.Twin.Layers.Properties
                 {
                     TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
                     TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
-                    TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);        
+                    TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
                 }
-                
+
                 transformPropertyData = value;
-                
+
                 transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
                 transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
                 transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
-                
+
                 UpdatePositionFields(transformPropertyData.Position);
                 UpdateRotationFields(transformPropertyData.EulerRotation);
                 UpdateScalingFields(transformPropertyData.LocalScale);
@@ -60,7 +61,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 SetTransformLocks();
             }
         }
-        
+
         private void OnEnable()
         {
             position.xField.onEndEdit.AddListener(OnPositionChanged);
@@ -68,7 +69,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             position.zField.onEndEdit.AddListener(OnPositionChanged);
             rotation.xField.onEndEdit.AddListener(OnRotationChanged);
             rotation.yField.onEndEdit.AddListener(OnRotationChanged);
-            rotation.zField.onEndEdit.AddListener(OnRotationChanged);        
+            rotation.zField.onEndEdit.AddListener(OnRotationChanged);
             scale.xField.onEndEdit.AddListener(OnScaleChanged);
             scale.yField.onEndEdit.AddListener(OnScaleChanged);
             scale.zField.onEndEdit.AddListener(OnScaleChanged);
@@ -81,16 +82,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             position.zField.onEndEdit.RemoveListener(OnPositionChanged);
             rotation.xField.onEndEdit.RemoveListener(OnRotationChanged);
             rotation.yField.onEndEdit.RemoveListener(OnRotationChanged);
-            rotation.zField.onEndEdit.RemoveListener(OnRotationChanged);        
+            rotation.zField.onEndEdit.RemoveListener(OnRotationChanged);
             scale.xField.onEndEdit.RemoveListener(OnScaleChanged);
             scale.yField.onEndEdit.RemoveListener(OnScaleChanged);
             scale.zField.onEndEdit.RemoveListener(OnScaleChanged);
-            
+
             TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
             TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
-            TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);        
+            TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
         }
-        
+
         private void SetTransformLocks()
         {
             if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
@@ -124,11 +125,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             double.TryParse(position.xField.Text, out var x);
             double.TryParse(position.yField.Text, out var y);
             double.TryParse(position.zField.Text, out var z);
-            
+
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
             TransformPropertyData.Position = rdCoordinate;
         }
-        
+
         private void OnRotationChanged(string axisValue)
         {
             float.TryParse(rotation.xField.Text, out var x);
@@ -137,20 +138,20 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
-        
+
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.Text.Replace(percentageCharacter,""), out var x);
-            float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
-            float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
+            float.TryParse(scale.xField.Text.Replace(percentageCharacter, ""), out var x);
+            float.TryParse(scale.yField.Text.Replace(percentageCharacter, ""), out var y);
+            float.TryParse(scale.zField.Text.Replace(percentageCharacter, ""), out var z);
 
             TransformPropertyData.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
         }
-        
+
         private void UpdatePositionFields(Coordinate coordinate)
         {
-            var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP); 
-            
+            var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
+
             position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
             position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
             position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));

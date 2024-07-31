@@ -19,8 +19,8 @@ namespace Netherlands3D.Twin.Layers
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
-
-        public TransformLayerPropertyData TransformPropertyData => transformPropertyData;
+        
+        LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
 
         protected void Awake()
         {
@@ -28,7 +28,6 @@ namespace Netherlands3D.Twin.Layers
             transformPropertyData.EulerRotation = transform.eulerAngles;
             transformPropertyData.LocalScale = transform.localScale;
 
-            LayerData.AddProperty(transformPropertyData);
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
         }
@@ -81,8 +80,9 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             previousPosition = transform.position;
             previousRotation = transform.rotation;
             previousScale = transform.localScale;

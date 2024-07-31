@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -65,7 +63,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
-        private void Start()
+        protected virtual void Start()
         {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
