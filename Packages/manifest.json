@@ -24,7 +24,7 @@
     "eu.netherlands3d.json": "1.0.1",
     "eu.netherlands3d.masking": "2.0.1",
     "eu.netherlands3d.meshclipper": "https://github.com/Netherlands3D/MeshClipper.git",
-    "eu.netherlands3d.minimap": "file:C:\\Users\\mvang\\OneDrive\\Documents\\netherlands3DPackages\\Minimap",
+    "eu.netherlands3d.minimap": "1.1.5",
     "eu.netherlands3d.obj-importer": "1.1.0",
     "eu.netherlands3d.periodic-snapshots": "1.0.0",
     "eu.netherlands3d.selection-tools": "2.4.0",

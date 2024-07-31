@@ -328,10 +328,11 @@
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
     "eu.netherlands3d.minimap": {
-      "version": "file:C:\\Users\\mvang\\OneDrive\\Documents\\netherlands3DPackages\\Minimap",
+      "version": "1.1.5",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
       "version": "1.1.0",
