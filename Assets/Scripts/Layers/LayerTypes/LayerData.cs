@@ -123,13 +123,17 @@ namespace Netherlands3D.Twin.Layers
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
+            Debug.Log("default constructor: " + name);
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
         }
 
+        [JsonConstructor]
         public LayerData(string name, HashSet<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
+            Debug.Log("json constructor: " + name);
+            Debug.Log("propertyCount: " + layerProperties.Count);
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
