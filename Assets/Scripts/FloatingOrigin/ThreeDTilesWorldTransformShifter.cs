@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var contentComponents = transform.GetComponentsInChildren<Content>();
             foreach (Content contentComponent in contentComponents)
             {
-                Coordinate position = new Coordinate(transform.position);
+                Coordinate position = new Coordinate(contentComponent.transform.position);
                 Quaternion rotation = Quaternion.Inverse(position.RotationToLocalGravityUp()) * transform.rotation;
 
                 tilesToShift.Add(

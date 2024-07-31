@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin
 
         private void Start()
         {
-            ShaderOrigin = new Coordinate(new Vector3(shaderOffset.x,0,shaderOffset.y));
+            ShaderOrigin = new Coordinate(new Vector3(-shaderOffset.x,0,-shaderOffset.y));
         }
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
@@ -27,8 +27,8 @@ namespace Netherlands3D.Twin
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             Vector3 ShaderOriginInUnity = ShaderOrigin.ToUnity();
-            shaderOffset.x = ShaderOriginInUnity.x;
-            shaderOffset.y = ShaderOriginInUnity.z;
+            shaderOffset.x = -ShaderOriginInUnity.x;
+            shaderOffset.y = -ShaderOriginInUnity.z;
 
 
             UpdateShaders();
