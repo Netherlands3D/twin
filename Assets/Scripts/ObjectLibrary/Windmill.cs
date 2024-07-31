@@ -53,7 +53,7 @@ namespace Netherlands3D.ObjectLibrary
         }
 
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(HashSet<LayerPropertyData> properties)
         {
             var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
             if (windmillProperties != null)
