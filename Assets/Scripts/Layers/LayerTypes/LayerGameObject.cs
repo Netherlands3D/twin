@@ -37,13 +37,14 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                LoadProperties(layerData.LayerProperties);
+                foreach (var layer in GetComponents<ILayerWithPropertyData>())
+                {
+                    layer.LoadProperties(layerData.LayerProperties);
+                }
             }
         }
 
-        protected virtual void LoadProperties(List<LayerPropertyData> properties)
-        {
-        }//todo make abstract when implemented in all inherited classes 
+
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();

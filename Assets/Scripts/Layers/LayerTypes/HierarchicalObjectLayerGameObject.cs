@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithProperties
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers
                 transform.localScale = newScale;
         }
         
-        protected override void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)

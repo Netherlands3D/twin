@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers
         Stroke,
     }
 
-    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithProperties
+    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         private GameObject originalObject;
         private Mesh mesh;
