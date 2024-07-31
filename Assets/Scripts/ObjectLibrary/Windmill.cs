@@ -23,7 +23,6 @@ namespace Netherlands3D.ObjectLibrary
             get => propertyData.AxisHeight;
             set => propertyData.AxisHeight = value;
         }
-        // public WindmillPropertyData PropertyData => propertyData;
 
         [Header("Settings")] [SerializeField] private float rotationSpeed = 10f;
         [SerializeField] private float defaultHeight = 120f;
@@ -51,16 +50,13 @@ namespace Netherlands3D.ObjectLibrary
             UpdateAxisHeight(propertyData.AxisHeight);
             UpdateRotorDiameter(propertyData.RotorDiameter);
         }
-
-
+        
         public void LoadProperties(HashSet<LayerPropertyData> properties)
         {
             var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
             if (windmillProperties != null)
             {
                 propertyData = windmillProperties;
-                print("LOADED RD: " + propertyData.RotorDiameter);
-                print("LOADED AH: " + propertyData.AxisHeight);
             }
 
             if (propertyData == null)
@@ -89,12 +85,6 @@ namespace Netherlands3D.ObjectLibrary
 
         private void UpdateAxisHeight(float height)
         {
-            // if (height == 0)
-            // {
-            //     Debug.LogWarning($"Windmill {name} has no height, using fallback height");
-            //     height = defaultHeight;
-            // }
-
             var baseHeight = height / baseModelHeight;
 
             var baseScale = baseHeight * basePercentage;
@@ -109,13 +99,8 @@ namespace Netherlands3D.ObjectLibrary
 
         private void UpdateRotorDiameter(float diameter)
         {
-            // if (diameter == 0)
-            // {
-            //     Debug.LogWarning($"Windmill {name} has no diameter, using fallback diameter");
-            //     diameter = defaultDiameter;
-            // }
-
             var rotorsLength = diameter * 0.5f;
+            
             //Scale the windmillRotors
             foreach (var windmillBlade in windmillBlades)
             {
