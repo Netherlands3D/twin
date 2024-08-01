@@ -133,7 +133,7 @@ namespace Netherlands3D.Twin.Layers
         public LayerData(string name, HashSet<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
             Debug.Log("json constructor: " + name);
-            Debug.Log("propertyCount: " + layerProperties.Count);
+            Debug.Log("propertyCount: " + layerProperties?.Count);
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
