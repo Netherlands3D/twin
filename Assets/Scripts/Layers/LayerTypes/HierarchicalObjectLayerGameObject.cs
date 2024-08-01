@@ -67,7 +67,7 @@ namespace Netherlands3D.Twin.Layers
                 transform.localScale = newScale;
         }
         
-        public void LoadProperties(HashSet<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)
