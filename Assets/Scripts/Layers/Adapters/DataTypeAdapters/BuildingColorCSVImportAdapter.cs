@@ -67,8 +67,9 @@ namespace Netherlands3D.Twin
             }
 
             var fileName = Path.GetFileName(fullPath);
+            var localFilePath = Path.Combine(Application.persistentDataPath, fullPath);
             var datasetLayer = new GameObject(fileName).AddComponent<DatasetLayerGameObject>();
-            datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+            datasetLayer.StartCoroutine(StreamReadCSV(localFilePath, datasetLayer, maxParsesPerFrame));
 
             activeDatasetLayer = datasetLayer;
         }
