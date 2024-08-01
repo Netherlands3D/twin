@@ -6,6 +6,6 @@ namespace Netherlands3D.Twin.Layers.Properties
     public interface ILayerWithPropertyData
     {
         public LayerPropertyData PropertyData { get; }
-        public void LoadProperties(HashSet<LayerPropertyData> properties);
+        public void LoadProperties(List<LayerPropertyData> properties);
     }
 }

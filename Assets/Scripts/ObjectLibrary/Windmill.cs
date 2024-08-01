@@ -51,7 +51,7 @@ namespace Netherlands3D.ObjectLibrary
             UpdateRotorDiameter(propertyData.RotorDiameter);
         }
         
-        public void LoadProperties(HashSet<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
             if (windmillProperties != null)
