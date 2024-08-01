@@ -57,6 +57,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             Debug.Log("constructing property. input pos crs: " + position.CoordinateSystem);
             Debug.Log("constructing property. input rot: " + eulerRotation);
+            Debug.Log("pos count: " + position.Points.Length);
             this.position = position.Convert(CoordinateSystem.RDNAP);
             this.eulerRotation = eulerRotation;
             this.localScale = localScale;
