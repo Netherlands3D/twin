@@ -38,7 +38,9 @@ namespace Netherlands3D.Coordinates
 #if NEWTONSOFT
         [JsonProperty]
 #endif
-        public int CoordinateSystem { get; }
+        [SerializeField]
+        private int coordinateSystem;
+        public int CoordinateSystem => coordinateSystem;
         
         /// <summary>
         /// Array representing all points for this coordinate.
@@ -118,7 +120,7 @@ namespace Netherlands3D.Coordinates
         public Coordinate(CoordinateSystem coordinateSystem, params double[] points)
         {
             converter = null;
-            CoordinateSystem = (int)coordinateSystem;
+            this.coordinateSystem = (int)coordinateSystem;
             Points = points;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
@@ -127,11 +129,11 @@ namespace Netherlands3D.Coordinates
 #if NEWTONSOFT
         [JsonConstructor]
 #endif
-        public Coordinate(int coordinateSystem, double[] points, double extraLongitudeRotation, double extraLatitudeRotation)
+        public Coordinate(int coordinateSystem, double[] Points, double extraLongitudeRotation, double extraLatitudeRotation)
         {
             converter = null;
-            CoordinateSystem = coordinateSystem;
-            Points = points;
+            this.coordinateSystem = coordinateSystem;
+            this.Points = Points;
             this.extraLongitudeRotation = extraLongitudeRotation;
             this.extraLattitudeRotation = extraLatitudeRotation;
         }
@@ -139,7 +141,7 @@ namespace Netherlands3D.Coordinates
         public Coordinate(int coordinateSystem, params double[] points)
         {
             converter = null;
-            CoordinateSystem = coordinateSystem;
+            this.coordinateSystem = coordinateSystem;
             Points = points;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
@@ -168,7 +170,7 @@ namespace Netherlands3D.Coordinates
 
                 Points = new double[3] { unrotatedRelativePosition.x, unrotatedRelativePosition.z, unrotatedRelativePosition.y };
             }
-            CoordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
+            coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
             Points = (CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, Points)).Points;
         }
 
@@ -176,7 +178,7 @@ namespace Netherlands3D.Coordinates
         {
             converter = CoordinateSystems.operators[coordinateSystem];
             Points = new double[converter.AxisCount()];
-            CoordinateSystem = (int)coordinateSystem;
+            this.coordinateSystem = (int)coordinateSystem;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -203,6 +205,7 @@ namespace Netherlands3D.Coordinates
             }
             return new Coordinate(a.CoordinateSystem, points);
         }
+        
         public static Coordinate operator -(Coordinate a, Coordinate b)
         {
             int maxcoordinatecount = a.Points.Length;
@@ -307,7 +310,6 @@ namespace Netherlands3D.Coordinates
             return result;
 
         }
-
         
         public Vector3 ToUnity()
         {
@@ -344,7 +346,5 @@ namespace Netherlands3D.Coordinates
             
             return rotatedRelativePosition;
         }
-
-
     }
 }
