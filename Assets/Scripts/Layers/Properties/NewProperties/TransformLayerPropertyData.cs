@@ -51,5 +51,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
+
+        [JsonConstructor]
+        public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
+        {
+            this.position = position.Convert(CoordinateSystem.RDNAP);
+            this.eulerRotation = eulerRotation;
+            this.localScale = localScale;
+        }
     }
 }
