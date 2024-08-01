@@ -257,11 +257,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "https://github.com/Netherlands3D/Coordinates.git#bugfix/coordinate-sytem-serialization-fix",
+      "version": "1.7.1",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "bc60fb2764e7d6f4c2c65920b8e945a7b3a4c576"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.event-containers": {
       "version": "0.1.0",
