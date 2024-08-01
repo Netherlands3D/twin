@@ -19,7 +19,6 @@ namespace Netherlands3D.Twin
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
-        private string geoJsonOutputFormat = "";
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
@@ -37,13 +36,13 @@ namespace Netherlands3D.Twin
                 return false;
             }
 
-            if (!wfs.CheckBboxFilterCapability())
+            if (!wfs.HasBboxFilterCapability())
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;
             }
 
-            if (!wfs.CheckGeoJSONOutputFormat())
+            if (!wfs.HasGetFeatureAsGeoJSON())
             {
                 Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                 return false;
@@ -102,6 +101,25 @@ namespace Netherlands3D.Twin
         {
             Debug.Log("Adding WFS layer: " + featureType);
 
+            // Create a GetFeature URL for the specific featureType
+            UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
+            var getFeatureUrl = uriBuilder.Uri.ToString();
+
+            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
+            var layerGameObject = new GameObject(featureType);
+            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
+            layer.LayerData.SetParent(folderLayer);
+            layer.RandomizeColorPerFeature = true;
+            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
+
+            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
+            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();
+            cartesianTileLayer.GeoJSONLayer = layer;
+            cartesianTileLayer.WfsUrl = getFeatureUrl;
+        }
+
+        private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
+        {
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
 
@@ -117,22 +135,9 @@ namespace Netherlands3D.Twin
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
             uriBuilder.SetQueryParameter("typeNames", featureType);
-            uriBuilder.SetQueryParameter("outputFormat", geoJsonOutputFormat);
+            uriBuilder.SetQueryParameter("outputFormat", "geojson");
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
-
-            var getFeatureUrl = uriBuilder.Uri.ToString();
-
-            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var layerGameObject = new GameObject(featureType);
-            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
-            layer.LayerData.SetParent(folderLayer);
-            layer.RandomizeColorPerFeature = true;
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-
-            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();
-            cartesianTileLayer.GeoJSONLayer = layer;
-            cartesianTileLayer.WfsUrl = getFeatureUrl;
+            return uriBuilder;
         }
 
         private class GeoJSONWFS
@@ -163,12 +168,12 @@ namespace Netherlands3D.Twin
                 return getCapabilitiesRequest || getFeatureRequest;
             }
 
-            public bool CheckBboxFilterCapability()
+            public bool HasBboxFilterCapability()
             {
                 return WFSBboxFilterCapability(this.xmlDocument, this.namespaceManager);
             }
 
-            public bool CheckGeoJSONOutputFormat()
+            public bool HasGetFeatureAsGeoJSON()
             {
                 XmlNode getFeatureOperationNode = ReadGetFeatureNode(this.xmlDocument, this.namespaceManager);
                 if (getFeatureOperationNode == null)
@@ -177,8 +182,8 @@ namespace Netherlands3D.Twin
                     return false;
                 }
 
-                var geoJsonOutputFormat = GetGeoJSONOutputFormat(getFeatureOperationNode, namespaceManager);
-                if (string.IsNullOrEmpty(geoJsonOutputFormat))
+                var geoJsonOutFormat = GetGeoJSONOutputFormat(getFeatureOperationNode, namespaceManager);
+                if (string.IsNullOrEmpty(geoJsonOutFormat))
                 {
                     Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                     return false;
