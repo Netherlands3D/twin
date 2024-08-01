@@ -6,13 +6,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Netherlands3D.Collada;
 using Netherlands3D.MeshClipping;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Netherlands3D.Twin
 {
-    
     [CreateAssetMenu(fileName = "AreaSelection", menuName = "Netherlands3D/Data/AreaSelection", order = 1)]
     public class AreaSelection : ScriptableObject
     {

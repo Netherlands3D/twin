@@ -68,18 +68,18 @@ namespace Netherlands3D.Twin.Interface.BAG
             copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
             
-            Destroy(northEastTooltip);
-            Destroy(southWestTooltip);
+            Destroy(northEastTooltip.gameObject);
+            Destroy(southWestTooltip.gameObject);
         }
 
         private void WhenSelectionBoundsChanged(Bounds selectedArea)
         {
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
-            northExtentTextField.text = southWestAndNorthEast.Item2.Points[0].ToString("0");
-            southExtentTextField.text = southWestAndNorthEast.Item1.Points[0].ToString("0");
-            eastExtentTextField.text = southWestAndNorthEast.Item2.Points[1].ToString("0");
-            westExtentTextField.text = southWestAndNorthEast.Item1.Points[1].ToString("0");
+            northExtentTextField.text = southWestAndNorthEast.northEast.Points[0].ToString("0");
+            southExtentTextField.text = southWestAndNorthEast.southWest.Points[0].ToString("0");
+            eastExtentTextField.text = southWestAndNorthEast.northEast.Points[1].ToString("0");
+            westExtentTextField.text = southWestAndNorthEast.southWest.Points[1].ToString("0");
 
             southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
@@ -121,7 +121,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where
         // the y equals the center of the bound) or a 3D results (containing the full bounds)
-        private Tuple<Coordinate, Coordinate> ConvertBoundsToCoordinates(Bounds bounds)
+        private (Coordinate southWest, Coordinate northEast) ConvertBoundsToCoordinates(Bounds bounds)
         {
             var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.center.y, bounds.min.z);
             var southWest = CoordinateConverter.ConvertTo(min, DisplayCrs);
@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin.Interface.BAG
             var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.center.y, bounds.max.z);
             var northEast = CoordinateConverter.ConvertTo(max, DisplayCrs);
 
-            return new Tuple<Coordinate, Coordinate>(southWest, northEast);
+            return (southWest, northEast);
         }
     }
 }
