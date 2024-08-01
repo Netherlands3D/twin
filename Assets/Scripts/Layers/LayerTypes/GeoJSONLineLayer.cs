@@ -1,19 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Visualisers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class GeoJSONLineLayer : LayerNL3DBase
+    public partial class GeoJSONLineLayer : LayerData
     {
-        public List<Feature> LineFeatures = new();
+
+        public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
         private LineRenderer3D lineRenderer3D;
 
@@ -39,16 +43,57 @@ namespace Netherlands3D.Twin
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, MultiLineString featureGeometry, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
+            where T : GeoJSONObject
         {
-            LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
+            // Skip if feature already exists (comparison is done using hashcode based on geometry)
+            if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
+                return;
+
+            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+
+            if (feature.Geometry is MultiLineString multiLineString)
+            {
+                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.lines.AddRange(newLines);
+            }
+            else if(feature.Geometry is LineString lineString)
+            {
+                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.lines.Add(newLine);
+            }
+
+            SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, LineString featureGeometry, CoordinateSystem originalCoordinateSystem)
+        /// <summary>
+        /// Checks the Bounds of the visualisations and checks them against the camera frustum
+        /// to remove visualisations that are out of view
+        /// </summary>
+        public void RemoveFeaturesOutOfView()
+        {         
+            // Remove visualisations that are out of view
+            var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
+            {
+                // Make sure to recalculate bounds because they can change due to shifts
+                SpawnedVisualisations[i].CalculateBounds();
+
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
+                if (inCameraFrustum)
+                    continue;
+
+                var featureVisualisation = SpawnedVisualisations[i];
+                RemoveFeature(featureVisualisation);
+            }
+        }
+        
+        private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
-            LineFeatures.Add(feature);
-            GeoJSONGeometryVisualizerUtility.VisualizeLineString(featureGeometry, originalCoordinateSystem, LineRenderer3D);
+            foreach (var line in featureVisualisation.lines)
+                lineRenderer3D.RemoveLine(line);
+
+            SpawnedVisualisations.Remove(featureVisualisation);
         }
 
         public override void DestroyLayer()

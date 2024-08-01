@@ -38,6 +38,7 @@ MonoBehaviour:
     - com.greener-games.sharp-zip-lib
     - com.greener-games.unity-extensions
     - com.svermeulen.asyncawaitutil
+    - jillejr.newtonsoft
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4

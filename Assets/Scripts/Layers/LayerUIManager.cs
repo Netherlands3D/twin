@@ -14,14 +14,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
-        [SerializeField] private ProjectData projectData;
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
         [SerializeField] private RectTransform layerUIContainer;
 
         public RectTransform LayerUIContainer => layerUIContainer;
 
-        private Dictionary<LayerNL3DBase, LayerUI> layerUIDictionary = new();
+        private Dictionary<LayerData, LayerUI> layerUIDictionary = new();
 
         //Drag variables
         [SerializeField] private DragGhost dragGhostPrefab;
@@ -35,18 +34,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private ContextMenuUI contextMenuPrefab;
         private ContextMenuUI contextMenu;
 
-        public void ReconstructHierarchyUIs()
+        private void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
-            foreach (var layer in projectData.RootLayer.ChildrenLayers)
+            foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
             {
-                ConstructHierarchyUIsRecursive(layer, projectData.RootLayer);
+                ConstructHierarchyUIsRecursive(layer, ProjectData.Current.RootLayer);
             }
 
             RecalculateLayersVisibleInInspector();
         }
 
-        private void ConstructHierarchyUIsRecursive(LayerNL3DBase layer, LayerNL3DBase parent)
+        private void ConstructHierarchyUIsRecursive(LayerData layer, LayerData parent)
         {
             InstantiateLayerItem(layer, parent);
             foreach (var child in layer.ChildrenLayers)
@@ -55,12 +54,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private LayerUI InstantiateLayerItem(LayerNL3DBase layer, LayerNL3DBase parent)
+        private LayerUI InstantiateLayerItem(LayerData layer, LayerData parent)
         {
             var layerUI = Instantiate(LayerUIPrefab, LayerUIContainer);
             layerUI.Layer = layer;
             layerUIDictionary.Add(layer, layerUI);
             layerUI.name = layer.Name;
+            
             if (parent is not RootLayer)
                 layerUI.SetParent(GetLayerUI(parent), layer.SiblingIndex);
 
@@ -71,6 +71,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             foreach (Transform t in LayerUIContainer)
             {
+                t.gameObject.SetActive(false); //ensure it won't get re-added in RecalculateLayersInInspector
                 Destroy(t.gameObject);
             }
 
@@ -80,18 +81,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            projectData.LayerAdded.AddListener(CreateNewUI);
-            projectData.LayerDeleted.AddListener(OnLayerDeleted);
+            ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
+            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            projectData.RootLayer.DeselectAllLayers();
-            projectData.LayerAdded.RemoveListener(CreateNewUI);
-            projectData.LayerDeleted.RemoveListener(OnLayerDeleted);
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
+            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
         }
 
-        private void CreateNewUI(LayerNL3DBase layer)
+        private void CreateNewUI(LayerData layer)
         {
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
@@ -128,7 +129,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                projectData.RootLayer.DeselectAllLayers();
+                ProjectData.Current.RootLayer.DeselectAllLayers();
         }
 
         public FolderLayer CreateFolderLayer()
@@ -137,12 +138,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return folder;
         }
 
-        public Sprite GetLayerTypeSprite(LayerNL3DBase layer)
+        public Sprite GetLayerTypeSprite(LayerData layer)
         {
             switch (layer)
             {
-                case ReferencedProxyLayer _:
-                    var reference = ((ReferencedProxyLayer)layer).Reference;
+                case ReferencedLayerData _:
+                    var reference = ((ReferencedLayerData)layer).Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
@@ -162,19 +163,19 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        private Sprite GetProxyLayerSprite(ReferencedLayer layer)
+        private Sprite GetProxyLayerSprite(LayerGameObject layer)
         {
             switch (layer)
             {
-                case CartesianTileLayer _:
+                case CartesianTileLayerGameObject _:
                     return layerTypeSprites[1];
-                case Tile3DLayer _:
+                case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
-                case HierarchicalObjectLayer _:
+                case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
-                case ObjectScatterLayer _:
+                case ObjectScatterLayerGameObject _:
                     return layerTypeSprites[4];
-                case DatasetLayer _:
+                case DatasetLayerGameObject _:
                     return layerTypeSprites[5];
                 case GeoJSONLayer _:
                     return layerTypeSprites[8]; //todo: split in points
@@ -225,13 +226,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void GroupSelectedLayers()
         {
-            if (projectData.RootLayer.SelectedLayers.Count == 0) 
+            if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
                 return;
             
-            var layersToGroup = new List<LayerNL3DBase>(projectData.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = CreateFolderLayer();
-            var referenceLayer = projectData.RootLayer.SelectedLayers.Last();
+            var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             SortSelectedLayers(layersToGroup);
             foreach (var selectedLayer in layersToGroup)
@@ -242,10 +243,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void SortSelectedLayersByVisibility()
         {
-            projectData.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
+            ProjectData.Current.RootLayer.SelectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
 
-        private void SortSelectedLayers(List<LayerNL3DBase> selectedLayers)
+        private void SortSelectedLayers(List<LayerData> selectedLayers)
         {
             selectedLayers.Sort((layer1, layer2) => LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer1)).CompareTo(LayerUIsVisibleInInspector.IndexOf(GetLayerUI(layer2))));
         }
@@ -257,13 +258,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         public void DeleteSelectedLayers()
         {
-            foreach (var layer in projectData.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
+            foreach (var layer in ProjectData.Current.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
                 layer.DestroyLayer();
             }
         }
 
-        private void OnLayerDeleted(LayerNL3DBase layer)
+        private void OnLayerDeleted(LayerData layer)
         {
             layerUIDictionary.Remove(layer);
         }
@@ -274,7 +275,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             LayerUIsVisibleInInspector = layerUIContainer.GetComponentsInChildren<LayerUI>(false).ToList();
         }
 
-        public LayerUI GetLayerUI(LayerNL3DBase layer)
+        public LayerUI GetLayerUI(LayerData layer)
         {
             if (layer is RootLayer)
                 return null;
@@ -282,7 +283,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             return layerUIDictionary[layer];
         }
 
-        public void HighlightLayerUI(LayerNL3DBase layer, bool isOn)
+        public void HighlightLayerUI(LayerData layer, bool isOn)
         {
             if (layer.IsSelected)
                 return;

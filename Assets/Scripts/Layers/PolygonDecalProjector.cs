@@ -1,7 +1,8 @@
 using System;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin
 {
@@ -19,7 +20,7 @@ namespace Netherlands3D.Twin
         
         private DecalProjector decalProjector;
         private Camera projectionCamera;
-        [SerializeField] private CartesianTileLayer terrainLayer;
+        [FormerlySerializedAs("terrainLayer")] [SerializeField] private CartesianTileLayerGameObject terrainLayerGameObject;
 
         private void Awake()
         {
@@ -56,11 +57,11 @@ namespace Netherlands3D.Twin
 
         private float EstimateCameraHeight()
         {
-            if (!terrainLayer)
+            if (!terrainLayerGameObject)
                 return Camera.main.transform.position.y;
             
             //estimate real height above terrain: get bounds of all terrein, get terrain with smallest y extents. use this bounds center as an estimation
-            var tiles = terrainLayer.GetComponentsInChildren<MeshFilter>();
+            var tiles = terrainLayerGameObject.GetComponentsInChildren<MeshFilter>();
             var smallestYExtents = float.MaxValue;
             var estimatedTerrainHeight = 0f;
 

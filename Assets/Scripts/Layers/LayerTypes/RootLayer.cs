@@ -1,32 +1,30 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class RootLayer : LayerNL3DBase //todo: make an extension of base and make functions protected
+    public class RootLayer : LayerData
     {
-        [JsonIgnore] public List<LayerNL3DBase> SelectedLayers { get; private set; } = new();
+        [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();
 
         public RootLayer(string name) : base(name)
         {
         }
 
-        public void AddLayerToSelection(LayerNL3DBase layer) //todo: make protected once this is an extension of base
+        public void AddLayerToSelection(LayerData layer)
         {
             if (!SelectedLayers.Contains(layer))
                 SelectedLayers.Add(layer);
         }
 
-        public void RemoveLayerFromSelection(LayerNL3DBase layer) //todo: make protected once this is an extension of base
+        public void RemoveLayerFromSelection(LayerData layer)
         {
-            if (SelectedLayers.Contains(layer))
-                SelectedLayers.Remove(layer);
+            SelectedLayers.Remove(layer);
         }
 
         public void DeselectAllLayers()
@@ -36,6 +34,43 @@ namespace Netherlands3D.Twin.Layers
             foreach (var selectedLayer in SelectedLayers.ToList())
             {
                 selectedLayer.DeselectLayer();
+            }
+        }
+
+        public override void DestroyLayer()
+        {
+            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
+            {
+                child.DestroyLayer();
+            }
+
+            ProjectData.Current.RemoveLayer(this);
+            LayerDestroyed.Invoke();
+        }
+
+        public void ReconstructParentsRecursive()
+        {
+            foreach (var layer in ChildrenLayers)
+            {
+                ReconstructParentsRecursive(layer, this);
+            }
+        }
+
+        private void ReconstructParentsRecursive(LayerData layer, LayerData parent)
+        {
+            layer.InitializeParent(parent);
+            foreach (var child in layer.ChildrenLayers)
+            {
+                ReconstructParentsRecursive(child, layer);
+            }
+        }
+
+        public void AddChild(LayerData layer)
+        {
+            if (!ChildrenLayers.Contains(layer))
+            {
+                ChildrenLayers.Add(layer);
+                ChildrenChanged.Invoke();
             }
         }
     }

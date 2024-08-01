@@ -1,10 +1,10 @@
 using System;
 using Netherlands3D.Twin.Projects;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class FolderLayer : LayerNL3DBase
+    public class FolderLayer : LayerData
     {
         public FolderLayer(string name) : base(name)
         {

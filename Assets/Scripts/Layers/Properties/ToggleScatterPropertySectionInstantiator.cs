@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!ScatterMap.Instance.ToggleScatterPropertySection) return;
 
             PropertySection = Instantiate(ScatterMap.Instance.ToggleScatterPropertySection, properties);
-            PropertySection.Layer = GetComponent<ReferencedLayer>();
+            PropertySection.LayerGameObject = GetComponent<LayerGameObject>();
         }
     }
 }

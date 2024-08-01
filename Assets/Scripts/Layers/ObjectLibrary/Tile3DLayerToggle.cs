@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class Tile3DLayerToggle : LayerToggle
     {
@@ -15,7 +10,7 @@ namespace Netherlands3D.Twin
         {
             base.Awake();
             layerParent = GameObject.FindWithTag("3DTileParent").transform;
-            layer = layerParent.GetComponentsInChildren<Tile3DLayer>().FirstOrDefault(l => l.Name == prefab.name);
+            layerGameObject = layerParent.GetComponentsInChildren<Tile3DLayerGameObject>().FirstOrDefault(l => l.PrefabIdentifier == prefab.GetComponent<Tile3DLayerGameObject>().PrefabIdentifier);
         }
     }
 }

@@ -165,6 +165,18 @@ namespace Netherlands3D.Twin
             GenerateTransformMatrixCache(startIndex);
         }
 
+        /// <summary>
+        /// Remove a collection of points using list reference
+        /// </summary>
+        public void RemoveCollection(List<Coordinate> points)
+        {
+            if (PositionCollections == null || PositionCollections.Count < 1) return;
+
+            PositionCollections.Remove(points);
+
+            GenerateTransformMatrixCache(-1);
+        }
+
         public void ClearLines()
         {
             PositionCollections.Clear();

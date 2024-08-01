@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Layer = GetComponent<HierarchicalObjectLayer>();
+            settings.LayerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
         }
     }
 }

@@ -18,6 +18,33 @@ namespace Netherlands3D.Web
             AddQueryParameter(uriBuilder, parameter.Key, parameter.Value);
         }
 
+        /// <summary>
+        /// Set a query parameter, if it already exists it will be replaced and casing will be reused.
+        /// This can be useful for services that are case sensitive.
+        /// </summary>
+        public static void SetQueryParameter(this UriBuilder uriBuilder, string key, string value)
+        {
+            var query = uriBuilder.Query;
+
+            var nameValueCollection = new NameValueCollection();
+            QueryStringAsNameValueCollection(query, nameValueCollection);
+
+            var isUpperCase = false;
+            if (nameValueCollection.AllKeys.Contains(key))
+            {
+                var exisitingValue = nameValueCollection[key];
+                isUpperCase = exisitingValue == exisitingValue.ToUpper();
+
+            }
+            if(isUpperCase) 
+                value = value.ToUpper();
+
+            nameValueCollection.Remove(key);
+            nameValueCollection.Add(key, value);
+
+            uriBuilder.Query = nameValueCollection.ToQueryString();
+        }
+
         public static void RemoveQueryParameter(this UriBuilder uriBuilder, string key)
         {
             var query = uriBuilder.Query;

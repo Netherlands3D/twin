@@ -1,8 +1,8 @@
 using System.Linq;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class StandardLayerToggle : LayerToggle
     {
@@ -12,8 +12,7 @@ namespace Netherlands3D.Twin
         { 
             tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(FindObjectsInactive.Include);
             layerParent = tileHandler.transform;
-            layer = tileHandler.layers.FirstOrDefault(l => l.name == prefab.name)?.GetComponent<CartesianTileLayer>();
-
+            layerGameObject = tileHandler.layers.FirstOrDefault(l => l.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier == prefab.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier)?.GetComponent<CartesianTileLayerGameObject>();
             base.OnEnable();
         }
     }
