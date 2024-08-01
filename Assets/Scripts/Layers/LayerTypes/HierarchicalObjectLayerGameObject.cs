@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        private TransformLayerPropertyData transformPropertyData = new();
+        private TransformLayerPropertyData transformPropertyData;
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
@@ -24,9 +24,11 @@ namespace Netherlands3D.Twin.Layers
 
         protected void Awake()
         {
-            transformPropertyData.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            transformPropertyData.EulerRotation = transform.eulerAngles;
-            transformPropertyData.LocalScale = transform.localScale;
+            var coord = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
+            // transformPropertyData.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            // transformPropertyData.EulerRotation = transform.eulerAngles;
+            // transformPropertyData.LocalScale = transform.localScale;
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
@@ -67,7 +69,7 @@ namespace Netherlands3D.Twin.Layers
                 transform.localScale = newScale;
         }
         
-        public void LoadProperties(HashSet<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)

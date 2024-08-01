@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
-
+            Debug.LogError("could not find prefab with id: " + id + ". Add it to the PrefabLibrary to be able to load it.", this);
             return fallbackPrefab;
         }
     }

@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [SerializeField, JsonProperty] protected HashSet<LayerPropertyData> layerProperties = new();
+        [SerializeField, JsonProperty] protected List<LayerPropertyData> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -77,7 +77,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        [JsonIgnore] public HashSet<LayerPropertyData> LayerProperties => layerProperties;
+        [JsonIgnore] public List<LayerPropertyData> LayerProperties => layerProperties;
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
@@ -130,10 +130,10 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonConstructor]
-        public LayerData(string name, HashSet<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
+        public LayerData(string name, List<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
             Debug.Log("json constructor: " + name);
-            Debug.Log("propertyCount: " + layerProperties.Count);
+            Debug.Log("propertyCount: " + layerProperties?.Count);
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
