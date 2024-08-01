@@ -257,11 +257,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.7.0",
+      "version": "https://github.com/Netherlands3D/Coordinates.git#bugfix/json-serialization-constructor",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "0be6d1d420e09807adb253ac0c1181d6cb0b7a44"
     },
     "eu.netherlands3d.event-containers": {
       "version": "0.1.0",
