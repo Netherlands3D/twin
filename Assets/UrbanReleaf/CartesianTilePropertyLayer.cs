@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
@@ -6,24 +7,14 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class CartesianTilePropertyLayer : CartesianTileLayer, ILayerWithProperties
+    public class CartesianTilePropertyLayer : CartesianTileLayerGameObject, ILayerWithProperties
     {
-        [SerializeField] private bool usePropertySections = true;
-        [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
+            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             return propertySections;
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            if (usePropertySections)
-                propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-            else
-                propertySections = new();
         }
     }
 }
