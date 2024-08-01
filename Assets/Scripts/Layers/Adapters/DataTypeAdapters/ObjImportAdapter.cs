@@ -63,8 +63,8 @@ namespace Netherlands3D.Twin
 
         public void Execute(LocalFile localFile)
         {
-            objfilename = localFile.LocalFilePath;
-            StartImport();
+            objfilename = Path.GetFileName(localFile.LocalFilePath);
+            ParseFiles(objfilename);
         }
 
         /// <summary>
