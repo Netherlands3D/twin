@@ -15,12 +15,17 @@ namespace Netherlands3D.Twin
         public float Maximum;
         public float Minimum;        
         public Color MaxColor;
-        public Color MinColor;        
+        public Color MinColor;  
+        public int TimeSeconds { get { return timeWindowSeconds; } set { timeWindowSeconds = Mathf.Clamp(value, 60, 3600 * 24 * 365 * 10); } }
+        public int Observations { get { return observationLimit; } set { observationLimit = Mathf.Clamp(value, 1, 5000); } }
           
         protected List<SensorCell> cells = new List<SensorCell>();   
         protected List<SensorCell> staticCells = new List<SensorCell>();        
         protected float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
-       
+
+        protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
+        protected int timeWindowSeconds = 3600 * 24 * 7 * 4;// * 365 * 10; //for some reason sensors are not updated recently
+
         public struct SensorCell
         {
             public float value;

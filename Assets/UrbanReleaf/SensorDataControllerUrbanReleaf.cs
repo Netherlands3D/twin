@@ -19,10 +19,7 @@ namespace Netherlands3D.Twin
         private const string timeStartKey = "&observation_datetime_start=";
         private const string timeEndKey = "&observation_datetime_end=";
         private const string observationLimitKey = "&observations_limit=";
-        private const string timeFormatSpecifier = "s";
-
-        private int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
-        private int timeWindowSeconds = 3600 * 24 * 7 * 4;// * 365 * 10; //for some reason sensors are not updated recently
+        private const string timeFormatSpecifier = "s";        
 
         private static StringBuilder strBuilder;
 

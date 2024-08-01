@@ -22,21 +22,12 @@ using System;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.CartesianTiles
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        
         private SensorDataController dataController;
-
-        //public override void Start()
-        //{
-        //    base.Start();
-        //    //by default update the ui when the layer is disabled on startup
-        //    CartesianTileLayer tileLayer = gameObject.GetComponent<CartesianTileLayer>();
-        //    tileLayer.ReferencedProxy.ActiveSelf = isEnabled;
-        //}
 
         protected override Tile CreateNewTile(Vector2Int tileKey)
         {
