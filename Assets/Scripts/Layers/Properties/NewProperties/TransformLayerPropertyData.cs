@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     [Serializable]
     public class TransformLayerPropertyData : LayerPropertyData
     {
-        [SerializeField, JsonProperty] private Coordinate position = new Coordinate(CoordinateSystem.RDNAP);
+        [SerializeField, JsonProperty] private Coordinate position;
         [SerializeField, JsonProperty] private Vector3 eulerRotation;
         [SerializeField, JsonProperty] private Vector3 localScale;
 
