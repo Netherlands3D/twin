@@ -261,7 +261,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f31e499573bf41b36a684d54fecb7e14e4781a3b"
+      "hash": "bc60fb2764e7d6f4c2c65920b8e945a7b3a4c576"
     },
     "eu.netherlands3d.event-containers": {
       "version": "0.1.0",
