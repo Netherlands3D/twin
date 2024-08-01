@@ -30,13 +30,13 @@ namespace Netherlands3D.CartesianTiles
     {        
         private SensorDataController dataController;
 
-        public override void Start()
-        {
-            base.Start();
-            //by default update the ui when the layer is disabled on startup
-            CartesianTileLayer tileLayer = gameObject.GetComponent<CartesianTileLayer>();
-            tileLayer.ReferencedProxy.ActiveSelf = isEnabled;
-        }
+        //public override void Start()
+        //{
+        //    base.Start();
+        //    //by default update the ui when the layer is disabled on startup
+        //    CartesianTileLayer tileLayer = gameObject.GetComponent<CartesianTileLayer>();
+        //    tileLayer.ReferencedProxy.ActiveSelf = isEnabled;
+        //}
 
         protected override Tile CreateNewTile(Vector2Int tileKey)
         {

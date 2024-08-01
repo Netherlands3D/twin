@@ -17,9 +17,9 @@ MonoBehaviour:
     extraLongitudeRotation: 0
     extraLattitudeRotation: 0
     Points:
-    - 155207
-    - 462945
     - 0
+    - 300
+    - -200
   Functionalities:
   - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
   - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
@@ -37,6 +37,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3da8bf8309a3baa4da8b4dba6d2283d9, type: 2}
   - {fileID: 11400000, guid: d06ed7bd107a54d9698c5b95998572bb, type: 2}
   - {fileID: 11400000, guid: db8c80d7396a1c04fa85faf2b38afc2f, type: 2}
+  - {fileID: 11400000, guid: 553d210113cda99448fd1ca5b78512a6, type: 2}
   OnAllowUserSettingsChanged:
     m_PersistentCalls:
       m_Calls: []

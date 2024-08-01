@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7673c97fdbab9d44b9cad278fdb3ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isenabled: 0
+  isenabled: 1
   tileSize: 1000
   layerPriority: 0
   Datasets:

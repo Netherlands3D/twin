@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
-  m_Name: Functionality_UrbanReleafVochtigheid
+  m_Name: Functionality_UrbanReleaf
   m_EditorClassIdentifier: 
-  Id: urbanreleafvochtigheid
-  Title: urbanreleaf vochtigheid sensors
+  Id: urbanreleaf
+  Title: Urbanreleaf sensor data
   Caption: 
-  Header: urbanreleafvochtigheidheader
-  Description: "Deze kaartlaag toont all urbanreleaf sensor vochtigheid data \n\n<i>\nBron:
+  Header: Toont alle UrbanReleaf sensor data
+  Description: "Deze kaartlaag toont all urbanreleaf sensor temperatuur data \n\n<i>\nBron:
     PDOK\nDatum: live</i>"
   configuration: {fileID: 0}
   isEnabled: 1
