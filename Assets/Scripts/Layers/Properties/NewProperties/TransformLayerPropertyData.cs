@@ -55,6 +55,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonConstructor]
         public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
         {
+            Debug.Log("constructing property. input pos crs: " + position.CoordinateSystem);
             this.position = position.Convert(CoordinateSystem.RDNAP);
             this.eulerRotation = eulerRotation;
             this.localScale = localScale;
