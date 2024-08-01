@@ -6,13 +6,13 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class ReferencedProxyLayer : LayerNL3DBase
+    public class ReferencedLayerData : LayerData
     {
         [SerializeField, JsonProperty] private string prefabId;
-        [JsonIgnore] public ReferencedLayer Reference { get; }
+        [JsonIgnore] public LayerGameObject Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
         
-        public ReferencedProxyLayer(string name, ReferencedLayer reference) : base(name)
+        public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
             Reference = reference;
             prefabId = reference.PrefabIdentifier;
@@ -24,12 +24,12 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonConstructor]
-        public ReferencedProxyLayer(string name, string prefabId) : base(name)
+        public ReferencedLayerData(string name, string prefabId) : base(name)
         {
             this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
-            Reference.ReferencedProxy = this;
+            Reference.LayerData = this;
             
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
-        ~ReferencedProxyLayer()
+        ~ReferencedLayerData()
         {
             ParentChanged.RemoveListener(OnParentChanged);
             ChildrenChanged.RemoveListener(OnChildrenChanged);

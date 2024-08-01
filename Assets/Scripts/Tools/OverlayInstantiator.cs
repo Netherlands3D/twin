@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -7,8 +8,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
     {
         [SerializeField] private OverlayInspector overlayPrefab;
         
+        [FormerlySerializedAs("referencedLayer")]
         [Header("(Optional)")]
-        [SerializeField] private ReferencedLayer referencedLayer;
+        [SerializeField] private LayerGameObject layerGameObject;
         [SerializeField] private bool instantiateOnStart = false;
         
         private void Start() 
@@ -21,8 +23,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var spawnedOverlay = ContentOverlayContainer.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
 
-            if(referencedLayer != null)
-                spawnedOverlay.SetReferencedLayer(referencedLayer);
+            if(layerGameObject != null)
+                spawnedOverlay.SetReferencedLayer(layerGameObject);
         }
     }
 }

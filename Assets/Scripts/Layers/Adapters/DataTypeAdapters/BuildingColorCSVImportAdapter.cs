@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private UnityEvent<float> progressEvent = new();
         private string[] requiredHeaders = { "BagId", "HexColor" };
         public int maxParsesPerFrame = 100;
-        private static DatasetLayer activeDatasetLayer; //todo: allow multiple datasets to exist
+        private static DatasetLayerGameObject activeDatasetLayer; //todo: allow multiple datasets to exist
 
         readonly CsvConfiguration config = new(CultureInfo.CurrentCulture)
         {
@@ -67,13 +67,13 @@ namespace Netherlands3D.Twin
             }
 
             var fileName = Path.GetFileName(fullPath);
-            var datasetLayer = new GameObject(fileName).AddComponent<DatasetLayer>();
+            var datasetLayer = new GameObject(fileName).AddComponent<DatasetLayerGameObject>();
             datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
 
             activeDatasetLayer = datasetLayer;
         }
 
-        private IEnumerator StreamReadCSV(string path, DatasetLayer layer, int maxParsesPerFrame)
+        private IEnumerator StreamReadCSV(string path, DatasetLayerGameObject layer, int maxParsesPerFrame)
         {
             yield return null; //wait a frame for the created layer to be reparented and set up correctly to ensure the correct priority index
                   

@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class Tile3DLayer : ReferencedLayer, ILayerWithProperties, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithProperties, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;

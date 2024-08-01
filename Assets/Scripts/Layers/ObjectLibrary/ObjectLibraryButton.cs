@@ -56,9 +56,9 @@ namespace Netherlands3D.Twin
             
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.Euler(initialRotation));
             newObject.transform.localScale = initialScale;
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayer>();
+            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<HierarchicalObjectLayer>();
+                layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
             
             layerComponent.Name = prefab.name;
 

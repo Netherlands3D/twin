@@ -16,23 +16,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         [SerializeField] private RectTransform credentialExplanation;
 
-        private Tile3DLayer layerWithCredentials;
+        private Tile3DLayerGameObject layerGameObjectWithCredentials;
         private AuthorizationType authorizationType = AuthorizationType.Unknown;
 
-        public override void SetReferencedLayer(ReferencedLayer layer)
+        public override void SetReferencedLayer(LayerGameObject layerGameObject)
         {
-            base.SetReferencedLayer(layer);
+            base.SetReferencedLayer(layerGameObject);
 
-            layerWithCredentials = layer as Tile3DLayer;
-            CloseRightProperties(layer.ReferencedProxy);
+            layerGameObjectWithCredentials = layerGameObject as Tile3DLayerGameObject;
+            CloseRightProperties(layerGameObject.LayerData);
 
-            tile3DLayerPropertySection.Tile3DLayer = layerWithCredentials;
+            tile3DLayerPropertySection.Tile3DLayerGameObject = layerGameObjectWithCredentials;
 
-            layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-            layerWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
+            layerGameObjectWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
+            layerGameObjectWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
         }
 
-        private void CloseRightProperties(LayerNL3DBase layer)
+        private void CloseRightProperties(LayerData layer)
         {
             var layerManager = FindAnyObjectByType<LayerUIManager>();
             var ui = layerManager.GetLayerUI(layer);
@@ -62,9 +62,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             //If we close the overlay without getting access to the layer we 'cancel' and remove the layer.
             if (authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.InferableSingleKey)
-                layerWithCredentials.DestroyLayer();
+                layerGameObjectWithCredentials.DestroyLayer();
 
-            layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
+            layerGameObjectWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 default:
                     //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-                    credentialsPropertySection.LayerWithCredentials = layerWithCredentials;
+                    credentialsPropertySection.LayerWithCredentials = layerGameObjectWithCredentials;
                     credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);

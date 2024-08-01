@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class TransformPropertySection : AbstractHierarchicalObjectPropertySection
     {
-        private HierarchicalObjectLayer layer;
+        private HierarchicalObjectLayerGameObject layerGameObject;
 
         [Serializable]
         private class SetOfXYZ
@@ -25,12 +25,12 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private const string percentageCharacter = "%";
 
-        public override HierarchicalObjectLayer Layer
+        public override HierarchicalObjectLayerGameObject LayerGameObject
         {
-            get => layer;
+            get => layerGameObject;
             set
             {
-                layer = value;
+                layerGameObject = value;
                 UpdatePositionFields();
                 UpdateRotationFields();
                 UpdateScalingFields();
@@ -54,18 +54,18 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void Update()
         {
-            if (layer.transform.hasChanged)
+            if (layerGameObject.transform.hasChanged)
             {
                 UpdatePositionFields();
                 UpdateRotationFields();
                 UpdateScalingFields();
-                layer.transform.hasChanged = false;
+                layerGameObject.transform.hasChanged = false;
             }
         }
 
         private void SetTransformLocks()
         {
-            if (layer.TryGetComponent(out TransformAxes transformLocks))
+            if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
             {
                 position.xField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
                 position.yField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
 
-            layer.transform.position = unityCoordinate;
+            layerGameObject.transform.position = unityCoordinate;
         }
         
         private void OnRotationChanged(string axisValue)
@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(rotation.yField.Text, out var y);
             float.TryParse(rotation.zField.Text, out var z);
 
-            layer.transform.eulerAngles = new Vector3(x, y, z);
+            layerGameObject.transform.eulerAngles = new Vector3(x, y, z);
         }
         
         private void OnScaleChanged(string axisValue)
@@ -119,14 +119,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
             float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
 
-            layer.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
+            layerGameObject.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
 
             UpdateScalingFields();
         }
         
         private void UpdatePositionFields()
         {
-            var rdCoordinate = ConvertLayerPositionToRd(layer);
+            var rdCoordinate = ConvertLayerPositionToRd(layerGameObject);
             position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
             position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
             position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));
@@ -134,7 +134,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateRotationFields()
         {
-            var eulerAngles = layer.transform.localEulerAngles;
+            var eulerAngles = layerGameObject.transform.localEulerAngles;
 
             rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
             rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
@@ -143,7 +143,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateScalingFields()
         {
-            var localScale = layer.transform.localScale;
+            var localScale = layerGameObject.transform.localScale;
 
             var xPercentage = localScale.x * 100;
             var yPercentage = localScale.y * 100;
@@ -154,7 +154,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
         }
 
-        private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayer origin)
+        private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayerGameObject origin)
         {
             var transformPosition = origin.transform.position;
             var unityCoordinate = new Coordinate(

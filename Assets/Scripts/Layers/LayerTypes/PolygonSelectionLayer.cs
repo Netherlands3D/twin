@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Layers
     }
 
     [Serializable]
-    public class PolygonSelectionLayer : LayerNL3DBase, ILayerWithProperties
+    public class PolygonSelectionLayer : LayerData, ILayerWithProperties
     {
         private ShapeType shapeType;
         public CompoundPolygon Polygon { get; set; }
