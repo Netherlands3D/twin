@@ -58,34 +58,41 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleStartTimeSeconds(float newValue)
         {
-            controller.StartTimeSeconds = (int)newValue * 3600 * 24;
-            projectionLayer.SetVisibleTilesDirty();
+            int value = (int)newValue * 3600 * 24;
+            if(value != controller.EndTimeSeconds)
+                projectionLayer.SetVisibleTilesDirty();
+            controller.StartTimeSeconds = value;            
         }
 
         private void HandleEndTimeSeconds(float newValue)
         {
-            controller.EndTimeSeconds = (int)newValue * 3600 * 24;
-            projectionLayer.SetVisibleTilesDirty();
+            int value = (int)newValue * 3600 * 24;
+            if(value != controller.EndTimeSeconds)
+                projectionLayer.SetVisibleTilesDirty();
+            controller.EndTimeSeconds = value;            
         }
 
         private void HandleMinimum(float newValue) 
         {
-            controller.Minimum = newValue;
-            projectionLayer.SetVisibleTilesDirty();
+            if(newValue != controller.Minimum)
+                projectionLayer.SetVisibleTilesDirty();
+            controller.Minimum = newValue;            
         }
 
         private void HandleMaximum(float newValue) 
         {
-            controller.Maximum = newValue;
-            projectionLayer.SetVisibleTilesDirty();
+            if(newValue != controller.Maximum)
+                projectionLayer.SetVisibleTilesDirty();
+            controller.Maximum = newValue;            
         }
 
         private void HandleMinimumColor(Color newValue) 
         {
             if (controller)
             {
-                controller.MinColor = newValue;
-                projectionLayer.SetVisibleTilesDirty();
+                if(newValue != controller.MinColor)
+                    projectionLayer.SetVisibleTilesDirty();
+                controller.MinColor = newValue;                
             }
         }
 
@@ -93,8 +100,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (controller)
             {
-                controller.MaxColor = newValue;
-                projectionLayer.SetVisibleTilesDirty();
+                if(newValue != controller.MaxColor)
+                    projectionLayer.SetVisibleTilesDirty();
+                controller.MaxColor = newValue;                
             }
         }
     }

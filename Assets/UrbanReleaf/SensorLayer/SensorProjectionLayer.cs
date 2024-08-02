@@ -65,7 +65,7 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            Tile tile = tiles[tileKey]; 
+            Tile tile = tiles[tileKey];
             UnityWebRequest webRequest = dataController.GetRequest(tile, Datasets[tiles[tileKey].unityLOD].path);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
@@ -74,8 +74,6 @@ namespace Netherlands3D.CartesianTiles
             {
                 Debug.LogWarning($"Could not download sensor data { webRequest.url }");
                 RemoveGameObjectFromTile(tileKey);
-                if(callback != null)
-                    callback(tileChange);
             }
             else
             {
@@ -83,6 +81,8 @@ namespace Netherlands3D.CartesianTiles
                 TileSensorDataController tileSensorData = tile.gameObject.GetComponent<TileSensorDataController>();
                 tileSensorData.SetCells(tile, dataController);
                 tileSensorData.UpdateTexture(tile, dataController);
+                TextureDecalProjector projector = tile.gameObject.GetComponent<TextureDecalProjector>();
+                projector.gameObject.SetActive(true);
 
                 //free up memory
                 tileSensorData.ClearCells();
@@ -90,10 +90,9 @@ namespace Netherlands3D.CartesianTiles
                 //when static sensor data we need to keep the cell data alive
                 if(!dataController.StaticSensorData)
                     dataController.ClearCells();
-
-                if (callback != null)
-                    callback(tileChange);
             }
+            if (callback != null)
+                callback(tileChange);
             yield return null;
         }
 
@@ -119,20 +118,35 @@ namespace Netherlands3D.CartesianTiles
                 if (tile.Value == null || tile.Value.gameObject == null)
                     continue;
 
+                TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                projector.gameObject.SetActive(false);
+
                 TileChange tileChange = new TileChange();
                 tileChange.X = tile.Key.x;
                 tileChange.Y = tile.Key.y;
                 queuedChanges.Add(tileChange);
             }
+            bool ready = true;
             while (queuedChanges.Count > 0)
             {
                 //lets wait half a second in case a slider is moving
-                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval)
+                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
                 {
+                    ready = false;
                     TileChange next = queuedChanges[0];
                     queuedChanges.RemoveAt(0);
                     Vector2Int key = new Vector2Int(next.X, next.Y);
-                    tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next));
+                    if (tiles.ContainsKey(key))
+                    {
+                        tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next, key =>
+                        {
+                            ready = true;
+                        }));
+                    }
+                    else
+                    {
+                        ready = true;
+                    }
                 }
                 yield return wfs;
             }           

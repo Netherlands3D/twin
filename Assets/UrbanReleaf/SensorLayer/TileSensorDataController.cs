@@ -198,6 +198,12 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
+        public void ClearTexture()
+        {
+            Color32[] pixels = dataTexture.GetPixels32();
+            ClearTexture(pixels);
+        }
+
         private void OnDestroy()
         {
             ClearCells();
