@@ -1,3 +1,4 @@
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.ObjectLibrary;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class SensorPropertySection : MonoBehaviour
     {
         private SensorDataController controller;
+        private SensorProjectionLayer projectionLayer;
         [SerializeField] private Slider startTimeSlider;
         [SerializeField] private Slider endTimeSlider;
         [SerializeField] private Slider minSlider;
@@ -16,10 +18,15 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public SensorDataController Controller
         {
-            get => controller;
+            get
+            {                
+                return controller;
+            }            
             set
             {
                 controller = value;
+                if (projectionLayer == null)
+                    projectionLayer = controller.gameObject.GetComponent<SensorProjectionLayer>();
                 startTimeSlider.value = controller.StartTimeSeconds / (3600 * 24);
                 endTimeSlider.value = controller.EndTimeSeconds / (3600 * 24);
                 minSlider.value = controller.Minimum;
@@ -30,7 +37,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         private void OnEnable()
-        {
+        {          
             startTimeSlider.onValueChanged.AddListener(HandleStartTimeSeconds);
             endTimeSlider.onValueChanged.AddListener(HandleEndTimeSeconds);
             minSlider.onValueChanged.AddListener(HandleMinimum);
@@ -52,33 +59,43 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void HandleStartTimeSeconds(float newValue)
         {
             controller.StartTimeSeconds = (int)newValue * 3600 * 24;
+            projectionLayer.SetVisibleTilesDirty();
         }
 
         private void HandleEndTimeSeconds(float newValue)
         {
             controller.EndTimeSeconds = (int)newValue * 3600 * 24;
+            projectionLayer.SetVisibleTilesDirty();
         }
 
         private void HandleMinimum(float newValue) 
         {
             controller.Minimum = newValue;
+            projectionLayer.SetVisibleTilesDirty();
         }
 
         private void HandleMaximum(float newValue) 
         {
             controller.Maximum = newValue;
+            projectionLayer.SetVisibleTilesDirty();
         }
 
         private void HandleMinimumColor(Color newValue) 
         {
-            if(controller)
-            controller.MinColor = newValue;
+            if (controller)
+            {
+                controller.MinColor = newValue;
+                projectionLayer.SetVisibleTilesDirty();
+            }
         }
 
         private void HandleMaximumColor(Color newValue) 
         {
-            if(controller)
-            controller.MaxColor = newValue;
+            if (controller)
+            {
+                controller.MaxColor = newValue;
+                projectionLayer.SetVisibleTilesDirty();
+            }
         }
     }
 }

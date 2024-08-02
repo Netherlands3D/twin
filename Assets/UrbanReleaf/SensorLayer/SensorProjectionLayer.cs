@@ -22,12 +22,19 @@ using System;
 using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
+using System.Collections.Generic;
 
 namespace Netherlands3D.CartesianTiles
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        
         private SensorDataController dataController;
+        private float lastUpdatedTimeStamp = 0;
+        private float lastUpdatedInterval = 1f;
+        private bool visibleTilesDirty = false;
+        private List<TileChange> queuedChanges = new List<TileChange>();
+        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
+        private Coroutine updateTilesRoutine = null;
 
         protected override Tile CreateNewTile(Vector2Int tileKey)
         {
@@ -67,7 +74,8 @@ namespace Netherlands3D.CartesianTiles
             {
                 Debug.LogWarning($"Could not download sensor data { webRequest.url }");
                 RemoveGameObjectFromTile(tileKey);
-                callback(tileChange);
+                if(callback != null)
+                    callback(tileChange);
             }
             else
             {
@@ -82,12 +90,55 @@ namespace Netherlands3D.CartesianTiles
                 //when static sensor data we need to keep the cell data alive
                 if(!dataController.StaticSensorData)
                     dataController.ClearCells();
-              
-                callback(tileChange);
+
+                if (callback != null)
+                    callback(tileChange);
             }
             yield return null;
         }
 
+        public void SetVisibleTilesDirty()
+        {
+            //is the update already running cancel it
+            if (visibleTilesDirty && updateTilesRoutine != null)
+            {                
+                queuedChanges.Clear();
+                StopCoroutine(updateTilesRoutine);
+            }
+
+            lastUpdatedTimeStamp = Time.time;
+            visibleTilesDirty = true;
+            updateTilesRoutine = StartCoroutine(UpdateVisibleTiles());
+        }   
         
+        private IEnumerator UpdateVisibleTiles()
+        {
+            //get current tiles
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                TileChange tileChange = new TileChange();
+                tileChange.X = tile.Key.x;
+                tileChange.Y = tile.Key.y;
+                queuedChanges.Add(tileChange);
+            }
+            while (queuedChanges.Count > 0)
+            {
+                //lets wait half a second in case a slider is moving
+                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval)
+                {
+                    TileChange next = queuedChanges[0];
+                    queuedChanges.RemoveAt(0);
+                    Vector2Int key = new Vector2Int(next.X, next.Y);
+                    tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next));
+                }
+                yield return wfs;
+            }           
+            
+            updateTilesRoutine = null;
+            visibleTilesDirty = false;
+        }
     }
 }
