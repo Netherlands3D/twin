@@ -135,7 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: -5673596216332244454}
   referenceCoordinateSystem: 2
   onPreShift:
@@ -168,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ea0481d59678846a64ecaf6ba21187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 8621565738462384234, guid: 335662c182a7c594e9a7ea069abc9207,
+  propertySectionPrefab: {fileID: 8621565738462384234, guid: 220ded5efe14b85439d8749d9b05aae3,
     type: 3}
 --- !u!114 &-4199356597631158015
 MonoBehaviour:
@@ -182,11 +181,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38fe46b8dda3fda4db70f655d0b3af43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: d128af3d82c1ec74ca2915dca7794e65
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  usePropertySections: 1
-  openPropertiesOnStart: 1

@@ -59,10 +59,13 @@ namespace Netherlands3D.Twin
         //get the observation start time and end time and create a timewindow url            
         public string GetTimeUrl()
         {
+            DateTime start = DateTime.Now;
+            DateTime startAdjusted = start.AddSeconds(-startTimeWindowSeconds);
             DateTime end = DateTime.Now;
-            string sortableEndTime = end.ToString(timeFormatSpecifier);
-            DateTime start = end.AddSeconds(-timeWindowSeconds);
-            string sortableStartTime = start.ToString(timeFormatSpecifier);
+            DateTime endAdjusted = end.AddSeconds(-endTimeWindowSeconds);
+            string sortableStartTime = startAdjusted.ToString(timeFormatSpecifier);
+            string sortableEndTime = endAdjusted.ToString(timeFormatSpecifier);            
+            
             string timeUrl = timeStartKey + sortableStartTime + timeEndKey + sortableEndTime;
             return timeUrl;
         }

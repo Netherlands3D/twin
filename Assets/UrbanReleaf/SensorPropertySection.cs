@@ -7,8 +7,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class SensorPropertySection : MonoBehaviour
     {
         private SensorDataController controller;
-        [SerializeField] private Slider timeSlider;
-        [SerializeField] private Slider observationSlider;
+        [SerializeField] private Slider startTimeSlider;
+        [SerializeField] private Slider endTimeSlider;
+        [SerializeField] private Slider minSlider;
+        [SerializeField] private Slider maxSlider;
+        [SerializeField] private ColorPicker minimumColorPicker;
+        [SerializeField] private ColorPicker maximumColorPicker;
 
         public SensorDataController Controller
         {
@@ -16,31 +20,65 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 controller = value;
-                timeSlider.value = controller.TimeSeconds;
-                observationSlider.value = controller.Observations;
+                startTimeSlider.value = controller.StartTimeSeconds / (3600 * 24);
+                endTimeSlider.value = controller.EndTimeSeconds / (3600 * 24);
+                minSlider.value = controller.Minimum;
+                maxSlider.value = controller.Maximum;
+                minimumColorPicker.color = controller.MinColor;
+                maximumColorPicker.color = controller.MaxColor;
             }
         }
 
         private void OnEnable()
         {
-            timeSlider.onValueChanged.AddListener(HandleTimeSeconds);
-            observationSlider.onValueChanged.AddListener(HandleObservationLimit);
+            startTimeSlider.onValueChanged.AddListener(HandleStartTimeSeconds);
+            endTimeSlider.onValueChanged.AddListener(HandleEndTimeSeconds);
+            minSlider.onValueChanged.AddListener(HandleMinimum);
+            maxSlider.onValueChanged.AddListener(HandleMaximum);
+            minimumColorPicker.onColorChanged += HandleMinimumColor;
+            maximumColorPicker.onColorChanged += HandleMaximumColor;
         }
 
         private void OnDisable()
         {
-            timeSlider.onValueChanged.RemoveListener(HandleTimeSeconds);
-            observationSlider.onValueChanged.RemoveListener(HandleObservationLimit);
+            startTimeSlider.onValueChanged.RemoveListener(HandleStartTimeSeconds);
+            endTimeSlider.onValueChanged.RemoveListener(HandleEndTimeSeconds);
+            minSlider.onValueChanged.RemoveListener(HandleMinimum);
+            maxSlider.onValueChanged.RemoveListener(HandleMaximum);
+            minimumColorPicker.onColorChanged -= HandleMinimumColor;
+            maximumColorPicker.onColorChanged -= HandleMaximumColor;
         }
 
-        private void HandleTimeSeconds(float newValue)
+        private void HandleStartTimeSeconds(float newValue)
         {
-            controller.TimeSeconds = (int)newValue;
+            controller.StartTimeSeconds = (int)newValue * 3600 * 24;
         }
 
-        private void HandleObservationLimit(float newValue)
+        private void HandleEndTimeSeconds(float newValue)
         {
-            controller.Observations = (int)newValue;
+            controller.EndTimeSeconds = (int)newValue * 3600 * 24;
+        }
+
+        private void HandleMinimum(float newValue) 
+        {
+            controller.Minimum = newValue;
+        }
+
+        private void HandleMaximum(float newValue) 
+        {
+            controller.Maximum = newValue;
+        }
+
+        private void HandleMinimumColor(Color newValue) 
+        {
+            if(controller)
+            controller.MinColor = newValue;
+        }
+
+        private void HandleMaximumColor(Color newValue) 
+        {
+            if(controller)
+            controller.MaxColor = newValue;
         }
     }
 }
