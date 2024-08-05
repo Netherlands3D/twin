@@ -91,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void Update()
         {
-            // We cannot user transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
+            // We cannot use transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
             // Check for position change
             if (transform.position != previousPosition)
             {

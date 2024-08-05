@@ -123,7 +123,6 @@ namespace Netherlands3D.Twin.Layers
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
-            Debug.Log("default constructor: " + name);
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
