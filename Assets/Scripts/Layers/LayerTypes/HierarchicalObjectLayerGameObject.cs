@@ -26,9 +26,6 @@ namespace Netherlands3D.Twin.Layers
         {
             var coord = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
             transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
-            // transformPropertyData.Position = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            // transformPropertyData.EulerRotation = transform.eulerAngles;
-            // transformPropertyData.LocalScale = transform.localScale;
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
