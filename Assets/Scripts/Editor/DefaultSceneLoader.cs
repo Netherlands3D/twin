@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Editor
 
             if (state == PlayModeStateChange.EnteredPlayMode && SceneManager.GetActiveScene().buildIndex != 0)
             {
-                EditorSceneManager.LoadScene(0);
+                //EditorSceneManager.LoadScene(0);
             }
         }
     }
