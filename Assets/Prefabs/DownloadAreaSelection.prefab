@@ -147,7 +147,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  selectedAreaBounds:
+  whenDrawingArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AreaSelection, Assembly-CSharp
+        m_MethodName: SetDuringSelectionAreaBounds
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  whenAreaIsSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2387899072786983831}
@@ -179,6 +194,7 @@ MonoBehaviour:
   multiplyHighlightScale: 5
   maxSelectionDistanceFromCamera: 10000
   useWorldSpace: 0
+  blockSelectinStartByUI: 1
   gridHighlight: {fileID: 1774945319993723127}
   selectionBlock: {fileID: 8160245633172219812}
   triplanarGridMaterial: {fileID: 2100000, guid: 1d25d945d920ea0419c29537e77199ce,
