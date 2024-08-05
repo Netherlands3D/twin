@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             get => position;
             set
             {
-                position = value.Convert(CoordinateSystem.RDNAP);
+                position = value.Convert(CoordinateSystems.connectedCoordinateSystem);
                 OnPositionChanged.Invoke(position);
             }
         }
@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonConstructor]
         public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
         {
-            this.position = position.Convert(CoordinateSystem.RDNAP);
+            this.position = position.Convert(CoordinateSystems.connectedCoordinateSystem);
             this.eulerRotation = eulerRotation;
             this.localScale = localScale;
         }
