@@ -14,7 +14,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJSONLayer : ReferencedLayer
+    public class GeoJSONLayer : LayerGameObject
     {
         public static float maxParseDuration = 0.01f;
         
@@ -36,13 +36,15 @@ namespace Netherlands3D.Twin.Layers
 
         private GeoJSONPointLayer pointFeatures;
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
+
+        private Coroutine streamParseCoroutine;
         
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
-            ReferencedProxy.Color = layerColor;
+            LayerData.Color = layerColor;
             this.lineRenderer3DPrefab = lineRenderer3DPrefab;
             this.pointRenderer3DPrefab = pointRenderer3DPrefab;
         }
@@ -103,7 +105,6 @@ namespace Netherlands3D.Twin.Layers
         /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
         /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
         /// </summary>
-        /// <param name="filePath"></param>
         public void AdditiveParseGeoJSON(string filePath)
         {
             // Read filepath and deserialize the GeoJSON using GeoJSON.net in one go
@@ -117,10 +118,12 @@ namespace Netherlands3D.Twin.Layers
         /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        /// <param name="filePath"></param>
         public void StreamParseGeoJSON(string filePath)
         {
-            StartCoroutine(ParseGeoJSONStream(filePath, 1000));
+            if (streamParseCoroutine != null)
+                StopCoroutine(streamParseCoroutine);
+
+            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(filePath, 1000));
         }
 
         private IEnumerator ParseGeoJSONStream(string filePath, int maxParsesPerFrame = Int32.MaxValue)
@@ -191,11 +194,11 @@ namespace Netherlands3D.Twin.Layers
         {
             var layer = new GeoJSONPolygonLayer("Polygonen")
             {
-                Color = ReferencedProxy.Color,
+                Color = LayerData.Color,
                 PolygonVisualizationMaterial = defaultVisualizationMaterial,
                 RandomizeColorPerFeature = RandomizeColorPerFeature
             };
-            layer.SetParent(ReferencedProxy);
+            layer.SetParent(LayerData);
             return layer;
         }
 
@@ -204,8 +207,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
             layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
-            layer.Color = ReferencedProxy.Color;
-            layer.SetParent(ReferencedProxy);
+            layer.Color = LayerData.Color;
+            layer.SetParent(LayerData);
             return layer;
         }
 
@@ -214,8 +217,8 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
             layer.PointRenderer3D.Material = defaultVisualizationMaterial;
-            layer.Color = ReferencedProxy.Color;
-            layer.SetParent(ReferencedProxy);
+            layer.Color = LayerData.Color;
+            layer.SetParent(LayerData);
             return layer;
         }
         
@@ -225,58 +228,74 @@ namespace Netherlands3D.Twin.Layers
             switch (feature.Geometry.Type)
             {
                 case GeoJSONObjectType.MultiPolygon:
-                {
-                    if (polygonFeatures == null)
-                        polygonFeatures = CreatePolygonLayer();
-
-                    polygonFeatures.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddMultiPolygonFeature(feature, originalCoordinateSystem);
+                    return;
                 case GeoJSONObjectType.Polygon:
-                {
-                    if (polygonFeatures == null)
-                        polygonFeatures = CreatePolygonLayer();
-
-                    polygonFeatures.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddPolygonFeature(feature, originalCoordinateSystem);
+                    return;
                 case GeoJSONObjectType.MultiLineString:
-                {
-                    if (lineFeatures == null)
-                        lineFeatures = CreateLineLayer();
-
-                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddMultiLineStringFeature(feature, originalCoordinateSystem);
+                    return;
                 case GeoJSONObjectType.LineString:
-                {
-                    if (lineFeatures == null)
-                        lineFeatures = CreateLineLayer();
-
-                    lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddLineStringFeature(feature, originalCoordinateSystem);
+                    return;
                 case GeoJSONObjectType.MultiPoint:
-                {
-                    if (pointFeatures == null)
-                        pointFeatures = CreatePointLayer();
-
-                    pointFeatures.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddMultiPointFeature(feature, originalCoordinateSystem);
+                    return;
                 case GeoJSONObjectType.Point:
-                {
-                    if (pointFeatures == null)
-                        pointFeatures = CreatePointLayer();
-                    
-                    pointFeatures.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
-                    break;
-                }
+                    AddPointFeature(feature, originalCoordinateSystem);
+                    return;
                 default:
-                {
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
-                }
             }
+        }
+
+        private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (pointFeatures == null)
+                pointFeatures = CreatePointLayer();
+
+            pointFeatures.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
+        }
+
+        private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (pointFeatures == null)
+                pointFeatures = CreatePointLayer();
+
+            pointFeatures.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
+        }
+
+        private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (lineFeatures == null)
+                lineFeatures = CreateLineLayer();
+
+            lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
+        }
+
+        private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (lineFeatures == null)
+                lineFeatures = CreateLineLayer();
+
+            lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
+        }
+
+        private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (polygonFeatures == null)
+                polygonFeatures = CreatePolygonLayer();
+
+            polygonFeatures.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
+        }
+
+        private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (polygonFeatures == null)
+                polygonFeatures = CreatePolygonLayer();
+
+            polygonFeatures.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }
 
         private CoordinateSystem GetCoordinateSystem()

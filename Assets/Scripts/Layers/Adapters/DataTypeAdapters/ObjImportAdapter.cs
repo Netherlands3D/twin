@@ -55,16 +55,7 @@ namespace Netherlands3D.Twin
         public bool Supports(LocalFile localFile)
         {
             var hasObjExtention = localFile.SourceUrl.EndsWith(".obj");
-            if(!hasObjExtention)
-                return false;
-
-            // Streamread and check if the obj at least has 3 newlines
-            using StreamReader reader = new StreamReader(localFile.LocalFilePath);
-            int lineCount = 0;
-            while (lineCount < 3 && reader.ReadLine() != null)
-                lineCount++;
-
-            if (lineCount >= 3)
+            if(hasObjExtention)
                 return true;
 
             return false;
@@ -72,8 +63,8 @@ namespace Netherlands3D.Twin
 
         public void Execute(LocalFile localFile)
         {
-            objfilename = localFile.LocalFilePath;
-            StartImport();
+            objfilename = Path.GetFileName(localFile.LocalFilePath);
+            ParseFiles(objfilename);
         }
 
         /// <summary>
@@ -159,7 +150,7 @@ namespace Netherlands3D.Twin
 
             parsedObj.AddComponent<MeshCollider>();
             parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();     
-            parsedObj.AddComponent<HierarchicalObjectLayer>();
+            parsedObj.AddComponent<HierarchicalObjectLayerGameObject>();
             parsedObj.AddComponent<WorldTransform>();
             
             CreatedMoveableGameObject.Invoke(parsedObj);

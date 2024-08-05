@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerNL3DBase
+    public partial class GeoJSONPointLayer : LayerData
     {
 
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
