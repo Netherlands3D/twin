@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -50,6 +51,10 @@ namespace Netherlands3D.SelectionTools
         private InputAction clickAction;
         private InputAction modifierAction;
 
+        private Action<InputAction.CallbackContext> tapActionPerformed;
+        private Action<InputAction.CallbackContext> clickActionPerformed;
+        private Action<InputAction.CallbackContext> clickActionCanceled;
+
         private Vector3 selectionStartPosition;
 
         private Plane worldPlane;
@@ -81,9 +86,9 @@ namespace Netherlands3D.SelectionTools
             pointerAction = areaSelectionActionMap.FindAction("Point");
             modifierAction = areaSelectionActionMap.FindAction("Modifier");
 
-            tapAction.performed += context => Tap();
-            clickAction.performed += context => StartClick();
-            clickAction.canceled += context => Release();
+            tapActionPerformed = context => Tap();
+            clickActionPerformed = context => StartClick();
+            clickActionCanceled = context => Release();
 
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
         }
@@ -103,6 +108,10 @@ namespace Netherlands3D.SelectionTools
         private void OnEnable()
         {
             areaSelectionActionMap.Enable();
+
+            tapAction.performed += tapActionPerformed;
+            clickAction.performed += clickActionPerformed;
+            clickAction.canceled += clickActionCanceled;
         }
 
         private void OnDisable()
@@ -111,6 +120,10 @@ namespace Netherlands3D.SelectionTools
             selectionBlock.SetActive(false);
             blockCameraDragging.Invoke(false);
             areaSelectionActionMap.Disable();
+
+            tapAction.performed -= tapActionPerformed;
+            clickAction.performed -= clickActionPerformed;
+            clickAction.canceled -= clickActionCanceled;
         }
 
         private void Update()
