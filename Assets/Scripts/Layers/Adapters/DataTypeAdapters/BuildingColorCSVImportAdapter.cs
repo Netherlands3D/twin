@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Netherlands3D.SubObjects;
@@ -13,10 +14,11 @@ using Application = UnityEngine.Application;
 namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
-    public class CSVImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class BuildingColorCSVImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         [SerializeField] private UnityEvent<float> progressEvent = new();
+        private string[] requiredHeaders = { "BagId", "HexColor" };
         public int maxParsesPerFrame = 100;
         private static DatasetLayerGameObject activeDatasetLayer; //todo: allow multiple datasets to exist
 
@@ -31,11 +33,22 @@ namespace Netherlands3D.Twin
             if(!localFile.LocalFilePath.ToLower().EndsWith(".csv"))
                 return false;
 
-            // Check if we can read the CVS using our expected config
-            using var reader = new StreamReader(localFile.LocalFilePath);
-            using var csv = new CsvReader(reader, config);
+            //Streamread first line to check if all required headers are present, and the config delimiter is used
+            using var streamReader = new StreamReader(localFile.LocalFilePath);
+            using var csv = new CsvReader(streamReader, config);
 
-            return csv.Read();
+            bool canReadWithConfig = csv.Read();
+            bool hasHeader = csv.ReadHeader();
+            if (!canReadWithConfig || !hasHeader)
+                return false;
+
+            foreach (var header in requiredHeaders)
+            {
+                if (!csv.Context.HeaderRecord.Contains(header))
+                    return false;
+            }
+
+            return true;
         }
 
         public void Execute(LocalFile localFile)
@@ -54,8 +67,9 @@ namespace Netherlands3D.Twin
             }
 
             var fileName = Path.GetFileName(fullPath);
+            var localFilePath = Path.Combine(Application.persistentDataPath, fullPath);
             var datasetLayer = new GameObject(fileName).AddComponent<DatasetLayerGameObject>();
-            datasetLayer.StartCoroutine(StreamReadCSV(fullPath, datasetLayer, maxParsesPerFrame));
+            datasetLayer.StartCoroutine(StreamReadCSV(localFilePath, datasetLayer, maxParsesPerFrame));
 
             activeDatasetLayer = datasetLayer;
         }

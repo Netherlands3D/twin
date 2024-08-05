@@ -8,25 +8,40 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
-    public class ChainOfResponsibility : MonoBehaviour
+    public class DataTypeChain : MonoBehaviour
     {
+        [Header("Settings")]
+        [SerializeField] private bool debugLog = false;
+
         [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
         private IDataTypeAdapter[] dataTypeAdapterInterfaces;
-        public UnityEvent OnAdapterFound = new();
+        public UnityEvent<IDataTypeAdapter> OnAdapterFound = new();
 
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
 
         private string targetUrl = "";
-        public string TargetUrl { get => targetUrl; set => targetUrl = value; }
+
+        /// <summary>
+        /// The target url can be set directly from an input field.
+        /// Using <ref> DetermineAdapter </ref> without an url will start the chain of responsibility using the set url.
+        /// </summary>
+        public string TargetUrl 
+        { 
+            get => targetUrl; 
+            set
+            {
+                AbortChain();
+                targetUrl = value;   
+            }
+        }
 
         private Coroutine chain;
 
         private void OnDisable() {
-            if(chain != null)
-                StopCoroutine(chain);
+            AbortChain();
         }
 
         /// <summary>
@@ -40,10 +55,14 @@ namespace Netherlands3D.Twin
         }
         public void DetermineAdapter()
         {
+            AbortChain();
+            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+        }
+
+        private void AbortChain()
+        {
             if(chain != null)
                 StopCoroutine(chain);
-
-            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
         }
 
         private IEnumerator DownloadAndCheckSupport(string url)
@@ -90,7 +109,7 @@ namespace Netherlands3D.Twin
             else
             {
                 urlAndData.LocalFilePath = "";
-                Debug.LogError("Download failed: " + uwr.error);
+                if(debugLog) Debug.LogError("Download failed: " + uwr.error);
             }
         }
 
@@ -99,18 +118,25 @@ namespace Netherlands3D.Twin
             // Get our interface references
             dataTypeAdapterInterfaces = new IDataTypeAdapter[dataTypeAdapters.Length];
             for (int i = 0; i < dataTypeAdapters.Length; i++)
+            {
+                if(dataTypeAdapters[i] == null)
+                {
+                    Debug.LogError("An adapter in chain is null. Please check your dataTypeAdapters list.",this.gameObject);
+                    yield break;
+                }
+
                 dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter;
+            }
 
             // Check data type per adapter using order set in inspector
             foreach (var adapter in dataTypeAdapterInterfaces)
             {
-                if (adapter.Supports(urlAndData))
-                {
-                    Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
-                    adapter.Execute(urlAndData);
-                    OnAdapterFound.Invoke();
-                    yield break;
-                }
+                if (!adapter.Supports(urlAndData)) continue;
+
+                if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
+                adapter.Execute(urlAndData);
+                OnAdapterFound.Invoke(adapter);
+                yield break;
             }
 
             CouldNotFindAdapter.Invoke(urlAndData.SourceUrl);
@@ -125,7 +151,7 @@ namespace Netherlands3D.Twin
             {
                 if (dataTypeAdapters[i] is not IDataTypeAdapter)
                 {
-                    Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
+                    if(debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
                     dataTypeAdapters[i] = null;
                 }
             }
