@@ -107,7 +107,6 @@ namespace Netherlands3D.Twin
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.name = featureType;
-            Debug.Log("WFS BBOX URL: " + getFeatureUrl);
 
             newLayer.CartesianTileWFSLayer.WfsUrl = getFeatureUrl;
         }
