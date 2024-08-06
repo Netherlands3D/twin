@@ -42,6 +42,35 @@ namespace Netherlands3D.Twin.Layers
                 );
             }
 
+            public void DestroyAllVisualisations()
+            {
+                foreach (var visualisation in visualisations)
+                {
+                    if (visualisation != null)
+                        Object.Destroy(visualisation.gameObject);
+                }
+                visualisations.Clear();
+            }
+
+            public void ShowVisualisations(bool show)
+            {
+                foreach (var visualisation in visualisations)
+                {
+                    visualisation.gameObject.SetActive(show);
+                }
+            }
+
+            /// <summary>
+            /// Set the material of all visualisations
+            /// </summary>
+            public void SetMaterial(Material material)
+            {
+                foreach (var visualisation in visualisations)
+                {
+                    visualisation.GetComponent<Renderer>().material = material;
+                }
+            }
+
             /// <summary>
             /// A nice addition/optimisation would be to cache this inside the PolygonVisualisation class (needs change in package)
             /// </summary>
