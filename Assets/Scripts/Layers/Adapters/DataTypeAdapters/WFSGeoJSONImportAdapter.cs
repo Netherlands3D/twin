@@ -16,9 +16,6 @@ namespace Netherlands3D.Twin
     public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
-        [SerializeField] private Material visualizationMaterial;
-        [SerializeField] private LineRenderer3D lineRenderer3D;
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
@@ -106,23 +103,11 @@ namespace Netherlands3D.Twin
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
-            //Move into prefab and instantiate, WFSGeoJSONTileDataLayer into new WFSGeoJSONLayer exten from GeoJSONLayer
-            WFSGeoJsonLayerGameObject wfsLayerGameObject = Instantiate(layerPrefab);
-            wfsLayerGameObject.LayerData.SetParent(folderLayer);
-            wfsLayerGameObject.name = featureType;
-            wfsLayerGameObject.CartesianTileWFSLayer.WfsUrl = getFeatureUrl;
-
-            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var layerGameObject = new GameObject(featureType);
-            var layer = layerGameObject.AddComponent<GeoJsonLayerGameObject>();
-            layer.LayerData.SetParent(folderLayer);
-            layer.RandomizeColorPerFeature = true;
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-
-            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();
-            cartesianTileLayer.WFSGeoJSONLayer = layer;
-            cartesianTileLayer.WfsUrl = getFeatureUrl;
+            //Spawn a new WFS GeoJSON layer
+            WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.LayerData.SetParent(folderLayer);
+            newLayer.name = featureType;
+            newLayer.CartesianTileWFSLayer.WfsUrl = getFeatureUrl;
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
