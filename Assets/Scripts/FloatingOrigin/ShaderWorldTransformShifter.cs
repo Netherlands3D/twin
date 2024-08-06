@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin
         [SerializeField] [Tooltip("Global shader variable used in shaders/shadergraphs")] private string shaderKeyWord = "_WorldOriginOffset";
         [SerializeField]  private Vector2 shaderOffset = Vector2.zero;
 
-        Coordinate ShaderOrigin;
+        private Coordinate ShaderOrigin;
 
         private void Start()
         {
