@@ -1048,7 +1048,7 @@ GameObject:
   - component: {fileID: 7547310559788966009}
   - component: {fileID: 3422094674334320595}
   m_Layer: 5
-  m_Name: DownloadInspector
+  m_Name: Bestand_Opslaan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3130,7 +3130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.070905544}
+  m_AnchoredPosition: {x: 0, y: 0.00045132692}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4009584302880459875
@@ -4768,7 +4768,7 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 0.99989307
+      value: 0.9999984
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
@@ -6132,7 +6132,7 @@ PrefabInstance:
     - target: {fileID: 7764135182217992251, guid: b0101f50a9b51dd45915dafbf0ffab81,
         type: 3}
       propertyPath: m_text
-      value: Geselecteerde gebied
+      value: Netherlands 3D als een bestand opslaan
       objectReference: {fileID: 0}
     - target: {fileID: 7764135182217992251, guid: b0101f50a9b51dd45915dafbf0ffab81,
         type: 3}
