@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class CartesianTilePropertyLayer : CartesianTileLayerGameObject, ILayerWithProperties
+    public class CartesianTilePropertyLayer : CartesianTileLayerGameObject, ILayerWithPropertyPanels
     {
         private List<IPropertySectionInstantiator> propertySections = new();
 
