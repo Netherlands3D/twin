@@ -11,10 +11,12 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
 using UnityEngine.Events;
+using Netherlands3D.Twin.Layers.Properties;
+using System.Linq;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJSONLayer : LayerGameObject
+    public class GeoJSONLayer : LayerGameObject, ILayerWithPropertyData
     {
         public static float maxParseDuration = 0.01f;
         
@@ -29,6 +31,8 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
+        public LayerPropertyData PropertyData => urlPropertyData;
+
         private GeoJSONLineLayer lineFeatures;
         private LineRenderer3D lineRenderer3DPrefab;
 
@@ -38,7 +42,27 @@ namespace Netherlands3D.Twin.Layers
         private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
 
         private Coroutine streamParseCoroutine;
+
+        private URLPropertyData urlPropertyData;
         
+        public class URLPropertyData : LayerPropertyData
+        {
+            public string url = "";
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+    
+        {
+            var urlProperty = (URLPropertyData)properties.FirstOrDefault(p => p is URLPropertyData);
+            if (urlProperty != null)
+            {
+                this.urlPropertyData = urlProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+                
+                //Set either url of tile data provider, or the url of the GeoJSON file based on GeoJSONLayer type
+                
+            }
+        }
+
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
             this.defaultVisualizationMaterial = defaultVisualizationMaterial;
@@ -418,5 +442,6 @@ namespace Netherlands3D.Twin.Layers
 
             return reader.Value.ToString().ToLower() == "features";
         }
+
     }
 }

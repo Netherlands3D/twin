@@ -105,6 +105,8 @@ namespace Netherlands3D.Twin
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
+            //Move into prefab and instantiate, WFSGeoJSONTileDataLayer into new WFSGeoJSONLayer exten from GeoJSONLayer
+
             // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
             var layerGameObject = new GameObject(featureType);
             var layer = layerGameObject.AddComponent<GeoJSONLayer>();
