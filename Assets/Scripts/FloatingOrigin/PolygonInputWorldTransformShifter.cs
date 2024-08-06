@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-            ;
             StoreLocalUnityCoordinatesLists();
         }
 
