@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
+            Coordinate = new Coordinate(referenceCoordinateSystem, 0, 0, 0);
         }
 
         private void OnValidate()
