@@ -1,5 +1,4 @@
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.ObjectLibrary;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Slider maxSlider;
         [SerializeField] private ColorPicker minimumColorPicker;
         [SerializeField] private ColorPicker maximumColorPicker;
+        private const int daySeconds = 3600 * 24;
 
         public SensorDataController Controller
         {
@@ -27,8 +27,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 controller = value;
                 if (projectionLayer == null)
                     projectionLayer = controller.gameObject.GetComponent<SensorProjectionLayer>();
-                startTimeSlider.value = controller.StartTimeSeconds / (3600 * 24);
-                endTimeSlider.value = controller.EndTimeSeconds / (3600 * 24);
+                startTimeSlider.value = controller.StartTimeSeconds / daySeconds;
+                endTimeSlider.value = controller.EndTimeSeconds / daySeconds;
                 minSlider.value = controller.Minimum;
                 maxSlider.value = controller.Maximum;
                 minimumColorPicker.color = controller.MinColor;
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleStartTimeSeconds(float newValue)
         {
-            int value = (int)newValue * 3600 * 24;
+            int value = (int)newValue * daySeconds;
             if(value != controller.EndTimeSeconds)
                 projectionLayer.SetVisibleTilesDirty();
             controller.StartTimeSeconds = value;            
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleEndTimeSeconds(float newValue)
         {
-            int value = (int)newValue * 3600 * 24;
+            int value = (int)newValue * daySeconds;
             if(value != controller.EndTimeSeconds)
                 projectionLayer.SetVisibleTilesDirty();
             controller.EndTimeSeconds = value;            
