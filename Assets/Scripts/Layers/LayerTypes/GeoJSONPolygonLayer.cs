@@ -39,9 +39,15 @@ namespace Netherlands3D.Twin.Layers
         public GeoJSONPolygonLayer(string name) : base(name)
         {
             ProjectData.Current.AddStandardLayer(this);
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        ~GeoJSONPolygonLayer()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
         
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in PolygonVisualisations)
             {

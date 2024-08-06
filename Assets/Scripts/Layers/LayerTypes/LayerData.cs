@@ -47,7 +47,6 @@ namespace Netherlands3D.Twin.Layers
                     child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
                 }
 
-                OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
             }
         }
@@ -115,10 +114,6 @@ namespace Netherlands3D.Twin.Layers
         {
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
-        }
-
-        protected virtual void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
