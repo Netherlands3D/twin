@@ -23,6 +23,9 @@ namespace Netherlands3D.Twin.FloatingOrigin
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
         public UnityEvent<WorldTransform, Coordinate> onPostShift = new();
 
+
+        private bool shiftPrepared = false;
+
         private void Awake()
         {
             worldTransformShifter = GetComponent<WorldTransformShifter>();
@@ -49,12 +52,21 @@ namespace Netherlands3D.Twin.FloatingOrigin
         {
             Origin.onPreShift.AddListener(PrepareToShift);
             Origin.onPostShift.AddListener(ShiftTo);
+
+            if (shiftPrepared)
+            {
+                ShiftTo(Coordinate, Coordinate);
+            }
+            
         }
 
         private void OnDisable()
         {
             Origin.onPreShift.RemoveListener(PrepareToShift);
             Origin.onPostShift.RemoveListener(ShiftTo);
+            //prepare for shifting, so we save the Coordinates. we can use these coordinates when the gameObject is Re-Enabled
+            //so the geometrie will appear in the correct unity-position.
+            PrepareToShift(Coordinate, Coordinate);
         }
 
         private void PrepareToShift(Coordinate fromOrigin, Coordinate toOrigin)
@@ -63,13 +75,14 @@ namespace Netherlands3D.Twin.FloatingOrigin
             onPreShift.Invoke(this, Coordinate);
             
             worldTransformShifter.PrepareToShift(this, fromOrigin, toOrigin);
+            shiftPrepared = true;
         }
 
         private void ShiftTo(Coordinate fromOrigin, Coordinate toOrigin)
         {
             worldTransformShifter.ShiftTo(this, fromOrigin, toOrigin);
-            
             onPostShift.Invoke(this, Coordinate);
+            shiftPrepared = false;
         }
     }
 }
