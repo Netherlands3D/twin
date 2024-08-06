@@ -5,21 +5,34 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.FloatingOrigin
 {
+    /// <summary>
+    /// when the 3DTileHandler needs to load geometry for the content of a tile, it creates a child-gameobject containing
+    /// a Content-component. this component takes care of the loading and positioning of the geometry. 
+    /// the child-gameobject is destroyed when it is no longer needed. 
+    /// Depending on the loaded geometry, these child-gameobjects can have multiple children itself.
+    /// to move all the 3dtile-geometry, we need to move all the gameobjects containing a Content-component.
+    /// </summary>
     public class ThreeDTilesWorldTransformShifter : WorldTransformShifter
     {
-        private Dictionary<Transform, Coordinate> tilesToShift = new();
+        private Dictionary<Transform, PositionAndRotation> tilesToShift = new();
         private Read3DTileset tilesetReader;
+        private struct PositionAndRotation
+        {
+            public Coordinate coordinateInConnectedCRS;
+            public Quaternion rotationInConnectedCRS;
+            public PositionAndRotation(Coordinate coordinate, Quaternion rotation)
+            {
+                coordinateInConnectedCRS = coordinate;
+                rotationInConnectedCRS = rotation;
+            }
+        }
+        
 
         private void Awake() {
             tilesetReader = GetComponent<Read3DTileset>();
         }
 
-        /// <summary>
-        /// Because the 3D Tile handler dynamically creates and destroys tiles, we need to collect a list of transforms
-        /// to reposition and calculate each their individual Coordinate, so that afetr shifting we can convert that
-        /// coordinate back to a Unity position. Because the calculation to a Unity position includes taking the origin
-        /// shift into account, it will thus reposition the tile to the correct location.
-        /// </summary>
+    
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             tilesToShift.Clear();
@@ -27,35 +40,35 @@ namespace Netherlands3D.Twin.FloatingOrigin
             var contentComponents = transform.GetComponentsInChildren<Content>();
             foreach (Content contentComponent in contentComponents)
             {
-                foreach (Transform child in contentComponent.transform)
-                {
-                    var baseCoordinate = new Coordinate(child.position);
-                    tilesToShift.Add(
-                        child, 
-                        baseCoordinate
-                    );
-                }
+                Coordinate position = new Coordinate(contentComponent.transform.position);
+                Quaternion rotation = Quaternion.Inverse(position.RotationToLocalGravityUp()) * transform.rotation;
+
+                tilesToShift.Add(
+                    contentComponent.transform,
+                    new PositionAndRotation(position, rotation)
+                );
             }
         }
         
-        public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
+
+public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
 #if UNITY_EDITOR
-            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} tiles</color>");
+            if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>{gameObject.name}: Shifting {tilesToShift.Count} children</color>");
 #endif
-
-            foreach (KeyValuePair<Transform,Coordinate> tile in tilesToShift)
+            foreach (KeyValuePair<Transform, PositionAndRotation> tile in tilesToShift)
             {
-                var coordinate = tile.Value;
-                var newPosition = coordinate.ToUnity();
+                var newPosition = tile.Value.coordinateInConnectedCRS.ToUnity();
+                var newRotation = tile.Value.coordinateInConnectedCRS.RotationToLocalGravityUp() * tile.Value.rotationInConnectedCRS;
 #if UNITY_EDITOR
                 if (worldTransform.Origin.LogShifts) Debug.Log($"<color=grey>| Shifting {tile.Key.gameObject.name} from {tile.Key.position} to {newPosition}</color>");
 #endif
                 tile.Key.position = newPosition;
+                tile.Key.rotation = newRotation;
             }
 
-            //Refresh 3D Tiles internal Bounds calculations
-            tilesetReader.RecalculateBounds();
+        //Refresh 3D Tiles internal Bounds calculations
+        tilesetReader.InvalidateBounds();
         }
     }
 }

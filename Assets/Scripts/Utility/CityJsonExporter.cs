@@ -58,12 +58,8 @@ namespace Netherlands3D.Twin
                 return;
             }
 
-            var unityCoordinate = new Coordinate(CoordinateSystem.Unity,
-                targetGameObject.transform.position.x,
-                targetGameObject.transform.position.y,
-                targetGameObject.transform.position.z
-            );
-            var rdCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RDNAP);
+            Coordinate targetCoordinate = new Coordinate(targetGameObject.transform.position);
+            var rdCoordinate = targetCoordinate.Convert(CoordinateSystem.RDNAP);
             var scale = targetGameObject.transform.localScale;
 
 

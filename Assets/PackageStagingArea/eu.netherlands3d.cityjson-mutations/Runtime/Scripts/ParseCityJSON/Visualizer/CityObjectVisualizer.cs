@@ -102,7 +102,7 @@ namespace Netherlands3D.T3DPipeline
         {
             var center = cityObject.AbsoluteCenter; 
             var coordinate = new Coordinate(cityObject.CoordinateSystem, center.x, center.y, center.z);
-            return CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.Unity).ToVector3();
+            return coordinate.ToUnity();
         }
 
 
@@ -315,12 +315,12 @@ namespace Netherlands3D.T3DPipeline
                 switch (coordinateSystem)
                 {
                     case CoordinateSystem.WGS84:
-                        var wgs = new Vector3WGS(relativeVert.x, relativeVert.y, relativeVert.z);
-                        convertedVert = CoordinateConverter.WGS84toUnity(wgs);
+                        var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
+                        convertedVert =wgs.ToUnity();
                         break;
                     case CoordinateSystem.RD:
-                        var rd = new Vector3RD(relativeVert.x, relativeVert.y, relativeVert.z);
-                        convertedVert = CoordinateConverter.RDtoUnity(rd);
+                        var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);
+                        convertedVert = rd.ToUnity();
                         break;
                     default:
                         convertedVert = new Vector3((float)relativeVert.x, (float)relativeVert.z, (float)relativeVert.y);

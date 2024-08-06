@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-            var unityCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
             StoreLocalUnityCoordinatesLists();
         }
 
@@ -39,13 +38,7 @@ namespace Netherlands3D.Twin
             for (int i = 0; i < positions.Count; i++)
             {
                 var point = positions[i];
-                var unityCoordinate = new Coordinate(
-                    CoordinateSystem.Unity, 
-                    point.x, 
-                    point.y, 
-                    point.z
-                );
-                var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+                var worldCoordinate = new Coordinate(point);
                 preshiftPolygonsCoordinates.Add(worldCoordinate);
             }
         }
@@ -59,9 +52,8 @@ namespace Netherlands3D.Twin
             for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
             {
                 var worldCoordinate = preshiftPolygonsCoordinates[i];
-                var unityCoordinate = CoordinateConverter.ConvertTo(worldCoordinate, CoordinateSystem.Unity);
-                var unityVector3Coordinate = new Vector3((float)unityCoordinate.Points[0], (float)unityCoordinate.Points[1], (float)unityCoordinate.Points[2]);
-                newPolygon.Add(unityVector3Coordinate);
+                var unityCoordinate = worldCoordinate.ToUnity();
+                newPolygon.Add(unityCoordinate);
             }
 
             // Trigger reapplied points
