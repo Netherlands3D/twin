@@ -107,8 +107,7 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if(Application.isPlaying)
-                UpdateVisuals();
+            UpdateVisuals();
         }
 
 #endif
@@ -184,7 +183,7 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
 
             m_Tracker.Clear();
 
-            if (fill != null)
+            if (fillArea != null)
             {
                 m_Tracker.Add(this, fill, DrivenTransformProperties.Anchors);
                 Vector2 anchorMin = Vector2.zero;
