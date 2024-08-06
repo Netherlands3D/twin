@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
@@ -23,22 +23,33 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
 
-        public string URL
+        private Tile3DLayerPropertyData propertyData;
+        public LayerPropertyData PropertyData => propertyData;
+
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => TilesetURLWithoutQuery(tileSet.tilesetUrl);
-            set
+            var tile3DLayerPropertyData = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
+            if (tile3DLayerPropertyData != null)
             {
-                //Always query parameters (tileset key's must be set via our credentials system)
-                string urlWithoutQuery = TilesetURLWithoutQuery(value);
+                this.propertyData = tile3DLayerPropertyData;
 
-                tileSet.tilesetUrl = urlWithoutQuery;
-                OnURLChanged.Invoke(urlWithoutQuery);
-
-                EnableTileset();
+                // if this game object is configured not to use property sections, we can assume
+                // a URL came preconfigured, and we ignore anything coming from the properties
+                // so that we always have the most recent version of the layer's data
+                if (usePropertySections)
+                {
+                    URL = propertyData.Url.ToString();
+                }
             }
         }
 
-        private string TilesetURLWithoutQuery(string value)
+        public string URL
+        {
+            get => StripUrlOfQueryString(tileSet.tilesetUrl);
+            set => OnURLChanged.Invoke(tileSet.tilesetUrl);
+        }
+
+        private string StripUrlOfQueryString(string value)
         {
             if(!value.Contains("?"))
                 return value;
@@ -48,6 +59,22 @@ namespace Netherlands3D.Twin.Layers
 
             var urlWithoutQuery = uriBuilder.Uri.ToString();
             return urlWithoutQuery;
+        }
+
+        /// <summary>
+        /// Updates the Url without calling the OnURLChanged event, that is directly tied to the
+        /// URL property. This method can be used for internal processes, such as setting properties
+        /// without causing a loop.
+        /// </summary>
+        /// <param name="url"></param>
+        private void UpdateUrl(Uri url)
+        {
+            //Always query parameters (tileset key's must be set via our credentials system)
+            string urlWithoutQuery = StripUrlOfQueryString(url.ToString());
+
+            tileSet.tilesetUrl = urlWithoutQuery;
+            
+            EnableTileset();
         }
 
         private void EnableTileset()
@@ -67,20 +94,45 @@ namespace Netherlands3D.Twin.Layers
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
-            
+            propertyData = new Tile3DLayerPropertyData(null);
+
             if (usePropertySections)
+            {
+                // only store the URL when we actually use property sections -and thus this
+                // layer is configurable- otherwise we ignore that a URL is stored and we assume
+                // it to be a pre-configured, and thus possibly changing, url.
+                propertyData.Url = new Uri(URL);
+                
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-            else
-                propertySections = new();
+            }
         }
 
-        private void OnEnable()
+        protected override void Start()
         {
+            base.Start();
+
+            // This is done by design, so that when the property's URL is changed outside of
+            // this layer, that it will update even if this layer is currently inactive.
+            propertyData.OnUrlChanged.AddListener(UpdateUrl);
+            
+            // The URL property on this game object's only responsibility is to set the URI in the
+            // propety data. The events invoked in the property data is then responsible for making
+            // sure all visualisations are applied, and thus the UpdateURL function is called
+            // whenever that changes.
+            this.OnURLChanged.AddListener((string url) => propertyData.Url = new Uri(url));
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
         }
         

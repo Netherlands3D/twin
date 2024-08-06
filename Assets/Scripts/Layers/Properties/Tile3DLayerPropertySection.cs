@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.LayerInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
