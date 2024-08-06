@@ -69,12 +69,12 @@ namespace Netherlands3D.Twin
 
         
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            
+
              //Use material color as layer color
             var layerColor = visualizationMaterial.color;
             layerColor.a = 1f;
             newLayer.LayerData.Color = layerColor;
-
+            newLayer.Name = geoJsonLayerName;
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
