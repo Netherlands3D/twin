@@ -23,6 +23,7 @@ namespace Netherlands3D.Twin.Layers
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         [JsonConstructor]
@@ -82,9 +83,8 @@ namespace Netherlands3D.Twin.Layers
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            base.OnLayerActiveInHierarchyChanged(activeInHierarchy);
             Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
         }
     }

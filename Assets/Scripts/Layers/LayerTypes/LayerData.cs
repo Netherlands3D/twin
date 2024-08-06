@@ -44,10 +44,9 @@ namespace Netherlands3D.Twin.Layers
                 activeSelf = value;
                 foreach (var child in ChildrenLayers)
                 {
-                    child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
+                    child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
                 }
 
-                OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
             }
         }
@@ -115,10 +114,6 @@ namespace Netherlands3D.Twin.Layers
         {
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
-        }
-
-        protected virtual void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
