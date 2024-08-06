@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin
                 geoJsonLayerName = localFile.SourceUrl;    
 
             var go = new GameObject(geoJsonLayerName);
-            var layer = go.AddComponent<GeoJSONLayer>();
+            var layer = go.AddComponent<GeoJsonLayerGameObject>();
 
             if (onErrorCallback != null)
                 layer.OnParseError.AddListener(onErrorCallback.Invoke);

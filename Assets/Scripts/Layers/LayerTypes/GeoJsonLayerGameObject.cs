@@ -16,33 +16,30 @@ using System.Linq;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJSONLayer : LayerGameObject, ILayerWithPropertyData
+    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public static float maxParseDuration = 0.01f;
         
-        private int maxFeatureVisualsPerFrame = 20;
-
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
-
         private GeoJSONPolygonLayer polygonFeatures;
-        private Material defaultVisualizationMaterial;
-        private bool randomizeColorPerFeature = false;
+        
+        [Header("Visualizer settings")]
+        [SerializeField] private int maxFeatureVisualsPerFrame = 20;
+        [SerializeField] private LineRenderer3D lineRenderer3DPrefab;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
+        [SerializeField] private Material defaultVisualizationMaterial;
+        [SerializeField] private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         public LayerPropertyData PropertyData => urlPropertyData;
-
         private GeoJSONLineLayer lineFeatures;
-        private LineRenderer3D lineRenderer3DPrefab;
 
+        [Space]
         public UnityEvent<string> OnParseError = new();
-
         private GeoJSONPointLayer pointFeatures;
-        private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
-
         private Coroutine streamParseCoroutine;
-
         private URLPropertyData urlPropertyData;
         
         public class URLPropertyData : LayerPropertyData
