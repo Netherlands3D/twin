@@ -18,7 +18,7 @@ using Netherlands3D.CartesianTiles;
 namespace Netherlands3D.Twin.Layers
 {
     /// <summary>
-    /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider
+    /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider.
     /// </summary>
     public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject, ILayerWithPropertyData
     {
