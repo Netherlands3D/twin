@@ -13,14 +13,7 @@ namespace Netherlands3D.Twin
 
         public void Execute(LocalFile localFile)
         {
-            var projectDataHandler = FindObjectOfType<ProjectDataHandler>();
-            if(!projectDataHandler)
-            {
-                Debug.LogError("Could not find ProjectDataHandler in scene. Cannot load NL3D file.");
-                return;
-            }
-
-            projectDataHandler.LoadFromFile(localFile.LocalFilePath);
+            ProjectDataHandler.Instance.LoadFromFile(localFile.LocalFilePath);
         }
     }
 }

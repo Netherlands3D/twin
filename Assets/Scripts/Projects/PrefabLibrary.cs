@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin
     public class PrefabGroup
     {
         public string groupName;
+        public bool autoPopulateUI;
         public List<LayerGameObject> prefabs;
     }
 

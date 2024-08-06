@@ -257,7 +257,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.6.2",
+      "version": "1.7.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -361,7 +361,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.4.0",
+      "version": "2.6.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {

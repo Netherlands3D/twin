@@ -7,8 +7,9 @@ namespace Netherlands3D.Twin.Layers
     {
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             RecalculateColorPriorities();
         }
 

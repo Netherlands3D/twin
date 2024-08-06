@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -222,6 +223,13 @@ namespace Netherlands3D.Twin.Projects
 
             var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
             referencedLayer.LayerData = proxyLayer;
+            
+            //add properties to the new layerData
+            var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
+            foreach (var property in layersWithPropertyData)
+            {
+                referencedLayer.LayerData.AddProperty(property.PropertyData);
+            }
         }
 
         public void RemoveLayer(LayerData layer)

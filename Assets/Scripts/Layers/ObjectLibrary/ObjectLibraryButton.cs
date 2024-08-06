@@ -28,6 +28,12 @@ namespace Netherlands3D.Twin
             button.onClick.RemoveListener(CreateObject);
         }
 
+        //for when this component is created at runtime
+        public void Initialize(GameObject prefab)
+        {
+            this.prefab = prefab;
+        }
+        
         protected virtual void CreateObject()
         {
             StartCoroutine(CreateObjectCoroutine());

@@ -1,4 +1,4 @@
-using System;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,8 +32,17 @@ namespace Netherlands3D.Twin.Layers
                     
                 return layerData;
             }
-            set => layerData = value;
+            set
+            {
+                layerData = value;
+                foreach (var layer in GetComponents<ILayerWithPropertyData>())
+                {
+                    layer.LoadProperties(layerData.LayerProperties);
+                }
+            }
         }
+
+
 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
@@ -54,7 +63,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
-        private void Start()
+        protected virtual void Start()
         {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, JsonProperty] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-
+        [SerializeField, JsonProperty] protected List<LayerPropertyData> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -43,10 +44,9 @@ namespace Netherlands3D.Twin.Layers
                 activeSelf = value;
                 foreach (var child in ChildrenLayers)
                 {
-                    child.LayerActiveInHierarchyChanged.Invoke(child.ActiveInHierarchy);
+                    child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
                 }
 
-                OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
             }
         }
@@ -75,6 +75,9 @@ namespace Netherlands3D.Twin.Layers
                 return ParentLayer.ActiveInHierarchy && activeSelf;
             }
         }
+
+        [JsonIgnore] public List<LayerPropertyData> LayerProperties => layerProperties;
+        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
@@ -113,15 +116,20 @@ namespace Netherlands3D.Twin.Layers
             LayerDeselected.Invoke(this);
         }
 
-        protected virtual void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-        }
-
-        public LayerData(string name)
+        public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
+        }
+
+        [JsonConstructor]
+        public LayerData(string name, List<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
+        {
+            Name = name;
+            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+                InitializeParent();
+            this.layerProperties = layerProperties;
         }
 
         public void SetParent(LayerData newParent, int siblingIndex = -1)
@@ -174,6 +182,16 @@ namespace Netherlands3D.Twin.Layers
 
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
+        }
+
+        public void AddProperty(LayerPropertyData propertyData)
+        {
+            layerProperties.Add(propertyData);
+        }
+
+        public void RemoveProperty(LayerPropertyData propertyData)
+        {
+            layerProperties.Remove(propertyData);
         }
     }
 }

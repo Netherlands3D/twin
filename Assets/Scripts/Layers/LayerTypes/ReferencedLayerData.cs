@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -11,26 +13,27 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, JsonProperty] private string prefabId;
         [JsonIgnore] public LayerGameObject Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
-        
+
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
             Reference = reference;
             prefabId = reference.PrefabIdentifier;
-            
+
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         [JsonConstructor]
-        public ReferencedLayerData(string name, string prefabId) : base(name)
+        public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
             this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.LayerData = this;
-            
+
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
@@ -80,9 +83,8 @@ namespace Netherlands3D.Twin.Layers
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            base.OnLayerActiveInHierarchyChanged(activeInHierarchy);
             Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
         }
     }
