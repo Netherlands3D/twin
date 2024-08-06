@@ -12,11 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abb461abbd5fb4b08a2a3620bb76c433, type: 3}
   m_Name: GeoJSONImportAdapter
   m_EditorClassIdentifier: 
-  visualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
-    type: 2}
-  lineRenderer3D: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
-    type: 3}
-  pointRenderer3D: {fileID: -4723935055048165154, guid: 5174e2e7a4c654e2ead494648a2604fd,
+  layerPrefab: {fileID: -2311983791405174025, guid: e46381d2665c69245b2475c986f6d0c4,
     type: 3}
   displayErrorMessageEvent:
     m_PersistentCalls:
@@ -33,3 +29,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  visualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
+    type: 2}
