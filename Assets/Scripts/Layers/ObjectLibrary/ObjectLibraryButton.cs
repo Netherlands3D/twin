@@ -28,6 +28,12 @@ namespace Netherlands3D.Twin
             button.onClick.RemoveListener(CreateObject);
         }
 
+        //for when this component is created at runtime
+        public void Initialize(GameObject prefab)
+        {
+            this.prefab = prefab;
+        }
+        
         protected virtual void CreateObject()
         {
             StartCoroutine(CreateObjectCoroutine());
@@ -56,9 +62,9 @@ namespace Netherlands3D.Twin
             
             var newObject = Instantiate(prefab, spawnPoint, Quaternion.Euler(initialRotation));
             newObject.transform.localScale = initialScale;
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayer>();
+            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<HierarchicalObjectLayer>();
+                layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
             
             layerComponent.Name = prefab.name;
 

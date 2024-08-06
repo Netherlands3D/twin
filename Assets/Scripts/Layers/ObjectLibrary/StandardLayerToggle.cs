@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         { 
             tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(FindObjectsInactive.Include);
             layerParent = tileHandler.transform;
-            layer = tileHandler.layers.FirstOrDefault(l => l.GetComponent<CartesianTileLayer>().PrefabIdentifier == prefab.GetComponent<CartesianTileLayer>().PrefabIdentifier)?.GetComponent<CartesianTileLayer>();
+            layerGameObject = tileHandler.layers.FirstOrDefault(l => l.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier == prefab.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier)?.GetComponent<CartesianTileLayerGameObject>();
             base.OnEnable();
         }
     }

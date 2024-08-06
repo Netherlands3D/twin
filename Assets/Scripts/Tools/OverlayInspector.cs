@@ -5,12 +5,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 {
     public class OverlayInspector : MonoBehaviour
     {
-        private ReferencedLayer referencedLayer;
-        public ReferencedLayer ReferencedLayer { get => referencedLayer; }
+        private LayerGameObject layerGameObject;
+        public LayerGameObject LayerGameObject { get => layerGameObject; }
 
-        public virtual void SetReferencedLayer(ReferencedLayer layer)
+        public virtual void SetReferencedLayer(LayerGameObject layerGameObject)
         {
-            referencedLayer = layer;
+            this.layerGameObject = layerGameObject;
         }
 
         public virtual void CloseOverlay()

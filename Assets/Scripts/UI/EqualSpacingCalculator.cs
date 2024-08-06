@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ namespace Netherlands3D.Twin
     {
         private GridLayoutGroup gridLayoutGroup;
         private RectTransform rt;
-        [SerializeField] private LayoutGroup[] additionalLayoutGroups;
+        [SerializeField] private List<LayoutGroup> additionalLayoutGroups;
 
         public float Spacing => gridLayoutGroup.spacing.x;
 
@@ -57,16 +58,27 @@ namespace Netherlands3D.Twin
 
             foreach (var layoutGroup in additionalLayoutGroups)
             {
-                layoutGroup.padding.left = Mathf.RoundToInt(Spacing);
-                layoutGroup.padding.right = Mathf.RoundToInt(Spacing);
-
-                if (layoutGroup is GridLayoutGroup)
-                {
-                    ((GridLayoutGroup)layoutGroup).spacing = gridLayoutGroup.spacing;
-                }
+                ApplySpacing(layoutGroup);
             }
         }
 
+        private void ApplySpacing(LayoutGroup layoutGroup)
+        {
+            layoutGroup.padding.left = Mathf.RoundToInt(Spacing);
+            layoutGroup.padding.right = Mathf.RoundToInt(Spacing);
+
+            if (layoutGroup is GridLayoutGroup)
+            {
+                ((GridLayoutGroup)layoutGroup).spacing = gridLayoutGroup.spacing;
+            }
+        }
+
+        public void AddLayoutGroup(LayoutGroup group)
+        {
+            additionalLayoutGroups.Add(group);
+            ApplySpacing(group);
+        }
+        
         public void RecalculateAllSpacings()
         {
             CalculateSpacing();

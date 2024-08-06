@@ -28,8 +28,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void Awake()
         {
-            worldTransformShifter = GetComponent<WorldTransformShifter>();
-            if (worldTransformShifter == null)
+            if (!TryGetComponent(out worldTransformShifter))
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
