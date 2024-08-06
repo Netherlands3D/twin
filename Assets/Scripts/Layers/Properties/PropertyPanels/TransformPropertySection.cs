@@ -2,13 +2,13 @@ using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
 using RuntimeHandle;
-using TMPro;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class TransformPropertySection : AbstractHierarchicalObjectPropertySection
     {
+        private TransformLayerPropertyData transformPropertyData;
         private HierarchicalObjectLayerGameObject layerGameObject;
 
         [Serializable]
@@ -25,42 +25,71 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private const string percentageCharacter = "%";
 
-        public override HierarchicalObjectLayerGameObject LayerGameObject
+        public override HierarchicalObjectLayerGameObject LayerGameObject //todo: possibly remove this and replace it with a direct reference to the TransformLayerProperty
         {
             get => layerGameObject;
             set
             {
                 layerGameObject = value;
-                UpdatePositionFields();
-                UpdateRotationFields();
-                UpdateScalingFields();
+                var layerWithPropertyData = layerGameObject as ILayerWithPropertyData;
+                TransformPropertyData = layerWithPropertyData.PropertyData as TransformLayerPropertyData;
+            }
+        }
+
+        private TransformLayerPropertyData TransformPropertyData
+        {
+            get => transformPropertyData;
+            set
+            {
+                if (transformPropertyData != null)
+                {
+                    TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+                    TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+                    TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
+                }
+
+                transformPropertyData = value;
+
+                transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
+                transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
+                transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
+
+                UpdatePositionFields(transformPropertyData.Position);
+                UpdateRotationFields(transformPropertyData.EulerRotation);
+                UpdateScalingFields(transformPropertyData.LocalScale);
 
                 SetTransformLocks();
             }
         }
-        
-        private void Start()
+
+        private void OnEnable()
         {
             position.xField.onEndEdit.AddListener(OnPositionChanged);
             position.yField.onEndEdit.AddListener(OnPositionChanged);
             position.zField.onEndEdit.AddListener(OnPositionChanged);
             rotation.xField.onEndEdit.AddListener(OnRotationChanged);
             rotation.yField.onEndEdit.AddListener(OnRotationChanged);
-            rotation.zField.onEndEdit.AddListener(OnRotationChanged);        
+            rotation.zField.onEndEdit.AddListener(OnRotationChanged);
             scale.xField.onEndEdit.AddListener(OnScaleChanged);
             scale.yField.onEndEdit.AddListener(OnScaleChanged);
             scale.zField.onEndEdit.AddListener(OnScaleChanged);
         }
 
-        private void Update()
+        private void OnDisable()
         {
-            if (layerGameObject.transform.hasChanged)
-            {
-                UpdatePositionFields();
-                UpdateRotationFields();
-                UpdateScalingFields();
-                layerGameObject.transform.hasChanged = false;
-            }
+            position.xField.onEndEdit.RemoveListener(OnPositionChanged);
+            position.yField.onEndEdit.RemoveListener(OnPositionChanged);
+            position.zField.onEndEdit.RemoveListener(OnPositionChanged);
+            rotation.xField.onEndEdit.RemoveListener(OnRotationChanged);
+            rotation.yField.onEndEdit.RemoveListener(OnRotationChanged);
+            rotation.zField.onEndEdit.RemoveListener(OnRotationChanged);
+            scale.xField.onEndEdit.RemoveListener(OnScaleChanged);
+            scale.yField.onEndEdit.RemoveListener(OnScaleChanged);
+            scale.zField.onEndEdit.RemoveListener(OnScaleChanged);
+
+            TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+            TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+            TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
         }
 
         private void SetTransformLocks()
@@ -96,55 +125,47 @@ namespace Netherlands3D.Twin.Layers.Properties
             double.TryParse(position.xField.Text, out var x);
             double.TryParse(position.yField.Text, out var y);
             double.TryParse(position.zField.Text, out var z);
-            
+
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-
-            var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
-
-            layerGameObject.transform.position = unityCoordinate;
+            TransformPropertyData.Position = rdCoordinate;
         }
-        
+
         private void OnRotationChanged(string axisValue)
         {
             float.TryParse(rotation.xField.Text, out var x);
             float.TryParse(rotation.yField.Text, out var y);
             float.TryParse(rotation.zField.Text, out var z);
 
-            layerGameObject.transform.eulerAngles = new Vector3(x, y, z);
+            TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
-        
+
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.Text.Replace(percentageCharacter,""), out var x);
-            float.TryParse(scale.yField.Text.Replace(percentageCharacter,""), out var y);
-            float.TryParse(scale.zField.Text.Replace(percentageCharacter,""), out var z);
+            float.TryParse(scale.xField.Text.Replace(percentageCharacter, ""), out var x);
+            float.TryParse(scale.yField.Text.Replace(percentageCharacter, ""), out var y);
+            float.TryParse(scale.zField.Text.Replace(percentageCharacter, ""), out var z);
 
-            layerGameObject.transform.localScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
-
-            UpdateScalingFields();
+            TransformPropertyData.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
         }
-        
-        private void UpdatePositionFields()
+
+        private void UpdatePositionFields(Coordinate coordinate)
         {
-            var rdCoordinate = ConvertLayerPositionToRd(layerGameObject);
+            var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
+
             position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
             position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
             position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));
         }
 
-        private void UpdateRotationFields()
+        private void UpdateRotationFields(Vector3 eulerAngles)
         {
-            var eulerAngles = layerGameObject.transform.localEulerAngles;
-
             rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
             rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
             rotation.zField.SetTextWithoutNotify(eulerAngles.z.ToString("0.00", CultureInfo.InvariantCulture));
         }
 
-        private void UpdateScalingFields()
+        private void UpdateScalingFields(Vector3 localScale)
         {
-            var localScale = layerGameObject.transform.localScale;
-
             var xPercentage = localScale.x * 100;
             var yPercentage = localScale.y * 100;
             var zPercentage = localScale.z * 100;
@@ -152,19 +173,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
             scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
             scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
-        }
-
-        private Coordinate ConvertLayerPositionToRd(HierarchicalObjectLayerGameObject origin)
-        {
-            var transformPosition = origin.transform.position;
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity, 
-                transformPosition.x, 
-                transformPosition.y,
-                transformPosition.z
-            );
-
-            return CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RDNAP);
         }
     }
 }

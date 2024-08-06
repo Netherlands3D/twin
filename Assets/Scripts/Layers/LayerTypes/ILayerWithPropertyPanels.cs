@@ -3,7 +3,7 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
-    public interface ILayerWithProperties
+    public interface ILayerWithPropertyPanels
     {
         public List<IPropertySectionInstantiator> GetPropertySections();
     }

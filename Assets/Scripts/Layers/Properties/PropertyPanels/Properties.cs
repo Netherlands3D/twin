@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             Hide();
         }
         
-        public void Show(ILayerWithProperties layer)
+        public void Show(ILayerWithPropertyPanels layer)
         {
             card.SetActive(true);
             sections.ClearAllChildren();
@@ -45,11 +45,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             sections.ClearAllChildren();
         }
         
-        public static ILayerWithProperties TryFindProperties(LayerData layer)
+        public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
         {
             var layerProxy = layer as ReferencedLayerData;
 
-            return (layerProxy == null) ? layer as ILayerWithProperties : layerProxy.Reference as ILayerWithProperties;
+            return (layerProxy == null) ? layer as ILayerWithPropertyPanels : layerProxy.Reference as ILayerWithPropertyPanels;
         }
     }
 }
