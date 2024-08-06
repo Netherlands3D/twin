@@ -32,13 +32,20 @@ namespace Netherlands3D.Twin.Layers
                 lineRenderer3D = value;
             }
         }
+        
 
         public GeoJSONLineLayer(string name) : base(name)
         {
             ProjectData.Current.AddStandardLayer(this);
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        ~GeoJSONLineLayer()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
         
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }

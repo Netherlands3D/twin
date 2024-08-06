@@ -74,6 +74,13 @@ namespace Netherlands3D.Twin.Layers
             worldTransformShifter.polygonSelectionLayer = this;
             PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
             worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
+            
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        ~PolygonSelectionLayer()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
 
         private void ShiftedPolygon(List<Vector3> newPolygon)
@@ -203,7 +210,7 @@ namespace Netherlands3D.Twin.Layers
             return polygonVisualisation;
         }
 
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
         }

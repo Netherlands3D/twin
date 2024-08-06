@@ -33,9 +33,15 @@ namespace Netherlands3D.Twin.Layers
         public GeoJSONPointLayer(string name) : base(name)
         {
             ProjectData.Current.AddStandardLayer(this);
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        ~GeoJSONPointLayer()
+        {
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
         
-        protected override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
