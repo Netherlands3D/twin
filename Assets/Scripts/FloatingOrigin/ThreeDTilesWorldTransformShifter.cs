@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.FloatingOrigin
 {
+    /// <summary>
+    /// when the 3DTileHandler needs to load geometry for the content of a tile, it creates a child-gameobject containing
+    /// a Content-component. this component takes care of the loading and positioning of the geometry. 
+    /// the child-gameobject is destroyed when it is no longer needed. 
+    /// Depending on the loaded geometry, these child-gameobjects can have multiple children itself.
+    /// to move all the 3dtile-geometry, we need to move all the gameobjects containing a Content-component.
+    /// </summary>
     public class ThreeDTilesWorldTransformShifter : WorldTransformShifter
     {
         private Dictionary<Transform, PositionAndRotation> tilesToShift = new();
@@ -25,12 +32,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             tilesetReader = GetComponent<Read3DTileset>();
         }
 
-        /// <summary>
-        /// Because the 3D Tile handler dynamically creates and destroys tiles, we need to collect a list of transforms
-        /// to reposition and calculate each their individual Coordinate, so that afetr shifting we can convert that
-        /// coordinate back to a Unity position. Because the calculation to a Unity position includes taking the origin
-        /// shift into account, it will thus reposition the tile to the correct location.
-        /// </summary>
+    
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             tilesToShift.Clear();
