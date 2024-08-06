@@ -51,14 +51,16 @@ namespace Netherlands3D.Twin
 
         public void ParseGeoJSON(LocalFile localFile)
         {
+            //Create random color material instance so every GeoJSON layer import gets a unique colors for now
             var randomColorVisualisationMaterial = new Material(visualizationMaterial);
             var randomColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
             randomColor.a = visualizationMaterial.color.a;
             randomColorVisualisationMaterial.color = randomColor;
+
             CreateGeoJSONLayer(localFile, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
         }
 
-        public static GeoJSONLayer CreateGeoJSONLayer(LocalFile localFile, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
+        private void CreateGeoJSONLayer(LocalFile localFile, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
@@ -74,7 +76,6 @@ namespace Netherlands3D.Twin
 
             layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
             layer.StreamParseGeoJSON(fullPath);
-            return layer;
         }
     }
 }
