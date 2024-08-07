@@ -2,6 +2,7 @@ using Netherlands3D.Twin;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Netherlands3D.CartesianTiles
@@ -122,6 +123,20 @@ namespace Netherlands3D.CartesianTiles
                 mat.color = new Color(tileColor.r, tileColor.g, tileColor.b, 1f);
             }
 
+            //add measuring text to the hexagon object
+            GameObject textObject = new GameObject();
+            TextMeshPro textMesh = textObject.AddComponent<TextMeshPro>();
+            textMesh.fontSize = 150;
+            RectTransform rt = textMesh.rectTransform;
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 75);
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 75);
+            textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n waarde: \n" + hex.value.ToString();
+            textMesh.alignment = TextAlignmentOptions.Center;
+            
+            textObject.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 30));
+            textObject.transform.SetParent(t.transform);
+            textObject.transform.localPosition = new Vector3(0,0,0.006f);
+
             //previous selected object should already be deactivated so we can use the ref again            
             selectedHexagonObject = t;
             t.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 30));
@@ -129,6 +144,7 @@ namespace Netherlands3D.CartesianTiles
             t.transform.position = new Vector3(tilePosition.x, 0, tilePosition.y);
             float scale = hexHeight * 0.5f / innerColumns * tileSize * div2_sqr3 * 2 * 100;
             Vector3 targetScale = new Vector3(scale, scale, 0);
+            textObject.transform.localScale = Vector3.one / scale;
             t.transform.localScale = targetScale;
 
             //animate the object to scale up
