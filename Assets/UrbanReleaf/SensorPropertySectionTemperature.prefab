@@ -593,7 +593,22 @@ PrefabInstance:
     - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
       propertyPath: m_fontSize
-      value: 11
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144510303773734006, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_PreferredWidth
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5480299388995647035, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
@@ -1492,7 +1507,7 @@ PrefabInstance:
     - target: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       propertyPath: m_Name
-      value: SensorPropertySection
+      value: SensorPropertySectionTemperature
       objectReference: {fileID: 0}
     - target: {fileID: 7643103102407970522, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
@@ -2110,7 +2125,22 @@ PrefabInstance:
     - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}
       propertyPath: m_fontSize
-      value: 11
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4855033384858789528, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144510303773734006, guid: 377efc921fcd2af49839b3b3d19a4087,
+        type: 3}
+      propertyPath: m_PreferredWidth
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5480299388995647035, guid: 377efc921fcd2af49839b3b3d19a4087,
         type: 3}

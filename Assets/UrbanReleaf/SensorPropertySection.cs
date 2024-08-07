@@ -1,4 +1,5 @@
 using Netherlands3D.CartesianTiles;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,8 +28,20 @@ namespace Netherlands3D.Twin.Layers.Properties
                 controller = value;
                 if (projectionLayer == null)
                     projectionLayer = controller.gameObject.GetComponent<SensorProjectionLayer>();
-                startTimeSlider.value = controller.StartTimeSeconds / daySeconds;
-                endTimeSlider.value = controller.EndTimeSeconds / daySeconds;
+
+
+                startTimeSlider.minValue = 0;
+                startTimeSlider.maxValue = SensorDataController.MaxDays;
+                DateTime defaultStartDate = controller.DefaultStartDate;
+                TimeSpan span = DateTime.Now - defaultStartDate;
+                startTimeSlider.value = (float)span.TotalDays;
+
+                endTimeSlider.minValue = 0;
+                endTimeSlider.maxValue = SensorDataController.MaxDays;
+                DateTime defaultEndDate = controller.DefaultEndDate;
+                span = DateTime.Now - defaultEndDate;
+                endTimeSlider.value = (float)span.TotalDays;
+
                 minSlider.value = controller.Minimum;
                 maxSlider.value = controller.Maximum;
                 minimumColorPicker.color = controller.MinColor;

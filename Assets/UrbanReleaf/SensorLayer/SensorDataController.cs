@@ -1,5 +1,6 @@
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,19 +17,22 @@ namespace Netherlands3D.Twin
         public float Minimum;        
         public Color MaxColor;
         public Color MinColor;  
-        public int StartTimeSeconds { get { return startTimeWindowSeconds; } set { startTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * maxDays); } }
-        public int EndTimeSeconds { get { return endTimeWindowSeconds; } set { endTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * maxDays); } }
+        public int StartTimeSeconds { get { return startTimeWindowSeconds; } set { startTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * MaxDays); } }
+        public int EndTimeSeconds { get { return endTimeWindowSeconds; } set { endTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * MaxDays); } }
+        public DateTime DefaultStartDate { get { return defaultStartDate; } }
+        public DateTime DefaultEndDate { get { return defaultEndDate; } }
         public int Observations { get { return observationLimit; } set { observationLimit = Mathf.Clamp(value, 1, 5000); } }
 
         private const int daySeconds = 3600 * 24;
-        private const int maxDays = 1000;
+        public const int MaxDays = 365;
         protected List<SensorCell> cells = new List<SensorCell>();   
         protected List<SensorCell> staticCells = new List<SensorCell>();        
         protected float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
         protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
-        protected int startTimeWindowSeconds = maxDays * daySeconds;
+        protected int startTimeWindowSeconds = MaxDays * daySeconds;
         protected int endTimeWindowSeconds = daySeconds;
-        
+        protected DateTime defaultStartDate = new();
+        protected DateTime defaultEndDate = new();
 
         public struct SensorCell
         {

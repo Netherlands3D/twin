@@ -14,8 +14,9 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
         private Slider slider;
         [SerializeField] private bool readOnly;
         [SerializeField] private TMP_Text valueField;
-        private const string timeFormatSpecifier = "s";
-        private const int daysToSeconds = 3600 * 24;
+        private const string timeFormatSpecifier = "d";
+        private const int dayToSeconds = 3600 * 24;
+        private DateTimeFormatInfo dtfi = CultureInfo.GetCultureInfo("fr-FR").DateTimeFormat;
 
         private void Awake()
         {
@@ -28,10 +29,10 @@ namespace Netherlands3D.Twin.UI.Elements.Properties
 
         private void OnValueChanged(float value)
         {
-            int seconds = (int)value * daysToSeconds;
+            int seconds = (int)value * dayToSeconds;
             DateTime now = DateTime.Now;
             DateTime point = now.AddSeconds(-seconds);
-            string timeString = point.ToString(timeFormatSpecifier);
+            string timeString = point.ToString(timeFormatSpecifier, dtfi);
             valueField.text = timeString;
         }
     }
