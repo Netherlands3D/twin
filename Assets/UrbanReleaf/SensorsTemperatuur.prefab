@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -5673596216332244454}
   - component: {fileID: -1830606201930232543}
   - component: {fileID: -4199356597631158015}
+  - component: {fileID: -2270055792247843345}
   m_Layer: 0
   m_Name: SensorsTemperatuur
   m_TagString: Untagged
@@ -92,6 +93,10 @@ MonoBehaviour:
   Minimum: 10
   MaxColor: {r: 1, g: 0, b: 0, a: 1}
   MinColor: {r: 0, g: 0.07468295, b: 1, a: 1}
+  HexagonSelectionPrefabEmpty: {fileID: 163732822759528096, guid: 96759158917151048a44df37d28d88d9,
+    type: 3}
+  HexagonSelectionPrefabValue: {fileID: 163732822759528096, guid: e117150540d8b5f44afcf333eb19bb4b,
+    type: 3}
 --- !u!114 &-3615321823364236960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,3 +193,15 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-2270055792247843345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd667b8091076344b559d357447d06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

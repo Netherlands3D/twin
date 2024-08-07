@@ -15,7 +15,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Slider maxSlider;
         [SerializeField] private ColorPicker minimumColorPicker;
         [SerializeField] private ColorPicker maximumColorPicker;
-        private const int daySeconds = 3600 * 24;
 
         public SensorDataController Controller
         {
@@ -71,7 +70,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleStartTimeSeconds(float newValue)
         {
-            int value = (int)newValue * daySeconds;
+            int value = (int)newValue * SensorDataController.DaySeconds;
             if(value != controller.EndTimeSeconds)
                 projectionLayer.SetVisibleTilesDirty();
             controller.StartTimeSeconds = value;            
@@ -79,7 +78,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HandleEndTimeSeconds(float newValue)
         {
-            int value = (int)newValue * daySeconds;
+            int value = (int)newValue * SensorDataController.DaySeconds;
             if(value != controller.EndTimeSeconds)
                 projectionLayer.SetVisibleTilesDirty();
             controller.EndTimeSeconds = value;            

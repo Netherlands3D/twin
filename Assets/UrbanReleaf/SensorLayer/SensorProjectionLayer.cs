@@ -28,6 +28,8 @@ namespace Netherlands3D.CartesianTiles
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        
+        public SensorDataController SensorDataController { get { return dataController; } private set { } }
+
         private SensorDataController dataController;
         private float lastUpdatedTimeStamp = 0;
         private float lastUpdatedInterval = 1f;
@@ -35,6 +37,15 @@ namespace Netherlands3D.CartesianTiles
         private List<TileChange> queuedChanges = new List<TileChange>();
         private WaitForSeconds wfs = new WaitForSeconds(0.5f);
         private Coroutine updateTilesRoutine = null;
+
+        public TileSensorDataController GetTileController(Vector2Int key)
+        {
+            if(tiles.ContainsKey(key))
+            {
+                return tiles[key].gameObject.GetComponent<TileSensorDataController>();
+            }
+            return null;
+        }
 
         protected override Tile CreateNewTile(Vector2Int tileKey)
         {

@@ -17,20 +17,24 @@ namespace Netherlands3D.Twin
         public float Minimum;        
         public Color MaxColor;
         public Color MinColor;  
-        public int StartTimeSeconds { get { return startTimeWindowSeconds; } set { startTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * MaxDays); } }
-        public int EndTimeSeconds { get { return endTimeWindowSeconds; } set { endTimeWindowSeconds = Mathf.Clamp(value, 0, daySeconds * MaxDays); } }
+        public int StartTimeSeconds { get { return startTimeWindowSeconds; } set { startTimeWindowSeconds = Mathf.Clamp(value, 0, DaySeconds * MaxDays); } }
+        public int EndTimeSeconds { get { return endTimeWindowSeconds; } set { endTimeWindowSeconds = Mathf.Clamp(value, 0, DaySeconds * MaxDays); } }
         public DateTime DefaultStartDate { get { return defaultStartDate; } }
         public DateTime DefaultEndDate { get { return defaultEndDate; } }
         public int Observations { get { return observationLimit; } set { observationLimit = Mathf.Clamp(value, 1, 5000); } }
 
-        private const int daySeconds = 3600 * 24;
+        public GameObject HexagonSelectionPrefabEmpty;
+        public GameObject HexagonSelectionPrefabValue;
+
+
+        public const int DaySeconds = 3600 * 24;
         public const int MaxDays = 365;
         protected List<SensorCell> cells = new List<SensorCell>();   
         protected List<SensorCell> staticCells = new List<SensorCell>();        
         protected float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
         protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
-        protected int startTimeWindowSeconds = MaxDays * daySeconds;
-        protected int endTimeWindowSeconds = daySeconds;
+        protected int startTimeWindowSeconds = MaxDays * DaySeconds;
+        protected int endTimeWindowSeconds = DaySeconds;
         protected DateTime defaultStartDate = new();
         protected DateTime defaultEndDate = new();
 
@@ -60,7 +64,33 @@ namespace Netherlands3D.Twin
             );
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
             return new double[2] { coord.Points[1], coord.Points[0] };
-        }               
+        }  
+        
+        public Vector2Int GetTileKeyFromUnityPosition(Vector3 position, int tileSize)
+        {
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                position.x,
+                position.y,
+                position.z
+            );
+            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            Vector2Int key = new Vector2Int(Mathf.RoundToInt(((float)coord.Points[0] - 0.5f * tileSize) / 1000) * 1000, Mathf.RoundToInt(((float)coord.Points[1] - 0.5f * tileSize) / 1000) * 1000);
+            return key;
+        }
+
+        public Vector2Int GetRDPositionFromUnityPosition(Vector3 position)
+        {
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                position.x,
+                position.y,
+                position.z
+            );
+            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            Vector2Int key = new Vector2Int((int)coord.Points[0], (int)coord.Points[1]);
+            return key;
+        }
         
         public virtual string GeneratePolygonUrlForTile(Tile tile)
         {

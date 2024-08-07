@@ -1,4 +1,6 @@
 using Netherlands3D.Twin;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +26,17 @@ namespace Netherlands3D.CartesianTiles
         private float hexagonEdgeWidth = 0.03f;
         private Vector2 tileHexagonOffset = Vector2.zero;
         private List<SensorDataController.SensorCell> localCells;
+        private SensorHexagon[,] hexagons = new SensorHexagon[columns, rows];
+        private GameObject selectedHexagonObject;
+        private float animationSpeed = 30f;
+        private Vector2Int lastSelectedHexagonIndex;
+
+        public struct SensorHexagon
+        {
+            public float value;
+            public int measurements;
+            public Color color;
+        }
         
         public void Initialize()
         {
@@ -51,7 +64,88 @@ namespace Netherlands3D.CartesianTiles
             ClearCells();
             List<SensorDataController.SensorCell> cells = controller.GetSensorCellsForTile(tile);
             localCells = new List<SensorDataController.SensorCell>(cells);
-        }       
+        }    
+
+        public void DeactivateHexagon()
+        {
+            if (selectedHexagonObject != null)
+            {                
+                //animate the object to scale down
+                StartCoroutine(AnimateHexagon(selectedHexagonObject, animationSpeed, 0, instance =>
+                {
+                    if(instance != null)
+                        Destroy(instance);
+                }));                
+            }
+        }
+        
+        public void ActivateHexagon(Vector3 position, int tileSize, SensorDataController controller)
+        { 
+            int innerColumns = columns - 1;
+            int rowsInner = rows - 1;
+            Vector2 pos = new Vector2(position.x, position.z);
+            Vector2 localPosition = new Vector2(
+                pos.x - transform.position.x - tileSize * 0.5f,
+                pos.y - transform.position.z - tileSize * 0.5f
+                );
+            Vector2Int index = HexagonPositionToIndex((localPosition.x + tileSize) / tileSize * innerColumns - tileHexagonOffset.x, (localPosition.y + tileSize) / tileSize * rowsInner - tileHexagonOffset.y);
+            if (lastSelectedHexagonIndex == index)
+            {
+                return;
+            }
+            DeactivateHexagon();
+            lastSelectedHexagonIndex = index;
+
+          
+
+            //lets convert it back from index to be sure of the right position
+            Vector2 testPos = HexagonIndexToPosition(index.x, index.y);
+            testPos += tileHexagonOffset;
+            Vector2 tilePosition = new Vector2(
+                testPos.x / innerColumns * tileSize + transform.position.x - tileSize * 0.5f,
+                testPos.y / rowsInner * tileSize + transform.position.z - tileSize * 0.5f
+                );
+
+            SensorHexagon hex = hexagons[index.x, index.y];
+            Color tileColor = hex.color;
+            GameObject t;
+            if (hex.measurements == 0)
+            {
+                t = Instantiate(controller.HexagonSelectionPrefabEmpty);
+                Material mat = t.GetComponent<MeshRenderer>().material;
+                mat.color = new Color(tileColor.r, tileColor.g, tileColor.b, 0.5f);
+            }
+            else
+            {
+                t = Instantiate(controller.HexagonSelectionPrefabValue);
+                Material mat = t.GetComponent<MeshRenderer>().material;
+                mat.color = new Color(tileColor.r, tileColor.g, tileColor.b, 1f);
+            }
+
+            //previous selected object should already be deactivated so we can use the ref again            
+            selectedHexagonObject = t;
+            t.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 30));
+
+            t.transform.position = new Vector3(tilePosition.x, 0, tilePosition.y);
+            float scale = hexHeight * 0.5f / innerColumns * tileSize * div2_sqr3 * 2 * 100;
+            Vector3 targetScale = new Vector3(scale, scale, 0);
+            t.transform.localScale = targetScale;
+
+            //animate the object to scale up
+            StartCoroutine(AnimateHexagon(t, animationSpeed, scale));
+        }
+
+        private IEnumerator AnimateHexagon(GameObject instance, float speed, float height, Action<GameObject> onEnd = null)
+        {
+            Vector3 targetScale = new Vector3(instance.transform.localScale.x, instance.transform.localScale.y, height);
+            while(instance != null && Mathf.Abs(instance.transform.localScale.z - height) > 100)
+            {
+                instance.transform.localScale = Vector3.Slerp(instance.transform.localScale, targetScale, Time.deltaTime * speed);
+                yield return new WaitForUpdate();
+            }
+            instance.transform.localScale = targetScale;
+            onEnd?.Invoke(instance);
+        }
 
         public void UpdateTexture(Tile tile, SensorDataController controller)
         {         
@@ -67,6 +161,8 @@ namespace Netherlands3D.CartesianTiles
 
             ClearTexture(pixels);
 
+            hexagons = new SensorHexagon[columns, rows];
+
             for (int row = 0; row < rows; row++)
                 for (int col = 0; col < columns; col++)
                 {
@@ -77,11 +173,14 @@ namespace Netherlands3D.CartesianTiles
                         position.x / columnsInner * tile.layer.tileSize + tile.gameObject.transform.position.x - tile.layer.tileSize * 0.5f,
                         position.y / rowsInner * tile.layer.tileSize + tile.gameObject.transform.position.z - tile.layer.tileSize * 0.5f
                         );
-                    
+
+                    //TestHexagon(tile, tilePosition, columnsInner);
+
                     //get the average cell value from datapoints
                     //because of floating point approximation lets add +0.001f * tilesize 
-                    bool hasValues;                    
-                    float value = GetValueForHexagon(tilePosition, hexHeight * 0.5f / columnsInner * tile.layer.tileSize * div2_sqr3 + tile.layer.tileSize * 0.001f, out hasValues);                    
+                    bool hasValues;
+                    int measurements;
+                    float value = GetValueForHexagon(tilePosition, hexHeight * 0.5f / columnsInner * tile.layer.tileSize * div2_sqr3 + tile.layer.tileSize * 0.001f, out hasValues, out measurements);                    
                     if (!hasValues && !hexagonalPatternEnabled)
                         continue;
 
@@ -98,6 +197,12 @@ namespace Netherlands3D.CartesianTiles
                     {
                         valueColor.a = 0.0f;
                     }
+
+                    SensorHexagon hex = new SensorHexagon();
+                    hex.value = value;
+                    hex.measurements = measurements;
+                    hex.color = valueColor;
+                    hexagons[col, row] = hex;
 
                     //generate the hexagon pixels
                     Vector2 texPosition = new Vector2(position.x / columnsInner * textureWidth, position.y / rowsInner * textureHeight);
@@ -136,8 +241,9 @@ namespace Netherlands3D.CartesianTiles
             dataTexture.Apply();
         }
         
-        private float GetValueForHexagon(Vector2 hexagonPosition, float hexagonRadius, out bool hasValues)
+        private float GetValueForHexagon(Vector2 hexagonPosition, float hexagonRadius, out bool hasValues, out int measurements)
         {
+            measurements = 0;
             hasValues = false;
             if (localCells == null)
                 return 0;
@@ -157,6 +263,7 @@ namespace Netherlands3D.CartesianTiles
             if (cellsInHexagon == 0)
                 return 0;
 
+            measurements = cellsInHexagon;
             value /= cellsInHexagon;
             return value;
         }
@@ -209,6 +316,8 @@ namespace Netherlands3D.CartesianTiles
             ClearCells();
             if (dataTexture != null)
                 Destroy(dataTexture);
+            if(selectedHexagonObject != null)
+                Destroy(selectedHexagonObject);
         }
 
         public void ClearCells()
@@ -216,5 +325,13 @@ namespace Netherlands3D.CartesianTiles
             if (localCells != null)
                 localCells.Clear();
         }
+
+        //private void TestHexagon(Tile tile, Vector2 position, int innerColumns)
+        //{
+        //    GameObject t = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //    t.GetComponent<MeshRenderer>().material.color = Color.yellow;
+        //    t.transform.position = new Vector3(position.x, 50, position.y);
+        //    t.transform.localScale = Vector3.one * hexHeight * 0.5f / innerColumns * tile.layer.tileSize * div2_sqr3 * 2;
+        //}
     }
 }
