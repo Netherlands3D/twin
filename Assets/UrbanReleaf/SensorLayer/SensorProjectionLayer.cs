@@ -129,8 +129,14 @@ namespace Netherlands3D.CartesianTiles
                 if (tile.Value == null || tile.Value.gameObject == null)
                     continue;
 
+                if (tile.Value.runningCoroutine != null)
+                    StopCoroutine(tile.Value.runningCoroutine);
+
                 TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
                 projector.gameObject.SetActive(false);
+
+                TileSensorDataController controller = tile.Value.gameObject.GetComponent<TileSensorDataController>();
+                controller.DestroySelectedHexagon();
 
                 TileChange tileChange = new TileChange();
                 tileChange.X = tile.Key.x;

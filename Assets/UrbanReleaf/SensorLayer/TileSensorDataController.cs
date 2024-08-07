@@ -67,7 +67,7 @@ namespace Netherlands3D.CartesianTiles
             localCells = new List<SensorDataController.SensorCell>(cells);
         }    
 
-        public void DeactivateHexagon()
+        public void DeactivateHexagon(Action onDeactivation = null)
         {
             if (selectedHexagonObject != null)
             {                
@@ -76,6 +76,7 @@ namespace Netherlands3D.CartesianTiles
                 {
                     if(instance != null)
                         Destroy(instance);
+                    onDeactivation?.Invoke();
                 }));                
             }
         }
@@ -92,12 +93,10 @@ namespace Netherlands3D.CartesianTiles
             Vector2Int index = HexagonPositionToIndex((localPosition.x + tileSize) / tileSize * innerColumns - tileHexagonOffset.x, (localPosition.y + tileSize) / tileSize * rowsInner - tileHexagonOffset.y);
             if (lastSelectedHexagonIndex == index)
             {
-                return;
+                DestroySelectedHexagon();
             }
-            DeactivateHexagon();
-            lastSelectedHexagonIndex = index;
-
-          
+            DeactivateHexagon();           
+            lastSelectedHexagonIndex = index;          
 
             //lets convert it back from index to be sure of the right position
             Vector2 testPos = HexagonIndexToPosition(index.x, index.y);
@@ -148,18 +147,24 @@ namespace Netherlands3D.CartesianTiles
             t.transform.localScale = targetScale;
 
             //animate the object to scale up
-            StartCoroutine(AnimateHexagon(t, animationSpeed, scale));
+            StartCoroutine(AnimateHexagon(t, animationSpeed, scale, instance =>
+            {
+                
+            }));
         }
 
         private IEnumerator AnimateHexagon(GameObject instance, float speed, float height, Action<GameObject> onEnd = null)
         {
-            Vector3 targetScale = new Vector3(instance.transform.localScale.x, instance.transform.localScale.y, height);
+            Vector3 targetScale = Vector3.zero;
+            if(instance != null)
+                targetScale = new Vector3(instance.transform.localScale.x, instance.transform.localScale.y, height);
             while(instance != null && Mathf.Abs(instance.transform.localScale.z - height) > 100)
             {
                 instance.transform.localScale = Vector3.Slerp(instance.transform.localScale, targetScale, Time.deltaTime * speed);
                 yield return new WaitForUpdate();
             }
-            instance.transform.localScale = targetScale;
+            if(instance != null)
+                instance.transform.localScale = targetScale;
             onEnd?.Invoke(instance);
         }
 
@@ -332,7 +337,12 @@ namespace Netherlands3D.CartesianTiles
             ClearCells();
             if (dataTexture != null)
                 Destroy(dataTexture);
-            if(selectedHexagonObject != null)
+            DestroySelectedHexagon();
+        }
+
+        public void DestroySelectedHexagon()
+        {
+            if (selectedHexagonObject != null)
                 Destroy(selectedHexagonObject);
         }
 
