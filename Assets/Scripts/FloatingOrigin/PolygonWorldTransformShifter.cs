@@ -34,19 +34,19 @@ namespace Netherlands3D.Twin
         private void StoreLocalUnityCoordinatesLists()
         {
             //Create matching points list with world coordinates
-            preshiftPolygonsCoordinates = new List<Coordinate>(polygonSelectionLayer.OriginalPolygon.Count);
-            for (int i = 0; i < polygonSelectionLayer.OriginalPolygon.Count; i++)
-            {
-                var point = polygonSelectionLayer.OriginalPolygon[i];
-                var unityCoordinate = new Coordinate(
-                    CoordinateSystem.Unity, 
-                    point.x, 
-                    point.y, 
-                    point.z
-                );
-                var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-                preshiftPolygonsCoordinates.Add(worldCoordinate);
-            }
+            // preshiftPolygonsCoordinates = new List<Coordinate>(polygonSelectionLayer.OriginalPolygon.Count);
+            // for (int i = 0; i < polygonSelectionLayer.OriginalPolygon.Count; i++)
+            // {
+            //     var point = polygonSelectionLayer.OriginalPolygon[i];
+            //     var unityCoordinate = new Coordinate(
+            //         CoordinateSystem.Unity, 
+            //         point.x, 
+            //         point.y, 
+            //         point.z
+            //     );
+            //     var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+            //     preshiftPolygonsCoordinates.Add(worldCoordinate);
+            // }
         }
 
         private void ConvertAndApplyCoordinates()

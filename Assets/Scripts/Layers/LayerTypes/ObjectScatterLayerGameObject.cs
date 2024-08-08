@@ -341,8 +341,9 @@ namespace Netherlands3D.Twin.Layers
 
         private static float CalculateLineAngle(PolygonSelectionLayer polygon)
         {
-            var start = new Vector2(polygon.OriginalPolygon[0].x, polygon.OriginalPolygon[0].z);
-            var end = new Vector2(polygon.OriginalPolygon[1].x, polygon.OriginalPolygon[1].z);
+            var linePoints = polygon.GetPolygonAsUnityPoints();
+            var start = new Vector2(linePoints[0].x, linePoints[0].z);
+            var end = new Vector2(linePoints[1].x, linePoints[1].z);
             var dir = end - start;
             return Vector2.Angle(Vector2.up, dir);
         }
