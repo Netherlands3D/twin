@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
 
-
+        [Space] 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 

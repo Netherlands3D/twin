@@ -184,7 +184,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[4];
                 case DatasetLayerGameObject _:
                     return layerTypeSprites[5];
-                case GeoJSONLayer _:
+                case GeoJsonLayerGameObject _:
                     return layerTypeSprites[8]; //todo: split in points
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");

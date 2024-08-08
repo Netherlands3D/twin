@@ -26,17 +26,17 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private GeoJSONLayer geoJSONLayer;
-        public GeoJSONLayer GeoJSONLayer
+        private GeoJsonLayerGameObject wfsGeoJSONLayer;
+        public GeoJsonLayerGameObject WFSGeoJSONLayer
         {
-            get => geoJSONLayer;
+            get => wfsGeoJSONLayer;
             set
             {
-                if (geoJSONLayer != null)
-                    geoJSONLayer.LayerData.LayerDestroyed.RemoveListener(OnGeoJSONLayerDestroyed);
+                if (wfsGeoJSONLayer != null)
+                    wfsGeoJSONLayer.LayerData.LayerDestroyed.RemoveListener(OnGeoJSONLayerDestroyed);
 
-                geoJSONLayer = value;
-                geoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
+                wfsGeoJSONLayer = value;
+                wfsGeoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Netherlands3D.CartesianTiles
                     tiles[tileKey].unityLOD--;
                     break;
                 case TileAction.Remove:
-                    geoJSONLayer.RemoveFeaturesOutOfView();
+                    wfsGeoJSONLayer.RemoveFeaturesOutOfView();
 
                     InteruptRunningProcesses(tileKey);
                     tiles.Remove(tileKey);
@@ -149,7 +149,7 @@ namespace Netherlands3D.CartesianTiles
             var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
 
             if (featureCollection.Features.Count > 0)
-                geoJSONLayer.AppendFeatureCollection(featureCollection);
+                wfsGeoJSONLayer.AppendFeatureCollection(featureCollection);
         }
     }
 }

@@ -11,37 +11,55 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
 using UnityEngine.Events;
+using Netherlands3D.Twin.Layers.Properties;
+using System.Linq;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class GeoJSONLayer : LayerGameObject
+    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public static float maxParseDuration = 0.01f;
         
-        private int maxFeatureVisualsPerFrame = 20;
-
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
-
         private GeoJSONPolygonLayer polygonFeatures;
-        private Material defaultVisualizationMaterial;
-        private bool randomizeColorPerFeature = false;
+        
+        [Header("Visualizer settings")]
+        [SerializeField] private int maxFeatureVisualsPerFrame = 20;
+        [SerializeField] private LineRenderer3D lineRenderer3DPrefab;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
+        [SerializeField] private Material defaultVisualizationMaterial;
+        [SerializeField] private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
+        public Material DefaultVisualizationMaterial { 
+            get => defaultVisualizationMaterial; 
+            set => defaultVisualizationMaterial = value;
+        }
+
+        public LayerPropertyData PropertyData => urlPropertyData;
 
         private GeoJSONLineLayer lineFeatures;
-        private LineRenderer3D lineRenderer3DPrefab;
 
+        [Space]
         public UnityEvent<string> OnParseError = new();
-
         private GeoJSONPointLayer pointFeatures;
-        private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
-
         private Coroutine streamParseCoroutine;
-        
+        private LayerURLPropertyData urlPropertyData;
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
+            if (urlProperty != null)
+            {
+                this.urlPropertyData = urlProperty; 
+                //Set either url of tile data provider, or the url of the GeoJSON file based on GeoJSONLayer type      
+            }
+        }
+
         public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
         {
-            this.defaultVisualizationMaterial = defaultVisualizationMaterial;
+            this.DefaultVisualizationMaterial = defaultVisualizationMaterial;
             var layerColor = defaultVisualizationMaterial.color;
             layerColor.a = 1f;
             LayerData.Color = layerColor;
@@ -195,7 +213,7 @@ namespace Netherlands3D.Twin.Layers
             var layer = new GeoJSONPolygonLayer("Polygonen")
             {
                 Color = LayerData.Color,
-                PolygonVisualizationMaterial = defaultVisualizationMaterial,
+                PolygonVisualizationMaterial = DefaultVisualizationMaterial,
                 RandomizeColorPerFeature = RandomizeColorPerFeature
             };
             layer.SetParent(LayerData);
@@ -206,7 +224,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var layer = new GeoJSONLineLayer("Lijnen");
             layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
-            layer.LineRenderer3D.LineMaterial = defaultVisualizationMaterial;
+            layer.LineRenderer3D.LineMaterial = DefaultVisualizationMaterial;
             layer.Color = LayerData.Color;
             layer.SetParent(LayerData);
             return layer;
@@ -216,7 +234,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var layer = new GeoJSONPointLayer("Punten");
             layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
-            layer.PointRenderer3D.Material = defaultVisualizationMaterial;
+            layer.PointRenderer3D.Material = DefaultVisualizationMaterial;
             layer.Color = LayerData.Color;
             layer.SetParent(LayerData);
             return layer;
@@ -418,5 +436,6 @@ namespace Netherlands3D.Twin.Layers
 
             return reader.Value.ToString().ToLower() == "features";
         }
+
     }
 }

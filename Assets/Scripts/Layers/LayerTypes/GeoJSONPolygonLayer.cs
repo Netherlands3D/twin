@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
     public partial class GeoJSONPolygonLayer : LayerData
     {
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
-        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
+
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
@@ -29,10 +29,9 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 polygonVisualizationMaterial = value;
-                foreach (var visualization in PolygonVisualisations)
-                {
-                    visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
-                }
+                
+                foreach (var featureVisualisation in SpawnedVisualisations)
+                    featureVisualisation.SetMaterial(value);
             }
         }
 
@@ -49,10 +48,8 @@ namespace Netherlands3D.Twin.Layers
         
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            foreach (var visualization in PolygonVisualisations)
-            {
-                visualization.gameObject.SetActive(activeInHierarchy);
-            }
+            foreach (var visualization in SpawnedVisualisations)
+                visualization.ShowVisualisations(activeInHierarchy);
         }
 
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
@@ -125,12 +122,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
-            foreach (var polygonVisualisation in featureVisualisation.visualisations)
-            {
-                PolygonVisualisations.Remove(polygonVisualisation);
-                if(polygonVisualisation.gameObject)
-                    GameObject.Destroy(polygonVisualisation.gameObject);
-            }
+            featureVisualisation.DestroyAllVisualisations();
             SpawnedVisualisations.Remove(featureVisualisation);
         }
     }

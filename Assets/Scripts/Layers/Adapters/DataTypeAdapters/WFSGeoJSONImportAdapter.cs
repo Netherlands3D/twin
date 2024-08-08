@@ -15,9 +15,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private Material visualizationMaterial;
-        [SerializeField] private LineRenderer3D lineRenderer3D;
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
@@ -105,17 +103,12 @@ namespace Netherlands3D.Twin
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
-            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var layerGameObject = new GameObject(featureType);
-            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
-            layer.LayerData.SetParent(folderLayer);
-            layer.RandomizeColorPerFeature = true;
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
+            //Spawn a new WFS GeoJSON layer
+            WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.LayerData.SetParent(folderLayer);
+            newLayer.Name = featureType;
 
-            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();
-            cartesianTileLayer.GeoJSONLayer = layer;
-            cartesianTileLayer.WfsUrl = getFeatureUrl;
+            newLayer.CartesianTileWFSLayer.WfsUrl = getFeatureUrl;
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
