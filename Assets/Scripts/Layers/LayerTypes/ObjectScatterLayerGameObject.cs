@@ -3,6 +3,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -16,23 +17,23 @@ namespace Netherlands3D.Twin.Layers
 
     public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
-        private GameObject originalObject;
-        private Mesh mesh;
-        private Material material;
-        private ScatterGenerationSettings settings;
-        public ScatterGenerationSettings Settings => settings;
-        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
-        private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        public PolygonSelectionLayer polygonLayer;
-        private List<IPropertySectionInstantiator> propertySections = new();
-        private List<PolygonVisualisation> visualisations = new();
+        [JsonIgnore] private GameObject originalObject;
+        [JsonIgnore] private Mesh mesh;
+        [JsonIgnore] private Material material;
+        [SerializeField, JsonProperty]private ScatterGenerationSettings settings;
+        [JsonIgnore] public ScatterGenerationSettings Settings => settings;
+        [JsonIgnore] private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
+        [JsonIgnore] private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
+        [JsonIgnore] public PolygonSelectionLayer polygonLayer;
+        [JsonIgnore] private List<IPropertySectionInstantiator> propertySections = new();
+        [JsonIgnore] private List<PolygonVisualisation> visualisations = new();
 
-        private Bounds polygonBounds = new();
-        private SampleTexture sampleTexture;
+        [JsonIgnore] private Bounds polygonBounds = new();
+        [JsonIgnore] private SampleTexture sampleTexture;
 
-        private WorldTransform worldTransform;
+        [JsonIgnore] private WorldTransform worldTransform;
 
-        private bool completedInitialization;
+        [JsonIgnore] private bool completedInitialization;
 
         public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
         {
