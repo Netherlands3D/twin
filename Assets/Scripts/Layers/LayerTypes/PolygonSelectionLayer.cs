@@ -37,8 +37,6 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] private List<IPropertySectionInstantiator> propertySections = new();
 
-        // [JsonIgnore] private PolygonWorldTransformShifter worldTransformShifter;
-
         [JsonIgnore]
         public ShapeType ShapeType
         {
@@ -61,29 +59,26 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonConstructor]
-        public PolygonSelectionLayer(string name, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight, float lineWidth): base(name)
+        public PolygonSelectionLayer(string name, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight, float lineWidth) : base(name)
         {
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
-            
+            this.lineWidth = lineWidth;
+
             SetShape(originalPolygon);
             PolygonSelectionCalculator.RegisterPolygon(this);
             ProjectData.Current.AddStandardLayer(this);
-            
+
             //Add shifter that manipulates the polygon if the world origin is shifted
             PolygonVisualisation.gameObject.AddComponent<GameObjectWorldTransformShifter>();
-            // worldTransformShifter.polygonSelectionLayer = this;
             PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
-            // Origin.current.onPreShift.AddListener(PrepareToShift);
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
-            // worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
-            
+
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
         public PolygonSelectionLayer(string name, List<Vector3> polygonUnityInput, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f) : base(name)
         {
-
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.polygonMeshMaterial = polygonMeshMaterial;
@@ -93,12 +88,10 @@ namespace Netherlands3D.Twin.Layers
             SetShape(coordinates);
             PolygonSelectionCalculator.RegisterPolygon(this);
             ProjectData.Current.AddStandardLayer(this);
-            
+
             //Add shifter that manipulates the polygon if the world origin is shifted
             PolygonVisualisation.gameObject.AddComponent<GameObjectWorldTransformShifter>();
-            // worldTransformShifter.polygonSelectionLayer = this;
             PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
-            // worldTransformShifter.polygonShifted.AddListener(ShiftedPolygon);
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
 
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
@@ -130,7 +123,7 @@ namespace Netherlands3D.Twin.Layers
             else
                 SetPolygon(shape);
         }
-        
+
         /// <summary>
         /// Set the polygon of the layer as a solid filled polygon with Coordinates
         /// </summary>
@@ -150,7 +143,7 @@ namespace Netherlands3D.Twin.Layers
                 polygonChanged.Invoke();
             }
         }
-        
+
         /// <summary>
         /// Set the layer as a 'line' with Coordinates. This will create a rectangle polygon from the line with a given width.
         /// </summary>
@@ -166,13 +159,12 @@ namespace Netherlands3D.Twin.Layers
                 var lineProperties = PolygonVisualisation.gameObject.AddComponent<PolygonPropertySectionInstantiator>();
                 lineProperties.PolygonLayer = this;
                 propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
-            }        
+            }
         }
 
         private void CreatePolygonFromLine(List<Coordinate> line, float width)
         {
             var rectangle = PolygonFromLine(line, width);
-
             Polygon = new CompoundPolygon(rectangle);
 
             var rectangle3D = rectangle.ToVector3List();
@@ -255,7 +247,7 @@ namespace Netherlands3D.Twin.Layers
             base.DeselectLayer();
             polygonSelected.Invoke(null);
         }
-        
+
         public override void DestroyLayer()
         {
             base.DestroyLayer();
@@ -281,7 +273,7 @@ namespace Netherlands3D.Twin.Layers
             var coord = new Coordinate((int)CoordinateSystem.Unity); //cache variable to minimize garbage collection
             foreach (var point in unityCoordinates)
             {
-                coord.Points= new double[]{point.x, point.y, point.z};
+                coord.Points = new double[] { point.x, point.y, point.z };
                 coordList.Add(coord);
             }
 
