@@ -225,7 +225,10 @@ namespace Netherlands3D.CartesianTiles
             container = Instantiate(containerPrefab, transform);
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
             container.layer = container.transform.parent.gameObject.layer;
-            container.transform.position = CoordinateConverter.RDtoUnity(new Vector2(tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)));
+
+            Coordinate rdCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2));
+            container.transform.position = rdCoordinate.ToUnity();
+            container.transform.rotation = rdCoordinate.RotationToLocalGravityUp();
 
             container.SetActive(isEnabled);
             container.GetComponent<CityJSON>().ParseCityJSON(cityJSON);

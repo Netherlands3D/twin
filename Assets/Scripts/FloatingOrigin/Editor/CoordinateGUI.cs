@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.FloatingOrigin.Editor
             EditorGUI.indentLevel++;
             Coordinate coordinate = coordinateContainer.Coordinate;
             var coordinateSystemAsString = coordinate.CoordinateSystem != 0
-                ? coordinate.CoordinateSystem.ToString()
+                ? ((CoordinateSystem)coordinate.CoordinateSystem).ToString()
                 : "Undefined";
             EditorGUILayout.LabelField("Coordinate System", coordinateSystemAsString);
 
