@@ -74,7 +74,10 @@ namespace Netherlands3D.Twin.Layers
             // Create material with random color if randomize per feature is enabled
             if (RandomizeColorPerFeature)
             {
-                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = UnityEngine.Random.ColorHSV() };
+                var randomColor = UnityEngine.Random.ColorHSV();
+                randomColor.a = LayerData.Color.a;
+
+                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = randomColor };
                 return featureMaterialInstance;
             }
 
