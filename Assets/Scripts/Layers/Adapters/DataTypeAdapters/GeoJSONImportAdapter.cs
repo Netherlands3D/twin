@@ -61,10 +61,6 @@ namespace Netherlands3D.Twin
         
             //Create a new geojson layer with random color (untill UI provides ways to choose colors)
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            var randomLayerColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f; //Half-transparent so we can stack overlapping layers
-
-            newLayer.LayerData.Color = randomLayerColor;
             newLayer.Name = geoJsonLayerName;
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)

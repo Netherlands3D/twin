@@ -45,6 +45,14 @@ namespace Netherlands3D.Twin.Layers
         private Coroutine streamParseCoroutine;
         private LayerURLPropertyData urlPropertyData;
 
+        protected virtual void Awake()
+        {
+            //GeoJSON layer+visual colors are set to random colors untill user can pick colors in UI
+            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
+            randomLayerColor.a = 0.5f;
+            LayerData.Color = randomLayerColor;
+        }
+
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);

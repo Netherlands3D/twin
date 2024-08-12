@@ -1,14 +1,10 @@
 using System.IO;
 using System.Xml;
 using UnityEngine;
-using GeoJSON.Net.Feature;
-using Newtonsoft.Json;
 using System;
 using Netherlands3D.Web;
-using Netherlands3D.CartesianTiles;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.Twin
 {
