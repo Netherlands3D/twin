@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private GeoJsonLayerGameObject layerPrefab;
         [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
-        [SerializeField] private Material visualizationMaterial;
 
         public bool Supports(LocalFile localFile)
         {
@@ -50,30 +49,22 @@ namespace Netherlands3D.Twin
 
         public void ParseGeoJSON(LocalFile localFile)
         {
-            //Create random color material instance so every GeoJSON layer import gets a unique colors for now
-            var randomColorVisualisationMaterial = new Material(visualizationMaterial);
-            var randomColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
-            randomColor.a = visualizationMaterial.color.a;
-            randomColorVisualisationMaterial.color = randomColor;
-
-            CreateGeoJSONLayer(localFile, randomColorVisualisationMaterial, displayErrorMessageEvent);
+            CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
         }
 
-        private void CreateGeoJSONLayer(LocalFile localFile, Material visualizationMaterial, UnityEvent<string> onErrorCallback = null)
+        private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
             var fullPath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-
             if(localFile.SourceUrl.Length > 0)
                 geoJsonLayerName = localFile.SourceUrl;    
-
         
+            //Create a new geojson layer with random color (untill UI provides ways to choose colors)
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            var randomLayerColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
+            randomLayerColor.a = 0.5f; //Half-transparent so we can stack overlapping layers
 
-             //Use material color as layer color
-            var layerColor = visualizationMaterial.color;
-            layerColor.a = 1f;
-            newLayer.LayerData.Color = layerColor;
+            newLayer.LayerData.Color = randomLayerColor;
             newLayer.Name = geoJsonLayerName;
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
