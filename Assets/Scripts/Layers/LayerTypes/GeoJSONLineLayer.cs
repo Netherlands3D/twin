@@ -93,9 +93,10 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
+
+            base.DestroyLayer();
         }
     }
 }

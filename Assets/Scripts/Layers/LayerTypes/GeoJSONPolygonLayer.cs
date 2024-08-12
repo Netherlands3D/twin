@@ -76,7 +76,6 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
             if (Application.isPlaying)
             {
                 // Remove all SpawnedVisualisations
@@ -86,6 +85,8 @@ namespace Netherlands3D.Twin.Layers
                     RemoveFeature(featureVisualisation);
                 }
             }
+
+            base.DestroyLayer();
         }
 
         /// <summary>
