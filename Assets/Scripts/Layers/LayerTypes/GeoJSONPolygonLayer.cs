@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         [SerializeField] private Material polygonVisualizationMaterial;
+        private Material polygonVisualizationMaterialInstance;
 
         public Material PolygonVisualizationMaterial
         {
@@ -50,28 +51,38 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             // Create visual with random color if enabled
-            var featureMaterial = PolygonVisualizationMaterial;
-            if (RandomizeColorPerFeature){
-                featureMaterial = new Material(PolygonVisualizationMaterial)
-                {
-                    color = UnityEngine.Random.ColorHSV()
-                };
-            }
+            Material featureRenderMaterial = GetMaterialInstance();
 
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
             var newFeatureVisualisation = new FeaturePolygonVisualisations { feature = feature };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
-                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureMaterial);
+                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
                 newFeatureVisualisation.visualisations = polygonVisualisations;
             }
-            else if(feature.Geometry is Polygon polygon)
+            else if (feature.Geometry is Polygon polygon)
             {
-                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureMaterial);
+                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
                 newFeatureVisualisation.visualisations.Append(singlePolygonVisualisation);
             }
-            
+
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        private Material GetMaterialInstance()
+        {
+            // Create material with random color if randomize per feature is enabled
+            if (RandomizeColorPerFeature)
+            {
+                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = UnityEngine.Random.ColorHSV() };
+                return featureMaterialInstance;
+            }
+
+            // Default to material with layer color
+            if (polygonVisualizationMaterialInstance == null)
+                    polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial) { color = LayerData.Color };
+
+            return polygonVisualizationMaterialInstance;
         }
 
         public override void DestroyLayer()
