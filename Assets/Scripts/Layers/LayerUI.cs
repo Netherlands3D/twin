@@ -151,8 +151,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
         
         private void UpdateColor(Color newColor)
-        {
-            colorButton.targetGraphic.color = newColor;
+        {   
+            var opaqueColor = newColor;
+            opaqueColor.a = 1;
+
+            colorButton.targetGraphic.color = opaqueColor;
         }
         
         private void OnLayerSelected(LayerData layer)
