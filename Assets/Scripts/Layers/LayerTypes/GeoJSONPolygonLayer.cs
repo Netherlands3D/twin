@@ -14,14 +14,14 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerData
+    public partial class GeoJSONPolygonLayer : LayerGameObject
     {
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
-        private Material polygonVisualizationMaterial;
+        [SerializeField] private Material polygonVisualizationMaterial;
 
         public Material PolygonVisualizationMaterial
         {
@@ -35,18 +35,8 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public GeoJSONPolygonLayer(string name) : base(name)
-        {
-            ProjectData.Current.AddStandardLayer(this);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        ~GeoJSONPolygonLayer()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
         
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in SpawnedVisualisations)
                 visualization.ShowVisualisations(activeInHierarchy);
