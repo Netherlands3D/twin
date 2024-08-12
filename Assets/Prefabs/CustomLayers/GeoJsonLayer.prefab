@@ -52,18 +52,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   maxFeatureVisualsPerFrame: 20
-  polygonLayerPrefab: {fileID: 8075904475903883821, guid: 509ce6cf579d6ed4b946913dff7eaed4,
+  polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,
     type: 3}
   lineLayerPrefab: {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576,
     type: 3}
-  pointLayerPrefab: {fileID: -1729821831653114375, guid: 267c8f33152cac142b8e40a7bdc54523,
+  pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
-  lineRenderer3DPrefab: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
-    type: 3}
-  pointRenderer3DPrefab: {fileID: -4723935055048165154, guid: 5174e2e7a4c654e2ead494648a2604fd,
-    type: 3}
-  defaultVisualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
-    type: 2}
   randomizeColorPerFeature: 0
   OnParseError:
     m_PersistentCalls:

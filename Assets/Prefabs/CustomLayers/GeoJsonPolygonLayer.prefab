@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486974600061382359}
-  - component: {fileID: 8075904475903883821}
+  - component: {fileID: 5640076176564817079}
   - component: {fileID: 5447569626426196056}
   m_Layer: 12
   m_Name: GeoJsonPolygonLayer
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8075904475903883821
+--- !u!114 &5640076176564817079
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,17 +42,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 764337386758102018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a0de221b34ebdd45ba7184b76e39572, type: 3}
+  m_Script: {fileID: 11500000, guid: 656fd46141ba0417797cd8268008cccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 509ce6cf579d6ed4b946913dff7eaed4
+  prefabIdentifier: 
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  polygonVisualizationMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533,
+  polygonVisualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
     type: 2}
 --- !u!114 &5447569626426196056
 MonoBehaviour:
