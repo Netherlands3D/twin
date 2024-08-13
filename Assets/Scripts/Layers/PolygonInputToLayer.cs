@@ -8,11 +8,6 @@ namespace Netherlands3D.Twin.Layers
 {
     public class PolygonInputToLayer : MonoBehaviour
     {
-        [Header("Polygon settings")] [SerializeField]
-        private float polygonExtrusionHeight = 0.1f;
-
-        [SerializeField] private PolygonSelectionVisualisation polygonVisualisationPrefab;
-
         private Dictionary<PolygonSelectionVisualisation, PolygonSelectionLayer> layers = new();
 
         private PolygonSelectionLayer activeLayer;
@@ -75,8 +70,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void ReselectLayerPolygon(PolygonSelectionLayer layer)
         {
-            Debug.Log("Reselect layer polygon");
-
             if(layer==null)
                 return;
 
@@ -122,7 +115,7 @@ namespace Netherlands3D.Twin.Layers
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
             // var visualisation = Instantiate(polygonVisualisationPrefab);
-            var layer = new PolygonSelectionLayer("Polygon","0dd48855510674827b667fa4abd5cf60", unityPolygon, ShapeType.Polygon, polygonExtrusionHeight);
+            var layer = new PolygonSelectionLayer("Polygon","0dd48855510674827b667fa4abd5cf60", unityPolygon, ShapeType.Polygon);
             layers.Add(layer.PolygonVisualisation, layer);
             layer.polygonSelected.AddListener(ProcessPolygonSelection);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
@@ -138,7 +131,7 @@ namespace Netherlands3D.Twin.Layers
         {
             // var visualisation = Instantiate(polygonVisualisationPrefab);
             var coordinates = PolygonSelectionLayer.ConvertToCoordinates(unityLine);
-            var layer = new PolygonSelectionLayer("Line", "0dd48855510674827b667fa4abd5cf60", unityLine, ShapeType.Line, polygonExtrusionHeight, defaultLineWidth);
+            var layer = new PolygonSelectionLayer("Line", "0dd48855510674827b667fa4abd5cf60", unityLine, ShapeType.Line, defaultLineWidth);
             layers.Add(layer.PolygonVisualisation, layer);
             layer.polygonSelected.AddListener(ProcessPolygonSelection);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work

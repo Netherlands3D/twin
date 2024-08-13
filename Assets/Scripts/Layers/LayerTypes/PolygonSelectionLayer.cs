@@ -24,7 +24,6 @@ namespace Netherlands3D.Twin.Layers
     {
         [JsonProperty] public List<Coordinate> OriginalPolygon { get; private set; }
         [SerializeField, JsonProperty] private ShapeType shapeType;
-        [SerializeField, JsonProperty] private float polygonExtrusionHeight;
         [JsonIgnore] private PolygonSelectionLayerPropertyData polygonPropertyData;
         [JsonIgnore] public LayerPropertyData PropertyData => polygonPropertyData;
         [JsonIgnore] public CompoundPolygon Polygon { get; set; }
@@ -54,28 +53,24 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
-        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight) : base(name, prefabId, layerProperties)
+        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType) : base(name, prefabId, layerProperties)
         {
-            this.ShapeType = shapeType;
-            this.polygonExtrusionHeight = polygonExtrusionHeight;
+            OriginalPolygon = originalPolygon;
+            ShapeType = shapeType;
 
-            SetShape(originalPolygon);
+            LoadProperties(layerProperties);
             PolygonSelectionCalculator.RegisterPolygon(this);
-            ProjectData.Current.AddStandardLayer(this);
 
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
-
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
-        public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float polygonExtrusionHeight, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
+        public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
         {
             polygonPropertyData = new PolygonSelectionLayerPropertyData();
             AddProperty(polygonPropertyData);
-            
-            this.ShapeType = shapeType;
-            this.polygonExtrusionHeight = polygonExtrusionHeight;
+            ShapeType = shapeType;
 
             var coordinates = ConvertToCoordinates(polygonUnityInput);
             SetShape(coordinates);
@@ -83,7 +78,6 @@ namespace Netherlands3D.Twin.Layers
 
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
-
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
@@ -132,7 +126,7 @@ namespace Netherlands3D.Twin.Layers
             var unityPolygon = ConvertToUnityPoints(solidPolygon);
             var flatPolygon = PolygonCalculator.FlattenPolygon(unityPolygon, new Plane(Vector3.up, 0));
             Polygon = new CompoundPolygon(flatPolygon);
-            PolygonVisualisation.UpdateVisualisation(flatPolygon, polygonExtrusionHeight);
+            PolygonVisualisation.UpdateVisualisation(flatPolygon, polygonPropertyData.ExtrusionHeight);
 
             if (notifyOnPolygonChange)
             {
@@ -147,7 +141,6 @@ namespace Netherlands3D.Twin.Layers
         {
             ShapeType = ShapeType.Line;
             OriginalPolygon = line;
-
             CreatePolygonFromLine(line, polygonPropertyData.LineWidth);
         }
 
@@ -155,7 +148,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var rectangle = PolygonFromLine(line, width);
             Polygon = new CompoundPolygon(rectangle);
-            PolygonVisualisation.UpdateVisualisation(rectangle, polygonExtrusionHeight);
+            PolygonVisualisation.UpdateVisualisation(rectangle, polygonPropertyData.ExtrusionHeight);
 
             if (notifyOnPolygonChange)
             {
@@ -249,11 +242,11 @@ namespace Netherlands3D.Twin.Layers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            Debug.Log("loading properties");
             var polygonProperty = (PolygonSelectionLayerPropertyData)properties.FirstOrDefault(p => p is PolygonSelectionLayerPropertyData);
             if (polygonProperty != null)
             {
-                polygonPropertyData = polygonProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+                polygonPropertyData = polygonProperty; //take existing property to overwrite the unlinked one of this class
+                SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
             }
         }
     }
