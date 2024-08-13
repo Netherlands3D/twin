@@ -81,4 +81,3 @@ crashlytics-build.properties
 
 # Docker build artefacts
 /.docker/app-config.json
-/Assets/Scriptables/CurrentProject.asset
