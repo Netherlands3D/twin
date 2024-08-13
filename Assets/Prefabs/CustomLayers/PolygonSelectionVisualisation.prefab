@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2578961074007820944}
   - component: {fileID: 4127536730765376663}
   - component: {fileID: 5468818634811242804}
+  - component: {fileID: 5962417615404079703}
   m_Layer: 0
   m_Name: PolygonSelectionVisualisation
   m_TagString: Untagged
@@ -86,3 +87,15 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5962417615404079703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532706497964853861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164adf020c1954cd5910d88b453b0ff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
