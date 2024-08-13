@@ -58,12 +58,12 @@ namespace Netherlands3D.Twin.Layers
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
                 var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.visualisations = polygonVisualisations;
+                newFeatureVisualisation.visualisations.AddRange(polygonVisualisations);
             }
             else if (feature.Geometry is Polygon polygon)
             {
                 var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.visualisations.Append(singlePolygonVisualisation);
+                newFeatureVisualisation.visualisations.Add(singlePolygonVisualisation);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
@@ -90,14 +90,12 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            if (Application.isPlaying)
+            // Remove all SpawnedVisualisations
+            Debug.Log("Destroying all visualisations " + SpawnedVisualisations.Count);  
+            for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
             {
-                // Remove all SpawnedVisualisations
-                for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
-                {
-                    var featureVisualisation = SpawnedVisualisations[i];
-                    RemoveFeature(featureVisualisation);
-                }
+                var featureVisualisation = SpawnedVisualisations[i];
+                RemoveFeature(featureVisualisation);
             }
 
             base.DestroyLayer();
