@@ -107,8 +107,7 @@ namespace Netherlands3D.Twin
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = featureType;
-
-            newLayer.CartesianTileWFSLayer.WfsUrl = getFeatureUrl;
+            newLayer.SetURL(getFeatureUrl);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)

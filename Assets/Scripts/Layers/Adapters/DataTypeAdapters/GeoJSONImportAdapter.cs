@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
-            newLayer.StreamParseGeoJSON(fullPath);
+            newLayer.StreamParseGeoJSONFile(fullPath);
         }
     }
 }

@@ -38,12 +38,11 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
-        public LayerPropertyData PropertyData => urlPropertyData;
-
         [Space]
         public UnityEvent<string> OnParseError = new();
         private Coroutine streamParseCoroutine;
-        private LayerURLPropertyData urlPropertyData;
+        protected LayerURLPropertyData urlPropertyData;
+        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         protected virtual void Awake()
         {
@@ -51,15 +50,17 @@ namespace Netherlands3D.Twin.Layers
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             LayerData.Color = randomLayerColor;
+
+            urlPropertyData = new LayerURLPropertyData();
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
-                this.urlPropertyData = urlProperty; 
-                //Set either url of tile data provider, or the url of the GeoJSON file based on GeoJSONLayer type      
+                this.urlPropertyData = urlProperty;
+                StreamParseGeoJSONFile(urlProperty.url);
             }
         }
 
@@ -116,23 +117,10 @@ namespace Netherlands3D.Twin.Layers
         }
 
         /// <summary>
-        /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
-        /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
-        /// </summary>
-        public void AdditiveParseGeoJSON(string filePath)
-        {
-            // Read filepath and deserialize the GeoJSON using GeoJSON.net in one go
-            var jsonText = File.ReadAllText(filePath);
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-            
-            AppendFeatureCollection(featureCollection);
-        }
-
-        /// <summary>
         /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void StreamParseGeoJSON(string filePath)
+        public void StreamParseGeoJSONFile(string filePath)
         {
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
