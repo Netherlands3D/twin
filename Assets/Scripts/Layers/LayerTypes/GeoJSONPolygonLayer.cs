@@ -54,16 +54,19 @@ namespace Netherlands3D.Twin.Layers
             Material featureRenderMaterial = GetMaterialInstance();
 
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
-            var newFeatureVisualisation = new FeaturePolygonVisualisations { feature = feature };
+            var newFeatureVisualisation = new FeaturePolygonVisualisations { 
+                feature = feature,
+                geoJsonPolygonLayer = this
+            };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
                 var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.visualisations.AddRange(polygonVisualisations);
+                newFeatureVisualisation.AppendVisualisations(polygonVisualisations);
             }
             else if (feature.Geometry is Polygon polygon)
             {
                 var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.visualisations.Add(singlePolygonVisualisation);
+                newFeatureVisualisation.AppendVisualisations(singlePolygonVisualisation);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
