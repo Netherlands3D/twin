@@ -13,7 +13,6 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONPointLayer : LayerGameObject
     {
-
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
