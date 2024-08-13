@@ -16,7 +16,6 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject
     {
-
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
@@ -32,7 +31,7 @@ namespace Netherlands3D.Twin.Layers
                 lineRenderer3D = value;
             }
         }
-        
+
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);

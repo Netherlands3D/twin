@@ -216,6 +216,10 @@ namespace Netherlands3D.Twin.Layers
         {
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
+
+            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
+            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
         }
@@ -224,6 +228,10 @@ namespace Netherlands3D.Twin.Layers
         {
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
+
+            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
+            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 
             return newPointLayerGameObject;
