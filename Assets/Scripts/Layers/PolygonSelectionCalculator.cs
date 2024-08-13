@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin
                 bool wasSelected = ProcessPolygonSelection(layer, camera, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
-                    layer.SelectLayer();
+                    layer.SelectLayer(true);
                     return; //select only one
                 }
                 else

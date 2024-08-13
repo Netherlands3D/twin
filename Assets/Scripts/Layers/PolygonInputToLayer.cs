@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Layers
 
         [SerializeField] private Material polygonMeshMaterial;
 
-        private Dictionary<PolygonVisualisation, PolygonSelectionLayer> layers = new();
+        private Dictionary<PolygonSelectionVisualisation, PolygonSelectionLayer> layers = new();
 
         private PolygonSelectionLayer activeLayer;
         private PolygonSelectionLayer ActiveLayer { 

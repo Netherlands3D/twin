@@ -142,7 +142,7 @@ namespace Netherlands3D.Twin.Layers
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
 
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonMeshMaterial);
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonVisualisation.PolygonMeshMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
