@@ -149,15 +149,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case ReferencedLayerData _:
-                    var reference = ((ReferencedLayerData)layer).Reference;
+                case PolygonSelectionLayer selectionLayer:
+                    if (selectionLayer.ShapeType == ShapeType.Polygon)
+                        return layerTypeSprites[6];
+                    return layerTypeSprites[7];
+                case ReferencedLayerData data:
+                    var reference = data.Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
-                case PolygonSelectionLayer _:
-                    if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
-                        return layerTypeSprites[6];
-                    return layerTypeSprites[7];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];

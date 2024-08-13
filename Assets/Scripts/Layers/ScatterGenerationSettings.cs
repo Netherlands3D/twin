@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,20 +13,21 @@ namespace Netherlands3D.Twin
     [Serializable]
     public class ScatterGenerationSettings : ScriptableObject, IPropertySectionInstantiator
     {
-        [SerializeField] private float density = 1f;
-        [SerializeField] private float scatter = 0f;
-        [SerializeField] private float angle = 0f;
-        [SerializeField] private Vector3 minScale = Vector3.one;
-        [SerializeField] private Vector3 maxScale = Vector3.one;
-        [SerializeField] private FillType fillType = FillType.Complete;
-        [SerializeField] private float strokeWidth = 1f;
+        [SerializeField, JsonProperty] private float density = 1f;
+        [SerializeField, JsonProperty] private float scatter = 0f;
+        [SerializeField, JsonProperty] private float angle = 0f;
+        [SerializeField, JsonProperty] private Vector3 minScale = Vector3.one;
+        [SerializeField, JsonProperty] private Vector3 maxScale = Vector3.one;
+        [SerializeField, JsonProperty] private FillType fillType = FillType.Complete;
+        [SerializeField, JsonProperty] private float strokeWidth = 1f;
 
-        public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
-        public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
-        public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
+        [JsonIgnore] public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
+        [JsonIgnore] public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
+        [JsonIgnore] public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
-        public bool AutoRotateToLine { get; set; } = false;
+        [JsonProperty] public bool AutoRotateToLine { get; set; } = false; //todo: is it needed to serialize this?
 
+        [JsonIgnore]
         public float Density
         {
             get { return density; }
@@ -38,7 +40,8 @@ namespace Netherlands3D.Twin
                 ScatterDistributionChanged.Invoke(); 
             }
         }
-
+        
+        [JsonIgnore]
         public float Scatter
         {
             get { return scatter; }
@@ -52,6 +55,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+        [JsonIgnore]
         public float Angle
         {
             get { return angle; }
@@ -65,6 +69,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+        [JsonIgnore]
         public Vector3 MinScale
         {
             get { return minScale; }
@@ -78,6 +83,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+        [JsonIgnore]
         public Vector3 MaxScale
         {
             get { return maxScale; }
@@ -91,6 +97,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+        [JsonIgnore]
         public FillType FillType
         {
             get => fillType;
@@ -104,6 +111,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+        [JsonIgnore]
         public float StrokeWidth
         {
             get => strokeWidth;

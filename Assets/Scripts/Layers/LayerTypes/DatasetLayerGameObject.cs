@@ -20,9 +20,8 @@ namespace Netherlands3D.Twin.Layers
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
-            base.OnDestroy();
             RemoveCustomColorSet();
         }
 
