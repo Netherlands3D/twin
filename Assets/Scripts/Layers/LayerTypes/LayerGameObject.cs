@@ -100,20 +100,6 @@ namespace Netherlands3D.Twin.Layers
             Destroy(gameObject);
         }
 
-        protected virtual void OnDestroy()
-        {
-            // ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
-            DestroyProxy();
-        }
-
-        public virtual void DestroyProxy()
-        {
-            if (LayerData != null)
-            {
-                LayerData.DestroyLayer();
-            }
-        }
-
         public virtual void OnProxyTransformChildrenChanged()
         {
             //called when the Proxy's children change            

@@ -104,9 +104,8 @@ namespace Netherlands3D.Twin.Layers
             polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
-            base.OnDestroy();
             RemoveReScatterListeners();
         }
 

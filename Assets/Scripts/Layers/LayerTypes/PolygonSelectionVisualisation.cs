@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class PolygonSelectionVisualisation : LayerGameObject//, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
     {
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin
             else
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
         }
-        
+
         private PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
             var contours = new List<List<Vector3>> { polygon };
@@ -38,6 +38,20 @@ namespace Netherlands3D.Twin
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
 
             return polygonVisualisation;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            var polygon = LayerData as PolygonSelectionLayer;
+            if (polygon.ShapeType == ShapeType.Line)
+                return GetComponents<IPropertySectionInstantiator>().ToList(); //LineWidth
+
+            return new List<IPropertySectionInstantiator>(); //no properties for a polygon
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Destroy(PolygonVisualisation.gameObject);
         }
     }
 }

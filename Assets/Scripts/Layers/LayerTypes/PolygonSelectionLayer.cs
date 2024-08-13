@@ -22,12 +22,13 @@ namespace Netherlands3D.Twin.Layers
     }
 
     [Serializable]
-    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData//, ILayerWithPropertyPanels
     {
         [JsonProperty] public List<Coordinate> OriginalPolygon { get; private set; }
         [SerializeField, JsonProperty] private ShapeType shapeType;
         [SerializeField, JsonProperty] private float polygonExtrusionHeight;
-
+        [JsonIgnore] private PolygonSelectionLayerPropertyData polygonPropertyData;
+        [JsonIgnore] public LayerPropertyData PropertyData => polygonPropertyData;
         [JsonIgnore] public CompoundPolygon Polygon { get; set; }
         [JsonIgnore] public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         [JsonIgnore] public UnityEvent polygonMoved = new();
@@ -45,7 +46,11 @@ namespace Netherlands3D.Twin.Layers
         public float LineWidth
         {
             get => polygonPropertyData.LineWidth;
-            set => polygonPropertyData.LineWidth = value;
+            set
+            {
+                polygonPropertyData.LineWidth = value;
+                CreatePolygonFromLine(OriginalPolygon, value);
+            }
         }
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
@@ -70,7 +75,6 @@ namespace Netherlands3D.Twin.Layers
         {
             polygonPropertyData = new PolygonSelectionLayerPropertyData();
             AddProperty(polygonPropertyData);
-            Debug.Log(LineWidth);
             
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
@@ -113,7 +117,7 @@ namespace Netherlands3D.Twin.Layers
         /// <param name="unityShape">Contour</param>
         public void SetShape(List<Coordinate> shape)
         {
-            if (shapeType == Layers.ShapeType.Line)
+            if (shapeType == ShapeType.Line)
                 SetLine(shape);
             else
                 SetPolygon(shape);
@@ -147,13 +151,6 @@ namespace Netherlands3D.Twin.Layers
             OriginalPolygon = line;
 
             CreatePolygonFromLine(line, polygonPropertyData.LineWidth);
-
-            if (propertySections.Count == 0)
-            {
-                var lineProperties = PolygonVisualisation.gameObject.AddComponent<PolygonPropertySectionInstantiator>();
-                lineProperties.PolygonLayer = this;
-                propertySections = new List<IPropertySectionInstantiator>() { lineProperties };
-            }
         }
 
         private void CreatePolygonFromLine(List<Coordinate> line, float width)
@@ -219,11 +216,8 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
             PolygonSelectionCalculator.UnregisterPolygon(this);
-
-            if (PolygonVisualisation)
-                GameObject.Destroy(PolygonVisualisation.gameObject);
+            base.DestroyLayer();
         }
 
         public List<Vector3> GetPolygonAsUnityPoints()
@@ -255,10 +249,6 @@ namespace Netherlands3D.Twin.Layers
             return pointList;
         }
 
-        private List<IPropertySectionInstantiator> propertySections = new();
-        private PolygonSelectionLayerPropertyData polygonPropertyData;
-        public LayerPropertyData PropertyData => polygonPropertyData;
-
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             Debug.Log("loading properties");
@@ -267,11 +257,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 polygonPropertyData = polygonProperty; //take existing TransformProperty to overwrite the unlinked one of this class
             }
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
         }
     }
 }
