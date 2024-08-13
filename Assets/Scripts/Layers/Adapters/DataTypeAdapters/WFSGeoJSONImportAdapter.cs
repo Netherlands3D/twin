@@ -69,6 +69,8 @@ namespace Netherlands3D.Twin
                     Debug.Log("Adding WFS layer for featureType: " + featureType);
                     AddWFSLayer(featureType, sourceUrl, wfsFolder);
                 }
+                
+                wfs = null;
                 return;
             }
 
@@ -87,6 +89,8 @@ namespace Netherlands3D.Twin
                     featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
                 }
                 AddWFSLayer(featureType, sourceUrl, wfsFolder);
+
+                wfs = null;
                 return;
             }
         }
