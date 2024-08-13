@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers
                 foreach (var visualisation in visualisations)
                 {
                     if (visualisation != null)
-                        Object.Destroy(visualisation.gameObject);
+                        Destroy(visualisation.gameObject);
                 }
                 visualisations.Clear();
             }
