@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Layers
         [Space]
         public UnityEvent<string> OnParseError = new();
         private Coroutine streamParseCoroutine;
-        protected LayerURLPropertyData urlPropertyData;
+        protected LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         protected virtual void Awake()
@@ -51,11 +51,15 @@ namespace Netherlands3D.Twin.Layers
             randomLayerColor.a = 0.5f;
             LayerData.Color = randomLayerColor;
 
-            urlPropertyData = new LayerURLPropertyData();
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
+            //Destroy child layers for now if restored from save file, because we create geometry layers on the fly
+            var childLayers = LayerData.ChildrenLayers;
+            foreach (var childLayer in childLayers)
+                childLayer.DestroyLayer();
+
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
@@ -192,16 +196,36 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private GeoJSONPolygonLayer CreatePolygonLayer()
+        private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
+                        return polygonLayer;
+                }
+            }
+
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
             return newPolygonLayerGameObject;
         }
 
-        private GeoJSONLineLayer CreateLineLayer()
+        private GeoJSONLineLayer CreateOrGetLineLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
+                        return lineLayer;
+                }
+            }
+
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
@@ -212,8 +236,18 @@ namespace Netherlands3D.Twin.Layers
             return newLineLayerGameObject;
         }
 
-        private GeoJSONPointLayer CreatePointLayer()
+        private GeoJSONPointLayer CreateOrGetPointLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
+                        return pointLayer;
+                }
+            }
+
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
@@ -256,7 +290,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreatePointLayer();
+                pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
         }
@@ -264,7 +298,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreatePointLayer();
+                pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
         }
@@ -272,7 +306,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateLineLayer();
+                lineFeaturesLayer = CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
@@ -280,7 +314,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateLineLayer();
+                lineFeaturesLayer = CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
@@ -288,7 +322,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreatePolygonLayer();
+                polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
         }
@@ -296,7 +330,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreatePolygonLayer();
+                polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }

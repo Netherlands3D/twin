@@ -35,8 +35,7 @@ namespace Netherlands3D.Twin.Layers
                     featureVisualisation.SetMaterial(value);
             }
         }
-
-        
+     
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in SpawnedVisualisations)
