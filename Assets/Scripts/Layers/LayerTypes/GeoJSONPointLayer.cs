@@ -11,12 +11,11 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerData
+    public partial class GeoJSONPointLayer : LayerGameObject
     {
-
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
-        private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
         public BatchedMeshInstanceRenderer PointRenderer3D
         {
@@ -30,18 +29,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
         
-        public GeoJSONPointLayer(string name) : base(name)
-        {
-            ProjectData.Current.AddStandardLayer(this);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        ~GeoJSONPointLayer()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
-        
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
@@ -101,9 +89,10 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
             if (Application.isPlaying && PointRenderer3D && PointRenderer3D.gameObject)
                 GameObject.Destroy(PointRenderer3D.gameObject);
+                
+            base.DestroyLayer();
         }
     }
 }

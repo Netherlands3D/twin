@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public void DestroyLayer()
+        public virtual void DestroyLayer()
         {
             Destroy(gameObject);
         }

@@ -13,6 +13,7 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
+using netDxf.Tables;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -22,30 +23,35 @@ namespace Netherlands3D.Twin.Layers
         
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
-        private GeoJSONPolygonLayer polygonFeatures;
+
+        private GeoJSONPolygonLayer polygonFeaturesLayer;
+        private GeoJSONLineLayer lineFeaturesLayer;
+        private GeoJSONPointLayer pointFeaturesLayer;
         
         [Header("Visualizer settings")]
         [SerializeField] private int maxFeatureVisualsPerFrame = 20;
-        [SerializeField] private LineRenderer3D lineRenderer3DPrefab;
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3DPrefab;
-        [SerializeField] private Material defaultVisualizationMaterial;
+        [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
+        [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
+        [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
+        
         [SerializeField] private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
-        public Material DefaultVisualizationMaterial { 
-            get => defaultVisualizationMaterial; 
-            set => defaultVisualizationMaterial = value;
-        }
 
         public LayerPropertyData PropertyData => urlPropertyData;
 
-        private GeoJSONLineLayer lineFeatures;
-
         [Space]
         public UnityEvent<string> OnParseError = new();
-        private GeoJSONPointLayer pointFeatures;
         private Coroutine streamParseCoroutine;
         private LayerURLPropertyData urlPropertyData;
+
+        protected virtual void Awake()
+        {
+            //GeoJSON layer+visual colors are set to random colors untill user can pick colors in UI
+            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
+            randomLayerColor.a = 0.5f;
+            LayerData.Color = randomLayerColor;
+        }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -57,29 +63,19 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void SetDefaultVisualizerSettings(Material defaultVisualizationMaterial, LineRenderer3D lineRenderer3DPrefab, BatchedMeshInstanceRenderer pointRenderer3DPrefab)
-        {
-            this.DefaultVisualizationMaterial = defaultVisualizationMaterial;
-            var layerColor = defaultVisualizationMaterial.color;
-            layerColor.a = 1f;
-            LayerData.Color = layerColor;
-            this.lineRenderer3DPrefab = lineRenderer3DPrefab;
-            this.pointRenderer3DPrefab = pointRenderer3DPrefab;
-        }
-
         /// <summary>
         /// Removes features based on the bounds of their visualisations
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            if (polygonFeatures != null)
-                polygonFeatures.RemoveFeaturesOutOfView();
+            if (polygonFeaturesLayer != null)
+                polygonFeaturesLayer.RemoveFeaturesOutOfView();
 
-            if (lineFeatures != null)
-                lineFeatures.RemoveFeaturesOutOfView();
+            if (lineFeaturesLayer != null)
+                lineFeaturesLayer.RemoveFeaturesOutOfView();
 
-            if (pointFeatures != null)
-                pointFeatures.RemoveFeaturesOutOfView();
+            if (pointFeaturesLayer != null)
+                pointFeaturesLayer.RemoveFeaturesOutOfView();
         }
 
         public void AppendFeatureCollection(FeatureCollection featureCollection)
@@ -210,34 +206,35 @@ namespace Netherlands3D.Twin.Layers
 
         private GeoJSONPolygonLayer CreatePolygonLayer()
         {
-            var layer = new GeoJSONPolygonLayer("Polygonen")
-            {
-                Color = LayerData.Color,
-                PolygonVisualizationMaterial = DefaultVisualizationMaterial,
-                RandomizeColorPerFeature = RandomizeColorPerFeature
-            };
-            layer.SetParent(LayerData);
-            return layer;
+            GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
+            newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+            newPolygonLayerGameObject.LayerData.SetParent(LayerData);
+            return newPolygonLayerGameObject;
         }
 
         private GeoJSONLineLayer CreateLineLayer()
         {
-            var layer = new GeoJSONLineLayer("Lijnen");
-            layer.LineRenderer3D = Instantiate(lineRenderer3DPrefab);
-            layer.LineRenderer3D.LineMaterial = DefaultVisualizationMaterial;
-            layer.Color = LayerData.Color;
-            layer.SetParent(LayerData);
-            return layer;
+            GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
+            newLineLayerGameObject.LayerData.Color = LayerData.Color;
+
+            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
+            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+
+            newLineLayerGameObject.LayerData.SetParent(LayerData);
+            return newLineLayerGameObject;
         }
 
         private GeoJSONPointLayer CreatePointLayer()
         {
-            var layer = new GeoJSONPointLayer("Punten");
-            layer.PointRenderer3D = Instantiate(pointRenderer3DPrefab);
-            layer.PointRenderer3D.Material = DefaultVisualizationMaterial;
-            layer.Color = LayerData.Color;
-            layer.SetParent(LayerData);
-            return layer;
+            GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
+            newPointLayerGameObject.LayerData.Color = LayerData.Color;
+
+            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
+            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+
+            newPointLayerGameObject.LayerData.SetParent(LayerData);
+
+            return newPointLayerGameObject;
         }
         
         private void VisualizeFeature(Feature feature)
@@ -270,50 +267,50 @@ namespace Netherlands3D.Twin.Layers
 
         private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (pointFeatures == null)
-                pointFeatures = CreatePointLayer();
+            if (pointFeaturesLayer == null)
+                pointFeaturesLayer = CreatePointLayer();
 
-            pointFeatures.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
+            pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
         }
 
         private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (pointFeatures == null)
-                pointFeatures = CreatePointLayer();
+            if (pointFeaturesLayer == null)
+                pointFeaturesLayer = CreatePointLayer();
 
-            pointFeatures.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
+            pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
         }
 
         private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (lineFeatures == null)
-                lineFeatures = CreateLineLayer();
+            if (lineFeaturesLayer == null)
+                lineFeaturesLayer = CreateLineLayer();
 
-            lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
+            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
 
         private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (lineFeatures == null)
-                lineFeatures = CreateLineLayer();
+            if (lineFeaturesLayer == null)
+                lineFeaturesLayer = CreateLineLayer();
 
-            lineFeatures.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
+            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
 
         private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (polygonFeatures == null)
-                polygonFeatures = CreatePolygonLayer();
+            if (polygonFeaturesLayer == null)
+                polygonFeaturesLayer = CreatePolygonLayer();
 
-            polygonFeatures.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
+            polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
         }
 
         private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
-            if (polygonFeatures == null)
-                polygonFeatures = CreatePolygonLayer();
+            if (polygonFeaturesLayer == null)
+                polygonFeaturesLayer = CreatePolygonLayer();
 
-            polygonFeatures.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
+            polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }
 
         private CoordinateSystem GetCoordinateSystem()

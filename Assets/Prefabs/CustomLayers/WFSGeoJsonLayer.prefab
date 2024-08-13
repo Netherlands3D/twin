@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5593278776292583182}
   - component: {fileID: -2609350098801323660}
   m_Layer: 0
-  m_Name: WFSGeoJsonLayerGameObject
+  m_Name: WFSGeoJsonLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,12 +53,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   maxFeatureVisualsPerFrame: 20
-  lineRenderer3DPrefab: {fileID: 373191915858293964, guid: 5a90b8aa85a93ae48b94879ac3d2373e,
+  polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,
     type: 3}
-  pointRenderer3DPrefab: {fileID: -4723935055048165154, guid: 5174e2e7a4c654e2ead494648a2604fd,
+  lineLayerPrefab: {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576,
     type: 3}
-  defaultVisualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
-    type: 2}
+  pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
+    type: 3}
   randomizeColorPerFeature: 1
   OnParseError:
     m_PersistentCalls:
