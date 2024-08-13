@@ -38,12 +38,11 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
-        public LayerPropertyData PropertyData => urlPropertyData;
-
         [Space]
         public UnityEvent<string> OnParseError = new();
         private Coroutine streamParseCoroutine;
-        private LayerURLPropertyData urlPropertyData;
+        protected LayerURLPropertyData urlPropertyData = new();
+        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         protected virtual void Awake()
         {
@@ -51,15 +50,16 @@ namespace Netherlands3D.Twin.Layers
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             LayerData.Color = randomLayerColor;
+
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
-                this.urlPropertyData = urlProperty; 
-                //Set either url of tile data provider, or the url of the GeoJSON file based on GeoJSONLayer type      
+                this.urlPropertyData = urlProperty;
+                StreamParseGeoJSONFile(urlProperty.url);
             }
         }
 
@@ -116,23 +116,10 @@ namespace Netherlands3D.Twin.Layers
         }
 
         /// <summary>
-        /// Parses a GeoJSON files and updates the exisiting list of Features with the new features.
-        /// Ideal of you want to build a visualisation of multiple GeoJSON files (like tiled request using bbox)
-        /// </summary>
-        public void AdditiveParseGeoJSON(string filePath)
-        {
-            // Read filepath and deserialize the GeoJSON using GeoJSON.net in one go
-            var jsonText = File.ReadAllText(filePath);
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-            
-            AppendFeatureCollection(featureCollection);
-        }
-
-        /// <summary>
         /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void StreamParseGeoJSON(string filePath)
+        public void StreamParseGeoJSONFile(string filePath)
         {
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
@@ -204,16 +191,36 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private GeoJSONPolygonLayer CreatePolygonLayer()
+        private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
+                        return polygonLayer;
+                }
+            }
+
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
             return newPolygonLayerGameObject;
         }
 
-        private GeoJSONLineLayer CreateLineLayer()
+        private GeoJSONLineLayer CreateOrGetLineLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
+                        return lineLayer;
+                }
+            }
+
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
@@ -224,8 +231,18 @@ namespace Netherlands3D.Twin.Layers
             return newLineLayerGameObject;
         }
 
-        private GeoJSONPointLayer CreatePointLayer()
+        private GeoJSONPointLayer CreateOrGetPointLayer()
         {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if(child is ReferencedLayerData referencedLayerData)
+                {
+                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
+                        return pointLayer;
+                }
+            }
+
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
@@ -268,7 +285,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreatePointLayer();
+                pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
         }
@@ -276,7 +293,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreatePointLayer();
+                pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
         }
@@ -284,7 +301,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateLineLayer();
+                lineFeaturesLayer = CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
@@ -292,7 +309,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateLineLayer();
+                lineFeaturesLayer = CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
@@ -300,7 +317,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreatePolygonLayer();
+                polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
         }
@@ -308,7 +325,7 @@ namespace Netherlands3D.Twin.Layers
         private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreatePolygonLayer();
+                polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }
