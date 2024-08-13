@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -20,20 +22,17 @@ namespace Netherlands3D.Twin.Layers
     }
 
     [Serializable]
-    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyPanels
+    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         [JsonProperty] public List<Coordinate> OriginalPolygon { get; private set; }
         [SerializeField, JsonProperty] private ShapeType shapeType;
         [SerializeField, JsonProperty] private float polygonExtrusionHeight;
-        [SerializeField, JsonProperty] private float lineWidth;
 
         [JsonIgnore] public CompoundPolygon Polygon { get; set; }
         [JsonIgnore] public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         [JsonIgnore] public UnityEvent polygonMoved = new();
         [JsonIgnore] public UnityEvent polygonChanged = new();
         [JsonIgnore] private bool notifyOnPolygonChange = true;
-
-        [JsonIgnore] private List<IPropertySectionInstantiator> propertySections = new();
 
         [JsonIgnore]
         public ShapeType ShapeType
@@ -45,22 +44,17 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore]
         public float LineWidth
         {
-            get => lineWidth;
-            set
-            {
-                lineWidth = value;
-                CreatePolygonFromLine(OriginalPolygon, lineWidth);
-            }
+            get => polygonPropertyData.LineWidth;
+            set => polygonPropertyData.LineWidth = value;
         }
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
-        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight, float lineWidth) : base(name, prefabId, layerProperties)
+        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight) : base(name, prefabId, layerProperties)
         {
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
-            this.lineWidth = lineWidth;
 
             SetShape(originalPolygon);
             PolygonSelectionCalculator.RegisterPolygon(this);
@@ -74,9 +68,12 @@ namespace Netherlands3D.Twin.Layers
 
         public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float polygonExtrusionHeight, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
         {
+            polygonPropertyData = new PolygonSelectionLayerPropertyData();
+            AddProperty(polygonPropertyData);
+            Debug.Log(LineWidth);
+            
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
-            this.lineWidth = defaultLineWidth;
 
             var coordinates = ConvertToCoordinates(polygonUnityInput);
             SetShape(coordinates);
@@ -87,7 +84,14 @@ namespace Netherlands3D.Twin.Layers
 
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
-        
+
+        private static List<LayerPropertyData> CreateNewProperties()
+        {
+            var properties = new List<LayerPropertyData>(1);
+            properties.Add(new PolygonSelectionLayerPropertyData());
+            return properties;
+        }
+
         ~PolygonSelectionLayer()
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
@@ -142,7 +146,7 @@ namespace Netherlands3D.Twin.Layers
             ShapeType = ShapeType.Line;
             OriginalPolygon = line;
 
-            CreatePolygonFromLine(line, lineWidth);
+            CreatePolygonFromLine(line, polygonPropertyData.LineWidth);
 
             if (propertySections.Count == 0)
             {
@@ -222,11 +226,6 @@ namespace Netherlands3D.Twin.Layers
                 GameObject.Destroy(PolygonVisualisation.gameObject);
         }
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
-        }
-
         public List<Vector3> GetPolygonAsUnityPoints()
         {
             return ConvertToUnityPoints(OriginalPolygon);
@@ -254,6 +253,25 @@ namespace Netherlands3D.Twin.Layers
             }
 
             return pointList;
+        }
+
+        private List<IPropertySectionInstantiator> propertySections = new();
+        private PolygonSelectionLayerPropertyData polygonPropertyData;
+        public LayerPropertyData PropertyData => polygonPropertyData;
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            Debug.Log("loading properties");
+            var polygonProperty = (PolygonSelectionLayerPropertyData)properties.FirstOrDefault(p => p is PolygonSelectionLayerPropertyData);
+            if (polygonProperty != null)
+            {
+                polygonPropertyData = polygonProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+            }
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return propertySections;
         }
     }
 }

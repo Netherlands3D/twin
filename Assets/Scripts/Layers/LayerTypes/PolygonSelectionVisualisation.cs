@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class PolygonSelectionVisualisation : LayerGameObject
+    public class PolygonSelectionVisualisation : LayerGameObject//, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
@@ -36,6 +39,5 @@ namespace Netherlands3D.Twin
 
             return polygonVisualisation;
         }
-
     }
 }
