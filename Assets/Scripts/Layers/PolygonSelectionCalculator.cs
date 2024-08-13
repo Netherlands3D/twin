@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin
         {
             opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
         }
-        
+
         private void OnEnable()
         {
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin
         {
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
-        
+
         public static void RegisterPolygon(PolygonSelectionLayer layer)
         {
             if (Layers.Contains(layer))
@@ -41,16 +41,11 @@ namespace Netherlands3D.Twin
             Layers.Add(layer);
             polygonAddedThisFrame = true;
         }
-        
+
         public static void UnregisterPolygon(PolygonSelectionLayer layer)
         {
-            if (!Layers.Contains(layer))
-            {
+            if (!Layers.Remove(layer))
                 Debug.LogError("layer " + layer + " is not registered");
-                return;
-            }
-
-            Layers.Remove(layer);
         }
 
         private void ProcessClick()
@@ -60,7 +55,7 @@ namespace Netherlands3D.Twin
                 polygonAddedThisFrame = false;
                 return;
             }
-            
+
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
             var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(camera, Pointer.current.position.ReadValue());
@@ -70,7 +65,7 @@ namespace Netherlands3D.Twin
                 bool wasSelected = ProcessPolygonSelection(layer, camera, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
-                    layer.SelectLayer();
+                    layer.SelectLayer(true);
                     return; //select only one
                 }
                 else

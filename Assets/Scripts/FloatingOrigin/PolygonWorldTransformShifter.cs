@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-
+            var unityCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
             StoreLocalUnityCoordinatesLists();
         }
 
@@ -34,13 +34,19 @@ namespace Netherlands3D.Twin
         private void StoreLocalUnityCoordinatesLists()
         {
             //Create matching points list with world coordinates
-            preshiftPolygonsCoordinates = new List<Coordinate>(polygonSelectionLayer.OriginalPolygon.Count);
-            for (int i = 0; i < polygonSelectionLayer.OriginalPolygon.Count; i++)
-            {
-                var point = polygonSelectionLayer.OriginalPolygon[i];
-                var worldCoordinate = new Coordinate(point);
-                preshiftPolygonsCoordinates.Add(worldCoordinate);
-            }
+            // preshiftPolygonsCoordinates = new List<Coordinate>(polygonSelectionLayer.OriginalPolygon.Count);
+            // for (int i = 0; i < polygonSelectionLayer.OriginalPolygon.Count; i++)
+            // {
+            //     var point = polygonSelectionLayer.OriginalPolygon[i];
+            //     var unityCoordinate = new Coordinate(
+            //         CoordinateSystem.Unity, 
+            //         point.x, 
+            //         point.y, 
+            //         point.z
+            //     );
+            //     var worldCoordinate = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+            //     preshiftPolygonsCoordinates.Add(worldCoordinate);
+            // }
         }
 
         private void ConvertAndApplyCoordinates()
@@ -52,8 +58,9 @@ namespace Netherlands3D.Twin
             for (int i = 0; i < preshiftPolygonsCoordinates.Count; i++)
             {
                 var worldCoordinate = preshiftPolygonsCoordinates[i];
-                var unityCoordinate = worldCoordinate.ToUnity();
-                newPolygon.Add(unityCoordinate);
+                var unityCoordinate = CoordinateConverter.ConvertTo(worldCoordinate, CoordinateSystem.Unity);
+                var unityVector3Coordinate = new Vector3((float)unityCoordinate.Points[0], (float)unityCoordinate.Points[1], (float)unityCoordinate.Points[2]);
+                newPolygon.Add(unityVector3Coordinate);
             }
 
             // Trigger reapplied points
