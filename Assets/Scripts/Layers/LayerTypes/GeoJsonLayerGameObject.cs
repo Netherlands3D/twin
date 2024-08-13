@@ -55,11 +55,6 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            //Destroy child layers for now if restored from save file, because we create geometry layers on the fly
-            var childLayers = LayerData.ChildrenLayers;
-            foreach (var childLayer in childLayers)
-                childLayer.DestroyLayer();
-
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
