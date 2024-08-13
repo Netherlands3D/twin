@@ -108,7 +108,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  terrainLayer: {fileID: 0}
+  terrainLayerGameObject: {fileID: 0}
 --- !u!20 &6592016002428932495
 Camera:
   m_ObjectHideFlags: 0
