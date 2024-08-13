@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -23,9 +24,14 @@ namespace Netherlands3D.Twin
             var polygon3D = newPolygon.ToVector3List();
 
             if (!PolygonVisualisation)
+            {
                 PolygonVisualisation = CreatePolygonMesh(polygon3D, extrusionHeight, PolygonMeshMaterial);
+                PolygonVisualisation.gameObject.AddComponent<GameObjectWorldTransformShifter>();
+                PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
+            }
             else
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
+            
         }
 
         private PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
