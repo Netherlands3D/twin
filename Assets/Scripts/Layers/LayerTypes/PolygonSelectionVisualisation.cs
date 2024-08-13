@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class PolygonSelectionVisualisation : MonoBehaviour
+    public class PolygonSelectionVisualisation : LayerGameObject
     {
         public PolygonVisualisation PolygonVisualisation { get; private set; }
-        public Material PolygonMeshMaterial { get; set; }
+        public Material PolygonMeshMaterial;
 
         /// <summary>
         /// Create or update PolygonVisualisation

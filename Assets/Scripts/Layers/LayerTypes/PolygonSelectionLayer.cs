@@ -20,14 +20,14 @@ namespace Netherlands3D.Twin.Layers
     }
 
     [Serializable]
-    public class PolygonSelectionLayer : LayerData, ILayerWithPropertyPanels
+    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyPanels
     {
         [JsonProperty] public List<Coordinate> OriginalPolygon { get; private set; }
         [SerializeField, JsonProperty] private ShapeType shapeType;
         [SerializeField, JsonProperty] private float polygonExtrusionHeight;
         [SerializeField, JsonProperty] private float lineWidth;
 
-        [JsonIgnore]public CompoundPolygon Polygon { get; set; }
+        [JsonIgnore] public CompoundPolygon Polygon { get; set; }
         [JsonIgnore] public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         [JsonIgnore] public UnityEvent polygonMoved = new();
         [JsonIgnore] public UnityEvent polygonChanged = new();
@@ -52,13 +52,12 @@ namespace Netherlands3D.Twin.Layers
                 CreatePolygonFromLine(OriginalPolygon, lineWidth);
             }
         }
-        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation { get; private set; }
+
+        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
-        public PolygonSelectionLayer(string name, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight, float lineWidth) : base(name)
+        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType, float polygonExtrusionHeight, float lineWidth) : base(name, prefabId, layerProperties)
         {
-            PolygonVisualisation = CreateVisualisation();
-            
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
             this.lineWidth = lineWidth;
@@ -68,42 +67,27 @@ namespace Netherlands3D.Twin.Layers
             ProjectData.Current.AddStandardLayer(this);
 
             //Add shifter that manipulates the polygon if the world origin is shifted
-            PolygonVisualisation.gameObject.AddComponent<GameObjectWorldTransformShifter>();
-            PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
 
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
-        public PolygonSelectionLayer(string name, List<Vector3> polygonUnityInput, float polygonExtrusionHeight, Material polygonMeshMaterial, ShapeType shapeType, float defaultLineWidth = 10f) : base(name)
+        public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float polygonExtrusionHeight, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
         {
-            PolygonVisualisation = CreateVisualisation();
-            
             this.ShapeType = shapeType;
             this.polygonExtrusionHeight = polygonExtrusionHeight;
-            PolygonVisualisation.PolygonMeshMaterial = polygonMeshMaterial;
             this.lineWidth = defaultLineWidth;
 
             var coordinates = ConvertToCoordinates(polygonUnityInput);
             SetShape(coordinates);
             PolygonSelectionCalculator.RegisterPolygon(this);
-            ProjectData.Current.AddStandardLayer(this);
 
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
 
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
-
-        private PolygonSelectionVisualisation CreateVisualisation()
-        {
-            var go = new GameObject("PolygonVisualisation");
-            var pv = go.AddComponent<PolygonSelectionVisualisation>();
-            go.AddComponent<GameObjectWorldTransformShifter>();
-            go.AddComponent<WorldTransform>();
-            return pv;
-        }
-
+        
         ~PolygonSelectionLayer()
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
@@ -211,7 +195,7 @@ namespace Netherlands3D.Twin.Layers
 
             return polygon;
         }
-        
+
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
