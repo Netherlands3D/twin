@@ -131,7 +131,6 @@ namespace Netherlands3D.CartesianTiles
         {
             var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             string url = WfsUrl.Replace("{0}", bboxValue);
-            Debug.Log("Downloading GeoJSON from: " + url);
 
             var geoJsonRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = geoJsonRequest;
