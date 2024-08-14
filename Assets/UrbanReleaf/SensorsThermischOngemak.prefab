@@ -92,7 +92,8 @@ MonoBehaviour:
   Maximum: 1
   Minimum: 0
   MaxColor: {r: 1, g: 0, b: 0.18562794, a: 1}
-  MinColor: {r: 0, g: 1, b: 0.15729427, a: 1}
+  MinColor: {r: 1, g: 0, b: 0, a: 1}
+  heightMultiplier: 5000
   HexagonSelectionPrefabEmpty: {fileID: 163732822759528096, guid: 96759158917151048a44df37d28d88d9,
     type: 3}
   HexagonSelectionPrefabValue: {fileID: 163732822759528096, guid: e117150540d8b5f44afcf333eb19bb4b,

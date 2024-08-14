@@ -16,25 +16,27 @@ namespace Netherlands3D.Twin
         public float Maximum;
         public float Minimum;        
         public Color MaxColor;
-        public Color MinColor;  
-        public int StartTimeSeconds { get { return startTimeWindowSeconds; } set { startTimeWindowSeconds = Mathf.Clamp(value, 0, DaySeconds * MaxDays); } }
-        public int EndTimeSeconds { get { return endTimeWindowSeconds; } set { endTimeWindowSeconds = Mathf.Clamp(value, 0, DaySeconds * MaxDays); } }
+        public Color MinColor;
+
+        public float heightMultiplier = 500; //how high will the tile rise on selection, multiplication scale per measurement
+
+        public DateTime StartDate { get { return startDate; } }
+        public DateTime EndDate { get { return endDate; } }
         public DateTime DefaultStartDate { get { return defaultStartDate; } }
         public DateTime DefaultEndDate { get { return defaultEndDate; } }
         public int Observations { get { return observationLimit; } set { observationLimit = Mathf.Clamp(value, 1, 5000); } }
 
         public GameObject HexagonSelectionPrefabEmpty;
         public GameObject HexagonSelectionPrefabValue;
-
-
-        public const int DaySeconds = 3600 * 24;
-        public const int MaxDays = 365;
+      
         protected List<SensorCell> cells = new List<SensorCell>();   
         protected List<SensorCell> staticCells = new List<SensorCell>();        
         protected float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
         protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
-        protected int startTimeWindowSeconds = MaxDays * DaySeconds;
-        protected int endTimeWindowSeconds = DaySeconds;
+
+
+        protected DateTime startDate;
+        protected DateTime endDate;
         protected DateTime defaultStartDate = new();
         protected DateTime defaultEndDate = new();
 
@@ -49,7 +51,13 @@ namespace Netherlands3D.Twin
 
         public virtual void Start()
         {
+            SetTimeWindow(defaultStartDate, defaultEndDate);
+        }
 
+        public void SetTimeWindow(DateTime startDate, DateTime endDate)
+        {
+            this.startDate = startDate;
+            this.endDate = endDate;
         }
 
         public abstract UnityWebRequest GetRequest(Tile tile, string baseUrl);

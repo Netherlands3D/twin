@@ -143,6 +143,13 @@ namespace Netherlands3D.CartesianTiles
                 tileChange.Y = tile.Key.y;
                 queuedChanges.Add(tileChange);
             }
+
+            if (!isEnabled)
+            {
+                queuedChanges.Clear();
+                yield break;
+            }
+
             bool ready = true;
             while (queuedChanges.Count > 0)
             {
@@ -170,6 +177,29 @@ namespace Netherlands3D.CartesianTiles
             
             updateTilesRoutine = null;
             visibleTilesDirty = false;
+        }
+
+        public override void LayerToggled()
+        {
+            base.LayerToggled();
+            if(!isEnabled)
+            {
+                //get current tiles
+                foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+                {
+                    if (tile.Value == null || tile.Value.gameObject == null)
+                        continue;
+
+                    if (tile.Value.runningCoroutine != null)
+                        StopCoroutine(tile.Value.runningCoroutine);
+
+                    TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                    projector.gameObject.SetActive(false);
+
+                    TileSensorDataController controller = tile.Value.gameObject.GetComponent<TileSensorDataController>();
+                    controller.DestroySelectedHexagon();
+                }
+            }
         }
     }
 }

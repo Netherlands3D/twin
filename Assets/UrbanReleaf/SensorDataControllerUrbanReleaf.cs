@@ -28,6 +28,7 @@ namespace Netherlands3D.Twin
             strBuilder = new StringBuilder();
             defaultStartDate = new DateTime(2024, 7, 1);
             defaultEndDate = new DateTime(2024, 8, 31);
+            base.Start();
         }
 
         public override UnityWebRequest GetRequest(Tile tile, string baseUrl)
@@ -61,12 +62,8 @@ namespace Netherlands3D.Twin
         //get the observation start time and end time and create a timewindow url            
         public string GetTimeUrl()
         {
-            DateTime start = DateTime.Now;
-            DateTime startAdjusted = start.AddSeconds(-startTimeWindowSeconds);
-            DateTime end = DateTime.Now;
-            DateTime endAdjusted = end.AddSeconds(-endTimeWindowSeconds);
-            string sortableStartTime = startAdjusted.ToString(timeFormatSpecifier);
-            string sortableEndTime = endAdjusted.ToString(timeFormatSpecifier);            
+            string sortableStartTime = startDate.ToString(timeFormatSpecifier);
+            string sortableEndTime = endDate.ToString(timeFormatSpecifier);            
             
             string timeUrl = timeStartKey + sortableStartTime + timeEndKey + sortableEndTime;
             return timeUrl;

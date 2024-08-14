@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b2293ded97497ba4e8743e34c11901, type: 3}
-  m_Name: CurrentProject
+  m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
   SavedTimestamp: 20240718162141
   UUID: 94e04335-1862-4a8f-985c-d030391bc8db
   CameraPosition:
-  - 154992.86748218536
-  - 462800.3472137451
-  - 300
+  - 136615.44318461418
+  - 453383.50341796875
+  - 884.4622802734375
   CameraRotation:
   - 60.000003814697266
   - 0

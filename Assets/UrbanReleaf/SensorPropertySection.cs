@@ -1,5 +1,6 @@
 using Netherlands3D.CartesianTiles;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +10,24 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         private SensorDataController controller;
         private SensorProjectionLayer projectionLayer;
-        [SerializeField] private Slider startTimeSlider;
-        [SerializeField] private Slider endTimeSlider;
+
+        [SerializeField] private TMP_Text startTimeYearField;
+        [SerializeField] private TMP_InputField startTimeYearInputField;
+        [SerializeField] private TMP_Text startTimeMonthField;
+        [SerializeField] private TMP_InputField startTimeMonthInputField;
+        [SerializeField] private TMP_Text startTimeDayField;
+        [SerializeField] private TMP_InputField startTimeDayInputField;
+
+        [SerializeField] private TMP_Text endTimeYearField;
+        [SerializeField] private TMP_InputField endTimeYearInputField;
+        [SerializeField] private TMP_Text endTimeMonthField;
+        [SerializeField] private TMP_InputField endTimeMonthInputField;
+        [SerializeField] private TMP_Text endTimeDayField;
+        [SerializeField] private TMP_InputField endTimeDayInputField;
+
+        [SerializeField] private string formatString = "N2";
+
+
         [SerializeField] private Slider minSlider;
         [SerializeField] private Slider maxSlider;
         [SerializeField] private ColorPicker minimumColorPicker;
@@ -29,60 +46,59 @@ namespace Netherlands3D.Twin.Layers.Properties
                     projectionLayer = controller.gameObject.GetComponent<SensorProjectionLayer>();
 
 
-                startTimeSlider.minValue = 0;
-                startTimeSlider.maxValue = SensorDataController.MaxDays;
-                DateTime defaultStartDate = controller.DefaultStartDate;
-                TimeSpan span = DateTime.Now - defaultStartDate;
-                startTimeSlider.value = (float)span.TotalDays;
+                DateTime startDate = controller.StartDate;
+                startTimeYearField.text = startDate.Year.ToString();
+                startTimeMonthField.text = startDate.Month.ToString();
+                startTimeDayField.text = startDate.Day.ToString();
+                OnInputStartTimeValueChanged();
 
-                endTimeSlider.minValue = 0;
-                endTimeSlider.maxValue = SensorDataController.MaxDays;
-                DateTime defaultEndDate = controller.DefaultEndDate;
-                span = DateTime.Now - defaultEndDate;
-                endTimeSlider.value = (float)span.TotalDays;
+                DateTime endDate = controller.EndDate;
+                endTimeYearField.text = endDate.Year.ToString();
+                endTimeMonthField.text = endDate.Month.ToString();
+                endTimeDayField.text = endDate.Day.ToString();
+                OnInputEndTimeValueChanged();
 
-                minSlider.value = controller.Minimum;
-                maxSlider.value = controller.Maximum;
-                minimumColorPicker.color = controller.MinColor;
-                maximumColorPicker.color = controller.MaxColor;
+                if(minSlider != null)
+                    minSlider.value = controller.Minimum;
+                if(maxSlider != null) 
+                    maxSlider.value = controller.Maximum;
+                if(minimumColorPicker != null)
+                    minimumColorPicker.color = controller.MinColor;
+                if(maximumColorPicker != null)
+                    maximumColorPicker.color = controller.MaxColor;
             }
         }
 
+        private void Awake()
+        {
+            startTimeYearInputField.onValueChanged.AddListener(v => { startTimeYearField.text = v; OnInputStartTimeValueChanged(); });
+            startTimeMonthInputField.onValueChanged.AddListener(v => { startTimeMonthField.text = v; OnInputStartTimeValueChanged(); });
+            startTimeDayInputField.onValueChanged.AddListener(v => { startTimeDayField.text = v; OnInputStartTimeValueChanged(); });
+
+            endTimeYearInputField.onValueChanged.AddListener(v => { endTimeYearField.text = v; OnInputEndTimeValueChanged(); });
+            endTimeMonthInputField.onValueChanged.AddListener(v => { endTimeMonthField.text = v; OnInputEndTimeValueChanged(); });
+            endTimeDayInputField.onValueChanged.AddListener(v => { endTimeDayField.text = v; OnInputEndTimeValueChanged(); });
+        }
+
         private void OnEnable()
-        {          
-            startTimeSlider.onValueChanged.AddListener(HandleStartTimeSeconds);
-            endTimeSlider.onValueChanged.AddListener(HandleEndTimeSeconds);
-            minSlider.onValueChanged.AddListener(HandleMinimum);
-            maxSlider.onValueChanged.AddListener(HandleMaximum);
-            minimumColorPicker.onColorChanged += HandleMinimumColor;
-            maximumColorPicker.onColorChanged += HandleMaximumColor;
+        { 
+            minSlider?.onValueChanged.AddListener(HandleMinimum);
+            maxSlider?.onValueChanged.AddListener(HandleMaximum);
+            if(minimumColorPicker != null)
+                minimumColorPicker.onColorChanged += HandleMinimumColor;
+            if(maximumColorPicker != null)
+                maximumColorPicker.onColorChanged += HandleMaximumColor;
         }
 
         private void OnDisable()
         {
-            startTimeSlider.onValueChanged.RemoveListener(HandleStartTimeSeconds);
-            endTimeSlider.onValueChanged.RemoveListener(HandleEndTimeSeconds);
-            minSlider.onValueChanged.RemoveListener(HandleMinimum);
-            maxSlider.onValueChanged.RemoveListener(HandleMaximum);
-            minimumColorPicker.onColorChanged -= HandleMinimumColor;
-            maximumColorPicker.onColorChanged -= HandleMaximumColor;
-        }
-
-        private void HandleStartTimeSeconds(float newValue)
-        {
-            int value = (int)newValue * SensorDataController.DaySeconds;
-            if(value != controller.EndTimeSeconds)
-                projectionLayer.SetVisibleTilesDirty();
-            controller.StartTimeSeconds = value;            
-        }
-
-        private void HandleEndTimeSeconds(float newValue)
-        {
-            int value = (int)newValue * SensorDataController.DaySeconds;
-            if(value != controller.EndTimeSeconds)
-                projectionLayer.SetVisibleTilesDirty();
-            controller.EndTimeSeconds = value;            
-        }
+            minSlider?.onValueChanged.RemoveListener(HandleMinimum);
+            maxSlider?.onValueChanged.RemoveListener(HandleMaximum);
+            if(minimumColorPicker != null)
+                minimumColorPicker.onColorChanged -= HandleMinimumColor;
+            if(maximumColorPicker != null)
+                maximumColorPicker.onColorChanged -= HandleMaximumColor;
+        }       
 
         private void HandleMinimum(float newValue) 
         {
@@ -116,6 +132,56 @@ namespace Netherlands3D.Twin.Layers.Properties
                     projectionLayer.SetVisibleTilesDirty();
                 controller.MaxColor = newValue;                
             }
+        }
+
+        private void OnInputStartTimeValueChanged()
+        {
+            if (!IsValidYear(startTimeDayField.text, startTimeMonthField.text, startTimeYearField.text))
+                return;
+
+            startTimeDayInputField.text = startTimeDayField.text;
+            startTimeMonthInputField.text = startTimeMonthField.text;
+            startTimeYearInputField.text = startTimeYearField.text;
+
+            projectionLayer.SetVisibleTilesDirty();
+            int day = int.Parse(startTimeDayField.text);
+            int month = int.Parse(startTimeMonthField.text);
+            int year = int.Parse(startTimeYearField.text);
+            DateTime endTime = controller.EndDate;
+            DateTime newStart = new DateTime(year, month, day);
+            controller.SetTimeWindow(newStart, endTime);
+        }
+
+        private void OnInputEndTimeValueChanged()
+        {
+            if (!IsValidYear(endTimeDayField.text, endTimeMonthField.text, endTimeYearField.text))
+                return;
+
+            endTimeDayInputField.text = endTimeDayField.text;
+            endTimeMonthInputField.text = endTimeMonthField.text;
+            endTimeYearInputField.text = endTimeYearField.text;
+
+            projectionLayer.SetVisibleTilesDirty();
+            int day = int.Parse(endTimeDayField.text);
+            int month = int.Parse(endTimeMonthField.text);
+            int year = int.Parse(endTimeYearField.text);
+            DateTime startTime = controller.StartDate;
+            DateTime newEnd = new DateTime(year, month, day);
+            controller.SetTimeWindow(startTime, newEnd);
+        }
+
+        private bool IsValidYear(string day, string month, string year)
+        {
+            if (string.IsNullOrEmpty(day) || day.Length > 2)
+                return false;
+
+            if (string.IsNullOrEmpty(month) || month.Length > 2)
+                return false;
+
+            if (string.IsNullOrEmpty(year) || year.Length != 4)
+                return false;
+
+            return true;
         }
     }
 }

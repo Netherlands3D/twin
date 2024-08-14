@@ -12,7 +12,7 @@ namespace Netherlands3D.CartesianTiles
         public Texture2D DataTexture { get { return dataTexture; } }
 
         private Texture2D dataTexture;
-        private bool hexagonalPatternEnabled = true; //enabling gives a hexagon pattern, disabling only shows colored hexagons with data (disabling increases performance)
+        private bool hexagonalPatternEnabled = false; //enabling gives a hexagon pattern, disabling only shows colored hexagons with data (disabling increases performance)
         private const float sqr3 = 1.73205080757f;
         private const float sqr3_div4 = 0.25f * sqr3;
         private const float half_sqr3_div4 = 0.5f * sqr3_div4;
@@ -36,6 +36,7 @@ namespace Netherlands3D.CartesianTiles
         {
             public float value;
             public int measurements;
+            public int sensors;
             public Color color;
         }
         
@@ -129,12 +130,22 @@ namespace Netherlands3D.CartesianTiles
             RectTransform rt = textMesh.rectTransform;
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 75);
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 75);
-            textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n waarde: \n" + hex.value.ToString();
+                        
+            switch(controller.propertyType)
+            {
+                case SensorDataController.SensorPropertyType.ThermalDiscomfort:
+                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors;
+                    break;
+                default:
+                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString();
+                    break;
+
+            }            
             textMesh.alignment = TextAlignmentOptions.Center;
             
             textObject.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 30));
             textObject.transform.SetParent(t.transform);
-            textObject.transform.localPosition = new Vector3(0,0,0.006f);
+            textObject.transform.localPosition = new Vector3(0,0,0.0051f);
 
             //previous selected object should already be deactivated so we can use the ref again            
             selectedHexagonObject = t;
@@ -147,10 +158,13 @@ namespace Netherlands3D.CartesianTiles
             t.transform.localScale = targetScale;
 
             //animate the object to scale up
-            StartCoroutine(AnimateHexagon(t, animationSpeed, scale, instance =>
+            if (gameObject.activeSelf)
             {
-                
-            }));
+                StartCoroutine(AnimateHexagon(t, animationSpeed, scale + hex.measurements * controller.heightMultiplier, instance =>
+                {
+
+                }));
+            }
         }
 
         private IEnumerator AnimateHexagon(GameObject instance, float speed, float height, Action<GameObject> onEnd = null)
@@ -200,8 +214,8 @@ namespace Netherlands3D.CartesianTiles
                     //get the average cell value from datapoints
                     //because of floating point approximation lets add +0.001f * tilesize 
                     bool hasValues;
-                    int measurements;
-                    float value = GetValueForHexagon(tilePosition, hexHeight * 0.5f / columnsInner * tile.layer.tileSize * div2_sqr3 + tile.layer.tileSize * 0.001f, out hasValues, out measurements);                    
+                    int measurements, sensors;
+                    float value = GetValueForHexagon(tilePosition, hexHeight * 0.5f / columnsInner * tile.layer.tileSize * div2_sqr3 + tile.layer.tileSize * 0.001f, out hasValues, out measurements, out sensors);                    
                     if (!hasValues && !hexagonalPatternEnabled)
                         continue;
 
@@ -222,6 +236,7 @@ namespace Netherlands3D.CartesianTiles
                     SensorHexagon hex = new SensorHexagon();
                     hex.value = value;
                     hex.measurements = measurements;
+                    hex.sensors = sensors;
                     hex.color = valueColor;
                     hexagons[col, row] = hex;
 
@@ -262,15 +277,17 @@ namespace Netherlands3D.CartesianTiles
             dataTexture.Apply();
         }
         
-        private float GetValueForHexagon(Vector2 hexagonPosition, float hexagonRadius, out bool hasValues, out int measurements)
+        private float GetValueForHexagon(Vector2 hexagonPosition, float hexagonRadius, out bool hasValues, out int measurements, out int sensorCount)
         {
             measurements = 0;
+            sensorCount = 0;
             hasValues = false;
             if (localCells == null)
                 return 0;
 
             int cellsInHexagon = 0;
             float value = 0;
+            List<Vector2> keys = new List<Vector2>();
             foreach(SensorDataController.SensorCell cell in localCells)
             {
                 Vector3 unityPosition = cell.unityPosition;
@@ -279,11 +296,16 @@ namespace Netherlands3D.CartesianTiles
                     cellsInHexagon++;
                     value += cell.value;
                     hasValues = true;
+                    Vector2 newKey = new Vector2(cell.lon, cell.lat);
+                    if(!keys.Contains(newKey))
+                        keys.Add(newKey);
                 }
             }
             if (cellsInHexagon == 0)
                 return 0;
 
+            sensorCount = keys.Count;
+            keys.Clear();
             measurements = cellsInHexagon;
             value /= cellsInHexagon;
             return value;
