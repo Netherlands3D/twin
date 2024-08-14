@@ -60,11 +60,12 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
+            Debug.Log("LoadProperties for layer " + LayerData.Name);
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                RestoreGeoJsonLocalFile(urlProperty.url);
+                StartCoroutine(RestoreGeoJsonLocalFile(urlProperty.url));
             }
         }
 
@@ -136,7 +137,8 @@ namespace Netherlands3D.Twin.Layers
 
         private IEnumerator RestoreGeoJsonLocalFile(string url)
         {
-            Debug.Log("Store." + url);
+            Debug.Log("Restore: " + url);
+
             //create LocalFile so we can use it in the ParseGeoJSONStream function
             var uwr = UnityWebRequest.Get(url);
             var optionalExtention = Path.GetExtension(url).Split("?")[0];

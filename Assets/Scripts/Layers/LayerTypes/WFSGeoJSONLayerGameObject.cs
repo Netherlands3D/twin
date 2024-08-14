@@ -7,7 +7,7 @@ using System.Linq;
 namespace Netherlands3D.Twin.Layers
 {
     /// <summary>
-    /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider.
+    /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider WFSGeoJSONTileDataLayer
     /// </summary>
     public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject
     {
