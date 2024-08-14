@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using netDxf.Tables;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -53,13 +54,17 @@ namespace Netherlands3D.Twin.Layers
 
         }
 
+        /// <summary>
+        /// Load properties is only used when restoring a layer from a project file.
+        /// After getting the property containing the url, the GeoJSON file is downloaded and parsed.
+        /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                StreamParseGeoJSONFile(urlProperty.url);
+                DownloadGeoJsonToLocalFile(urlProperty.url);
             }
         }
 
@@ -119,18 +124,38 @@ namespace Netherlands3D.Twin.Layers
         /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void StreamParseGeoJSONFile(string filePath)
+        public void StreamParseGeoJSONFile(string path)
         {
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
 
-            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(filePath, 1000));
+            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
         }
 
-        private IEnumerator ParseGeoJSONStream(string filePath, int maxParsesPerFrame = Int32.MaxValue)
+        private IEnumerator DownloadGeoJsonToLocalFile(string url)
+        {
+            //create LocalFile so we can use it in the ParseGeoJSONStream function
+            var uwr = UnityWebRequest.Get(url);
+            var optionalExtention = Path.GetExtension(url).Split("?")[0];
+            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
+            string path = Path.Combine(Application.persistentDataPath, guidFilename);
+
+            uwr.downloadHandler = new DownloadHandlerFile(path);
+            yield return uwr.SendWebRequest();
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                StreamParseGeoJSONFile(path);
+            }
+            else
+            {
+                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
+            }
+        }
+
+        private IEnumerator ParseGeoJSONStream(string path, int maxParsesPerFrame = Int32.MaxValue)
         {
             var startFrame = Time.frameCount;
-            var reader = new StreamReader(filePath);
+            var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);
 
             JsonSerializer serializer = new JsonSerializer();
@@ -140,7 +165,7 @@ namespace Netherlands3D.Twin.Layers
 
             //reset position of reader
             jsonReader.Close();
-            reader = new StreamReader(filePath);
+            reader = new StreamReader(path);
             jsonReader = new JsonTextReader(reader);
 
             while (jsonReader.Read())
