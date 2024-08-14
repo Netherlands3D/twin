@@ -121,6 +121,7 @@ namespace Netherlands3D.CartesianTiles
                 t = Instantiate(controller.HexagonSelectionPrefabValue);
                 Material mat = t.GetComponent<MeshRenderer>().material;
                 mat.color = new Color(tileColor.r, tileColor.g, tileColor.b, 1f);
+
             }
 
             //add measuring text to the hexagon object
@@ -222,6 +223,9 @@ namespace Netherlands3D.CartesianTiles
                     Color valueColor = Color.gray;
                     if (hasValues)
                     {
+                        if (controller.MeasurementsIsValue)
+                            value = measurements;
+
                         float total = controller.Maximum - controller.Minimum; 
                         float v = (value - controller.Minimum) / total; 
                         v = Mathf.Clamp01(v);

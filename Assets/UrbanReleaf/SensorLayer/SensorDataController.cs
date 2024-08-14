@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin
         public Color MinColor;
 
         public float heightMultiplier = 500; //how high will the tile rise on selection, multiplication scale per measurement
+        public bool MeasurementsIsValue = false;
 
         public DateTime StartDate { get { return startDate; } }
         public DateTime EndDate { get { return endDate; } }
