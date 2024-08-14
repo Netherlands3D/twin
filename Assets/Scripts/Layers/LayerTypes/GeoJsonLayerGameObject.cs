@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                DownloadGeoJsonToLocalFile(urlProperty.url);
+                RestoreGeoJsonLocalFile(urlProperty.url);
             }
         }
 
@@ -121,19 +121,22 @@ namespace Netherlands3D.Twin.Layers
         }
 
         /// <summary>
-        /// Start a 'streaming' parse of a GeoJSON file. This will spread out the generation of visuals over multiple frames.
+        /// Sets URL and start a 'streaming' parse of the GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void StreamParseGeoJSONFile(string path)
+        public void SetURL(string path, string sourceUrl = "")
         {
+            this.urlPropertyData.url = sourceUrl;
+
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
 
             streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
         }
 
-        private IEnumerator DownloadGeoJsonToLocalFile(string url)
+        private IEnumerator RestoreGeoJsonLocalFile(string url)
         {
+            Debug.Log("Store." + url);
             //create LocalFile so we can use it in the ParseGeoJSONStream function
             var uwr = UnityWebRequest.Get(url);
             var optionalExtention = Path.GetExtension(url).Split("?")[0];
@@ -144,7 +147,7 @@ namespace Netherlands3D.Twin.Layers
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                StreamParseGeoJSONFile(path);
+                SetURL(path);
             }
             else
             {
