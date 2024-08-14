@@ -26,8 +26,7 @@ namespace Netherlands3D.Twin
             if (!PolygonVisualisation)
             {
                 PolygonVisualisation = CreatePolygonMesh(polygon3D, extrusionHeight, PolygonMeshMaterial);
-                PolygonVisualisation.gameObject.AddComponent<GameObjectWorldTransformShifter>();
-                PolygonVisualisation.gameObject.AddComponent<WorldTransform>();
+                PolygonVisualisation.transform.SetParent(transform);
             }
             else
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
