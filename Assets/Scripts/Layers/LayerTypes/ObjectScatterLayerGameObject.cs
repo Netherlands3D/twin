@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         }
         
-        public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
+        public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
         {
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
@@ -61,10 +61,6 @@ namespace Netherlands3D.Twin.Layers
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
 
             LayerData.SetParent(polygon);
-            foreach (var child in children)
-            {
-                child.SetParent(LayerData);
-            }
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();

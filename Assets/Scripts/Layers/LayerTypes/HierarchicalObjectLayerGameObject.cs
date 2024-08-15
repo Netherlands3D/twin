@@ -171,29 +171,15 @@ namespace Netherlands3D.Twin.Layers
             var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
             var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
             scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
-
-            var originalGameObject = objectLayerGameObject.gameObject;
-            objectLayerGameObject.LayerData.KeepReferenceOnDestroy = true;
+            scatterLayer.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer);
+            for (var i = objectLayerGameObject.LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
+            {
+                var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
+                child.SetParent(scatterLayer.LayerData, 0);
+            }
+            
             objectLayerGameObject.LayerData.DestroyLayer();
-            scatterLayer.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
-
             return scatterLayer;
-        }
-
-        private static List<LayerData> UnparentDirectChildren(LayerData layer)
-        {
-            var list = new List<LayerData>();
-            foreach (var child in layer.ChildrenLayers)
-            {
-                list.Add(child);
-            }
-
-            foreach (var directChild in list)
-            {
-                directChild.SetParent(null);
-            }
-
-            return list;
         }
     }
 }
