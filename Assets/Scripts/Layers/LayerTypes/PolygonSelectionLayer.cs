@@ -236,7 +236,6 @@ namespace Netherlands3D.Twin.Layers
             foreach (var coord in coordinateList)
             {
                 pointList.Add(coord.ToUnity());
-                Debug.Log(coord.ToVector3RD() + "\t"+ coord.ToUnity());
             }
 
             return pointList;

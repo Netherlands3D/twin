@@ -3,6 +3,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -17,10 +18,11 @@ namespace Netherlands3D.Twin.Layers
 
     public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
-        [JsonIgnore] private GameObject originalObject;
+        // [JsonIgnore] private GameObject originalObject;
+        [SerializeField, JsonProperty] private string originalObjectPrefabId;
         [JsonIgnore] private Mesh mesh;
         [JsonIgnore] private Material material;
-        [SerializeField, JsonProperty]private ScatterGenerationSettings settings;
+        [SerializeField, JsonProperty] private ScatterGenerationSettings settings;
         [JsonIgnore] public ScatterGenerationSettings Settings => settings;
         [JsonIgnore] private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [JsonIgnore] private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
@@ -35,14 +37,19 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] private bool completedInitialization;
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
+        public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
         {
-            this.originalObject = originalObject;
+            this.originalObjectPrefabId = originalObject.PrefabIdentifier;
+            foreach (var property in originalObject.LayerData.LayerProperties)
+            {
+                LayerData.AddProperty(property); //copy properties to be able to revert
+            }
+
             this.mesh = CombineHierarchicalMeshes(originalObject.transform);
             this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
             this.material.enableInstancing = true;
 
-            originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
+            // originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
             polygonLayer = polygon;
 
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
@@ -74,7 +81,7 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
-            
+
 // #if UNITY_EDITOR
 //          gameObject.AddComponent<GridDebugger>();
 // #endif
@@ -320,18 +327,21 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            originalObject.SetActive(true);
-            var layer = originalObject.AddComponent<HierarchicalObjectLayerGameObject>();
-            layer.LayerData.ActiveSelf = true;
+            // gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
+            // originalObject.SetActive(true);
+            // var layer = originalObject.AddComponent<HierarchicalObjectLayerGameObject>();
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(originalObjectPrefabId);
+            var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
+            revertedLayer.LayerData.SetProperties(LayerData.LayerProperties); //overwrite the properties with the saved ones, this will call the event and trigger a reload of the original properties. it will also save the modified scatter settings in case the user makes it a scatter layer again
+            revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
 
             foreach (var child in LayerData.ChildrenLayers)
             {
-                child.SetParent(layer.LayerData);
+                child.SetParent(revertedLayer.LayerData);
             }
 
-            layer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
-            DestroyLayer();
+            revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
+            LayerData.DestroyLayer();
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

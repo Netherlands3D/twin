@@ -172,8 +172,8 @@ namespace Netherlands3D.Twin.Layers
 
             var originalGameObject = objectLayerGameObject.gameObject;
             objectLayerGameObject.LayerData.KeepReferenceOnDestroy = true;
-            Destroy(objectLayerGameObject); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
-            layerComponent.Initialize(originalGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
+            objectLayerGameObject.LayerData.DestroyLayer();
+            layerComponent.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
 
             return layerComponent;
         }

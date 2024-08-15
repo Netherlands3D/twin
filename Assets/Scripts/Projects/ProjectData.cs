@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
-        
+
         [JsonIgnore]
         public RootLayer RootLayer
         {
@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin.Projects
         {
             UUID = Guid.NewGuid().ToString();
         }
-        
+
         public void CopyUndoFrom(ProjectData project)
         {
             //TODO: Implement undo copy with just the data we want to move between undo/redo states
@@ -104,22 +104,19 @@ namespace Netherlands3D.Twin.Projects
                         using Stream zipStream = zf.GetInputStream(zipEntry);
                         using StreamReader sr = new(zipStream);
                         string json = sr.ReadToEnd();
-                        
+
                         LoadJSON(json);
-                        
                     }
                     else
                     {
                         //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
                         Debug.Log("Other file found in Project zip. Ignoring for now.");
                         isLoading = false;
-                        
+
                         //todo add failed loading event
                     }
                 }
             }
-
-
         }
 
         public static void LoadProjectData(ProjectData data)
@@ -127,7 +124,7 @@ namespace Netherlands3D.Twin.Projects
             var jsonProject = JsonConvert.SerializeObject(data, Current.serializerSettings);
             Current.LoadJSON(jsonProject);
         }
-        
+
         private void LoadJSON(string json)
         {
             JsonConvert.PopulateObject(json, Current, serializerSettings);
@@ -167,7 +164,7 @@ namespace Netherlands3D.Twin.Projects
             // Finish the zip
             zipOutputStream.Finish();
             zipOutputStream.Close();
-            
+
             // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
             SyncFilesToIndexedDB(projectDataHandler.name, "ProjectSavedToIndexedDB");
@@ -214,6 +211,7 @@ namespace Netherlands3D.Twin.Projects
             {
                 RootLayer.AddChild(layer);
             }
+
             LayerAdded.Invoke(layer);
         }
 
@@ -223,12 +221,13 @@ namespace Netherlands3D.Twin.Projects
 
             var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
             referencedLayer.LayerData = proxyLayer;
-            
+
             //add properties to the new layerData
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
-            foreach (var property in layersWithPropertyData)
+            foreach (var layerWithPropertyData in layersWithPropertyData)
             {
-                referencedLayer.LayerData.AddProperty(property.PropertyData);
+                referencedLayer.LayerData.AddProperty(layerWithPropertyData.PropertyData);
+                proxyLayer.PropertiesChanged.AddListener(layerWithPropertyData.LoadProperties);
             }
         }
 

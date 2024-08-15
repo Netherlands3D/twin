@@ -34,10 +34,20 @@ namespace Netherlands3D.Twin.Layers
             }
             set
             {
+                if (layerData != null)
+                {
+                    foreach (var layer in GetComponents<ILayerWithPropertyData>())
+                    {
+                        layerData.PropertiesChanged.RemoveListener(layer.LoadProperties); //remove old listeners
+                    }
+                }
+                
                 layerData = value;
+                
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
-                    layer.LoadProperties(layerData.LayerProperties);
+                    layer.LoadProperties(layerData.LayerProperties); //initial load
+                    layerData.PropertiesChanged.AddListener(layer.LoadProperties); //subscribe to changes
                 }
             }
         }
@@ -57,7 +67,6 @@ namespace Netherlands3D.Twin.Layers
                 {
                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
                     prefabIdentifier = metaID.ToString();
-                    // print("setting prefab id to : " + prefabIdentifier);
                     EditorUtility.SetDirty(this);
                 }
             }
@@ -68,7 +77,6 @@ namespace Netherlands3D.Twin.Layers
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
-            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
         }
 
@@ -96,6 +104,11 @@ namespace Netherlands3D.Twin.Layers
         }
 
         public virtual void DestroyLayer()
+        {
+            layerData.DestroyLayer();
+        }
+
+        public void DestroyLayerGameObject()
         {
             Destroy(gameObject);
         }

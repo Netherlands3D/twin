@@ -90,6 +90,9 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<List<LayerPropertyData>> PropertiesChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -187,11 +190,19 @@ namespace Netherlands3D.Twin.Layers
         public void AddProperty(LayerPropertyData propertyData)
         {
             layerProperties.Add(propertyData);
+            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
             layerProperties.Remove(propertyData);
+            PropertyRemoved.Invoke(propertyData);
+        }
+
+        public void SetProperties(List<LayerPropertyData> properties) //overwrite all current properties with new ones
+        {
+            layerProperties = properties;
+            PropertiesChanged.Invoke(properties);
         }
     }
 }
