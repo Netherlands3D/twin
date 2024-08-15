@@ -105,18 +105,18 @@ namespace Netherlands3D.Twin.Layers
             var scatterSettings = (ScatterGenerationSettings)properties.FirstOrDefault(p => p is ScatterGenerationSettings);
             if (scatterSettings != null)
             {
-                InitializeFromFile(scatterSettings);
+                LoadScatterProperties(scatterSettings);
             }
         }
 
-        private void InitializeFromFile(ScatterGenerationSettings scatterProperties)
+        private void LoadScatterProperties(ScatterGenerationSettings scatterProperties)
         {
             settings = scatterProperties;
             InitializeScatterMesh(scatterProperties.OriginalPrefabId);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectCompletedLoading); //listen to the project to finish loading, this is needed because the hierarchy is still being loaded, so we do not yet have access to our parent polygon layer
         }
         
-        private void OnProjectCompletedLoading(ProjectData data)
+        private void OnProjectCompletedLoading(ProjectData data) //complete initialization after loading fully completes and we can get out parent polygon
         {
             polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
             RecalculatePolygonsAndSamplerTexture();
@@ -304,39 +304,7 @@ namespace Netherlands3D.Twin.Layers
                 visualisation.DrawLine = false;
             }
         }
-
-        private static Mesh CombineHierarchicalMeshes(Transform transform)
-        {
-            var originalPosition = transform.position;
-            var originalRotation = transform.rotation;
-            var originalScale = transform.localScale;
-
-            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
-            transform.rotation = Quaternion.identity;
-            transform.localScale = Vector3.one;
-
-            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-            for (int i = 0; i < meshFilters.Length; i++)
-            {
-                combine[i].mesh = meshFilters[i].sharedMesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.CombineMeshes(combine);
-            mesh.RecalculateBounds();
-
-            transform.position = originalPosition; //reset position
-            transform.rotation = originalRotation; //reset rotation
-            transform.localScale = originalScale; //reset scale
-
-            if (mesh.vertices.Length == 0)
-                Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
-
-            return mesh;
-        }
-
+        
         public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
@@ -385,6 +353,44 @@ namespace Netherlands3D.Twin.Layers
             return propertySections;
         }
 
+        public void AddToProperties(RectTransform properties)
+        {
+            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
+            propertySection.Settings = settings;
+        }
+
+        private static Mesh CombineHierarchicalMeshes(Transform transform)
+        {
+            var originalPosition = transform.position;
+            var originalRotation = transform.rotation;
+            var originalScale = transform.localScale;
+
+            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
+            transform.rotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+
+            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.CombineMeshes(combine);
+            mesh.RecalculateBounds();
+
+            transform.position = originalPosition; //reset position
+            transform.rotation = originalRotation; //reset rotation
+            transform.localScale = originalScale; //reset scale
+
+            if (mesh.vertices.Length == 0)
+                Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
+
+            return mesh;
+        }
+        
         private static float CalculateLineAngle(PolygonSelectionLayer polygon)
         {
             var linePoints = polygon.GetPolygonAsUnityPoints();
@@ -393,12 +399,5 @@ namespace Netherlands3D.Twin.Layers
             var dir = end - start;
             return Vector2.Angle(Vector2.up, dir);
         }
-
-        public void AddToProperties(RectTransform properties)
-        {
-            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
-            propertySection.Settings = settings;
-        }
-
     }
 }
