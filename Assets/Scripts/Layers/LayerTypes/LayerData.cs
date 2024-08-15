@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
@@ -201,12 +202,6 @@ namespace Netherlands3D.Twin.Layers
         {
             layerProperties.Remove(propertyData);
             PropertyRemoved.Invoke(propertyData);
-        }
-
-        public void SetProperties(List<LayerPropertyData> properties) //overwrite all current properties with new ones
-        {
-            layerProperties = properties;
-            PropertiesChanged.Invoke(properties);
         }
     }
 }

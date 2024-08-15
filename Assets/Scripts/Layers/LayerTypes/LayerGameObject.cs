@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -47,7 +48,6 @@ namespace Netherlands3D.Twin.Layers
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
                     layer.LoadProperties(layerData.LayerProperties); //initial load
-                    layerData.PropertiesChanged.AddListener(layer.LoadProperties); //subscribe to changes
                 }
             }
         }
@@ -72,12 +72,26 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
+        
         protected virtual void Start()
         {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+            
+            foreach (var layer in GetComponents<ILayerWithPropertyData>())
+            {
+                layerData.PropertiesChanged.AddListener(layer.LoadProperties); //subscribe to changes
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            foreach (var layer in GetComponents<ILayerWithPropertyData>())
+            {
+                layerData.PropertiesChanged.RemoveListener(layer.LoadProperties); //subscribe to changes
+            }
         }
 
         private void CreateProxy()

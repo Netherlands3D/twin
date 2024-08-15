@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected void Awake()
         {
-            var coord = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            var coord = new Coordinate(transform.position);
             transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -36,14 +36,32 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnEnable();
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
-            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            previousPosition = transform.position;
+            previousRotation = transform.rotation;
+            previousScale = transform.localScale;
+
+            objectCreated.Invoke(gameObject);
+            
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+        }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
@@ -72,22 +90,23 @@ namespace Netherlands3D.Twin.Layers
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)
             {
+                if (transformPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
+                {
+                    transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
+                    transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
+                    transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
+                }
+
                 this.transformPropertyData = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
 
                 UpdatePosition(this.transformPropertyData.Position);
                 UpdateRotation(this.transformPropertyData.EulerRotation);
                 UpdateScale(this.transformPropertyData.LocalScale);
+
+                transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+                transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+                transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
             }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            previousPosition = transform.position;
-            previousRotation = transform.rotation;
-            previousScale = transform.localScale;
-
-            objectCreated.Invoke(gameObject);
         }
 
         private void Update()
@@ -177,7 +196,7 @@ namespace Netherlands3D.Twin.Layers
                 var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
                 child.SetParent(scatterLayer.LayerData, 0);
             }
-            
+
             objectLayerGameObject.LayerData.DestroyLayer();
             return scatterLayer;
         }

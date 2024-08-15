@@ -331,7 +331,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(settings.OriginalPrefabId);
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
-            revertedLayer.LayerData.SetProperties(LayerData.LayerProperties); //overwrite the properties with the saved ones, this will call the event and trigger a reload of the original properties. it will also save the modified scatter settings in case the user makes it a scatter layer again
+            revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
 
             for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
