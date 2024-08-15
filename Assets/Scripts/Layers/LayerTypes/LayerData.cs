@@ -191,8 +191,12 @@ namespace Netherlands3D.Twin.Layers
         public void AddProperty(LayerPropertyData propertyData)
         {
             var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
-            if(existingProperty != null)
-                Debug.LogError("A property of this type already exists for " + Name);
+            if (existingProperty != null)
+            {
+                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
+                int index = layerProperties.IndexOf(existingProperty);
+                layerProperties[index] = propertyData;
+            }
             
             layerProperties.Add(propertyData);
             PropertyAdded.Invoke(propertyData);

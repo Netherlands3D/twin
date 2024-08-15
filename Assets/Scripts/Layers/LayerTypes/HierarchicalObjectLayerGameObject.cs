@@ -52,13 +52,13 @@ namespace Netherlands3D.Twin.Layers
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);
-            
+
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
-        
+
         protected override void OnDestroy()
         {
             base.OnDestroy();

@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Layers
         
         public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
         {
+            
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
                 LayerData.AddProperty(property); //copy properties to be able to revert
@@ -57,7 +58,13 @@ namespace Netherlands3D.Twin.Layers
             InitializeScatterMesh(originalObject.PrefabIdentifier);
 
             polygonLayer = polygon;
-            CreateNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
+            
+            var existingScatterProperties = (ScatterGenerationSettings) originalObject.LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettings);
+            if(existingScatterProperties == null)
+                InitializeNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
+            else
+                LoadScatterProperties(existingScatterProperties);
+            
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
 
             LayerData.SetParent(polygon);
@@ -80,7 +87,7 @@ namespace Netherlands3D.Twin.Layers
             this.material.enableInstancing = true;
         }
         
-        private void CreateNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
+        private void InitializeNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
         {
             settings.OriginalPrefabId = originalObjectPrefabId;
             Debug.Log("created new scatter settings with original id: " + settings.OriginalPrefabId);
@@ -333,6 +340,7 @@ namespace Netherlands3D.Twin.Layers
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
             revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
+            revertedLayer.LayerData.AddProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
 
             for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {
