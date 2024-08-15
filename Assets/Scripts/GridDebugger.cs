@@ -23,14 +23,14 @@ namespace Netherlands3D.Twin
             layerGameObject = GetComponent<ObjectScatterLayerGameObject>();
             UpdateGrid();
             layerGameObject.polygonLayer.polygonChanged.AddListener(UpdateGrid);
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettings;
+            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
             scatterSettings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }
 
         private void UpdateGrid()
         {
             poly = layerGameObject.polygonLayer.Polygon;
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettings;
+            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
             var angle = scatterSettings.Angle;
             
             var densityPerSquareUnit = scatterSettings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2

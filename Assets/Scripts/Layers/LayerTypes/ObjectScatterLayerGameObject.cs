@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
         private Mesh mesh;
         private Material material;
 
-        [SerializeField] private ScatterGenerationSettings settings = new();
+        [SerializeField] private ScatterGenerationSettingsPropertyData settings = new();
 
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers
 
             polygonLayer = polygon;
             
-            var existingScatterProperties = (ScatterGenerationSettings) originalObject.LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettings);
+            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) originalObject.LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if(existingScatterProperties == null)
                 InitializeNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
             else
@@ -105,14 +105,14 @@ namespace Netherlands3D.Twin.Layers
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var scatterSettings = (ScatterGenerationSettings)properties.FirstOrDefault(p => p is ScatterGenerationSettings);
+            var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if (scatterSettings != null)
             {
                 LoadScatterProperties(scatterSettings);
             }
         }
 
-        private void LoadScatterProperties(ScatterGenerationSettings scatterProperties)
+        private void LoadScatterProperties(ScatterGenerationSettingsPropertyData scatterProperties)
         {
             settings = scatterProperties;
             InitializeScatterMesh(scatterProperties.OriginalPrefabId);

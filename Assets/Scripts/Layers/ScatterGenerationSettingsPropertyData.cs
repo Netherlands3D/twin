@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.Properties
 {
     [Serializable]
-    public class ScatterGenerationSettings : LayerPropertyData
+    public class ScatterGenerationSettingsPropertyData : LayerPropertyData
     {
         [SerializeField, JsonProperty] private string originalObjectPrefabId;
         [SerializeField, JsonProperty] private float density = 1f;
@@ -21,12 +21,12 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
         [JsonIgnore] public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
-        public ScatterGenerationSettings()
+        public ScatterGenerationSettingsPropertyData()
         {
         }
         
         [JsonConstructor]
-        public ScatterGenerationSettings(string originalObjectPrefabId, float density, float scatter, float angle, Vector3 minScale, Vector3 maxScale, FillType fillType, float strokeWidth, bool autoRotateToLine)
+        public ScatterGenerationSettingsPropertyData(string originalObjectPrefabId, float density, float scatter, float angle, Vector3 minScale, Vector3 maxScale, FillType fillType, float strokeWidth, bool autoRotateToLine)
         {
             Debug.Log("json constructor for scatter settings");
             this.originalObjectPrefabId = originalObjectPrefabId;

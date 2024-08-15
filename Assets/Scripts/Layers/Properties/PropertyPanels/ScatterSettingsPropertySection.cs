@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class ScatterSettingsPropertySection : MonoBehaviour
     {
-        private ScatterGenerationSettings settings;
+        private ScatterGenerationSettingsPropertyData settings;
         [SerializeField] private Toggle completeToggle;
         [SerializeField] private Toggle strokeToggle;
         [SerializeField] private Toggle fillToggle;
@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private DoubleSlider heightRangeSlider;
         [SerializeField] private DoubleSlider diameterRangeSlider;
 
-        public ScatterGenerationSettings Settings
+        public ScatterGenerationSettingsPropertyData Settings
         {
             get => settings;
             set
