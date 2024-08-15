@@ -59,9 +59,8 @@ namespace Netherlands3D.Twin.Layers
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
-            base.OnDestroy();
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);

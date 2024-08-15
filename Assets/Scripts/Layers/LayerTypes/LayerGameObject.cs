@@ -35,14 +35,6 @@ namespace Netherlands3D.Twin.Layers
             }
             set
             {
-                if (layerData != null)
-                {
-                    foreach (var layer in GetComponents<ILayerWithPropertyData>())
-                    {
-                        layerData.PropertiesChanged.RemoveListener(layer.LoadProperties); //remove old listeners
-                    }
-                }
-                
                 layerData = value;
                 
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
@@ -79,21 +71,8 @@ namespace Netherlands3D.Twin.Layers
                 CreateProxy();
 
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
-            
-            foreach (var layer in GetComponents<ILayerWithPropertyData>())
-            {
-                layerData.PropertiesChanged.AddListener(layer.LoadProperties); //subscribe to changes
-            }
         }
-
-        protected virtual void OnDestroy()
-        {
-            foreach (var layer in GetComponents<ILayerWithPropertyData>())
-            {
-                layerData.PropertiesChanged.RemoveListener(layer.LoadProperties); //subscribe to changes
-            }
-        }
-
+        
         private void CreateProxy()
         {
             ProjectData.AddReferenceLayer(this);

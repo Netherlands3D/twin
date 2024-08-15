@@ -227,7 +227,6 @@ namespace Netherlands3D.Twin.Projects
             foreach (var layerWithPropertyData in layersWithPropertyData)
             {
                 referencedLayer.LayerData.AddProperty(layerWithPropertyData.PropertyData);
-                proxyLayer.PropertiesChanged.AddListener(layerWithPropertyData.LoadProperties);
             }
         }
 
