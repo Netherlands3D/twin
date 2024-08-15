@@ -16,8 +16,8 @@ MonoBehaviour:
   SavedTimestamp: 20240718162141
   UUID: 94e04335-1862-4a8f-985c-d030391bc8db
   CameraPosition:
-  - 154963.47788619995
-  - 462762.0704803467
+  - 154992.86748218536
+  - 462800.3472137451
   - 300
   CameraRotation:
   - 60.000003814697266
@@ -27,5 +27,26 @@ MonoBehaviour:
     name: RootLayer
     activeSelf: 1
     color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
-    children: []
+    children:
+    - name: Gebouwen
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+      layerProperties: []
+    - name: Maaiveld
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+      layerProperties: []
+    - name: Bomen
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+      layerProperties: []
+    - name: Bossen
+      activeSelf: 1
+      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+      children: []
+      layerProperties: []
+    layerProperties: []
   PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
