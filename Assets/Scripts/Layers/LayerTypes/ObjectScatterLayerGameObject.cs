@@ -6,7 +6,6 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -21,28 +20,26 @@ namespace Netherlands3D.Twin.Layers
     [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
     public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
-        [JsonIgnore] public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+        public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
 
-        // [JsonIgnore] private GameObject originalObject;
-        [JsonIgnore] private Mesh mesh;
-        [JsonIgnore] private Material material;
+        private Mesh mesh;
+        private Material material;
 
-        [SerializeField, JsonProperty] private ScatterGenerationSettings settings = new(); //todo: are all the json attributes needed here?
+        [SerializeField] private ScatterGenerationSettings settings = new();
 
-        // [JsonIgnore] public ScatterGenerationSettings Settings => settings;
-        [JsonIgnore] private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
-        [JsonIgnore] private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        [JsonIgnore] public PolygonSelectionLayer polygonLayer;
-        [JsonIgnore] private List<IPropertySectionInstantiator> propertySections = new();
-        [JsonIgnore] private List<PolygonVisualisation> visualisations = new();
+        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
+        private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
+        public PolygonSelectionLayer polygonLayer;
+        private List<IPropertySectionInstantiator> propertySections = new();
+        private List<PolygonVisualisation> visualisations = new();
 
-        [JsonIgnore] private Bounds polygonBounds = new();
-        [JsonIgnore] private SampleTexture sampleTexture;
+        private Bounds polygonBounds = new();
+        private SampleTexture sampleTexture;
 
-        [JsonIgnore] private WorldTransform worldTransform;
+        private WorldTransform worldTransform;
 
-        [JsonIgnore] private bool completedInitialization;
-        [JsonIgnore] public LayerPropertyData PropertyData => settings;
+        private bool completedInitialization;
+        public LayerPropertyData PropertyData => settings;
 
         private void Awake()
         {
