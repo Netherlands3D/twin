@@ -1,18 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.Properties
 {
-    [CreateAssetMenu(fileName = "TreeGenerationSettings", menuName = "ScriptableObjects/TreeGenerationSettings", order = 1)]
     [Serializable]
-    public class ScatterGenerationSettings : ScriptableObject, IPropertySectionInstantiator
+    public class ScatterGenerationSettings : LayerPropertyData
     {
+        [SerializeField, JsonProperty] private string originalObjectPrefabId;
         [SerializeField, JsonProperty] private float density = 1f;
         [SerializeField, JsonProperty] private float scatter = 0f;
         [SerializeField, JsonProperty] private float angle = 0f;
@@ -25,8 +21,40 @@ namespace Netherlands3D.Twin
         [JsonIgnore] public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
         [JsonIgnore] public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
+        public ScatterGenerationSettings()
+        {
+        }
+        
+        [JsonConstructor]
+        public ScatterGenerationSettings(string originalObjectPrefabId, float density, float scatter, float angle, Vector3 minScale, Vector3 maxScale, FillType fillType, float strokeWidth, bool autoRotateToLine)
+        {
+            Debug.Log("json constructor for scatter settings");
+            this.originalObjectPrefabId = originalObjectPrefabId;
+            this.density = density;
+            this.scatter = scatter;
+            this.angle = angle;
+            this.minScale = minScale;
+            this.maxScale = maxScale;
+            this.fillType = fillType;
+            this.strokeWidth = strokeWidth;
+            AutoRotateToLine = autoRotateToLine;
+        }
+
         [JsonProperty] public bool AutoRotateToLine { get; set; } = false; //todo: is it needed to serialize this?
 
+        [JsonIgnore] public string OriginalPrefabId
+        {
+            get => originalObjectPrefabId;
+            set
+            {
+                if (originalObjectPrefabId == value)
+                    return;
+
+                originalObjectPrefabId = value;
+                ScatterSettingsChanged.Invoke();
+            }
+        }
+        
         [JsonIgnore]
         public float Density
         {
@@ -124,7 +152,7 @@ namespace Netherlands3D.Twin
                 ScatterShapeChanged.Invoke();
             }
         }
-
+        
         public Vector3 GenerateRandomScale()
         {
             float x = UnityEngine.Random.Range(minScale.x, maxScale.x);
@@ -132,12 +160,6 @@ namespace Netherlands3D.Twin
             float z = UnityEngine.Random.Range(minScale.z, maxScale.z);
 
             return new Vector3(x, y, z);
-        }
-
-        public void AddToProperties(RectTransform properties)
-        {
-            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
-            propertySection.Settings = this;
         }
     }
 }

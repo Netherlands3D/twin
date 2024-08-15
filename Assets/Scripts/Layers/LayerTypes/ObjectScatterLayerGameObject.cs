@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -16,14 +18,18 @@ namespace Netherlands3D.Twin.Layers
         Stroke,
     }
 
-    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
+    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
+        [JsonIgnore] public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+
         // [JsonIgnore] private GameObject originalObject;
-        [SerializeField, JsonProperty] private string originalObjectPrefabId;
         [JsonIgnore] private Mesh mesh;
         [JsonIgnore] private Material material;
-        [SerializeField, JsonProperty] private ScatterGenerationSettings settings;
-        [JsonIgnore] public ScatterGenerationSettings Settings => settings;
+
+        [SerializeField, JsonProperty] private ScatterGenerationSettings settings = new(); //todo: are all the json attributes needed here?
+
+        // [JsonIgnore] public ScatterGenerationSettings Settings => settings;
         [JsonIgnore] private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [JsonIgnore] private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         [JsonIgnore] public PolygonSelectionLayer polygonLayer;
@@ -36,42 +42,26 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] private WorldTransform worldTransform;
 
         [JsonIgnore] private bool completedInitialization;
+        [JsonIgnore] public LayerPropertyData PropertyData => settings;
 
+        private void Awake()
+        {
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
+        }
+        
         public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
         {
-            this.originalObjectPrefabId = originalObject.PrefabIdentifier;
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
                 LayerData.AddProperty(property); //copy properties to be able to revert
             }
 
-            this.mesh = CombineHierarchicalMeshes(originalObject.transform);
-            this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
-            this.material.enableInstancing = true;
+            InitializeScatterMesh(originalObject.PrefabIdentifier);
 
-            // originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
             polygonLayer = polygon;
-
-            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-
-            if (!toggleScatterPropertySectionInstantiator)
-                toggleScatterPropertySectionInstantiator = gameObject.AddComponent<ToggleScatterPropertySectionInstantiator>();
-
-            settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
-            settings.Density = 1000; // per ha for the UI
-            if (polygon.ShapeType == ShapeType.Line)
-            {
-                settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
-                settings.AutoRotateToLine = true;
-            }
-
-            settings.MinScale = new Vector3(3, 3, 3);
-            settings.MaxScale = new Vector3(6, 6, 6);
-
-            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
-
-            gameObject.AddComponent<ScatterLayerShifter>();
-            gameObject.AddComponent<WorldTransform>();
+            CreateNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
 
             LayerData.SetParent(polygon);
             foreach (var child in children)
@@ -85,6 +75,57 @@ namespace Netherlands3D.Twin.Layers
 // #if UNITY_EDITOR
 //          gameObject.AddComponent<GridDebugger>();
 // #endif
+            completedInitialization = true;
+        }
+        
+        private void InitializeScatterMesh(string prefabId)
+        {
+            Debug.Log("getting original prefab with id: " + prefabId);
+            var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
+            this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material.enableInstancing = true;
+        }
+        
+        private void CreateNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
+        {
+            settings.OriginalPrefabId = originalObjectPrefabId;
+            Debug.Log("created new scatter settings with original id: " + settings.OriginalPrefabId);
+            settings.Density = 1000; // per ha for the UI
+
+            if (shapeType == ShapeType.Line)
+            {
+                settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
+                settings.AutoRotateToLine = true;
+            }
+
+            settings.MinScale = new Vector3(3, 3, 3);
+            settings.MaxScale = new Vector3(6, 6, 6);
+        }
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var scatterSettings = (ScatterGenerationSettings)properties.FirstOrDefault(p => p is ScatterGenerationSettings);
+            if (scatterSettings != null)
+            {
+                InitializeFromFile(scatterSettings);
+            }
+        }
+
+        private void InitializeFromFile(ScatterGenerationSettings scatterProperties)
+        {
+            settings = scatterProperties;
+            InitializeScatterMesh(scatterProperties.OriginalPrefabId);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectCompletedLoading); //listen to the project to finish loading, this is needed because the hierarchy is still being loaded, so we do not yet have access to our parent polygon layer
+        }
+        
+        private void OnProjectCompletedLoading(ProjectData data)
+        {
+            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
+            RecalculatePolygonsAndSamplerTexture();
+            AddReScatterListeners();
+            
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectCompletedLoading);
             completedInitialization = true;
         }
 
@@ -281,7 +322,7 @@ namespace Netherlands3D.Twin.Layers
             CombineInstance[] combine = new CombineInstance[meshFilters.Length];
             for (int i = 0; i < meshFilters.Length; i++)
             {
-                combine[i].mesh = meshFilters[i].mesh;
+                combine[i].mesh = meshFilters[i].sharedMesh;
                 combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             }
 
@@ -327,17 +368,15 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            // gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            // originalObject.SetActive(true);
-            // var layer = originalObject.AddComponent<HierarchicalObjectLayerGameObject>();
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(originalObjectPrefabId);
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(settings.OriginalPrefabId);
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
             revertedLayer.LayerData.SetProperties(LayerData.LayerProperties); //overwrite the properties with the saved ones, this will call the event and trigger a reload of the original properties. it will also save the modified scatter settings in case the user makes it a scatter layer again
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
 
-            foreach (var child in LayerData.ChildrenLayers)
+            for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {
-                child.SetParent(revertedLayer.LayerData);
+                var child = LayerData.ChildrenLayers[i];
+                child.SetParent(revertedLayer.LayerData, 0);
             }
 
             revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
@@ -357,5 +396,12 @@ namespace Netherlands3D.Twin.Layers
             var dir = end - start;
             return Vector2.Angle(Vector2.up, dir);
         }
+
+        public void AddToProperties(RectTransform properties)
+        {
+            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
+            propertySection.Settings = settings;
+        }
+
     }
 }

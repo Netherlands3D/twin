@@ -189,6 +189,10 @@ namespace Netherlands3D.Twin.Layers
 
         public void AddProperty(LayerPropertyData propertyData)
         {
+            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
+            if(existingProperty != null)
+                Debug.LogError("A property of this type already exists for " + Name);
+            
             layerProperties.Add(propertyData);
             PropertyAdded.Invoke(propertyData);
         }

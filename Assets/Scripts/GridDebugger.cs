@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,15 +23,17 @@ namespace Netherlands3D.Twin
             layerGameObject = GetComponent<ObjectScatterLayerGameObject>();
             UpdateGrid();
             layerGameObject.polygonLayer.polygonChanged.AddListener(UpdateGrid);
-            layerGameObject.Settings.ScatterSettingsChanged.AddListener(UpdateGrid);
+            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettings;
+            scatterSettings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }
 
         private void UpdateGrid()
         {
             poly = layerGameObject.polygonLayer.Polygon;
-            var angle = layerGameObject.Settings.Angle;
+            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettings;
+            var angle = scatterSettings.Angle;
             
-            var densityPerSquareUnit = layerGameObject.Settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
+            var densityPerSquareUnit = scatterSettings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out gridBounds);
         }

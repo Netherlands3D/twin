@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -167,15 +168,16 @@ namespace Netherlands3D.Twin.Layers
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
         {
-            var scatterLayer = new GameObject(objectLayerGameObject.Name + "_Scatter");
-            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayerGameObject>();
+            var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
+            var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
+            scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
 
             var originalGameObject = objectLayerGameObject.gameObject;
             objectLayerGameObject.LayerData.KeepReferenceOnDestroy = true;
             objectLayerGameObject.LayerData.DestroyLayer();
-            layerComponent.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
+            scatterLayer.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
 
-            return layerComponent;
+            return scatterLayer;
         }
 
         private static List<LayerData> UnparentDirectChildren(LayerData layer)
