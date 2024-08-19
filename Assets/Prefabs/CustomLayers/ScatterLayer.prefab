@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2998583602963014791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1945261982492574242}
+  - component: {fileID: 3749709991008444548}
+  - component: {fileID: -1946070736926899763}
+  m_Layer: 0
+  m_Name: ScatterLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1945261982492574242
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2998583602963014791}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3749709991008444548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2998583602963014791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdc6763b22be4a0f9cff59bab25b1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: acb0d28ce2b674042ba63bf1d7789bfd
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  settings:
+    originalObjectPrefabId: 
+    density: 1
+    scatter: 0
+    angle: 0
+    minScale: {x: 1, y: 1, z: 1}
+    maxScale: {x: 1, y: 1, z: 1}
+    fillType: 0
+    strokeWidth: 1
+    ScatterSettingsChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    ScatterShapeChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    ScatterDistributionChanged:
+      m_PersistentCalls:
+        m_Calls: []
+  polygonLayer:
+    name: 
+    activeSelf: 0
+    color: {r: 0, g: 0, b: 0, a: 0}
+    children: []
+    layerProperties: []
+    prefabId: 
+    shapeType: 0
+    polygonSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    polygonMoved:
+      m_PersistentCalls:
+        m_Calls: []
+    polygonChanged:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &-1946070736926899763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2998583602963014791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8627c8e76a0824e85bcb97c9dff0c636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

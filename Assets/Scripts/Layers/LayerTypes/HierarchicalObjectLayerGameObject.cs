@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -24,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected void Awake()
         {
-            var coord = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
+            var coord = new Coordinate(transform.position);
             transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -35,14 +36,31 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnEnable();
             ClickNothingPlane.ClickedOnNothing.AddListener(OnMouseClickNothing);
-            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            previousPosition = transform.position;
+            previousRotation = transform.rotation;
+            previousScale = transform.localScale;
+
+            objectCreated.Invoke(gameObject);
+
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+        }
+
+        protected void OnDestroy()
+        {
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
@@ -71,22 +89,23 @@ namespace Netherlands3D.Twin.Layers
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
             if (transformProperty != null)
             {
+                if (transformPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
+                {
+                    transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
+                    transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
+                    transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
+                }
+
                 this.transformPropertyData = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
 
                 UpdatePosition(this.transformPropertyData.Position);
                 UpdateRotation(this.transformPropertyData.EulerRotation);
                 UpdateScale(this.transformPropertyData.LocalScale);
+
+                transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+                transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+                transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
             }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            previousPosition = transform.position;
-            previousRotation = transform.rotation;
-            previousScale = transform.localScale;
-
-            objectCreated.Invoke(gameObject);
         }
 
         private void Update()
@@ -167,31 +186,18 @@ namespace Netherlands3D.Twin.Layers
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
         {
-            var scatterLayer = new GameObject(objectLayerGameObject.Name + "_Scatter");
-            var layerComponent = scatterLayer.AddComponent<ObjectScatterLayerGameObject>();
-
-            var originalGameObject = objectLayerGameObject.gameObject;
-            objectLayerGameObject.LayerData.KeepReferenceOnDestroy = true;
-            Destroy(objectLayerGameObject); //destroy the component, not the gameObject, because we need to save the original GameObject to allow us to convert back 
-            layerComponent.Initialize(originalGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer, UnparentDirectChildren(objectLayerGameObject.LayerData));
-
-            return layerComponent;
-        }
-
-        private static List<LayerData> UnparentDirectChildren(LayerData layer)
-        {
-            var list = new List<LayerData>();
-            foreach (var child in layer.ChildrenLayers)
+            var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
+            var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
+            scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
+            scatterLayer.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer);
+            for (var i = objectLayerGameObject.LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {
-                list.Add(child);
+                var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
+                child.SetParent(scatterLayer.LayerData, 0);
             }
 
-            foreach (var directChild in list)
-            {
-                directChild.SetParent(null);
-            }
-
-            return list;
+            objectLayerGameObject.LayerData.DestroyLayer();
+            return scatterLayer;
         }
     }
 }

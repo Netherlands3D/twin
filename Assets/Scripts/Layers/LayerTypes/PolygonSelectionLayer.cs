@@ -100,6 +100,9 @@ namespace Netherlands3D.Twin.Layers
             notifyOnPolygonChange = false;
             SetShape(OriginalPolygon);
             polygonMoved.Invoke();
+            if(IsSelected)
+                polygonSelected.Invoke(this);
+            
             notifyOnPolygonChange = true;
         }
 
@@ -219,11 +222,9 @@ namespace Netherlands3D.Twin.Layers
         public static List<Coordinate> ConvertToCoordinates(List<Vector3> unityCoordinates)
         {
             var coordList = new List<Coordinate>(unityCoordinates.Capacity);
-            var coord = new Coordinate((int)CoordinateSystem.Unity); //cache variable to minimize garbage collection
             foreach (var point in unityCoordinates)
             {
-                coord.Points = new double[] { point.x, point.y, point.z };
-                coordList.Add(coord);
+                coordList.Add(new Coordinate(point));
             }
 
             return coordList;
