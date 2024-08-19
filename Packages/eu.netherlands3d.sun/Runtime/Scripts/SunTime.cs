@@ -193,11 +193,10 @@ namespace Netherlands3D.Sun
             var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
             if (newTime != time)
             {
-                timeOfDayChanged.Invoke(time);
+                time = newTime;
+                SetPosition();
+                timeOfDayChanged.Invoke(newTime);
             }
-
-            time = newTime;
-            SetPosition();
         }
 
         private void DetermineCurrentLocationFromOrigin()

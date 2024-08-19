@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.sun",
   "displayName": "Netherlands3D - Sun, Time of Day and Shadows",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "unity": "2022.2",
   "description": "",
   "type": "library",
