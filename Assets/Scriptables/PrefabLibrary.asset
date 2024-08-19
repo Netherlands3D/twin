@@ -39,6 +39,7 @@ MonoBehaviour:
     autoPopulateUI: 1
     prefabs:
     - {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60, type: 3}
+    - {fileID: 3749709991008444548, guid: acb0d28ce2b674042ba63bf1d7789bfd, type: 3}
     - {fileID: 5593278776292583182, guid: b1bd3a7a50cb3bd4bb3236aadf5c32b6, type: 3}
     - {fileID: -2311983791405174025, guid: e46381d2665c69245b2475c986f6d0c4, type: 3}
     - {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
