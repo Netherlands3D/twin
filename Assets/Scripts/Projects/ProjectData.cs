@@ -38,6 +38,7 @@ namespace Netherlands3D.Twin.Projects
         public string UUID = "";
         public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
         public double[] CameraRotation = new double[3];
+        public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
         
