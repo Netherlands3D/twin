@@ -28,7 +28,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonConstructor]
         public ScatterGenerationSettingsPropertyData(string originalObjectPrefabId, float density, float scatter, float angle, Vector3 minScale, Vector3 maxScale, FillType fillType, float strokeWidth, bool autoRotateToLine)
         {
-            Debug.Log("json constructor for scatter settings");
             this.originalObjectPrefabId = originalObjectPrefabId;
             this.density = density;
             this.scatter = scatter;

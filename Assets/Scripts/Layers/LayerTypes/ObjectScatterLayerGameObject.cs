@@ -71,16 +71,12 @@ namespace Netherlands3D.Twin.Layers
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
-
-// #if UNITY_EDITOR
-//          gameObject.AddComponent<GridDebugger>();
-// #endif
+            
             completedInitialization = true;
         }
         
         private void InitializeScatterMesh(string prefabId)
         {
-            Debug.Log("getting original prefab with id: " + prefabId);
             var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
             this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
@@ -90,7 +86,6 @@ namespace Netherlands3D.Twin.Layers
         private void InitializeNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
         {
             settings.OriginalPrefabId = originalObjectPrefabId;
-            Debug.Log("created new scatter settings with original id: " + settings.OriginalPrefabId);
             settings.Density = 1000; // per ha for the UI
 
             if (shapeType == ShapeType.Line)
