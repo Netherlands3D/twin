@@ -36,20 +36,16 @@ namespace Netherlands3D.Twin
 
         private void OnProjectDataChanged(ProjectData project)
         {
-            print("updating time from project: " + project.CurrentDateTime);
             lastSavedDateTime = project.CurrentDateTime;
             sunTime.SetTime(project.CurrentDateTime);
         }
         
         private void SaveCurrentDateTime(DateTime newDateTime)
         {
-            print("try saving time to project: " + newDateTime + "\tLastSavedTime: " + lastSavedDateTime);
             if(lastSavedDateTime == newDateTime)
                 return;
             
             lastSavedDateTime = newDateTime;
-            
-            print("new time is different, saving to project: " + newDateTime);
             ProjectData.Current.CurrentDateTime = newDateTime;
         }
     }
