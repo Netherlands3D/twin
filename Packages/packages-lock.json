@@ -392,8 +392,8 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.sun": {
-      "version": "1.0.0",
-      "depth": 1,
+      "version": "1.0.1",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0"
