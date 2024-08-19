@@ -18,7 +18,7 @@ MonoBehaviour:
   Header: 
   Description: 
   configuration: {fileID: 0}
-  isEnabled: 1
+  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
