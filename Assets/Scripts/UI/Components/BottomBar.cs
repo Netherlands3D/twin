@@ -7,9 +7,17 @@ namespace Netherlands3D.Twin
 {
     public class BottomBar : MonoBehaviour
     {
+        private Camera mainCamera;
+
         [Header("Camera coordinates")]
         [SerializeField] private TextMeshProUGUI coordinatesText;
         [SerializeField] private string coordinateFormat = "x{0} y{1} z{2}";
+
+        private void Start()
+        {
+            mainCamera = Camera.main;
+        }
+
         public void Update()
         {
             ApplyCameraPositionToText();
@@ -17,14 +25,8 @@ namespace Netherlands3D.Twin
 
         private void ApplyCameraPositionToText()
         {
-            //Use coordinate convert to convert camera to rd coordinates
-            var cameraCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                Camera.main.transform.position.x,
-                Camera.main.transform.position.y,
-                Camera.main.transform.position.z
-             );
-            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RDNAP);
+            var cameraCoordinate = new Coordinate(mainCamera.transform.position);
+            var rd = cameraCoordinate.Convert(CoordinateSystem.RDNAP);
 
             //Replace the placeholders with the coordinates
             coordinatesText.text = coordinateFormat

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
@@ -10,8 +11,8 @@ namespace Netherlands3D.Twin.Projects
     /// </summary>
     public class ProjectDataHandler : MonoBehaviour
     {
-        [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
-        private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
+        [UsedImplicitly] [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
+        [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
 
         public List<ProjectData> undoStack = new();
@@ -22,7 +23,8 @@ namespace Netherlands3D.Twin.Projects
         private static ProjectDataHandler instance;
         public static ProjectDataHandler Instance 
         { 
-            get{
+            get 
+            {
                 if(instance == null)
                     instance = FindObjectOfType<ProjectDataHandler>();
 
@@ -34,7 +36,8 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        private void Awake() {
+        private void Awake() 
+        {
             if(ProjectData.Current == null) {
                 Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
                 return;
@@ -62,7 +65,6 @@ namespace Netherlands3D.Twin.Projects
             
             // Copy the current projectData to a new project instance for our undo history
             var newProject = ScriptableObject.CreateInstance<ProjectData>();
-            // newProject.CopyFrom(projectData);
             undoStack.Add(newProject);
 
             // Clear the redo stack
@@ -127,6 +129,7 @@ namespace Netherlands3D.Twin.Projects
                 redoStack.RemoveAt(redoStack.Count - 1);
             }       
         }
+
         public void Undo()
         {
             // Overwrite current projectData with the one from the undostack copy
@@ -145,6 +148,7 @@ namespace Netherlands3D.Twin.Projects
         {
             ProjectData.Current.ProjectSavedToIndexedDB();
         }
+
         public void DownloadedProject()
         {
             Debug.Log("Downloading project file succeeded");
