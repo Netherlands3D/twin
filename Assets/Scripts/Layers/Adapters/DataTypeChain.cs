@@ -45,18 +45,24 @@ namespace Netherlands3D.Twin
         }
 
         /// <summary>
-        /// Determine the type of data using chain of responsibility
+        /// Load data from the given URL.
         /// </summary>
         /// <param name="url">Url to file or service</param>
-        public void DetermineAdapter(string url)
+        /// <param name="onComplete">A callable that can be invoked once the chain completes</param>
+        public void LoadFromUrl(string url, Action onComplete = null)
         {
             TargetUrl = url;
-            DetermineAdapter();
+            LoadFromUrl(onComplete);
         }
-        public void DetermineAdapter()
+
+        /// <summary>
+        /// Loads data using the URL configured in the TargetUrl property.
+        /// </summary>
+        /// <param name="onComplete">A callable that can be invoked once the chain completes</param>
+        public void LoadFromUrl(Action onComplete = null)
         {
             AbortChain();
-            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl, onComplete));
         }
 
         private void AbortChain()
@@ -65,7 +71,7 @@ namespace Netherlands3D.Twin
                 StopCoroutine(chain);
         }
 
-        private IEnumerator DownloadAndCheckSupport(string url)
+        private IEnumerator DownloadAndCheckSupport(string url, Action onComplete = null)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
             var urlAndData = new LocalFile()
@@ -83,7 +89,7 @@ namespace Netherlands3D.Twin
             }
 
             // Find the proper adapter in a chain of responsibility
-            yield return AdapterChain(urlAndData);
+            yield return AdapterChain(urlAndData, onComplete);
         }
 
         /// <summary>
@@ -113,7 +119,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private IEnumerator AdapterChain(LocalFile urlAndData)
+        private IEnumerator AdapterChain(LocalFile urlAndData, Action onComplete = null)
         {
             // Get our interface references
             dataTypeAdapterInterfaces = new IDataTypeAdapter[dataTypeAdapters.Length];
@@ -136,6 +142,7 @@ namespace Netherlands3D.Twin
                 if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
                 adapter.Execute(urlAndData);
                 OnAdapterFound.Invoke(adapter);
+                onComplete?.Invoke();
                 yield break;
             }
 
