@@ -18,6 +18,7 @@ public class TimeParser : MonoBehaviour
         
         if (DateTime.TryParse(timeString, out var parsedTime)) //try default formats
         {
+            print("d parsed:"+ parsedTime);
             hourParsed.Invoke(parsedTime.Hour);
             minuteParsed.Invoke(parsedTime.Minute);
             secondParsed.Invoke(parsedTime.Second);
