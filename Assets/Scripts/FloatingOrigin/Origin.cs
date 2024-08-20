@@ -9,7 +9,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class Origin : MonoBehaviour, IHasCoordinate
     {
-        public Coordinate Coordinate { get; set; }
+        public Coordinate Coordinate
+        {
+            get => CoordinateSystems.CoordinateAtUnityOrigin;
+            set => CoordinateSystems.SetOrigin(value);
+        }
 
         public static Origin current;
         public Transform mainShifter;
@@ -113,7 +117,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
             onPreShift.Invoke(currentOrigin, originDestination);
 
-            CoordinateSystems.SetOrigin(originDestination);
+            Coordinate = originDestination;
 
             // Shout to the world that the origin has changed to this coordinate
             onPostShift.Invoke(currentOrigin, originDestination);
