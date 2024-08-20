@@ -29,14 +29,15 @@ namespace Netherlands3D.Twin
             var cameraUnityCoordinate = cameraCoordinate.ToUnity();
             transform.position = cameraUnityCoordinate;
 
-            if(project.CameraRotation.Length == 3)
+            if (project.CameraRotation.Length == 3)
             {
                 var cameraRotation = new Vector3((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2]);
                 transform.rotation = Quaternion.Euler(cameraRotation);
             }
         }
 
-        private void Update() {
+        private void Update() 
+        {
             var currentCameraMatrix = transform.localToWorldMatrix;        
             if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
 

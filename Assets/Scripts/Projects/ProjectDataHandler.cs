@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Configuration;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
@@ -14,6 +16,7 @@ namespace Netherlands3D.Twin.Projects
         [UsedImplicitly] [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
+        [SerializeField] private Configuration.Configuration configuration;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
@@ -95,12 +98,43 @@ namespace Netherlands3D.Twin.Projects
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
-            fileImporter.DetermineAdapter(url);
+            fileImporter.LoadFromUrl(url, ApplyOverridesFromConfiguration);
 #else
             var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
             ProjectData.Current.LoadFromFile(filePath);
+            ApplyOverridesFromConfiguration();
 #endif
+        }
+
+        /// <summary>
+        /// In the earlier version of the application, the application was configuration driven instead of using
+        /// project files. When we introduced the project data solution we hadn't removed the configuration yet for
+        /// backwards compatibility reasons, and this method allows for a Project's settings to be overridden by
+        /// the Configuration when that was loaded from file or URL.
+        ///
+        /// Usually, this method is called after loading the default project so that the defaults defined in that
+        /// project are overridden by the intended user-specific changes. Subsequent loads of projects should _not_
+        /// be overridden by the configuration as these are more specific than the loaded configuration.
+        ///
+        /// Chain of specificity:
+        /// 
+        /// Default Project -> Configuration -> User-loaded Project
+        ///
+        /// This method should not be called outside of this system as we intend to replace the way configuration is
+        /// loaded by something that directly interacts with projects instead of this in-between Scriptable Object. 
+        /// </summary>
+        public void ApplyOverridesFromConfiguration()
+        {
+            Debug.Log("Configuration was provided, update camera position to match");
+            // if no alternate configuration was loaded, we do not apply the settings as we intend for the project
+            // to provide the defaults; instead of picking these from the configuration.
+            if (configuration.Source == ConfigurationSource.None) return;
+            
+            // Ensure the configuration's origin is in RDNAP because CameraPosition is in RDNAP
+            ProjectData.Current.CameraPosition = configuration.Origin.Convert(CoordinateSystem.RDNAP).Points;
+            
+            // TODO: Override functionalities and their settings once we support that in the ProjectData
         }
         
         public void LoadFromFile(string filePaths)

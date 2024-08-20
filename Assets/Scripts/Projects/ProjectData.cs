@@ -36,8 +36,8 @@ namespace Netherlands3D.Twin.Projects
         [Header("Serialized data")] public int Version = 1;
         public string SavedTimestamp = "";
         public string UUID = "";
-        public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
-        public double[] CameraRotation = new double[3];
+        [SerializeField, JsonProperty] private double[] cameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+        [SerializeField, JsonProperty] private double[] cameraRotation = new double[3];
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
 
@@ -49,6 +49,30 @@ namespace Netherlands3D.Twin.Projects
             {
                 rootLayer = value;
                 rootLayer.ReconstructParentsRecursive();
+            }
+        }
+
+        public double[] CameraPosition
+        {
+            get => cameraPosition;
+            set
+            {
+                if (cameraPosition == value) return;
+
+                cameraPosition = value;
+                OnDataChanged.Invoke(this);
+            }
+        }
+
+        public double[] CameraRotation
+        {
+            get => cameraRotation;
+            set
+            {
+                if (cameraRotation == value) return;
+
+                cameraRotation = value;
+                OnDataChanged.Invoke(this);
             }
         }
 

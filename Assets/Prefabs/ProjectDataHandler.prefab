@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d923de955f294562b5be072fac17cfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
   defaultProjectFileName: ProjectTemplate.nl3d
+  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
   undoStack: []
   redoStack: []
   undoStackSize: 10
@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b258de7d0c67bb438bcc70b871ecf0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugLog: 0
   dataTypeAdapters:
   - {fileID: 11400000, guid: 7ced692139442654998e5e20d4f711a2, type: 2}
   OnAdapterFound:
