@@ -13,13 +13,21 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Configuration
 {
+    public enum ConfigurationSource
+    {
+        None,
+        Url,
+        File
+    }
+
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configuration", fileName = "Configuration", order = 0)]
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
-        
+        public ConfigurationSource Source { get; private set; } = ConfigurationSource.None;
+
         public string Title
         {
             get => title;
@@ -89,6 +97,10 @@ namespace Netherlands3D.Twin.Configuration
                 Debug.Log($"Successfully downloaded external config: {externalConfigFilePath}");
                 var json = request.downloadHandler.text;
 
+                // The source is definitely a file, let's remember that so that the project system knows it needs
+                // to override the default project's settings from this configuration object
+                Source = ConfigurationSource.File;
+                
                 // populate object and when settings are missing, use the defaults from the provided object
                 Populate(JSON.Parse(json));
                 ShouldStartSetup = false;
@@ -105,6 +117,12 @@ namespace Netherlands3D.Twin.Configuration
         {
             var queryParameters = new NameValueCollection();
             url.TryParseQueryString(queryParameters);
+            
+            // The source is the url, let's remember that so that the project system knows it needs
+            // to override the default project's settings from this configuration object
+            Source = ConfigurationSource.Url;
+
+            
             Populate(queryParameters);
         }
 
