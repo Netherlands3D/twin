@@ -241,10 +241,16 @@ namespace Netherlands3D.Twin.Configuration
             int.TryParse(originParts[0].Trim(), out int x);
             int.TryParse(originParts[1].Trim(), out int y);
             int.TryParse(originParts[2].Trim(), out int z);
-
+            
+            // The Origin in the config may be misleadingly named as the X and Y are the World Origin its
+            // position; but the Z (elevation) is the Camera's elevation.
             Origin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-            CoordinateSystems.SetOrigin(Origin);
-            Debug.Log($"Set origin '{Origin}' from URL");
+            
+            // The World Origin should be at 0 elevation as the application makes assumptions regarding
+            // conversions to Unity units; this will ensure NAP 0 is at Unity Y 0
+            CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, x, y, 0));
+            
+            Debug.Log($"Set origin '{Origin.ToVector3()}' from URL");
         }
 
         private void LoadFunctionalitiesFromString(string functionalities)
