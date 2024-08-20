@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         private void Start()
         {
             worldTransform = transform.GetComponent<WorldTransform>();
-            
+
             UpdateCoordinateBasedOnUnityTransform();
         }
 
@@ -47,13 +47,12 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void UpdateCoordinateBasedOnUnityTransform()
         {
-            if(!this.worldTransform)
-                return;
+            if (!this.worldTransform) return;
 
-            
-            this.worldTransform.Coordinate = new Coordinate(transform.position).Convert(this.worldTransform.ReferenceCoordinateSystem);
-            this.worldTransform.Rotation = Quaternion.Inverse(this.worldTransform.Coordinate.RotationToLocalGravityUp()) * transform.rotation;
-            
+            this.worldTransform.Coordinate = new Coordinate(transform.position)
+                .Convert(this.worldTransform.ReferenceCoordinateSystem);
+            var rotationToLocalGravityUp = this.worldTransform.Coordinate.RotationToLocalGravityUp();
+            this.worldTransform.Rotation = Quaternion.Inverse(rotationToLocalGravityUp) * transform.rotation;
         }
     }
 }

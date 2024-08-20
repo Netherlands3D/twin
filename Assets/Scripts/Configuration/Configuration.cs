@@ -35,7 +35,6 @@ namespace Netherlands3D.Twin.Configuration
             get => origin;
             set
             {
-               
                 var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.Points[0], (int)value.Points[1], (int)value.Points[2]);
                 origin = roundedValue;
                 OnOriginChanged.Invoke(roundedValue);
@@ -186,11 +185,11 @@ namespace Netherlands3D.Twin.Configuration
 
         public void AddQueryParameters(UriBuilder urlBuilder)
         {
-            var enabledfunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
+            var enabledFunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
 
-            var originRDNAP = origin.Convert(CoordinateSystem.RDNAP);
-            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.Points[0]},{(int)originRDNAP.Points[1]},{(int)originRDNAP.Points[2]}");
-            urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledfunctionalities.ToArray()));
+            var originRDNAP = origin.ToUnity();
+            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.x},{(int)originRDNAP.z},{(int)originRDNAP.y}");
+            urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledFunctionalities.ToArray()));
             foreach (var functionality in Functionalities)
             {
                 if (functionality.configuration is not IConfiguration functionalityConfiguration) continue;
