@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Slider darknessSlider;      // Slider for adjusting darkness  
         [SerializeField] private TextMeshProUGUI hexColorText; // Text element to display the HEX color code  
         [SerializeField] private TMP_InputField hexInputField; // Input field for HEX color input
+        [SerializeField] private Button pickColorButton;     // Button to pick color
 
         private Texture2D pickerTexture;   // To sample colors from the image  
         private Color selectedColor = Color.white;
@@ -25,6 +26,9 @@ namespace Netherlands3D.Twin
             opacitySlider.onValueChanged.AddListener(OnOpacityChanged);
             darknessSlider.onValueChanged.AddListener(OnDarknessChanged);
             UpdateReticlePosition(Vector2.zero); // Initialize reticle position  
+
+            // Add listener to button
+            pickColorButton.onClick.AddListener(PickColor);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -88,7 +92,7 @@ namespace Netherlands3D.Twin
         {
             string hex = ColorUtility.ToHtmlStringRGB(color);
             hexColorText.text = $"#{hex}";
-            hexInputField.text = ""; // Update the input field with the HEX code  
+            hexInputField.text = ""; // Clear the input field  
         }
 
         private void UpdateReticlePosition(Vector2 localPoint)
@@ -145,6 +149,12 @@ namespace Netherlands3D.Twin
             {
                 Debug.LogWarning("Invalid HEX format. Ensure it is 6 characters long after '#'.");
             }
+        }
+
+        // New method to pick color
+        private void PickColor()
+        {
+            
         }
     }
 }
