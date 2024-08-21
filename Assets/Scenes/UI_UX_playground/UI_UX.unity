@@ -4178,7 +4178,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 112526606}
   m_HandleRect: {fileID: 112526605}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4498,18 +4498,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 767208733}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &777716286 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-    type: 3}
-  m_PrefabInstance: {fileID: 2002593470}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &780948074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6163,18 +6151,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119819283}
   m_CullTransparentMesh: 1
---- !u!114 &1134583968 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7275114998268791187, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-    type: 3}
-  m_PrefabInstance: {fileID: 2002593470}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dc85356250718d4bbd600418b5f7166, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1139490404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9588,7 +9564,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -400.09814
+      value: -485.9887
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
@@ -9630,60 +9606,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1531357645974589374, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531357645974589374, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531357645974589374, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1862391620528445496, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1134583968}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnHexInputChanged
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.ColorWheel, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2308799934881513566, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2363918003598521034, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
@@ -9919,16 +9845,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7275114998268791187, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: hexInputField
-      value: 
-      objectReference: {fileID: 777716286}
-    - target: {fileID: 7275114998268791187, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
-        type: 3}
-      propertyPath: colorDisplays.Array.size
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7908207433689781745, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}

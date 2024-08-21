@@ -90,6 +90,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -186,12 +188,22 @@ namespace Netherlands3D.Twin.Layers
 
         public void AddProperty(LayerPropertyData propertyData)
         {
+            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
+            if (existingProperty != null)
+            {
+                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
+                int index = layerProperties.IndexOf(existingProperty);
+                layerProperties[index] = propertyData;
+            }
+            
             layerProperties.Add(propertyData);
+            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
             layerProperties.Remove(propertyData);
+            PropertyRemoved.Invoke(propertyData);
         }
     }
 }
