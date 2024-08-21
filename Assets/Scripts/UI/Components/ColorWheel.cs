@@ -7,13 +7,13 @@ namespace Netherlands3D.Twin
 {
     public class ColorWheel : MonoBehaviour, IPointerDownHandler, IDragHandler
     {
-        public Image[] colorDisplays;      // Array to hold multiple color displays  
-        public Image pickerImage;          // Image for the color picker  
-        public Image reticle;              // The reticle to indicate color position  
-        public Slider opacitySlider;       // Slider for adjusting opacity  
-        public Slider darknessSlider;      // Slider for adjusting darkness  
-        public TextMeshProUGUI hexColorText; // Text element to display the HEX color code  
-        public TMP_InputField hexInputField; // Input field for HEX color input
+        [SerializeField] private Image[] colorDisplays;      // Array to hold multiple color displays  
+        [SerializeField] private Image pickerImage;          // Image for the color picker  
+        [SerializeField] private Image reticle;              // The reticle to indicate color position  
+        [SerializeField] private Slider opacitySlider;       // Slider for adjusting opacity  
+        [SerializeField] private Slider darknessSlider;      // Slider for adjusting darkness  
+        [SerializeField] private TextMeshProUGUI hexColorText; // Text element to display the HEX color code  
+        [SerializeField] private TMP_InputField hexInputField; // Input field for HEX color input
 
         private Texture2D pickerTexture;   // To sample colors from the image  
         private Color selectedColor = Color.white;
@@ -21,7 +21,6 @@ namespace Netherlands3D.Twin
         void Start()
         {
             pickerTexture = pickerImage.sprite.texture;
-
             UpdateColorDisplay();
             opacitySlider.onValueChanged.AddListener(OnOpacityChanged);
             darknessSlider.onValueChanged.AddListener(OnDarknessChanged);
