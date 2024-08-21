@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
@@ -240,6 +241,16 @@ namespace Netherlands3D.Twin.Projects
             Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
+        }
+
+        /// <summary>
+        /// Recursively collect all assets from each of the property data elements of every layer for loading and
+        /// saving purposes. 
+        /// </summary>
+        /// <returns>A list of assets on disk</returns>
+        public IEnumerable<Asset> GetAssets()
+        {
+            return rootLayer.GetAssets();
         }
     }
 }
