@@ -78,7 +78,7 @@ namespace Netherlands3D.Sun
             {
                 UpdateTimeOfDayPartsFromTime();
                 timeOfDayChanged.Invoke(time);
-                SetPosition();
+                SetDirection();
             }
 
             frameStep = (frameStep + 1) % frameSteps;
@@ -158,7 +158,7 @@ namespace Netherlands3D.Sun
             this.longitude = longitude;
             this.latitude = latitude;
 
-            SetPosition();
+            SetDirection();
         }
 
         public void SetUpdateSteps(int i)
@@ -194,19 +194,19 @@ namespace Netherlands3D.Sun
             if (newTime != time)
             {
                 time = newTime;
-                SetPosition();
+                SetDirection();
                 timeOfDayChanged.Invoke(newTime);
             }
         }
-
+        
         private void DetermineCurrentLocationFromOrigin()
         {
-            var wgs84SceneCenter = CoordinateConverter.RDtoWGS84(EPSG7415.relativeCenter.x, EPSG7415.relativeCenter.y);
-            longitude = (float)wgs84SceneCenter.lon;
-            latitude = (float)wgs84SceneCenter.lat;
+            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon); 
+            longitude = (float)wgs84SceneCenter.easting;
+            latitude = (float)wgs84SceneCenter.northing;
         }
 
-        private void SetPosition()
+        private void SetDirection()
         {
             Vector3 angles = new Vector3();
             SunPosition.CalculateSunPosition(time, (double)latitude, (double)longitude, out double azi, out double alt);
@@ -214,6 +214,13 @@ namespace Netherlands3D.Sun
             angles.y = (float)azi * Mathf.Rad2Deg;
 
             sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
+        }
+        
+        //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
+        public void RecalculateOrigin()
+        {
+            DetermineCurrentLocationFromOrigin();
+            SetDirection();
         }
     }
 }
