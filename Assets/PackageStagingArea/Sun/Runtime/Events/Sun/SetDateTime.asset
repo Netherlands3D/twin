@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3806bf4ed8508374aa40d46634c7a461, type: 3}
   m_Name: SetDateTime
   m_EditorClassIdentifier: 
-  eventName: 
-  description: 
+  eventName: SetDateTime
+  description: Set the SunTime's full DateTime
