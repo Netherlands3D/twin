@@ -78,7 +78,7 @@ namespace Netherlands3D.Sun
             {
                 UpdateTimeOfDayPartsFromTime();
                 timeOfDayChanged.Invoke(time);
-                SetPosition();
+                SetDirection();
             }
 
             frameStep = (frameStep + 1) % frameSteps;
@@ -158,7 +158,7 @@ namespace Netherlands3D.Sun
             this.longitude = longitude;
             this.latitude = latitude;
 
-            SetPosition();
+            SetDirection();
         }
 
         public void SetUpdateSteps(int i)
@@ -194,7 +194,7 @@ namespace Netherlands3D.Sun
             if (newTime != time)
             {
                 time = newTime;
-                SetPosition();
+                SetDirection();
                 timeOfDayChanged.Invoke(newTime);
             }
         }
@@ -206,7 +206,7 @@ namespace Netherlands3D.Sun
             latitude = (float)wgs84SceneCenter.northing;
         }
 
-        private void SetPosition()
+        private void SetDirection()
         {
             Vector3 angles = new Vector3();
             SunPosition.CalculateSunPosition(time, (double)latitude, (double)longitude, out double azi, out double alt);
@@ -220,7 +220,7 @@ namespace Netherlands3D.Sun
         public void RecalculateOrigin()
         {
             DetermineCurrentLocationFromOrigin();
-            SetPosition();
+            SetDirection();
         }
     }
 }
