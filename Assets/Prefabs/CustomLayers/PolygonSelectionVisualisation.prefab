@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4784300685805219416}
   - component: {fileID: 2578961074007820944}
-  - component: {fileID: 4127536730765376663}
-  - component: {fileID: 5468818634811242804}
   - component: {fileID: 5962417615404079703}
   m_Layer: 0
   m_Name: PolygonSelectionVisualisation
@@ -55,38 +53,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   PolygonMeshMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
---- !u!114 &4127536730765376663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532706497964853861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5468818634811242804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532706497964853861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 2
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5962417615404079703
 MonoBehaviour:
   m_ObjectHideFlags: 0
