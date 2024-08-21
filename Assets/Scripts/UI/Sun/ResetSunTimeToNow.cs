@@ -9,7 +9,6 @@ namespace Netherlands3D.Twin
         public UnityEvent<DateTime> dateTimeNow;
         public void GetDateTimeNowAndSendEvent()
         {
-            Debug.Log("setting dt " + DateTime.Now);
             dateTimeNow.Invoke(DateTime.Now);
         }
     }
