@@ -198,12 +198,12 @@ namespace Netherlands3D.Sun
                 timeOfDayChanged.Invoke(newTime);
             }
         }
-
+        
         private void DetermineCurrentLocationFromOrigin()
         {
-            var wgs84SceneCenter = CoordinateConverter.RDtoWGS84(EPSG7415.relativeCenter.x, EPSG7415.relativeCenter.y);
-            longitude = (float)wgs84SceneCenter.lon;
-            latitude = (float)wgs84SceneCenter.lat;
+            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon); 
+            longitude = (float)wgs84SceneCenter.easting;
+            latitude = (float)wgs84SceneCenter.northing;
         }
 
         private void SetPosition()
@@ -214,6 +214,13 @@ namespace Netherlands3D.Sun
             angles.y = (float)azi * Mathf.Rad2Deg;
 
             sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
+        }
+        
+        //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
+        public void RecalculateOrigin()
+        {
+            DetermineCurrentLocationFromOrigin();
+            SetPosition();
         }
     }
 }
