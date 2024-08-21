@@ -7,35 +7,21 @@ namespace Netherlands3D.Twin
 {
     public class NL3D_Openen_Opslaan_UI : MonoBehaviour
     {
-        public Slider Loadingbar;
-        public GameObject[] objectsToHideWhenDone;
-        public GameObject[] objectsToShowWhenDone;
+        [SerializeField] private Slider Loadingbar;
+        [SerializeField] private GameObject[] objectsToHideWhenDone;
+        [SerializeField] private GameObject[] objectsToShowWhenDone;
 
         private void Update()
         {
-            if (Loadingbar.value < Loadingbar.maxValue)
+            var isLoading = Loadingbar.value < Loadingbar.maxValue;
+            foreach (GameObject obj in objectsToHideWhenDone)
             {
-                foreach (GameObject obj in objectsToHideWhenDone)
-                {
-                    obj.SetActive(true);
-                }
-
-                foreach (GameObject obj in objectsToShowWhenDone)
-                {
-                    obj.SetActive(false);
-                }
+                obj.SetActive(isLoading);
             }
-            else
-            {
-                foreach (GameObject obj in objectsToHideWhenDone)
-                {
-                    obj.SetActive(false);
-                }
 
-                foreach (GameObject obj in objectsToShowWhenDone)
-                {
-                    obj.SetActive(true);
-                }
+            foreach (GameObject obj in objectsToShowWhenDone)
+            {
+                obj.SetActive(!isLoading);
             }
         }
     }
