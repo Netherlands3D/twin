@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
@@ -22,17 +21,7 @@ namespace Netherlands3D.Twin.Projects
     {
         [JsonIgnore] private static ProjectData current;
         [JsonIgnore] public static ProjectData Current => current;
-        [JsonIgnore, NonSerialized] private bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
-
-        [DllImport("__Internal")]
-        private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
-
-        [DllImport("__Internal")]
-        private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
-
-        public const string DefaultFileName = "NL3D_Project_";
-        public const string ProjectFileExtension = ".nl3d";
-        public const string ProjectJsonFileNameInZip = "project.json";
+        [JsonIgnore, NonSerialized] public bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
 
         [Header("Serialized data")] public int Version = 1;
         public string SavedTimestamp = "";
@@ -53,19 +42,9 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        [NonSerialized] private ProjectDataHandler projectDataHandler;
-        [NonSerialized] private ZipOutputStream zipOutputStream;
-        [NonSerialized] private string lastSavePath = "";
-
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
-
-        [NonSerialized] private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented
-        };
 
         public void RefreshUUID()
         {
@@ -85,126 +64,6 @@ namespace Netherlands3D.Twin.Projects
         }
 
 #endif
-
-        public void LoadFromFile(string fileName)
-        {
-            isLoading = true;
-            RootLayer.DestroyLayer();
-
-            // Open the zip file
-            using (FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName)))
-            {
-                //Extract specific project.json from zip using CsharpLib
-                using ZipFile zf = new(fs);
-
-                foreach (ZipEntry zipEntry in zf)
-                {
-                    if (!zipEntry.IsFile) continue;
-                    if (zipEntry.Name == ProjectJsonFileNameInZip)
-                    {
-                        using Stream zipStream = zf.GetInputStream(zipEntry);
-                        using StreamReader sr = new(zipStream);
-                        string json = sr.ReadToEnd();
-
-                        LoadJSON(json);
-                    }
-                    else
-                    {
-                        //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
-                        Debug.Log("Other file found in Project zip. Ignoring for now.");
-                        isLoading = false;
-
-                        //todo add failed loading event
-                    }
-                }
-            }
-        }
-
-        public static void LoadProjectData(ProjectData data)
-        {
-            var jsonProject = JsonConvert.SerializeObject(data, Current.serializerSettings);
-            Current.LoadJSON(jsonProject);
-        }
-
-        private void LoadJSON(string json)
-        {
-            JsonConvert.PopulateObject(json, Current, serializerSettings);
-            RootLayer.ReconstructParentsRecursive();
-            Debug.Log("loaded project with uuid: " + UUID);
-            OnDataChanged.Invoke(this);
-            isLoading = false;
-        }
-
-        public void SaveAsFile(ProjectDataHandler projectDataHandler)
-        {
-            RefreshUUID();
-
-            this.projectDataHandler = projectDataHandler;
-
-            // Set the timestamp when the data was saved
-            SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
-
-            // Start the zip output stream
-            lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}{ProjectFileExtension}";
-            zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
-
-            var jsonProject = JsonConvert.SerializeObject(this, serializerSettings);
-            var entry = new ZipEntry(ProjectJsonFileNameInZip);
-            zipOutputStream.PutNextEntry(entry);
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
-            zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);
-
-            // For now we can directly download the zip file (in the future we want to append more files to the zip, like meshes and textures etc.)
-            FinishProjectFile();
-        }
-
-        private void FinishProjectFile()
-        {
-            // Finish the zip
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
-
-            // Make sure indexedDB is synced
-#if !UNITY_EDITOR && UNITY_WEBGL
-            SyncFilesToIndexedDB(projectDataHandler.name, "ProjectSavedToIndexedDB");
-
-#elif UNITY_EDITOR
-            //Request using file write dialog of unity editor where to copy the file from lastSavePath path
-            var fileName = Path.GetFileNameWithoutExtension(lastSavePath);
-            var fileExtention = Path.GetExtension(lastSavePath).Replace(".", "");
-            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, fileExtention);
-            if (fileTargetPath.Length > 0)
-            {
-                File.Copy(lastSavePath, fileTargetPath, true);
-            }
-
-            //Open the folder where the file is saved
-            EditorUtility.RevealInFinder(fileTargetPath);
-
-#endif
-        }
-
-        public void AppendFileToZip(string fileName)
-        {
-            var persistentDataPath = Application.persistentDataPath + "/" + fileName;
-            Debug.Log("Appending file to zip: " + persistentDataPath);
-
-            byte[] buffer = new byte[4096];
-            var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");
-            ZipEntry entry = new ZipEntry(randomFileTag + "_" + fileName);
-            zipOutputStream.PutNextEntry(entry);
-
-            using FileStream fs = File.OpenRead(persistentDataPath);
-            StreamUtils.Copy(fs, zipOutputStream, buffer);
-        }
-
-        public void ProjectSavedToIndexedDB()
-        {
-            var fileName = Path.GetFileName(lastSavePath);
-            DownloadFromIndexedDB($"{fileName}", projectDataHandler.name, "DownloadedProject");
-        }
 
         public void AddStandardLayer(LayerData layer)
         {
