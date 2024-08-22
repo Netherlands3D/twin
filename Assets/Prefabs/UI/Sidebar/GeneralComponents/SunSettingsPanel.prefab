@@ -5729,6 +5729,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4480209959497672921}
+    - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7053593094994427922}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!224 &5572727072114807208 stripped
 RectTransform:
@@ -5827,6 +5831,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7053593094994427922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5977504864734157109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 'De dag voor de zonnestand.
+
+    Scroll of typ om te wijzigen.'
 --- !u!1001 &2952575318461658105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6400,6 +6419,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 582713912738239823}
+    - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8719685927998408890}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!1 &2825460506498938215 stripped
 GameObject:
@@ -6492,6 +6515,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8719685927998408890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2825460506498938215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 'De maand voor de zonnestand.
+
+    Scroll of typ om te wijzigen.'
 --- !u!224 &4076916420703600122 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
@@ -6716,6 +6754,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 557580617795689680}
+    - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4214901546966387685}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!1 &2478140180863641863 stripped
 GameObject:
@@ -6808,6 +6850,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4214901546966387685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478140180863641863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 'Het jaar voor de zonnestand.
+
+    Scroll of typ om te wijzigen.'
 --- !u!224 &4451262750907359642 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
