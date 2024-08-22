@@ -223,7 +223,7 @@ namespace Netherlands3D.Twin.Projects
             var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
             referencedLayer.LayerData = proxyLayer;
 
-            //add properties to the new layerData
+            // Add properties to the new layerData
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
             foreach (var layerWithPropertyData in layersWithPropertyData)
             {
@@ -247,8 +247,8 @@ namespace Netherlands3D.Twin.Projects
         /// Recursively collect all assets from each of the property data elements of every layer for loading and
         /// saving purposes. 
         /// </summary>
-        /// <returns>A list of assets on disk</returns>
-        public IEnumerable<Asset> GetAssets()
+        /// <returns>A list of assets</returns>
+        public IEnumerable<LayerAsset> GetAssets()
         {
             return rootLayer.GetAssets();
         }

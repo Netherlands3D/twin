@@ -211,7 +211,7 @@ namespace Netherlands3D.Twin.Layers
         /// purposes. 
         /// </summary>
         /// <returns>A list of assets on disk</returns>
-        public IEnumerable<Asset> GetAssets()
+        public IEnumerable<LayerAsset> GetAssets()
         {
             var assetsOfCurrentLayer = layerProperties
                 .OfType<ILayerPropertyDataWithAssets>()
