@@ -6069,6 +6069,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3649091038733432688}
+    - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3089275168652750090}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!1 &7361776512118125532 stripped
 GameObject:
@@ -6192,6 +6196,49 @@ MonoBehaviour:
   tooltipText: 'De tijd voor de zonnestand.
 
     Scroll of typ om te wijzigen.'
+--- !u!114 &3089275168652750090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7361776512118125532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948c69bf0dc644221bd8e414efd46b5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 3
+  minutesChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: f0bc5ac5c49e6a745992156b6889f461, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  hoursChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 6a1d5daf74be68448983646eb4d3492c, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &8757346257185307457 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,

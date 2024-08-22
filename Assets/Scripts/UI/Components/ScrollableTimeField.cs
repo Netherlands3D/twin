@@ -7,20 +7,21 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    public class ScrollableField : MonoBehaviour, IScrollHandler
+    public class ScrollableTimeField : MonoBehaviour, IScrollHandler
     {
         [SerializeField] private float sensitivity = 10f;
-        [SerializeField] private int minValue = 0;
-        [SerializeField] private int maxValue = 12;
-        public UnityEvent<int> fieldChanged;
+        public UnityEvent<int> minutesChanged;
+        public UnityEvent<int> hoursChanged;
 
         private InputField field;
         private TMP_InputField tmp_field;
+        private TimeParser parser;
 
         private void Start()
         {
             field = GetComponent<InputField>();
             tmp_field = GetComponent<TMP_InputField>();
+            parser = GetComponent<TimeParser>();
         }
 
         public void OnScroll(PointerEventData eventData)
@@ -36,15 +37,10 @@ namespace Netherlands3D.Twin
 
         private void IncrementFieldValue(string currentValue, float delta)
         {
-            if (!int.TryParse(currentValue, out int parsedInt))
-            {
-                return;
-            }
-
-            parsedInt += (int)delta;
-            parsedInt = Math.Clamp(parsedInt, minValue, maxValue);
-
-            fieldChanged.Invoke(parsedInt);
+            var dateTime = parser.ParseTime(currentValue);
+            var newTime = dateTime.AddMinutes(delta);
+            minutesChanged.Invoke(newTime.Minute);
+            hoursChanged.Invoke(newTime.Hour);
         }
     }
 }
