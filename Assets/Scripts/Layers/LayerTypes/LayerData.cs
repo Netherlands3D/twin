@@ -205,5 +205,22 @@ namespace Netherlands3D.Twin.Layers
             layerProperties.Remove(propertyData);
             PropertyRemoved.Invoke(propertyData);
         }
+
+        /// <summary>
+        /// Recursively collect all assets from each of the property data elements for loading and saving
+        /// purposes. 
+        /// </summary>
+        /// <returns>A list of assets on disk</returns>
+        public IEnumerable<LayerAsset> GetAssets()
+        {
+            var assetsOfCurrentLayer = layerProperties
+                .OfType<ILayerPropertyDataWithAssets>()
+                .SelectMany(p => p.GetAssets());
+
+            var assetsOfAllChildLayers = children
+                .SelectMany(l => l.GetAssets());
+
+            return assetsOfAllChildLayers.Concat(assetsOfCurrentLayer);
+        }
     }
 }
