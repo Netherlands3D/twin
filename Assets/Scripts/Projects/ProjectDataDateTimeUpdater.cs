@@ -39,12 +39,12 @@ namespace Netherlands3D.Twin
             lastSavedDateTime = project.CurrentDateTime;
             sunTime.SetTime(project.CurrentDateTime);
         }
-        
+
         private void SaveCurrentDateTime(DateTime newDateTime)
         {
-            if(lastSavedDateTime == newDateTime)
+            if (lastSavedDateTime == newDateTime)
                 return;
-            
+
             lastSavedDateTime = newDateTime;
             ProjectData.Current.CurrentDateTime = newDateTime;
         }
