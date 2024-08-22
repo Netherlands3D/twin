@@ -6068,7 +6068,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5699464260665654850}
+      addedObject: {fileID: 3649091038733432688}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!1 &7361776512118125532 stripped
 GameObject:
@@ -6177,7 +6177,7 @@ MonoBehaviour:
   dateTimeParsed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5699464260665654850
+--- !u!114 &3649091038733432688
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6186,15 +6186,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7361776512118125532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 10
-  minValue: 0
-  maxValue: 12
-  fieldChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  tooltipText: 'De tijd voor de zonnestand.
+
+    Scroll of typ om te wijzigen.'
 --- !u!224 &8757346257185307457 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
