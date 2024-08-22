@@ -1168,8 +1168,8 @@ RectTransform:
   m_LocalScale: {x: 0.45558614, y: 0.45558614, z: 0.45558614}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9196894221326461299}
   - {fileID: 6840221707609125860}
+  - {fileID: 9196894221326461299}
   m_Father: {fileID: 7234754521722894092}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
@@ -4713,8 +4713,9 @@ GameObject:
   - component: {fileID: 9035633249369248511}
   - component: {fileID: 3487973043830433222}
   - component: {fileID: 6273250756346834612}
+  - component: {fileID: 5779303477585118533}
   m_Layer: 5
-  m_Name: Mask
+  m_Name: SundialMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4790,7 +4791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
+  m_ShowMaskGraphic: 0
 --- !u!114 &3487973043830433222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4852,6 +4853,49 @@ MonoBehaviour:
       - m_Target: {fileID: 11400000, guid: f0bc5ac5c49e6a745992156b6889f461, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onConvertedToAngle:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3487973043830433222}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.RotatableKnob, Assembly-CSharp
+        m_MethodName: SetAngle
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5779303477585118533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9215488442837690699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9af4f0f37b445d4b97c5287bf00f4f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 67cccae072f2d9243a400202895e49b2, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6273250756346834612}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AngleToTime, Assembly-CSharp
+        m_MethodName: Time24ToAngle
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

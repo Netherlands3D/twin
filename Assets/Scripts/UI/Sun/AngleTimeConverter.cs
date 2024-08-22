@@ -7,10 +7,12 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
-    public class AngleToTime : MonoBehaviour
+    public class AngleTimeConverter : MonoBehaviour
     {
         public UnityEvent<int> onConvertedToHour;
         public UnityEvent<int> onConvertedToMinute;
+
+        public UnityEvent<float> onConvertedToAngle;
         
         public void To12HourTime(float angle)
         {
@@ -34,10 +36,23 @@ namespace Netherlands3D.Twin
             int hour = (int)(angle / 15) % 24;
             int minutes = (int)((angle % 15) * 4);
             
-            Debug.Log(angle + "\t" + hour +":" + minutes);
-
             onConvertedToHour.Invoke(hour);
             onConvertedToMinute.Invoke(minutes);
+        }
+
+        public void Time24ToAngle(DateTime dateTime)
+        {
+            //15 degrees is one hour, 0.25 degrees is one minute
+            float angle = dateTime.Hour * 15 + dateTime.Minute * 0.25f;
+            onConvertedToAngle.Invoke(angle);
+        }
+        
+        public void Time12ToAngle(DateTime dateTime)
+        {
+            //30 degrees is one hour, 0.5 degrees is one minute
+            float angle = dateTime.Hour * 30 + dateTime.Minute * 0.5f;
+            onConvertedToAngle.Invoke(angle);
+            
         }
     }
 }

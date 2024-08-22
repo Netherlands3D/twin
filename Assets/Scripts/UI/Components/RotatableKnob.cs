@@ -35,5 +35,10 @@ namespace Netherlands3D.Twin
 
             onAngleChanged.Invoke(Angle);
         }
+
+        public void SetAngle(float angle)
+        {
+            rotationCenter.transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
     }
 }
