@@ -1482,11 +1482,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -59.80005
       objectReference: {fileID: 0}
-    - target: {fileID: 7741421429120120711, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
-        type: 3}
-      propertyPath: trigger.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7542350089009178941}
     - target: {fileID: 8065810425275369335, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1548,15 +1543,3 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4434894509721109686}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7542350089009178941 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6133945018832317835, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
-    type: 3}
-  m_PrefabInstance: {fileID: 4434894509721109686}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b2e4cfbe3045d4493f2c254f04ff44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
