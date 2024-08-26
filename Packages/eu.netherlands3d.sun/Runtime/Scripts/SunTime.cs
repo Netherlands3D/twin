@@ -46,10 +46,40 @@ namespace Netherlands3D.Sun
         [Header("Events")]
         public UnityEvent<DateTime> timeOfDayChanged = new();
         public UnityEvent<float> timeSpeedChanged = new();
+        public UnityEvent<bool> useCurrentTimeChanged = new();
 
         private float longitude;
         private float latitude;
         private DateTime time;
+
+        public DateTime Time
+        {
+            get => time;
+            set
+            {
+                if(time == value)
+                    return;
+                
+                time = value;
+                UpdateTimeOfDayPartsFromTime();
+                SetDirection();
+                timeOfDayChanged.Invoke(time);
+            }
+        }
+
+        public bool UseCurrentTime
+        {
+            get => jumpToCurrentTimeAtStart;
+            set
+            {
+                jumpToCurrentTimeAtStart = value;
+                if(value)
+                    ResetToNow();
+                
+                useCurrentTimeChanged.Invoke(value);
+            }
+        }
+        
         private int frameStep;
         private const int gizmoRayLength = 10000;
 
@@ -59,28 +89,26 @@ namespace Netherlands3D.Sun
             {
                 ResetToNow();
             }
+            else
+            {
+                var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
+                Time = newTime;
+            }
 
             DetermineCurrentLocationFromOrigin();
-            Apply();
         }
 
         private void OnValidate()
         {
-            Apply();
+            var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
+            Time = newTime;
         }
 
         private void Update()
         {
             if (!animate) return;
 
-            time = time.AddSeconds(timeSpeed * Time.deltaTime);
-            if (frameStep == 0)
-            {
-                UpdateTimeOfDayPartsFromTime();
-                timeOfDayChanged.Invoke(time);
-                SetDirection();
-            }
-
+            Time = time.AddSeconds(timeSpeed * UnityEngine.Time.deltaTime);
             frameStep = (frameStep + 1) % frameSteps;
         }
 
@@ -98,59 +126,91 @@ namespace Netherlands3D.Sun
             this.animate = animate;
         }
 
+        [Obsolete("Use the Time property instead")]
         public DateTime GetTime()
         {
             return time;
         }
 
+        //function for in the inspector
         public void SetTime(DateTime time)
         {
-            this.time = time;
-            UpdateTimeOfDayPartsFromTime();
-            Apply();
+            UseCurrentTime = false;
+            Time = time;
         }
 
-        public void SetTime(int hour, int minutes)
+        public void SetTime(int hour, int minute, int second)
         {
-            this.hour = Mathf.Clamp(hour, 0, 24);
-            this.minutes = Mathf.Clamp(minutes, 0, 60);
-            Apply();
+            UseCurrentTime = false;
+
+            hour = Mathf.Clamp(hour, 0, 24);
+            minute = Mathf.Clamp(minute, 0, 60);
+            second = Mathf.Clamp(second, 0, 60);
+
+            Time = new DateTime(
+                Time.Year,
+                Time.Month,
+                Time.Day,
+                hour,
+                minute,
+                second,
+                Time.Millisecond,
+                Time.Kind);
         }
 
         public void SetHour(int hour)
         {
-            this.hour = Mathf.Clamp(hour, 0, 24);
-            Apply();
+            SetTime(hour, Time.Minute, Time.Second);
         }
-
-        public void SetSeconds(int seconds)
+        public void SetMinutes(int minute)
         {
-            this.seconds = Mathf.Clamp(seconds, 0, 60);
-            Apply();
+            SetTime(Time.Hour, minute, Time.Second);
         }
 
-        public void SetMinutes(int minutes)
+        public void SetSeconds(int second)
+        { 
+            SetTime(Time.Hour, Time.Minute, second);
+        }
+
+        public void SetDate(int day, int month, int year)
         {
-            this.minutes = Mathf.Clamp(minutes, 0, 60);
-            Apply();
-        }
+            UseCurrentTime = false;
+            
+            day = Mathf.Clamp(day, 1, 31);
+            month = Mathf.Clamp(month, 1, 12);
+            year = Mathf.Clamp(year, 1, 9999);
 
+            try
+            {
+                Time = new DateTime(
+                    year,
+                    month,
+                    day,
+                    Time.Hour,
+                    Time.Minute,
+                    Time.Second,
+                    Time.Millisecond,
+                    Time.Kind);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("invalid date entered, ignoring the change");
+            }
+        }
+        
         public void SetDay(int day)
         {
-            this.day = Mathf.Clamp(day, 1, 31);
-            Apply();
+            SetDate(day, Time.Month, Time.Year);
         }
 
         public void SetMonth(int month)
         {
-            this.month = Mathf.Clamp(month, 1, 12);
-            Apply();
+            SetDate(Time.Day, month, Time.Year);
         }
 
         public void SetYear(int year)
         {
-            this.year = year;
-            Apply();
+            SetDate(Time.Day, Time.Month, year);
         }
 
         public void SetLocation(float longitude, float latitude)
@@ -174,31 +234,21 @@ namespace Netherlands3D.Sun
 
         public void ResetToNow()
         {
-            time = DateTime.Now;
-
-            UpdateTimeOfDayPartsFromTime();
+            jumpToCurrentTimeAtStart = true;
+            useCurrentTimeChanged.Invoke(jumpToCurrentTimeAtStart);
+            Time = DateTime.Now;
         }
 
         private void UpdateTimeOfDayPartsFromTime()
         {
             hour = time.Hour;
             minutes = time.Minute;
+            seconds = time.Second;
             day = time.Day;
             month = time.Month;
             year = time.Year;
         }
 
-        private void Apply()
-        {
-            var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
-            if (newTime != time)
-            {
-                time = newTime;
-                SetDirection();
-                timeOfDayChanged.Invoke(newTime);
-            }
-        }
-        
         private void DetermineCurrentLocationFromOrigin()
         {
             var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon); 
