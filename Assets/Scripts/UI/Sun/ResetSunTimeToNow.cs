@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,10 +7,12 @@ namespace Netherlands3D.Twin
 {
     public class ResetSunTimeToNow : MonoBehaviour
     {
-        public UnityEvent<DateTime> dateTimeNow;
-        public void GetDateTimeNowAndSendEvent()
+        public UnityEvent<bool> useCurrentTime;
+
+        public void SetDateTimeToNow()
         {
-            dateTimeNow.Invoke(DateTime.Now);
+            useCurrentTime.Invoke(true);
+            ProjectData.Current.UseCurrentTime = true;
         }
     }
 }

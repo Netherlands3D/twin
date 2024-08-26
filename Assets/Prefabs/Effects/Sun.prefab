@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 1067614697350413827}
   - component: {fileID: 1217313053658380861}
   - component: {fileID: 5606514037957622521}
+  - component: {fileID: 2011149091027820903}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -218,6 +219,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  useCurrentTimeChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4406432131298064742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,18 +512,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1832797565794202596}
-        m_TargetAssemblyTypeName: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
-        m_MethodName: ResetToNow
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls:
@@ -647,3 +639,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2011149091027820903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593048648800678676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: c0fadf4eeee2c49ee80ea76e9ec2a119, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1832797565794202596}
+        m_TargetAssemblyTypeName: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
+        m_MethodName: set_UseCurrentTime
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
