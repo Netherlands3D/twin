@@ -235,8 +235,8 @@ namespace Netherlands3D.Sun
 
         public void ResetToNow()
         {
-            jumpToCurrentTimeAtStart = true;
-            useCurrentTimeChanged.Invoke(jumpToCurrentTimeAtStart);
+            useCurrentTime = true;
+            useCurrentTimeChanged.Invoke(useCurrentTime);
             Time = DateTime.Now;
         }
 
