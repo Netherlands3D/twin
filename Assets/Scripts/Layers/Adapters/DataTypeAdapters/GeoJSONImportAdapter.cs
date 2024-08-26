@@ -9,9 +9,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private Material visualizationMaterial;
-        [SerializeField] private LineRenderer3D lineRenderer3D;
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private GeoJsonLayerGameObject layerPrefab;
         [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
 
         public bool Supports(LocalFile localFile)
@@ -51,31 +49,25 @@ namespace Netherlands3D.Twin
 
         public void ParseGeoJSON(LocalFile localFile)
         {
-            //Create random color material instance so every GeoJSON layer import gets a unique colors for now
-            var randomColorVisualisationMaterial = new Material(visualizationMaterial);
-            var randomColor = Color.HSVToRGB(Random.value, Random.Range(0.5f, 1f), 1);
-            randomColor.a = visualizationMaterial.color.a;
-            randomColorVisualisationMaterial.color = randomColor;
-
-            CreateGeoJSONLayer(localFile, randomColorVisualisationMaterial, lineRenderer3D, pointRenderer3D, displayErrorMessageEvent);
+            CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
         }
 
-        private void CreateGeoJSONLayer(LocalFile localFile, Material visualizationMaterial, LineRenderer3D lineRenderer3D, BatchedMeshInstanceRenderer pointRenderer3D, UnityEvent<string> onErrorCallback = null)
+        private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
-            var fullPath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
+            var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-
             if(localFile.SourceUrl.Length > 0)
                 geoJsonLayerName = localFile.SourceUrl;    
-
-            var go = new GameObject(geoJsonLayerName);
-            var layer = go.AddComponent<GeoJSONLayer>();
-
+        
+            //Create a new geojson layer with random color (untill UI provides ways to choose colors)
+            GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.Name = geoJsonLayerName;
+            newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
-                layer.OnParseError.AddListener(onErrorCallback.Invoke);
+                newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-            layer.StreamParseGeoJSON(fullPath);
+            
+            newLayer.SetURL(localFilePath, localFile.SourceUrl);
         }
     }
 }

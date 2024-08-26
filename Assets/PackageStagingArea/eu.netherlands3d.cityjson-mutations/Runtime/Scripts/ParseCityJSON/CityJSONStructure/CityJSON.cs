@@ -29,7 +29,7 @@ namespace Netherlands3D.T3DPipeline
         public Vector3Double MinExtent { get; private set; }
         public Vector3Double MaxExtent { get; private set; }
         public Vector3Double AbsoluteCenter { get { return (MaxExtent + MinExtent) / 2; } }
-        public CoordinateSystem CoordinateSystem { get; private set; } = CoordinateSystem.Unity;
+        public CoordinateSystem CoordinateSystem { get; private set; } = CoordinateSystem.Undefined;
 
         private Dictionary<string, JSONNode> extensionNodes = new Dictionary<string, JSONNode>();
 
@@ -218,14 +218,14 @@ namespace Netherlands3D.T3DPipeline
         {
             Debug.Log("Parsing coordinate system: " + coordinateSystemNode.Value);
             if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::7415")
-                return CoordinateSystem.RD;
+                return CoordinateSystem.RDNAP;
             if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::28992")
                 return CoordinateSystem.RD;
             if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::4979")
                 return CoordinateSystem.WGS84;
 
-            Debug.Log("Parsing coordinateSystem failed, using Unity Coordinate Sytem");
-            return CoordinateSystem.Unity;
+            Debug.Log("Parsing coordinateSystem failed, using Undefined Coordinate Sytem");
+            return CoordinateSystem.Undefined;
         }
 
         //custom nodes must be added as is to the exporter to ensure they are preserved.
@@ -261,8 +261,7 @@ namespace Netherlands3D.T3DPipeline
             {
                 var relativeCenterRD = (MinExtent + MaxExtent) / 2;
                 Debug.Log("Setting Relative RD Center to: " + relativeCenterRD);
-                CoordinateConverter.zeroGroundLevelY = 0;// (float)relativeCenterRD.z;
-                CoordinateConverter.relativeCenterRD = new Vector2RD(relativeCenterRD.x, relativeCenterRD.y);
+                CoordinateSystems.SetOrigin( new Coordinate(CoordinateSystem.RD, relativeCenterRD.x, relativeCenterRD.y));
             }
         }
     }

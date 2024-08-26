@@ -149,21 +149,15 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case ReferencedLayerData _:
-                    var reference = ((ReferencedLayerData)layer).Reference;
+                case PolygonSelectionLayer selectionLayer:
+                    if (selectionLayer.ShapeType == ShapeType.Polygon)
+                        return layerTypeSprites[6];
+                    return layerTypeSprites[7];
+                case ReferencedLayerData data:
+                    var reference = data.Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];
-                case PolygonSelectionLayer _:
-                    if (((PolygonSelectionLayer)layer).ShapeType == ShapeType.Polygon)
-                        return layerTypeSprites[6];
-                    return layerTypeSprites[7];
-                case GeoJSONPolygonLayer:
-                    return layerTypeSprites[6];
-                case GeoJSONLineLayer:
-                    return layerTypeSprites[7];
-                case GeoJSONPointLayer:
-                    return layerTypeSprites[9];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
@@ -184,8 +178,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[4];
                 case DatasetLayerGameObject _:
                     return layerTypeSprites[5];
-                case GeoJSONLayer _:
-                    return layerTypeSprites[8]; //todo: split in points
+                case GeoJSONPolygonLayer _:
+                    return layerTypeSprites[6];
+                case GeoJSONLineLayer _:
+                    return layerTypeSprites[7];
+                case GeoJsonLayerGameObject _:
+                    return layerTypeSprites[8];
+                case GeoJSONPointLayer _:
+                    return layerTypeSprites[9];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];

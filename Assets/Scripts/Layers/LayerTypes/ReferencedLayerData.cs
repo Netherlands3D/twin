@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.Layers
         {
             base.DestroyLayer();
             if (!KeepReferenceOnDestroy && Reference)
-                GameObject.Destroy(Reference.gameObject);
+                Reference.DestroyLayerGameObject();
         }
 
         public override void SelectLayer(bool deselectOthers = false)

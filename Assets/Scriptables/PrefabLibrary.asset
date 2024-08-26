@@ -35,3 +35,13 @@ MonoBehaviour:
     - {fileID: -6065409727045272873, guid: ba57070110ceb4eb3be79e964993f598, type: 3}
     - {fileID: -7062163889935492721, guid: a324f799961a34de6967402e40a749dc, type: 3}
     - {fileID: -5293961980780918241, guid: e78ad354330e64902b24d08795d54efb, type: 3}
+  - groupName: CustomLayers
+    autoPopulateUI: 0
+    prefabs:
+    - {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60, type: 3}
+    - {fileID: 3749709991008444548, guid: acb0d28ce2b674042ba63bf1d7789bfd, type: 3}
+    - {fileID: 5593278776292583182, guid: b1bd3a7a50cb3bd4bb3236aadf5c32b6, type: 3}
+    - {fileID: -2311983791405174025, guid: e46381d2665c69245b2475c986f6d0c4, type: 3}
+    - {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
+    - {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
+    - {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4, type: 3}

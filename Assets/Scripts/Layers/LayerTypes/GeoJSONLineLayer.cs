@@ -14,12 +14,11 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerData
+    public partial class GeoJSONLineLayer : LayerGameObject
     {
-
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
-        private LineRenderer3D lineRenderer3D;
+        [SerializeField] private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
         {
@@ -32,20 +31,8 @@ namespace Netherlands3D.Twin.Layers
                 lineRenderer3D = value;
             }
         }
-        
 
-        public GeoJSONLineLayer(string name) : base(name)
-        {
-            ProjectData.Current.AddStandardLayer(this);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        ~GeoJSONLineLayer()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
-        
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
@@ -105,9 +92,10 @@ namespace Netherlands3D.Twin.Layers
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
+
+            base.DestroyLayer();
         }
     }
 }

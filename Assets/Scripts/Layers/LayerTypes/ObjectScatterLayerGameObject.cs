@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -14,13 +17,16 @@ namespace Netherlands3D.Twin.Layers
         Stroke,
     }
 
-    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
+    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
-        private GameObject originalObject;
+        public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+
         private Mesh mesh;
         private Material material;
-        private ScatterGenerationSettings settings;
-        public ScatterGenerationSettings Settings => settings;
+
+        [SerializeField] private ScatterGenerationSettingsPropertyData settings = new();
+
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         public PolygonSelectionLayer polygonLayer;
@@ -33,25 +39,56 @@ namespace Netherlands3D.Twin.Layers
         private WorldTransform worldTransform;
 
         private bool completedInitialization;
+        public LayerPropertyData PropertyData => settings;
 
-        public void Initialize(GameObject originalObject, PolygonSelectionLayer polygon, List<LayerData> children)
+        private void Awake()
         {
-            this.originalObject = originalObject;
-            this.mesh = CombineHierarchicalMeshes(originalObject.transform);
-            this.material = originalObject.GetComponentInChildren<MeshRenderer>().material; //todo: make this work with multiple materials for hierarchical meshes?
-            this.material.enableInstancing = true;
-
-            originalObject.SetActive(false); //todo: does this affect the WorldTransformShifter?
-            polygonLayer = polygon;
-
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
+        }
+        
+        public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
+        {
+            
+            foreach (var property in originalObject.LayerData.LayerProperties)
+            {
+                LayerData.AddProperty(property); //copy properties to be able to revert
+            }
 
-            if (!toggleScatterPropertySectionInstantiator)
-                toggleScatterPropertySectionInstantiator = gameObject.AddComponent<ToggleScatterPropertySectionInstantiator>();
+            InitializeScatterMesh(originalObject.PrefabIdentifier);
 
-            settings = ScriptableObject.CreateInstance<ScatterGenerationSettings>();
+            polygonLayer = polygon;
+            
+            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) originalObject.LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            if(existingScatterProperties == null)
+                InitializeNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
+            else
+                LoadScatterProperties(existingScatterProperties);
+            
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
+
+            LayerData.SetParent(polygon);
+
+            RecalculatePolygonsAndSamplerTexture();
+            AddReScatterListeners();
+            
+            completedInitialization = true;
+        }
+        
+        private void InitializeScatterMesh(string prefabId)
+        {
+            var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
+            this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material.enableInstancing = true;
+        }
+        
+        private void InitializeNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
+        {
+            settings.OriginalPrefabId = originalObjectPrefabId;
             settings.Density = 1000; // per ha for the UI
-            if (polygon.ShapeType == ShapeType.Line)
+
+            if (shapeType == ShapeType.Line)
             {
                 settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
                 settings.AutoRotateToLine = true;
@@ -59,24 +96,31 @@ namespace Netherlands3D.Twin.Layers
 
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
-
-            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, settings };
-
-            gameObject.AddComponent<ScatterLayerShifter>();
-            gameObject.AddComponent<WorldTransform>();
-
-            LayerData.SetParent(polygon);
-            foreach (var child in children)
+        }
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            if (scatterSettings != null)
             {
-                child.SetParent(LayerData);
+                LoadScatterProperties(scatterSettings);
             }
+        }
 
+        private void LoadScatterProperties(ScatterGenerationSettingsPropertyData scatterProperties)
+        {
+            settings = scatterProperties;
+            InitializeScatterMesh(scatterProperties.OriginalPrefabId);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectCompletedLoading); //listen to the project to finish loading, this is needed because the hierarchy is still being loaded, so we do not yet have access to our parent polygon layer
+        }
+        
+        private void OnProjectCompletedLoading(ProjectData data) //complete initialization after loading fully completes and we can get out parent polygon
+        {
+            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
             
-// #if UNITY_EDITOR
-//          gameObject.AddComponent<GridDebugger>();
-// #endif
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectCompletedLoading);
             completedInitialization = true;
         }
 
@@ -103,9 +147,8 @@ namespace Netherlands3D.Twin.Layers
             polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
-            base.OnDestroy();
             RemoveReScatterListeners();
         }
 
@@ -141,7 +184,7 @@ namespace Netherlands3D.Twin.Layers
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
 
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonMeshMaterial);
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonVisualisation.PolygonMeshMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
@@ -259,39 +302,7 @@ namespace Netherlands3D.Twin.Layers
                 visualisation.DrawLine = false;
             }
         }
-
-        private static Mesh CombineHierarchicalMeshes(Transform transform)
-        {
-            var originalPosition = transform.position;
-            var originalRotation = transform.rotation;
-            var originalScale = transform.localScale;
-
-            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
-            transform.rotation = Quaternion.identity;
-            transform.localScale = Vector3.one;
-
-            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-            for (int i = 0; i < meshFilters.Length; i++)
-            {
-                combine[i].mesh = meshFilters[i].mesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.CombineMeshes(combine);
-            mesh.RecalculateBounds();
-
-            transform.position = originalPosition; //reset position
-            transform.rotation = originalRotation; //reset rotation
-            transform.localScale = originalScale; //reset scale
-
-            if (mesh.vertices.Length == 0)
-                Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
-
-            return mesh;
-        }
-
+        
         public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
@@ -320,18 +331,20 @@ namespace Netherlands3D.Twin.Layers
 
         public void RevertToHierarchicalObjectLayer()
         {
-            gameObject.SetActive(true); //need to activate the GameObject to start the coroutine
-            originalObject.SetActive(true);
-            var layer = originalObject.AddComponent<HierarchicalObjectLayerGameObject>();
-            layer.LayerData.ActiveSelf = true;
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(settings.OriginalPrefabId);
+            var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
+            revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
+            revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
+            revertedLayer.LayerData.AddProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
 
-            foreach (var child in LayerData.ChildrenLayers)
+            for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {
-                child.SetParent(layer.LayerData);
+                var child = LayerData.ChildrenLayers[i];
+                child.SetParent(revertedLayer.LayerData, 0);
             }
 
-            layer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
-            DestroyLayer();
+            revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
+            LayerData.DestroyLayer();
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
@@ -339,10 +352,49 @@ namespace Netherlands3D.Twin.Layers
             return propertySections;
         }
 
+        public void AddToProperties(RectTransform properties)
+        {
+            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
+            propertySection.Settings = settings;
+        }
+
+        private static Mesh CombineHierarchicalMeshes(Transform transform)
+        {
+            var originalPosition = transform.position;
+            var originalRotation = transform.rotation;
+            var originalScale = transform.localScale;
+
+            transform.position = Vector3.zero; //set position to 0 to get the correct worldToLocalMatrix
+            transform.rotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+
+            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.CombineMeshes(combine);
+            mesh.RecalculateBounds();
+
+            transform.position = originalPosition; //reset position
+            transform.rotation = originalRotation; //reset rotation
+            transform.localScale = originalScale; //reset scale
+
+            if (mesh.vertices.Length == 0)
+                Debug.LogError("Combined mesh has no vertices, is read/write of the source meshes enabled?");
+
+            return mesh;
+        }
+        
         private static float CalculateLineAngle(PolygonSelectionLayer polygon)
         {
-            var start = new Vector2(polygon.OriginalPolygon[0].x, polygon.OriginalPolygon[0].z);
-            var end = new Vector2(polygon.OriginalPolygon[1].x, polygon.OriginalPolygon[1].z);
+            var linePoints = polygon.GetPolygonAsUnityPoints();
+            var start = new Vector2(linePoints[0].x, linePoints[0].z);
+            var end = new Vector2(linePoints[1].x, linePoints[1].z);
             var dir = end - start;
             return Vector2.Angle(Vector2.up, dir);
         }

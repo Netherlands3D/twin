@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -35,15 +36,16 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
+                
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
-                    layer.LoadProperties(layerData.LayerProperties);
+                    layer.LoadProperties(layerData.LayerProperties); //initial load
                 }
             }
         }
 
 
-
+        [Space] 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
@@ -57,21 +59,20 @@ namespace Netherlands3D.Twin.Layers
                 {
                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
                     prefabIdentifier = metaID.ToString();
-                    // print("setting prefab id to : " + prefabIdentifier);
                     EditorUtility.SetDirty(this);
                 }
             }
         }
 #endif
+        
         protected virtual void Start()
         {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
-            // ReferencedProxy.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged); //todo: move this to referencedProxy
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
         }
-
+        
         private void CreateProxy()
         {
             ProjectData.AddReferenceLayer(this);
@@ -95,23 +96,14 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public void DestroyLayer()
+        public virtual void DestroyLayer()
+        {
+            layerData.DestroyLayer();
+        }
+
+        public void DestroyLayerGameObject()
         {
             Destroy(gameObject);
-        }
-
-        protected virtual void OnDestroy()
-        {
-            // ReferencedProxy.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged); //add in Awake and remove in OnDestroy, so that the Event function is called even if the gameObject is disabled
-            DestroyProxy();
-        }
-
-        public virtual void DestroyProxy()
-        {
-            if (LayerData != null)
-            {
-                LayerData.DestroyLayer();
-            }
         }
 
         public virtual void OnProxyTransformChildrenChanged()

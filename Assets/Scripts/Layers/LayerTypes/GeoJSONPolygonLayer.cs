@@ -14,14 +14,15 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerData
+    public partial class GeoJSONPolygonLayer : LayerGameObject
     {
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
-        public List<PolygonVisualisation> PolygonVisualisations { get; private set; } = new();
+
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
-        private Material polygonVisualizationMaterial;
+        [SerializeField] private Material polygonVisualizationMaterial;
+        private Material polygonVisualizationMaterialInstance;
 
         public Material PolygonVisualizationMaterial
         {
@@ -29,30 +30,16 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 polygonVisualizationMaterial = value;
-                foreach (var visualization in PolygonVisualisations)
-                {
-                    visualization.GetComponent<MeshRenderer>().material = polygonVisualizationMaterial;
-                }
+                
+                foreach (var featureVisualisation in SpawnedVisualisations)
+                    featureVisualisation.SetMaterial(value);
             }
         }
-
-        public GeoJSONPolygonLayer(string name) : base(name)
+     
+        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            ProjectData.Current.AddStandardLayer(this);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        ~GeoJSONPolygonLayer()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
-        
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-            foreach (var visualization in PolygonVisualisations)
-            {
-                visualization.gameObject.SetActive(activeInHierarchy);
-            }
+            foreach (var visualization in SpawnedVisualisations)
+                visualization.ShowVisualisations(activeInHierarchy);
         }
 
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
@@ -63,42 +50,57 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             // Create visual with random color if enabled
-            var featureMaterial = PolygonVisualizationMaterial;
-            if (RandomizeColorPerFeature){
-                featureMaterial = new Material(PolygonVisualizationMaterial)
-                {
-                    color = UnityEngine.Random.ColorHSV()
-                };
-            }
+            Material featureRenderMaterial = GetMaterialInstance();
 
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
-            var newFeatureVisualisation = new FeaturePolygonVisualisations { feature = feature };
+            var newFeatureVisualisation = new FeaturePolygonVisualisations { 
+                feature = feature,
+                geoJsonPolygonLayer = this
+            };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
-                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureMaterial);
-                newFeatureVisualisation.visualisations = polygonVisualisations;
+                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
+                newFeatureVisualisation.AppendVisualisations(polygonVisualisations);
             }
-            else if(feature.Geometry is Polygon polygon)
+            else if (feature.Geometry is Polygon polygon)
             {
-                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureMaterial);
-                newFeatureVisualisation.visualisations.Append(singlePolygonVisualisation);
+                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
+                newFeatureVisualisation.AppendVisualisations(singlePolygonVisualisation);
             }
-            
+
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        private Material GetMaterialInstance()
+        {
+            // Create material with random color if randomize per feature is enabled
+            if (RandomizeColorPerFeature)
+            {
+                var randomColor = UnityEngine.Random.ColorHSV();
+                randomColor.a = LayerData.Color.a;
+
+                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = randomColor };
+                return featureMaterialInstance;
+            }
+
+            // Default to material with layer color
+            if (polygonVisualizationMaterialInstance == null)
+                    polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial) { color = LayerData.Color };
+
+            return polygonVisualizationMaterialInstance;
         }
 
         public override void DestroyLayer()
         {
-            base.DestroyLayer();
-            if (Application.isPlaying)
+            // Remove all SpawnedVisualisations
+            Debug.Log("Destroying all visualisations " + SpawnedVisualisations.Count);  
+            for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
             {
-                // Remove all SpawnedVisualisations
-                for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
-                {
-                    var featureVisualisation = SpawnedVisualisations[i];
-                    RemoveFeature(featureVisualisation);
-                }
+                var featureVisualisation = SpawnedVisualisations[i];
+                RemoveFeature(featureVisualisation);
             }
+
+            base.DestroyLayer();
         }
 
         /// <summary>
@@ -125,12 +127,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
-            foreach (var polygonVisualisation in featureVisualisation.visualisations)
-            {
-                PolygonVisualisations.Remove(polygonVisualisation);
-                if(polygonVisualisation.gameObject)
-                    GameObject.Destroy(polygonVisualisation.gameObject);
-            }
+            featureVisualisation.DestroyAllVisualisations();
             SpawnedVisualisations.Remove(featureVisualisation);
         }
     }

@@ -90,6 +90,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -186,12 +188,39 @@ namespace Netherlands3D.Twin.Layers
 
         public void AddProperty(LayerPropertyData propertyData)
         {
+            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
+            if (existingProperty != null)
+            {
+                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
+                int index = layerProperties.IndexOf(existingProperty);
+                layerProperties[index] = propertyData;
+            }
+            
             layerProperties.Add(propertyData);
+            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
             layerProperties.Remove(propertyData);
+            PropertyRemoved.Invoke(propertyData);
+        }
+
+        /// <summary>
+        /// Recursively collect all assets from each of the property data elements for loading and saving
+        /// purposes. 
+        /// </summary>
+        /// <returns>A list of assets on disk</returns>
+        public IEnumerable<LayerAsset> GetAssets()
+        {
+            var assetsOfCurrentLayer = layerProperties
+                .OfType<ILayerPropertyDataWithAssets>()
+                .SelectMany(p => p.GetAssets());
+
+            var assetsOfAllChildLayers = children
+                .SelectMany(l => l.GetAssets());
+
+            return assetsOfAllChildLayers.Concat(assetsOfCurrentLayer);
         }
     }
 }

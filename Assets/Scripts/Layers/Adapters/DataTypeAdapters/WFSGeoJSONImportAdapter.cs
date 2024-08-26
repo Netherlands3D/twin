@@ -1,26 +1,22 @@
 using System.IO;
 using System.Xml;
 using UnityEngine;
-using GeoJSON.Net.Feature;
-using Newtonsoft.Json;
 using System;
 using Netherlands3D.Web;
-using Netherlands3D.CartesianTiles;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.UI.LayerInspector;
 
 namespace Netherlands3D.Twin
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private Material visualizationMaterial;
-        [SerializeField] private LineRenderer3D lineRenderer3D;
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
+
+        private GeoJSONWFS wfs;
 
         public bool Supports(LocalFile localFile)
         {
@@ -28,14 +24,19 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            var wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
+            wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
 
-            if (!wfs.ValidateURL())
-            {
-                Debug.Log("<color=orange>WFS url does not contain a GetCapabilities or GetFeature request.</color>");
+            //If the body is a specific GetFeature request; directly continue to execute
+            bool isGetFeatureRequest = wfs.IsGetFeatureRequest();
+            if (isGetFeatureRequest)
+                return true;
+
+            //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
+            bool IsGetCapabilitiesRequest = wfs.IsGetCapabilitiesRequest();
+            if(!IsGetCapabilitiesRequest)
                 return false;
-            }
 
+            wfs.ParseBodyAsXML();
             if (!wfs.HasBboxFilterCapability())
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
@@ -56,44 +57,41 @@ namespace Netherlands3D.Twin
         public void Execute(LocalFile localFile)
         {
             var sourceUrl = localFile.SourceUrl;
-            var wfs = new GeoJSONWFS(localFile.SourceUrl, localFile.LocalFilePath);
+            var wfsFolder = new FolderLayer(sourceUrl);
 
-            if (wfs.ValidateURL())
+            if (wfs.requestType == GeoJSONWFS.RequestType.GetCapabilities)
             {
-                var getCapabilitiesRequest = sourceUrl.ToLower().Contains("request=getcapabilities");
-                var wfsFolder = new FolderLayer(sourceUrl);
+                var featureTypes = wfs.GetFeatureTypes();
 
-                if (getCapabilitiesRequest)
+                //Create a folder layer 
+                foreach (var featureType in featureTypes)
                 {
-                    var featureTypes = wfs.GetFeatureTypes();
-
-                    //Create a folder layer 
-                    foreach (var featureType in featureTypes)
-                    {
-                        Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType, sourceUrl, wfsFolder);
-                    }
-                    return;
-                }
-
-                var getFeatureRequest = sourceUrl.ToLower().Contains("request=getfeature");
-                if (getFeatureRequest)
-                {
-                    // Get the feature type from the url
-                    var featureType = string.Empty;
-                    if (sourceUrl.ToLower().Contains("typename="))
-                    {
-                        //WFS 1.0.0 uses 'typename'
-                        featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
-                    }
-                    else if (sourceUrl.ToLower().Contains("typenames="))
-                    {
-                        //WFS 2 uses plural 'typenames'
-                        featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
-                    }
+                    Debug.Log("Adding WFS layer for featureType: " + featureType);
                     AddWFSLayer(featureType, sourceUrl, wfsFolder);
-                    return;
                 }
+                
+                wfs = null;
+                return;
+            }
+
+            if (wfs.requestType == GeoJSONWFS.RequestType.GetFeature)
+            {
+                // Get the feature type from the url
+                var featureType = string.Empty;
+                if (sourceUrl.ToLower().Contains("typename="))
+                {
+                    //WFS 1.0.0 uses 'typename'
+                    featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
+                }
+                else if (sourceUrl.ToLower().Contains("typenames="))
+                {
+                    //WFS 2 uses plural 'typenames'
+                    featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
+                }
+                AddWFSLayer(featureType, sourceUrl, wfsFolder);
+
+                wfs = null;
+                return;
             }
         }
 
@@ -105,17 +103,11 @@ namespace Netherlands3D.Twin
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
-            // Create a new GeoJSON layer per GetFeature, with a 'live' datasource
-            var layerGameObject = new GameObject(featureType);
-            var layer = layerGameObject.AddComponent<GeoJSONLayer>();
-            layer.LayerData.SetParent(folderLayer);
-            layer.RandomizeColorPerFeature = true;
-            layer.SetDefaultVisualizerSettings(visualizationMaterial, lineRenderer3D, pointRenderer3D);
-
-            // Create a new WFSGeoJSONTileDataLayer that can inject the Features loaded from tiles into the GeoJSONLayer
-            var cartesianTileLayer = layerGameObject.AddComponent<WFSGeoJSONTileDataLayer>();
-            cartesianTileLayer.GeoJSONLayer = layer;
-            cartesianTileLayer.WfsUrl = getFeatureUrl;
+            //Spawn a new WFS GeoJSON layer
+            WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.LayerData.SetParent(folderLayer);
+            newLayer.Name = featureType;
+            newLayer.SetURL(getFeatureUrl);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
@@ -145,27 +137,42 @@ namespace Netherlands3D.Twin
             private readonly string sourceUrl;
             private readonly string cachedBodyContent;
 
-            private readonly XmlDocument xmlDocument;
-            private readonly XmlNamespaceManager namespaceManager;
+            private XmlDocument xmlDocument;
+            private XmlNamespaceManager namespaceManager;
+
+            public RequestType requestType;
+            public enum RequestType
+            {
+                GetCapabilities,
+                GetFeature,
+                Unsupported
+            }
 
             public GeoJSONWFS(string sourceUrl, string cachedBodyFilePath)
             {
                 this.sourceUrl = sourceUrl;
                 this.cachedBodyContent = cachedBodyFilePath;
-
-                var dataAsText = File.ReadAllText(this.cachedBodyContent);
-                xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(dataAsText);
-
-                namespaceManager = ReadNameSpaceManager(xmlDocument);
             }
 
-            public bool ValidateURL()
+            public void ParseBodyAsXML()
+            {
+                this.xmlDocument = new XmlDocument();
+                this.xmlDocument.Load(this.cachedBodyContent);
+                this.namespaceManager = ReadNameSpaceManager(this.xmlDocument);
+            }
+
+            public bool IsGetCapabilitiesRequest()
             {
                 var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
-                var getFeatureRequest = this.sourceUrl.ToLower().Contains("request=getfeature");
+                requestType = RequestType.GetCapabilities;
+                return getCapabilitiesRequest;
+            }
 
-                return getCapabilitiesRequest || getFeatureRequest;
+            public bool IsGetFeatureRequest()
+            {
+                var getFeatureRequest = this.sourceUrl.ToLower().Contains("request=getfeature");
+                requestType = RequestType.GetFeature;
+                return getFeatureRequest;
             }
 
             public bool HasBboxFilterCapability()
@@ -204,11 +211,8 @@ namespace Netherlands3D.Twin
 
             public string GetWFSVersionFromBody()
             {
-                var dataAsText = File.ReadAllText(this.cachedBodyContent);
-                var xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(dataAsText);
-
-                XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
+                if(xmlDocument == null)
+                    ParseBodyAsXML();
 
                 var serviceTypeVersion = xmlDocument.SelectSingleNode("//ows:ServiceTypeVersion", namespaceManager);
                 if (serviceTypeVersion != null)
@@ -221,11 +225,8 @@ namespace Netherlands3D.Twin
 
             public string[] GetFeatureTypes()
             {
-                var dataAsText = File.ReadAllText(this.cachedBodyContent);
-                var xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(dataAsText);
-
-                XmlNamespaceManager namespaceManager = ReadNameSpaceManager(xmlDocument);
+                if(xmlDocument == null)
+                    ParseBodyAsXML();
 
                 var featureTypeListNodeInRoot = xmlDocument.SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
                 var featureTypeChildNodes = featureTypeListNodeInRoot.ChildNodes;
