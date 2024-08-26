@@ -33,6 +33,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private ColorPicker minimumColorPicker;
         [SerializeField] private ColorPicker maximumColorPicker;
 
+        private float defaultMinValue;
+        private float defaultMaxValue;
+        private Color defaultMinColor;
+        private Color defaultMaxColor;
+
         public SensorDataController Controller
         {
             get
@@ -43,7 +48,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 controller = value;
                 if (projectionLayer == null)
+                {
                     projectionLayer = controller.gameObject.GetComponent<SensorProjectionLayer>();
+                    defaultMinValue = controller.Minimum;
+                    defaultMaxValue = controller.Maximum;
+                    defaultMinColor = controller.MinColor;
+                    defaultMaxColor = controller.MaxColor;
+                }
 
 
                 DateTime startDate = controller.StartDate;
@@ -182,6 +193,30 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return false;
 
             return true;
+        }
+
+        public void ResetDefaultValues()
+        {
+            DateTime startDate = controller.DefaultStartDate;
+            startTimeYearField.text = startDate.Year.ToString();
+            startTimeMonthField.text = startDate.Month.ToString();
+            startTimeDayField.text = startDate.Day.ToString();
+            OnInputStartTimeValueChanged();
+
+            DateTime endDate = controller.DefaultEndDate;
+            endTimeYearField.text = endDate.Year.ToString();
+            endTimeMonthField.text = endDate.Month.ToString();
+            endTimeDayField.text = endDate.Day.ToString();
+            OnInputEndTimeValueChanged();
+
+            if (minSlider != null)
+                minSlider.value = defaultMinValue;
+            if (maxSlider != null)
+                maxSlider.value = defaultMaxValue;
+            if (minimumColorPicker != null)
+                minimumColorPicker.color = defaultMinColor;
+            if (maximumColorPicker != null)
+                maximumColorPicker.color = defaultMaxColor;
         }
     }
 }

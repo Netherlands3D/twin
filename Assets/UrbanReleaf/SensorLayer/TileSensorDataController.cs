@@ -137,8 +137,11 @@ namespace Netherlands3D.CartesianTiles
                 case SensorDataController.SensorPropertyType.ThermalDiscomfort:
                     textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors;
                     break;
-                default:
-                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString();
+                case SensorDataController.SensorPropertyType.RelativeHumidity:
+                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString() + "%";
+                    break;
+                case SensorDataController.SensorPropertyType.Temperature:
+                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString() + "°C";
                     break;
 
             }            
