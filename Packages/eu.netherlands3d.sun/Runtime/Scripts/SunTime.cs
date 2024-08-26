@@ -20,6 +20,7 @@ using System;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Sun
 {
@@ -29,7 +30,7 @@ namespace Netherlands3D.Sun
         [Header("Time")]
         [SerializeField] private DateTimeKind dateTimeKind = DateTimeKind.Local;
 
-        [SerializeField] private bool jumpToCurrentTimeAtStart = false;
+        [FormerlySerializedAs("jumpToCurrentTimeAtStart")] [SerializeField] private bool useCurrentTime = false;
         [SerializeField] [Range(0, 24)] private int hour = 18;
         [SerializeField] [Range(0, 60)] private int minutes = 0;
         [SerializeField] [Range(0, 60)] private int seconds = 0;
@@ -69,10 +70,10 @@ namespace Netherlands3D.Sun
 
         public bool UseCurrentTime
         {
-            get => jumpToCurrentTimeAtStart;
+            get => useCurrentTime;
             set
             {
-                jumpToCurrentTimeAtStart = value;
+                useCurrentTime = value;
                 if(value)
                     ResetToNow();
                 
@@ -85,7 +86,7 @@ namespace Netherlands3D.Sun
 
         private void Start()
         {
-            if (jumpToCurrentTimeAtStart)
+            if (useCurrentTime)
             {
                 ResetToNow();
             }
