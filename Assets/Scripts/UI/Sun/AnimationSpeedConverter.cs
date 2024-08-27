@@ -37,9 +37,5 @@ namespace Netherlands3D.Twin
 
             return convertedValue;
         }
-
-        //todo: when dropdown changes, update input field value
-        //todo: when pressing fast forward, change increments depending on units
-        //todo: default project with new projectData fields
     }
 }
