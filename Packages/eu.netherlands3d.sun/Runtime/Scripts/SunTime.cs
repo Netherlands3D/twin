@@ -227,9 +227,15 @@ namespace Netherlands3D.Sun
             frameSteps = i;
         }
 
-        public void SetTimeSpeed(float multiplicationFactor)
+        public void MultiplyTimeSpeed(float multiplicationFactor)
         {
-            timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, 10000);
+            timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, 43200);
+            timeSpeedChanged.Invoke(timeSpeed);
+        }
+        
+        public void SetTimeSpeed(float speed)
+        {
+            timeSpeed = Math.Clamp(speed, 1, 43200);
             timeSpeedChanged.Invoke(timeSpeed);
         }
 
