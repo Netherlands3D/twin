@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin
         
         public void To12HourTime(float angle)
         {
+            angle *= -1;
             angle %= 360;
             if (angle < 0) angle += 360;
 
@@ -29,6 +30,7 @@ namespace Netherlands3D.Twin
 
         public void To24HourTime(float angle)
         {
+            angle *= -1;
             angle %= 360;
             if (angle < 0) angle += 360;
             
@@ -44,14 +46,14 @@ namespace Netherlands3D.Twin
         {
             //15 degrees is one hour, 0.25 degrees is one minute
             float angle = dateTime.Hour * 15 + dateTime.Minute * 0.25f;
-            onConvertedToAngle.Invoke(angle);
+            onConvertedToAngle.Invoke(-angle);
         }
         
         public void Time12ToAngle(DateTime dateTime)
         {
             //30 degrees is one hour, 0.5 degrees is one minute
             float angle = dateTime.Hour * 30 + dateTime.Minute * 0.5f;
-            onConvertedToAngle.Invoke(angle);
+            onConvertedToAngle.Invoke(-angle);
             
         }
     }
