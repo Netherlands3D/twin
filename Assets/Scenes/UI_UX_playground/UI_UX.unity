@@ -4178,7 +4178,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 112526606}
   m_HandleRect: {fileID: 112526605}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9749,7 +9749,7 @@ PrefabInstance:
     - target: {fileID: 4867701567814267811, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
       propertyPath: m_Value
-      value: 1.0000005
+      value: 0.9999995
       objectReference: {fileID: 0}
     - target: {fileID: 4937648021248025973, guid: 5a2d1dfe471d3cb44bbb90d2995ae690,
         type: 3}
@@ -10234,7 +10234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0006373747, y: -0.000061035156}
+  m_AnchoredPosition: {x: -0.0006373747, y: 0}
   m_SizeDelta: {x: 3.143219, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2095595408
@@ -19389,6 +19389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7658382538514721410, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7675200249289711365, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
