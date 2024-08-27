@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 1217313053658380861}
   - component: {fileID: 5606514037957622521}
   - component: {fileID: 2011149091027820903}
+  - component: {fileID: 3565443448003096271}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dateTimeKind: 2
-  jumpToCurrentTimeAtStart: 0
+  useCurrentTime: 0
   hour: 12
   minutes: 29
   seconds: 38
@@ -423,8 +424,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1832797565794202596}
-        m_TargetAssemblyTypeName: Netherlands3D.Sun.SunTime, nl.netherlands3d.sun
-        m_MethodName: SetTimeSpeed
+        m_TargetAssemblyTypeName: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
+        m_MethodName: MultiplyTimeSpeed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -673,3 +674,31 @@ MonoBehaviour:
   onFalse:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3565443448003096271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593048648800678676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161fc7dbadbff74448bf577d9a025fcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: d77da5b5c42ca4b4bbeb50a01213a9c0, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1832797565794202596}
+        m_TargetAssemblyTypeName: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
+        m_MethodName: SetTimeSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

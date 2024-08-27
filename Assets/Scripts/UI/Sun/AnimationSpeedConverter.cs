@@ -20,36 +20,26 @@ namespace Netherlands3D.Twin
             { SpeedUnits.HoursPerSecond, 1f / 3600f } // 1 hour per second equals 1/3600 seconds per second
         };
 
-        [SerializeField] private SpeedUnits originalUnits = SpeedUnits.SecondsPerSecond;
-        [SerializeField] private SpeedUnits targetUnits;
-        
-        public UnityEvent<float> OnSpeedConverted;
+        [field: SerializeField] public SpeedUnits OriginalUnits { get; set; } = SpeedUnits.SecondsPerSecond;
+        [field: SerializeField] public SpeedUnits TargetUnits { get; set; } = SpeedUnits.SecondsPerSecond;
 
-        public void ConvertSpeed(float value)
+        public float ConvertSpeed(float value)
         {
-            ConvertSpeed(value, originalUnits, targetUnits);
+            return ConvertSpeed(value, OriginalUnits, TargetUnits);
         }
-        
-        public void ConvertSpeed(float value, SpeedUnits originalUnits, SpeedUnits targetUnits)
+
+        public float ConvertSpeed(float value, SpeedUnits originalUnits, SpeedUnits targetUnits)
         {
             float originalFactor = multiplicationFactor[originalUnits];
             float targetFactor = multiplicationFactor[targetUnits];
 
             float convertedValue = (value / originalFactor) * targetFactor;
 
-            OnSpeedConverted?.Invoke(convertedValue);
+            return convertedValue;
         }
 
-        //for the ui dropdown
-        public void SetOriginalUnits(int units)
-        {
-            originalUnits = (SpeedUnits)units;
-        }
-        
-        //for the ui dropdown
-        public void SetTargetUnits(int units)
-        {
-            targetUnits = (SpeedUnits)units;
-        }
+        //todo: when dropdown changes, update input field value
+        //todo: when pressing fast forward, change increments depending on units
+        //todo: default project with new projectData fields
     }
 }
