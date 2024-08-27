@@ -179,47 +179,18 @@ namespace Netherlands3D.Sun
 
             year = Mathf.Clamp(year, 1, 9999);
             month = Mathf.Clamp(month, 1, 12);
-            var maxDay = 31;
-            switch (month)
-            {
-                case 4: // April
-                case 6: // June
-                case 9: // September
-                case 11: // November
-                    maxDay = 30;
-                    break;
-                case 2: // February
-                    // Check if it's a leap year
-                    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
-                    {
-                        maxDay = 29;
-                    }
-                    else
-                    {
-                        maxDay = 28;
-                    }
-
-                    break;
-            }
-
+            var maxDay = DateTime.DaysInMonth(year, month);
             day = Mathf.Clamp(day, 1, maxDay);
 
-            try
-            {
-                Time = new DateTime(
-                    year,
-                    month,
-                    day,
-                    Time.Hour,
-                    Time.Minute,
-                    Time.Second,
-                    Time.Millisecond,
-                    Time.Kind);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("invalid date entered, ignoring the change");
-            }
+            Time = new DateTime(
+                year,
+                month,
+                day,
+                Time.Hour,
+                Time.Minute,
+                Time.Second,
+                Time.Millisecond,
+                Time.Kind);
         }
 
         public void SetDay(int day)
