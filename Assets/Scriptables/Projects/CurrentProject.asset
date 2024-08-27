@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20240718162141
-  UUID: 94e04335-1862-4a8f-985c-d030391bc8db
+  SavedTimestamp: 20240827093846
+  UUID: 32ee685f-8719-4fe4-bbd0-9d2f24787392
   CameraPosition:
   - 154992.86748218536
   - 462800.3472137451
@@ -29,7 +29,7 @@ MonoBehaviour:
     color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
     children:
     - name: Gebouwen
-      activeSelf: 1
+      activeSelf: 0
       color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
       children: []
       layerProperties: []
@@ -39,12 +39,7 @@ MonoBehaviour:
       children: []
       layerProperties: []
     - name: Bomen
-      activeSelf: 1
-      color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
-      children: []
-      layerProperties: []
-    - name: Bossen
-      activeSelf: 1
+      activeSelf: 0
       color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
       children: []
       layerProperties: []
