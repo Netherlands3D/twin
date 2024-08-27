@@ -1,20 +1,20 @@
 /*
-*  Copyright (C) X Gemeente
-*                X Amsterdam
-*                X Economic Services Departments
-*
-*  Licensed under the EUPL, Version 1.2 or later (the "License");
-*  You may not use this work except in compliance with the License.
-*  You may obtain a copy of the License at:
-*
-*    https://github.com/Amsterdam/Netherlands3D/blob/main/LICENSE.txt
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" basis,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-*  implied. See the License for the specific language governing
-*  permissions and limitations under the License.
-*/
+ *  Copyright (C) X Gemeente
+ *                X Amsterdam
+ *                X Economic Services Departments
+ *
+ *  Licensed under the EUPL, Version 1.2 or later (the "License");
+ *  You may not use this work except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *    https://github.com/Amsterdam/Netherlands3D/blob/main/LICENSE.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" basis,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied. See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
 
 using System;
 using Netherlands3D.Coordinates;
@@ -27,10 +27,11 @@ namespace Netherlands3D.Sun
     [ExecuteInEditMode]
     public class SunTime : MonoBehaviour
     {
-        [Header("Time")]
-        [SerializeField] private DateTimeKind dateTimeKind = DateTimeKind.Local;
+        [Header("Time")] [SerializeField] private DateTimeKind dateTimeKind = DateTimeKind.Local;
 
-        [FormerlySerializedAs("jumpToCurrentTimeAtStart")] [SerializeField] private bool useCurrentTime = false;
+        [FormerlySerializedAs("jumpToCurrentTimeAtStart")] [SerializeField]
+        private bool useCurrentTime = false;
+
         [SerializeField] [Range(0, 24)] private int hour = 18;
         [SerializeField] [Range(0, 60)] private int minutes = 0;
         [SerializeField] [Range(0, 60)] private int seconds = 0;
@@ -38,14 +39,12 @@ namespace Netherlands3D.Sun
         [SerializeField] [Range(1, 12)] private int month = 8;
         [SerializeField] [Range(1, 9999)] private int year = 2022;
 
-        [Header("Settings")]
-        [SerializeField] private Light sunDirectionalLight;
+        [Header("Settings")] [SerializeField] private Light sunDirectionalLight;
         [SerializeField] private bool animate = true;
         [SerializeField] private float timeSpeed = 1;
         [SerializeField] private int frameSteps = 1;
 
-        [Header("Events")]
-        public UnityEvent<DateTime> timeOfDayChanged = new();
+        [Header("Events")] public UnityEvent<DateTime> timeOfDayChanged = new();
         public UnityEvent<float> timeSpeedChanged = new();
         public UnityEvent<bool> useCurrentTimeChanged = new();
 
@@ -58,9 +57,9 @@ namespace Netherlands3D.Sun
             get => time;
             set
             {
-                if(time == value)
+                if (time == value)
                     return;
-                
+
                 time = value;
                 UpdateTimeOfDayPartsFromTime();
                 SetDirection();
@@ -74,13 +73,13 @@ namespace Netherlands3D.Sun
             set
             {
                 useCurrentTime = value;
-                if(value)
+                if (value)
                     ResetToNow();
-                
+
                 useCurrentTimeChanged.Invoke(value);
             }
         }
-        
+
         private int frameStep;
         private const int gizmoRayLength = 10000;
 
@@ -163,23 +162,47 @@ namespace Netherlands3D.Sun
         {
             SetTime(hour, Time.Minute, Time.Second);
         }
+
         public void SetMinutes(int minute)
         {
             SetTime(Time.Hour, minute, Time.Second);
         }
 
         public void SetSeconds(int second)
-        { 
+        {
             SetTime(Time.Hour, Time.Minute, second);
         }
 
         public void SetDate(int day, int month, int year)
         {
             UseCurrentTime = false;
-            
-            day = Mathf.Clamp(day, 1, 31);
-            month = Mathf.Clamp(month, 1, 12);
+
             year = Mathf.Clamp(year, 1, 9999);
+            month = Mathf.Clamp(month, 1, 12);
+            var maxDay = 31;
+            switch (month)
+            {
+                case 4: // April
+                case 6: // June
+                case 9: // September
+                case 11: // November
+                    maxDay = 30;
+                    break;
+                case 2: // February
+                    // Check if it's a leap year
+                    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+                    {
+                        maxDay = 29;
+                    }
+                    else
+                    {
+                        maxDay = 28;
+                    }
+
+                    break;
+            }
+
+            day = Mathf.Clamp(day, 1, maxDay);
 
             try
             {
@@ -198,7 +221,7 @@ namespace Netherlands3D.Sun
                 Debug.LogError("invalid date entered, ignoring the change");
             }
         }
-        
+
         public void SetDay(int day)
         {
             SetDate(day, Time.Month, Time.Year);
@@ -232,7 +255,7 @@ namespace Netherlands3D.Sun
             timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, 43200);
             timeSpeedChanged.Invoke(timeSpeed);
         }
-        
+
         public void SetTimeSpeed(float speed)
         {
             timeSpeed = Math.Clamp(speed, 1, 43200);
@@ -258,7 +281,7 @@ namespace Netherlands3D.Sun
 
         private void DetermineCurrentLocationFromOrigin()
         {
-            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon); 
+            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon);
             longitude = (float)wgs84SceneCenter.easting;
             latitude = (float)wgs84SceneCenter.northing;
         }
@@ -272,7 +295,7 @@ namespace Netherlands3D.Sun
 
             sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
         }
-        
+
         //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
         public void RecalculateOrigin()
         {
