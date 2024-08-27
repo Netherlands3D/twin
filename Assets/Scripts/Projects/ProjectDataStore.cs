@@ -3,18 +3,21 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-using Netherlands3D.Twin.Layers;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
 {
-    public class ProjectDataStore
+    [CreateAssetMenu(fileName = "ProjectDataStore", menuName = "Netherlands3D/Twin/ProjectDataStore", order = 1)]
+    public class ProjectDataStore : ScriptableObject
     {
         [DllImport("__Internal")]
         private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
+
         [DllImport("__Internal")]
+        [UsedImplicitly]
         private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
         private readonly JsonSerializerSettings serializerSettings = new()
@@ -23,9 +26,9 @@ namespace Netherlands3D.Twin.Projects
             Formatting = Formatting.Indented
         };
 
-        private const string DefaultFileName = "NL3D_Project_";
-        private const string ProjectFileExtension = ".nl3d";
-        private const string ProjectJsonFileNameInZip = "project.json";
+        [SerializeField] private string DefaultFileName = "NL3D_Project_";
+        [SerializeField] private string ProjectFileExtension = "nl3d";
+        [SerializeField] private string ProjectJsonFileNameInZip = "project.json";
 
         private ProjectDataHandler projectDataHandler;
         private ZipOutputStream zipOutputStream;
@@ -76,6 +79,7 @@ namespace Netherlands3D.Twin.Projects
         
         public void SaveAsFile(ProjectDataHandler projectDataHandler)
         {
+            this.projectDataHandler = projectDataHandler;
             ProjectData.Current.RefreshUUID();
 
             // Set the timestamp when the data was saved
@@ -83,11 +87,11 @@ namespace Netherlands3D.Twin.Projects
             var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
 
             // Start the zip output stream
-            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}{ProjectFileExtension}";
+            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
             zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
             zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
-            var jsonProject = JsonConvert.SerializeObject(this, serializerSettings);
+            var jsonProject = JsonConvert.SerializeObject(ProjectData.Current, serializerSettings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
@@ -109,9 +113,8 @@ namespace Netherlands3D.Twin.Projects
             SyncFilesToIndexedDB(projectDataHandler.name, "ProjectSavedToIndexedDB");
 #elif UNITY_EDITOR
             //Request using file write dialog of unity editor where to copy the file from lastSavePath path
-            var fileName = Path.GetFileNameWithoutExtension(lastSavePath);
-            var fileExtention = Path.GetExtension(lastSavePath).Replace(".", "");
-            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, fileExtention);
+            var fileName = Path.GetFileName(lastSavePath);
+            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, ProjectFileExtension);
             if (fileTargetPath.Length > 0)
             {
                 File.Copy(lastSavePath, fileTargetPath, true);

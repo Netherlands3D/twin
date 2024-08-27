@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Projects
         [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
         private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
+        [SerializeField] private ProjectDataStore projectDataStore;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
@@ -20,7 +21,6 @@ namespace Netherlands3D.Twin.Projects
         public int undoStackSize = 10;
 
         private static ProjectDataHandler instance;
-        private ProjectDataStore projectDataStore;
 
         public static ProjectDataHandler Instance 
         { 
@@ -43,7 +43,6 @@ namespace Netherlands3D.Twin.Projects
                 return;
             }
 
-            projectDataStore = new ProjectDataStore();
             fileImporter = GetComponent<DataTypeChain>();
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
