@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class LayerData
     {
+        [SerializeField, JsonProperty] protected Guid UUID = Guid.NewGuid();
         [SerializeField, JsonProperty] protected string name;
         [SerializeField, JsonProperty] protected bool activeSelf = true;
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
