@@ -774,7 +774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4173332915423330545
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1251,16 +1251,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -23.699951
-      objectReference: {fileID: 0}
-    - target: {fileID: 2476834714503323816, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
-        type: 3}
-      propertyPath: trigger.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: DateTimeExtract, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758350511255446386, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
-        type: 3}
-      propertyPath: trigger.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: DateTimeExtract, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3452715905981332367, guid: 0cfaeaf4a6f8c4da3aba90dcd40f6b47,
         type: 3}
