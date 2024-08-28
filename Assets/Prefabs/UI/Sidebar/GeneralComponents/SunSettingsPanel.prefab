@@ -6085,7 +6085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 3
+  sensitivity: 5
   minValue: 1
   maxValue: 31
   fieldChanged:
@@ -6813,7 +6813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 3
+  sensitivity: 5
   minValue: 1
   maxValue: 12
   fieldChanged:
@@ -7148,7 +7148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 3
+  sensitivity: 5
   minValue: 1
   maxValue: 9999
   fieldChanged:
