@@ -30,14 +30,20 @@ namespace Netherlands3D.Twin
 
             if (tmp_field)
             {
+                var isFocused = tmp_field.isFocused;
                 tmp_field.DeactivateInputField(); //deactivate the input field because it will then update to the new value 
                 IncrementFieldValue(tmp_field.text, delta);
+                if (isFocused)
+                    tmp_field.ActivateInputField();
             }
 
             if (field)
             {
+                var isFocused = field.isFocused;
                 field.DeactivateInputField(); //deactivate the input field because it will then update to the new value
                 IncrementFieldValue(field.text, delta);
+                if (isFocused)
+                    field.ActivateInputField();
             }
         }
 
