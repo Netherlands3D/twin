@@ -29,9 +29,16 @@ namespace Netherlands3D.Twin
             var delta = eventData.scrollDelta.magnitude * sensitivity * sign;
 
             if (tmp_field)
+            {
+                tmp_field.DeactivateInputField(); //deactivate the input field because it will then update to the new value 
                 IncrementFieldValue(tmp_field.text, delta);
+            }
+
             if (field)
+            {
+                field.DeactivateInputField(); //deactivate the input field because it will then update to the new value
                 IncrementFieldValue(field.text, delta);
+            }
         }
 
         private void IncrementFieldValue(string currentValue, float delta)
