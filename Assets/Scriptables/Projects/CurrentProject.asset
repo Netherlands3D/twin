@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b2293ded97497ba4e8743e34c11901, type: 3}
+  m_Name: ProjectData
+  m_EditorClassIdentifier: 
+  Version: 1
+  SavedTimestamp: 20240827093846
+  UUID: 32ee685f-8719-4fe4-bbd0-9d2f24787392
+  CameraPosition:
+  - 154963.47788619995
+  - 462762.0704803467
+  - 300
+  CameraRotation:
+  - 60.000003814697266
+  - 0
+  - 0
+  rootLayer:
+    name: RootLayer
+    activeSelf: 1
+    color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
+    children: []
+    layerProperties: []
+  PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}

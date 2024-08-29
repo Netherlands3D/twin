@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
 public class UI_FloatToTextValue : MonoBehaviour
 {
     private Text text;
+    private InputField inputField;
+    private TMP_Text tmp_text;
+    private TMP_InputField tmp_inputField;
 
     [SerializeField]
     private bool interpolate = false;
@@ -17,15 +20,16 @@ public class UI_FloatToTextValue : MonoBehaviour
     [SerializeField]
     private float maxLerp = 100;
 
-    void Awake()
+    private void Awake()
     {
         text = GetComponent<Text>();
+        inputField = GetComponent<InputField>();
+        tmp_text = GetComponent<TMP_Text>();
+        tmp_inputField = GetComponent<TMP_InputField>();
     }
 
     public void SetFloatText(float value)
     {
-        if (!text) return;
-
         if (interpolate)
         {
             value = Mathf.Lerp(minLerp, maxLerp, value);
@@ -36,7 +40,13 @@ public class UI_FloatToTextValue : MonoBehaviour
             value = Mathf.RoundToInt(value);
         }
 
-
-        text.text = value.ToString();
+        if (text) 
+            text.text = value.ToString();
+        if (inputField)
+            inputField.text = value.ToString();
+        if (tmp_text)
+            tmp_text.text = value.ToString();
+        if (tmp_inputField)
+            tmp_inputField.text = value.ToString();
     }
 }

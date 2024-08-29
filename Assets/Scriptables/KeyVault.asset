@@ -22,7 +22,7 @@ MonoBehaviour:
   - url: https://tile.googleapis.com:443/v1/3dtiles/root.json
     username: 
     password: 
-    key: AIzaSyDSu1PKgDDRC0mz4cm93Mt9834jXmoQbS0
+    key: 
     authorizationType: 2
   log: 1
   OnAuthorizationTypeDetermined:
