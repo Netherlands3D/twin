@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Twin_Bruggen
-  m_Shader: {fileID: -6465566751694194690, guid: c21d9922649bcf44d8a1651227e8838c,
+  m_Shader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
