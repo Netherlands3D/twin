@@ -59,7 +59,6 @@ namespace Netherlands3D.Twin
             
             parsedInt += intDelta;
             parsedInt = Math.Clamp(parsedInt, minValue, maxValue);
-            Debug.Log((int)delta + "\t" + intDelta + "\t"+ parsedInt);
 
             fieldChanged.Invoke(parsedInt);
         }
