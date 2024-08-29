@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers
         
         public string URL
         {
-            get => TilesetURLWithoutQuery(tileSet.tilesetUrl);
+            get => urlPropertyData.Url;
             set
             {
                 //Always query parameters (tileset key's must be set via our credentials system)
@@ -167,8 +167,8 @@ namespace Netherlands3D.Twin.Layers
             var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
             if (urlProperty != null)
             {
-                URL = urlProperty.Url.ToString();
-                UpdateURL(URL);
+                URL = urlProperty.Url;
+                UpdateURL(urlProperty.Url);
             }
         }
 
