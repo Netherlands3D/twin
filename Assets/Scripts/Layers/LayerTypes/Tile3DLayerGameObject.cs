@@ -11,18 +11,20 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
         [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
         
-        private UnityEvent<string> onURLChanged = new();
-        public UnityEvent<string> OnURLChanged { get => onURLChanged; }
+        public UnityEvent<string> OnURLChanged { get => urlPropertyData.OnUrlChanged; }
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
 
+        private Tile3DLayerPropertyData urlPropertyData = new Tile3DLayerPropertyData();
+        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        
         public string URL
         {
             get => TilesetURLWithoutQuery(tileSet.tilesetUrl);
@@ -30,11 +32,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 //Always query parameters (tileset key's must be set via our credentials system)
                 string urlWithoutQuery = TilesetURLWithoutQuery(value);
-
-                tileSet.tilesetUrl = urlWithoutQuery;
-                OnURLChanged.Invoke(urlWithoutQuery);
-
-                EnableTileset();
+                urlPropertyData.Url = urlWithoutQuery;
             }
         }
 
@@ -67,7 +65,7 @@ namespace Netherlands3D.Twin.Layers
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
-            
+
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
@@ -83,7 +81,19 @@ namespace Netherlands3D.Twin.Layers
         {
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
         }
-        
+
+        protected override void Start()
+        {
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
+        }
+
+        private void UpdateURL(string urlWithoutQuery)
+        {
+            tileSet.tilesetUrl = urlWithoutQuery;
+            EnableTileset();
+        }
+
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             gameObject.SetActive(isActive);
@@ -150,6 +160,21 @@ namespace Netherlands3D.Twin.Layers
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
+            if (urlProperty != null)
+            {
+                URL = urlProperty.Url.ToString();
+                UpdateURL(URL);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            urlPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
         }
     }
 }
