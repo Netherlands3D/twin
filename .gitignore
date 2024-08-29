@@ -81,9 +81,3 @@ crashlytics-build.properties
 
 # Docker build artefacts
 /.docker/app-config.json
-
-# The default project when editing - changes are not committed because the ScriptableObject
-# changes when working on the project. If change is intentionally needed, use the command
-# `git add --force Assets/Scriptables/CurrentProject.asset` to force the changes to be committed.
-/[Aa]ssets/[Ss]criptables/CurrentProject.asset
-Assets/Scriptables/CurrentProject.asset
