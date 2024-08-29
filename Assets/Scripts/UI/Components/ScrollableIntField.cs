@@ -7,11 +7,12 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin
 {
-    public class ScrollableField : MonoBehaviour, IScrollHandler
+    public class ScrollableIntField : MonoBehaviour, IScrollHandler
     {
         [SerializeField] private float sensitivity = 10f;
         [SerializeField] private int minValue = 0;
         [SerializeField] private int maxValue = 12;
+        [SerializeField] private int maxDelta = 1;
         public UnityEvent<int> fieldChanged;
 
         private InputField field;
@@ -54,8 +55,11 @@ namespace Netherlands3D.Twin
                 return;
             }
 
-            parsedInt += (int)delta;
+            var intDelta = Math.Clamp((int)delta, -maxDelta, maxDelta);
+            
+            parsedInt += intDelta;
             parsedInt = Math.Clamp(parsedInt, minValue, maxValue);
+            Debug.Log((int)delta + "\t" + intDelta + "\t"+ parsedInt);
 
             fieldChanged.Invoke(parsedInt);
         }

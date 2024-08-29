@@ -6085,9 +6085,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 5
+  sensitivity: 3
   minValue: 1
   maxValue: 31
+  maxDelta: 1
   fieldChanged:
     m_PersistentCalls:
       m_Calls:
@@ -6813,9 +6814,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 5
+  sensitivity: 3
   minValue: 1
   maxValue: 12
+  maxDelta: 1
   fieldChanged:
     m_PersistentCalls:
       m_Calls:
@@ -7148,9 +7150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 5
+  sensitivity: 3
   minValue: 1
   maxValue: 9999
+  maxDelta: 1
   fieldChanged:
     m_PersistentCalls:
       m_Calls:
