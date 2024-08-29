@@ -22,10 +22,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         [JsonIgnore] public readonly UnityEvent<string> OnUrlChanged = new();
-
-        public Tile3DLayerPropertyData()
-        {
-        }
         
         [JsonConstructor]
         public Tile3DLayerPropertyData(string url)

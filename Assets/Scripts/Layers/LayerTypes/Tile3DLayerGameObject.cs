@@ -15,16 +15,14 @@ namespace Netherlands3D.Twin.Layers
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
-        [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
-        
-        public UnityEvent<string> OnURLChanged { get => urlPropertyData.OnUrlChanged; }
-        public UnityEvent<string> UnsupportedExtensionsMessage;
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
 
-        private Tile3DLayerPropertyData urlPropertyData = new Tile3DLayerPropertyData();
+        private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-        
+        public UnityEvent<string> OnURLChanged => urlPropertyData.OnUrlChanged;
+        public UnityEvent<string> UnsupportedExtensionsMessage;
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
+
         public string URL
         {
             get => urlPropertyData.Url;
@@ -38,7 +36,7 @@ namespace Netherlands3D.Twin.Layers
 
         private string TilesetURLWithoutQuery(string value)
         {
-            if(!value.Contains("?"))
+            if (!value.Contains("?"))
                 return value;
 
             var uriBuilder = new UriBuilder(value);
@@ -50,14 +48,16 @@ namespace Netherlands3D.Twin.Layers
 
         private void EnableTileset()
         {
-            if(!tileSet.enabled)
+            if (!tileSet.enabled)
                 tileSet.enabled = true;
             else
                 tileSet.RefreshTiles();
         }
 
         private CredentialsPropertySection propertySection;
-        public CredentialsPropertySection PropertySection {
+
+        public CredentialsPropertySection PropertySection
+        {
             get => propertySection;
             set => propertySection = value;
         }
@@ -65,6 +65,7 @@ namespace Netherlands3D.Twin.Layers
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
+            urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
 
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -107,8 +108,9 @@ namespace Netherlands3D.Twin.Layers
             string message = Name + " contains the following unsupported extensions: ";
             foreach (var extension in unsupportedExtensions)
             {
-                message += "\n"+ extension;
+                message += "\n" + extension;
             }
+
             UnsupportedExtensionsMessage.Invoke(message);
         }
 
@@ -127,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
         {
             tileSet.personalKey = key;
             tileSet.publicKey = key;
-            
+
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
         }
@@ -137,7 +139,7 @@ namespace Netherlands3D.Twin.Layers
             tileSet.AddCustomHeader("Authorization", "Bearer " + token);
             tileSet.RefreshTiles();
         }
-        
+
         public void SetCode(string code)
         {
             tileSet.personalKey = code;
