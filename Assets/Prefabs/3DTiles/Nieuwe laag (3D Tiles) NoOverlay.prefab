@@ -58,10 +58,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1194273570138351517, guid: 395dd4e52bd3b42cfb24f183f3839bba,
+        type: 3}
+      propertyPath: instantiateOnStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7974831043381414785, guid: 395dd4e52bd3b42cfb24f183f3839bba,
         type: 3}
       propertyPath: m_Name
-      value: Nieuwe laag (3D Tiles)
+      value: Nieuwe laag (3D Tiles) NoOverlay
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
