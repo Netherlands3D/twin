@@ -169,6 +169,7 @@
     "m_OutputNode": {
         "m_Id": "40d1898b9d2b4b178d5b82907e5eed92"
     },
+    "m_SubDatas": [],
     "m_ActiveTargets": []
 }
 
@@ -359,7 +360,7 @@
     },
     "m_Slots": [
         {
-            "m_Id": "dd4e9ee7a181400aa4a96af6d62ae828"
+            "m_Id": "85d86c6496114f45b7573be50ea365c5"
         }
     ],
     "synonyms": [],
@@ -556,6 +557,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "85d86c6496114f45b7573be50ea365c5",
+    "m_Id": 1,
+    "m_DisplayName": "UV",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "UV",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.UVMaterialSlot",
     "m_ObjectId": "88b7cc22fe2846f7b5180a18aa80ef39",
     "m_Id": 0,
@@ -682,27 +704,6 @@
     "m_Labels": [
         "X"
     ]
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
-    "m_ObjectId": "dd4e9ee7a181400aa4a96af6d62ae828",
-    "m_Id": 1,
-    "m_DisplayName": "Out_Vector2",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "OutVector2",
-    "m_StageCapability": 3,
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
-    },
-    "m_Labels": []
 }
 
 {
