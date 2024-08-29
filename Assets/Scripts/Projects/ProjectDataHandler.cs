@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Projects
         [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
         private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
+        [SerializeField] private ProjectDataStore projectDataStore;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
@@ -20,6 +21,7 @@ namespace Netherlands3D.Twin.Projects
         public int undoStackSize = 10;
 
         private static ProjectDataHandler instance;
+
         public static ProjectDataHandler Instance 
         { 
             get{
@@ -34,7 +36,8 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        private void Awake() {
+        private void Awake() 
+        {
             if(ProjectData.Current == null) {
                 Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
                 return;
@@ -85,7 +88,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void SaveProject()
         {
-            ProjectData.Current.SaveAsFile(this);
+            projectDataStore.SaveAsFile(this);
         }
 
         private void LoadDefaultProject()
@@ -97,7 +100,7 @@ namespace Netherlands3D.Twin.Projects
 #else
             var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
-            ProjectData.Current.LoadFromFile(filePath);
+            projectDataStore.LoadFromFile(filePath);
 #endif
         }
         
@@ -111,7 +114,7 @@ namespace Netherlands3D.Twin.Projects
                 if(filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);
-                    ProjectData.Current.LoadFromFile(filePath);
+                    projectDataStore.LoadFromFile(filePath);
                     return;
                 }
             }  
@@ -143,8 +146,9 @@ namespace Netherlands3D.Twin.Projects
         /// </summary>
         public void ProjectSavedToIndexedDB()
         {
-            ProjectData.Current.ProjectSavedToIndexedDB();
+            projectDataStore.ProjectSavedToIndexedDB();
         }
+
         public void DownloadedProject()
         {
             Debug.Log("Downloading project file succeeded");
