@@ -39,6 +39,8 @@ namespace Netherlands3D.CartesianTiles
         public UnityEvent<LogType, string> onLogMessage = new();
         
         public static readonly float ProjectorHeight = 1000f;
+        public static readonly float ProjectorMinDepth = ProjectorHeight * 1.1f;
+
 
         public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {

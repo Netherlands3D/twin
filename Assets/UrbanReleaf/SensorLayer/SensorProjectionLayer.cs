@@ -23,6 +23,7 @@ using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
 using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -62,6 +63,13 @@ namespace Netherlands3D.CartesianTiles
                 projector.gameObject.SetActive(isEnabled);
                 tileSensorData.Initialize();
                 projector.SetTexture(tileSensorData.DataTexture);
+
+                //force the depth to be at least larger than its height to prevent z-fighting
+                DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
+                TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
+                if (ProjectorHeight >= decalProjector.size.z)
+                    textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+
             }
             return tile;
         }
