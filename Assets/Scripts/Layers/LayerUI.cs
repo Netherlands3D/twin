@@ -709,7 +709,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
             propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
-            ToggleProperties(true, propertiesPanel);
+            ToggleProperties(propertyToggle.isOn, propertiesPanel);
         }
 
         public void ToggleProperties(bool onOrOff)

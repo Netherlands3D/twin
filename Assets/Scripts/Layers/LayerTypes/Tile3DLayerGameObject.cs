@@ -11,36 +11,32 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
-        [SerializeField] private bool openPropertiesOnStart = true;
         private List<IPropertySectionInstantiator> propertySections = new();
-        
-        private UnityEvent<string> onURLChanged = new();
-        public UnityEvent<string> OnURLChanged { get => onURLChanged; }
+
+        private Tile3DLayerPropertyData urlPropertyData;
+        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        public UnityEvent<string> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived { get => tileSet.OnServerResponseReceived;  }
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
         public string URL
         {
-            get => TilesetURLWithoutQuery(tileSet.tilesetUrl);
+            get => urlPropertyData.Url;
             set
             {
                 //Always query parameters (tileset key's must be set via our credentials system)
                 string urlWithoutQuery = TilesetURLWithoutQuery(value);
-
-                tileSet.tilesetUrl = urlWithoutQuery;
-                OnURLChanged.Invoke(urlWithoutQuery);
-
-                EnableTileset();
+                urlPropertyData.Url = urlWithoutQuery;
             }
         }
 
         private string TilesetURLWithoutQuery(string value)
         {
-            if(!value.Contains("?"))
+            if (!value.Contains("?"))
                 return value;
 
             var uriBuilder = new UriBuilder(value);
@@ -52,14 +48,16 @@ namespace Netherlands3D.Twin.Layers
 
         private void EnableTileset()
         {
-            if(!tileSet.enabled)
+            if (!tileSet.enabled)
                 tileSet.enabled = true;
             else
                 tileSet.RefreshTiles();
         }
 
         private CredentialsPropertySection propertySection;
-        public CredentialsPropertySection PropertySection {
+
+        public CredentialsPropertySection PropertySection
+        {
             get => propertySection;
             set => propertySection = value;
         }
@@ -67,7 +65,8 @@ namespace Netherlands3D.Twin.Layers
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
-            
+            urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
+
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
@@ -83,7 +82,19 @@ namespace Netherlands3D.Twin.Layers
         {
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
         }
-        
+
+        protected override void Start()
+        {
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
+        }
+
+        private void UpdateURL(string urlWithoutQuery)
+        {
+            tileSet.tilesetUrl = urlWithoutQuery;
+            EnableTileset();
+        }
+
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             gameObject.SetActive(isActive);
@@ -97,8 +108,9 @@ namespace Netherlands3D.Twin.Layers
             string message = Name + " contains the following unsupported extensions: ";
             foreach (var extension in unsupportedExtensions)
             {
-                message += "\n"+ extension;
+                message += "\n" + extension;
             }
+
             UnsupportedExtensionsMessage.Invoke(message);
         }
 
@@ -117,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
         {
             tileSet.personalKey = key;
             tileSet.publicKey = key;
-            
+
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
         }
@@ -127,7 +139,7 @@ namespace Netherlands3D.Twin.Layers
             tileSet.AddCustomHeader("Authorization", "Bearer " + token);
             tileSet.RefreshTiles();
         }
-        
+
         public void SetCode(string code)
         {
             tileSet.personalKey = code;
@@ -150,6 +162,21 @@ namespace Netherlands3D.Twin.Layers
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
             tileSet.RefreshTiles();
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
+            if (urlProperty != null)
+            {
+                URL = urlProperty.Url;
+                UpdateURL(urlProperty.Url);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            urlPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
         }
     }
 }
