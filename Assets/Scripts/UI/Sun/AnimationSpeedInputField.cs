@@ -33,16 +33,34 @@ namespace Netherlands3D.Twin
             floatToText.SetFloatText(convertedSpeed);
         }
 
-        //for the dropdown
-        public void ReparseField(int newUnits)
+        public void ReparseField(AnimationSpeedConverter.SpeedUnits newUnits)
         {
             var oldUnits = converter.TargetUnits;
-            converter.TargetUnits = (AnimationSpeedConverter.SpeedUnits)newUnits;
+            converter.TargetUnits = newUnits;
             
             if (float.TryParse(inputField.text, out var parsedValue))
             {
                 var convertedValue = converter.ConvertSpeed(parsedValue, oldUnits, converter.TargetUnits);
                 floatToText.SetFloatText(convertedValue);
+            }
+        }
+
+        public void SetInteractable(int dropdownValue)
+        {
+            inputField.interactable = dropdownValue != 0;
+        }
+        
+        public void SetAnimationSpeed(int dropdownValue)
+        {
+            switch (dropdownValue)
+            {
+                case 0:
+                    ReparseField(AnimationSpeedConverter.SpeedUnits.SecondsPerSecond);
+                    inputField.text = "1"; //set speed to 1 when changing dropdown to realtime
+                    break;
+                case 1:
+                    ReparseField(AnimationSpeedConverter.SpeedUnits.HoursPerSecond);
+                    break;
             }
         }
     }

@@ -3575,7 +3575,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 185043464974179936}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.AnimationSpeedInputField, Assembly-CSharp
-        m_MethodName: ReparseField
+        m_MethodName: SetAnimationSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 185043464974179936}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AnimationSpeedInputField, Assembly-CSharp
+        m_MethodName: SetInteractable
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5046,6 +5058,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3469015320980451011, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3469015320980451011, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5204,6 +5221,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 185043464974179936}
+    - targetCorrespondingSourceObject: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6407094729356505898}
   m_SourcePrefab: {fileID: 100100000, guid: 2ae4535c62cdb144b9610806f19cdcf8, type: 3}
 --- !u!224 &4970532645603616791 stripped
 RectTransform:
@@ -5302,6 +5323,39 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6407094729356505898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6582276547172016266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002a0f133b6cf4f79809db2cdf5f9d4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SetNewAnimationSpeed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: d77da5b5c42ca4b4bbeb50a01213a9c0, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.FloatEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  speedIndex: 1
+  animationSpeedSteps:
+  - 0.5
+  - 1
+  - 2
+  - 3
 --- !u!1001 &2028786012163234064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6288,13 +6342,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -6305,8 +6364,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: a869eef3f52109349a649796d0ede268,
-        type: 2}
+      objectReference: {fileID: 6407094729356505898}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -6321,7 +6379,7 @@ PrefabInstance:
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
+      value: DecrementAnimationSpeed
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -6331,7 +6389,7 @@ PrefabInstance:
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.FloatEvent, eu.netherlands3d.event-system.Runtime
+      value: Netherlands3D.Twin.AnimationSpeedIncrementer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -7327,7 +7385,7 @@ PrefabInstance:
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -7338,8 +7396,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11400000, guid: a869eef3f52109349a649796d0ede268,
-        type: 2}
+      objectReference: {fileID: 6407094729356505898}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -7354,7 +7411,7 @@ PrefabInstance:
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
+      value: IncrementAnimationSpeed
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -7364,7 +7421,7 @@ PrefabInstance:
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.FloatEvent, eu.netherlands3d.event-system.Runtime
+      value: Netherlands3D.Twin.AnimationSpeedIncrementer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
