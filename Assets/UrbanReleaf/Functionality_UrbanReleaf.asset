@@ -13,11 +13,18 @@ MonoBehaviour:
   m_Name: Functionality_UrbanReleaf
   m_EditorClassIdentifier: 
   Id: urbanreleaf
-  Title: Urbanreleaf sensor data
+  Title: UrbanReLeaf Sensor Data
   Caption: 
-  Header: Toont alle UrbanReleaf sensor data
-  Description: "Deze kaartlaag toont all urbanreleaf sensor temperatuur data \n\n<i>\nBron:
-    PDOK\nDatum: live</i>"
+  Header: Toont alle UrbanReLeaf sensor data
+  Description: 'Deze kaartlaag toont all UrbanReLeaf sensor temperatuur data.
+
+
+    <i>
+
+    Bron:
+    PDOK
+
+    Datum: live</i>'
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:
