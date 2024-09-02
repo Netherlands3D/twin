@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Functionality_Sun
   m_EditorClassIdentifier: 
   Id: sun
-  Title: Stel de zonnestand en schaduwen in
+  Title: Zonnestand simuleren
   Caption: Vrij beschikbaar
+  Header: 
+  Description: 
   configuration: {fileID: 0}
-  isEnabled: 0
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

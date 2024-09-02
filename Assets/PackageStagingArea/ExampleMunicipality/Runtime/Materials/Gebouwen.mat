@@ -8,10 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Gebouwen
-  m_Shader: {fileID: -6465566751694194690, guid: 181a09231c6b2b64183c4f1dee04233f, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: c21d9922649bcf44d8a1651227e8838c,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _SUBOBJECT_FILTERING
+  - _TEXTURINGMODE_SKIP_TEXTURE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -55,6 +58,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -68,6 +75,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SecondaryTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -104,6 +115,7 @@ Material:
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
+    - _IncludeInGlobalMask: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -111,14 +123,18 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _SPIKE_CLAMPING: 0
+    - _SUBOBJECT_FILTERING: 1
     - _Shininess: 0
     - _Smoothness: 0.5
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
     - _SpecSource: 0
     - _SpecularHighlights: 1
+    - _SpikeClampHeight: 50
     - _SrcBlend: 1
     - _Surface: 0
+    - _TEXTURINGMODE: 0
     - _UVSec: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
@@ -127,9 +143,12 @@ Material:
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HighlightColor: {r: 0.04245281, g: 0.3570498, b: 1, a: 1}
+    - _HighlightColor: {r: 0.043137256, g: 0.35686275, b: 1, a: 1}
+    - _SecondaryHighlightColor: {r: 1, g: 1, b: 0, a: 1}
     - _Size: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _TilingMainTexture: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _TilingSecondaryTexture: {r: 0.00001, g: 0.00001, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &9028180374595937086
 MonoBehaviour:

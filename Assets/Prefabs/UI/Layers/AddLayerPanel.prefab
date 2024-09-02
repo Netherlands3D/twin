@@ -11980,8 +11980,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - name: ' Else If Functionality_ObjImporter && Functionality_ColorByBAGFromCSV
-      == enabled)'
+  - name: ' Else If Functionality_ObjImporter && Functionality_ColorByBAGFromCSV ==
+      enabled)'
     enabledFunctionalities:
     - {fileID: 11400000, guid: 0ec3b91944ad94ebe98ebb1e0c1b25a3, type: 2}
     - {fileID: 11400000, guid: dda4b16d8e55bd84abd90a371bf17304, type: 2}
@@ -15271,8 +15271,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Klik in de 3D viewer om een polygoon tekengebied te maken. \nSluit de
-    polygoon door deze te verbinden."
+  m_text: "Klik in de 3D viewer om een polygoon tekengebied te maken. \nSluit de polygoon
+    door deze te verbinden."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
