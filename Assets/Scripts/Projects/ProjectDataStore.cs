@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
+using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
@@ -91,22 +93,55 @@ namespace Netherlands3D.Twin.Projects
             zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
             zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
-            var jsonProject = JsonConvert.SerializeObject(ProjectData.Current, serializerSettings);
+            var projectData = ProjectData.Current;
+            WriteProjectToZip(projectData, zipOutputStream);
+            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+            zipOutputStream.Finish();
+            zipOutputStream.Close();
+
+            SaveFile(lastSavePath);
+        }
+
+        private void WriteProjectAssetsToZipfile(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            // TODO: The term project is now at multiple places in this application, refactor that
+            // Only layers whose URI start with the special scheme 'project' are meant to be copied into the 
+            // project zipfile
+            var projectAssets = projectData
+                .GetAssets().Where(asset => asset.Uri.Scheme == "project")
+                .ToList();
+            Debug.Log("Found " + projectAssets.Count() + " project assets in project");
+            
+            foreach (var layerAsset in projectAssets)
+            {
+                WriteProjectAssetToZipFile(layerAsset, zipOutputStream);
+            }
+        }
+
+        private void WriteProjectAssetToZipFile(LayerAsset layerAsset, ZipOutputStream zipOutputStream)
+        {
+            var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
+            var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
+            Debug.Log("Saving asset from " + relativePath);
+
+            var entry = new ZipEntry(relativePath);
+            zipOutputStream.PutNextEntry(entry);
+            byte[] fileBytes = File.ReadAllBytes(absolutePath);
+            zipOutputStream.Write(fileBytes, 0, fileBytes.Length);
+        }
+
+        private void WriteProjectToZip(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            var jsonProject = JsonConvert.SerializeObject(projectData, serializerSettings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
             zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);
-
-            // For now we can directly download the zip file (in the future we want to append more files to the zip, like meshes and textures etc.)
-            FinishProjectFile(lastSavePath);
         }
 
-        private void FinishProjectFile(string lastSavePath)
+        private void SaveFile(string lastSavePath)
         {
-            // Finish the zip
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
-
             // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
             this.lastSavePath = lastSavePath; 
