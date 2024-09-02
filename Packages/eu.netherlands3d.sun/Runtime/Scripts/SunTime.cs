@@ -47,6 +47,7 @@ namespace Netherlands3D.Sun
         [Header("Events")] public UnityEvent<DateTime> timeOfDayChanged = new();
         public UnityEvent<float> timeSpeedChanged = new();
         public UnityEvent<bool> useCurrentTimeChanged = new();
+        public UnityEvent<bool> isAnimatingChanged = new();
 
         private float longitude;
         private float latitude;
@@ -80,6 +81,8 @@ namespace Netherlands3D.Sun
             }
         }
 
+        public bool IsAnimating => animate;
+
         private int frameStep;
         private const int gizmoRayLength = 10000;
 
@@ -95,7 +98,7 @@ namespace Netherlands3D.Sun
                 Time = newTime;
             }
 
-            DetermineCurrentLocationFromOrigin();
+            RecalculateOrigin();
         }
 
         private void OnValidate()
@@ -124,6 +127,7 @@ namespace Netherlands3D.Sun
         public void ToggleAnimation(bool animate)
         {
             this.animate = animate;
+            isAnimatingChanged.Invoke(animate);
         }
 
         [Obsolete("Use the Time property instead")]
