@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Indicators
   m_EditorClassIdentifier: 
-  Data:
-    Id: indicators
+  data:
+    Id: indicatoren
     IsEnabled: 0
-  Id: indicators
   Title: Indicatoren
   Caption: Tygron
   Header: Zichtbaar maken van dossiers uit de Tygron applicatie
@@ -25,7 +24,6 @@ MonoBehaviour:
     Maakt het mogelijk dossiers
     vanuit Tygron in te laden en de indicatoren in de 3D viewer weer te geven.'
   configuration: {fileID: 11400000, guid: 9649637ffb6f9c24da61c215efe6adaa, type: 2}
-  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

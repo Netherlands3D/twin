@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Buildings
   m_EditorClassIdentifier: 
-  Data:
-    Id: buildings
+  data:
+    Id: gebouwen
     IsEnabled: 1
-  Id: buildings
   Title: Gebouwen
   Caption: 3DBag
   Header: Toont alle gebouwen van Nederland
@@ -26,7 +25,6 @@ MonoBehaviour:
     \n\n<i>\nBron: <link=https://docs.3dbag.nl/nl/><u><color=blue>3D BAG</color></u></link>\nDatum:
     2023\nActualisatie: Jaarlijks\n</i>"
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

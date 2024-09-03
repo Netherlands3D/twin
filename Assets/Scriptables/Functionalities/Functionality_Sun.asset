@@ -12,16 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Sun
   m_EditorClassIdentifier: 
-  Data:
-    Id: sun
+  data:
+    Id: zonnestand-simuleren
     IsEnabled: 1
-  Id: sun
   Title: Zonnestand simuleren
   Caption: Vrij beschikbaar
   Header: 
   Description: 
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

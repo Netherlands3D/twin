@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Streetnames
   m_EditorClassIdentifier: 
-  Data:
-    Id: streets
+  data:
+    Id: straatnamen
     IsEnabled: 0
-  Id: streets
   Title: Straatnamen
   Caption: 
   Header: Alle straatnamen van Nederland
@@ -32,7 +31,6 @@ MonoBehaviour:
 
     </i>'
   configuration: {fileID: 0}
-  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

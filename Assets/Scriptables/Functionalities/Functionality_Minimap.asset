@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Minimap
   m_EditorClassIdentifier: 
-  Data:
+  data:
     Id: minimap
     IsEnabled: 1
-  Id: minimap
   Title: Minimap
   Caption: 
   Header: Snelle navigatie via minimap
@@ -23,7 +22,6 @@ MonoBehaviour:
     andere locatie kunt navigeren. \nBinnen de minimap geeft een selectiegebied of
     'field of sight' aan welk deel van Nederland in het hoofdscherm in 3D wordt weergegeven."
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
