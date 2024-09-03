@@ -1,28 +1,40 @@
-﻿using SimpleJSON;
+﻿using System;
+using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Functionalities
 {
+    [Serializable]
+    public class FunctionalityData
+    {
+        public string Id;
+        public bool IsEnabled;
+    }
+    
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
-        public string Id;
-
-        [Tooltip("Functionality button title")]
+        [JsonProperty] public FunctionalityData Data = new();
+        public string Id; //todo delete
+        
+        [Tooltip("Functionality button title"), JsonIgnore]
         public string Title;
 
-        [Tooltip("Functionality button caption")]
+        [Tooltip("Functionality button caption"), JsonIgnore]
         public string Caption;
 
-        [Tooltip("The header above the description")]
+        [Tooltip("The header above the description"), JsonIgnore]
         public string Header;
-        [TextArea(5, 10)]
+        [TextArea(5, 10), JsonIgnore]
         public string Description;
-        public ScriptableObject configuration;
+        [JsonIgnore] public ScriptableObject configuration;
 
-        [SerializeField] private bool isEnabled;
-
+        [SerializeField] private bool isEnabled;//todo delete
+        
+        [JsonProperty]
         public bool IsEnabled
         {
             get => isEnabled;
@@ -39,6 +51,7 @@ namespace Netherlands3D.Twin.Functionalities
 
                 var wasEnabled = isEnabled;
                 isEnabled = value;
+                Debug.Log( Id+" setting func act: " + value);
                 switch (wasEnabled)
                 {
                     case false when isEnabled:
@@ -50,10 +63,10 @@ namespace Netherlands3D.Twin.Functionalities
                 }
             }
         }
-
-        public UnityEvent OnEnable = new();
-        public UnityEvent OnDisable = new();
-
+        
+        [JsonIgnore] public UnityEvent OnEnable = new();
+        [JsonIgnore] public UnityEvent OnDisable = new();
+        
         public void Populate(JSONNode jsonNode)
         {
             IsEnabled = jsonNode["enabled"];
