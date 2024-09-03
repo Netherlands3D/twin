@@ -272,6 +272,8 @@ namespace Netherlands3D.Twin.Configuration
                     matchingFunctionality.IsEnabled = savedData.IsEnabled;
                 }
             }
+
+            AddFunctionalityDataToProject(); //re add missing functionalities to project, in case the project did not have a specific functionalityData
         }
 
         public void AddFunctionalityDataToProject()
