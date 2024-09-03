@@ -77,19 +77,6 @@ namespace Netherlands3D.Twin.Functionalities
                     else
                         OnDisable.Invoke();
                 }
-
-                // var wasEnabled = Data.IsEnabled;
-                // Data.IsEnabled = value;
-                // Debug.Log( Data.Id+" setting func act: " + value);
-                // switch (wasEnabled)
-                // {
-                //     case false when Data.IsEnabled:
-                //         OnEnable.Invoke();
-                //         break;
-                //     case true when Data.IsEnabled == false:
-                //         OnDisable.Invoke();
-                //         break;
-                // }
             }
         }
 
