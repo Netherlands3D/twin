@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Timeline
   m_EditorClassIdentifier: 
+  Data:
+    Id: timeline
+    IsEnabled: 1
   Id: timeline
   Title: Timeline
   Caption: Vrij beschikbaar
+  Header: 
+  Description: 
   configuration: {fileID: 0}
   isEnabled: 1
   OnEnable:

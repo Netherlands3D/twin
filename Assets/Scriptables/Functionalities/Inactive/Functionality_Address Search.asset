@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Address Search
   m_EditorClassIdentifier: 
+  Data:
+    Id: address-search
+    IsEnabled: 0
   Id: address-search
   Title: Zoeken op adres
   Caption: Vrij beschikbaar
+  Header: 
   Description: 
   configuration: {fileID: 0}
   isEnabled: 0
