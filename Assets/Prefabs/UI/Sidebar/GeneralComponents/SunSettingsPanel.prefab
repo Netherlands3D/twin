@@ -5353,6 +5353,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002a0f133b6cf4f79809db2cdf5f9d4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedIndex: 1
+  animationSpeedSteps:
+  - 0.5
+  - 1
+  - 2
+  - 3
   SetNewAnimationSpeed:
     m_PersistentCalls:
       m_Calls:
@@ -5380,12 +5386,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  speedIndex: 1
-  animationSpeedSteps:
-  - 0.5
-  - 1
-  - 2
-  - 3
 --- !u!1001 &2028786012163234064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6530,18 +6530,29 @@ PrefabInstance:
     - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_text
-      value: "-\u221E-\u200B"
+      value: "\u221E\u200B"
       objectReference: {fileID: 0}
     - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_fontSize
-      value: 8.5
+      value: 9.25
       objectReference: {fileID: 0}
+    - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4,
+        type: 2}
     - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_overflowMode
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 682979640690371858, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
     - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_text
@@ -6555,8 +6566,14 @@ PrefabInstance:
     - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_fontSize
-      value: 8.5
+      value: 9.25
       objectReference: {fileID: 0}
+    - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4,
+        type: 2}
     - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_fontStyle
@@ -6579,6 +6596,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+    - target: {fileID: 1105806121077348609, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
       propertyPath: m_TextWrappingMode
       value: 3
       objectReference: {fileID: 0}
@@ -6590,13 +6612,19 @@ PrefabInstance:
     - target: {fileID: 3469015320980451011, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_Text
-      value: "-\u221E-"
+      value: "\u221E"
       objectReference: {fileID: 0}
     - target: {fileID: 3469015320980451011, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_Interactable
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3469015320980451011, guid: 2ae4535c62cdb144b9610806f19cdcf8,
+        type: 3}
+      propertyPath: m_GlobalFontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4,
+        type: 2}
     - target: {fileID: 5680146476129533989, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_Name
