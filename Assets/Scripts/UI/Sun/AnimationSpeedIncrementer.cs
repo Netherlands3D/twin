@@ -32,23 +32,28 @@ namespace Netherlands3D.Twin
             var convertedValue = converter.ConvertSpeed(animationSpeedSteps[speedIndex], converter.TargetUnits, AnimationSpeedConverter.SpeedUnits.SecondsPerSecond);
             SetNewAnimationSpeed.Invoke(convertedValue);
         }
+
+        public void UpdateSpeedIndex(float value)
+        {
+            speedIndex = FindClosestIndex(value);
+        }
         
-        // public int FindClosestIndex(float value)
-        // {
-        //     int closestIndex = 0;
-        //     float smallestDifference = Math.Abs(animationSpeedSteps[0] - value);
-        //
-        //     for (int i = 1; i < animationSpeedSteps.Count; i++)
-        //     {
-        //         float currentDifference = Math.Abs(animationSpeedSteps[i] - value);
-        //         if (currentDifference < smallestDifference)
-        //         {
-        //             smallestDifference = currentDifference;
-        //             closestIndex = i;
-        //         }
-        //     }
-        //
-        //     return closestIndex;
-        // }
+        public int FindClosestIndex(float value)
+        {
+            int closestIndex = 0;
+            float smallestDifference = Math.Abs(animationSpeedSteps[0] - value);
+        
+            for (int i = 1; i < animationSpeedSteps.Count; i++)
+            {
+                float currentDifference = Math.Abs(animationSpeedSteps[i] - value);
+                if (currentDifference < smallestDifference)
+                {
+                    smallestDifference = currentDifference;
+                    closestIndex = i;
+                }
+            }
+        
+            return closestIndex;
+        }
     }
 }

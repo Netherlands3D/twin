@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,62 +7,52 @@ namespace Netherlands3D.Twin
 {
     public class AnimationSpeedInputField : MonoBehaviour
     {
+        [SerializeField] private int matchingDropdownIndex;
+
         private AnimationSpeedConverter converter;
         public UnityEvent<float> onSpeedParsed;
         private TMP_InputField inputField;
         private UI_FloatToTextValue floatToText;
-            
+        private AnimationSpeedIncrementer incrementer;
+        private float speedInLocalUnits = 1; //seconds per second speed needed for Suntime.cs
+
         private void Awake()
         {
             inputField = GetComponent<TMP_InputField>();
             converter = GetComponent<AnimationSpeedConverter>();
             floatToText = GetComponent<UI_FloatToTextValue>();
+            incrementer = GetComponent<AnimationSpeedIncrementer>();
         }
 
         public void ParseField(string inputValue)
         {
             if (float.TryParse(inputValue, out var parsedValue))
             {
-                var convertedValue = converter.ConvertSpeed(parsedValue, converter.TargetUnits, AnimationSpeedConverter.SpeedUnits.SecondsPerSecond);
-                onSpeedParsed.Invoke(convertedValue);
+                speedInLocalUnits = parsedValue;
+                incrementer?.UpdateSpeedIndex(speedInLocalUnits);
+                var convertedSpeed = converter.ConvertSpeed(parsedValue, converter.TargetUnits, AnimationSpeedConverter.SpeedUnits.SecondsPerSecond);
+                onSpeedParsed.Invoke(convertedSpeed);
             }
         }
 
         public void SetInputField(float timeSpeed)
         {
-            var convertedSpeed = converter.ConvertSpeed(timeSpeed, AnimationSpeedConverter.SpeedUnits.SecondsPerSecond, converter.TargetUnits);
-            floatToText.SetFloatText(convertedSpeed);
+            speedInLocalUnits = converter.ConvertSpeed(timeSpeed, AnimationSpeedConverter.SpeedUnits.SecondsPerSecond, converter.TargetUnits);
+            incrementer?.UpdateSpeedIndex(speedInLocalUnits);
+            floatToText.SetFloatText(speedInLocalUnits);
         }
 
-        public void ReparseField(AnimationSpeedConverter.SpeedUnits newUnits)
+        public void ToggleInputField(int dropdownValue)
         {
-            var oldUnits = converter.TargetUnits;
-            converter.TargetUnits = newUnits;
-            
-            if (float.TryParse(inputField.text, out var parsedValue))
-            {
-                var convertedValue = converter.ConvertSpeed(parsedValue, oldUnits, converter.TargetUnits);
-                floatToText.SetFloatText(convertedValue);
-            }
+            gameObject.SetActive(dropdownValue == matchingDropdownIndex);
         }
 
-        public void SetInteractable(int dropdownValue)
-        {
-            inputField.interactable = dropdownValue != 0;
-        }
-        
         public void SetAnimationSpeed(int dropdownValue)
         {
-            switch (dropdownValue)
-            {
-                case 0:
-                    ReparseField(AnimationSpeedConverter.SpeedUnits.SecondsPerSecond);
-                    inputField.text = "1"; //set speed to 1 when changing dropdown to realtime
-                    break;
-                case 1:
-                    ReparseField(AnimationSpeedConverter.SpeedUnits.HoursPerSecond);
-                    break;
-            }
+            if (dropdownValue != matchingDropdownIndex)
+                return;
+            
+            ParseField(speedInLocalUnits.ToString());
         }
     }
 }
