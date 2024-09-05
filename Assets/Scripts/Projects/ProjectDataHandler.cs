@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -20,6 +22,14 @@ namespace Netherlands3D.Twin.Projects
 
         public int undoStackSize = 10;
 
+        [Header("Progress events")]
+        [Tooltip("called when the save action is started")]
+        public UnityEvent OnSaveStarted;
+        [Tooltip("called when the save action completed successfully")]
+        public UnityEvent OnSaveCompleted;
+        // [Tooltip("called when the save action failed")]
+        // public UnityEvent OnSaveFailed;
+        
         private static ProjectDataHandler instance;
 
         public static ProjectDataHandler Instance 
@@ -74,21 +84,33 @@ namespace Netherlands3D.Twin.Projects
 
         private void Update()
         {
-            var ctrlModifier = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
-
-            if (Input.GetKeyDown(KeyCode.S) && ctrlModifier)
+            var ctrlModifier = CtrlModifierIsPressed();
+            
+            if (Keyboard.current.sKey.wasPressedThisFrame && ctrlModifier)
                 SaveProject();
 
-            if (Input.GetKeyDown(KeyCode.Z) && ctrlModifier)
+            if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
                 Undo();
 
-            if (Input.GetKeyDown(KeyCode.Y) && ctrlModifier)
+            if (Keyboard.current.yKey.wasPressedThisFrame && ctrlModifier)
                 Redo();
+        }
+        
+        public static bool CtrlModifierIsPressed()
+        {
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+            {
+                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
+            }
+
+            return Keyboard.current.ctrlKey.isPressed;
         }
 
         public void SaveProject()
         {
+            OnSaveStarted.Invoke();
             projectDataStore.SaveAsFile(this);
+            OnSaveCompleted.Invoke();
         }
 
         private void LoadDefaultProject()
