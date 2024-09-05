@@ -99,9 +99,12 @@ namespace Netherlands3D.Twin.Projects
 
             if (Keyboard.current.sKey.wasPressedThisFrame && ctrlModifier)
                 SaveProject();
-            
+
             if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
+            {
+                print("opening file");
                 GetComponentInChildren<Button>().onClick.Invoke();
+            }
 
             if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
                 Undo();
