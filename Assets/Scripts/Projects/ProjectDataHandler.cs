@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -98,6 +99,9 @@ namespace Netherlands3D.Twin.Projects
 
             if (Keyboard.current.sKey.wasPressedThisFrame && ctrlModifier)
                 SaveProject();
+            
+            if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
+                GetComponentInChildren<Button>().onClick.Invoke();
 
             if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
                 Undo();
