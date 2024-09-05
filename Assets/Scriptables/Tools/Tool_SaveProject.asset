@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
   m_Name: Tool_SaveProject
   m_EditorClassIdentifier: 
-  code: openProject
-  title: Project openen
+  code: saveProject
+  title: Project opslaan
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
   onAvailabilityChange:
