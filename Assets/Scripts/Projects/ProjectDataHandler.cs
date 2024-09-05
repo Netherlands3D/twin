@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -43,7 +42,6 @@ namespace Netherlands3D.Twin.Projects
         public UnityEvent OnLoadFailed;
 
         private static ProjectDataHandler instance;
-        [SerializeField] private Button testButton;
         public static ProjectDataHandler Instance
         {
             get
@@ -55,7 +53,7 @@ namespace Netherlands3D.Twin.Projects
             }
             set { instance = value; }
         }
-
+        
         private void Awake()
         {
             if (ProjectData.Current == null)
@@ -103,7 +101,7 @@ namespace Netherlands3D.Twin.Projects
             if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
             {
                 print("opening file");
-                testButton.onClick.Invoke();
+                GetComponent<FileOpenShortcut>().OpenFileDialog();
             }
 
             if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
