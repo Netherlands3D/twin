@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Projects
         public UnityEvent OnLoadFailed;
 
         private static ProjectDataHandler instance;
-
+        [SerializeField] private Button testButton;
         public static ProjectDataHandler Instance
         {
             get
@@ -103,7 +103,7 @@ namespace Netherlands3D.Twin.Projects
             if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
             {
                 print("opening file");
-                GetComponentInChildren<Button>().onClick.Invoke();
+                testButton.onClick.Invoke();
             }
 
             if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
