@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Projects
             if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
             {
                 print("opening file");
-                GetComponent<FileOpenShortcut>().OpenFileDialog();
+                // GetComponent<FileOpenShortcut>().OpenFileDialog();
             }
 
             if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
