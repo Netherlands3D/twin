@@ -271,11 +271,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.filebrowser": {
-      "version": "2.0.3",
+      "version": "https://github.com/Netherlands3D/FileBrowser.git#feature/ctrl-o-support",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "c3fe5b3ff2d8b17a2faf6f98cd364a37fe1d2378"
     },
     "eu.netherlands3d.geojson": {
       "version": "1.1.0",
