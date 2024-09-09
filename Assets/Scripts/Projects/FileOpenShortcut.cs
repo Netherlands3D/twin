@@ -1,34 +1,64 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Netherlands3D.JavascriptConnection;
 using UnityEngine;
 using UnityEngine.Events;
-
+using UnityEngine.InputSystem;
+#if !UNITY_EDITOR && UNITY_WEBGL
+using Netherlands3D.JavascriptConnection;
+#endif
 namespace Netherlands3D.Twin
 {
     public class FileOpenShortcut : MonoBehaviour
     {
-        [DllImport("__Internal")]
-        private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiselect);
         [Tooltip("Allowed file input selections")]
-        [SerializeField] private string fileExtentions = "nl3d";
+        [SerializeField]
+        private string fileExtentions = "csv";
 
         [Tooltip("Allowed selection multiple files")]
-        [SerializeField] private bool multiSelect = false;        
+        [SerializeField]
+        private bool multiSelect = false;
+
+        [DllImport("__Internal")]
+        private static extern void AddFileInput(string inputName, string fileExtentions, bool multiSelect);
         
         public UnityEvent<string> onFilesSelected = new();
 
-        public void OpenFileDialog()
+#if !UNITY_EDITOR && UNITY_WEBGL
+        private string fileInputName;
+        private FileInputIndexedDB javaScriptFileInputHandler;
+
+        void Start()
         {
-            // Call the JavaScript function to open the file dialog
-            UploadFile(gameObject.name, "OnFileSelected", fileExtentions, multiSelect);
+            javaScriptFileInputHandler = FindObjectOfType<FileInputIndexedDB>(true);
+            if (javaScriptFileInputHandler == null)
+            {
+                GameObject go = new GameObject("UserFileUploads");
+                javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
+            }
+
+            // Set file input name with generated id to avoid html conflicts
+            fileInputName += "_" + gameObject.GetInstanceID();
+            name = fileInputName;
+
+            // DrawHTMLOverCanvas javascriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
+            AddFileInput(fileInputName, fileExtentions, multiSelect);
         }
         
-        // This is the callback method that gets called when the file is selected
-        public void OnFileSelected(string filePaths)
+        public void ClickNativeButton()
         {
-            Debug.Log("shortcut received: " + filePaths);
-            onFilesSelected.Invoke(filePaths);        
+            javaScriptFileInputHandler.SetCallbackAddress(SendResults);
+        }
+        #endif
+        
+        public void SendResults(string filePaths)
+        {
+            Debug.Log("o: " + Keyboard.current.oKey.isPressed);
+            Debug.Log("cmd: " + Keyboard.current.leftCommandKey.isPressed);
+            Debug.Log("shortcut object received: " + filePaths);
+            onFilesSelected.Invoke(filePaths);
         }
     }
 }
