@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin
 {
     public class AnimationSpeedInputField : MonoBehaviour
     {
-        [SerializeField] private int matchingDropdownIndex;
+        [SerializeField] private int matchingDropdownIndex; //this determines when this inputField is active and should set the animation speed (when this value matches the value that is selected by the dropdown)
 
         private AnimationSpeedConverter converter;
         public UnityEvent<float> onSpeedParsed;
