@@ -5,13 +5,6 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Functionalities
 {
-    [Serializable]
-    public class FunctionalityData
-    {
-        public string Id;
-        public bool IsEnabled;
-    }
-
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
