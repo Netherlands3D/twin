@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -13,14 +15,18 @@ namespace Netherlands3D.Twin.Projects
     public class ProjectDataHandler : MonoBehaviour
     {
         [DllImport("__Internal")]
+        [UsedImplicitly]
         private static extern void PreventDefaultShortcuts();
 
-        private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
+        [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
+
+        [SerializeField] private InputActionAsset applicationActionMap;
+        [SerializeField] private FileOpen fileOpener;
 
         public int undoStackSize = 10;
 
@@ -30,8 +36,6 @@ namespace Netherlands3D.Twin.Projects
         [Tooltip("called when the save action completed successfully")]
         public UnityEvent OnSaveCompleted;
 
-        // [Tooltip("called when the save action failed")]
-        // public UnityEvent OnSaveFailed;
         [Tooltip("called when the load action is started")]
         public UnityEvent OnLoadStarted;
 
@@ -42,6 +46,11 @@ namespace Netherlands3D.Twin.Projects
         public UnityEvent OnLoadFailed;
 
         private static ProjectDataHandler instance;
+        private InputAction openProjectAction;
+        private InputAction saveProjectAction;
+        private InputAction undoAction;
+        private InputAction redoAction;
+
         public static ProjectDataHandler Instance
         {
             get
@@ -56,6 +65,11 @@ namespace Netherlands3D.Twin.Projects
         
         private void Awake()
         {
+            openProjectAction = applicationActionMap.FindAction("Projects/Open");
+            saveProjectAction = applicationActionMap.FindAction("Projects/Save");
+            undoAction = applicationActionMap.FindAction("Projects/Undo");
+            redoAction = applicationActionMap.FindAction("Projects/Redo");
+
             if (ProjectData.Current == null)
             {
                 Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
@@ -69,6 +83,36 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
+        }
+
+        private void OnEnable()
+        {
+            openProjectAction.Enable();
+            openProjectAction.performed += OnOpenProjectAction;
+
+            saveProjectAction.Enable();
+            saveProjectAction.performed += OnSaveProjectAction;
+
+            undoAction.Enable();
+            undoAction.performed += OnUndoAction;
+
+            redoAction.Enable();
+            redoAction.performed += OnRedoAction;
+        }
+
+        private void OnDisable()
+        {
+            openProjectAction.performed -= OnOpenProjectAction;
+            openProjectAction.Disable();
+
+            saveProjectAction.performed -= OnSaveProjectAction;
+            saveProjectAction.Disable();
+
+            undoAction.performed -= OnUndoAction;
+            undoAction.Disable();
+
+            redoAction.performed -= OnRedoAction;
+            redoAction.Disable();
         }
 
         private void Start()
@@ -91,34 +135,24 @@ namespace Netherlands3D.Twin.Projects
             redoStack.Clear();
         }
 
-        private void Update()
+        private void OnOpenProjectAction(InputAction.CallbackContext obj)
         {
-            var ctrlModifier = CtrlModifierIsPressed();
-
-            if (Keyboard.current.sKey.wasPressedThisFrame && ctrlModifier)
-                SaveProject();
-
-            if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
-            {
-                print("opening file");
-                GetComponent<FileOpenShortcut>().OpenFileDialog();
-            }
-
-            if (Keyboard.current.zKey.wasPressedThisFrame && ctrlModifier)
-                Undo();
-
-            if (Keyboard.current.yKey.wasPressedThisFrame && ctrlModifier)
-                Redo();
+            fileOpener.OpenFile();
         }
 
-        public static bool CtrlModifierIsPressed()
+        private void OnSaveProjectAction(InputAction.CallbackContext obj)
         {
-            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
-            {
-                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
-            }
+            SaveProject();
+        }
 
-            return Keyboard.current.ctrlKey.isPressed;
+        private void OnUndoAction(InputAction.CallbackContext obj)
+        {
+            Undo();
+        }
+
+        private void OnRedoAction(InputAction.CallbackContext obj)
+        {
+            Redo();
         }
 
         public void SaveProject()
