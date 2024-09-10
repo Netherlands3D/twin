@@ -32,26 +32,26 @@ namespace Netherlands3D.Twin
             onFilesSelected.Invoke(filePaths);        
         }
 
-        private void Update()
-        {
-            var ctrlModifier = CtrlModifierIsPressed();
-
-            if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
-            {
-                print("opening file with shortcut");
-                OpenFileDialog();
-            }
-        }
+        // private void Update()
+        // {
+        //     var ctrlModifier = CtrlModifierIsPressed();
+        //
+        //     if (Keyboard.current.oKey.wasPressedThisFrame && ctrlModifier)
+        //     {
+        //         print("opening file with shortcut");
+        //         OpenFileDialog();
+        //     }
+        // }
         
-        public static bool CtrlModifierIsPressed()
-        {
-            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
-            {
-                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
-            }
-
-            return Keyboard.current.ctrlKey.isPressed;
-        }
+        // public static bool CtrlModifierIsPressed()
+        // {
+        //     if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+        //     {
+        //         return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
+        //     }
+        //
+        //     return Keyboard.current.ctrlKey.isPressed;
+        // }
 
     }
 }
