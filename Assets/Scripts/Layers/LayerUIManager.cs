@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
         [SerializeField] private LayerUI LayerUIPrefab;
         [SerializeField] private List<Sprite> layerTypeSprites;
+        [SerializeField] private List<Sprite> disabledLayerTypeSprites;
         [SerializeField] private RectTransform layerUIContainer;
 
         public RectTransform LayerUIContainer => layerUIContainer;
@@ -190,6 +191,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
             }
+        }
+
+        public Sprite GetDisabledLayerTypeSprite(Sprite original)
+        {
+            var index = layerTypeSprites.IndexOf(original);
+            if(index >= 0 && index < disabledLayerTypeSprites.Count)
+                return disabledLayerTypeSprites[index];
+            return disabledLayerTypeSprites[0];
         }
 
         public void EnableContextMenu(bool enable, Vector2 position = default)
