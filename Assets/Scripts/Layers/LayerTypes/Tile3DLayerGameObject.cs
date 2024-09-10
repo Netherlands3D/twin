@@ -76,11 +76,25 @@ namespace Netherlands3D.Twin.Layers
         private void OnEnable()
         {
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
+            OnServerResponseReceived.AddListener(ProcessServerResponse);
         }
 
         private void OnDisable()
         {
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
+            OnServerResponseReceived.RemoveListener(ProcessServerResponse);
+        }
+
+        private void ProcessServerResponse(UnityWebRequest request)
+        {
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                LayerData.HasValidCredentials = false;
+            }
+            else
+            {
+                LayerData.HasValidCredentials = true;
+            }
         }
 
         protected override void Start()
@@ -169,6 +183,7 @@ namespace Netherlands3D.Twin.Layers
             var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
             if (urlProperty != null)
             {
+                urlPropertyData = urlProperty; //use existing object to overwrite the current instance
                 URL = urlProperty.Url;
                 UpdateURL(urlProperty.Url);
             }
