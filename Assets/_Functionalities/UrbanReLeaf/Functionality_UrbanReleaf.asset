@@ -12,15 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_UrbanReleaf
   m_EditorClassIdentifier: 
-  data:
-    Id: urbanreleaf-sensor-data
-    IsEnabled: 1
-  Title: Urbanreleaf sensor data
+  Id: urbanreleaf
+  Title: UrbanReLeaf Sensor Data
   Caption: 
-  Header: Toont alle UrbanReleaf sensor data
-  Description: "Deze kaartlaag toont all urbanreleaf sensor temperatuur data \n\n<i>\nBron:
-    PDOK\nDatum: live</i>"
+  Header: Toont alle UrbanReLeaf sensor data
+  Description: 'Deze kaartlaag toont all UrbanReLeaf sensor temperatuur data.
+
+
+    <i>
+
+    Bron:
+    PDOK
+
+    Datum: live</i>'
   configuration: {fileID: 0}
+  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
