@@ -16,28 +16,26 @@ namespace Netherlands3D.Twin.Functionalities
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
         [SerializeField] private FunctionalityData data = new();
+
         public FunctionalityData Data
         {
-            get
-            {
-                return data;
-            }
+            get { return data; }
             set
             {
                 var oldEnabled = data.IsEnabled;
                 data = value;
-                
+
                 //invoke events if the state of the new Data object and old Data object don't match
                 if (data.IsEnabled != oldEnabled)
                 {
-                    Debug.Log( Data.Id+" invoking  func act when settin data: " + value);
+                    Debug.Log(Data.Id + " invoking  func act when settin data: " + value);
                     if (Data.IsEnabled)
                         OnEnable.Invoke();
                     else
                         OnDisable.Invoke();
                 }
             }
-        } 
+        }
 
         [Tooltip("Functionality button title")]
         public string Title;
@@ -52,7 +50,7 @@ namespace Netherlands3D.Twin.Functionalities
         public ScriptableObject configuration;
 
         public string Id => Data.Id;
-        
+
         public bool IsEnabled
         {
             get => Data.IsEnabled;
@@ -68,15 +66,14 @@ namespace Netherlands3D.Twin.Functionalities
                     targetValue = false;
                 }
 
-                if (value != Data.IsEnabled) //IsEnabled was changed
-                {
-                    Debug.Log( Data.Id+" setting func act: " + value);
-                    Data.IsEnabled = value;
-                    if (Data.IsEnabled)
-                        OnEnable.Invoke();
-                    else
-                        OnDisable.Invoke();
-                }
+                if (value == Data.IsEnabled) //IsEnabled was not changed
+                    return;
+
+                Data.IsEnabled = value;
+                if (Data.IsEnabled)
+                    OnEnable.Invoke();
+                else
+                    OnDisable.Invoke();
             }
         }
 
