@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4759327881244281210}
   - component: {fileID: 840209856476251670}
   - component: {fileID: 3396860488134915228}
-  - component: {fileID: 7569641903057550561}
+  - component: {fileID: 2562595831614236368}
   m_Layer: 0
   m_Name: ProjectDataHandler
   m_TagString: Untagged
@@ -51,6 +51,9 @@ MonoBehaviour:
   projectDataStore: {fileID: 11400000, guid: d44646dfa83fba241ac198123f4db956, type: 2}
   undoStack: []
   redoStack: []
+  applicationActionMap: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
+    type: 3}
+  fileOpener: {fileID: 0}
   undoStackSize: 10
   OnSaveStarted:
     m_PersistentCalls:
@@ -168,7 +171,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7569641903057550561
+--- !u!114 &2562595831614236368
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,23 +180,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2174600510305605328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6445d730b0384120ab36363bd4cc9d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 032dd0137110346cdb7c4217a42f461d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileExtentions: nl3d
-  multiSelect: 0
-  onFilesSelected:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
-        m_MethodName: ProcessFile
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  applicationActionMap: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
+    type: 3}

@@ -2304,62 +2304,6 @@ PrefabInstance:
       propertyPath: fileOpener
       value: 
       objectReference: {fileID: 1235137767}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
-        type: 3}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Id
-      value: 539d55f1-ef1b-4617-ba03-2dbdccbb70dd
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Name
-      value: Application
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Actions.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Bindings.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Actions.Array.data[0].m_Id
-      value: 324ec26d-6da3-4573-9429-8f8ccb2f0323
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Bindings.Array.data[0].m_Id
-      value: b4e9c168-1429-4749-9ea1-c2fd11eeaa09
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Actions.Array.data[0].m_Name
-      value: New action
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Actions.Array.data[0].m_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Bindings.Array.data[0].m_Action
-      value: New action
-      objectReference: {fileID: 0}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: applicationActionMap.m_Actions.Array.data[0].m_ExpectedControlType
-      value: Button
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
