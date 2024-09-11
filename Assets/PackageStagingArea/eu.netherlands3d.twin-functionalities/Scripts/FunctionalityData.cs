@@ -7,5 +7,13 @@ namespace Netherlands3D.Twin.Functionalities
     {
         public string Id;
         public bool IsEnabled;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not FunctionalityData functionalityData)
+                return false;
+
+            return functionalityData.Id == Id;
+        }
     }
 }

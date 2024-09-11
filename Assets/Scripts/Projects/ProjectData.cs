@@ -121,6 +121,8 @@ namespace Netherlands3D.Twin.Projects
         {
             if (!functionalities.Contains(data))
                 functionalities.Add(data);
+            else
+                Debug.LogError("A functionality with ID: " + data.Id + " already exists.");
         }
 
         public void RemoveFunctionality(FunctionalityData data)
