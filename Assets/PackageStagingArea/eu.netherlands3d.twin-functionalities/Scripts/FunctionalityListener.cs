@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Functionalities
 
         private void Awake()
         {
+            //events are set in awake, and removed in OnDestroy to still match changes when this gameObject is disabled 
             foreach (var functionality in functionalities)
             {
                 functionality.OnEnable.AddListener(EnableFunctionality);
@@ -25,8 +26,9 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        private void OnEnable()
+        private void Start()
         {
+            //Match initial functionality setting
             foreach (var functionality in functionalities)
             {
 

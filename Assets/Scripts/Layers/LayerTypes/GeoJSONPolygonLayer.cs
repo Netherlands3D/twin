@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.Layers
             return polygonVisualizationMaterialInstance;
         }
 
-        public override void DestroyLayer()
+        public override void DestroyLayerGameObject()
         {
             // Remove all SpawnedVisualisations
             Debug.Log("Destroying all visualisations " + SpawnedVisualisations.Count);  
@@ -100,7 +100,7 @@ namespace Netherlands3D.Twin.Layers
                 RemoveFeature(featureVisualisation);
             }
 
-            base.DestroyLayer();
+            base.DestroyLayerGameObject();
         }
 
         /// <summary>
