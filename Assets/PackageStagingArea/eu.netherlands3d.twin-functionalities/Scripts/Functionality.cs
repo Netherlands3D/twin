@@ -19,14 +19,10 @@ namespace Netherlands3D.Twin.Functionalities
                 data = value;
 
                 //invoke events if the state of the new Data object and old Data object don't match
-                if (data.IsEnabled != oldEnabled)
-                {
-                    Debug.Log(Data.Id + " invoking  func act when settin data: " + value);
-                    if (Data.IsEnabled)
-                        OnEnable.Invoke();
-                    else
-                        OnDisable.Invoke();
-                }
+                if (data.IsEnabled == oldEnabled)
+                    return;
+                
+                InvokeOnEnableChangeEvents();
             }
         }
 
@@ -49,30 +45,32 @@ namespace Netherlands3D.Twin.Functionalities
             get => Data.IsEnabled;
             set
             {
-                var config = configuration as IConfiguration;
-                var targetValue = value;
-
                 //cant enable functionality if configuration is invalid
-                if (Data.IsEnabled && config != null && config.Validate().Count > 0)
+                if (Data.IsEnabled && configuration is IConfiguration config && config.Validate().Count > 0)
                 {
                     Debug.LogWarning($"Can't enable functionality {Title} because configuration is invalid");
-                    targetValue = false;
                 }
 
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
 
                 Data.IsEnabled = value;
-                if (Data.IsEnabled)
-                    OnEnable.Invoke();
-                else
-                    OnDisable.Invoke();
+                
+                InvokeOnEnableChangeEvents();
             }
         }
 
         public UnityEvent OnEnable = new();
         public UnityEvent OnDisable = new();
 
+        private void InvokeOnEnableChangeEvents()
+        {
+            if (Data.IsEnabled)
+                OnEnable.Invoke();
+            else
+                OnDisable.Invoke();
+        }
+        
         public void Populate(JSONNode jsonNode)
         {
             IsEnabled = jsonNode["enabled"];
