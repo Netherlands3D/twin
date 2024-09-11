@@ -124,6 +124,12 @@ namespace Netherlands3D.Twin.Configuration
                 configuration.Populate(uri);
             }
 
+            //this overwrites the url parameters with the project functionalities after loading a project
+            configuration.AddProjectDataChangedListener();
+            
+            //add any missing functionalities to the projectData (e.g. when a project was saved before the functionality was added to the application)
+            configuration.AddFunctionalityDataToProject();
+            
             OnLoaded.Invoke(configuration);
             
             indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);

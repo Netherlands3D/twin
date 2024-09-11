@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Districtnames
   m_EditorClassIdentifier: 
-  Id: districts
+  data:
+    Id: wijknamen
+    IsEnabled: 0
   Title: Wijknamen
   Caption: 
   Header: Alle wijknamen van Nederland
@@ -27,7 +29,6 @@ MonoBehaviour:
     Datum:
     live</i>'
   configuration: {fileID: 0}
-  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

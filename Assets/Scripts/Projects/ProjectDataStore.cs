@@ -38,7 +38,8 @@ namespace Netherlands3D.Twin.Projects
         public void LoadFromFile(string fileName)
         {
             ProjectData.Current.RootLayer.DestroyLayer();
-
+            ProjectData.Current.ClearFunctionalityData();
+            
             // Open the zip file
             using FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName));
 
@@ -76,7 +77,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.isLoading = false;
         }
-        
+
         public void SaveAsFile(ProjectDataHandler projectDataHandler)
         {
             this.projectDataHandler = projectDataHandler;
