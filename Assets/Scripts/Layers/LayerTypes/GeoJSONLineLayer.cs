@@ -90,12 +90,12 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Remove(featureVisualisation);
         }
 
-        public override void DestroyLayer()
+        public override void DestroyLayerGameObject()
         {
             if (Application.isPlaying)
                 GameObject.Destroy(LineRenderer3D.gameObject);
 
-            base.DestroyLayer();
+            base.DestroyLayerGameObject();
         }
     }
 }

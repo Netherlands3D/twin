@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Zip;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 #if UNITY_EDITOR
@@ -30,6 +31,7 @@ namespace Netherlands3D.Twin.Projects
         public double[] CameraRotation = new double[3];
         public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
         public bool UseCurrentTime = false;
+        [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
 
@@ -102,6 +104,7 @@ namespace Netherlands3D.Twin.Projects
             Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
+            current.functionalities = new();
         }
 
         /// <summary>
@@ -112,6 +115,24 @@ namespace Netherlands3D.Twin.Projects
         public IEnumerable<LayerAsset> GetAssets()
         {
             return rootLayer.GetAssets();
+        }
+
+        public void AddFunctionality(FunctionalityData data)
+        {
+            if (!functionalities.Contains(data))
+                functionalities.Add(data);
+            else
+                Debug.LogError("A functionality with ID: " + data.Id + " already exists.");
+        }
+
+        public void RemoveFunctionality(FunctionalityData data)
+        {
+            functionalities.Remove(data);
+        }
+
+        public void ClearFunctionalityData()
+        {
+            functionalities.Clear();
         }
     }
 }

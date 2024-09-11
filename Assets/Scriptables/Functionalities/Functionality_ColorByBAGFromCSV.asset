@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_ColorByBAGFromCSV
   m_EditorClassIdentifier: 
-  Id: csv-coloring
+  data:
+    Id: gebouwen-kleuren
+    IsEnabled: 1
   Title: Gebouwen kleuren
   Caption: Op basis van BAG id
   Header: Kleur gebouwen op basis van kenmerk
@@ -22,7 +24,6 @@ MonoBehaviour:
     bijbehorende kenmerk te gebruiken om panden te kleuren. Aan elk onderscheidend
     kenmerk wordt een kleur toegewezen welke zichtbaar wordt gemaakt in de viewer.
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []
