@@ -11,6 +11,7 @@ public class MacOSControlReplacement : MonoBehaviour
         // Check if we are running on macOS
         if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
         {
+            Debug.Log("MacOS detected, replacing ctrl with cmd bindings");
             ReplaceCtrlWithCommand();
         }
     }
@@ -33,7 +34,7 @@ public class MacOSControlReplacement : MonoBehaviour
                         continue;
 
                     // Replace "ctrl" with "cmd" (command on Mac, represented as 'meta' in Unity)
-                    var modifiedBindingPath = binding.overridePath ="<Keyboard>/cmd";
+                    var modifiedBindingPath = binding.overridePath = "<Keyboard>/meta";
                     action.ApplyBindingOverride(i, modifiedBindingPath);
 
                     Debug.Log($"Replaced Ctrl with Command for action: {action.name} on binding: {binding.effectivePath}");
