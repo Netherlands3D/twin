@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_AreaDownload
   m_EditorClassIdentifier: 
-  Id: download
+  data:
+    Id: downloaden-3d-gebied
+    IsEnabled: 1
   Title: Downloaden 3D gebied
   Caption: Collada
   Header: Downloaden van 3D gebied
@@ -20,7 +22,6 @@ MonoBehaviour:
     losse 3D Collada DAE objecten (per kaartlaag). Downloaden kan per tegel van 100x100m
     met een maximum van 16 tegels tegelijk.
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls:

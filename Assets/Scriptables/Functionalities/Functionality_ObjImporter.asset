@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_ObjImporter
   m_EditorClassIdentifier: 
-  Id: object-importer
+  data:
+    Id: 3d-modellen-toevoegen
+    IsEnabled: 1
   Title: 3D modellen toevoegen
   Caption: OBJ
   Header: Eigen .OBJ bestanden tonen in de 3D viewer
@@ -24,7 +26,6 @@ MonoBehaviour:
     faces' is aangevinkt onder Options\n- Zorg dat 'Swap YZ co\xF6rdinates' is aangevinkt
     onder Options"
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

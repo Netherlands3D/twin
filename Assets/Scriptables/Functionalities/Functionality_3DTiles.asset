@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_3DTiles
   m_EditorClassIdentifier: 
-  Id: 3dtiles
+  data:
+    Id: 3d-tiles
+    IsEnabled: 1
   Title: 3D Tiles
   Caption: BETA
   Header: 3D Tilesets inladen (BETA)
@@ -26,7 +28,6 @@ MonoBehaviour:
     <color=blue><u><link=https://www.ogc.org/standard/3dtiles/>Meer
     informatie over OGC standaard ''3D Tiles''</link></u></color>'
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

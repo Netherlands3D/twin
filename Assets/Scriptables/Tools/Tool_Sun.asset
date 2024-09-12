@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
   m_Name: Tool_Sun
   m_EditorClassIdentifier: 
-  code: 
+  code: sun
   title: Zonnestand
   functionGroups:
   - {fileID: 11400000, guid: f443a08a9cf0b1640bf676a9b943f0f8, type: 2}
@@ -33,4 +33,4 @@ MonoBehaviour:
   inspectorPrefab: {fileID: 4173332915424425295, guid: 4deecaa09ce904bae825ebe18de06100,
     type: 3}
   functionalityPrefabs: []
-  open: 1
+  open: 0

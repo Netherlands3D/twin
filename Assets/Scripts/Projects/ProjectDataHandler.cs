@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -10,35 +14,64 @@ namespace Netherlands3D.Twin.Projects
     /// </summary>
     public class ProjectDataHandler : MonoBehaviour
     {
-        [DllImport("__Internal")] private static extern void PreventDefaultShortcuts();
-        private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
+        [DllImport("__Internal")]
+        [UsedImplicitly]
+        private static extern void PreventDefaultShortcuts();
+
+        [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
 
+        [SerializeField] private InputActionAsset applicationActionMap;
+        [SerializeField] private FileOpen fileOpener;
+
         public int undoStackSize = 10;
 
-        private static ProjectDataHandler instance;
+        [Header("Progress events")] [Tooltip("called when the save action is started")]
+        public UnityEvent OnSaveStarted;
 
-        public static ProjectDataHandler Instance 
-        { 
-            get{
-                if(instance == null)
+        [Tooltip("called when the save action completed successfully")]
+        public UnityEvent OnSaveCompleted;
+
+        [Tooltip("called when the load action is started")]
+        public UnityEvent OnLoadStarted;
+
+        [Tooltip("called when the load action completed successfully")]
+        public UnityEvent OnLoadCompleted;
+
+        [Tooltip("called when the load action failed")]
+        public UnityEvent OnLoadFailed;
+
+        private static ProjectDataHandler instance;
+        private InputAction openProjectAction;
+        private InputAction saveProjectAction;
+        private InputAction undoAction;
+        private InputAction redoAction;
+
+        public static ProjectDataHandler Instance
+        {
+            get
+            {
+                if (instance == null)
                     instance = FindObjectOfType<ProjectDataHandler>();
 
                 return instance;
             }
-            set
-            {
-                instance = value;
-            }
+            set { instance = value; }
         }
-
-        private void Awake() 
+        
+        private void Awake()
         {
-            if(ProjectData.Current == null) {
+            openProjectAction = applicationActionMap.FindAction("Projects/Open");
+            saveProjectAction = applicationActionMap.FindAction("Projects/Save");
+            undoAction = applicationActionMap.FindAction("Projects/Undo");
+            redoAction = applicationActionMap.FindAction("Projects/Redo");
+
+            if (ProjectData.Current == null)
+            {
                 Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
                 return;
             }
@@ -52,6 +85,36 @@ namespace Netherlands3D.Twin.Projects
 #endif
         }
 
+        private void OnEnable()
+        {
+            openProjectAction.Enable();
+            openProjectAction.performed += OnOpenProjectAction;
+
+            saveProjectAction.Enable();
+            saveProjectAction.performed += OnSaveProjectAction;
+
+            undoAction.Enable();
+            undoAction.performed += OnUndoAction;
+
+            redoAction.Enable();
+            redoAction.performed += OnRedoAction;
+        }
+
+        private void OnDisable()
+        {
+            openProjectAction.performed -= OnOpenProjectAction;
+            openProjectAction.Disable();
+
+            saveProjectAction.performed -= OnSaveProjectAction;
+            saveProjectAction.Disable();
+
+            undoAction.performed -= OnUndoAction;
+            undoAction.Disable();
+
+            redoAction.performed -= OnRedoAction;
+            redoAction.Disable();
+        }
+
         private void Start()
         {
             LoadDefaultProject(); //todo: when undo is implemented, assign the listener after loading this, so the initial load cannot be undone
@@ -62,7 +125,7 @@ namespace Netherlands3D.Twin.Projects
             // Add new undo state
             if (undoStack.Count == undoStackSize)
                 undoStack.RemoveAt(0);
-            
+
             // Copy the current projectData to a new project instance for our undo history
             var newProject = ScriptableObject.CreateInstance<ProjectData>();
             // newProject.CopyFrom(projectData);
@@ -72,23 +135,31 @@ namespace Netherlands3D.Twin.Projects
             redoStack.Clear();
         }
 
-        private void Update()
+        private void OnOpenProjectAction(InputAction.CallbackContext obj)
         {
-            var ctrlModifier = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+            fileOpener.OpenFile();
+        }
 
-            if (Input.GetKeyDown(KeyCode.S) && ctrlModifier)
-                SaveProject();
+        private void OnSaveProjectAction(InputAction.CallbackContext obj)
+        {
+            SaveProject();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Z) && ctrlModifier)
-                Undo();
+        private void OnUndoAction(InputAction.CallbackContext obj)
+        {
+            Undo();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Y) && ctrlModifier)
-                Redo();
+        private void OnRedoAction(InputAction.CallbackContext obj)
+        {
+            Redo();
         }
 
         public void SaveProject()
         {
+            OnSaveStarted.Invoke();
             projectDataStore.SaveAsFile(this);
+            OnSaveCompleted.Invoke();
         }
 
         private void LoadDefaultProject()
@@ -103,21 +174,26 @@ namespace Netherlands3D.Twin.Projects
             projectDataStore.LoadFromFile(filePath);
 #endif
         }
-        
+
         public void LoadFromFile(string filePaths)
         {
+            OnLoadStarted.Invoke();
+
             var files = filePaths.Split(',');
             print("processing " + files.Length + " files");
             foreach (var filePath in files)
             {
                 print("attempting to load file: " + filePath);
-                if(filePath.ToLower().EndsWith(".nl3d"))
+                if (filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);
                     projectDataStore.LoadFromFile(filePath);
+                    OnLoadCompleted.Invoke();
                     return;
                 }
-            }  
+            }
+
+            OnLoadFailed.Invoke();
         }
 
         public void Redo()
@@ -128,8 +204,9 @@ namespace Netherlands3D.Twin.Projects
                 var lastState = redoStack[redoStack.Count - 1];
                 ProjectData.Current.CopyUndoFrom(lastState);
                 redoStack.RemoveAt(redoStack.Count - 1);
-            }       
+            }
         }
+
         public void Undo()
         {
             // Overwrite current projectData with the one from the undostack copy

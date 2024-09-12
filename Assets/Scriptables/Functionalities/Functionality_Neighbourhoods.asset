@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Neighbourhoods
   m_EditorClassIdentifier: 
+  Data:
+    Id: neighbourhoods
+    IsEnabled: 0
   Id: neighbourhoods
   Title: Buurtnamen
   Caption: 
