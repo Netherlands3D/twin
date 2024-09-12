@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         EnabledInDisabled = 3
     }
 
-    public class LayerUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public LayerData Layer { get; set; }
 
@@ -85,7 +85,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerUIManager = GetComponentInParent<LayerUIManager>();
             childVerticalLayoutGroup = childrenPanel.GetComponent<VerticalLayoutGroup>();
             spacerStartWidth = spacer.sizeDelta.x;
-            layerNameField.onFocusSelectAll = true;
         }
 
         private void OnEnable()
@@ -414,14 +413,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             layerNameField.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
 
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
-            {
-                OnLeftButtonDoubleClick(eventData);
-            }
-        }
-
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
@@ -455,6 +446,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
             if (Layer.IsSelected)
             {
+                if (eventData.clickCount == 1 && eventData.pointerEnter == layerNameText.gameObject)
+                {
+                    OnSelectInputField();
+                }
                 waitForFullClickToDeselect = true;
                 return;
             }
@@ -471,11 +466,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
 
             // layerManager.EnableContextMenu(true, eventData.position);  //disabled context menu until UI is ready
-        }
-
-        private void OnLeftButtonDoubleClick(PointerEventData eventData)
-        {
-            OnSelectInputField();
         }
 
         private void ProcessLayerSelection()
