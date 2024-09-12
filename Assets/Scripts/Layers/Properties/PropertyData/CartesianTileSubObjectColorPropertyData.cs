@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.Properties
 {
     [Serializable]
-    public class CartesianTileBuildingColorPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
+    public class CartesianTileSubObjectColorPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
         [SerializeField, JsonProperty] private Uri data;
         

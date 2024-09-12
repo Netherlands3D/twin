@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -29,8 +30,8 @@ namespace Netherlands3D.Twin.Layers
 
         public Uri Uri => uri;
 
-        public bool IsStoredInProject => Uri.Scheme == "project";
-        public bool IsRemoteAsset => Uri.Scheme is "http" or "https";
+        public bool IsStoredInProject => Uri.IsStoredInProject();
+        public bool IsRemoteAsset => Uri.IsRemoteAsset();
         
         public LayerAsset(LayerPropertyData layerPropertyData, Uri uri)
         {

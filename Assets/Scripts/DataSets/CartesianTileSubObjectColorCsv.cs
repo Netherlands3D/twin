@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.DataSets
 {
-    public class CartesianTileBuildingColorCsv : DataSet<Dictionary<string, Color>>
+    public class CartesianTileSubObjectColorCsv : DataSet<Dictionary<string, Color>>
     {
         private readonly string path;
         private readonly int maxParsesPerFrame;
@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.DataSets
             Delimiter = ";"
         };
 
-        public CartesianTileBuildingColorCsv(Uri uri, int maxParsesPerFrame = 100)
+        public CartesianTileSubObjectColorCsv(Uri uri, int maxParsesPerFrame = 100)
         {
             // TODO: This should be moved into a URI extension method
             if (uri.Scheme != "project")
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.DataSets
             this.maxParsesPerFrame = maxParsesPerFrame;
         }
 
-        public CartesianTileBuildingColorCsv(string path, int maxParsesPerFrame = 100)
+        public CartesianTileSubObjectColorCsv(string path, int maxParsesPerFrame = 100)
         {
             this.path = path;
             this.maxParsesPerFrame = maxParsesPerFrame;

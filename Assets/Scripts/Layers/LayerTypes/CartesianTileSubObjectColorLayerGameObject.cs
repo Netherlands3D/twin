@@ -11,7 +11,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class CartesianTileBuildingColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public int PriorityIndex
         {
@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
         public ColorSetLayer ColorSetLayer { get; private set; } = new(0, new());
-        private CartesianTileBuildingColorPropertyData propertyData = new();
+        private CartesianTileSubObjectColorPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
 
         public UnityEvent<float> progressEvent = new();
@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers
         
         private IEnumerator ReadAsync(Uri uri, int maxParsesPerFrame)
         {
-            var csv = new CartesianTileBuildingColorCsv(uri, maxParsesPerFrame);
+            var csv = new CartesianTileSubObjectColorCsv(uri, maxParsesPerFrame);
 
             // Wait a frame for the created layer to be re-parented and set up correctly to ensure the correct priority index
             yield return null;
@@ -96,20 +96,20 @@ namespace Netherlands3D.Twin.Layers
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        private List<CartesianTileBuildingColorLayerGameObject> GetFlatHierarchy(LayerData root)
+        private List<CartesianTileSubObjectColorLayerGameObject> GetFlatHierarchy(LayerData root)
         {
-            var list = new List<CartesianTileBuildingColorLayerGameObject>();
+            var list = new List<CartesianTileSubObjectColorLayerGameObject>();
 
             AddLayersRecursive(root, list);
 
             return list;
         }
 
-        private void AddLayersRecursive(LayerData layer, List<CartesianTileBuildingColorLayerGameObject> list)
+        private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
         {
             if (layer is ReferencedLayerData proxyLayer)
             {
-                if (proxyLayer.Reference is CartesianTileBuildingColorLayerGameObject datasetLayer)
+                if (proxyLayer.Reference is CartesianTileSubObjectColorLayerGameObject datasetLayer)
                 {
                     list.Add(datasetLayer);
                 }
@@ -123,7 +123,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<CartesianTileBuildingColorPropertyData>().FirstOrDefault();
+            var propertyData = properties.OfType<CartesianTileSubObjectColorPropertyData>().FirstOrDefault();
             if (propertyData == null) return;
 
             this.propertyData = propertyData;
