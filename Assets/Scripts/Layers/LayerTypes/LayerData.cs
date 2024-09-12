@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class LayerData
     {
+        [SerializeField, JsonProperty] protected Guid UUID = Guid.NewGuid();
         [SerializeField, JsonProperty] protected string name;
         [SerializeField, JsonProperty] protected bool activeSelf = true;
         [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
@@ -76,7 +77,20 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        [JsonIgnore] public List<LayerPropertyData> LayerProperties => layerProperties;
+        [JsonIgnore] public List<LayerPropertyData> LayerProperties
+        {
+            get
+            {
+                // When unserializing, and the layerproperties ain't there: make sure we have a valid list object.
+                if (layerProperties == null)
+                {
+                    layerProperties = new();
+                }
+
+                return layerProperties;
+            }
+        }
+
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
@@ -213,14 +227,19 @@ namespace Netherlands3D.Twin.Layers
         /// <returns>A list of assets on disk</returns>
         public IEnumerable<LayerAsset> GetAssets()
         {
-            var assetsOfCurrentLayer = layerProperties
-                .OfType<ILayerPropertyDataWithAssets>()
-                .SelectMany(p => p.GetAssets());
+            IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
+            Debug.Log(layerProperties);
+            if (layerProperties != null)
+            {
+                assetsOfCurrentLayer = layerProperties
+                    .OfType<ILayerPropertyDataWithAssets>()
+                    .SelectMany(p => p.GetAssets());
+            }
 
             var assetsOfAllChildLayers = children
                 .SelectMany(l => l.GetAssets());
 
-            return assetsOfAllChildLayers.Concat(assetsOfCurrentLayer);
+            return assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
         }
     }
 }

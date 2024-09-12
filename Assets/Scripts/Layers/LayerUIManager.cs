@@ -176,7 +176,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
                     return layerTypeSprites[4];
-                case DatasetLayerGameObject _:
+                case CartesianTileSubObjectColorLayerGameObject _:
                     return layerTypeSprites[5];
                 case GeoJSONPolygonLayer _:
                     return layerTypeSprites[6];
