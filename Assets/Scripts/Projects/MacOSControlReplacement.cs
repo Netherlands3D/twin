@@ -30,7 +30,7 @@ public class MacOSControlReplacement : MonoBehaviour
                     var binding = action.bindings[i];
 
                     // Check if the binding has Ctrl (Control) as a modifier
-                    if (!binding.isPartOfComposite || !binding.path.Contains("ctrl"))
+                    if (!binding.isPartOfComposite)
                         continue;
 
                     if (binding.path.Contains("<Keyboard>/ctrl"))
