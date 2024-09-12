@@ -126,6 +126,10 @@ namespace Netherlands3D.Twin.Layers
             var propertyData = properties.OfType<CartesianTileSubObjectColorPropertyData>().FirstOrDefault();
             if (propertyData == null) return;
 
+            // Property data is set here, and the parsing and loading of the actual data is done
+            // in the start method, there a coroutine is started to load the data in a streaming fashion.
+            // If we do that here, then this may conflict with the loading of the project file and it would
+            // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
         }
     }
