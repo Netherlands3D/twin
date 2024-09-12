@@ -29,6 +29,9 @@ namespace Netherlands3D.Twin.Layers
 
         public Uri Uri => uri;
 
+        public bool IsStoredInProject => Uri.Scheme == "project";
+        public bool IsRemoteAsset => Uri.Scheme is "http" or "https";
+        
         public LayerAsset(LayerPropertyData layerPropertyData, Uri uri)
         {
             this.layerPropertyData = layerPropertyData;

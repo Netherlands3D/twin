@@ -25,6 +25,7 @@ namespace Netherlands3D.Twin.DataSets
 
         public CartesianTileBuildingColorCsv(Uri uri, int maxParsesPerFrame = 100)
         {
+            // TODO: This should be moved into a URI extension method
             if (uri.Scheme != "project")
             {
                 throw new NotSupportedException(

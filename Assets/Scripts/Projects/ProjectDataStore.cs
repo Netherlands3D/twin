@@ -50,23 +50,24 @@ namespace Netherlands3D.Twin.Projects
 
             foreach (ZipEntry zipEntry in zf)
             {
+                // TODO: this does not yet support directories
                 if (!zipEntry.IsFile) continue;
 
+                using Stream zipStream = zf.GetInputStream(zipEntry);
                 if (zipEntry.Name == ProjectJsonFileNameInZip)
                 {
-                    using Stream zipStream = zf.GetInputStream(zipEntry);
                     using StreamReader sr = new(zipStream);
                     string json = sr.ReadToEnd();
 
                     LoadJSON(json);
+                    continue;
                 }
-                else
-                {
-                    //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
-                    Debug.Log("Other file found in Project zip. Ignoring for now.");
-
-                    // todo add failed loading event
-                }
+                
+                string fullZipToPath = Path.Combine(Application.persistentDataPath, zipEntry.Name);
+                using FileStream streamWriter = File.Create(fullZipToPath);
+                zipStream.CopyTo(streamWriter);
+        
+                Console.WriteLine("Extracted: " + zipEntry.Name);
             }
         }
         
@@ -106,11 +107,8 @@ namespace Netherlands3D.Twin.Projects
 
         private void WriteProjectAssetsToZipfile(ProjectData projectData, ZipOutputStream zipOutputStream)
         {
-            // TODO: The term project is now at multiple places in this application, refactor that
-            // Only layers whose URI start with the special scheme 'project' are meant to be copied into the 
-            // project zipfile
             var projectAssets = projectData
-                .GetAssets().Where(asset => asset.Uri.Scheme == "project")
+                .GetAssets().Where(asset => asset.IsStoredInProject)
                 .ToList();
             Debug.Log("Found " + projectAssets.Count() + " project assets in project");
             

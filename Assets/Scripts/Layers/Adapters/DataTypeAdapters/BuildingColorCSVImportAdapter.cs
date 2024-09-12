@@ -38,6 +38,8 @@ namespace Netherlands3D.Twin
             activeCartesianTileBuildingColorLayer = Instantiate(layerGameObjectPrefab);
             activeCartesianTileBuildingColorLayer.gameObject.name = fileName;
             var propertyData = activeCartesianTileBuildingColorLayer.PropertyData as CartesianTileBuildingColorPropertyData;
+            
+            // TODO: This scheme should be otherwise constructed; using a url factory or extension method?
             propertyData.Data = new Uri("project:///" + fullPath);
             
             // TODO: Temporary proxying during refactoring, it would be better to simplify this.
