@@ -44,7 +44,40 @@
             ],
             "bindings": [
                 {
-                    "name": "Ctrl+O",
+                    "name": "Ctrl+O (left)",
+                    "id": "f7b2977b-b386-4e15-a60b-f85293f9647e",
+                    "path": "ButtonWithOneModifier(whichSideWins=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Modifier",
+                    "id": "3080588c-f077-4a7b-93ee-c0dae16f2017",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button",
+                    "id": "b0356562-c3f0-4836-a46c-515e6b85451a",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Ctrl+O (right)",
                     "id": "f292e04a-4aee-4e5d-93f4-98e89b1e7a58",
                     "path": "OneModifier",
                     "interactions": "",
@@ -57,7 +90,7 @@
                 {
                     "name": "modifier",
                     "id": "94563cc5-472f-4f2d-8abf-9e9b9f378c7e",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/rightCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -77,7 +110,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Ctrl+S",
+                    "name": "Ctrl+S (left)",
                     "id": "a936cb46-69c4-484a-a988-c9722efc036f",
                     "path": "OneModifier",
                     "interactions": "",
@@ -90,7 +123,7 @@
                 {
                     "name": "modifier",
                     "id": "d55053b9-2e31-4bbe-9d6f-d99211a9835b",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -110,7 +143,40 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Ctrl+Z",
+                    "name": "Ctrl+S (right)",
+                    "id": "0e7d6704-468f-4659-bff8-92e1774a60b9",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Save",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "c84a174f-0d20-4e47-8bcc-d3b07980f47f",
+                    "path": "<Keyboard>/rightCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Save",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "b626f491-6170-4246-927b-f9e9e4092af9",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Save",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Ctrl+Z (left)",
                     "id": "01ff4b54-88f8-4229-92bd-0d7f28d330eb",
                     "path": "OneModifier",
                     "interactions": "",
@@ -123,7 +189,7 @@
                 {
                     "name": "modifier",
                     "id": "6376e2ee-508d-4420-9ea8-90ac76d7a009",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -143,7 +209,40 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Ctrl+Y",
+                    "name": "Ctrl+Z (right)",
+                    "id": "78d76c01-0437-4a9a-becb-5af896e9543d",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Undo",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "1b509e72-fe7d-4eb3-844c-651041503887",
+                    "path": "<Keyboard>/rightCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Undo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "d9de1b2d-85f3-46ea-b626-150b132b35b9",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Undo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Ctrl+Y (left)",
                     "id": "51e71018-d614-432b-af41-b6e90517bab6",
                     "path": "OneModifier",
                     "interactions": "",
@@ -156,7 +255,7 @@
                 {
                     "name": "modifier",
                     "id": "bb3c4fd2-5f02-4113-8846-2cd8ee77c6cf",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -167,6 +266,39 @@
                 {
                     "name": "binding",
                     "id": "0c02e5d9-436f-4965-8aea-f0d21ff22608",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Redo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Ctrl+Y (right)",
+                    "id": "83a19e66-7547-44c8-a0f2-d709048be7d6",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Redo",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "a8c4f94f-72c5-4b4a-b478-2b03673c6f98",
+                    "path": "<Keyboard>/rightCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Redo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "d11bb89f-1540-4600-a86f-64cfa91b4298",
                     "path": "<Keyboard>/y",
                     "interactions": "",
                     "processors": "",

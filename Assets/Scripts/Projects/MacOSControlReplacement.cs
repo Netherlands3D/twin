@@ -30,13 +30,31 @@ public class MacOSControlReplacement : MonoBehaviour
                     var binding = action.bindings[i];
 
                     // Check if the binding has Ctrl (Control) as a modifier
-                    if (!binding.isPartOfComposite || !binding.path.Contains("<Keyboard>/ctrl"))
+                    if (!binding.isPartOfComposite || !binding.path.Contains("ctrl"))
                         continue;
 
-                    // Replace "ctrl" with "cmd" (command on Mac, represented as 'meta' in Unity)
-                    var modifiedBindingPath = binding.overridePath = "<Keyboard>/leftMeta";
-                    action.ApplyBindingOverride(i, modifiedBindingPath);
-                    Debug.Log($"Replaced Ctrl with Command for action: {action.name} on binding: {binding.effectivePath}");
+                    if (binding.path.Contains("<Keyboard>/ctrl"))
+                    {
+                        Debug.LogWarning("compound control modifier found, cannot replace this with a compound cmd modifier because it does not exist. Using left cmd, make a input action map with both ctrl keys separately to include the right cmd key.");
+                        // Replace "ctrl" with "cmd" (command on Mac, represented as 'meta' in Unity)
+                        var modifiedBindingPath = binding.overridePath = "<Keyboard>/leftMeta";
+                        action.ApplyBindingOverride(i, modifiedBindingPath);
+                        Debug.Log($"Replaced Ctrl with LeftCommand for action: {action.name} on binding: {binding.effectivePath}");
+                    }
+                    else if (binding.path.Contains("<Keyboard>/leftCtrl"))
+                    {
+                        // Replace "leftCtrl" with "leftCmd" (command on Mac, represented as 'meta' in Unity)
+                        var modifiedBindingPath = binding.overridePath = "<Keyboard>/leftMeta";
+                        action.ApplyBindingOverride(i, modifiedBindingPath);
+                        Debug.Log($"Replaced LeftCtrl with LeftCommand for action: {action.name} on binding: {binding.effectivePath}");
+                    }
+                    else if (binding.path.Contains("<Keyboard>/rightCtrl"))
+                    {
+                        // Replace "rightCtrl" with "rightCmd" (command on Mac, represented as 'meta' in Unity)
+                        var modifiedBindingPath = binding.overridePath = "<Keyboard>/rightMeta";
+                        action.ApplyBindingOverride(i, modifiedBindingPath);
+                        Debug.Log($"Replaced RightCtrl with RightCommand for action: {action.name} on binding: {binding.effectivePath}");
+                    }
                 }
             }
         }
