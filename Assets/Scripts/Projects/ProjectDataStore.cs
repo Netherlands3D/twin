@@ -66,8 +66,6 @@ namespace Netherlands3D.Twin.Projects
                 string fullZipToPath = Path.Combine(Application.persistentDataPath, zipEntry.Name);
                 using FileStream streamWriter = File.Create(fullZipToPath);
                 zipStream.CopyTo(streamWriter);
-        
-                Console.WriteLine("Extracted: " + zipEntry.Name);
             }
         }
         
@@ -76,7 +74,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.isLoading = true;
             JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
-            Debug.Log("loaded project with uuid: " + ProjectData.Current.UUID);
+            Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.isLoading = false;
         }
@@ -110,7 +108,6 @@ namespace Netherlands3D.Twin.Projects
             var projectAssets = projectData
                 .GetAssets().Where(asset => asset.IsStoredInProject)
                 .ToList();
-            Debug.Log("Found " + projectAssets.Count() + " project assets in project");
             
             foreach (var layerAsset in projectAssets)
             {
@@ -122,7 +119,6 @@ namespace Netherlands3D.Twin.Projects
         {
             var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
             var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
-            Debug.Log("Saving asset from " + relativePath);
 
             var entry = new ZipEntry(relativePath);
             zipOutputStream.PutNextEntry(entry);
@@ -162,7 +158,6 @@ namespace Netherlands3D.Twin.Projects
         public void AppendFileToZip(string fileName)
         {
             var persistentDataPath = Application.persistentDataPath + "/" + fileName;
-            Debug.Log("Appending file to zip: " + persistentDataPath);
 
             byte[] buffer = new byte[4096];
             var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");

@@ -227,13 +227,10 @@ namespace Netherlands3D.Twin.Layers
         /// <returns>A list of assets on disk</returns>
         public IEnumerable<LayerAsset> GetAssets()
         {
-            Debug.Log("==== Start GetAssets for " + this.name + "====");
-            Debug.Log(this.name);
             IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
             Debug.Log(layerProperties);
             if (layerProperties != null)
             {
-                Debug.Log("Found " + layerProperties.Count + " properties");
                 assetsOfCurrentLayer = layerProperties
                     .OfType<ILayerPropertyDataWithAssets>()
                     .SelectMany(p => p.GetAssets());
@@ -242,11 +239,7 @@ namespace Netherlands3D.Twin.Layers
             var assetsOfAllChildLayers = children
                 .SelectMany(l => l.GetAssets());
 
-            var layerAssets = assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
-            
-            Debug.Log("==== End GetAssets for " + this.name + ", found: " + layerAssets.Count() + " assets ====");
-
-            return layerAssets;
+            return assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
         }
     }
 }
