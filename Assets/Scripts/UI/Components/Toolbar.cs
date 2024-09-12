@@ -11,9 +11,8 @@ namespace Netherlands3D.Twin
         /// <param name="tool">The tool to check the others against</param>
         public void DisableOutsideToolGroup(Tool tool)
         {
-            foreach (Transform child in transform)
+            foreach (var toolButton in GetComponentsInChildren<ToolButton>())
             {
-                var toolButton = child.GetComponent<ToolButton>();
                 if (toolButton.Tool != tool)
                 {
                     var conflictingFunctionGroups = tool.functionGroups.Intersect(toolButton.Tool.functionGroups);

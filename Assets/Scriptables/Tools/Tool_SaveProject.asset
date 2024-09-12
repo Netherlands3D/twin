@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
-  m_Name: Tool_Sun
+  m_Name: Tool_SaveProject
   m_EditorClassIdentifier: 
-  code: sun
-  title: Zonnestand
+  code: saveProject
+  title: Project opslaan
   functionGroups:
-  - {fileID: 11400000, guid: f443a08a9cf0b1640bf676a9b943f0f8, type: 2}
-  - {fileID: 11400000, guid: 273b59c4a8f150a4c9eee47e2423c945, type: 2}
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
   onAvailabilityChange:
     m_PersistentCalls:
@@ -30,7 +28,7 @@ MonoBehaviour:
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 4173332915424425295, guid: 4deecaa09ce904bae825ebe18de06100,
+  inspectorPrefab: {fileID: 5078733024073835164, guid: 43356b14e74180541a8883de6a2e483d,
     type: 3}
   functionalityPrefabs: []
   open: 0
