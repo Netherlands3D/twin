@@ -34,9 +34,8 @@ public class MacOSControlReplacement : MonoBehaviour
                         continue;
 
                     // Replace "ctrl" with "cmd" (command on Mac, represented as 'meta' in Unity)
-                    var modifiedBindingPath = binding.overridePath = "<Keyboard>/meta";
+                    var modifiedBindingPath = binding.overridePath = "<Keyboard>/leftMeta";
                     action.ApplyBindingOverride(i, modifiedBindingPath);
-
                     Debug.Log($"Replaced Ctrl with Command for action: {action.name} on binding: {binding.effectivePath}");
                 }
             }
