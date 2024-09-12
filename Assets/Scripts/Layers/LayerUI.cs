@@ -92,8 +92,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
-            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
-            
+            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);           
         }
 
         private void OnDisable()
@@ -435,12 +434,16 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             }
         }
 
-        public void NotifyPointerDown(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerPress == gameObject)
-                Debug.Log("I am the one...");
-            else
-                Debug.Log("im not the one.......");//!IsPointerOverUIElement(inputField))
+            if (!layerUIManager.DragGhost && !Layer.IsSelected)
+                SetHighlight(InteractionState.Hover);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!Layer.IsSelected)
+                SetHighlight(InteractionState.Default);
         }
 
         private void OnLeftButtonDown(PointerEventData eventData)
@@ -719,19 +722,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public static bool SequentialSelectionModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!layerUIManager.DragGhost && !Layer.IsSelected)
-                SetHighlight(InteractionState.Hover);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (!Layer.IsSelected)
-                SetHighlight(InteractionState.Default);
-        }
+        }      
 
         private void OnDestroy()
         {
