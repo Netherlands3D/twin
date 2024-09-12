@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_BAGInformation
   m_EditorClassIdentifier: 
-  Id: bag
+  data:
+    Id: gebouw-informatie
+    IsEnabled: 1
   Title: Gebouw informatie
   Caption: 
   Header: BAG pand- en adresinformatie opvragen
@@ -21,7 +23,6 @@ MonoBehaviour:
     is gedetailleerde informatie over het pand, enkele pandkenmerken en de adressen
     daarbinnen op te vragen.  \n\n<i>\nBron: PDOK\nDatum: live\n</I>"
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls:

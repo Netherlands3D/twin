@@ -2890,10 +2890,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091adbd22668b45908748840e8043592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  urlInputField: {fileID: 0}
-  input: {fileID: 0}
-  errorMessage: {fileID: 0}
-  colorFeedbackImage: {fileID: 0}
+  urlInputField: {fileID: 2727200524326025391}
+  input: {fileID: 8217279611143772481}
+  errorMessage: {fileID: 2335253490340609670}
+  colorFeedbackImage: {fileID: 7461859768636553765}
   defaultColor: {r: 0.8745098, g: 0.9098039, b: 0.9490197, a: 1}
   warningColor: {r: 1, g: 0.65723264, b: 0.67298067, a: 1}
 --- !u!114 &3169139170002022083

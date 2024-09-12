@@ -1,0 +1,207 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1762811913447571165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8942052645519180280}
+  - component: {fileID: 6731469812728504720}
+  - component: {fileID: 6952782567475305714}
+  - component: {fileID: -5093186732130595199}
+  - component: {fileID: -2468234292356823431}
+  - component: {fileID: 258519666352606205}
+  - component: {fileID: 5825035565799434744}
+  - component: {fileID: -6121453874124892339}
+  - component: {fileID: 219502633430572450}
+  m_Layer: 0
+  m_Name: SensorsVochtigheid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8942052645519180280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6731469812728504720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7673c97fdbab9d44b9cad278fdb3ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isenabled: 1
+  tileSize: 1000
+  layerPriority: 0
+  Datasets:
+  - Description: 
+    geoLOD: 
+    path: https://platform-urbanreleaf.iccs.gr/api/public/observations?city=Utrecht&observation_type=Relative%20Humidity
+    pathQuery: 
+    maximumDistance: 10000
+    maximumDistanceSquared: 0
+    enabled: 1
+  pauseLoading: 0
+  onLayerEnabled:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  compressLoadedTextures: 0
+  projectorPrefab: {fileID: 4500353898809890024, guid: d62ffe26c4958754e9ee3be0a03b28f6,
+    type: 3}
+  onLogMessage:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6952782567475305714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9483b6a6c1d04af4587a0940f5e2738e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StaticSensorData: 0
+  propertyType: 2
+  Maximum: 100
+  Minimum: 0
+  MaxColor: {r: 1, g: 0, b: 0.7892847, a: 1}
+  MinColor: {r: 0, g: 0.6230023, b: 1, a: 1}
+  HexagonSelectionPrefabEmpty: {fileID: 163732822759528096, guid: 96759158917151048a44df37d28d88d9,
+    type: 3}
+  HexagonSelectionPrefabValue: {fileID: 163732822759528096, guid: e117150540d8b5f44afcf333eb19bb4b,
+    type: 3}
+--- !u!114 &-5093186732130595199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities: []
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &-2468234292356823431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldTransformShifter: {fileID: 258519666352606205}
+  referenceCoordinateSystem: 2
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &258519666352606205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5825035565799434744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ea0481d59678846a64ecaf6ba21187, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 8621565738462384234, guid: bb5cfe0f7e3f71b44a0c8473aec224e9,
+    type: 3}
+--- !u!114 &-6121453874124892339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38fe46b8dda3fda4db70f655d0b3af43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: a3423cc30b04fd74caa657b5830b8985
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &219502633430572450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd667b8091076344b559d357447d06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

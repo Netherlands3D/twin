@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Address Search
   m_EditorClassIdentifier: 
-  Id: address-search
+  data:
+    Id: zoeken-op-adres
+    IsEnabled: 0
   Title: Zoeken op adres
   Caption: Vrij beschikbaar
+  Header: 
   Description: 
   configuration: {fileID: 0}
-  isEnabled: 0
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

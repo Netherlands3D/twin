@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Screenshots
   m_EditorClassIdentifier: 
-  Id: screenshot
+  data:
+    Id: maak-screenshots
+    IsEnabled: 1
   Title: Maak screenshots
   Caption: 
   Header: Maak hoog-resolutie schermafbeeldingen
@@ -20,7 +22,6 @@ MonoBehaviour:
     is het ook mogelijk verschillende onderdelen uit de interface wel of niet op
     te nemen in de afbeelding.
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls: []

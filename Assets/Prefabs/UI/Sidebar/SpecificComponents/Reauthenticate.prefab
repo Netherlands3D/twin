@@ -2846,8 +2846,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 276.98386, y: 0}
-  m_SizeDelta: {x: 453.9677, y: 55.200996}
+  m_AnchoredPosition: {x: 189.51585, y: 7.5}
+  m_SizeDelta: {x: 279.0317, y: 51.836}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5741188382167558739
 CanvasRenderer:
@@ -4325,9 +4325,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 666286390342822967}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -20.466629, y: -28.2}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -20.466629, y: 1.3999996}
   m_SizeDelta: {x: 23.683, y: 23.683}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &101702923442175094
@@ -4868,7 +4868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 172.01585, y: -272.07745}
+  m_AnchoredPosition: {x: 172.01585, y: -117.13655}
   m_SizeDelta: {x: 344.0317, y: 111.8815}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1830149672476884356
@@ -4891,7 +4891,6 @@ GameObject:
   - component: {fileID: 1831621874971572128}
   - component: {fileID: 4187864944359192514}
   - component: {fileID: 5129465039716766964}
-  - component: {fileID: 99771650584685797}
   m_Layer: 5
   m_Name: CredentialError
   m_TagString: Untagged
@@ -4918,8 +4917,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 259.48386, y: -277.3568}
-  m_SizeDelta: {x: 518.9677, y: 165.342}
+  m_AnchoredPosition: {x: 172.01585, y: -143.86679}
+  m_SizeDelta: {x: 344.0317, y: 165.342}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1831621874971572128
 CanvasRenderer:
@@ -4977,32 +4976,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &99771650584685797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8681879202439052226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 50
-    m_Right: 15
-    m_Top: 0
-    m_Bottom: 14
-  m_ChildAlignment: 0
-  m_Spacing: 8.33
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &8742818313449060799
 GameObject:
   m_ObjectHideFlags: 0
@@ -5037,8 +5010,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 276.98386, y: -107.43649}
-  m_SizeDelta: {x: 453.9677, y: 87.811}
+  m_AnchoredPosition: {x: 189.51585, y: -82.371}
+  m_SizeDelta: {x: 279.0317, y: 64.029}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6359281764194147172
 CanvasRenderer:
@@ -5135,7 +5108,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0.00064086914, w: 0}
+  m_margin: {x: 0, y: -13.394695, z: 0.00064086914, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6220,17 +6193,17 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 45.25
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -6245,7 +6218,7 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -18.6494
       objectReference: {fileID: 0}
     - target: {fileID: 2083294629274030569, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}

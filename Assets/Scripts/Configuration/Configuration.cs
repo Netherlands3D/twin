@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
-        [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207,462945, 0);
+        [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
         public ConfigurationSource Source { get; private set; } = ConfigurationSource.None;
 
@@ -48,12 +49,13 @@ namespace Netherlands3D.Twin.Configuration
                 OnOriginChanged.Invoke(roundedValue);
             }
         }
-        
+
         /// <summary>
         /// By default, the options to change settings are enabled for the user.
         /// The configuration file can disable this.
         /// </summary>
         private bool allowUserSettings = true;
+
         public bool AllowUserSettings
         {
             get => allowUserSettings;
@@ -69,6 +71,7 @@ namespace Netherlands3D.Twin.Configuration
         /// loaded from the URL or from the Configuration File.
         /// </summary>
         private bool shouldStartSetup = true;
+
         public bool ShouldStartSetup
         {
             get => shouldStartSetup;
@@ -279,6 +282,35 @@ namespace Netherlands3D.Twin.Configuration
                 functionality.IsEnabled = functionalityIdentifiers.Contains(functionality.Id);
                 if (functionality.IsEnabled) Debug.Log($"Enabled functionality '{functionality.Id}' from URL");
             }
+        }
+
+        private void LoadFunctionalitiesFromProject(ProjectData changedData)
+        {
+            foreach (var savedData in changedData.functionalities)
+            {
+                var savedId = savedData.Id;
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Data.Id == savedId);
+                if (matchingFunctionality != null)
+                {
+                    matchingFunctionality.Data = savedData;
+                    matchingFunctionality.IsEnabled = savedData.IsEnabled;
+                }
+            }
+
+            AddFunctionalityDataToProject(); //re add missing functionalities to project, in case the project did not have a specific functionalityData
+        }
+
+        public void AddFunctionalityDataToProject()
+        {
+            foreach (var functionality in Functionalities)
+            {
+                ProjectData.Current.AddFunctionality(functionality.Data);
+            }
+        }
+
+        public void AddProjectDataChangedListener()
+        {
+            ProjectData.Current.OnDataChanged.AddListener(LoadFunctionalitiesFromProject);
         }
     }
 }
