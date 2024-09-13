@@ -9,17 +9,17 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class OBJPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
-        [SerializeField, JsonProperty] private Uri data;
+        [SerializeField, JsonProperty] private Uri objFile;
 
         [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
 
         [JsonIgnore]
-        public Uri Data
+        public Uri ObjFile
         {
-            get => data;
+            get => objFile;
             set
             {
-                data = value;
+                objFile = value;
                 OnDataChanged.Invoke(value);
             }
         }
@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             return new List<LayerAsset>()
             {
-                new (this, data != null ? data : null)
+                new (this, objFile != null ? objFile : null)
             };
         }
     }

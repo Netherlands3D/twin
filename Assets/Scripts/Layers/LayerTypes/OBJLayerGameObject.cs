@@ -52,8 +52,8 @@ namespace Netherlands3D.Twin.Layers
             /// the obj-importer deletes the obj-file after importing.
             /// because we want to keep the file, we let the importer read a copy of the file
             /// the copying can be removed after the code for the importer is changed
-            string originalFilename = Path.Combine(Application.persistentDataPath, propertyData.Data.LocalPath.TrimStart('/', '\\'));
-            string copiedFilename = Path.Combine(Application.persistentDataPath, propertyData.Data.LocalPath.TrimStart('/', '\\'))+"_temp";
+            string originalFilename = Path.Combine(Application.persistentDataPath, propertyData.ObjFile.LocalPath.TrimStart('/', '\\'));
+            string copiedFilename = Path.Combine(Application.persistentDataPath, propertyData.ObjFile.LocalPath.TrimStart('/', '\\'))+"_temp";
             File.Copy(originalFilename, copiedFilename);
 
             importer.objFilePath = copiedFilename ;

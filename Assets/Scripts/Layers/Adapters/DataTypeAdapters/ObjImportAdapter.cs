@@ -34,12 +34,12 @@ namespace Netherlands3D.Twin
         {
             var fullPath = localFile.LocalFilePath;
             var fileName = Path.GetFileName(fullPath);
-
+            Debug.Log("OBJ-adapter executes " + fileName);
             OBJLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
             var propertyData = newLayer.PropertyData as OBJPropertyData;
-            propertyData.Data = AssetUriFactory.CreateProjectAssetUri(fullPath);
+            propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
             
         }
 
