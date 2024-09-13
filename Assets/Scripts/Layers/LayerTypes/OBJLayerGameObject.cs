@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections;
@@ -20,6 +21,7 @@ namespace Netherlands3D.Twin.Layers
         public LayerPropertyData PropertyData=>propertyData;
 
         private ObjImporter.ObjImporter importer;
+        
 
         protected override void Start()
         {
@@ -43,20 +45,22 @@ namespace Netherlands3D.Twin.Layers
 
         private void StartImport()
         {
-            //List<LayerPropertyData> propertyList = new List<LayerPropertyData>();
-            //Layers.Properties.OBJPropertyData propertyData = new OBJPropertyData();
-            
-            //propertyList.Add(propertyData);
 
-           // LayerData = new ReferencedLayerData(localFile.LocalFilePath, "34882a73ff6122243a0e3e9811473e20", propertyList);
-
-            
             
             ConnectToImporter();
 
-            importer.objFilePath = Path.Combine(Application.persistentDataPath, propertyData.Data.LocalPath.TrimStart('/', '\\')); ;
+            /// the obj-importer deletes the obj-file after importing.
+            /// because we want to keep the file, we let the importer read a copy of the file
+            /// the copying can be removed after the code for the importer is changed
+            string originalFilename = Path.Combine(Application.persistentDataPath, propertyData.Data.LocalPath.TrimStart('/', '\\'));
+            string copiedFilename = Path.Combine(Application.persistentDataPath, propertyData.Data.LocalPath.TrimStart('/', '\\'))+"_temp";
+            File.Copy(originalFilename, copiedFilename);
+
+            importer.objFilePath = copiedFilename ;
             importer.mtlFilePath = "";
             importer.imgFilePath = "";
+
+            
 
             importer.BaseMaterial = baseMaterial;
             importer.createSubMeshes = createSubMeshes;
@@ -65,14 +69,12 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnOBJImported(GameObject returnedGameObject)
         {
-            //objfilename = string.Empty;
-            //mtlfilename = string.Empty;
-            //imgfilename = string.Empty;
+
             Debug.Log("finished obj-import");
             returnedGameObject.transform.parent = this.transform;
 
             if (importer != null) Destroy(importer.gameObject);
-            //AddLayerScriptToObj(returnedGameObject, null);
+           
         }
 
         private void ConnectToImporter()
@@ -84,23 +86,6 @@ namespace Netherlands3D.Twin.Layers
             Debug.Log("Connected to new ObjImporter");
         }
 
-        //private LayerGameObject AddLayerScriptToObj(GameObject parsedObj, ReferencedLayerData existingLayer)
-        //{
-        //    var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
-
-        //    parsedObj.transform.position = spawnPoint;
-
-        //    //var instantiator = parsedObj.AddComponent<HierarchicalObjectPropertySectionInstantiator>();
-        //    //instantiator.PropertySectionPrefab = defaultPropertySection;
-
-        //    parsedObj.AddComponent<MeshCollider>();
-        //    parsedObj.AddComponent<ToggleScatterPropertySectionInstantiator>();
-        //    var layerGameObject = parsedObj.AddComponent<HierarchicalObjectLayerGameObject>();
-        //    layerGameObject.LayerData = existingLayer;
-        //    parsedObj.AddComponent<WorldTransform>();
-
-        //    CreatedMoveableGameObject.Invoke(parsedObj);
-        //    return layerGameObject;
-        //}
+       
     }
 }

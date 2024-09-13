@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4013969559654378043}
   - component: {fileID: 2503999841313970645}
+  - component: {fileID: 1646213389209705716}
+  - component: {fileID: 8128677453936289607}
   m_Layer: 0
   m_Name: OBJLayer
   m_TagString: Untagged
@@ -44,5 +46,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e90ae85fbb6e04d973829e034985aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: 34882a73ff6122243a0e3e9811473e20
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
   baseMaterial: {fileID: 2100000, guid: 90fd983bb8ef51c438fb61a9453e74b8, type: 2}
   createSubMeshes: 0
+--- !u!114 &1646213389209705716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldTransformShifter: {fileID: 8128677453936289607}
+  referenceCoordinateSystem: 2
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8128677453936289607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
