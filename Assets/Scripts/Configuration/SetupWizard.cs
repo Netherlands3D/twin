@@ -49,9 +49,6 @@ namespace Netherlands3D.Twin.Configuration
 
             ProjectData.Current.OnCameraPositionChanged.Invoke(origin);
 
-            // TODO: Refactor this away
-            configuration.OnOriginChanged.Invoke(origin);
-
             functionalitiesPane.Init(configuration.Functionalities);
             functionalitiesPane.Toggled.AddListener(functionality => OnSettingsChanged.Invoke());
         }
@@ -65,9 +62,6 @@ namespace Netherlands3D.Twin.Configuration
             var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
             ProjectData.Current.CameraPosition = cameraCoordinate.Convert(CoordinateSystem.RDNAP).Points;
             
-            // TODO: Refactor this away
-            configuration.Origin = cameraCoordinate;
-
             //Update url with some cooldown (browsers do not like setting url too often)
             if(urlNeedsUpdate && Time.frameCount - lastUrlUpdate > urlUpdateFrameCooldown)
             {
