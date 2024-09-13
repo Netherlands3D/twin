@@ -91,7 +91,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
-            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);           
+            layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
         }
 
         private void OnDisable()
@@ -416,13 +416,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
-            {
                 OnLeftButtonDown(eventData);
-            }
             if (eventData.button == PointerEventData.InputButton.Right)
-            {
                 OnRightButtonDown(eventData);
-            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -440,12 +436,13 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void OnLeftButtonDown(PointerEventData eventData)
         {
             layerUIManager.DragStartOffset = (Vector2)transform.position - eventData.position;
-            referenceLayerUnderMouse = this;           
+            referenceLayerUnderMouse = this;
 
             //if the layer under mouse is already selected, this can be the beginning of a drag, so don't deselect anything yet. wait for the pointer up event that is not a drag
             waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
             if (Layer.IsSelected)
             {
+                //only one extra click on a selected layer should initiate the layer name editing
                 if (eventData.clickCount == 1 && eventData.pointerEnter == layerNameText.gameObject)
                 {
                     OnSelectInputField();
@@ -454,7 +451,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 return;
             }
 
-            ProcessLayerSelection();            
+            ProcessLayerSelection();
         }
 
         private void OnRightButtonDown(PointerEventData eventData)
