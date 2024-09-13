@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c9c16e225616452fafd554fc129f136, type: 3}
   m_Name: BuildingColorCSVImportAdapter
   m_EditorClassIdentifier: 
+  layerGameObjectPrefab: {fileID: 2205593157182618917, guid: c57dd4a997e79ce43895144d0702166c,
+    type: 3}
   csvReplacedMessageEvent:
     m_PersistentCalls:
       m_Calls:
@@ -42,7 +44,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  requiredHeaders:
-  - BagId
-  - HexColor
-  maxParsesPerFrame: 1000
