@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -38,13 +39,18 @@ namespace Netherlands3D.Twin.Configuration
 
         private void Start()
         {
-            originXField.text = configuration.Origin.Points[0].ToString(CultureInfo.InvariantCulture);
+            var origin = new Coordinate(CoordinateSystem.RDNAP, ProjectData.Current.CameraPosition);
+
+            originXField.text = origin.Points[0].ToString(CultureInfo.InvariantCulture);
             originXField.onEndEdit.AddListener(OnOriginXChanged);
 
-            originYField.text = configuration.Origin.Points[1].ToString(CultureInfo.InvariantCulture);
+            originYField.text = origin.Points[1].ToString(CultureInfo.InvariantCulture);
             originYField.onEndEdit.AddListener(OnOriginYChanged);
 
-            configuration.OnOriginChanged.Invoke(configuration.Origin);
+            ProjectData.Current.OnCameraPositionChanged.Invoke(origin);
+
+            // TODO: Refactor this away
+            configuration.OnOriginChanged.Invoke(origin);
 
             functionalitiesPane.Init(configuration.Functionalities);
             functionalitiesPane.Toggled.AddListener(functionality => OnSettingsChanged.Invoke());
@@ -57,6 +63,9 @@ namespace Netherlands3D.Twin.Configuration
 
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
             var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+            ProjectData.Current.CameraPosition = cameraCoordinate.Convert(CoordinateSystem.RDNAP).Points;
+            
+            // TODO: Refactor this away
             configuration.Origin = cameraCoordinate;
 
             //Update url with some cooldown (browsers do not like setting url too often)
@@ -73,9 +82,8 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void OnEnable()
         {
-            configuration.OnOriginChanged.AddListener(ValidateRdCoordinate);
-            configuration.OnOriginChanged.AddListener(UpdateInterfaceToNewOrigin);
-            configuration.OnTitleChanged.AddListener(UpdateShareUrlWhenTitleChanges);
+            ProjectData.Current.OnCameraPositionChanged.AddListener(ValidateRdCoordinate);
+            ProjectData.Current.OnCameraPositionChanged.AddListener(UpdateInterfaceToNewOrigin);
             foreach (var availableFunctionality in configuration.Functionalities)
             {
                 availableFunctionality.OnEnable.AddListener(UpdateShareUrlWhenFunctionalityChanges);
@@ -85,7 +93,7 @@ namespace Netherlands3D.Twin.Configuration
 
         private void ValidateRdCoordinate(Coordinate coordinate)
         {
-            var rd = coordinate.Convert(CoordinateSystem.RD);
+            var rd = coordinate.Convert(CoordinateSystem.RDNAP);
             var validRdCoordinates = rd.IsValid();
 
             originXField.textComponent.color = validRdCoordinates ? Color.black : Color.red;
@@ -98,9 +106,8 @@ namespace Netherlands3D.Twin.Configuration
         /// </summary>
         private void OnDisable()
         {
-            configuration.OnOriginChanged.RemoveListener(ValidateRdCoordinate);
-            configuration.OnOriginChanged.RemoveListener(UpdateInterfaceToNewOrigin);
-            configuration.OnTitleChanged.RemoveListener(UpdateShareUrlWhenTitleChanges);
+            ProjectData.Current.OnCameraPositionChanged.RemoveListener(ValidateRdCoordinate);
+            ProjectData.Current.OnCameraPositionChanged.RemoveListener(UpdateInterfaceToNewOrigin);
             foreach (var availableFunctionality in configuration.Functionalities)
             {
                 availableFunctionality.OnEnable.RemoveListener(UpdateShareUrlWhenFunctionalityChanges);
@@ -134,11 +141,6 @@ namespace Netherlands3D.Twin.Configuration
             UpdateShareUrl();
         }
 
-        private void UpdateShareUrlWhenTitleChanges(string title)
-        {
-            UpdateShareUrl();
-        }
-
         public void UpdateShareUrl()
         {
             urlNeedsUpdate = false;
@@ -155,15 +157,15 @@ namespace Netherlands3D.Twin.Configuration
         {
             int.TryParse(value, out int y);
 
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
+            var cameraPosition = Camera.main.transform.position;
+            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RD);
             cameraRD.Points[1] = y;
 
             var newCameraCoordinate = CoordinateConverter
                 .ConvertTo(cameraRD, CoordinateSystem.Unity)
                 .ToVector3();
 
-            newCameraCoordinate.y = Camera.main.transform.position.y;
+            newCameraCoordinate.y = cameraPosition.y;
 
             Camera.main.transform.position = newCameraCoordinate;
 
@@ -173,16 +175,16 @@ namespace Netherlands3D.Twin.Configuration
         private void OnOriginXChanged(string value)
         {
             int.TryParse(value, out int x);
-            
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            var cameraRD = cameraCoordinate.Convert(CoordinateSystem.RD);
+
+            var cameraPosition = Camera.main.transform.position;
+            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RD);
             cameraRD.Points[0] = x;
 
             var newCameraCoordinate = CoordinateConverter
                 .ConvertTo(cameraRD, CoordinateSystem.Unity)
                 .ToVector3();
 
-            newCameraCoordinate.y = Camera.main.transform.position.y;
+            newCameraCoordinate.y = cameraPosition.y;
 
             Camera.main.transform.position = newCameraCoordinate;
 
