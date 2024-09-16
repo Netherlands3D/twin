@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class ObjLayerGameObject : HierarchicalObjectLayerGameObject
+    public class ObjSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")] 
         [SerializeField] private Material baseMaterial;
@@ -20,16 +20,13 @@ namespace Netherlands3D.Twin.Layers
 
         private ObjImporter.ObjImporter importer;
 
-        protected override void Start()
+        private void Start()
         {
-            base.Start();
             StartImport();
         }
 
-        public override void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            base.LoadProperties(properties);
-
             var propertyData = properties.OfType<ObjPropertyData>().FirstOrDefault();
             if (propertyData == null) return;
 
@@ -71,7 +68,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            Debug.Log("finished obj-import");
             returnedGameObject.transform.parent = this.transform;
             AddLayerScriptToObj(returnedGameObject);
 

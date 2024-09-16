@@ -171,7 +171,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
-                case ObjLayerGameObject _:
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
