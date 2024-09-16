@@ -1,27 +1,24 @@
-using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class OBJLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class ObjLayerGameObject : HierarchicalObjectLayerGameObject
     {
-        [Header("Required input")]
+        [Header("Required input")] 
         [SerializeField] private Material baseMaterial;
+        [SerializeField] private ObjImporter.ObjImporter importerPrefab;
 
-        [Header("Settings")]
+        [Header("Settings")] 
         [SerializeField] private bool createSubMeshes = false;
-
-        private OBJPropertyData propertyData = new();
-        public LayerPropertyData PropertyData=>propertyData;
+        
+        private ObjPropertyData propertyData = new();
+        public LayerPropertyData PropertyData => propertyData;
 
         private ObjImporter.ObjImporter importer;
-        
 
         protected override void Start()
         {
@@ -29,11 +26,11 @@ namespace Netherlands3D.Twin.Layers
             StartImport();
         }
 
-       
-
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public override void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<OBJPropertyData>().FirstOrDefault();
+            base.LoadProperties(properties);
+
+            var propertyData = properties.OfType<ObjPropertyData>().FirstOrDefault();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -45,47 +42,56 @@ namespace Netherlands3D.Twin.Layers
 
         private void StartImport()
         {
+            DisposeImporter();
 
+            importer = Instantiate(importerPrefab);
+
+            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
+            var path = Path.Combine(Application.persistentDataPath, localPath);
             
-            ConnectToImporter();
+            ImportObj(path);
+        }
 
-            /// the obj-importer deletes the obj-file after importing.
-            /// because we want to keep the file, we let the importer read a copy of the file
-            /// the copying can be removed after the code for the importer is changed
-            string originalFilename = Path.Combine(Application.persistentDataPath, propertyData.ObjFile.LocalPath.TrimStart('/', '\\'));
-            string copiedFilename = Path.Combine(Application.persistentDataPath, propertyData.ObjFile.LocalPath.TrimStart('/', '\\'))+"_temp";
-            File.Copy(originalFilename, copiedFilename);
+        private void ImportObj(string path)
+        {
+            // the obj-importer deletes the obj-file after importing.
+            // because we want to keep the file, we let the importer read a copy of the file
+            // the copying can be removed after the code for the importer is changed
+            string copiedFilename = path + ".temp";
+            File.Copy(path, copiedFilename);
 
-            importer.objFilePath = copiedFilename ;
+            importer.objFilePath = copiedFilename;
             importer.mtlFilePath = "";
             importer.imgFilePath = "";
 
-            
-
             importer.BaseMaterial = baseMaterial;
             importer.createSubMeshes = createSubMeshes;
-            importer.StartImporting(OnOBJImported);
+            importer.StartImporting(OnObjImported);
         }
 
-        private void OnOBJImported(GameObject returnedGameObject)
+        private void OnObjImported(GameObject returnedGameObject)
         {
-
             Debug.Log("finished obj-import");
             returnedGameObject.transform.parent = this.transform;
+            AddLayerScriptToObj(returnedGameObject);
 
-            if (importer != null) Destroy(importer.gameObject);
-           
+            DisposeImporter();
         }
 
-        private void ConnectToImporter()
+        private void DisposeImporter()
         {
             if (importer != null) Destroy(importer.gameObject);
-
-            importer = new GameObject().AddComponent<ObjImporter.ObjImporter>();
-
-            Debug.Log("Connected to new ObjImporter");
         }
+        
+        private void AddLayerScriptToObj(GameObject parsedObj)
+        {
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
 
-       
+            gameObject.transform.position = spawnPoint;
+
+            parsedObj.AddComponent<MeshCollider>();
+
+            // CreatedMoveableGameObject.Invoke(parsedObj);
+        }
     }
 }

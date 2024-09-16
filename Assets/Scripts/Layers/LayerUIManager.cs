@@ -169,9 +169,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             switch (layer)
             {
                 case CartesianTileLayerGameObject _:
-                    return layerTypeSprites[1];
                 case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
+                case ObjLayerGameObject _:
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
@@ -186,8 +186,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[8];
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
-                case OBJLayerGameObject _:
-                    return layerTypeSprites[3];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];

@@ -228,7 +228,6 @@ namespace Netherlands3D.Twin.Layers
         public IEnumerable<LayerAsset> GetAssets()
         {
             IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
-            Debug.Log(layerProperties);
             if (layerProperties != null)
             {
                 assetsOfCurrentLayer = layerProperties

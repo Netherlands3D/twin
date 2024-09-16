@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
     public class ObjImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private OBJLayerGameObject layerPrefab;
+        [SerializeField] private ObjLayerGameObject layerPrefab;
 
         public bool Supports(LocalFile localFile)
         {
@@ -20,10 +20,10 @@ namespace Netherlands3D.Twin
         {
             var fullPath = localFile.LocalFilePath;
             var fileName = Path.GetFileName(fullPath);
-            OBJLayerGameObject newLayer = Instantiate(layerPrefab);
+            ObjLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
-            var propertyData = newLayer.PropertyData as OBJPropertyData;
+            var propertyData = newLayer.PropertyData as ObjPropertyData;
             propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
     }

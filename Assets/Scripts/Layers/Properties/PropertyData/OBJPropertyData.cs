@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class OBJPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
+    public class ObjPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
         [SerializeField, JsonProperty] private Uri objFile;
 
