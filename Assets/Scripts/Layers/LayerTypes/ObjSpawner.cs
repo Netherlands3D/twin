@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            returnedGameObject.transform.parent = this.transform;
+            returnedGameObject.transform.SetParent(this.transform, false);
             AddLayerScriptToObj(returnedGameObject);
 
             DisposeImporter();
