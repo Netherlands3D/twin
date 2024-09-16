@@ -134,11 +134,14 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         }
 
         private void OnInputFieldChanged(string newName)
-        {         
-            Layer.Name = newName;
-            layerNameText.text = newName;
+        {
             layerNameField.gameObject.SetActive(false);
             layerNameText.gameObject.SetActive(true);
+
+            if (string.IsNullOrEmpty(newName)) return;
+
+            Layer.Name = newName;
+            layerNameText.text = newName;           
         }
         
         private void Start()
