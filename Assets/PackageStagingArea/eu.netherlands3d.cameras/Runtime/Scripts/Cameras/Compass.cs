@@ -31,6 +31,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private InputAction rotateStartAction;
         private InputAction rotateAction;
         private InputActionMap cameraActionMap;
+        private Action<InputAction.CallbackContext> onUpdateArrow;
 
         private void Awake()
         {
@@ -45,10 +46,12 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             rotateStartAction = cameraActionMap.FindAction("RotateModifier");
             rotateAction = cameraActionMap.FindAction("Look");
             rotateStartAction.started += CancelAnimation;
-            rotateAction.started += UpdateArrow;
+
+            onUpdateArrow = c => UpdateArrow();
+            rotateAction.started += onUpdateArrow;
         }
 
-        private void UpdateArrow(InputAction.CallbackContext context)
+        private void UpdateArrow()
         {
             arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
             float angle;
@@ -83,7 +86,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
                 () => 
                 { 
                     cameraTransform.transform.rotation = Quaternion.Slerp(cameraTransform.transform.rotation, rotateTo, Time.deltaTime * snapSpeed);
-                    UpdateArrow(new InputAction.CallbackContext());
+                    UpdateArrow();
                 },
                 () => { UnlockTileHandlers(activeTileHandlers); }));
         }
@@ -125,7 +128,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private void OnDestroy()
         {
             rotateStartAction.started -= CancelAnimation;
-            rotateAction.started -= UpdateArrow;
+            rotateAction.started -= onUpdateArrow;
         }
     }
 }
