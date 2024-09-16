@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -110,10 +111,34 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateFoldout();
             RecalculateVisibleHierarchyRecursive();
         }
-        
-        private void OnInputFieldChanged(string newName)
+
+        private void OnSelectInputField()
         {
+            layerNameField.text = Layer.Name;
+            layerNameText.text = Layer.Name;
+            layerNameField.gameObject.SetActive(true);
+            layerNameText.gameObject.SetActive(false);
+            layerNameField.Select();
+            layerNameField.ActivateInputField();
+            StartCoroutine(WaitForNextFrame(() =>
+            {
+                layerNameField.caretPosition = layerNameField.text.Length;
+                layerNameField.selectionAnchorPosition = 0;
+            }));
+        }
+
+        private IEnumerator WaitForNextFrame(Action onNextFrame)
+        {            
+            yield return new WaitForEndOfFrame();
+            onNextFrame.Invoke();
+        }
+
+        private void OnInputFieldChanged(string newName)
+        {         
             Layer.Name = newName;
+            layerNameText.text = newName;
+            layerNameField.gameObject.SetActive(false);
+            layerNameText.gameObject.SetActive(true);
         }
         
         private void Start()
@@ -396,6 +421,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 OnRightButtonDown(eventData);
         }
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!layerUIManager.DragGhost && !Layer.IsSelected)
+                SetHighlight(InteractionState.Hover);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!Layer.IsSelected)
+                SetHighlight(InteractionState.Default);
+        }
+
         private void OnLeftButtonDown(PointerEventData eventData)
         {
             layerUIManager.DragStartOffset = (Vector2)transform.position - eventData.position;
@@ -405,6 +442,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
             if (Layer.IsSelected)
             {
+                //only one extra click on a selected layer should initiate the layer name editing
+                if (eventData.clickCount == 1 && eventData.pointerEnter == layerNameText.gameObject)
+                {
+                    OnSelectInputField();
+                }
                 waitForFullClickToDeselect = true;
                 return;
             }
@@ -667,19 +709,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public static bool SequentialSelectionModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!layerUIManager.DragGhost && !Layer.IsSelected)
-                SetHighlight(InteractionState.Hover);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (!Layer.IsSelected)
-                SetHighlight(InteractionState.Default);
-        }
+        }      
 
         private void OnDestroy()
         {
