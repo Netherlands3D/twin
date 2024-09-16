@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin
         /// <param name="url">Url to file or service</param>
         public void DetermineAdapter(string url)
         {
-            
+            TargetUrl = url;
             DetermineAdapter();
         }
         public void DetermineAdapter()
@@ -70,19 +70,10 @@ namespace Netherlands3D.Twin
             // Start by download the file, so we can do a detailed check of the content to determine the type
             var urlAndData = new LocalFile()
             {
-                SourceUrl = "",
+                SourceUrl = url,
                 LocalFilePath = ""
             };
-            if (url.StartsWith("http"))
-            {
-                urlAndData.SourceUrl = url;
-                TargetUrl = url;
-                yield return DownloadDataToLocalCache(urlAndData);
-            }
-            else
-            {
-                urlAndData.LocalFilePath = url;
-            }
+            yield return DownloadDataToLocalCache(urlAndData);
 
             // No local cache? Download failed.
             if(string.IsNullOrEmpty(urlAndData.LocalFilePath))
