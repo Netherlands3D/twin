@@ -16,7 +16,6 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         public Color NorthColor;
         
         private Camera cameraComponent;
-        private FreeCamera freeCamera;
         private Transform cameraTransform;
         private bool cancelingAnimation = false;
         private Image arrowImage;
@@ -29,13 +28,13 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         [SerializeField] private float snapSpeed = 10f;
 
         [Header("Input")][SerializeField] private InputActionAsset inputActionAsset;
+        private InputAction rotateStartAction;
         private InputAction rotateAction;
         private InputActionMap cameraActionMap;
 
         private void Awake()
         {
             cameraComponent = GetComponent<Camera>();
-            freeCamera = GetComponent<FreeCamera>();
             cameraTransform = cameraComponent.transform;
 
             arrowImage = arrowTransform.GetComponent<Image>();
@@ -43,23 +42,22 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
 
             //when user rotates, cancel the animation if active
             cameraActionMap = inputActionAsset.FindActionMap("Camera");
-            rotateAction = cameraActionMap.FindAction("RotateModifier");
-            rotateAction.started += CancelAnimation;
+            rotateStartAction = cameraActionMap.FindAction("RotateModifier");
+            rotateAction = cameraActionMap.FindAction("Look");
+            rotateStartAction.started += CancelAnimation;
+            rotateAction.started += UpdateArrow;
         }
 
-        private void Update()
+        private void UpdateArrow(InputAction.CallbackContext context)
         {
             arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
             float angle;
-            if(cameraComponent.orthographic)
-            {               
-                angle = Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up);                
-            }
+            if (cameraComponent.orthographic)
+                angle = Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up);
             else
-            {                                
-                angle = Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;                
-            }            
-            if(Mathf.Abs(angle) < northAngleMargin)
+                angle = Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;
+
+            if (Mathf.Abs(angle) < northAngleMargin)
                 arrowImage.color = NorthColor;
             else
                 arrowImage.color = arrowColor;
@@ -82,7 +80,11 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
 
             StartCoroutine(CameraAnimationLoop(rotateTo, cameraTransform,
                 () => { LockTileHandlers(activeTileHandlers); },
-                () => { cameraTransform.transform.rotation = Quaternion.Slerp(cameraTransform.transform.rotation, rotateTo, Time.deltaTime * snapSpeed); },
+                () => 
+                { 
+                    cameraTransform.transform.rotation = Quaternion.Slerp(cameraTransform.transform.rotation, rotateTo, Time.deltaTime * snapSpeed);
+                    UpdateArrow(new InputAction.CallbackContext());
+                },
                 () => { UnlockTileHandlers(activeTileHandlers); }));
         }
 
@@ -106,7 +108,6 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
 
         private void LockTileHandlers(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers)
         {
-            freeCamera.LockDragging(true);
             foreach (var handler in activeTileHandlers)
             {
                 handler.enabled = false;
@@ -119,12 +120,12 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             {
                 handler.enabled = true;
             }
-            freeCamera.LockDragging(false);
         }
 
         private void OnDestroy()
         {
-            rotateAction.started -= CancelAnimation;
+            rotateStartAction.started -= CancelAnimation;
+            rotateAction.started -= UpdateArrow;
         }
     }
 }
