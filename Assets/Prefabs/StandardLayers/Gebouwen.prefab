@@ -57,7 +57,7 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.04.20/lod1.2/buildings-{x}_{y}.1.2.bin
     pathQuery: 
-    maximumDistance: 10000
+    maximumDistance: 100000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
@@ -159,7 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: -1431062917293908258}
   referenceCoordinateSystem: 2
   onPreShift:
