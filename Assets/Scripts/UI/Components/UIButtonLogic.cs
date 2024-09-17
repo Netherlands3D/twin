@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,10 +17,12 @@ namespace Netherlands3D.Twin
         public Color DisabledTextColor = Color.grey;
         public TextMeshProUGUI ButtonText;
         public GameObject Icon;
+        [SerializeField]private Button ThisButton;
 
         // Start is called before the first frame update
         void Start()
         {
+            ThisButton = this.gameObject.GetComponent<Button>();
             if (ButtonText != null)
             {
                 ButtonText.overrideColorTags = true;
@@ -29,6 +32,14 @@ namespace Netherlands3D.Twin
             {
                 Icon.GetComponent<Image>().color = BaseTextColor;
             }
+           
+                ButtonState(ThisButton.IsInteractable());
+            
+        }
+
+        private void Update()
+        {
+            ButtonState(ThisButton.IsInteractable());
         }
 
         public void PointerDown()
@@ -65,6 +76,7 @@ namespace Netherlands3D.Twin
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }
+            ButtonState(ThisButton.IsInteractable());
         }
 
         public void ButtonState(bool Enabled )
@@ -95,6 +107,7 @@ namespace Netherlands3D.Twin
                 }
             }
         }
+      
 
     }
 }
