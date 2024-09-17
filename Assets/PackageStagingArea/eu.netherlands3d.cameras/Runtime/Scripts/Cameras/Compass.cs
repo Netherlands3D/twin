@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using GG.Extensions;
-using Netherlands3D.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -14,31 +12,25 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
     {
         public RectTransform arrowTransform;
         public Color NorthColor;
-        
-        private Camera cameraComponent;
-        private Transform cameraTransform;
-        private bool cancelingAnimation = false;
-        private Image arrowImage;
-        private Color arrowColor;
-
-        private const float directionMargin = 0.1f;
-        private const float northAngleMargin = 1.0f;
-
-        [Header("Animation tweaks")]
-        [SerializeField] private float snapSpeed = 10f;
 
         [Header("Input")][SerializeField] private InputActionAsset inputActionAsset;
         private InputAction rotateStartAction;
         private InputAction rotateAction;
         private InputActionMap cameraActionMap;
         private Action<InputAction.CallbackContext> onUpdateArrow;
+        private Sequence animationSequence;
+        private Camera cameraComponent;
+        private Transform cameraTransform;
+        private Image arrowImage;
+        private Color arrowColor;      
+        private const float northAngleMargin = 1.0f;
+        private const float animationDuration = 1.0f;        
 
         private void Awake()
         {
             cameraComponent = GetComponent<Camera>();
-            cameraTransform = cameraComponent.transform;
-
             arrowImage = arrowTransform.GetComponent<Image>();
+            cameraTransform = cameraComponent.transform;            
             arrowColor = arrowImage.color;
 
             //when user rotates, cancel the animation if active
@@ -46,7 +38,6 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
             rotateStartAction = cameraActionMap.FindAction("RotateModifier");
             rotateAction = cameraActionMap.FindAction("Look");
             rotateStartAction.started += CancelAnimation;
-
             onUpdateArrow = c => UpdateArrow();
             rotateAction.started += onUpdateArrow;
         }
@@ -54,21 +45,27 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private void UpdateArrow()
         {
             arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
-            float angle;
-            if (cameraComponent.orthographic)
-                angle = Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up);
-            else
-                angle = Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;
-
-            if (Mathf.Abs(angle) < northAngleMargin)
-                arrowImage.color = NorthColor;
-            else
-                arrowImage.color = arrowColor;
+            float angle = cameraComponent.orthographic ? 
+                Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up) : 
+                Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;            
+            arrowImage.color = Mathf.Abs(angle) < northAngleMargin ? NorthColor : arrowColor;
         }
 
         public void SwitchToNorth()
         {
-            cancelingAnimation = false;
+            //set target rotation
+            Quaternion rotateTo = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+            rotateTo.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, rotateTo.eulerAngles.y, cameraTransform.eulerAngles.z);
+            StartAnimation(rotateTo);
+        }
+
+        private void StartAnimation(Quaternion rotateTo)
+        {
+            // If the animation is playing, quickly complete it and then start a new one
+            if (animationSequence != null && animationSequence.IsPlaying())
+            {
+                animationSequence.Complete(true);
+            }
 
             // Find the tile handlers that are currently active, to disable them at the start of the animation
             // and reactivate them after the animation to prevent glitching from LOD switches
@@ -77,53 +74,43 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
                 FindObjectsSortMode.None
             );
 
-            //set target rotation
-            Quaternion rotateTo = Quaternion.LookRotation(Vector3.forward, Vector3.up);
-            rotateTo.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, rotateTo.eulerAngles.y, cameraTransform.eulerAngles.z);
-
-            StartCoroutine(CameraAnimationLoop(rotateTo, cameraTransform,
-                () => { LockTileHandlers(activeTileHandlers); },
-                () => 
-                { 
-                    cameraTransform.transform.rotation = Quaternion.Slerp(cameraTransform.transform.rotation, rotateTo, Time.deltaTime * snapSpeed);
-                    UpdateArrow();
-                },
-                () => { UnlockTileHandlers(activeTileHandlers); }));
+            animationSequence = CreateAnimationSequence(                
+                rotateTo,
+                activeTileHandlers
+            );
+            animationSequence.Play();
         }
 
-        private IEnumerator CameraAnimationLoop(Quaternion to, Transform cam, Action onStart, Action onUpdate, Action onEnd)
+        private Sequence CreateAnimationSequence(Quaternion rotateTo, CartesianTiles.TileHandler[] activeTileHandlers)
         {
-            WaitForUpdate wfu = new WaitForUpdate();
-            onStart.Invoke();
-            while(Quaternion.Angle(cam.rotation, to) > directionMargin && !cancelingAnimation)
-            {
-                onUpdate.Invoke();
-                yield return wfu;
-            }
-            onEnd.Invoke();
-            cancelingAnimation = false;
-        }
+            Sequence sequence = DOTween.Sequence(cameraTransform);
+            sequence.SetEase(Ease.InOutCubic);
+            sequence.AppendCallback(() => SetTileHandlersEnabled(activeTileHandlers, false)); 
+            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration).OnUpdate(() => UpdateArrow()));
+            sequence.AppendCallback(() => SetTileHandlersEnabled(activeTileHandlers, true));
+
+            // Ensure animation sequence is nulled after completing to clean up
+            sequence.OnComplete(() => animationSequence = null);
+
+            return sequence;
+        }   
 
         public void CancelAnimation(InputAction.CallbackContext context)
         {
-            cancelingAnimation = true;
+            //in case of user cancelation we want to keep the orientation before canceling
+            //otherwise the camera will snap facing north giving an instant transition
+            Vector3 angles = cameraTransform.eulerAngles;
+            animationSequence.Complete(true);
+            cameraTransform.eulerAngles = angles;
         }
 
-        private void LockTileHandlers(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers)
+        private void SetTileHandlersEnabled(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers, bool enabled)
         {
             foreach (var handler in activeTileHandlers)
             {
-                handler.enabled = false;
+                handler.enabled = enabled;
             }
-        }
-
-        private void UnlockTileHandlers(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers)
-        {
-            foreach (var handler in activeTileHandlers)
-            {
-                handler.enabled = true;
-            }
-        }
+        }        
 
         private void OnDestroy()
         {
