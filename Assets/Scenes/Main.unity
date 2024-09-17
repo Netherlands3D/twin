@@ -18,8 +18,8 @@ RenderSettings:
   m_FogColor: {r: 0.9490197, g: 0.9686275, b: 1, a: 0.7607843}
   m_FogMode: 1
   m_FogDensity: 0.01
-  m_LinearFogStart: 7500
-  m_LinearFogEnd: 8500
+  m_LinearFogStart: 19000
+  m_LinearFogEnd: 20000
   m_AmbientSkyColor: {r: 0.036667857, g: 0.048546024, b: 0.0754717, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
@@ -520,7 +520,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowTransform: {fileID: 7732943800119484194}
   NorthColor: {r: 0.46540874, g: 0.106839046, b: 0.106839046, a: 1}
-  snapSpeed: 10
   inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}
 --- !u!1001 &859080883
@@ -1094,6 +1093,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5315891981602308677, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: maxCameraHeight
+      value: 20000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: far clip plane
+      value: 20000
+      objectReference: {fileID: 0}
     - target: {fileID: 5315891981602308679, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
