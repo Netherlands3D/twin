@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private Action<InputAction.CallbackContext> onUpdateArrow;
         private Sequence animationSequence;
         private Camera cameraComponent;
+        private FreeCamera freeCamera;
         private Transform cameraTransform;
         private Image arrowImage;
         private Color arrowColor;      
@@ -29,6 +30,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         private void Awake()
         {
             cameraComponent = GetComponent<Camera>();
+            freeCamera = cameraComponent.GetComponent<FreeCamera>();
             arrowImage = arrowTransform.GetComponent<Image>();
             cameraTransform = cameraComponent.transform;            
             arrowColor = arrowImage.color;
@@ -85,9 +87,17 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         {
             Sequence sequence = DOTween.Sequence(cameraTransform);
             sequence.SetEase(Ease.InOutCubic);
-            sequence.AppendCallback(() => SetTileHandlersEnabled(activeTileHandlers, false)); 
+            sequence.AppendCallback(() =>
+            {
+                freeCamera.LockDragging(true);
+                SetTileHandlersEnabled(activeTileHandlers, false);
+            });
             sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration).OnUpdate(() => UpdateArrow()));
-            sequence.AppendCallback(() => SetTileHandlersEnabled(activeTileHandlers, true));
+            sequence.AppendCallback(() =>
+            {
+                SetTileHandlersEnabled(activeTileHandlers, true);
+                freeCamera.LockDragging(false);
+            });
 
             // Ensure animation sequence is nulled after completing to clean up
             sequence.OnComplete(() => animationSequence = null);
@@ -105,7 +115,7 @@ namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime
         }
 
         private void SetTileHandlersEnabled(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers, bool enabled)
-        {
+        {            
             foreach (var handler in activeTileHandlers)
             {
                 handler.enabled = enabled;
