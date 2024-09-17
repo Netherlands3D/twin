@@ -1,8 +1,10 @@
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -66,8 +68,11 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
-            
-            newLayer.SetURL(localFilePath, localFile.SourceUrl);
+            var uri = localFile.SourceUrl.StartsWith("https://") || localFile.SourceUrl.StartsWith("https://")
+                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl)
+                : AssetUriFactory.CreateProjectAssetUri(localFile.SourceUrl);
+
+            newLayer.SetURL(localFilePath, uri);
         }
     }
 }

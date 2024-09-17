@@ -14,6 +14,8 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using netDxf.Tables;
+using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
@@ -61,10 +63,11 @@ namespace Netherlands3D.Twin.Layers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
-            if (urlProperty != null)
+            if (urlProperty != null && !string.IsNullOrEmpty(urlProperty.url))
             {
                 this.urlPropertyData = urlProperty;
-                StartCoroutine(RestoreGeoJsonLocalFile(urlProperty.url));
+                var uri = new Uri(urlProperty.url);
+                StartCoroutine(RestoreGeoJsonLocalFile(uri));
             }
         }
 
@@ -124,9 +127,9 @@ namespace Netherlands3D.Twin.Layers
         /// Sets URL and start a 'streaming' parse of the GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void SetURL(string path, string sourceUrl = "")
+        public void SetURL(string path, Uri sourceUrl)
         {
-            this.urlPropertyData.url = sourceUrl;
+            this.urlPropertyData.url = sourceUrl.ToString();
 
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
@@ -134,19 +137,26 @@ namespace Netherlands3D.Twin.Layers
             streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
         }
 
-        private IEnumerator RestoreGeoJsonLocalFile(string url)
+        private IEnumerator RestoreGeoJsonLocalFile(Uri url)
         {
+            if (url.IsStoredInProject())
+            {
+                // No download necessary, it is already here
+                SetURL(url.ToProjectPath(), url);
+                yield break;
+            }
+
             //create LocalFile so we can use it in the ParseGeoJSONStream function
             var uwr = UnityWebRequest.Get(url);
-            var optionalExtention = Path.GetExtension(url).Split("?")[0];
-            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
+            var optionalExtension = Path.GetExtension(url.LocalPath).Split("?")[0];
+            var guidFilename = Guid.NewGuid().ToString() + optionalExtension;
             string path = Path.Combine(Application.persistentDataPath, guidFilename);
 
             uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                SetURL(path);
+                SetURL(path, url);
             }
             else
             {

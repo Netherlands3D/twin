@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -43,10 +44,7 @@ namespace Netherlands3D.Twin.Layers
 
             importer = Instantiate(importerPrefab);
 
-            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            
-            ImportObj(path);
+            ImportObj(propertyData.ObjFile.ToProjectPath());
         }
 
         private void ImportObj(string path)
