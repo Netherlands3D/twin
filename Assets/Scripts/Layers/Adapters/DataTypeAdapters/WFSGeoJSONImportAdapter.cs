@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Netherlands3D.Web;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Netherlands3D.Twin.Layers;
 
 namespace Netherlands3D.Twin
@@ -122,12 +123,18 @@ namespace Netherlands3D.Twin
                 wfsVersion = defaultFallbackVersion;
             }
 
+            var parameters = new NameValueCollection();
+            uriBuilder.TryParseQueryString(parameters);
+
             // Set the required query parameters for the GetFeature request
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
             uriBuilder.SetQueryParameter("typeNames", featureType);
-            uriBuilder.SetQueryParameter("outputFormat", "geojson");
+            if (parameters.Get("outputFormat").ToLower() is not ("json" or "geojson"))
+            {
+                uriBuilder.SetQueryParameter("outputFormat", "geojson");
+            }
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
             return uriBuilder;
         }
