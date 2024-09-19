@@ -15,6 +15,9 @@ namespace Netherlands3D.Twin.Layers
     {
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
+        private bool randomizeColorPerFeature = false;
+        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
+
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
         public BatchedMeshInstanceRenderer PointRenderer3D
@@ -28,7 +31,7 @@ namespace Netherlands3D.Twin.Layers
                 pointRenderer3D = value;
             }
         }
-        
+
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
@@ -42,7 +45,10 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
-        
+
+            // Create visual with random color if enabled
+            UpdateMaterialInstance();
+
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(multiPoint, originalCoordinateSystem, PointRenderer3D);
@@ -57,7 +63,23 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-         /// <summary>
+        private void UpdateMaterialInstance()
+        {
+            // Create material with random color if randomize per feature is enabled
+            if (RandomizeColorPerFeature)
+            {
+                var randomColor = UnityEngine.Random.ColorHSV();
+                randomColor.a = LayerData.Color.a;
+
+                pointRenderer3D.Material.color = randomColor;
+                return;
+            }
+
+            // Default to material with layer color
+            pointRenderer3D.Material.color = LayerData.Color;
+        }
+
+        /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
         /// </summary>

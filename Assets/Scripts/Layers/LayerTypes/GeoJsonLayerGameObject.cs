@@ -287,7 +287,6 @@ namespace Netherlands3D.Twin.Layers
         
         private void VisualizeFeature(Feature feature)
         {
-            LoadDefaultValues();
             var originalCoordinateSystem = GetCoordinateSystem();
             switch (feature.Geometry.Type)
             {

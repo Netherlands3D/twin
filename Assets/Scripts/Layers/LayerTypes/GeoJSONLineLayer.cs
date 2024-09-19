@@ -18,6 +18,9 @@ namespace Netherlands3D.Twin.Layers
     {
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
+        private bool randomizeColorPerFeature = false;
+        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
+
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
@@ -30,7 +33,7 @@ namespace Netherlands3D.Twin.Layers
                 // Destroy(lineRenderer3D.gameObject);
                 lineRenderer3D = value;
             }
-        }
+        }       
 
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -46,6 +49,9 @@ namespace Netherlands3D.Twin.Layers
 
             var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
 
+            // Create visual with random color if enabled
+            UpdateMaterialInstance();
+
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
@@ -58,6 +64,22 @@ namespace Netherlands3D.Twin.Layers
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        private void UpdateMaterialInstance()
+        {
+            // Create material with random color if randomize per feature is enabled
+            if (RandomizeColorPerFeature)
+            {
+                var randomColor = UnityEngine.Random.ColorHSV();
+                randomColor.a = LayerData.Color.a;
+
+                lineRenderer3D.LineMaterial.color = randomColor;
+                return;
+            }
+
+            // Default to material with layer color
+            lineRenderer3D.LineMaterial.color = LayerData.Color;
         }
 
         /// <summary>
