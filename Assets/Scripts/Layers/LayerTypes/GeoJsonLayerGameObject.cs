@@ -64,8 +64,6 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            LoadDefaultValues();
-
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
@@ -289,6 +287,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void VisualizeFeature(Feature feature)
         {
+            LoadDefaultValues();
             var originalCoordinateSystem = GetCoordinateSystem();
             switch (feature.Geometry.Type)
             {

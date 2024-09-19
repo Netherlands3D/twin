@@ -28,8 +28,6 @@ namespace Netherlands3D.Twin.Layers
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
-            LoadDefaultValues();
-
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
