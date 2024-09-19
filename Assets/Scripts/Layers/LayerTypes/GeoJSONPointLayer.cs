@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers
             var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
 
             // Create visual with random color if enabled
-            UpdateMaterialInstance();
+            pointRenderer3D.Material = GetMaterialInstance();
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -63,20 +63,22 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-        private void UpdateMaterialInstance()
+        private Material GetMaterialInstance()
         {
+            Material featureMaterialInstance;
             // Create material with random color if randomize per feature is enabled
             if (RandomizeColorPerFeature)
             {
                 var randomColor = UnityEngine.Random.ColorHSV();
                 randomColor.a = LayerData.Color.a;
 
-                pointRenderer3D.Material.color = randomColor;
-                return;
+                featureMaterialInstance = new Material(pointRenderer3D.Material) { color = randomColor };
+                return featureMaterialInstance;
             }
 
             // Default to material with layer color
-            pointRenderer3D.Material.color = LayerData.Color;
+            featureMaterialInstance = new Material(pointRenderer3D.Material) { color = LayerData.Color };
+            return featureMaterialInstance;
         }
 
         /// <summary>

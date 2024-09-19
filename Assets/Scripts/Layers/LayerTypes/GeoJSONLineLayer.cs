@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin.Layers
             var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
 
             // Create visual with random color if enabled
-            UpdateMaterialInstance();
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
@@ -66,20 +66,22 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-        private void UpdateMaterialInstance()
+        private Material GetMaterialInstance()
         {
+            Material featureMaterialInstance;
             // Create material with random color if randomize per feature is enabled
             if (RandomizeColorPerFeature)
             {
                 var randomColor = UnityEngine.Random.ColorHSV();
                 randomColor.a = LayerData.Color.a;
 
-                lineRenderer3D.LineMaterial.color = randomColor;
-                return;
+                featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = randomColor };
+                return featureMaterialInstance;
             }
 
             // Default to material with layer color
-            lineRenderer3D.LineMaterial.color = LayerData.Color;
+            featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = LayerData.Color };
+            return featureMaterialInstance;
         }
 
         /// <summary>
