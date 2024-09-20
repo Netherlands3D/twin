@@ -54,26 +54,6 @@ namespace Netherlands3D.Interface
         private void FollowPointer()
         {
             rectTransform.position = Mouse.current.position.ReadValue();
-
-            SwapPivot();
-        }
-
-        private void SwapPivot()
-        {
-            var pivot = Vector2.zero;
-            //Swap pivot based on place in screen (to try to stay in the screen horizontally)
-            if (rectTransform.position.x + GetRectTransformBounds(rectTransform).size.x > Screen.width)
-            {
-                pivot.x = 1;
-            }
-
-            //Swap pivot based on place in screen (to try to stay in the screen vertically)
-            if (rectTransform.position.y + GetRectTransformBounds(rectTransform).size.y > Screen.height)
-            {
-                pivot.y = 1;
-            }
-
-            rectTransform.pivot = pivot;
         }
 
         public void AlignOnElement(RectTransform element)
@@ -82,14 +62,21 @@ namespace Netherlands3D.Interface
 
             lastTarget = currentTarget;
             currentTarget = element;
+        }
 
-            var elementCenter = GetRectTransformBounds(element).center;
-            var elementMax = GetRectTransformBounds(element).max;
+        private void UpdatePosition()
+        {
+            var elementCenter = GetRectTransformBounds(currentTarget).center;
+            var elementMax = GetRectTransformBounds(currentTarget).max;
+            var elementMin = GetRectTransformBounds(currentTarget).min;
+            Vector2 tooltipSize = GetRectTransformBounds(rectTransform).size;
+            Vector2 elementSize = GetRectTransformBounds(currentTarget).size;
+
+            var tooltipPosition = new Vector2(elementMax.x + offset.x, elementCenter.y + offset.y);
+            if (currentTarget.position.x > Screen.width * 0.5f)
+                tooltipPosition = new Vector2(elementMin.x - tooltipSize.x - offset.x, elementCenter.y + offset.y);
             
-            var tooltipPosition = new Vector2(elementMax.x, elementCenter.y) + offset;
             rectTransform.position = tooltipPosition;
-            
-            SwapPivot();
         }
 
         public void ShowMessage(string message = "Tooltip", RectTransform hoverTarget = null)
@@ -105,10 +92,7 @@ namespace Netherlands3D.Interface
 
             StartCoroutine(FitContent());
 
-            StartAnimation(1f, () => 
-            {
-               
-            });
+            StartAnimation(1f);
         }
 
         private IEnumerator FitContent()
@@ -154,7 +138,7 @@ namespace Netherlands3D.Interface
         {
             Sequence sequence = DOTween.Sequence(rectTransform);
             sequence.SetEase(scale > 0 ? Ease.OutBounce : Ease.InBack);            
-            sequence.Join(rectTransform.DOScale(scale, scale > 0 ? animationDuration : 0.5f * animationDuration));
+            sequence.Join(rectTransform.DOScale(scale, scale > 0 ? animationDuration : 0.5f * animationDuration).OnUpdate(() => UpdatePosition()));
 
             // Ensure animation sequence is nulled after completing to clean up
             sequence.OnComplete(() =>
