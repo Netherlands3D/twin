@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using TMPro;
@@ -14,7 +15,11 @@ namespace Netherlands3D.Interface
         
         private TextMeshProUGUI tooltiptext;
         private RectTransform rectTransform;
+        private RectTransform lastTarget;
+        private RectTransform currentTarget;
         private ContentSizeFitter contentSizeFitter;
+        private Sequence animationSequence;
+        private const float animationDuration = 0.25f;
         private Vector3[] worldCorners = new Vector3[4];
 
         #region Singleton
@@ -75,6 +80,9 @@ namespace Netherlands3D.Interface
         {
             if (!element) return;
 
+            lastTarget = currentTarget;
+            currentTarget = element;
+
             var elementCenter = GetRectTransformBounds(element).center;
             var elementMax = GetRectTransformBounds(element).max;
             
@@ -96,6 +104,11 @@ namespace Netherlands3D.Interface
             tooltiptext.text = message;
 
             StartCoroutine(FitContent());
+
+            StartAnimation(1f, () => 
+            {
+               
+            });
         }
 
         private IEnumerator FitContent()
@@ -106,8 +119,11 @@ namespace Netherlands3D.Interface
         }
 
         public void Hide()
-        {
-            gameObject.SetActive(false);
+        {   
+            StartAnimation(0f, ()=> {
+                if(lastTarget == currentTarget || currentTarget == null)
+                    gameObject.SetActive(false);
+            });
         }
 
         private Bounds GetRectTransformBounds(RectTransform transform)
@@ -120,6 +136,34 @@ namespace Netherlands3D.Interface
             }
 
             return bounds;
+        }
+
+
+        private void StartAnimation(float targetScale, Action onFinish = null)
+        {
+            // If the animation is playing, quickly complete it and then start a new one
+            if (animationSequence != null && animationSequence.IsPlaying())
+            {
+                animationSequence.Complete(true);
+            }  
+            animationSequence = CreateAnimationSequence(targetScale, onFinish);
+            animationSequence.Play();
+        }
+
+        private Sequence CreateAnimationSequence(float scale, Action onFinish = null)
+        {
+            Sequence sequence = DOTween.Sequence(rectTransform);
+            sequence.SetEase(scale > 0 ? Ease.OutBounce : Ease.InBack);            
+            sequence.Join(rectTransform.DOScale(scale, scale > 0 ? animationDuration : 0.5f * animationDuration));
+
+            // Ensure animation sequence is nulled after completing to clean up
+            sequence.OnComplete(() =>
+            {
+                onFinish?.Invoke();
+                animationSequence = null;                
+            });
+
+            return sequence;
         }
     }
 }
