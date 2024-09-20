@@ -131,7 +131,7 @@ namespace Netherlands3D.Twin
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
             uriBuilder.SetQueryParameter("typeNames", featureType);
-            if (parameters.Get("outputFormat").ToLower() is not ("json" or "geojson"))
+            if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 uriBuilder.SetQueryParameter("outputFormat", "geojson");
             }
