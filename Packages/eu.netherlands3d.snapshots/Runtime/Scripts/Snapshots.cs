@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using SFB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -117,7 +118,7 @@ namespace Netherlands3D.Snapshots
             var path = DetermineSaveLocation();
 
             //Use the jslib DownloadSnapshot to download the bytes as a file in WebGL/Browser
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR          
             DownloadSnapshot(bytes, bytes.Length, Path.GetFileName(path));
 #else
             File.WriteAllBytes(path, bytes);
@@ -154,19 +155,23 @@ namespace Netherlands3D.Snapshots
             string location = Application.persistentDataPath
                 + Path.DirectorySeparatorChar
                 + targetPath
-                + Path.DirectorySeparatorChar
-                + outputFileName;
+                + Path.DirectorySeparatorChar;
 
-#if UNITY_EDITOR
-            // Window for user to input desired path/name/filetype
-            location = EditorUtility.SaveFilePanel(
-                "Save texture as file",
-                "",
-                outputFileName,
-                fileType.ToString()
-            );
-#endif
-
+            if(!Directory.Exists(location)) {
+                Directory.CreateDirectory(location);
+                }
+                //+ outputFileName;
+//#if UNITY_WEBGL && !UNITY_EDITOR
+            StandaloneFileBrowser.SaveFilePanel("Save texture as file", location, outputFileName, FileType.ToString());
+//#elif UNITY_EDITOR
+//            // Window for user to input desired path/name/filetype
+//            location = EditorUtility.SaveFilePanel(
+//                "Save texture as file",
+//                "",
+//                outputFileName,
+//                fileType.ToString()
+//            );
+//#endif
             return location;
         }
     }
