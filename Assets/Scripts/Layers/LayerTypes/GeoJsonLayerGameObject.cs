@@ -47,11 +47,15 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void Awake()
         {
+            LoadDefaultValues();
+        }
+
+        protected virtual void LoadDefaultValues()
+        {
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             LayerData.Color = randomLayerColor;
-
         }
 
         /// <summary>
