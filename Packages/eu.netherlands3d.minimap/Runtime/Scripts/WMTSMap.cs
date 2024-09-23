@@ -208,15 +208,18 @@ namespace Netherlands3D.Minimap
 			var meterY = localClickPosition.y * startMeterInPixels;
 
             var rdCoordinate = new Coordinate(
-                CoordinateSystem.RD,
+                CoordinateSystem.RDNAP,
                 bottomLeft.x + meterX,
                 (float)topRight.y + meterY,
                 0.0d
             );
-			var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
-            unityCoordinate.y = Camera.main.transform.position.y;
 
-			if(moveCameraToClickedLocation && cameraMoveTarget){
+            if (!rdCoordinate.IsValid()) return;
+
+            var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+            unityCoordinate.y = Camera.main.transform.position.y;
+            
+            if (moveCameraToClickedLocation && cameraMoveTarget){
 				cameraMoveTarget.transform.position = unityCoordinate;	
 			}
 
