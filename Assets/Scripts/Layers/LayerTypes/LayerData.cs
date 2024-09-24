@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
@@ -12,13 +13,13 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class LayerData
     {
-        [SerializeField, JsonProperty] protected Guid UUID = Guid.NewGuid();
-        [SerializeField, JsonProperty] protected string name;
-        [SerializeField, JsonProperty] protected bool activeSelf = true;
-        [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        [SerializeField, JsonProperty] protected List<LayerData> children = new();
+        [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
+        [SerializeField, DataMember] protected string name;
+        [SerializeField, DataMember] protected bool activeSelf = true;
+        [SerializeField, DataMember] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [SerializeField, JsonProperty] protected List<LayerPropertyData> layerProperties = new();
+        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Root")]
     public class RootLayer : LayerData
     {
         [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();

@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "CartesianTileSubObjectColor")]
     public class CartesianTileSubObjectColorPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
-        [SerializeField, JsonProperty] private Uri data;
+        [DataMember] private Uri data;
         
         [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
         
