@@ -108,7 +108,7 @@ namespace Netherlands3D.Snapshots
 
         public void OnSnapshotDownloadComplete(string message)
         {
-            Debug.Log("File download complete: " + message);
+            //Debug.Log("File download complete: " + message);
         }
 
         private string DetermineSaveLocation()
