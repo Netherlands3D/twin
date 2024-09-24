@@ -82,7 +82,7 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator DownloadSnapshots(string timestamp, string path)
         {
-            yield return TakeSnapshotsAcrossFrames(timestamp, path);            
+            yield return TakeSnapshotsAcrossFrames(timestamp, path);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
             var archivePath = FetchArchivePath(timestamp);
@@ -93,7 +93,7 @@ namespace Netherlands3D.Snapshots
 
         public void OnSnapshotDownloadComplete(string message)
         {
-            Debug.Log("File download complete: " + message);
+            //Debug.Log("File download complete: " + message);
         }
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
