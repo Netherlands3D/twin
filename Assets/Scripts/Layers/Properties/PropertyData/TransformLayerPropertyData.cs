@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -8,12 +9,12 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Transform")]
     public class TransformLayerPropertyData : LayerPropertyData
     {
-        [SerializeField, JsonProperty] private Coordinate position;
-        [SerializeField, JsonProperty] private Vector3 eulerRotation;
-        [SerializeField, JsonProperty] private Vector3 localScale;
+        [DataMember] private Coordinate position;
+        [DataMember] private Vector3 eulerRotation;
+        [DataMember] private Vector3 localScale;
 
         [JsonIgnore]
         public Coordinate Position

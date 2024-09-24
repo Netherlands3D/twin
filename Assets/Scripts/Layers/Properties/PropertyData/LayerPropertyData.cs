@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -11,6 +12,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// Property data has a unique identifier for tracking which data belongs to this
         /// property; such as assets. 
         /// </summary>
-        [SerializeField, JsonProperty] public Guid UUID = Guid.NewGuid();
+        [DataMember] public Guid UUID = Guid.NewGuid();
     }
 }

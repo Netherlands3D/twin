@@ -7,6 +7,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ namespace Netherlands3D.Twin.Projects
         private readonly JsonSerializerSettings serializerSettings = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            SerializationBinder = new DataContractSerializationBinder(new DefaultSerializationBinder())
         };
 
         [SerializeField] private string DefaultFileName = "NL3D_Project_";
