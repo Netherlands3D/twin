@@ -12,8 +12,9 @@ namespace Netherlands3D.Snapshots
 {
     public class PeriodicSnapshots : MonoBehaviour
     {
+        //import this from filebrowser package which includes tghe download functions in its jslib
         [DllImport("__Internal")]
-        private static extern void DownloadSnapshot(byte[] array, int byteLength, string fileName);
+        private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
         [Serializable]
         public class Moment
@@ -81,13 +82,18 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator DownloadSnapshots(string timestamp, string path)
         {
-            yield return TakeSnapshotsAcrossFrames(timestamp, path);
+            yield return TakeSnapshotsAcrossFrames(timestamp, path);            
 
 #if UNITY_WEBGL && !UNITY_EDITOR
             var archivePath = FetchArchivePath(timestamp);
             var bytes = File.ReadAllBytes(archivePath);
-            DownloadSnapshot(bytes, bytes.Length, Path.GetFileName(archivePath));
+            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(archivePath), bytes, bytes.Length);
 #endif
+        }
+
+        public void OnSnapshotDownloadComplete(string message)
+        {
+            Debug.Log("File download complete: " + message);
         }
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
