@@ -16,7 +16,7 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
-        public UnityEvent<string> DownloadSnapshotComplete;
+        public UnityEvent<string> DownloadSnapshotComplete = new();
 
         [Serializable]
         public class Moment
