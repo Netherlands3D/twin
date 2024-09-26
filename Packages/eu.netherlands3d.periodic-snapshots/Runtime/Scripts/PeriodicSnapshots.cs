@@ -16,6 +16,8 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
+        public UnityEvent<string> DownloadSnapshotComplete;
+
         [Serializable]
         public class Moment
         {
@@ -93,7 +95,7 @@ namespace Netherlands3D.Snapshots
 
         public void OnSnapshotDownloadComplete(string message)
         {
-            //Debug.Log("File download complete: " + message);
+            DownloadSnapshotComplete.Invoke(message);
         }
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
