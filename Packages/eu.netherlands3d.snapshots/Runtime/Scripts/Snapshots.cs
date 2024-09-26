@@ -129,7 +129,7 @@ namespace Netherlands3D.Snapshots
                 + Path.DirectorySeparatorChar
                 + outputFileName;
 #else       
-            StandaloneFileBrowser.SaveFilePanel("Save texture as file", location, outputFileName, FileType.ToString());
+            StandaloneFileBrowser.SaveFilePanel("Save texture as file", "", outputFileName, FileType.ToString());
 #endif
             return location;
         }
