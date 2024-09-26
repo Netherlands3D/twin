@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 8717214517003222087}
   - component: {fileID: 2905702030834297639}
   - component: {fileID: 3970040958747475425}
+  - component: {fileID: 3168198496151457512}
   m_Layer: 5
   m_Name: CompassButton
   m_TagString: Untagged
@@ -277,6 +278,19 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &3168198496151457512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604895824299764615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Weergave naar noorden draaien
 --- !u!1 &7869458717022100725
 GameObject:
   m_ObjectHideFlags: 0
