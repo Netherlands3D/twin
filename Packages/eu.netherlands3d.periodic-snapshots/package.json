@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "eu.netherlands3d.sun": "1.0.0",
-    "eu.netherlands3d.snapshots": "1.0.1"
+    "eu.netherlands3d.snapshots": "1.0.1",
+    "eu.netherlands3d.filebrowser": "2.1.0"
   }
 }
