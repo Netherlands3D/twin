@@ -2,7 +2,6 @@
     "name": "eu.netherlands3d.snapshots.Runtime",
     "rootNamespace": "Netherlands3D.Snapshots",
     "references": [
-        "eu.netherlands3d.sun.Runtime",
         "eu.netherlands3d.filebrowser.Runtime"
     ],
     "includePlatforms": [],
