@@ -46,6 +46,8 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
 
+        public UnityEvent<string> DownloadSnapshotComplete = new();
+
         public int Width
         {
             get => width;
@@ -108,7 +110,7 @@ namespace Netherlands3D.Snapshots
 
         public void OnSnapshotDownloadComplete(string message)
         {
-            //Debug.Log("File download complete: " + message);
+            DownloadSnapshotComplete.Invoke(message);
         }
 
         private string DetermineSaveLocation()
