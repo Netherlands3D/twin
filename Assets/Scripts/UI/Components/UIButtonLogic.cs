@@ -16,31 +16,38 @@ namespace Netherlands3D.Twin
         public Color HighlightedTextColor = Color.white;
         public Color DisabledTextColor = Color.grey;
         public TextMeshProUGUI ButtonText;
-        public GameObject Icon;
-        [SerializeField]private Button ThisButton;
+        public Image Icon;
 
         // Start is called before the first frame update
         void Start()
         {
-            ThisButton = this.gameObject.GetComponent<Button>();
-            if (ButtonText != null)
+
+            if (this.GetComponent<Button>().interactable == true)
             {
-                ButtonText.overrideColorTags = true;
-                ButtonText.color = BaseTextColor;
+                if (ButtonText != null)
+                {
+                    ButtonText.overrideColorTags = true;
+                    ButtonText.color = BaseTextColor;
+                }
+                if (Icon != null)
+                {
+                    Icon.color = BaseTextColor;
+                }
             }
-            if(Icon != null)
+            else
             {
-                Icon.GetComponent<Image>().color = BaseTextColor;
+                if (ButtonText != null)
+                {
+                    ButtonText.overrideColorTags = true;
+                    ButtonText.color = DisabledTextColor;
+                }
+                if (Icon != null)
+                {
+                    Icon.color = DisabledTextColor;
+                }
             }
-           
-                ButtonState(ThisButton.IsInteractable());
-            
         }
 
-        private void Update()
-        {
-            ButtonState(ThisButton.IsInteractable());
-        }
 
         public void PointerDown()
         {
@@ -51,23 +58,39 @@ namespace Netherlands3D.Twin
             }
             if (Icon != null)
             {
-                Icon.GetComponent<Image>().color = HighlightedTextColor;
+                Icon.color = HighlightedTextColor;
             }
         }
 
         public void PointerUp()
         {
-            if (ButtonText != null)
+            if(this.GetComponent<Button>().interactable == true)
             {
-                ButtonText.overrideColorTags = true;
-                ButtonText.color = BaseTextColor;
+                if (ButtonText != null)
+                {
+                    ButtonText.overrideColorTags = true;
+                    ButtonText.color = BaseTextColor;
+                }
+                if (Icon != null)
+                {
+                    Icon.color = BaseTextColor;
+                }
             }
-            if (Icon != null)
+            else
             {
-                Icon.GetComponent<Image>().color = BaseTextColor;
+                if (ButtonText != null)
+                {
+                    ButtonText.overrideColorTags = true;
+                    ButtonText.color = DisabledTextColor;
+                }
+                if (Icon != null)
+                {
+                    Icon.color = DisabledTextColor;
+                }
             }
+           
             DeselectClickedButton(this.gameObject);
-            
+
         }
 
         private void DeselectClickedButton(GameObject button)
@@ -76,38 +99,24 @@ namespace Netherlands3D.Twin
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }
-            ButtonState(ThisButton.IsInteractable());
         }
 
-        public void ButtonState(bool Enabled )
+        public void Disable_Button()
         {
-            if(Enabled == true)
+            if (ButtonText != null)
             {
-                this.GetComponent<Button>().interactable = true;
-                {
-                    ButtonText.overrideColorTags = true;
-                    ButtonText.color = BaseTextColor;
-                }
-                if (Icon != null)
-                {
-                    Icon.GetComponent<Image>().color = BaseTextColor;
-                }
+                ButtonText.overrideColorTags = true;
+                ButtonText.color = DisabledTextColor;
             }
-
-            if(Enabled == false)
+            if (Icon != null)
             {
-                this.GetComponent<Button>().interactable = false;
-                {
-                    ButtonText.overrideColorTags = true;
-                    ButtonText.color = DisabledTextColor;
-                }
-                if (Icon != null)
-                {
-                    Icon.GetComponent<Image>().color = DisabledTextColor;
-                }
+                Icon.color = DisabledTextColor;
             }
         }
-      
 
+        public void Enable_Button()
+        {
+            PointerUp();
+        }
     }
 }

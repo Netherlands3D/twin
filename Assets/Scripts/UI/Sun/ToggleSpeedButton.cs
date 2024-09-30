@@ -19,6 +19,13 @@ namespace Netherlands3D.Twin
         public void SetInteractable(int dropdownValue)
         {
             button.interactable = dropdownValue == activeAtValue;
+            if (dropdownValue == 0)
+            {
+                button.GetComponent<UIButtonLogic>().Disable_Button();
+            }
+            else {
+                button.GetComponent<UIButtonLogic>().Enable_Button();
+            }
         }
     }
 }
