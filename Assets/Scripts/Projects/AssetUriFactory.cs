@@ -1,0 +1,19 @@
+using System;
+
+namespace Netherlands3D.Twin.Projects
+{
+    public static class AssetUriFactory
+    {
+        public static Uri CreateProjectAssetUri(string pathInProject)
+        {
+            return new Uri("project:///" + pathInProject);
+        }
+
+        public static Uri CreateRemoteAssetUri(string url)
+        {
+            if (!url.StartsWith("http") && !url.StartsWith("https")) return null;
+            
+            return new Uri(url);
+        }
+    }
+}

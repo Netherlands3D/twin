@@ -164,6 +164,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6093601054233314278}
+    - targetCorrespondingSourceObject: {fileID: 2664015473938025932, guid: b9565e5e6806aa84fa4bee3688c5cb46,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7662381555634833805}
   m_SourcePrefab: {fileID: 100100000, guid: b9565e5e6806aa84fa4bee3688c5cb46, type: 3}
 --- !u!1 &5142072659738984082 stripped
 GameObject:
@@ -183,7 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionality: {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
   functionalities:
   - {fileID: 11400000, guid: ff7d5f7ae5009d24c869aa8086473845, type: 2}
   OnEnableFunctionality:
@@ -216,3 +219,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7662381555634833805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5142072659738984082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Schermafbeelding maken

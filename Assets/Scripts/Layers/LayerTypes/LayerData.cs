@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
@@ -12,13 +13,13 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public class LayerData
     {
-        [SerializeField, JsonProperty] protected string name;
-        [SerializeField, JsonProperty] protected bool activeSelf = true;
-        [SerializeField, JsonProperty] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
-        [SerializeField, JsonProperty] protected List<LayerData> children = new();
+        [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
+        [SerializeField, DataMember] protected string name;
+        [SerializeField, DataMember] protected bool activeSelf = true;
+        [SerializeField, DataMember] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [SerializeField, JsonProperty] protected List<LayerPropertyData> layerProperties = new();
-        [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
+        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -77,21 +78,21 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        [JsonIgnore] public List<LayerPropertyData> LayerProperties => layerProperties;
-        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
-        [JsonIgnore]
-        public bool HasValidCredentials
+        [JsonIgnore] public List<LayerPropertyData> LayerProperties
         {
             get
             {
-                return hasValidCredentials;
-            }
-            set
-            {
-                hasValidCredentials = value;
-                HasValidCredentialsChanged.Invoke(value);
+                // When unserializing, and the layerproperties ain't there: make sure we have a valid list object.
+                if (layerProperties == null)
+                {
+                    layerProperties = new();
+                }
+
+                return layerProperties;
             }
         }
+
+        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
@@ -106,7 +107,6 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
-        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -228,14 +228,18 @@ namespace Netherlands3D.Twin.Layers
         /// <returns>A list of assets on disk</returns>
         public IEnumerable<LayerAsset> GetAssets()
         {
-            var assetsOfCurrentLayer = layerProperties
-                .OfType<ILayerPropertyDataWithAssets>()
-                .SelectMany(p => p.GetAssets());
+            IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
+            if (layerProperties != null)
+            {
+                assetsOfCurrentLayer = layerProperties
+                    .OfType<ILayerPropertyDataWithAssets>()
+                    .SelectMany(p => p.GetAssets());
+            }
 
             var assetsOfAllChildLayers = children
                 .SelectMany(l => l.GetAssets());
 
-            return assetsOfAllChildLayers.Concat(assetsOfCurrentLayer);
+            return assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
         }
     }
 }

@@ -1,10 +1,13 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
+using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,7 +26,8 @@ namespace Netherlands3D.Twin.Projects
         private readonly JsonSerializerSettings serializerSettings = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            SerializationBinder = new DataContractSerializationBinder(new DefaultSerializationBinder())
         };
 
         [SerializeField] private string DefaultFileName = "NL3D_Project_";
@@ -48,23 +52,22 @@ namespace Netherlands3D.Twin.Projects
 
             foreach (ZipEntry zipEntry in zf)
             {
+                // TODO: this does not yet support directories
                 if (!zipEntry.IsFile) continue;
 
+                using Stream zipStream = zf.GetInputStream(zipEntry);
                 if (zipEntry.Name == ProjectJsonFileNameInZip)
                 {
-                    using Stream zipStream = zf.GetInputStream(zipEntry);
                     using StreamReader sr = new(zipStream);
                     string json = sr.ReadToEnd();
 
                     LoadJSON(json);
+                    continue;
                 }
-                else
-                {
-                    //TODO: Future Project files can have more files in the zip, like meshes and textures etc.
-                    Debug.Log("Other file found in Project zip. Ignoring for now.");
-
-                    // todo add failed loading event
-                }
+                
+                string fullZipToPath = Path.Combine(Application.persistentDataPath, zipEntry.Name);
+                using FileStream streamWriter = File.Create(fullZipToPath);
+                zipStream.CopyTo(streamWriter);
             }
         }
         
@@ -73,7 +76,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.isLoading = true;
             JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
-            Debug.Log("loaded project with uuid: " + ProjectData.Current.UUID);
+            Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.isLoading = false;
         }
@@ -92,22 +95,50 @@ namespace Netherlands3D.Twin.Projects
             zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
             zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
 
-            var jsonProject = JsonConvert.SerializeObject(ProjectData.Current, serializerSettings);
+            var projectData = ProjectData.Current;
+            WriteProjectToZip(projectData, zipOutputStream);
+            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+            zipOutputStream.Finish();
+            zipOutputStream.Close();
+
+            SaveFile(lastSavePath);
+        }
+
+        private void WriteProjectAssetsToZipfile(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            var projectAssets = projectData
+                .GetAssets().Where(asset => asset.IsStoredInProject)
+                .ToList();
+            
+            foreach (var layerAsset in projectAssets)
+            {
+                WriteProjectAssetToZipFile(layerAsset, zipOutputStream);
+            }
+        }
+
+        private void WriteProjectAssetToZipFile(LayerAsset layerAsset, ZipOutputStream zipOutputStream)
+        {
+            var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
+            var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
+
+            var entry = new ZipEntry(relativePath);
+            zipOutputStream.PutNextEntry(entry);
+            byte[] fileBytes = File.ReadAllBytes(absolutePath);
+            zipOutputStream.Write(fileBytes, 0, fileBytes.Length);
+        }
+
+        private void WriteProjectToZip(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            var jsonProject = JsonConvert.SerializeObject(projectData, serializerSettings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
             zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);
-
-            // For now we can directly download the zip file (in the future we want to append more files to the zip, like meshes and textures etc.)
-            FinishProjectFile(lastSavePath);
         }
 
-        private void FinishProjectFile(string lastSavePath)
+        private void SaveFile(string lastSavePath)
         {
-            // Finish the zip
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
-
             // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
             this.lastSavePath = lastSavePath; 
@@ -129,7 +160,6 @@ namespace Netherlands3D.Twin.Projects
         public void AppendFileToZip(string fileName)
         {
             var persistentDataPath = Application.persistentDataPath + "/" + fileName;
-            Debug.Log("Appending file to zip: " + persistentDataPath);
 
             byte[] buffer = new byte[4096];
             var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");

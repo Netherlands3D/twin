@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Zip;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
@@ -27,7 +28,15 @@ namespace Netherlands3D.Twin.Projects
         [Header("Serialized data")] public int Version = 1;
         public string SavedTimestamp = "";
         public string UUID = "";
-        public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+        private double[] cameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+        public double[] CameraPosition {
+            get => cameraPosition;
+            set
+            {
+                cameraPosition = value;
+                OnCameraPositionChanged.Invoke(new Coordinate(CoordinateSystem.RDNAP, cameraPosition));
+            }
+        }
         public double[] CameraRotation = new double[3];
         public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
         public bool UseCurrentTime = false;
@@ -47,6 +56,7 @@ namespace Netherlands3D.Twin.Projects
         }
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
+        [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
         [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 

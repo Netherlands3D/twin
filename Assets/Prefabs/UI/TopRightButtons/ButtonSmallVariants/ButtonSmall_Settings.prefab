@@ -328,6 +328,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5612239837602820538}
+    - targetCorrespondingSourceObject: {fileID: 2664015473938025932, guid: b9565e5e6806aa84fa4bee3688c5cb46,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7173424971446478480}
   m_SourcePrefab: {fileID: 100100000, guid: b9565e5e6806aa84fa4bee3688c5cb46, type: 3}
 --- !u!224 &2409698041119019074 stripped
 RectTransform:
@@ -427,3 +431,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
+--- !u!114 &7173424971446478480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8222931090793477828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Instellingen

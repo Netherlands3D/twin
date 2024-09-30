@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -45,7 +46,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [SerializeField] private float indentWidth = 40f;
         [SerializeField] private Toggle foldoutToggle;
         [SerializeField] private Image layerTypeImage;
-        [SerializeField] private Image errorLayerTypeImage;
         [SerializeField] private TMP_Text layerNameText;
         [SerializeField] private TMP_InputField layerNameField;
         [SerializeField] private RectTransform childrenPanel;
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
         public string LayerName => Layer.Name;
         public bool PropertiesOpen => propertyToggle.isOn;
-
+        
         private int Depth => ParentUI ? ParentUI.Depth + 1 : 0;
 
         private void Awake()
@@ -105,18 +105,42 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             Layer.ActiveSelf = isOn;
         }
-
+        
         private void OnFoldoutToggleValueChanged(bool isOn)
         {
             UpdateFoldout();
             RecalculateVisibleHierarchyRecursive();
         }
 
-        private void OnInputFieldChanged(string newName)
+        private void OnSelectInputField()
         {
-            Layer.Name = newName;
+            layerNameField.text = Layer.Name;
+            layerNameText.text = Layer.Name;
+            layerNameField.gameObject.SetActive(true);
+            layerNameText.gameObject.SetActive(false);
+            layerNameField.Select();
+            layerNameField.ActivateInputField();
+            StartCoroutine(WaitForNextFrame(() =>
+            {
+                layerNameField.caretPosition = layerNameField.text.Length;
+                layerNameField.selectionAnchorPosition = 0;
+            }));
         }
 
+        private IEnumerator WaitForNextFrame(Action onNextFrame)
+        {            
+            yield return new WaitForEndOfFrame();
+            onNextFrame.Invoke();
+        }
+
+        private void OnInputFieldChanged(string newName)
+        {         
+            Layer.Name = newName;
+            layerNameText.text = newName;
+            layerNameField.gameObject.SetActive(false);
+            layerNameText.gameObject.SetActive(true);
+        }
+        
         private void Start()
         {
             Layer.NameChanged.AddListener(OnNameChanged);
@@ -129,7 +153,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.LayerDestroyed.AddListener(DestroyUI);
 
             MarkLayerUIAsDirty();
-
+            
             //Match initial layer states
             SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), Layer.SiblingIndex); // needed because eventListener is not assigned yet when calling layer.SetParent immediately after creating a layer object
             if (Layer.IsSelected)
@@ -138,27 +162,27 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             UpdateColor(Layer.Color);
             RegisterWithPropertiesPanel(Properties.Instance);
         }
-
+        
         private void OnNameChanged(string newName)
         {
             gameObject.name = newName;
         }
-
+        
         private void UpdateEnabledToggle(bool isOn)
         {
             enabledToggle.SetIsOnWithoutNotify(isOn);
             RecalculateCurrentTreeStates();
             SetEnabledToggleInteractiveStateRecursive();
         }
-
+        
         private void UpdateColor(Color newColor)
-        {
+        {   
             var opaqueColor = newColor;
             opaqueColor.a = 1;
 
             colorButton.targetGraphic.color = opaqueColor;
         }
-
+        
         private void OnLayerSelected(LayerData layer)
         {
             SelectUI();
@@ -168,17 +192,17 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             DeselectUI();
         }
-
+        
         private void OnLayerChildrenChanged()
         {
             RecalculateCurrentTreeStates();
         }
-
+        
         private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
         {
             SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
         }
-
+        
         private void DestroyUI()
         {
             // Unparent before deleting to avoid UI being destroyed multiple times (through DestroyUI and as a
@@ -225,7 +249,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foreach (var child in ChildrenUI)
                 child.SetEnabledToggleInteractiveStateRecursive();
         }
-
+        
         private void SetVisibilitySprite()
         {
             debugIndexText.text = State.ToString();
@@ -259,7 +283,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
 
             SetVisibilitySprite();
         }
-
+        
         public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
             if (newParent == this)
@@ -349,8 +373,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             var sprite = layerUIManager.GetLayerTypeSprite(Layer);
             layerTypeImage.sprite = sprite;
-            if (errorLayerTypeImage)
-                errorLayerTypeImage.sprite = layerUIManager.GetDisabledLayerTypeSprite(sprite);
         }
 
         private void UpdateFoldout()
@@ -399,6 +421,18 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 OnRightButtonDown(eventData);
         }
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!layerUIManager.DragGhost && !Layer.IsSelected)
+                SetHighlight(InteractionState.Hover);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!Layer.IsSelected)
+                SetHighlight(InteractionState.Default);
+        }
+
         private void OnLeftButtonDown(PointerEventData eventData)
         {
             layerUIManager.DragStartOffset = (Vector2)transform.position - eventData.position;
@@ -408,6 +442,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
             if (Layer.IsSelected)
             {
+                //only one extra click on a selected layer should initiate the layer name editing
+                if (eventData.clickCount == 1 && eventData.pointerEnter == layerNameText.gameObject)
+                {
+                    OnSelectInputField();
+                }
                 waitForFullClickToDeselect = true;
                 return;
             }
@@ -612,7 +651,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         private void RemoveHoverHighlight(LayerUI ui)
         {
             if (!ui) return;
-
+            
             var state = InteractionState.Default;
             if (ui.Layer.IsSelected)
                 state = InteractionState.Selected;
@@ -670,19 +709,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public static bool SequentialSelectionModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!layerUIManager.DragGhost && !Layer.IsSelected)
-                SetHighlight(InteractionState.Hover);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (!Layer.IsSelected)
-                SetHighlight(InteractionState.Default);
-        }
+        }      
 
         private void OnDestroy()
         {
@@ -694,7 +721,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-
+            
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
@@ -706,10 +733,10 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             var layerWithProperties = Properties.TryFindProperties(Layer);
             var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
             propertyToggle.gameObject.SetActive(hasProperties);
-
-            if (!hasProperties)
+            
+            if(!hasProperties)
                 return;
-
+            
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
             propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
             ToggleProperties(propertyToggle.isOn, propertiesPanel);
@@ -719,7 +746,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             propertyToggle.isOn = onOrOff;
         }
-
+        
         private void ToggleProperties(bool onOrOff, Properties properties)
         {
             var layerWithProperties = Properties.TryFindProperties(Layer);
