@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers;
+using System.Collections.Generic;
+using System.IO;
+using System;
+using Newtonsoft.Json.Linq;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -143,12 +147,82 @@ namespace Netherlands3D.CartesianTiles
             callback?.Invoke(tileChange);
         }
 
+        private int maxDeserializationLengthForQueue = 0;
+        private List<string> deserializationQueue = new List<string>();
+
         private void ParseGeoJSON(string jsonText)
         {
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
+            if (jsonText.Length > maxDeserializationLengthForQueue)
+            {
+                deserializationQueue.Add(jsonText);
+            }
+        }
 
-            if (featureCollection.Features.Count > 0)
-                wfsGeoJSONLayer.AppendFeatureCollection(featureCollection);
+        private void Update()
+        {
+            if (deserializationQueue.Count > 0)
+            {
+                string jsonText = deserializationQueue[0];
+                deserializationQueue.RemoveAt(0);
+                ParseGeoJsonFromQueue(jsonText);                
+            }            
+        }
+
+        private void ParseGeoJsonFromQueue(string json)
+        {
+            StartCoroutine(ChunkDeserialization(json, collection => 
+            {
+                wfsGeoJSONLayer.AppendFeatureCollection(collection);
+            }));
+        }
+
+        private IEnumerator ChunkDeserialization(string json, Action<FeatureCollection> onFinish)
+        {
+            WaitForSeconds wfe = new WaitForSeconds(0.5f);
+            List<Feature> allFeatures = new List<Feature>();
+            JsonSerializer serializer = new JsonSerializer();
+            //we can NOT use standard JObject.Parse(json) / JsonConvert.DeserializeObject<FeatureCollection>(json) here because of larger sets
+            using (StringReader stringReader = new StringReader(json))
+            using (JsonTextReader jsonReader = new JsonTextReader(stringReader))
+            {              
+                while (jsonReader.Read())
+                {
+                    // Look for the "features" property
+                    if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "features")
+                    {
+                        break;
+                    }
+                }
+
+                jsonReader.Read();
+                //read all features until end
+                while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
+                {
+                    var feature = serializer.Deserialize<Feature>(jsonReader);
+                    allFeatures.Add(feature);                    
+                    yield return wfe;
+                }
+            }
+            if (allFeatures.Count > 0)
+            {
+                //this is a bit hacky to circumvent the json.parse of the full json, but solves the performance issues by alot
+                //its necessary the next node after features is always totalFeatures!
+                int featuresIndex = json.IndexOf("\"features\"");
+                int featuresEndIndex = json.IndexOf("\"totalFeatures\"");
+                if (featuresIndex != -1)
+                {
+                    //find the start of the features node
+                    int startIndex = json.IndexOf('[', featuresIndex) + 1;
+                    //find the end of the features node by stepping back from the next
+                    int endIndex = json.IndexOf(']', featuresEndIndex - 2);
+                    //remove the features from the json to have faster parsing
+                    json = json.Remove(startIndex, endIndex - startIndex);
+                }
+            }
+            JObject root = JObject.Parse(json);
+            FeatureCollection featureCollection = root.ToObject<FeatureCollection>();
+            featureCollection.SetFeatures(allFeatures);
+            onFinish.Invoke(featureCollection);
         }
     }
 }
