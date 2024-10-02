@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using SFB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,8 +31,9 @@ namespace Netherlands3D.Snapshots
 {
     public class Snapshots : MonoBehaviour
     {
+        //import this from filebrowser package which includes tghe download functions in its jslib
         [DllImport("__Internal")]
-        private static extern void DownloadSnapshot(byte[] array, int byteLength, string fileName);
+        private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
         [Tooltip("Optional source camera (Defaults to Camera.main)")]
         [SerializeField] private Camera sourceCamera;
@@ -43,6 +45,8 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private string fileName = "Snapshot";
         [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
+
+        public UnityEvent<string> DownloadSnapshotComplete = new();
 
         public int Width
         {
@@ -85,27 +89,8 @@ namespace Netherlands3D.Snapshots
         {
             if (!sourceCamera) sourceCamera = Camera.main;
         }
-
-        [Obsolete("Use the Width property instead")]
-        public void SetImageWidth(string width) => Width = int.Parse(width);
-
-        [Obsolete("Use the Width property instead")]
-        public void SetImageWidth(int width) => Width = width;
-
-        [Obsolete("Use the Height property instead")]
-        public void SetImageHeight(string height) => Height = int.Parse(height);
-
-        [Obsolete("Use the Height property instead")]
-        public void SetImageHeight(int height) => Height = height;
-
+        
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
-
-        /// <summary>
-        /// Set the layermask for the snapshot camera ( if you want to exclude, include specific layers in the image )
-        /// </summary>
-        /// <param name="snapshotLayers">Include these layers in the snapshot</param>
-        [Obsolete("Use the SnapshotLayers property instead")]
-        public void SetLayerMask(LayerMask snapshotLayers) => SnapshotLayers = snapshotLayers;
 
         public void TakeSnapshot()
         {
@@ -116,30 +101,16 @@ namespace Netherlands3D.Snapshots
 
             var path = DetermineSaveLocation();
 
-            //Use the jslib DownloadSnapshot to download the bytes as a file in WebGL/Browser
 #if UNITY_WEBGL && !UNITY_EDITOR
-            DownloadSnapshot(bytes, bytes.Length, Path.GetFileName(path));
+            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
 #else
             File.WriteAllBytes(path, bytes);
 #endif
         }
 
-        [Obsolete("Use Snapshot.ToImageBytes instead")]
-        public static byte[] SnapshotToImageBytes(
-            int imageWidth,
-            int imageHeight,
-            string fileType = "png",
-            Camera sourceCamera = null,
-            LayerMask snapshotLayers = default
-        ) {
-            if (!sourceCamera) sourceCamera = Camera.main;
-
-            if (Enum.TryParse(fileType, out SnapshotFileType fileTypeAsEnum) == false)
-            {
-                fileTypeAsEnum = SnapshotFileType.png;
-            }
-
-            return Snapshot.ToImageBytes(imageWidth, imageHeight, sourceCamera, snapshotLayers, fileTypeAsEnum);
+        public void OnSnapshotDownloadComplete(string message)
+        {
+            DownloadSnapshotComplete.Invoke(message);
         }
 
         private string DetermineSaveLocation()
@@ -149,24 +120,17 @@ namespace Netherlands3D.Snapshots
             {
                 outputFileName = $"Snapshot_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}";
             }
-            outputFileName = $"{outputFileName}.{FileType}";
+            string location = Application.persistentDataPath;
 
-            string location = Application.persistentDataPath
-                + Path.DirectorySeparatorChar
+#if UNITY_WEBGL && !UNITY_EDITOR
+            outputFileName = $"{outputFileName}.{FileType}";
+            location += Path.DirectorySeparatorChar
                 + targetPath
                 + Path.DirectorySeparatorChar
                 + outputFileName;
-
-#if UNITY_EDITOR
-            // Window for user to input desired path/name/filetype
-            location = EditorUtility.SaveFilePanel(
-                "Save texture as file",
-                "",
-                outputFileName,
-                fileType.ToString()
-            );
+#else       
+            StandaloneFileBrowser.SaveFilePanel("Save texture as file", "", outputFileName, FileType.ToString());
 #endif
-
             return location;
         }
     }
