@@ -169,7 +169,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             switch (layer)
             {
                 case CartesianTileLayerGameObject _:
-                    return layerTypeSprites[1];
                 case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayerGameObject _:

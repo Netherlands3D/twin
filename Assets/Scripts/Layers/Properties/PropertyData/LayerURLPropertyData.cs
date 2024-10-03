@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Url")]
     public class LayerURLPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
-        public string url = "";
+        [DataMember] public string url = "";
         
         public IEnumerable<LayerAsset> GetAssets()
         {

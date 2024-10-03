@@ -1,14 +1,15 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "3DTiles")]
     public class Tile3DLayerPropertyData : LayerPropertyData
     {
-        [SerializeField, JsonProperty] private string url;
+        [DataMember] private string url;
 
         [JsonIgnore]
         public string Url
