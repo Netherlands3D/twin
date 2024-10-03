@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers
                 layer.isEnabled = isActive;
         }
         
-        protected void Awake()
+        protected virtual void Awake()
         {
             tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>();
             transform.SetParent(tileHandler.transform);

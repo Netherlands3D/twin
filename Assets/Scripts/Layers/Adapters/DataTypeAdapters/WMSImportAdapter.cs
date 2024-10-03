@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Geoservice;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
@@ -50,17 +51,17 @@ namespace Netherlands3D.Twin
         public void Execute(LocalFile localFile)
         {
             var sourceUrl = localFile.SourceUrl;
-            var wmsFolder = new FolderLayer(sourceUrl);
+            string url = sourceUrl.Split('?')[0];
+            var wmsFolder = new FolderLayer(url);
 
             if (wms.requestType == WMS.RequestType.GetCapabilities)
             {
-                var layerTypes = wms.GetWmsLayers();
+                List<WMS.WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
 
                 //Create a folder layer 
-                foreach (var layerType in layerTypes)
+                foreach (WMS.WMSLayerQueryParams layer in layerTypes)
                 {
-                    Debug.Log("Adding WMS layer for layerType: " + layerType);
-                    AddWMSLayer(layerType, sourceUrl, wmsFolder);
+                    AddWMSLayer(layer, url, wmsFolder);
                 }
                 
                 wms = null;
@@ -68,22 +69,22 @@ namespace Netherlands3D.Twin
             }            
         }
 
-        private void AddWMSLayer(string featureType, string sourceUrl, FolderLayer folderLayer)
+        private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer)
         {
-            Debug.Log("Adding WMS layer: " + featureType);
+            Debug.Log("Adding WMS layer: " + layer.name);
+            // Create a layerType URL for the specific layerType
+            UriBuilder uriBuilder = CreateLayerUri(layer, sourceUrl);
+            var getLayerTypeUrl = uriBuilder.Uri.ToString();
+            string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);
 
-            // Create a GetFeature URL for the specific featureType
-            UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
-            var getFeatureUrl = uriBuilder.Uri.ToString();
-
-            //Spawn a new WFS GeoJSON layer
+            //Spawn a new WMS layer
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = featureType;
-            newLayer.SetURL(getFeatureUrl);
+            newLayer.Name = layer.name;
+            newLayer.SetURL(finalUrl);
         }
 
-        private UriBuilder CreateLayerUri(string layerType, string sourceUrl)
+        private UriBuilder CreateLayerUri(WMS.WMSLayerQueryParams layer, string sourceUrl)
         {
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
@@ -98,16 +99,22 @@ namespace Netherlands3D.Twin
             var parameters = new NameValueCollection();
             uriBuilder.TryParseQueryString(parameters);
 
+            string encoded = Uri.EscapeDataString(layer.name);
+
             // Set the required query parameters for the GetFeature request
-            uriBuilder.SetQueryParameter("service", "WFS");
-            uriBuilder.SetQueryParameter("request", "GetMap");
-            uriBuilder.SetQueryParameter("version", wmsVersion);
-            uriBuilder.SetQueryParameter("layers", layerType);
-            if (parameters.Get("format")?.ToLower() is not ("png" or "jpeg"))
+            uriBuilder.AddQueryParameter("service", "WMS");
+            uriBuilder.AddQueryParameter("version", wmsVersion);
+            uriBuilder.AddQueryParameter("request", "GetMap");
+            uriBuilder.AddQueryParameter("layers", encoded);
+            uriBuilder.AddQueryParameter("styles", layer.style);
+            uriBuilder.AddQueryParameter(layer.spatialReferenceType, layer.spatialReference);
+            uriBuilder.AddQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
+            uriBuilder.AddQueryParameter("width", "512");
+            uriBuilder.AddQueryParameter("height", "512"); 
+            if (parameters.Get("format")?.ToLower() is not ("image/png" or "image/jpeg"))
             {
-                uriBuilder.SetQueryParameter("format", "png");
+                uriBuilder.AddQueryParameter("format", "image/png");
             }
-            uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
             return uriBuilder;
         }
 
@@ -183,30 +190,64 @@ namespace Netherlands3D.Twin
                 return "";
             }
 
-            public string[] GetWmsLayers()
+            public struct WMSLayerQueryParams
+            {
+                public string name;
+                public string spatialReferenceType;
+                public string spatialReference;
+                public string style;
+            }
+
+            public List<WMSLayerQueryParams> GetWmsLayers()
             {
                 if (xmlDocument == null)
                     ParseBodyAsXML(); // Parse the XML if not already done
 
                 // Select the Layer nodes from the WMS capabilities document
                 var capabilityNode = xmlDocument.SelectSingleNode("//*[local-name()='Capability']", namespaceManager);
-                var layerNodes = capabilityNode.SelectNodes(".//*[local-name()='Layer']/*[local-name()='Layer']", namespaceManager);
-                var layers = new List<string>();
-
+                var layerNodes = capabilityNode.SelectNodes(".//*[local-name()='Layer']/*[local-name()='Layer']", namespaceManager);                
+                List<WMSLayerQueryParams> layers = new List<WMSLayerQueryParams>();
                 // Loop through the Layer nodes and get their names
                 foreach (XmlNode layerNode in layerNodes)
                 {
+                    WMSLayerQueryParams layerQueryParams = new WMSLayerQueryParams();
                     // Extract the Name node for each layer
                     var layerNameNode = layerNode.SelectSingleNode(".//*[local-name()='Name']", namespaceManager);
+                    var srsNode = layerNode.SelectSingleNode(".//*[local-name()='SRS']", namespaceManager);
+                    var crsNode = layerNode.SelectSingleNode(".//*[local-name()='CRS']", namespaceManager);
                     if (layerNameNode != null)
                     {
-                        var layerName = layerNameNode.InnerText;
-                        layers.Add(layerName);
-                    }
-                }
+                        layerQueryParams.name = layerNameNode.InnerText;
+                        if (crsNode != null)
+                        {
+                            layerQueryParams.spatialReferenceType = "CRS";
+                            layerQueryParams.spatialReference = crsNode.InnerText;
+                        }
+                        else if (srsNode != null)
+                        {
+                            layerQueryParams.spatialReferenceType = "SRS";
+                            layerQueryParams.spatialReference = srsNode.InnerText;
+                        }
 
+                        // Extract styles for the layer
+                        var styleNodes = layerNode.SelectNodes(".//*[local-name()='Style']", namespaceManager);
+                        var styles = new List<string>();
+
+                        foreach (XmlNode styleNode in styleNodes)
+                        {
+                            var styleNameNode = styleNode.SelectSingleNode(".//*[local-name()='Name']", namespaceManager);
+                            if (styleNameNode != null)
+                            {
+                                styles.Add(styleNameNode.InnerText);
+                            }
+                        }
+                        layerQueryParams.style = string.Join(",", styles);
+
+                    }
+                    layers.Add(layerQueryParams);
+                }
                 // Return the list of layer names as an array
-                return layers.ToArray();
+                return layers;
             }
 
             private XmlNamespaceManager ReadNameSpaceManager(XmlDocument xmlDocument)
@@ -239,11 +280,14 @@ namespace Netherlands3D.Twin
             {
                 // Select all BoundingBox nodes in the document
                 var boundingBoxNodes = xmlDocument.SelectNodes("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
-
                 // Initialize bboxFilter to false
                 bool bboxFilter = false;
-
                 // Loop through each BoundingBox node to check if it exists
+                if (boundingBoxNodes != null && boundingBoxNodes.Count > 0)
+                {
+                    bboxFilter = true; // Set to true if any BoundingBox nodes exist
+                }
+                boundingBoxNodes = xmlDocument.SelectNodes("//*[local-name()='BoundingBox']", namespaceManager);
                 if (boundingBoxNodes != null && boundingBoxNodes.Count > 0)
                 {
                     bboxFilter = true; // Set to true if any BoundingBox nodes exist

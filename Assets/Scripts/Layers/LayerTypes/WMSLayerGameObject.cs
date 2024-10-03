@@ -1,15 +1,13 @@
-using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.CartesianTiles;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Netherlands3D.Twin.Layers
 {
     /// <summary>
-    /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSGTileDataLayer
+    /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
         private WMSTileDataLayer wmsProjectionLayer;
         public WMSTileDataLayer WMSProjectionLayer { get => wmsProjectionLayer; }
@@ -18,16 +16,16 @@ namespace Netherlands3D.Twin.Layers
         protected LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
-        protected virtual void Awake() 
-        {                       
-            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+        protected override void Awake() 
+        {
+            base.Awake();
+            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();            
         }
 
         public void SetURL(string url)
         {
             this.urlPropertyData.url = url;
-            //CartesianTileWFSLayer.WfsUrl = url;
-            //TODO projectionlayer set this url
+            wmsProjectionLayer.WmsUrl = url;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
@@ -36,8 +34,7 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                //CartesianTileWFSLayer.WfsUrl = urlProperty.url;
-                //TODO projectionlayer set this url
+                wmsProjectionLayer.WmsUrl = urlProperty.url;
             }
         }
     }
