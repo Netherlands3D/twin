@@ -344,12 +344,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.periodic-snapshots": {
-      "version": "1.0.0",
+      "version": "2.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.sun": "1.0.0",
-        "eu.netherlands3d.snapshots": "1.0.0"
+        "eu.netherlands3d.sun": "1.3.0",
+        "eu.netherlands3d.snapshots": "2.0.0",
+        "eu.netherlands3d.filebrowser": "2.1.0"
       },
       "url": "https://package.openupm.com"
     },
@@ -378,10 +379,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.snapshots": {
-      "version": "1.0.0",
+      "version": "2.0.0",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "eu.netherlands3d.filebrowser": "2.1.0"
+      },
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.subobjects": {
