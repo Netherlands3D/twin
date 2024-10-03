@@ -539,7 +539,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054dbe152f39f4f39b7a492ae71e5987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectData: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
   LayerUIPrefab: {fileID: 2127760596796970168, guid: 67f661495874545c8847acccfa777e7e,
     type: 3}
   layerTypeSprites:
@@ -552,6 +551,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
   - {fileID: 21300000, guid: 4c0989c5e9ec1404ab9e3523c94f6b29, type: 3}
   - {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
+  - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
   - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
@@ -1413,17 +1413,17 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 88.46
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
@@ -1438,7 +1438,7 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 6792633624716269715, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
@@ -1470,6 +1470,36 @@ PrefabInstance:
       propertyPath: layerUIManager
       value: 
       objectReference: {fileID: 284876463517830170}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066990467744404531, guid: a1d12948b2baf466d9b8bf9980e98e47,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7275960957246304947, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: layerManager

@@ -25,6 +25,9 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
+            if (!sourceUrl.ToLower().Contains("service=wms"))
+                return false;
+
             Debug.Log("Checking source WMS url: " + sourceUrl);
             wms = new WMS(sourceUrl, cachedDataPath);
 
@@ -146,16 +149,24 @@ namespace Netherlands3D.Twin
             public bool HasBboxFilterCapability()
             {
                 return WMSBboxFilterCapability(this.xmlDocument, this.namespaceManager);
-            }              
+            }
 
             public string GetWMSVersion()
             {
-                var urlLower = sourceUrl.ToLower();
-                var versionQueryKey = "version=";
-                if (urlLower.Contains(versionQueryKey))
-                    return urlLower.Split(versionQueryKey)[1].Split("&")[0];
+                if (xmlDocument == null)
+                    ParseBodyAsXML();
 
-                return GetWMSVersionFromBody();
+                // Use XPath to select the root node and get the version attribute
+                var rootNode = xmlDocument.SelectSingleNode("/*");
+
+                // Check if the root node is found and retrieve the version attribute
+                if (rootNode != null && rootNode.Attributes != null)
+                {
+                    var versionAttribute = rootNode.Attributes["version"];
+                    return versionAttribute?.Value; // Return the version value or null if not found
+                }
+
+                return null; // Return null if root node or version attribute is not found
             }
 
             public string GetWMSVersionFromBody()
@@ -203,6 +214,8 @@ namespace Netherlands3D.Twin
                 XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
                 XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
                 namespaceManager.AddNamespace("wms", "http://www.opengis.net/wms");
+                namespaceManager.AddNamespace("sld", "http://www.opengis.net/sld");
+                namespaceManager.AddNamespace("ms", "http://mapserver.gis.umn.edu/mapserver");
 
                 if (elementsWithNamespaces != null)
                 {
@@ -224,14 +237,16 @@ namespace Netherlands3D.Twin
 
             private bool WMSBboxFilterCapability(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
             {
-                var filterCapabilitiesNodeInRoot = xmlDocument.SelectSingleNode("//fes:SpatialOperators", namespaceManager);
-                var bboxFilter = false;
-                foreach (XmlNode spatialOperator in filterCapabilitiesNodeInRoot.ChildNodes)
+                // Select all BoundingBox nodes in the document
+                var boundingBoxNodes = xmlDocument.SelectNodes("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
+
+                // Initialize bboxFilter to false
+                bool bboxFilter = false;
+
+                // Loop through each BoundingBox node to check if it exists
+                if (boundingBoxNodes != null && boundingBoxNodes.Count > 0)
                 {
-                    if (spatialOperator.Attributes["name"].Value.ToLower() == "bbox")
-                    {
-                        bboxFilter = true;
-                    }
+                    bboxFilter = true; // Set to true if any BoundingBox nodes exist
                 }
                 return bboxFilter;
             }  

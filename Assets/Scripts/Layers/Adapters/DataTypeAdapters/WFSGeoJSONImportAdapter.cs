@@ -24,6 +24,9 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
+            if (!sourceUrl.ToLower().Contains("service=wfs"))
+                return false;
+
             Debug.Log("Checking source WFS url: " + sourceUrl);
             wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
 

@@ -185,6 +185,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[8];
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
+                case WMSLayerGameObject _:
+                    return layerTypeSprites[10];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
