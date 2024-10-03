@@ -63,39 +63,39 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
             var wfsFolder = new FolderLayer(sourceUrl);
 
-            if (wfs.requestType == GeoJSONWFS.RequestType.GetCapabilities)
+            switch (wfs.requestType)
             {
-                var featureTypes = wfs.GetFeatureTypes();
-
-                //Create a folder layer 
-                foreach (var featureType in featureTypes)
+                case GeoJSONWFS.RequestType.GetCapabilities:
                 {
-                    Debug.Log("Adding WFS layer for featureType: " + featureType);
-                    AddWFSLayer(featureType, sourceUrl, wfsFolder);
-                }
+                    var featureTypes = wfs.GetFeatureTypes();
+
+                    //Create a folder layer 
+                    foreach (var featureType in featureTypes)
+                    {
+                        Debug.Log("Adding WFS layer for featureType: " + featureType);
+                        AddWFSLayer(featureType, sourceUrl, wfsFolder);
+                    }
                 
-                wfs = null;
-                return;
-            }
-
-            if (wfs.requestType == GeoJSONWFS.RequestType.GetFeature)
-            {
-                // Get the feature type from the url
-                var featureType = string.Empty;
-                if (sourceUrl.ToLower().Contains("typename="))
-                {
-                    //WFS 1.0.0 uses 'typename'
-                    featureType = sourceUrl.ToLower().Split("typename=")[1].Split("&")[0];
+                    wfs = null;
+                    return;
                 }
-                else if (sourceUrl.ToLower().Contains("typenames="))
+                case GeoJSONWFS.RequestType.GetFeature:
                 {
-                    //WFS 2 uses plural 'typenames'
-                    featureType = sourceUrl.ToLower().Split("typenames=")[1].Split("&")[0];
-                }
-                AddWFSLayer(featureType, sourceUrl, wfsFolder);
+                    NameValueCollection queryParameters = new();
+                    new Uri(sourceUrl).TryParseQueryString(queryParameters);
+                    var featureType = queryParameters.Get(ParameterNameOfTypeNameBasedOnVersion());
 
-                wfs = null;
-                return;
+                    if (string.IsNullOrEmpty(featureType) == false)
+                    {
+                        AddWFSLayer(featureType, sourceUrl, wfsFolder);
+                    }
+
+                    wfs = null;
+                    return;
+                }
+                default:
+                    Debug.LogError("Unrecognized WFS request type: " + wfs.requestType);
+                    break;
             }
         }
 
@@ -133,8 +133,7 @@ namespace Netherlands3D.Twin
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
-            var typeNameFieldName = wfsVersion == "1.1.0" ? "typeName" : "typeNames";
-            uriBuilder.SetQueryParameter(typeNameFieldName, featureType);
+            uriBuilder.SetQueryParameter(ParameterNameOfTypeNameBasedOnVersion(), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 var geoJsonOutputFormatString = wfs.GetGeoJsonOutputFormatString();
@@ -148,6 +147,11 @@ namespace Netherlands3D.Twin
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
 
             return uriBuilder;
+        }
+
+        private string ParameterNameOfTypeNameBasedOnVersion()
+        {
+            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
         }
 
         private class GeoJSONWFS
