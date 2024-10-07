@@ -101,11 +101,11 @@ namespace Netherlands3D.Twin
 
         private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer)
         {
-            Debug.Log("Adding WFS layer: " + featureType);
-
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
             var getFeatureUrl = uriBuilder.Uri.ToString();
+
+            Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
             //Spawn a new WFS GeoJSON layer
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
@@ -139,9 +139,7 @@ namespace Netherlands3D.Twin
                 var geoJsonOutputFormatString = wfs.GetGeoJsonOutputFormatString();
                 uriBuilder.SetQueryParameter(
                     "outputFormat", 
-                    !string.IsNullOrEmpty(geoJsonOutputFormatString) 
-                        ? UnityWebRequest.EscapeURL(geoJsonOutputFormatString) 
-                        : "geojson"
+                    !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"
                 );
             }
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
@@ -354,12 +352,22 @@ namespace Netherlands3D.Twin
                 string outputString = "";
                 foreach (XmlNode owsValue in owsAllowedValues.ChildNodes)
                 {
-                    var lowerCaseValue = owsValue.InnerText.ToLower();
+                    var value = owsValue.InnerText;
+                    var lowerCaseValue = value.ToLower();
+                    
+                    // Immediately return outputFormats containing the word 'geojson'; this is by definition the
+                    // most specific and best option
                     if (lowerCaseValue.Contains("geojson"))
-                        return owsValue.InnerText; // Return complete string, in case it has a variation
+                    {
+                        return value; // _Return_ complete string, in case it has a variation
+                    }
 
+                    // if there is no outputFormat with the term 'geojson' in it, let's store any format with the
+                    // term json in it; this is _usually_ geojson
                     if (lowerCaseValue.Contains("json"))
-                        outputString = "geojson"; // let's hope this works, most WFS server accept this
+                    {
+                        outputString = value; // _Remember_ complete string, in case it has a variation
+                    }
                 }
 
                 if (string.IsNullOrEmpty(outputString))
