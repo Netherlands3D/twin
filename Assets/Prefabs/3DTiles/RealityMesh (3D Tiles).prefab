@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoApplyCredentials: 1
-  inputPropertySectionPrefab: {fileID: 4139614324750460760, guid: d01d03b127df7b34cacbb24ee8f84d28,
+  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
   OnCredentialsPropertySectionInstantiated:
     m_PersistentCalls:

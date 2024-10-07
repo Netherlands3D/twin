@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class CredentialsInputPropertySection : MonoBehaviour
+    public class CredentialsInputPropertySection : MonoBehaviour, ILayerCredentialInterface
     {
         private LayerCredentialsHandler handler;
-        
+
         [SerializeField] private TMP_InputField userNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
@@ -19,13 +19,42 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Transform errorMessage;
         private bool skipFirstCredentialErrorMessage = true;
 
-        private void Awake()
+        public LayerCredentialsHandler Handler
         {
-            handler = GetComponent<LayerCredentialsHandler>();
-            if (!handler)
-                handler = gameObject.AddComponent<LayerCredentialsHandler>();
+            get => handler;
+            set
+            {
+                if (handler)
+                    handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+
+                handler = value;
+
+                OnCredentialsAccepted(handler.HasValidCredentials);
+
+                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+            }
         }
-        
+
+        private void OnCredentialsAccepted(bool accepted)
+        {
+            if (accepted)
+            {
+                print("success");
+            }
+            else
+            {
+                print("fail");
+                ShowCredentialsWarning();
+            }
+        }
+
+        // private void Awake()
+        // {
+        //     handler = GetComponent<LayerCredentialsHandler>();
+        //     if (!handler)
+        //         handler = gameObject.AddComponent<LayerCredentialsHandler>();
+        // }
+
         private void OnEnable()
         {
             errorMessage.gameObject.SetActive(false);
@@ -38,7 +67,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void ShowCredentialsWarning()
         {
             //First failure from server may be ignored, because we want to give the user a chance to fill in the credentials via the credentials panel
-            if(skipFirstCredentialErrorMessage)
+            if (skipFirstCredentialErrorMessage)
             {
                 skipFirstCredentialErrorMessage = false;
                 return;
@@ -47,7 +76,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             //For now a standard text is shown.
             errorMessage.gameObject.SetActive(true);
         }
-        
+
         public void CloseFailedFeedback()
         {
             errorMessage.gameObject.SetActive(false);
@@ -59,8 +88,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void ApplyCredentials()
         {
             errorMessage.gameObject.SetActive(false);
-            
-            switch(handler.AuthorizationType)
+
+            switch (handler.AuthorizationType)
             {
                 case AuthorizationType.UsernamePassword:
                     handler.UserName = userNameInputField.text;
@@ -70,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     handler.PasswordOrKeyOrTokenOrCode = keyTokenOrCodeInputField.text;
                     break;
             }
-            
+
             handler.ApplyCredentials();
         }
 
@@ -81,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             handler.SetAuthorizationInputType((AuthorizationType)type);
         }
-        
+
         public void SetAuthorizationInputType(AuthorizationType type)
         {
             handler.SetAuthorizationInputType(type);
@@ -98,9 +127,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// </summary>
         public void SetInputFieldsValues(string username = "", string password = "", string key = "")
         {
-            if(username.Length > 0) userNameInputField.text = username;
-            if(password.Length > 0) passwordInputField.text = password;
-            if(key.Length > 0) keyTokenOrCodeInputField.text = key;
+            if (username.Length > 0) userNameInputField.text = username;
+            if (password.Length > 0) passwordInputField.text = password;
+            if (key.Length > 0) keyTokenOrCodeInputField.text = key;
         }
     }
 }
