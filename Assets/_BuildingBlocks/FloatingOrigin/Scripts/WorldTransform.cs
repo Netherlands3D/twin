@@ -8,15 +8,10 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         [SerializeField] private WorldTransformShifter worldTransformShifter;
         [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
-        public Coordinate Coordinate {
-            get;
-            set;
-        }
-        public Quaternion Rotation
-        {
-            get;
-            set;
-        }
+
+        public Coordinate Coordinate { get; set; } = new(CoordinateSystem.RDNAP);
+
+        public Quaternion Rotation { get; set; } = Quaternion.identity;
         public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
         public Origin Origin => Origin.current;
 
@@ -56,7 +51,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 ShiftTo(Coordinate, Coordinate);
             }
-            
         }
 
         private void OnDisable()
