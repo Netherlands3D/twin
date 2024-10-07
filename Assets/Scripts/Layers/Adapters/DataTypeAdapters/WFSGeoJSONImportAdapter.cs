@@ -5,6 +5,7 @@ using System;
 using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Xml.Serialization;
 using Netherlands3D.Twin.Layers;
 using UnityEngine.Networking;
 
@@ -61,7 +62,7 @@ namespace Netherlands3D.Twin
         public void Execute(LocalFile localFile)
         {
             var sourceUrl = localFile.SourceUrl;
-            var wfsFolder = new FolderLayer(sourceUrl);
+            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfs.GetTitle()) ? wfs.GetTitle() : sourceUrl);
 
             switch (wfs.requestType)
             {
@@ -73,7 +74,7 @@ namespace Netherlands3D.Twin
                     foreach (var featureType in featureTypes)
                     {
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType, sourceUrl, wfsFolder);
+                        AddWFSLayer(featureType.Name, sourceUrl, wfsFolder, featureType.Title);
                     }
                 
                     wfs = null;
@@ -87,7 +88,9 @@ namespace Netherlands3D.Twin
 
                     if (string.IsNullOrEmpty(featureType) == false)
                     {
-                        AddWFSLayer(featureType, sourceUrl, wfsFolder);
+                        // Can't deduct a human-readable title at the moment, we should add that we always query for the
+                        // capabilities; this also helps with things like outputFormat and CRS
+                        AddWFSLayer(featureType, sourceUrl, wfsFolder, featureType);
                     }
 
                     wfs = null;
@@ -99,7 +102,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer)
+        private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer, string title)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
@@ -110,7 +113,7 @@ namespace Netherlands3D.Twin
             //Spawn a new WFS GeoJSON layer
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = featureType;
+            newLayer.Name = title;
             newLayer.SetURL(getFeatureUrl);
         }
 
@@ -152,6 +155,17 @@ namespace Netherlands3D.Twin
             return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
         }
 
+        [Serializable]
+        public class FeatureType
+        {
+            public string Name;
+            public string Title;
+            public string Abstract;
+            public string DefaultCRS;
+            public string[] OtherCRS;
+            public string MetadataURL;
+        }
+        
         private class GeoJSONWFS
         {
             private readonly string sourceUrl;
@@ -256,7 +270,19 @@ namespace Netherlands3D.Twin
                 return "";
             }
 
-            public IEnumerable<string> GetFeatureTypes()
+            public string GetTitle()
+            {
+                if(xmlDocument == null)
+                    ParseBodyAsXML();
+
+                var title = xmlDocument?
+                    .DocumentElement?
+                    .SelectSingleNode("//*[local-name()='ServiceIdentification']/*[local-name()='Title']", namespaceManager);
+                
+                return title != null ? title.InnerText : "";
+            }
+
+            public IEnumerable<FeatureType> GetFeatureTypes()
             {
                 if(xmlDocument == null)
                     ParseBodyAsXML();
@@ -264,19 +290,39 @@ namespace Netherlands3D.Twin
                 var featureTypeListNodeInRoot = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
                 var featureTypeChildNodes = featureTypeListNodeInRoot?.ChildNodes;
-                var featureTypes = new List<string>();
+                var featureTypes = new List<FeatureType>();
                 if (featureTypeChildNodes == null)
                 {
                     Debug.LogWarning("No feature types were found in WFS' GetCapabilities response");
                     return featureTypes;
                 }
 
+                var wfsVersion = GetWFSVersion();
+                string namespaceVersion = wfsVersion switch
+                {
+                    "1.1.0" => "1.1.0",
+                    "2.0.0" => "2.0",
+                    _ => null
+                };
+
+                // Unsupported version
+                if (namespaceVersion == null) return featureTypes;
+
+                XmlSerializer serializer = new XmlSerializer(
+                    typeof(FeatureType), 
+                    new XmlRootAttribute("FeatureType")
+                    {
+                        Namespace = "http://www.opengis.net/wfs/" + namespaceVersion
+                    }
+                );
                 foreach (XmlNode featureTypeNode in featureTypeChildNodes)
                 {
-                    var featureTypeName = featureTypeNode?.SelectSingleNode(".//*[local-name()='Name']", namespaceManager)?.InnerText;
-                    if (string.IsNullOrEmpty(featureTypeName)) continue;
-    
-                    featureTypes.Add(featureTypeName);
+                    using XmlNodeReader reader = new XmlNodeReader(featureTypeNode);
+                    
+                    FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
+                    if (featureType == null) continue;
+                        
+                    featureTypes.Add(featureType);
                 }
 
                 return featureTypes;
