@@ -9,9 +9,9 @@ using TMPro;
 
 namespace Netherlands3D.Twin
 {
-    public class UIButtonLogic : MonoBehaviour
+    public class UIToggleLogic : MonoBehaviour
     {
-        private Button button;
+        private Toggle toggle;
         
         public Color BaseTextColor = Color.blue;
         public Color HighlightedTextColor = Color.white;
@@ -21,12 +21,12 @@ namespace Netherlands3D.Twin
 
         private void Awake()
         {
-            button = GetComponent<Button>();
+            toggle = GetComponent<Toggle>();
         }
 
         private void Start()
         {
-            if (button.interactable)
+            if (toggle.interactable)
             {
                 if (ButtonText != null)
                 {
@@ -51,8 +51,7 @@ namespace Netherlands3D.Twin
                 }
             }
         }
-
-
+        
         public void PointerDown()
         {
             if (ButtonText != null)
@@ -68,7 +67,7 @@ namespace Netherlands3D.Twin
 
         public void PointerUp()
         {
-            if(button.interactable)
+            if(toggle.interactable)
             {
                 if (ButtonText != null)
                 {

@@ -86,8 +86,8 @@ GameObject:
   - component: {fileID: 6841143497760565240}
   - component: {fileID: 1645131060369214473}
   - component: {fileID: 8399301839133359048}
-  - component: {fileID: 7188778991279440448}
   - component: {fileID: -8843509744830246120}
+  - component: {fileID: 8073243692310883490}
   m_Layer: 5
   m_Name: UIToggleButton
   m_TagString: Untagged
@@ -195,23 +195,6 @@ MonoBehaviour:
   imageToSwap: {fileID: 9066887699801784710}
   startSprite: {fileID: 21300000, guid: 898f8d6a059a97140bf49ae0880749e5, type: 3}
   swappedSprite: {fileID: 21300000, guid: 1ed68b3914776904e8c2b8feb51113da, type: 3}
---- !u!114 &7188778991279440448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2349728562035508211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bf1a1308af559e47a8cc837e50d8707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BaseTextColor: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
-  HighlightedTextColor: {r: 1, g: 1, b: 1, a: 1}
-  DisabledTextColor: {r: 0.8745098, g: 0.9098039, b: 0.9490196, a: 1}
-  ButtonText: {fileID: 0}
-  Icon: {fileID: 2145024381500092288}
 --- !u!114 &-8843509744830246120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +212,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7188778991279440448}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.UIButtonLogic, Assembly-CSharp
           m_MethodName: PointerDown
           m_Mode: 1
@@ -245,7 +228,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7188778991279440448}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: Netherlands3D.Twin.UIButtonLogic, Assembly-CSharp
           m_MethodName: PointerUp
           m_Mode: 1
@@ -257,6 +240,23 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8073243692310883490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2349728562035508211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f602c17a32cf4f2395dbbd86a06789b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaseTextColor: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
+  HighlightedTextColor: {r: 1, g: 1, b: 1, a: 1}
+  DisabledTextColor: {r: 0.8745098, g: 0.9098039, b: 0.9490196, a: 1}
+  ButtonText: {fileID: 0}
+  Icon: {fileID: 9066887699801784710}
 --- !u!1 &4709915411388322746
 GameObject:
   m_ObjectHideFlags: 0
