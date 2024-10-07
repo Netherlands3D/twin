@@ -43,13 +43,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        // private void Awake()
-        // {
-        //     handler = GetComponent<LayerCredentialsHandler>();
-        //     if (!handler)
-        //         handler = gameObject.AddComponent<LayerCredentialsHandler>();
-        // }
-
         private void OnEnable()
         {
             ShowCredentialsWarning(false);
@@ -57,38 +50,18 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void ShowCredentialsWarning(bool show)
         {
-            print("shjowing warning:" + show);
-            //First failure from server may be ignored, because we want to give the user a chance to fill in the credentials via the credentials panel
-            // if (skipFirstCredentialErrorMessage)
-            // {
-            //     print("skipping");
-            //     skipFirstCredentialErrorMessage = false;
-            //     return;
-            // }
-
-            //For now a standard text is shown.
             inputPanel.SetActive(!show);
             errorMessage.SetActive(show);
 
             if (!show)
                 SetAuthorizationInputType(credentialTypeDropdown.value);
         }
-
-        // public void CloseFailedFeedback()
-        // {
-        //     inputPanel.SetActive(true);
-        //     errorMessage.gameObject.SetActive(false);
-        // }
-
+        
         /// <summary>
         /// Apply the credentials input fields and start checking our authorization vault
         /// </summary>
         public void ApplyCredentials()
         {
-            print(" applying");
-
-            // ShowCredentialsWarning(false);
-
             switch (handler.AuthorizationType)
             {
                 case AuthorizationType.UsernamePassword:

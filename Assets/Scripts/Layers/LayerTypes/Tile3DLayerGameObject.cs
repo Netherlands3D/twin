@@ -53,15 +53,7 @@ namespace Netherlands3D.Twin.Layers
             else
                 tileSet.RefreshTiles();
         }
-
-        // private CredentialsInputPropertySection inputPropertySection;
-        //
-        // public CredentialsInputPropertySection InputPropertySection
-        // {
-        //     get => inputPropertySection;
-        //     set => inputPropertySection = value;
-        // }
-
+        
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
@@ -71,9 +63,6 @@ namespace Netherlands3D.Twin.Layers
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
                 propertySections = new();
-
-            if (!GetComponent<LayerCredentialsHandler>())
-                gameObject.AddComponent<LayerCredentialsHandler>();
         }
 
         private void OnEnable()

@@ -13,8 +13,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [Tooltip("The same URL input is used here, as the one used in the property panel")] [SerializeField]
         private Tile3DLayerPropertySection tile3DLayerPropertySection;
 
-        [FormerlySerializedAs("credentialsPropertySection")] [Tooltip("The same credentials input is used here, as the one used in the property panel")] 
-        [SerializeField] private LayerCredentialsHandler credentialsHandler;
+        [Tooltip("The same credentials input is used here, as the one used in the property panel")] 
+        [SerializeField] private CredentialsInputPropertySection credentialsPropertySection;
 
         [SerializeField] private RectTransform credentialExplanation;
 
@@ -24,12 +24,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public override void SetReferencedLayer(LayerGameObject layerGameObject)
         {
             base.SetReferencedLayer(layerGameObject);
+            credentialsPropertySection.Handler = layerGameObject.GetComponent<LayerCredentialsHandler>();
 
             layerGameObjectWithCredentials = layerGameObject as Tile3DLayerGameObject;
             CloseRightProperties(layerGameObject.LayerData);
 
             tile3DLayerPropertySection.Tile3DLayerGameObject = layerGameObjectWithCredentials;
-
             layerGameObjectWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerGameObjectWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
         }
@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (webRequestResult.ReturnedServerError())
             {
                 credentialExplanation.gameObject.SetActive(false);
-                credentialsHandler.gameObject.SetActive(false);
+                credentialsPropertySection.gameObject.SetActive(false);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
 
             //Hide the credentials section by default. Only activated if we determine the URL needs credentials
-            credentialsHandler.gameObject.SetActive(false);
+            credentialsPropertySection.gameObject.SetActive(false);
             credentialExplanation.gameObject.SetActive(false);
         }
 
@@ -97,9 +97,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 default:
                     //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-                    // credentialsHandler.LayerWithCredentials = layerGameObjectWithCredentials;
-                    credentialsHandler.SetAuthorizationInputType(startingAuthenticationType);
-                    // credentialsHandler.gameObject.SetActive(true);
+                    credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
+                    credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);
                     break;
             }
