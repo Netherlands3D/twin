@@ -18,14 +18,13 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             var settings = Instantiate(inputPropertySectionPrefab, properties);
             var handler = GetComponent<LayerCredentialsHandler>();
+            
             foreach (var credentialInterface in settings.GetComponentsInChildren<ILayerCredentialInterface>(true))
             {
                 print(credentialInterface);
                 credentialInterface.Handler = handler;
             }
-            // if (settings.Handler == null)
-            //     gameObject.AddComponent<LayerCredentialsHandler>();
-
+            
             OnCredentialsPropertySectionInstantiated.Invoke(settings);
         }
     }

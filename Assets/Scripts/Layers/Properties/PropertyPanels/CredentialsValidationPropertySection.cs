@@ -29,13 +29,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void OnEnable()
+        private void Start()
         {
             if (handler)
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (handler)
                 handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
@@ -43,6 +43,9 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnCredentialsAccepted(bool accepted)
         {
+            if(accepted)
+                gameObject.SetActive(true);
+    
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
             if (accepted)

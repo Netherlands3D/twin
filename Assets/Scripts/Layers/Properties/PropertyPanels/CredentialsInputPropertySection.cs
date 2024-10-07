@@ -8,15 +8,13 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         private LayerCredentialsHandler handler;
 
+        [SerializeField] private GameObject inputPanel;
+        [SerializeField] private GameObject errorMessage;
+
         [SerializeField] private TMP_InputField userNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
-        [SerializeField] private TMP_Text keyTokenOrCodeLabel;
-
-        [SerializeField] private Transform headerDefault;
-        [SerializeField] private Transform headerWithCredentialTypeDropdown;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
-        [SerializeField] private Transform errorMessage;
         private bool skipFirstCredentialErrorMessage = true;
 
         public LayerCredentialsHandler Handler
@@ -29,7 +27,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
                 handler = value;
 
-                OnCredentialsAccepted(handler.HasValidCredentials);
+                skipFirstCredentialErrorMessage = true;
+                // OnCredentialsAccepted(handler.HasValidCredentials);
 
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
             }
@@ -37,14 +36,10 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnCredentialsAccepted(bool accepted)
         {
+            ShowCredentialsWarning(!accepted);
             if (accepted)
             {
-                print("success");
-            }
-            else
-            {
-                print("fail");
-                ShowCredentialsWarning();
+                gameObject.SetActive(false);
             }
         }
 
@@ -57,37 +52,42 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnEnable()
         {
-            errorMessage.gameObject.SetActive(false);
+            ShowCredentialsWarning(false);
         }
 
-        private void OnDisable()
+        public void ShowCredentialsWarning(bool show)
         {
-        }
-
-        public void ShowCredentialsWarning()
-        {
+            print("shjowing warning:" + show);
             //First failure from server may be ignored, because we want to give the user a chance to fill in the credentials via the credentials panel
-            if (skipFirstCredentialErrorMessage)
-            {
-                skipFirstCredentialErrorMessage = false;
-                return;
-            }
+            // if (skipFirstCredentialErrorMessage)
+            // {
+            //     print("skipping");
+            //     skipFirstCredentialErrorMessage = false;
+            //     return;
+            // }
 
             //For now a standard text is shown.
-            errorMessage.gameObject.SetActive(true);
+            inputPanel.SetActive(!show);
+            errorMessage.SetActive(show);
+
+            if (!show)
+                SetAuthorizationInputType(credentialTypeDropdown.value);
         }
 
-        public void CloseFailedFeedback()
-        {
-            errorMessage.gameObject.SetActive(false);
-        }
+        // public void CloseFailedFeedback()
+        // {
+        //     inputPanel.SetActive(true);
+        //     errorMessage.gameObject.SetActive(false);
+        // }
 
         /// <summary>
         /// Apply the credentials input fields and start checking our authorization vault
         /// </summary>
         public void ApplyCredentials()
         {
-            errorMessage.gameObject.SetActive(false);
+            print(" applying");
+
+            // ShowCredentialsWarning(false);
 
             switch (handler.AuthorizationType)
             {
