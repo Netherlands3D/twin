@@ -2014,7 +2014,6 @@ MonoBehaviour:
   indentWidth: 24
   foldoutToggle: {fileID: 2274689754544140435}
   layerTypeImage: {fileID: 1356745287749164724}
-  errorLayerTypeImage: {fileID: 94072058954664853}
   layerNameText: {fileID: 4813776858706825396}
   layerNameField: {fileID: 8882207419444401735}
   childrenPanel: {fileID: 4186340492675122666}
@@ -2441,7 +2440,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1850104207184435544}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
+        m_MethodName: set_isOn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &7119179143932802346
 GameObject:
