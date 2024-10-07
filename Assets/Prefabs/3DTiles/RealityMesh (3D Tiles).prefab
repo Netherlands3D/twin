@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -5688274655914667246}
   - component: {fileID: -3892557586120215936}
   - component: {fileID: 379969814246679949}
+  - component: {fileID: 6181233540970977359}
   m_Layer: 6
   m_Name: RealityMesh (3D Tiles)
   m_TagString: Untagged
@@ -79,10 +80,12 @@ MonoBehaviour:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
@@ -156,10 +159,12 @@ MonoBehaviour:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
@@ -329,6 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: 71fff5c85650fcd4d9f59e4e182b5e95
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -336,7 +342,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   usePropertySections: 1
-  openPropertiesOnStart: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls: []
@@ -352,7 +357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: -3892557586120215936}
   referenceCoordinateSystem: 4326
   onPreShift:
@@ -386,8 +390,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoApplyCredentials: 1
-  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
+  inputPropertySectionPrefab: {fileID: 4139614324750460760, guid: d01d03b127df7b34cacbb24ee8f84d28,
     type: 3}
   OnCredentialsPropertySectionInstantiated:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6181233540970977359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b2880c796b146d191c4b41da5c526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findKeyInVaultOnURLChange: 1
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  autoApplyCredentials: 1

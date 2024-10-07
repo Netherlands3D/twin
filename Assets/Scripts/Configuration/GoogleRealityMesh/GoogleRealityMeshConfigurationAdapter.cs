@@ -30,9 +30,9 @@ namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
             read3DTileset.enabled = true;
         }
 
-        private void CredentialsPropertySectionInstantiated(CredentialsPropertySection credentialsPropertySection)
+        private void CredentialsPropertySectionInstantiated(CredentialsValidationPropertySection credentialsInputPropertySection)
         {
-            credentialsPropertySection.SetInputFieldsValues(key: configuration.ApiKey);
+            // credentialsInputPropertySection.SetInputFieldsValues(key: configuration.ApiKey);
         }
     }
 }

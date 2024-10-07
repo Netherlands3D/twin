@@ -1,6 +1,8 @@
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -11,8 +13,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [Tooltip("The same URL input is used here, as the one used in the property panel")] [SerializeField]
         private Tile3DLayerPropertySection tile3DLayerPropertySection;
 
-        [Tooltip("The same credentials input is used here, as the one used in the property panel")] [SerializeField]
-        private CredentialsPropertySection credentialsPropertySection;
+        [FormerlySerializedAs("credentialsPropertySection")] [Tooltip("The same credentials input is used here, as the one used in the property panel")] 
+        [SerializeField] private LayerCredentialsHandler credentialsHandler;
 
         [SerializeField] private RectTransform credentialExplanation;
 
@@ -45,7 +47,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             if (webRequestResult.ReturnedServerError())
             {
                 credentialExplanation.gameObject.SetActive(false);
-                credentialsPropertySection.gameObject.SetActive(false);
+                credentialsHandler.gameObject.SetActive(false);
             }
         }
 
@@ -54,7 +56,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
 
             //Hide the credentials section by default. Only activated if we determine the URL needs credentials
-            credentialsPropertySection.gameObject.SetActive(false);
+            credentialsHandler.gameObject.SetActive(false);
             credentialExplanation.gameObject.SetActive(false);
         }
 
@@ -95,9 +97,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 default:
                     //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-                    credentialsPropertySection.LayerWithCredentials = layerGameObjectWithCredentials;
-                    credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
-                    credentialsPropertySection.gameObject.SetActive(true);
+                    // credentialsHandler.LayerWithCredentials = layerGameObjectWithCredentials;
+                    credentialsHandler.SetAuthorizationInputType(startingAuthenticationType);
+                    // credentialsHandler.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);
                     break;
             }
