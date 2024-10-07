@@ -140,6 +140,7 @@ namespace Netherlands3D.Twin
             else
             {
                 Debug.LogError("Access denied with username and password for: " + url);
+                //todo: send an event here so UI can update
             }
         }
 
