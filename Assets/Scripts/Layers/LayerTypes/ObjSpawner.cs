@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,11 @@ namespace Netherlands3D.Twin.Layers
         public LayerPropertyData PropertyData => propertyData;
 
         private ObjImporter.ObjImporter importer;
+
+        private void Awake()
+        {
+            gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
+        }
 
         private void Start()
         {
@@ -68,8 +74,10 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnObjImported(GameObject returnedGameObject)
         {
+            // By explicitly stating the worldPositionStays to false, we ensure Obj is spawned and it will retain the
+            // position and scale in this parent object
             returnedGameObject.transform.SetParent(this.transform, false);
-            AddLayerScriptToObj(returnedGameObject);
+            returnedGameObject.AddComponent<MeshCollider>();
 
             DisposeImporter();
         }
@@ -77,17 +85,6 @@ namespace Netherlands3D.Twin.Layers
         private void DisposeImporter()
         {
             if (importer != null) Destroy(importer.gameObject);
-        }
-        
-        private void AddLayerScriptToObj(GameObject parsedObj)
-        {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
-
-            gameObject.transform.position = spawnPoint;
-
-            parsedObj.AddComponent<MeshCollider>();
-
-            // CreatedMoveableGameObject.Invoke(parsedObj);
         }
     }
 }
