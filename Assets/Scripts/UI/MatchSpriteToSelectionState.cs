@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private Selectable targetSelectable;
         private Image image;
-        private Sprite normalSprite;
         [SerializeField] private Sprite highlightedSprite;
         [SerializeField] private Sprite pressedSprite;
         [SerializeField] private Sprite selectedSprite;
@@ -24,8 +23,10 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {
-            if (!targetSelectable.image)
+            if (!targetSelectable.targetGraphic)
+            {
                 return;
+            }
 
             if (targetSelectable.image.overrideSprite == targetSelectable.spriteState.highlightedSprite)
                 image.overrideSprite = highlightedSprite;
