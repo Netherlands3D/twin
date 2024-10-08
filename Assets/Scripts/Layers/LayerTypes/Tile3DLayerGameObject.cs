@@ -85,6 +85,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void Start()
         {
+            base.Start();
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
         }
