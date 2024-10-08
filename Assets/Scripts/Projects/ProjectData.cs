@@ -83,7 +83,7 @@ namespace Netherlands3D.Twin.Projects
         {
             if (!isLoading)
             {
-                RootLayer.AddChild(layer);
+                RootLayer.AddChild(layer, 0);
             }
 
             LayerAdded.Invoke(layer);
