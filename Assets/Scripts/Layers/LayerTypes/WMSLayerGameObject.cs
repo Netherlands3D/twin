@@ -10,12 +10,21 @@ namespace Netherlands3D.Twin.Layers
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
         private WMSTileDataLayer wmsProjectionLayer;
-        public WMSTileDataLayer WMSProjectionLayer { get => wmsProjectionLayer; }
-
+        public WMSTileDataLayer WMSProjectionLayer
+        {
+            get
+            {
+                if (wmsProjectionLayer == null)
+                    wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+                return wmsProjectionLayer;
+            }
+        }
 
         protected LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
+        public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
+        
         protected override void Awake() 
         {
             base.Awake();

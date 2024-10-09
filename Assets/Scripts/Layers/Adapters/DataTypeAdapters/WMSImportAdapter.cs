@@ -71,16 +71,17 @@ namespace Netherlands3D.Twin
 
         private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer)
         {
-            Debug.Log("Adding WMS layer: " + layer.name);
-            // Create a layerType URL for the specific layerType
-            UriBuilder uriBuilder = CreateLayerUri(layer, sourceUrl);
-            var getLayerTypeUrl = uriBuilder.Uri.ToString();
-            string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);
-
             //Spawn a new WMS layer
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = layer.name;
+
+            Debug.Log("Adding WMS layer: " + layer.name);
+            // Create a layerType URL for the specific layerType
+            UriBuilder uriBuilder = CreateLayerUri(layer, sourceUrl);
+            var getLayerTypeUrl = uriBuilder.Uri.ToString();
+            string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);            
+            
             newLayer.SetURL(finalUrl);
         }
 
@@ -115,6 +116,8 @@ namespace Netherlands3D.Twin
             {
                 uriBuilder.AddQueryParameter("format", "image/png");
             }
+            if (!sourceUrl.Contains("transparent="))
+                uriBuilder.AddQueryParameter("transparent", layerPrefab.TransparencyEnabled.ToString());
             return uriBuilder;
         }
 

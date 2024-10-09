@@ -12,6 +12,9 @@ namespace Netherlands3D.Twin
 {
     public class WMSTileDataLayer : ImageProjectionLayer
     {
+        //this gives the requesting url the extra param to set transparancy enabled by default
+        public bool TransparencyEnabled = true;
+
         private string wmsUrl = "";
         public string WmsUrl
         {
@@ -52,7 +55,6 @@ namespace Netherlands3D.Twin
             var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             string url = wmsUrl.Replace("{0}", bboxValue);
 
-            //var webRequest = UnityWebRequest.Get(url);
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
@@ -65,19 +67,8 @@ namespace Netherlands3D.Twin
             }
             else
             {
-                //byte[] imageData = webRequest.downloadHandler.data;
-                //Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                //tex.LoadImage(imageData);
-                ////tex.LoadRawTextureData(imageData);
-                //tex.Apply();
-
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-
-                ////Texture myTexture = DownloadHandlerTexture.GetContent(webRequest);
                 Texture2D tex = texture as Texture2D;
-
-                Color[] pixels = tex.GetPixels();
-
                 if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                 {
                     projector.SetSize(tileSize, tileSize, tileSize);
@@ -90,8 +81,6 @@ namespace Netherlands3D.Twin
                         textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
 
                 }
-
-
                 ClearPreviousTexture(tile);
                 callback(tileChange);
             }
