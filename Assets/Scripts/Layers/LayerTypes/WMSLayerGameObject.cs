@@ -24,7 +24,8 @@ namespace Netherlands3D.Twin.Layers
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
-        
+        public int DefaultEnabledLayersMax { get => WMSProjectionLayer.DefaultEnabledLayersMax; }
+
         protected override void Awake() 
         {
             base.Awake();
