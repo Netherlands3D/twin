@@ -244,7 +244,13 @@ namespace Netherlands3D.Twin
                                 styles.Add(styleNameNode.InnerText);
                             }
                         }
-                        layerQueryParams.style = string.Join(",", styles);
+
+                        // Add all styles, but pick the first one by default for the WMS request
+                        if (styles.Count > 0)
+                            layerQueryParams.style = styles[0]; // Pick the first style by default
+                        else
+                            layerQueryParams.style = "";                        
+                        //layerQueryParams.style = string.Join(",", styles);
 
                     }
                     layers.Add(layerQueryParams);
