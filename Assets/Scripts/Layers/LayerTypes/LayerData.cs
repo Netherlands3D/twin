@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
+        [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -92,6 +93,20 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        [JsonIgnore]
+        public bool HasValidCredentials
+        {
+            get
+            {
+                return hasValidCredentials;
+            }
+            set
+            {
+                hasValidCredentials = value;
+                HasValidCredentialsChanged.Invoke(value);
+            }
+        }
+
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
@@ -107,6 +122,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 

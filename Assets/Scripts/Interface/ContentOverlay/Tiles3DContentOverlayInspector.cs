@@ -1,6 +1,8 @@
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
@@ -11,8 +13,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         [Tooltip("The same URL input is used here, as the one used in the property panel")] [SerializeField]
         private Tile3DLayerPropertySection tile3DLayerPropertySection;
 
-        [Tooltip("The same credentials input is used here, as the one used in the property panel")] [SerializeField]
-        private CredentialsPropertySection credentialsPropertySection;
+        [Tooltip("The same credentials input is used here, as the one used in the property panel")] 
+        [SerializeField] private CredentialsInputPropertySection credentialsPropertySection;
 
         [SerializeField] private RectTransform credentialExplanation;
 
@@ -22,12 +24,12 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         public override void SetReferencedLayer(LayerGameObject layerGameObject)
         {
             base.SetReferencedLayer(layerGameObject);
+            credentialsPropertySection.Handler = layerGameObject.GetComponent<LayerCredentialsHandler>();
 
             layerGameObjectWithCredentials = layerGameObject as Tile3DLayerGameObject;
             CloseRightProperties(layerGameObject.LayerData);
 
             tile3DLayerPropertySection.Tile3DLayerGameObject = layerGameObjectWithCredentials;
-
             layerGameObjectWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerGameObjectWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
         }
@@ -95,7 +97,6 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 default:
                     //Something went wrong, show the credentials section, starting with a default authentication input type
                     var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-                    credentialsPropertySection.LayerWithCredentials = layerGameObjectWithCredentials;
                     credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
                     credentialsPropertySection.gameObject.SetActive(true);
                     credentialExplanation.gameObject.SetActive(true);

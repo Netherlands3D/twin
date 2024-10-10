@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 1194273570138351517}
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
+  - component: {fileID: -3598923106467742640}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -64,10 +65,12 @@ MonoBehaviour:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
@@ -141,10 +144,12 @@ MonoBehaviour:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
       Points: []
@@ -192,6 +197,7 @@ MonoBehaviour:
     boundingRegion: []
   tileCount: 0
   nestingDepth: 0
+  parseAssetMetadata: 0
   parseSubObjects: 0
   maxScreenHeightInPixels: 1080
   maximumScreenSpaceError: 5
@@ -201,7 +207,13 @@ MonoBehaviour:
   unsupportedExtensionsParsed:
     m_PersistentCalls:
       m_Calls: []
+  OnServerResponseReceived:
+    m_PersistentCalls:
+      m_Calls: []
   OnServerRequestFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadAssetMetadata:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7109194962515795805
@@ -263,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: 395dd4e52bd3b42cfb24f183f3839bba
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -270,7 +283,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   usePropertySections: 1
-  openPropertiesOnStart: 0
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:
@@ -344,7 +356,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -860560823292524916, guid: f241bd5b609aa4447ae89fb4325470ef,
+  autoApplyCredentials: 1
+  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
   OnCredentialsPropertySectionInstantiated:
     m_PersistentCalls:
@@ -363,7 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overlayPrefab: {fileID: -5551926652888725166, guid: 3242028f86f3dad4a8d336a5e171cab1,
     type: 3}
-  referencedLayer: {fileID: 4142489338678956943}
+  layerGameObject: {fileID: 4142489338678956943}
   instantiateOnStart: 1
 --- !u!114 &2740582493697960923
 MonoBehaviour:
@@ -377,7 +390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: 1859171214202950123}
   referenceCoordinateSystem: 4326
   onPreShift:
@@ -398,3 +410,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3598923106467742640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b2880c796b146d191c4b41da5c526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findKeyInVaultOnURLChange: 1
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  autoApplyCredentials: 1

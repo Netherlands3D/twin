@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
@@ -8,16 +9,22 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private bool autoApplyCredentials = false;
-        [SerializeField] private CredentialsPropertySection propertySectionPrefab;  
-        [HideInInspector] public UnityEvent<CredentialsPropertySection> OnCredentialsPropertySectionInstantiated = new();
+        [SerializeField] private GameObject inputPropertySectionPrefab;
+        [HideInInspector] public UnityEvent<GameObject> OnCredentialsPropertySectionInstantiated = new();
 
         public void AddToProperties(RectTransform properties)
         {
-            if (!propertySectionPrefab) return;
+            if (!inputPropertySectionPrefab) return;
 
-            var settings = Instantiate(propertySectionPrefab, properties);
-            settings.AutoApplyCredentials = autoApplyCredentials;
-            settings.LayerWithCredentials = GetComponent<ILayerWithCredentials>();
+            var settings = Instantiate(inputPropertySectionPrefab, properties);
+            var handler = GetComponent<LayerCredentialsHandler>();
+            
+            foreach (var credentialInterface in settings.GetComponentsInChildren<ILayerCredentialInterface>(true))
+            {
+                print(credentialInterface);
+                credentialInterface.Handler = handler;
+            }
+            
             OnCredentialsPropertySectionInstantiated.Invoke(settings);
         }
     }
