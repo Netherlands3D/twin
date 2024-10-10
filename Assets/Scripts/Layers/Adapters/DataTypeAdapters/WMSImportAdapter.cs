@@ -5,6 +5,7 @@ using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Layers;
+using System.Text;
 
 namespace Netherlands3D.Twin
 {
@@ -28,6 +29,11 @@ namespace Netherlands3D.Twin
 
             Debug.Log("Checking source WMS url: " + sourceUrl);
             wms = new WMS(sourceUrl, cachedDataPath);
+
+            //If the body is a specific GetFeature request; directly continue to execute
+            bool isGetMapRequest = wms.IsGetMapRequest();
+            if (isGetMapRequest)
+                return true;
 
             //If the body is a GetCapabilities request; check if the WMS supports BBOX filter
             bool IsGetCapabilitiesRequest = wms.IsGetCapabilitiesRequest();
@@ -63,7 +69,66 @@ namespace Netherlands3D.Twin
                 
                 wms = null;
                 return;
-            }            
+            }
+            if (wms.requestType == WMS.RequestType.GetMap)
+            {
+                //Spawn a new WMS layer
+                WMSLayerGameObject newLayer = Instantiate(layerPrefab);
+                newLayer.LayerData.SetParent(wmsFolder);               
+               
+                // Start by removing any query parameters we want to inject
+                var uriBuilder = new UriBuilder(url);
+
+                if (sourceUrl.ToLower().Contains("version="))
+                {
+                    wmsVersion = sourceUrl.ToLower().Split("version=")[1].Split("&")[0];
+                }
+                else
+                {
+                    Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
+                    wmsVersion = defaultFallbackVersion;
+                }
+
+                var parameters = new NameValueCollection();
+                uriBuilder.TryParseQueryString(parameters);
+
+                uriBuilder.AddQueryParameter("service", "WMS");
+                uriBuilder.AddQueryParameter("version", wmsVersion);
+                uriBuilder.AddQueryParameter("request", "GetMap");
+
+                var layerName = string.Empty;
+                if (sourceUrl.ToLower().Contains("layers="))
+                {
+                    layerName = sourceUrl.ToLower().Split("layers=")[1].Split("&")[0];
+                }
+                uriBuilder.AddQueryParameter("layers", layerName);
+                var styles = string.Empty;
+                if (sourceUrl.ToLower().Contains("styles="))
+                {
+                    styles = sourceUrl.ToLower().Split("styles=")[1].Split("&")[0];
+                }
+                uriBuilder.AddQueryParameter("styles", styles);
+                uriBuilder.AddQueryParameter("SRS", "EPSG:4326"); //most common
+                uriBuilder.AddQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
+                uriBuilder.AddQueryParameter("width", layerPrefab.PreferredImageSize.x.ToString());
+                uriBuilder.AddQueryParameter("height", layerPrefab.PreferredImageSize.y.ToString());
+                if (parameters.Get("format")?.ToLower() is not ("image/png" or "image/jpeg"))
+                {
+                    uriBuilder.AddQueryParameter("format", "image/png");
+                }
+                if (!sourceUrl.Contains("transparent="))
+                    uriBuilder.AddQueryParameter("transparent", layerPrefab.TransparencyEnabled.ToString());
+
+                newLayer.Name = layerName;
+                var getLayerTypeUrl = uriBuilder.Uri.ToString();
+                string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);
+
+                newLayer.SetURL(finalUrl);
+                newLayer.LayerData.ActiveSelf = true;
+
+                wms = null;
+                return;
+            }
         }
 
         private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool defaultEnabled)
@@ -131,6 +196,7 @@ namespace Netherlands3D.Twin
             public enum RequestType
             {
                 GetCapabilities,
+                GetMap,
                 Unsupported
             }
 
@@ -145,6 +211,13 @@ namespace Netherlands3D.Twin
                 this.xmlDocument = new XmlDocument();
                 this.xmlDocument.Load(this.cachedBodyContent);
                 this.namespaceManager = ReadNameSpaceManager(this.xmlDocument);
+            }
+
+            public bool IsGetMapRequest()
+            {
+                var getMapRequest = this.sourceUrl.ToLower().Contains("request=getmap");
+                requestType = RequestType.GetMap;
+                return getMapRequest;
             }
 
             public bool IsGetCapabilitiesRequest()
