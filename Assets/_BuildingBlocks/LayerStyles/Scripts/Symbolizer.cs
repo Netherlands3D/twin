@@ -10,6 +10,7 @@ namespace Netherlands3D.LayerStyles
 
         internal object GetProperty(string key)
         {
+            // explicitly return null when value is not present, so that caller knows it should ignore using this field 
             return properties.ContainsKey(key) ? properties[key] : null;
         }
 
