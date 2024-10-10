@@ -35,8 +35,6 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
         
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
@@ -44,19 +42,6 @@ namespace Netherlands3D.Twin.Layers
         private Coroutine streamParseCoroutine;
         protected LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-
-        protected virtual void Awake()
-        {
-            LoadDefaultValues();
-        }
-
-        protected virtual void LoadDefaultValues()
-        {
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            LayerData.Color = randomLayerColor;
-        }
 
         /// <summary>
         /// Load properties is only used when restoring a layer from a project file.

@@ -115,6 +115,11 @@ namespace Netherlands3D.Twin
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = title;
             newLayer.SetURL(getFeatureUrl);
+            
+            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
+            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
+            randomLayerColor.a = 0.5f;
+            newLayer.LayerData.Color = randomLayerColor;
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
