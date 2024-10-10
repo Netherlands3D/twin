@@ -18,6 +18,8 @@ namespace Netherlands3D.Twin
         //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public int DefaultEnabledLayersMax = 5;
 
+        public Vector2Int PreferredImageSize = Vector2Int.one * 512;
+
         public int RenderIndex 
         { 
             get => renderIndex;

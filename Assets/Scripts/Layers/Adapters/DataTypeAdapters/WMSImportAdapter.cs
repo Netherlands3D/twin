@@ -108,8 +108,8 @@ namespace Netherlands3D.Twin
             uriBuilder.AddQueryParameter("styles", layer.style);
             uriBuilder.AddQueryParameter(layer.spatialReferenceType, layer.spatialReference);
             uriBuilder.AddQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
-            uriBuilder.AddQueryParameter("width", "512");
-            uriBuilder.AddQueryParameter("height", "512"); 
+            uriBuilder.AddQueryParameter("width", layerPrefab.PreferredImageSize.x.ToString());
+            uriBuilder.AddQueryParameter("height", layerPrefab.PreferredImageSize.y.ToString()); 
             if (parameters.Get("format")?.ToLower() is not ("image/png" or "image/jpeg"))
             {
                 uriBuilder.AddQueryParameter("format", "image/png");

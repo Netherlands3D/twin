@@ -81,3 +81,6 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
+  TransparencyEnabled: 1
+  DefaultEnabledLayersMax: 5
+  PreferredImageSize: {x: 512, y: 512}

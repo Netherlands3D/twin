@@ -1,6 +1,7 @@
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -25,6 +26,7 @@ namespace Netherlands3D.Twin.Layers
 
         public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
         public int DefaultEnabledLayersMax { get => WMSProjectionLayer.DefaultEnabledLayersMax; }
+        public Vector2Int PreferredImageSize { get => WMSProjectionLayer.PreferredImageSize; }
 
         protected override void Awake() 
         {
