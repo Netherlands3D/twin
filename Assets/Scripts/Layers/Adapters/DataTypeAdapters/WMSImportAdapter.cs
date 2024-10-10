@@ -1,4 +1,3 @@
-using System.IO;
 using System.Xml;
 using UnityEngine;
 using System;
@@ -6,8 +5,6 @@ using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Geoservice;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
@@ -58,12 +55,10 @@ namespace Netherlands3D.Twin
             {
                 List<WMS.WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
 
-                int defaultEnabled = layerPrefab.DefaultEnabledLayersMax;
-
                 //Create a folder layer 
                 for(int i = 0; i < layerTypes.Count; i++)
                 {
-                    AddWMSLayer(layerTypes[i], url, wmsFolder, i < defaultEnabled);
+                    AddWMSLayer(layerTypes[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
                 }
                 
                 wms = null;
@@ -71,7 +66,7 @@ namespace Netherlands3D.Twin
             }            
         }
 
-        private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool enabled = true)
+        private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool defaultEnabled)
         {
             //Spawn a new WMS layer
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
@@ -85,7 +80,7 @@ namespace Netherlands3D.Twin
             string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);            
             
             newLayer.SetURL(finalUrl);
-            newLayer.LayerData.ActiveSelf = enabled;
+            newLayer.LayerData.ActiveSelf = defaultEnabled;
         }
 
         private UriBuilder CreateLayerUri(WMS.WMSLayerQueryParams layer, string sourceUrl)

@@ -18,6 +18,17 @@ namespace Netherlands3D.Twin
         //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public int DefaultEnabledLayersMax = 5;
 
+        public int RenderIndex 
+        { 
+            get => renderIndex;
+            set
+            {
+                renderIndex = value;
+            }
+        }
+
+        private int renderIndex = 0;
+
         private string wmsUrl = "";
         public string WmsUrl
         {
@@ -82,6 +93,9 @@ namespace Netherlands3D.Twin
                     TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
                     if (ProjectorHeight >= decalProjector.size.z)
                         textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+
+                    //set the render index, to make sure the render order is maintained
+                    textureDecalProjector.SetPriority(renderIndex);
 
                 }
                 ClearPreviousTexture(tile);

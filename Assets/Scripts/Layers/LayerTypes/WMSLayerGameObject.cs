@@ -29,13 +29,21 @@ namespace Netherlands3D.Twin.Layers
         protected override void Awake() 
         {
             base.Awake();
-            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();            
+            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+            LayerData.RootIndexChanged.AddListener(SetRenderOrder);
         }
 
         public void SetURL(string url)
         {
             this.urlPropertyData.url = url;
             wmsProjectionLayer.WmsUrl = url;
+        }
+
+        //a higher order means rendering over lower indices
+        public void SetRenderOrder(int order)
+        {
+            //we have to flip the value because a lower layer with a higher index needs a lower render index
+            wmsProjectionLayer.RenderIndex = -order;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
@@ -46,6 +54,12 @@ namespace Netherlands3D.Twin.Layers
                 this.urlPropertyData = urlProperty;
                 wmsProjectionLayer.WmsUrl = urlProperty.url;
             }
+        }
+
+        public override void DestroyLayerGameObject()
+        {
+            base.DestroyLayerGameObject();
+            LayerData.RootIndexChanged.RemoveListener(SetRenderOrder);
         }
     }
 }

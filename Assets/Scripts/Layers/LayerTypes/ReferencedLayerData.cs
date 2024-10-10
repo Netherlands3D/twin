@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin.Layers
             Reference.OnProxyTransformParentChanged();
         }
 
-        private void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        private void OnSiblingIndexOrParentChanged(int newSiblingIndex, LayerData data)
         {
             Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
         }

@@ -49,5 +49,10 @@ namespace Netherlands3D.Rendering
             if (texture)
                 Destroy(texture);
         }
+
+        public void SetPriority(int priority)
+        {
+            projector.material.SetInt("_DrawOrder", priority);
+        }
     }
 }

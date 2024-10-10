@@ -19,13 +19,14 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
+        [JsonIgnore] protected int rootIndex = -1;
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-
+        
         [JsonIgnore]
         public string Name
         {
@@ -67,6 +68,17 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
         [JsonIgnore]
+        public int RootIndex
+        {
+            get => rootIndex;
+            set
+            {
+                if(rootIndex != value) { RootIndexChanged.Invoke(value); }
+                rootIndex = value;
+            }
+        }
+
+        [JsonIgnore]
         public bool ActiveInHierarchy
         {
             get
@@ -98,13 +110,14 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
+        [JsonIgnore] public readonly UnityEvent<int> RootIndexChanged = new();
 
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<int, LayerData> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
 
@@ -175,7 +188,7 @@ namespace Netherlands3D.Twin.Layers
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
-                ParentOrSiblingIndexChanged.Invoke(siblingIndex);
+                ParentOrSiblingIndexChanged.Invoke(siblingIndex, this);
             }
 
             if (parentChanged)
@@ -240,6 +253,18 @@ namespace Netherlands3D.Twin.Layers
                 .SelectMany(l => l.GetAssets());
 
             return assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
+        }
+
+        /// <summary>
+        /// Recursively get all layers within children
+        /// </summary>
+        /// <returns></returns>
+        public List<LayerData> GetLayerDataTree()
+        {
+            List<LayerData> layerDataTree = new List<LayerData>();
+            layerDataTree.Add(this);
+            layerDataTree.AddRange(children.SelectMany(l => l.GetLayerDataTree()).ToList());
+            return layerDataTree;
         }
     }
 }

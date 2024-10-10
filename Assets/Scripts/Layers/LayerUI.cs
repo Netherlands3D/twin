@@ -198,7 +198,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateCurrentTreeStates();
         }
         
-        private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
+        private void OnParentOrSiblingIndexChanged(int newSiblingIndex, LayerData data)
         {
             SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
         }

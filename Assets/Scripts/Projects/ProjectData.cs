@@ -52,6 +52,7 @@ namespace Netherlands3D.Twin.Projects
             {
                 rootLayer = value;
                 rootLayer.ReconstructParentsRecursive();
+                LayerMoved.AddListener(rootLayer.UpdateLayerTreeOrder);
             }
         }
 
@@ -59,6 +60,7 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
         [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
+        [NonSerialized] public UnityEvent<LayerData> LayerMoved = new();
 
         public void RefreshUUID()
         {
@@ -87,6 +89,12 @@ namespace Netherlands3D.Twin.Projects
             }
 
             LayerAdded.Invoke(layer);
+            layer.ParentOrSiblingIndexChanged.AddListener(OnLayerMoved);
+        }
+
+        private void OnLayerMoved(int siblingIndex, LayerData data)
+        {
+            LayerMoved.Invoke(data);
         }
 
         public static void AddReferenceLayer(LayerGameObject referencedLayer)
@@ -107,6 +115,7 @@ namespace Netherlands3D.Twin.Projects
         public void RemoveLayer(LayerData layer)
         {
             LayerDeleted.Invoke(layer);
+            layer.ParentOrSiblingIndexChanged.RemoveListener(OnLayerMoved);
         }
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
