@@ -76,6 +76,7 @@ namespace Netherlands3D.Twin
             if (wms.requestType == WMS.RequestType.GetMap)
             {
                 WMS.WMSLayerQueryParams wmsParam = new WMS.WMSLayerQueryParams();
+
                 string layerName = GetParamValueFromSourceUrl(sourceUrl, "layers");
                 wmsParam.name = layerName;                
 
@@ -109,7 +110,7 @@ namespace Netherlands3D.Twin
                 wmsParam.spatialReference = coordinateSystemReference;
                 wmsParam.style = GetParamValueFromSourceUrl(sourceUrl, "styles");
 
-                AddWMSLayer(wmsParam, sourceUrl, wmsFolder, 0 < layerPrefab.DefaultEnabledLayersMax);
+                AddWMSLayer(wmsParam, url, wmsFolder, 0 < layerPrefab.DefaultEnabledLayersMax);
 
                 wms = null;
                 return;
@@ -170,11 +171,12 @@ namespace Netherlands3D.Twin
             uriBuilder.AddQueryParameter(layer.spatialReferenceType, layer.spatialReference);
             uriBuilder.AddQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
             uriBuilder.AddQueryParameter("width", layerPrefab.PreferredImageSize.x.ToString());
-            uriBuilder.AddQueryParameter("height", layerPrefab.PreferredImageSize.y.ToString()); 
-            if (parameters.Get("format")?.ToLower() is not ("image/png" or "image/jpeg"))
-            {
-                uriBuilder.AddQueryParameter("format", "image/png");
-            }
+            uriBuilder.AddQueryParameter("height", layerPrefab.PreferredImageSize.y.ToString());
+            string format = GetParamValueFromSourceUrl(sourceUrl, "format");
+            format = Uri.UnescapeDataString(format);
+            if (format != "image/png" && format != "image/jpeg")
+                format = "image/png";
+            uriBuilder.AddQueryParameter("format", format);
             if (!sourceUrl.Contains("transparent="))
                 uriBuilder.AddQueryParameter("transparent", layerPrefab.TransparencyEnabled.ToString());
             return uriBuilder;
@@ -244,20 +246,6 @@ namespace Netherlands3D.Twin
                 }
 
                 return null; // Return null if root node or version attribute is not found
-            }
-
-            public string GetWMSVersionFromBody()
-            {
-                if(xmlDocument == null)
-                    ParseBodyAsXML();
-
-                var serviceTypeVersion = xmlDocument.SelectSingleNode("//ows:ServiceTypeVersion", namespaceManager);
-                if (serviceTypeVersion != null)
-                {
-                    Debug.Log("WMS version found: " + serviceTypeVersion.InnerText);
-                    return serviceTypeVersion.InnerText;
-                }
-                return "";
             }
 
             public struct WMSLayerQueryParams

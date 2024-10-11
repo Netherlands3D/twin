@@ -1,9 +1,7 @@
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Rendering;
-using Netherlands3D.Twin.Layers;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
