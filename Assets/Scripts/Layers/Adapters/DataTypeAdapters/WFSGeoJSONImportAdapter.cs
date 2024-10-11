@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if (!sourceUrl.ToLower().Contains("service=wfs"))
+            if (!sourceUrl.ToLower().Contains("service=wfs") || sourceUrl.ToLower().Contains("request=getmap")) //if request = getmap it means wms
                 return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);

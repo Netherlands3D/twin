@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin
 
         private string wmsVersion = "";
         private const string defaultFallbackVersion = "1.3.0"; // Default to 1.3.0 (?)
+        private const string defaultCoordinateSystemType = "CRS";
+        private const string defaultCoordinateSystemReference = "EPSG:28992";
 
         private WMS wms;
 
@@ -24,7 +26,7 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if (!sourceUrl.ToLower().Contains("service=wms"))
+            if (!sourceUrl.ToLower().Contains("service=wms") || sourceUrl.ToLower().Contains("request=getfeature")) //if request = getfeature it means wfs
                 return false;
 
             Debug.Log("Checking source WMS url: " + sourceUrl);
@@ -72,63 +74,56 @@ namespace Netherlands3D.Twin
             }
             if (wms.requestType == WMS.RequestType.GetMap)
             {
-                //Spawn a new WMS layer
-                WMSLayerGameObject newLayer = Instantiate(layerPrefab);
-                newLayer.LayerData.SetParent(wmsFolder);               
-               
-                // Start by removing any query parameters we want to inject
-                var uriBuilder = new UriBuilder(url);
+                WMS.WMSLayerQueryParams wmsParam = new WMS.WMSLayerQueryParams();
+                string layerName = GetParamValueFromSourceUrl(sourceUrl, "layers");
+                wmsParam.name = layerName;                
 
+                string coordinateSystemType = string.Empty;
+                string coordinateSystemReference = string.Empty;
                 if (sourceUrl.ToLower().Contains("version="))
                 {
                     wmsVersion = sourceUrl.ToLower().Split("version=")[1].Split("&")[0];
+                    string[] numbers = wmsVersion.Split('.');
+                    int major = int.Parse(numbers[0]);
+                    int minor = int.Parse(numbers[1]);
+                    int revision = int.Parse(numbers[2]);                    
+                    int targetMajor = 1;
+                    int targetMinor = 3;
+                    int targetRevision = 0;
+                    bool isHigherOrEqualVersion = (major > targetMajor) ||
+                                           (major == targetMajor && minor >= targetMinor) ||
+                                           (major == targetMajor && minor == targetMinor && revision >= targetRevision);
+                    coordinateSystemType = isHigherOrEqualVersion ? "CRS" : "SRS";
+                    coordinateSystemReference = defaultCoordinateSystemReference;
                 }
                 else
                 {
                     Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
                     wmsVersion = defaultFallbackVersion;
+                    coordinateSystemType = defaultCoordinateSystemType;
+                    coordinateSystemReference = defaultCoordinateSystemReference;
                 }
 
-                var parameters = new NameValueCollection();
-                uriBuilder.TryParseQueryString(parameters);
+                wmsParam.spatialReferenceType = coordinateSystemType;
+                wmsParam.spatialReference = coordinateSystemReference;
+                wmsParam.style = GetParamValueFromSourceUrl(sourceUrl, "styles");
 
-                uriBuilder.AddQueryParameter("service", "WMS");
-                uriBuilder.AddQueryParameter("version", wmsVersion);
-                uriBuilder.AddQueryParameter("request", "GetMap");
-
-                var layerName = string.Empty;
-                if (sourceUrl.ToLower().Contains("layers="))
-                {
-                    layerName = sourceUrl.ToLower().Split("layers=")[1].Split("&")[0];
-                }
-                uriBuilder.AddQueryParameter("layers", layerName);
-                var styles = string.Empty;
-                if (sourceUrl.ToLower().Contains("styles="))
-                {
-                    styles = sourceUrl.ToLower().Split("styles=")[1].Split("&")[0];
-                }
-                uriBuilder.AddQueryParameter("styles", styles);
-                uriBuilder.AddQueryParameter("SRS", "EPSG:4326"); //most common
-                uriBuilder.AddQueryParameter("bbox", "{0}"); // Bbox value is injected by ImageProjectionLayer
-                uriBuilder.AddQueryParameter("width", layerPrefab.PreferredImageSize.x.ToString());
-                uriBuilder.AddQueryParameter("height", layerPrefab.PreferredImageSize.y.ToString());
-                if (parameters.Get("format")?.ToLower() is not ("image/png" or "image/jpeg"))
-                {
-                    uriBuilder.AddQueryParameter("format", "image/png");
-                }
-                if (!sourceUrl.Contains("transparent="))
-                    uriBuilder.AddQueryParameter("transparent", layerPrefab.TransparencyEnabled.ToString());
-
-                newLayer.Name = layerName;
-                var getLayerTypeUrl = uriBuilder.Uri.ToString();
-                string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);
-
-                newLayer.SetURL(finalUrl);
-                newLayer.LayerData.ActiveSelf = true;
+                AddWMSLayer(wmsParam, sourceUrl, wmsFolder, 0 < layerPrefab.DefaultEnabledLayersMax);
 
                 wms = null;
                 return;
             }
+        }
+
+        private string GetParamValueFromSourceUrl(string sourceUrl, string param)
+        {
+            string value = string.Empty;
+            string p = param + "=";
+            if (sourceUrl.ToLower().Contains(p))
+            {
+                value = sourceUrl.ToLower().Split(p)[1].Split("&")[0];
+            }
+            return value;
         }
 
         private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool defaultEnabled)
