@@ -26,7 +26,8 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if (!sourceUrl.ToLower().Contains("service=wms") || sourceUrl.ToLower().Contains("request=getfeature")) //if request = getfeature it means wfs
+            if ((!sourceUrl.ToLower().Contains("service=wms") && !sourceUrl.ToLower().Contains("/wms")) 
+                || sourceUrl.ToLower().Contains("request=getfeature")) //if request = getfeature it means wfs
                 return false;
 
             Debug.Log("Checking source WMS url: " + sourceUrl);
