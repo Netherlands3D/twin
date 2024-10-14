@@ -68,11 +68,14 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void AddChild(LayerData layer)
+        public void AddChild(LayerData layer, int siblingIndex = -1)
         {
             if (!ChildrenLayers.Contains(layer))
             {
-                ChildrenLayers.Add(layer);
+                if (siblingIndex >= 0 && siblingIndex < ChildrenLayers.Count)
+                    ChildrenLayers.Insert(siblingIndex, layer);
+                else
+                    ChildrenLayers.Add(layer);
                 ChildrenChanged.Invoke();
             }
         }

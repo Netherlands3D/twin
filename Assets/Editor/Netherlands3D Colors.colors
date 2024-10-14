@@ -10,18 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12323, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
+  m_Name: Netherlands3D Colors
   m_EditorClassIdentifier: 
   m_Presets:
-  - m_Name: Blue 700
-    m_Color: {r: 0, g: 0.27450982, b: 0.6, a: 1}
   - m_Name: White
     m_Color: {r: 1, g: 1, b: 1, a: 1}
-  - m_Name: Default Text Color
-    m_Color: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
-  - m_Name: Blue 100
-    m_Color: {r: 0.8980393, g: 0.9215687, b: 0.9490197, a: 1}
   - m_Name: Blue 50
     m_Color: {r: 0.9529412, g: 0.96862745, b: 0.9843137, a: 1}
+  - m_Name: Blue 100
+    m_Color: {r: 0.8980393, g: 0.9215687, b: 0.9490197, a: 1}
   - m_Name: Blue 200
     m_Color: {r: 0.8, g: 0.84313726, b: 0.89411765, a: 1}
+  - m_Name: Blue 300
+    m_Color: {r: 0.44313726, g: 0.50980395, b: 0.5882353, a: 1}
+  - m_Name: Blue 700
+    m_Color: {r: 0, g: 0.27450982, b: 0.6, a: 1}
+  - m_Name: Text Color
+    m_Color: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
+  - m_Name: Blue 900
+    m_Color: {r: 0.18431373, g: 0.20784314, b: 0.3137255, a: 1}
+  - m_Name: Link Text Color
+    m_Color: {r: 0.2, g: 0.4, b: 0.8, a: 1}
+  - m_Name: Warning Color
+    m_Color: {r: 0.8901961, g: 0.3372549, b: 0.3372549, a: 1}
+  - m_Name: Black
+    m_Color: {r: 0, g: 0, b: 0, a: 1}
