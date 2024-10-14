@@ -85,16 +85,9 @@ namespace Netherlands3D.Twin
                 if (sourceUrl.ToLower().Contains("version="))
                 {
                     wmsVersion = sourceUrl.ToLower().Split("version=")[1].Split("&")[0];
-                    string[] numbers = wmsVersion.Split('.');
-                    int major = int.Parse(numbers[0]);
-                    int minor = int.Parse(numbers[1]);
-                    int revision = int.Parse(numbers[2]);                    
-                    int targetMajor = 1;
-                    int targetMinor = 3;
-                    int targetRevision = 0;
-                    bool isHigherOrEqualVersion = (major > targetMajor) ||
-                                           (major == targetMajor && minor >= targetMinor) ||
-                                           (major == targetMajor && minor == targetMinor && revision >= targetRevision);
+                    Version version = Version.Parse(wmsVersion);
+                    wmsVersion = version.ToString();
+                    bool isHigherOrEqualVersion = version >= Version.Parse(defaultFallbackVersion);
                     coordinateSystemType = isHigherOrEqualVersion ? "CRS" : "SRS";
                     coordinateSystemReference = defaultCoordinateSystemReference;
                 }
