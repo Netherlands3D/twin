@@ -10,7 +10,6 @@ namespace Netherlands3D.Twin.Layers
     /// </summary>
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
-        private WMSTileDataLayer wmsProjectionLayer;
         public WMSTileDataLayer WMSProjectionLayer
         {
             get
@@ -20,13 +19,13 @@ namespace Netherlands3D.Twin.Layers
                 return wmsProjectionLayer;
             }
         }
-
-        private LayerURLPropertyData urlPropertyData = new();
-        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-
+        public LayerPropertyData PropertyData => urlPropertyData;
         public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
         public int DefaultEnabledLayersMax { get => WMSProjectionLayer.DefaultEnabledLayersMax; }
         public Vector2Int PreferredImageSize { get => WMSProjectionLayer.PreferredImageSize; }
+
+        private WMSTileDataLayer wmsProjectionLayer;
+        private LayerURLPropertyData urlPropertyData; 
 
         protected override void Awake() 
         {
@@ -40,9 +39,10 @@ namespace Netherlands3D.Twin.Layers
             wmsProjectionLayer.WmsUrl = this.urlPropertyData.url;
         }
 
-        public void SetURL(string url)
+        public void SetUrlPropertyData(string url)
         {
-            this.urlPropertyData.url = url;
+            urlPropertyData = new LayerURLPropertyData();
+            urlPropertyData.url = url;
         }
 
         //a higher order means rendering over lower indices

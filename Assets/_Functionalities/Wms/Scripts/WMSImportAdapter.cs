@@ -127,14 +127,9 @@ namespace Netherlands3D.Twin
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = layer.name;            
-
-            Debug.Log("Adding WMS layer: " + layer.name);
-            // Create a layerType URL for the specific layerType
             UriBuilder uriBuilder = CreateLayerUri(layer, sourceUrl);
-            var getLayerTypeUrl = uriBuilder.Uri.ToString();
-            string finalUrl = Uri.UnescapeDataString(getLayerTypeUrl);            
-            
-            newLayer.SetURL(finalUrl);
+            var uri = uriBuilder.Uri.ToString();
+            newLayer.SetUrlPropertyData(uri);
             newLayer.LayerData.ActiveSelf = defaultEnabled;
         }
 
@@ -143,7 +138,7 @@ namespace Netherlands3D.Twin
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
 
-            // Make sure we have a wfsVersion set
+            // Make sure we have a wmsVersion set
             if (string.IsNullOrEmpty(wmsVersion))
             {
                 Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
