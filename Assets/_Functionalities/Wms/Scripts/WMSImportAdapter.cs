@@ -21,6 +21,14 @@ namespace Netherlands3D.Twin
 
         private WMS wms;
 
+        private struct WMSLayerQueryParams
+        {
+            public string name;
+            public string spatialReferenceType;
+            public string spatialReference;
+            public string style;
+        }
+
         public bool Supports(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
@@ -62,7 +70,7 @@ namespace Netherlands3D.Twin
 
             if (wms.requestType == WMS.RequestType.GetCapabilities)
             {
-                List<WMS.WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
+                List<WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
 
                 //Create a folder layer 
                 for(int i = 0; i < layerTypes.Count; i++)
@@ -75,7 +83,7 @@ namespace Netherlands3D.Twin
             }
             if (wms.requestType == WMS.RequestType.GetMap)
             {
-                WMS.WMSLayerQueryParams wmsParam = new WMS.WMSLayerQueryParams();
+                WMSLayerQueryParams wmsParam = new WMSLayerQueryParams();
 
                 string layerName = GetParamValueFromSourceUrl(sourceUrl, "layers");
                 wmsParam.name = layerName;                
@@ -121,7 +129,7 @@ namespace Netherlands3D.Twin
             return value;
         }
 
-        private void AddWMSLayer(WMS.WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool defaultEnabled)
+        private void AddWMSLayer(WMSLayerQueryParams layer, string sourceUrl, FolderLayer folderLayer, bool defaultEnabled)
         {
             //Spawn a new WMS layer
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
@@ -133,7 +141,7 @@ namespace Netherlands3D.Twin
             newLayer.LayerData.ActiveSelf = defaultEnabled;
         }
 
-        private UriBuilder CreateLayerUri(WMS.WMSLayerQueryParams layer, string sourceUrl)
+        private UriBuilder CreateLayerUri(WMSLayerQueryParams layer, string sourceUrl)
         {
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
@@ -235,15 +243,7 @@ namespace Netherlands3D.Twin
                 }
 
                 return null; // Return null if root node or version attribute is not found
-            }
-
-            public struct WMSLayerQueryParams
-            {
-                public string name;
-                public string spatialReferenceType;
-                public string spatialReference;
-                public string style;
-            }
+            }           
 
             public List<WMSLayerQueryParams> GetWmsLayers()
             {
