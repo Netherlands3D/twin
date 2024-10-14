@@ -50,6 +50,12 @@ namespace Netherlands3D.Twin.Layers
             LoadDefaultValues();
         }
 
+        protected override void Start()
+        {
+            base.Start();
+            StartCoroutine(RestoreGeoJsonLocalFile(urlPropertyData.url));
+        }
+
         protected virtual void LoadDefaultValues()
         {
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
@@ -68,7 +74,6 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                StartCoroutine(RestoreGeoJsonLocalFile(urlProperty.url));
             }
         }
 
