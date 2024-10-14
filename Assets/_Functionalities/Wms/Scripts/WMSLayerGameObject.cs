@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,18 +26,15 @@ namespace Netherlands3D.Twin.Layers
         public Vector2Int PreferredImageSize { get => WMSProjectionLayer.PreferredImageSize; }
 
         private WMSTileDataLayer wmsProjectionLayer;
-        private LayerURLPropertyData urlPropertyData; 
-
-        protected override void Awake() 
-        {
-            base.Awake();
-            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
-            LayerData.RootIndexChanged.AddListener(SetRenderOrder);
-        }
+        private LayerURLPropertyData urlPropertyData;
 
         protected override void Start()
         {
+            base.Start();
+            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
             wmsProjectionLayer.WmsUrl = this.urlPropertyData.url;
+            LayerData.RootIndexChanged.AddListener(SetRenderOrder);
+            SetRenderOrder(LayerData.RootIndex);
         }
 
         public void SetUrlPropertyData(string url)

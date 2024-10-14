@@ -2,6 +2,7 @@ using Netherlands3D.CartesianTiles;
 using Netherlands3D.Rendering;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
@@ -23,7 +24,10 @@ namespace Netherlands3D.Twin
             get => renderIndex;
             set
             {
+                int oldIndex = renderIndex;
                 renderIndex = value;
+                if (oldIndex != renderIndex) 
+                    UpdateDrawOrderForChildren();
             }
         }
 
@@ -102,6 +106,18 @@ namespace Netherlands3D.Twin
                 callback(tileChange);
             }
             yield return null;
+        }
+
+        private void UpdateDrawOrderForChildren()
+        {
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                projector.SetPriority(renderIndex);                    
+            }
         }
     }
 }

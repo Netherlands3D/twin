@@ -73,7 +73,8 @@ namespace Netherlands3D.Twin.Layers
             get => rootIndex;
             set
             {
-                if(rootIndex != value) { RootIndexChanged.Invoke(value); }
+                if(value != rootIndex)
+                    RootIndexChanged.Invoke(value); 
                 rootIndex = value;
             }
         }
