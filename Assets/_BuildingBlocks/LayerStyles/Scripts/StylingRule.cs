@@ -1,11 +1,25 @@
+using System.Runtime.Serialization;
+
 namespace Netherlands3D.LayerStyles
 {
-    public class StylingRule
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "StylingRule")]
+    public sealed class StylingRule
     {
-        public string Name { get; }
+        public string Name { get; private set; }
         public Symbolizer Symbolizer { get; } = new();
 
-        // By default, everything matches. And that means a "True" literal boolean.
-        public Expression Selector { get; } = BoolExpression.True();
+        public Expression Selector { get; private set; }
+
+        public StylingRule(string name)
+        {
+            Name = name;
+            Selector = BoolExpression.True();
+        }
+
+        public StylingRule(string name, Expression selector)
+        {
+            Name = name;
+            Selector = selector;
+        }
     }
 }
