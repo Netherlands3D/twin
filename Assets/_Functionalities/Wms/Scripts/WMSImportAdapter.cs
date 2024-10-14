@@ -150,7 +150,7 @@ namespace Netherlands3D.Twin
 
             string encoded = Uri.EscapeDataString(layer.name);
 
-            // Set the required query parameters for the GetFeature request
+            // Set the required query parameters for the GetMap request
             uriBuilder.SetQueryParameter("service", "WMS");
             uriBuilder.SetQueryParameter("version", wmsVersion);
             uriBuilder.SetQueryParameter("request", "GetMap");
