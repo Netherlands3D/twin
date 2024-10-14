@@ -168,7 +168,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
-                case WMSLayerGameObject _: //requested to be equal to geojsonlayer
+                case WMSLayerGameObject _:
+                case GeoJsonLayerGameObject _:
                     return layerTypeSprites[8];
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
@@ -183,8 +184,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer _:
                     return layerTypeSprites[7];                
-                case GeoJsonLayerGameObject _:
-                    return layerTypeSprites[8];
+                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
                 default:
