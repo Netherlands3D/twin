@@ -105,7 +105,6 @@ namespace Netherlands3D.Twin
                 ClearPreviousTexture(tile);
                 callback(tileChange);
             }
-            yield return null;
         }
 
         private void UpdateDrawOrderForChildren()

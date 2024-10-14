@@ -148,8 +148,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 ClearPreviousTexture(tile);               
                 callback(tileChange);
-            }
-            yield return null;          
+            }     
         }
 
         /// <summary>

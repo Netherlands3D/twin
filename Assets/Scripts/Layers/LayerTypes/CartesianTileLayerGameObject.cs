@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
             tileHandler.AddLayer(layer);
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if(Application.isPlaying && tileHandler && layer)
                 tileHandler.RemoveLayer(layer);

@@ -59,9 +59,9 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public override void DestroyLayerGameObject()
+        protected override void OnDestroy()
         {
-            base.DestroyLayerGameObject();
+            base.OnDestroy();
             LayerData.RootIndexChanged.RemoveListener(SetRenderOrder);
         }
     }
