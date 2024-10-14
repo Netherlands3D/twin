@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        protected LayerURLPropertyData urlPropertyData = new();
+        private LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
