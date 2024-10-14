@@ -35,10 +35,14 @@ namespace Netherlands3D.Twin.Layers
             LayerData.RootIndexChanged.AddListener(SetRenderOrder);
         }
 
+        protected override void Start()
+        {
+            wmsProjectionLayer.WmsUrl = this.urlPropertyData.url;
+        }
+
         public void SetURL(string url)
         {
             this.urlPropertyData.url = url;
-            wmsProjectionLayer.WmsUrl = url;
         }
 
         //a higher order means rendering over lower indices
@@ -54,7 +58,6 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                wmsProjectionLayer.WmsUrl = urlProperty.url;
             }
         }
 
