@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Netherlands3D.Twin.Layers;
 using System.Text;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -137,7 +139,10 @@ namespace Netherlands3D.Twin
             newLayer.Name = layer.name;            
             UriBuilder uriBuilder = CreateLayerUri(layer, sourceUrl);
             var uri = uriBuilder.Uri.ToString();
-            newLayer.SetUrlPropertyData(uri);
+
+            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(uri);
+
             newLayer.LayerData.ActiveSelf = defaultEnabled;
         }
 

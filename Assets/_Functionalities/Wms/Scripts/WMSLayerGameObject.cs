@@ -32,15 +32,9 @@ namespace Netherlands3D.Twin.Layers
         {
             base.Start();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
-            wmsProjectionLayer.WmsUrl = this.urlPropertyData.url;
+            wmsProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-        }
-
-        public void SetUrlPropertyData(string url)
-        {
-            urlPropertyData = new LayerURLPropertyData();
-            urlPropertyData.url = url;
         }
 
         //a higher order means rendering over lower indices
