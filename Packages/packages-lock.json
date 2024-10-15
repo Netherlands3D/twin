@@ -275,7 +275,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "048107c19d3a7e7b6c53f9b56ccbf933a94b75e3"
+      "hash": "bdcc30177911ff2ec1ff97107993dd02aef9c3d3"
     },
     "eu.netherlands3d.geojson": {
       "version": "1.1.0",
