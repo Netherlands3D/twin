@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.Layers
             base.Start();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
             wmsProjectionLayer.WmsUrl = this.urlPropertyData.url;
-            LayerData.RootIndexChanged.AddListener(SetRenderOrder);
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }
 
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Layers
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            LayerData.RootIndexChanged.RemoveListener(SetRenderOrder);
+            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
         }
     }
 }

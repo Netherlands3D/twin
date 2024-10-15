@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 if(value != rootIndex)
-                    RootIndexChanged.Invoke(value); 
+                    LayerOrderChanged.Invoke(value); 
                 rootIndex = value;
             }
         }
@@ -111,7 +111,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
-        [JsonIgnore] public readonly UnityEvent<int> RootIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
 
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
