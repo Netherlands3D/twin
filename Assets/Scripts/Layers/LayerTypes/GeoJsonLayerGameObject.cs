@@ -13,8 +13,7 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
-using netDxf.Tables;
-using UnityEngine.Networking;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -41,9 +40,8 @@ namespace Netherlands3D.Twin.Layers
 
         [Space]
         public UnityEvent<string> OnParseError = new();
-        private Coroutine streamParseCoroutine;
         protected LayerURLPropertyData urlPropertyData = new();
-        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        public LayerPropertyData PropertyData => urlPropertyData;
 
         protected virtual void Awake()
         {
@@ -53,7 +51,8 @@ namespace Netherlands3D.Twin.Layers
         protected override void Start()
         {
             base.Start();
-            StartCoroutine(RestoreGeoJsonLocalFile(urlPropertyData.url));
+            if(urlPropertyData.Data.IsStoredInProject())
+                StartCoroutine(ParseGeoJSONStream(urlPropertyData.Data, 1000));
         }
 
         protected virtual void LoadDefaultValues()
@@ -129,42 +128,18 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        /// <summary>
-        /// Sets URL and start a 'streaming' parse of the GeoJSON file. This will spread out the generation of visuals over multiple frames.
-        /// Ideal for large single files.
-        /// </summary>
-        public void SetURL(string path, string sourceUrl = "")
+        private IEnumerator ParseGeoJSONStream(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
-            this.urlPropertyData.url = sourceUrl;
-
-            if (streamParseCoroutine != null)
-                StopCoroutine(streamParseCoroutine);
-
-            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
-        }
-
-        private IEnumerator RestoreGeoJsonLocalFile(string url)
-        {
-            //create LocalFile so we can use it in the ParseGeoJSONStream function
-            var uwr = UnityWebRequest.Get(url);
-            var optionalExtention = Path.GetExtension(url).Split("?")[0];
-            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
-            string path = Path.Combine(Application.persistentDataPath, guidFilename);
-
-            uwr.downloadHandler = new DownloadHandlerFile(path);
-            yield return uwr.SendWebRequest();
-            if (uwr.result == UnityWebRequest.Result.Success)
+            // TODO: This should be moved into a URI extension method
+            if (uri.Scheme != "project")
             {
-                SetURL(path);
+                throw new NotSupportedException(
+                    "The given type of URI is not supported, only project files are supported"
+                );
             }
-            else
-            {
-                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
-            }
-        }
 
-        private IEnumerator ParseGeoJSONStream(string path, int maxParsesPerFrame = Int32.MaxValue)
-        {
+            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));
+            
             var startFrame = Time.frameCount;
             var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);

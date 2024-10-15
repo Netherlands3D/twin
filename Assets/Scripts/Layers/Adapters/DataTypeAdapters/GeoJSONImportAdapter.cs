@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -66,8 +68,10 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
-            
-            newLayer.SetURL(localFilePath, localFile.SourceUrl);
+            var fullPath = localFile.LocalFilePath;
+            var fileName = Path.GetFileName(fullPath);
+            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
+            propertyData.Data = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
     }
 }
