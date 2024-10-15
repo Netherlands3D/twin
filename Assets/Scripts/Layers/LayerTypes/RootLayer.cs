@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public void UpdateLayerTreeOrder(LayerData data)
+        public void UpdateLayerTreeOrder(int index)
         {
             //LayerUIManager uiManager = GameObject.FindObjectOfType<LayerUIManager>();
             List<LayerData> children = GetLayerDataTree();
