@@ -130,16 +130,10 @@ namespace Netherlands3D.Twin.Layers
 
         private IEnumerator ParseGeoJSONStream(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
-            // TODO: This should be moved into a URI extension method
-            if (uri.Scheme != "project")
-            {
-                throw new NotSupportedException(
-                    "The given type of URI is not supported, only project files are supported"
-                );
-            }
+            if (!uri.IsStoredInProject())
+                throw new NotSupportedException("The given type of URI is not supported, only project files are supported");
 
-            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));
-            
+            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));            
             var startFrame = Time.frameCount;
             var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);

@@ -9,17 +9,17 @@ namespace Netherlands3D.Twin.Layers.Properties
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Url")]
     public class LayerURLPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
-        [DataMember] private Uri data;
+        [DataMember] private Uri url;
 
         [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
 
         [JsonIgnore]
         public Uri Data
         {
-            get => data;
+            get => url;
             set
             {
-                data = value;
+                url = value;
                 OnDataChanged.Invoke(value);
             }
         }
@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             return new List<LayerAsset>()
             {
-                new (this, data != null ? data : null)
+                new (this, url != null ? url : null)
             };
         }
     }
