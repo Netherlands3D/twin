@@ -88,8 +88,7 @@ namespace Netherlands3D.Twin.Projects
             {
                 RootLayer.AddChild(layer, 0);
             }
-
-            LayerAdded.Invoke(layer);
+            LayerAdded.Invoke(layer);           
         }
 
         public static void AddReferenceLayer(LayerGameObject referencedLayer)
@@ -109,7 +108,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void RemoveLayer(LayerData layer)
         {
-            LayerDeleted.Invoke(layer);
+            LayerDeleted.Invoke(layer);            
         }
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)

@@ -8,6 +8,8 @@ using System.Collections.Specialized;
 using System.Xml.Serialization;
 using Netherlands3D.Twin.Layers;
 using UnityEngine.Networking;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -25,6 +27,10 @@ namespace Netherlands3D.Twin
         {
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
+
+            if ((!sourceUrl.ToLower().Contains("service=wfs") && !sourceUrl.ToLower().Contains("/wfs"))
+                || sourceUrl.ToLower().Contains("request=getmap")) //if request = getmap it means wms
+                return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
             wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
@@ -114,7 +120,9 @@ namespace Netherlands3D.Twin
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = title;
-            newLayer.SetURL(getFeatureUrl);
+
+            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)

@@ -12,7 +12,7 @@ public class UrlReader : MonoBehaviour
 {
     //public static UrlReader Instance { get; private set; }
 
-    public WMS ActiveWMS { get; private set; } 
+    //public WMS ActiveWMS { get; private set; } 
     public WFS ActiveWFS { get; private set; }
 
     [SerializeField] private TMP_InputField wfsInputField;
