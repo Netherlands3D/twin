@@ -20,13 +20,14 @@ namespace Netherlands3D.Twin.Layers
                 return wmsProjectionLayer;
             }
         }
-        public LayerPropertyData PropertyData => urlPropertyData;
+        
         public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
         public int DefaultEnabledLayersMax { get => WMSProjectionLayer.DefaultEnabledLayersMax; }
         public Vector2Int PreferredImageSize { get => WMSProjectionLayer.PreferredImageSize; }
 
         private WMSTileDataLayer wmsProjectionLayer;
-        private LayerURLPropertyData urlPropertyData;
+        protected LayerURLPropertyData urlPropertyData = new();
+        public LayerPropertyData PropertyData => urlPropertyData;
 
         protected override void Start()
         {
