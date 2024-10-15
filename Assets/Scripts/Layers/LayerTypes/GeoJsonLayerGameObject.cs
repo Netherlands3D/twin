@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -53,6 +54,8 @@ namespace Netherlands3D.Twin.Layers
             base.Start();
             if(urlPropertyData.Data.IsStoredInProject())
                 StartCoroutine(ParseGeoJSONStream(urlPropertyData.Data, 1000));
+            else if(urlPropertyData.Data.IsRemoteAsset())
+                StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
         }
 
         protected virtual void LoadDefaultValues()
@@ -128,11 +131,29 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        private IEnumerator ParseGeoJSONStreamRemote(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
+        {
+            //create LocalFile so we can use it in the ParseGeoJSONStream function
+            string url = uri.ToString();
+            var uwr = UnityWebRequest.Get(url);
+            var optionalExtention = Path.GetExtension(url).Split("?")[0];
+            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
+            string path = Path.Combine(Application.persistentDataPath, guidFilename);
+
+            uwr.downloadHandler = new DownloadHandlerFile(path);
+            yield return uwr.SendWebRequest();
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                StartCoroutine(ParseGeoJSONStream(uri, maxParsesPerFrame));
+            }
+            else
+            {
+                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
+            }
+        }
+
         private IEnumerator ParseGeoJSONStream(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
-            if (!uri.IsStoredInProject())
-                throw new NotSupportedException("The given type of URI is not supported, only project files are supported");
-
             string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));            
             var startFrame = Time.frameCount;
             var reader = new StreamReader(path);
