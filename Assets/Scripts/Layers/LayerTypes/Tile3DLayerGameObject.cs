@@ -81,14 +81,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void ProcessServerResponse(UnityWebRequest request)
         {
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                LayerData.HasValidCredentials = false;
-            }
-            else
-            {
-                LayerData.HasValidCredentials = true;
-            }
+            LayerData.HasValidCredentials = request.result == UnityWebRequest.Result.Success;
         }
 
         protected override void Start()
