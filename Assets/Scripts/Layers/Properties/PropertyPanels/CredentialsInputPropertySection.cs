@@ -97,6 +97,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// <summary>
         /// Fill the inputs with predefined values
         /// </summary>
+        
+        //Todo: This function is no longer used. This does cause the currently used key to not show up when re-opening the properties panel, this should be re-implemented if deemed a useful feature.
         public void SetInputFieldsValues(string username = "", string password = "", string key = "")
         {
             if (username.Length > 0) userNameInputField.text = username;
