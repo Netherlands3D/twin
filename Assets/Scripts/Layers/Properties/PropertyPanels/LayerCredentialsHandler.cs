@@ -63,15 +63,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void HandleServerResponse(UnityWebRequest webRequest)
         {
-            
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                layerGameObject.LayerData.HasValidCredentials = false;
-            }
-            else
-            {
-                layerGameObject.LayerData.HasValidCredentials = true;
-            }
+            layerGameObject.LayerData.HasValidCredentials = webRequest.result == UnityWebRequest.Result.Success;
             
             if (webRequest.RequiresCredentials())
             {
