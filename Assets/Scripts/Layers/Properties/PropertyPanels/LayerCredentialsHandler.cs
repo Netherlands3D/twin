@@ -35,29 +35,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         private ILayerWithCredentials layerWithCredentials;
         private LayerGameObject layerGameObject;
 
-        // public ILayerWithCredentials LayerWithCredentials
-        // {
-        //     get { return layerWithCredentials; }
-        //     set
-        //     {
-        //         if (layerWithCredentials != null)
-        //         {
-        //             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
-        //             layerWithCredentials.OnServerResponseReceived.RemoveListener(HandleServerResponse);
-        //         }
-        //
-        //         layerWithCredentials = value;
-        //
-        //         if (layerWithCredentials != null)
-        //         {
-        //             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-        //             layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
-        //
-        //             UrlHasChanged(layerWithCredentials.URL);
-        //         }
-        //     }
-        // }
-
         public bool HasValidCredentials => layerGameObject && layerGameObject.LayerData.HasValidCredentials;
         public UnityEvent<bool> CredentialsAccepted => layerGameObject.LayerData.HasValidCredentialsChanged;
 
@@ -90,21 +67,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 layerGameObject.LayerData.HasValidCredentials = false;
-                // CredentialsAccepted.Invoke(false);
             }
             else
             {
                 layerGameObject.LayerData.HasValidCredentials = true;
-                // CredentialsAccepted.Invoke(true);
             }
             
-            // if(webRequest.ReturnedServerError())
-            // {
-            //     //Disable credentials property section if we get a server error (not tied to credentials)
-            //     Debug.LogWarning("Server request failed: " + webRequest);
-            //     gameObject.SetActive(false);
-            // }
-            // else 
             if (webRequest.RequiresCredentials())
             {
                 Debug.LogWarning("Credentials required: " + webRequest);
@@ -169,7 +137,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnCredentialTypeDetermined(string url, AuthorizationType type)
         {
-            // credentialTypeDropdown.value = (int)type;
             authorizationType = type;
 
             switch (type)
@@ -211,12 +178,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 || type == AuthorizationType.Code
             )
                 type = AuthorizationType.InferableSingleKey;
-
-            // credentialTypeDropdown.value = (int)type;
-
-            //Similar values are not reapplied, so make sure to the dropdown items appear
-            // if (credentialTypeDropdown.TryGetComponent(out DropdownSelection dropdownSelection))
-            //     dropdownSelection.DropdownSelectItem(credentialTypeDropdown.value);
 
             authorizationType = type;
         }
