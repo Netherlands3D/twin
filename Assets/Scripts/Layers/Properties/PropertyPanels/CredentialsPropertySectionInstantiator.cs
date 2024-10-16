@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        [SerializeField] private bool autoApplyCredentials = false;
         [SerializeField] private GameObject inputPropertySectionPrefab;
         [HideInInspector] public UnityEvent<GameObject> OnCredentialsPropertySectionInstantiated = new();
 
