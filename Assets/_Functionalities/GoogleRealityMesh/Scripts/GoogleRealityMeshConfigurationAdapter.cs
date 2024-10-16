@@ -12,8 +12,7 @@ namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
     {
         [SerializeField] private Configuration configuration;
         [SerializeField] private Read3DTileset read3DTileset;
-        [SerializeField] private CredentialsPropertySectionInstantiator credentialsPropertySectionInstantiator;
-
+        
         private void Awake()
         {
             if (!read3DTileset)
