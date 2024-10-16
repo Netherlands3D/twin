@@ -21,7 +21,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach (var credentialInterface in settings.GetComponentsInChildren<ILayerCredentialInterface>(true))
             {
-                print(credentialInterface);
                 credentialInterface.Handler = handler;
             }
             
