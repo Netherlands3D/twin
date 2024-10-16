@@ -28,7 +28,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 handler = value;
 
                 skipFirstCredentialErrorMessage = true;
-                // OnCredentialsAccepted(handler.HasValidCredentials);
 
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
             }
