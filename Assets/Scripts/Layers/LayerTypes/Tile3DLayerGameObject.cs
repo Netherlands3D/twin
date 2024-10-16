@@ -65,14 +65,16 @@ namespace Netherlands3D.Twin.Layers
                 propertySections = new();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
             OnServerResponseReceived.AddListener(ProcessServerResponse);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
             OnServerResponseReceived.RemoveListener(ProcessServerResponse);
         }
