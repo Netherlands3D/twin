@@ -16,23 +16,17 @@ namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
 
         private void Awake()
         {
-            if(!read3DTileset)
+            if (!read3DTileset)
                 read3DTileset = GetComponent<Read3DTileset>();
 
             //Apply key as default input to the credentials property section when it spawns
-            credentialsPropertySectionInstantiator.OnCredentialsPropertySectionInstantiated.AddListener(CredentialsPropertySectionInstantiated);
-
+            
             read3DTileset.publicKey = configuration.ApiKey;
 #if UNITY_EDITOR
             read3DTileset.personalKey = configuration.ApiKey;
 #endif
 
             read3DTileset.enabled = true;
-        }
-
-        private void CredentialsPropertySectionInstantiated(GameObject credentialsInputPropertySection)
-        {
-            // credentialsInputPropertySection.SetInputFieldsValues(key: configuration.ApiKey);
         }
     }
 }

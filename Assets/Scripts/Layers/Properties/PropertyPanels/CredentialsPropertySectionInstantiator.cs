@@ -9,7 +9,6 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private GameObject inputPropertySectionPrefab;
-        [HideInInspector] public UnityEvent<GameObject> OnCredentialsPropertySectionInstantiated = new();
 
         public void AddToProperties(RectTransform properties)
         {
@@ -22,8 +21,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 credentialInterface.Handler = handler;
             }
-            
-            OnCredentialsPropertySectionInstantiated.Invoke(settings);
         }
     }
 }
