@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers.LayerTypes;
+
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -48,12 +45,6 @@ namespace Netherlands3D.Twin.Layers.Properties
     
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
-            if (accepted)
-            {
-                print("accepted");
-            }
-            else
-                print("rejected");
         }
     }
 }
