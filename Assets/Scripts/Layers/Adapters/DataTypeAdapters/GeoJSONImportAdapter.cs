@@ -70,14 +70,14 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
-            var fullPath = localFile.LocalFilePath;
-            var fileName = Path.GetFileName(fullPath);
+            var localPath = localFile.LocalFilePath;
+            var fileName = Path.GetFileName(localPath);
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
 
-            if (localFile.SourceUrl.StartsWith("http") || localFile.SourceUrl.StartsWith("https"))
+            if (localFile.SourceUrl.StartsWith("http"))
                 propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl);
             else
-                propertyData.Data = AssetUriFactory.CreateProjectAssetUri(fullPath);
+                propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localPath);
         }
     }
 }
