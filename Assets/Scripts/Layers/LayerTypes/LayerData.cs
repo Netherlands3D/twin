@@ -172,12 +172,15 @@ namespace Netherlands3D.Twin.Layers
 
             if (newParent == this)
                 return;
-
+            
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
             
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
+            
+            if(newParent == parent && siblingIndex == oldSiblingIndex)
+                return;
             
             newParent.children.Insert(siblingIndex, this);
 
