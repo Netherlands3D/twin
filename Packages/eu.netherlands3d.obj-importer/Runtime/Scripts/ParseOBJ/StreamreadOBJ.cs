@@ -184,10 +184,12 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
         IEnumerator StreamReadFile(string filename, System.Action<bool> callback)
         {
             Debug.Log("StreamReadFile: " + filename);
+
+            var file = Path.GetFileName(filename);
             
-            vertices.SetupWriting("vertices");
-            normals.SetupWriting("normals");
-            uvs.SetupWriting("uvs");
+            vertices.SetupWriting(filename+"_vertices");
+            normals.SetupWriting(filename+"_normals");
+            uvs.SetupWriting(filename+"_uvs");
 
             //setup first submesh;
             AddSubMesh("default");
