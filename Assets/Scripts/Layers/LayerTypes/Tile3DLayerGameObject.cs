@@ -53,15 +53,7 @@ namespace Netherlands3D.Twin.Layers
             else
                 tileSet.RefreshTiles();
         }
-
-        private CredentialsPropertySection propertySection;
-
-        public CredentialsPropertySection PropertySection
-        {
-            get => propertySection;
-            set => propertySection = value;
-        }
-
+        
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
@@ -73,14 +65,23 @@ namespace Netherlands3D.Twin.Layers
                 propertySections = new();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
+            OnServerResponseReceived.AddListener(ProcessServerResponse);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
+            OnServerResponseReceived.RemoveListener(ProcessServerResponse);
+        }
+
+        private void ProcessServerResponse(UnityWebRequest request)
+        {
+            LayerData.HasValidCredentials = request.result == UnityWebRequest.Result.Success;
         }
 
         protected override void Start()
@@ -170,6 +171,7 @@ namespace Netherlands3D.Twin.Layers
             var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
             if (urlProperty != null)
             {
+                urlPropertyData = urlProperty; //use existing object to overwrite the current instance
                 URL = urlProperty.Url;
                 UpdateURL(urlProperty.Url);
             }
