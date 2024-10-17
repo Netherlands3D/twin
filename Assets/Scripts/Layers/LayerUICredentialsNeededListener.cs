@@ -11,8 +11,7 @@ namespace Netherlands3D.Twin
 {
     public class LayerUICredentialsNeededListener : MonoBehaviour
     {
-        private LayerUI layerUI;
-        private LayerUIManager layerUIManager;
+        public LayerUI layerUI { get; set; }
         
         [SerializeField] private GameObject visibilityToggle;
         [SerializeField] private GameObject warningIcon;
@@ -31,14 +30,13 @@ namespace Netherlands3D.Twin
         
         private void Awake()
         {
-            layerUI = GetComponent<LayerUI>();
-            layerUIManager = GetComponentInParent<LayerUIManager>();
+            if(!layerUI)
+                layerUI = GetComponent<LayerUI>();
         }
 
         private void Start()
         {
             originalTextColor = layerNameText.color;
-            
             SetUI(layerUI.Layer.HasValidCredentials); //set initial state
             layerUI.Layer.HasValidCredentialsChanged.AddListener(SetUI);
         }
@@ -60,7 +58,6 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy()
         {
-            var layerUI = GetComponent<LayerUI>();
             layerUI.Layer.HasValidCredentialsChanged.RemoveListener(SetUI);
         }
     }
