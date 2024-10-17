@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
     public class FileTypeAdapter : ScriptableObject
     {
+        [SerializeField] private string assetsFolderName = "Assets";
         [SerializeField] private List<FileTypeEvent> fileTypeEvents;
 
         public void ProcessFiles(string files)
@@ -35,28 +36,55 @@ namespace Netherlands3D.Twin
         {
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
+            
+            var absoluteFilePath = Path.Combine(Application.persistentDataPath, file);
+            var assetsFolderPath = Path.Combine(Application.persistentDataPath, assetsFolderName);
+            
+            if (!Directory.Exists(assetsFolderPath))
+            {
+                Directory.CreateDirectory(assetsFolderPath);
+            }
+            
+            var fileName = Path.GetFileNameWithoutExtension(file);
+            var extension = Path.GetExtension(file).ToLower();
+            var newFilePathRelative = Path.Combine(assetsFolderName, fileName + extension);
+            var newFilePathAbsolute = Path.Combine(assetsFolderPath, fileName + extension);
+            
+            // Find a unique file name if a file with the same name already exists
+            int index = 0;
+            while (File.Exists(newFilePathAbsolute))
+            {
+                Debug.Log("file already exists: " + newFilePathAbsolute);
+                index++;
+                var newFileName = $"{fileName}({index}){extension}";
+                newFilePathRelative = Path.Combine(assetsFolderName, newFileName);
+                newFilePathAbsolute = Path.Combine(assetsFolderPath, newFileName);
+                Debug.Log("attempting to save as: " + newFilePathAbsolute);
+            }
+            
+            Debug.Log(absoluteFilePath + " will be moved to: " + newFilePathAbsolute);
+            File.Move(absoluteFilePath, newFilePathAbsolute);
                 
-            string fileExtension = Path.GetExtension(file).ToLower();
-            if (fileExtension.StartsWith('.'))
-                fileExtension = fileExtension.Substring(1);
+            if (extension.StartsWith('.'))
+                extension = extension.Substring(1);
             
-            var fileTypeEvent = fileTypeEvents.FirstOrDefault(fte => fte.Extension == fileExtension);
+            var fileTypeEvent = fileTypeEvents.FirstOrDefault(fte => fte.Extension.ToLower() == extension);
             
-            Debug.Log("file: " + file);
+            Debug.Log("processing file: " + newFilePathRelative);
             
             if(fileTypeEvent != null)
             {
                 var localFile = new LocalFile()
                 {
-                    SourceUrl = file,
-                    LocalFilePath = file
+                    SourceUrl = newFilePathRelative,
+                    LocalFilePath = newFilePathRelative
                 };
 
                 fileTypeEvent.FileReceived.Invoke(localFile);
             }
             else
             {
-                Debug.Log("file type {" + fileExtension + "} does not have an associated processing function");
+                Debug.Log("file type {" + extension + "} does not have an associated processing function");
             }
         }
     }
