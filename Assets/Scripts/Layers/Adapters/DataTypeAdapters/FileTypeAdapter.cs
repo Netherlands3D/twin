@@ -54,12 +54,15 @@ namespace Netherlands3D.Twin
             int index = 0;
             while (File.Exists(newFilePathAbsolute))
             {
+                Debug.Log("file already exists: " + newFilePathAbsolute);
                 index++;
                 var newFileName = $"{fileName}({index}){extension}";
                 newFilePathRelative = Path.Combine(assetsFolderName, newFileName);
                 newFilePathAbsolute = Path.Combine(assetsFolderPath, newFileName);
+                Debug.Log("attempting to save as: " + newFilePathAbsolute);
             }
             
+            Debug.Log(absoluteFilePath + " will be moved to: " + newFilePathAbsolute);
             File.Move(absoluteFilePath, newFilePathAbsolute);
                 
             if (extension.StartsWith('.'))
