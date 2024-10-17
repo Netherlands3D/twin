@@ -102,7 +102,6 @@ namespace Netherlands3D.Twin
                     textureDecalProjector.SetPriority(renderIndex);
 
                 }
-                ClearPreviousTexture(tile);
                 callback(tileChange);
             }
         }
