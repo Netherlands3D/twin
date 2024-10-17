@@ -83,7 +83,8 @@ namespace Netherlands3D.CartesianTiles
                 {
                     return;
                 }
-
+                //to be sure its not held in memory
+                ClearPreviousTexture(tile);
                 //destroy the gameobject
                 Destroy(tile.gameObject);
             }

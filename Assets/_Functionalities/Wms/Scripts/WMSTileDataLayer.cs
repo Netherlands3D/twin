@@ -85,8 +85,13 @@ namespace Netherlands3D.Twin
             }
             else
             {
+                ClearPreviousTexture(tile);
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
+                tex.Compress(true);
+                tex.filterMode = FilterMode.Bilinear;
+                tex.Apply(false, true);
+                
                 if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                 {
                     projector.SetSize(tileSize, tileSize, tileSize);
