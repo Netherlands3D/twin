@@ -6,6 +6,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using Netherlands3D.Visualisers;
@@ -54,12 +55,12 @@ namespace Netherlands3D.Twin.Layers
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
-                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.lines.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
-                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.lines.Add(newLine);
             }
 
