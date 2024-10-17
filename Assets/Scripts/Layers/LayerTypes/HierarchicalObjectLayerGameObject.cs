@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -11,22 +12,28 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.Layers
 {
+    [RequireComponent(typeof(WorldTransform))]
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
         private TransformLayerPropertyData transformPropertyData;
-        private Vector3 previousPosition;
+        private Coordinate previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
+        private WorldTransform worldTransform;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
 
         protected void Awake()
         {
-            var coord = new Coordinate(transform.position);
-            transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
+            worldTransform = GetComponent<WorldTransform>();
+            transformPropertyData = new TransformLayerPropertyData(
+                worldTransform.Coordinate, 
+                worldTransform.Rotation.eulerAngles, 
+                transform.localScale
+            );
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
@@ -47,8 +54,8 @@ namespace Netherlands3D.Twin.Layers
         protected override void Start()
         {
             base.Start();
-            previousPosition = transform.position;
-            previousRotation = transform.rotation;
+            previousPosition = worldTransform.Coordinate;
+            previousRotation = worldTransform.Rotation;
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);
@@ -68,62 +75,72 @@ namespace Netherlands3D.Twin.Layers
 
         private void UpdatePosition(Coordinate newPosition)
         {
-            if (newPosition.ToUnity() != transform.position)
-                transform.position = newPosition.ToUnity();
+            if (newPosition.ToUnity() == worldTransform.Coordinate.ToUnity()) return;
+
+            worldTransform.Coordinate = newPosition;
+            transform.position = worldTransform.Coordinate.ToUnity();
         }
 
         private void UpdateRotation(Vector3 newAngles)
         {
-            if (newAngles != transform.eulerAngles)
-                transform.eulerAngles = newAngles;
+            if (newAngles == transform.eulerAngles) return;
+
+            worldTransform.Rotation = Quaternion.Euler(newAngles);
+            transform.rotation = worldTransform.Rotation;
         }
 
         private void UpdateScale(Vector3 newScale)
         {
-            if (newScale != transform.localScale)
-                transform.localScale = newScale;
+            if (newScale == transform.localScale) return;
+
+            transform.localScale = newScale;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
-            if (transformProperty != null)
+            var transformProperty = properties.OfType<TransformLayerPropertyData>().FirstOrDefault();
+            if (transformProperty == default(TransformLayerPropertyData)) return;
+            
+            // unsubscribe events from previous property object, resubscribe to new object at the end of this if block
+            if (transformPropertyData != null) 
             {
-                if (transformPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-                {
-                    transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
-                    transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
-                    transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
-                }
-
-                this.transformPropertyData = transformProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-
-                UpdatePosition(this.transformPropertyData.Position);
-                UpdateRotation(this.transformPropertyData.EulerRotation);
-                UpdateScale(this.transformPropertyData.LocalScale);
-
-                transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-                transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-                transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+                transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
+                transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
+                transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
             }
+
+            // take existing TransformProperty to overwrite the unlinked one of this class
+            this.transformPropertyData = transformProperty;
+
+            UpdatePosition(this.transformPropertyData.Position);
+            UpdateRotation(this.transformPropertyData.EulerRotation);
+            UpdateScale(this.transformPropertyData.LocalScale);
+            
+            // Reset the previous[X] to prevent a reset of the  
+            previousPosition = transformPropertyData.Position;
+            previousRotation = Quaternion.Euler(transformPropertyData.EulerRotation);
+            previousScale = transformPropertyData.LocalScale;
+
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
         private void Update()
         {
             // We cannot use transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
             // Check for position change
-            if (transform.position != previousPosition)
+            if (worldTransform.Coordinate.ToUnity() != previousPosition.ToUnity())
             {
-                var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-                transformPropertyData.Position = rdCoordinate;
-                previousPosition = transform.position;
+                transformPropertyData.Position = worldTransform.Coordinate;
+                previousPosition = worldTransform.Coordinate;
             }
 
             // Check for rotation change
-            if (transform.rotation != previousRotation)
+            if (worldTransform.Rotation != previousRotation)
             {
-                transformPropertyData.EulerRotation = transform.eulerAngles;
-                previousRotation = transform.rotation;
+                transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
+                previousRotation = worldTransform.Rotation;
             }
 
             // Check for scale change
