@@ -172,22 +172,31 @@ namespace Netherlands3D.Twin.Layers
 
             if (newParent == this)
                 return;
-
+            
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
 
-            parent.children.Remove(this);
-            if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
-                siblingIndex--;
-            parent.ChildrenChanged.Invoke(); //call event on old parent
-
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
+            
+            if (!parentChanged && siblingIndex > oldSiblingIndex) // moved down: insert first, remove after to keep the correct indices
+            {
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.children.RemoveAt(oldSiblingIndex);
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            else
+            {
+                parent.children.RemoveAt(oldSiblingIndex);
 
-            parent = newParent;
-
-            newParent.children.Insert(siblingIndex, this);
-
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
