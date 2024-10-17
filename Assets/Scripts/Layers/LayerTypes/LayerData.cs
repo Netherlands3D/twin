@@ -175,19 +175,27 @@ namespace Netherlands3D.Twin.Layers
             
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
-            
+
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
             
-            if(newParent == parent && siblingIndex == oldSiblingIndex)
-                return;
-            
-            newParent.children.Insert(siblingIndex, this);
+            if (!parentChanged && siblingIndex > oldSiblingIndex) // moved down: insert first, remove after to keep the correct indices
+            {
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.children.RemoveAt(oldSiblingIndex);
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            else
+            {
+                parent.children.RemoveAt(oldSiblingIndex);
 
-            parent.children.RemoveAt(oldSiblingIndex);
-            parent.ChildrenChanged.Invoke(); //call event on old parent
-            
-            parent = newParent;
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
             
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
