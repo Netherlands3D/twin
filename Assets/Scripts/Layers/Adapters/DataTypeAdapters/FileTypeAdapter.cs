@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin
             }
             
             var fileName = Path.GetFileNameWithoutExtension(file);
-            var extension = Path.GetExtension(file);
+            var extension = Path.GetExtension(file).ToLower();
             var newFilePathRelative = Path.Combine(assetsFolderName, fileName + extension);
             var newFilePathAbsolute = Path.Combine(assetsFolderPath, fileName + extension);
             
@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin
             if (extension.StartsWith('.'))
                 extension = extension.Substring(1);
             
-            var fileTypeEvent = fileTypeEvents.FirstOrDefault(fte => fte.Extension == extension);
+            var fileTypeEvent = fileTypeEvents.FirstOrDefault(fte => fte.Extension.ToLower() == extension);
             
             Debug.Log("processing file: " + newFilePathRelative);
             
