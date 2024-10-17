@@ -108,7 +108,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7611614742349668521}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerGameObject, Assembly-CSharp
-        m_MethodName: DestroyLayerGameObject
+        m_MethodName: DestroyLayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
