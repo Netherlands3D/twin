@@ -66,7 +66,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dossier: {fileID: 11400000, guid: 84a7c9f73f20c8c4ba60ce64ca5ef6d7, type: 2}
+  invokeOnStart: 0
+  onImporting:
+    m_PersistentCalls:
+      m_Calls: []
+  onImportingFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  onImport:
+    m_PersistentCalls:
+      m_Calls: []
+  onOpening:
+    m_PersistentCalls:
+      m_Calls: []
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onFailedToOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onClose:
     m_PersistentCalls:
       m_Calls: []
   onSelectedVariant:
@@ -85,12 +104,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onFailedToOpen:
-    m_PersistentCalls:
-      m_Calls: []
-  onClose:
-    m_PersistentCalls:
-      m_Calls: []
   onLoadedProjectArea:
     m_PersistentCalls:
       m_Calls:
@@ -184,6 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dossier: {fileID: 11400000, guid: 84a7c9f73f20c8c4ba60ce64ca5ef6d7, type: 2}
+  spriteRenderer: {fileID: 0}
   meshMaterial: {fileID: 2100000, guid: 53006c35af9556846916ce83795fd3a0, type: 2}
   lineMaterial: {fileID: 2100000, guid: c9ca3310a0b8542479992bbcbe4800df, type: 2}
   selectedMeshMaterial: {fileID: 2100000, guid: c562d39411dae6b4eb5545f4ddad5a4d,
@@ -197,6 +211,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onSelectedArea:
+    m_PersistentCalls:
+      m_Calls: []
+  onReadValueAtLocation:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &9113950922241682998
@@ -325,11 +342,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3935001219056799147, guid: 97d41d85bcf14ef9978a4265d4d52cd8,
         type: 3}
-      propertyPath: onTextureLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 6430938360508834454}
-    - target: {fileID: 3935001219056799147, guid: 97d41d85bcf14ef9978a4265d4d52cd8,
-        type: 3}
       propertyPath: onTextureLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -432,15 +444,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2726562957860431216}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6430938360508834454 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9001001091731392486, guid: 97d41d85bcf14ef9978a4265d4d52cd8,
-    type: 3}
-  m_PrefabInstance: {fileID: 2726562957860431216}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1164069605219792946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 035e888fc4a96fb40b69129b857c880a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
