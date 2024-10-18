@@ -21,7 +21,6 @@ namespace Netherlands3D.Indicators
             var webRequest = UnityWebRequestTexture.GetTexture(textureUrl, false);
             
             yield return webRequest.SendWebRequest();
-
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Could not download {textureUrl}, result code was {webRequest.result}");

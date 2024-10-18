@@ -9,9 +9,7 @@ namespace Netherlands3D.Indicators
     {
         [SerializeField] private Transform textFacingCamera;
         [SerializeField] private TMP_Text label;
-
         [SerializeField] private float scaleMultiplier = 1.0f;
-
         [SerializeField] private GameObject pinModel;
         
         public void SetLabel(string value)
