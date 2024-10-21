@@ -50,6 +50,9 @@ namespace Netherlands3D.Twin
             var newFilePathRelative = Path.Combine(assetsFolderName, fileName + extension);
             var newFilePathAbsolute = Path.Combine(assetsFolderPath, fileName + extension);
             
+            Debug.Log("checking if file exists: " + newFilePathAbsolute);
+            Debug.Log("file exists: " + File.Exists(newFilePathAbsolute));
+            
             // Find a unique file name if a file with the same name already exists
             int index = 0;
             while (File.Exists(newFilePathAbsolute))
