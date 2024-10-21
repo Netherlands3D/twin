@@ -13,9 +13,8 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
-using netDxf.Tables;
-using UnityEngine.Networking;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -42,7 +41,6 @@ namespace Netherlands3D.Twin.Layers
 
         [Space]
         public UnityEvent<string> OnParseError = new();
-        private Coroutine streamParseCoroutine;
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
 
@@ -54,8 +52,10 @@ namespace Netherlands3D.Twin.Layers
         protected override void Start()
         {
             base.Start();
-            if (urlPropertyData.Data.IsStoredInProject())
-                StartCoroutine(ParseGeoJSONStream(urlPropertyData.Data, 1000));
+            if(urlPropertyData.Data.IsStoredInProject())
+                StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
+            else if(urlPropertyData.Data.IsRemoteAsset())
+                StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
         }
 
         protected virtual void LoadDefaultValues()
@@ -131,18 +131,57 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private IEnumerator ParseGeoJSONStream(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
+        private IEnumerator ParseGeoJSONStreamRemote(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
-            // TODO: This should be moved into a URI extension method
-            if (uri.Scheme != "project")
+            //create LocalFile so we can use it in the ParseGeoJSONStream function
+            string url = uri.ToString();
+            var uwr = UnityWebRequest.Get(url);
+
+            yield return uwr.SendWebRequest();
+            if (uwr.result == UnityWebRequest.Result.Success)
             {
-                throw new NotSupportedException(
-                    "The given type of URI is not supported, only project files are supported"
-                );
+                var startFrame = Time.frameCount;
+                // Get the downloaded text
+                string jsonText = uwr.downloadHandler.text;
+                StringReader reader = new StringReader(jsonText);
+                JsonTextReader jsonReader = new JsonTextReader(reader);
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Error += OnSerializerError;
+
+                FindTypeAndCRS(jsonReader, serializer);
+
+                //reset position of reader
+                jsonReader.Close();
+                reader.Dispose(); 
+
+                reader = new StringReader(jsonText); // Reset to start of JSON
+                jsonReader = new JsonTextReader(reader);
+
+                while (jsonReader.Read())
+                {
+                    // Read features depending on type
+                    if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
+                    {
+                        jsonReader.Read(); // Start array
+                        yield return ReadFeaturesArrayStream(jsonReader, serializer);
+                    }
+                }
+                jsonReader.Close();
+
+                var frameCount = Time.frameCount - startFrame;
+                if (frameCount == 0)
+                    yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
             }
+            else
+            {
+                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
+            }
+        }
 
-            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));
-
+        private IEnumerator ParseGeoJSONStreamLocal(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
+        {
+            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\')); 
+          
             var startFrame = Time.frameCount;
             var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);

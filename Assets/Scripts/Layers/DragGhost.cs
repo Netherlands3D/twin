@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI.LayerInspector
 {
-    public class DragGhost : MonoBehaviour//, IPointerDownHandler, IPointerUpHandler
+    public class DragGhost : MonoBehaviour //, IPointerDownHandler, IPointerUpHandler
     {
         private Vector2 DragStartOffset { get; set; }
-        
+
         [SerializeField] private Image layerVisibilityImage;
         [SerializeField] private Image colorImage;
         [SerializeField] private Image foldoutImage;
@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             // var pointerPosition = Pointer.current.position.ReadValue();
             DragStartOffset = dragStartOffset;
             CalculateNewPosition();
-            
+
             CopyAppearance(ui);
         }
 
@@ -32,8 +32,11 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             foldoutImage.enabled = ui.hasChildren;
             layerTypeImage.sprite = ui.LayerTypeSprite;
             layerNameText.text = ui.LayerName;
+
+            var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
+            credentialsUI.layerUI = ui;
         }
-        
+
         void Update()
         {
             CalculateNewPosition();
