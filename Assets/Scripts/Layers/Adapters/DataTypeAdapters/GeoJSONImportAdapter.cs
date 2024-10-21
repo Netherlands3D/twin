@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -66,8 +64,7 @@ namespace Netherlands3D.Twin
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
             
-            Debug.Log("creating geojson layer: "+ localFile.SourceUrl);
-            newLayer.SetURL(AssetUriFactory.CreateProjectAssetUri(localFile.SourceUrl), localFilePath);
+            newLayer.SetURL(localFilePath, localFile.SourceUrl);
         }
     }
 }
