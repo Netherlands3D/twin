@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin
             var fileName = Path.GetFileNameWithoutExtension(file);
             var extension = Path.GetExtension(file).ToLower();
 
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var newFilePathRelative = Path.Combine(assetsFolderName, guid + extension);
             var newFilePathAbsolute = Path.Combine(assetsFolderPath, guid + extension);
             
