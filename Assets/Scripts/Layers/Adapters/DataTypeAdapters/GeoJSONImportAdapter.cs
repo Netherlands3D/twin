@@ -3,6 +3,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
+using System;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 
 namespace Netherlands3D.Twin
 {
@@ -55,7 +59,9 @@ namespace Netherlands3D.Twin
         private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
             var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
-            var geoJsonLayerName = localFile.OriginalFileName;
+            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
+            if(localFile.SourceUrl.Length > 0)
+                geoJsonLayerName = localFile.SourceUrl;    
         
             //Create a new geojson layer with random color (untill UI provides ways to choose colors)
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
@@ -63,8 +69,15 @@ namespace Netherlands3D.Twin
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
-            
-            newLayer.SetURL(localFilePath, localFile.SourceUrl);
+
+            var localPath = localFile.LocalFilePath;
+            var fileName = Path.GetFileName(localPath);
+            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
+
+            if (localFile.SourceUrl.StartsWith("http"))
+                propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl);
+            else
+                propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localPath);
         }
     }
 }
