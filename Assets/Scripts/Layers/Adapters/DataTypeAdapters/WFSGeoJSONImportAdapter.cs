@@ -8,6 +8,8 @@ using System.Collections.Specialized;
 using System.Xml.Serialization;
 using Netherlands3D.Twin.Layers;
 using UnityEngine.Networking;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Twin
 {
@@ -114,7 +116,9 @@ namespace Netherlands3D.Twin
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = title;
-            newLayer.SetURL(getFeatureUrl);
+
+            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl); 
             
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);

@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin.Layers
             {"default", LayerStyle.CreateDefaultStyle()}
         };
 
+        [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
@@ -116,6 +117,20 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        [JsonIgnore]
+        public bool HasValidCredentials
+        {
+            get
+            {
+                return hasValidCredentials;
+            }
+            set
+            {
+                hasValidCredentials = value;
+                HasValidCredentialsChanged.Invoke(value);
+            }
+        }
+
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] private Dictionary<string, LayerStyle> Styles => styles;
@@ -141,6 +156,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -190,22 +206,31 @@ namespace Netherlands3D.Twin.Layers
 
             if (newParent == this)
                 return;
-
+            
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
 
-            parent.children.Remove(this);
-            if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
-                siblingIndex--;
-            parent.ChildrenChanged.Invoke(); //call event on old parent
-
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
+            
+            if (!parentChanged && siblingIndex > oldSiblingIndex) // moved down: insert first, remove after to keep the correct indices
+            {
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.children.RemoveAt(oldSiblingIndex);
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            else
+            {
+                parent.children.RemoveAt(oldSiblingIndex);
 
-            parent = newParent;
-
-            newParent.children.Insert(siblingIndex, this);
-
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);

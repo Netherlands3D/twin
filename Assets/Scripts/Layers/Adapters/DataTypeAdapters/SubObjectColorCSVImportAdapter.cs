@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
 using System.IO;
-using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
-using Application = UnityEngine.Application;
 
 namespace Netherlands3D.Twin
 {

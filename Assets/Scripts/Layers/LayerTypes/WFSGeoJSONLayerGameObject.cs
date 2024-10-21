@@ -19,10 +19,10 @@ namespace Netherlands3D.Twin.Layers
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
-        public void SetURL(string url)
+        protected override void Start()
         {
-            this.urlPropertyData.url = url;
-            CartesianTileWFSLayer.WfsUrl = url;
+            base.Start();
+            cartesianTileWFSLayer.WfsUrl = urlPropertyData.Data.ToString();
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -31,7 +31,6 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                CartesianTileWFSLayer.WfsUrl = urlProperty.url;
             }
         }
     }
