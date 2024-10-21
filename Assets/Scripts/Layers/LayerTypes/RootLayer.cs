@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
