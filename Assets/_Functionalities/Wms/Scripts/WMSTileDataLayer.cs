@@ -10,14 +10,7 @@ using UnityEngine.Rendering.Universal;
 namespace Netherlands3D.Twin
 {
     public class WMSTileDataLayer : ImageProjectionLayer
-    {
-        //this gives the requesting url the extra param to set transparancy enabled by default
-        public bool TransparencyEnabled = true;
-
-        //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
-        public int DefaultEnabledLayersMax = 5;
-
-        public Vector2Int PreferredImageSize = Vector2Int.one * 512;
+    {      
 
         public int RenderIndex 
         { 

@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin
             var sourceUrl = localFile.SourceUrl;
             string url = sourceUrl.Split('?')[0];
             var wmsFolder = new FolderLayer(url);
-
+            
             switch (wms.requestType)
             {
                 case WMS.RequestType.GetCapabilities:

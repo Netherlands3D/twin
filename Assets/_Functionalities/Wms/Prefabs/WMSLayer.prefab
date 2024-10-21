@@ -55,6 +55,9 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  TransparencyEnabled: 1
+  DefaultEnabledLayersMax: 5
+  PreferredImageSize: {x: 1024, y: 1024}
 --- !u!114 &1347090001780688696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,9 +87,6 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
-  TransparencyEnabled: 1
-  DefaultEnabledLayersMax: 5
-  PreferredImageSize: {x: 1024, y: 1024}
 --- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0

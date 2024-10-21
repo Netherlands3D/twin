@@ -11,10 +11,10 @@ namespace Netherlands3D.Twin.Layers
     /// </summary>
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
-        public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
-        public bool TransparencyEnabled => WMSProjectionLayer.TransparencyEnabled; 
-        public int DefaultEnabledLayersMax => WMSProjectionLayer.DefaultEnabledLayersMax; 
-        public Vector2Int PreferredImageSize => WMSProjectionLayer.PreferredImageSize;
+        public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;       
+        public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
+        public int DefaultEnabledLayersMax = 5;  //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
+        public Vector2Int PreferredImageSize = Vector2Int.one * 512;
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private WMSTileDataLayer wmsProjectionLayer;
@@ -28,8 +28,8 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void Start()
         {
-            base.Start();            
-            wmsProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
+            base.Start();
+            WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }
@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers
         public void SetRenderOrder(int order)
         {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
-            wmsProjectionLayer.RenderIndex = -order;
+            WMSProjectionLayer.RenderIndex = -order;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
