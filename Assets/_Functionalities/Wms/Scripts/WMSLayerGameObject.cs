@@ -11,28 +11,24 @@ namespace Netherlands3D.Twin.Layers
     /// </summary>
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
-        public WMSTileDataLayer WMSProjectionLayer
-        {
-            get
-            {
-                if (wmsProjectionLayer == null)
-                    wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
-                return wmsProjectionLayer;
-            }
-        }
-        
-        public bool TransparencyEnabled { get => WMSProjectionLayer.TransparencyEnabled; }
-        public int DefaultEnabledLayersMax { get => WMSProjectionLayer.DefaultEnabledLayersMax; }
-        public Vector2Int PreferredImageSize { get => WMSProjectionLayer.PreferredImageSize; }
+        public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
+        public bool TransparencyEnabled => WMSProjectionLayer.TransparencyEnabled; 
+        public int DefaultEnabledLayersMax => WMSProjectionLayer.DefaultEnabledLayersMax; 
+        public Vector2Int PreferredImageSize => WMSProjectionLayer.PreferredImageSize;
+        public LayerPropertyData PropertyData => urlPropertyData;
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-        public LayerPropertyData PropertyData => urlPropertyData;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+        }
 
         protected override void Start()
         {
-            base.Start();
-            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+            base.Start();            
             wmsProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
