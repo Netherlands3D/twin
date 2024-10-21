@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private int renderIndex = 0;
+        private int renderIndex = -1;
 
         private string wmsUrl = "";
         public string WmsUrl

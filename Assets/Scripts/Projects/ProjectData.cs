@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Projects
             private set
             {
                 rootLayer = value;
-                rootLayer.ReconstructParentsRecursive();
+                rootLayer.Initialize();
             }
         }
 

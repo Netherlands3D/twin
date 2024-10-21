@@ -13,7 +13,13 @@ namespace Netherlands3D.Twin.Layers
 
         public RootLayer(string name) : base(name)
         {
-            
+           
+        }
+
+        public void Initialize()
+        {
+            ReconstructParentsRecursive();
+            ProjectData.Current.OnDataChanged.AddListener(data => UpdateLayerTreeOrder(0));
         }
 
         public void AddLayerToSelection(LayerData layer)
