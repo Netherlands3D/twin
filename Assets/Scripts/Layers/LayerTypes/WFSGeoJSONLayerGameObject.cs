@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.CartesianTiles;
@@ -23,7 +24,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void SetURL(string url)
         {
-            this.urlPropertyData.url = url;
+            this.urlPropertyData.uri = new Uri(url);
             CartesianTileWFSLayer.WfsUrl = url;
         }
 
@@ -33,7 +34,7 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                CartesianTileWFSLayer.WfsUrl = urlProperty.url;
+                CartesianTileWFSLayer.WfsUrl = urlProperty.uri.ToString();
             }
         }
     }

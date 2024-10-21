@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using netDxf.Tables;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
@@ -21,26 +22,36 @@ namespace Netherlands3D.Twin.Layers
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public static float maxParseDuration = 0.01f;
-        
+
         public GeoJSONObjectType Type { get; private set; }
         public CRSBase CRS { get; private set; }
 
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
-        
-        [Header("Visualizer settings")]
-        [SerializeField] private int maxFeatureVisualsPerFrame = 20;
+
+        [Header("Visualizer settings")] [SerializeField]
+        private int maxFeatureVisualsPerFrame = 20;
+
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
-        public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
-        [Space]
-        public UnityEvent<string> OnParseError = new();
+        [SerializeField] private bool randomizeColorPerFeature = false;
+
+        public bool RandomizeColorPerFeature
+        {
+            get => randomizeColorPerFeature;
+            set => randomizeColorPerFeature = value;
+        }
+
+        public int MaxFeatureVisualsPerFrame
+        {
+            get => maxFeatureVisualsPerFrame;
+            set => maxFeatureVisualsPerFrame = value;
+        }
+
+        [Space] public UnityEvent<string> OnParseError = new();
         private Coroutine streamParseCoroutine;
         protected LayerURLPropertyData urlPropertyData = new();
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
@@ -68,7 +79,16 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                StartCoroutine(RestoreGeoJsonLocalFile(urlProperty.url));
+
+                if (urlProperty.uri.IsStoredInProject())
+                {
+                    var localPath = urlProperty.uri.GetComponents(UriComponents.AbsoluteUri & ~UriComponents.Scheme, UriFormat.UriEscaped);
+                    localPath = localPath.Replace("\\", "/"); // Make sure we only get '/' separators.
+                    localPath = localPath.TrimStart('/');
+                    SetURL(urlProperty.uri, localPath);
+                }
+                else
+                    StartCoroutine(RestoreGeoJsonLocalFileFromRemote(urlProperty.uri.ToString()));
             }
         }
 
@@ -116,7 +136,7 @@ namespace Netherlands3D.Twin.Layers
                 //If a feature was not found, stop queue
                 if (feature == null)
                     yield break;
-                
+
                 VisualizeFeature(feature);
 
                 if (i % MaxFeatureVisualsPerFrame == 0)
@@ -128,29 +148,32 @@ namespace Netherlands3D.Twin.Layers
         /// Sets URL and start a 'streaming' parse of the GeoJSON file. This will spread out the generation of visuals over multiple frames.
         /// Ideal for large single files.
         /// </summary>
-        public void SetURL(string path, string sourceUrl = "")
+        public void SetURL(Uri uri, string localPath)
         {
-            this.urlPropertyData.url = sourceUrl;
+            this.urlPropertyData.uri = uri;
 
             if (streamParseCoroutine != null)
                 StopCoroutine(streamParseCoroutine);
 
-            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
+            var absolutePath = Path.Combine(Application.persistentDataPath, localPath);
+            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(absolutePath, 1000));
         }
 
-        private IEnumerator RestoreGeoJsonLocalFile(string url)
+        private IEnumerator RestoreGeoJsonLocalFileFromRemote(string url)
         {
+            Debug.Log("restoring local file: " + url);
+
             //create LocalFile so we can use it in the ParseGeoJSONStream function
             var uwr = UnityWebRequest.Get(url);
             var optionalExtention = Path.GetExtension(url).Split("?")[0];
-            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
+            var guidFilename = Guid.NewGuid() + optionalExtention;
             string path = Path.Combine(Application.persistentDataPath, guidFilename);
 
             uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                SetURL(path);
+                SetURL(new Uri(url), path);
             }
             else
             {
@@ -227,9 +250,9 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
+                if (child is ReferencedLayerData referencedLayerData)
                 {
-                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
+                    if (referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
                         return polygonLayer;
                 }
             }
@@ -245,9 +268,9 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
+                if (child is ReferencedLayerData referencedLayerData)
                 {
-                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
+                    if (referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
                         return lineLayer;
                 }
             }
@@ -267,9 +290,9 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
+                if (child is ReferencedLayerData referencedLayerData)
                 {
-                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
+                    if (referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
                         return pointLayer;
                 }
             }
@@ -284,7 +307,7 @@ namespace Netherlands3D.Twin.Layers
 
             return newPointLayerGameObject;
         }
-        
+
         private void VisualizeFeature(Feature feature)
         {
             var originalCoordinateSystem = GetCoordinateSystem();
@@ -460,15 +483,15 @@ namespace Netherlands3D.Twin.Layers
 
         private static bool IsAtTypeToken(JsonTextReader reader)
         {
-            if(reader.TokenType != JsonToken.PropertyName)
-                    return false;
+            if (reader.TokenType != JsonToken.PropertyName)
+                return false;
 
             return reader.Value.ToString().ToLower() == "type";
         }
 
         private static bool IsAtCRSToken(JsonTextReader reader)
         {
-            if(reader.TokenType != JsonToken.PropertyName)
+            if (reader.TokenType != JsonToken.PropertyName)
                 return false;
 
             return reader.Value.ToString().ToLower() == "crs";
@@ -476,11 +499,10 @@ namespace Netherlands3D.Twin.Layers
 
         private static bool IsAtFeaturesToken(JsonTextReader reader)
         {
-            if(reader.TokenType != JsonToken.PropertyName)
+            if (reader.TokenType != JsonToken.PropertyName)
                 return false;
 
             return reader.Value.ToString().ToLower() == "features";
         }
-
     }
 }
