@@ -47,23 +47,10 @@ namespace Netherlands3D.Twin
             
             var fileName = Path.GetFileNameWithoutExtension(file);
             var extension = Path.GetExtension(file).ToLower();
-            var newFilePathRelative = Path.Combine(assetsFolderName, fileName + extension);
-            var newFilePathAbsolute = Path.Combine(assetsFolderPath, fileName + extension);
-            
-            Debug.Log("checking if file exists: " + newFilePathAbsolute);
-            Debug.Log("file exists: " + File.Exists(newFilePathAbsolute));
-            
-            // Find a unique file name if a file with the same name already exists
-            int index = 0;
-            while (File.Exists(newFilePathAbsolute))
-            {
-                Debug.Log("file already exists: " + newFilePathAbsolute);
-                index++;
-                var newFileName = $"{fileName}({index}){extension}";
-                newFilePathRelative = Path.Combine(assetsFolderName, newFileName);
-                newFilePathAbsolute = Path.Combine(assetsFolderPath, newFileName);
-                Debug.Log("attempting to save as: " + newFilePathAbsolute);
-            }
+
+            var guid = new Guid();
+            var newFilePathRelative = Path.Combine(assetsFolderName, guid + extension);
+            var newFilePathAbsolute = Path.Combine(assetsFolderPath, guid + extension);
             
             Debug.Log(absoluteFilePath + " will be moved to: " + newFilePathAbsolute);
             File.Move(absoluteFilePath, newFilePathAbsolute);
@@ -80,7 +67,8 @@ namespace Netherlands3D.Twin
                 var localFile = new LocalFile()
                 {
                     SourceUrl = newFilePathRelative,
-                    LocalFilePath = newFilePathRelative
+                    LocalFilePath = newFilePathRelative,
+                    OriginalFileName = fileName
                 };
 
                 fileTypeEvent.FileReceived.Invoke(localFile);

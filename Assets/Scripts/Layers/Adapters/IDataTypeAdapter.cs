@@ -8,6 +8,8 @@ namespace Netherlands3D.Twin
         public string SourceUrl;
         public string LocalFilePath;
 
+        public string OriginalFileName; // in order to avoid overwrites, we change the file name to a uuid, but we want to keep the original name for the user
+
         public List<string> log = new();
     }
 
