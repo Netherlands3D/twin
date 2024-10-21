@@ -29,7 +29,6 @@ namespace Netherlands3D.Indicators
         private void Start()
         {
             if (!invokeOnStart) return;
-
             switch (Dossier.State)
             {
                 case DossierSO.DossierSystemState.Importing: onImporting.Invoke(); break;

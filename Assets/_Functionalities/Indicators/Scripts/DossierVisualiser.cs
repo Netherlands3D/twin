@@ -21,7 +21,6 @@ namespace Netherlands3D.Indicators
         [SerializeField] private Material meshMaterial;
         [SerializeField] private Material lineMaterial;
         [SerializeField] private Material selectedMeshMaterial;
-
         [SerializeField] private Pin dataValuePin;
         [SerializeField] private float meshExtrusionHeight = 10f;
 
