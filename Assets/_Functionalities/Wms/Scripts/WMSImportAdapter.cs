@@ -305,8 +305,7 @@ namespace Netherlands3D.Twin
                         if (styles.Count > 0)
                             layerQueryParams.style = styles[0]; // Pick the first style by default
                         else
-                            layerQueryParams.style = "";                        
-                        //layerQueryParams.style = string.Join(",", styles);
+                            layerQueryParams.style = "";                                                
 
                     }
                     layers.Add(layerQueryParams);

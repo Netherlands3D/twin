@@ -74,7 +74,6 @@ namespace Netherlands3D.Twin
             {
                 Debug.LogWarning($"Could not download {url}");
                 RemoveGameObjectFromTile(tileKey);
-                callback(tileChange);
             }
             else
             {
@@ -98,10 +97,9 @@ namespace Netherlands3D.Twin
 
                     //set the render index, to make sure the render order is maintained
                     textureDecalProjector.SetPriority(renderIndex);
-
                 }
-                callback(tileChange);
             }
+            callback(tileChange);
         }
 
         private void UpdateDrawOrderForChildren()

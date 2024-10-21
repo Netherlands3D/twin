@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -10,6 +11,8 @@ namespace Netherlands3D.Twin.Layers
     public class RootLayer : LayerData
     {
         [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();
+
+        [JsonIgnore] private UnityAction<ProjectData> projectDataListener;
 
         public RootLayer(string name) : base(name)
         {
@@ -19,7 +22,8 @@ namespace Netherlands3D.Twin.Layers
         public void Initialize()
         {
             ReconstructParentsRecursive();
-            ProjectData.Current.OnDataChanged.AddListener(data => UpdateLayerTreeOrder(0));
+            projectDataListener = data => UpdateLayerTreeOrder(0);
+            ProjectData.Current.OnDataChanged.AddListener(projectDataListener);
         }
 
         public void AddLayerToSelection(LayerData layer)
@@ -49,7 +53,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.DestroyLayer();
             }
-
+            ProjectData.Current.OnDataChanged.RemoveListener(projectDataListener);
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
