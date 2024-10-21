@@ -70,53 +70,60 @@ namespace Netherlands3D.Twin
             string url = sourceUrl.Split('?')[0];
             var wmsFolder = new FolderLayer(url);
 
-            if (wms.requestType == WMS.RequestType.GetCapabilities)
+            switch (wms.requestType)
             {
-                List<WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
-
-                //Create a folder layer 
-                for(int i = 0; i < layerTypes.Count; i++)
+                case WMS.RequestType.GetCapabilities:
                 {
-                    AddWMSLayer(layerTypes[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
+                    List<WMSLayerQueryParams> layerTypes = wms.GetWmsLayers();
+
+                    //Create a folder layer 
+                    for (int i = 0; i < layerTypes.Count; i++)
+                    {
+                        AddWMSLayer(layerTypes[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
+                    }
+
+                    wms = null;
+                    return;
                 }
-                
-                wms = null;
-                return;
-            }
-            if (wms.requestType == WMS.RequestType.GetMap)
-            {
-                WMSLayerQueryParams wmsParam = new WMSLayerQueryParams();
-
-                string layerName = GetParamValueFromSourceUrl(sourceUrl, "layers");
-                wmsParam.name = layerName;                
-
-                string coordinateSystemType = string.Empty;
-                string coordinateSystemReference = string.Empty;
-                if (sourceUrl.ToLower().Contains("version="))
+                case WMS.RequestType.GetMap:
                 {
-                    wmsVersion = sourceUrl.ToLower().Split("version=")[1].Split("&")[0];
-                    Version version = Version.Parse(wmsVersion);
-                    wmsVersion = version.ToString();
-                    bool isHigherOrEqualVersion = version >= Version.Parse(defaultFallbackVersion);
-                    coordinateSystemType = isHigherOrEqualVersion ? "CRS" : "SRS";
-                    coordinateSystemReference = defaultCoordinateSystemReference;
+                    WMSLayerQueryParams wmsParam = new WMSLayerQueryParams();
+
+                    string layerName = GetParamValueFromSourceUrl(sourceUrl, "layers");
+                    wmsParam.name = layerName;
+
+                    string coordinateSystemType = string.Empty;
+                    string coordinateSystemReference = string.Empty;
+                    if (sourceUrl.ToLower().Contains("version="))
+                    {
+                        wmsVersion = sourceUrl.ToLower().Split("version=")[1].Split("&")[0];
+                        Version version = Version.Parse(wmsVersion);
+                        wmsVersion = version.ToString();
+                        bool isHigherOrEqualVersion = version >= Version.Parse(defaultFallbackVersion);
+                        coordinateSystemType = isHigherOrEqualVersion ? "CRS" : "SRS";
+                        coordinateSystemReference = defaultCoordinateSystemReference;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
+                        wmsVersion = defaultFallbackVersion;
+                        coordinateSystemType = defaultCoordinateSystemType;
+                        coordinateSystemReference = defaultCoordinateSystemReference;
+                    }
+
+                    wmsParam.spatialReferenceType = coordinateSystemType;
+                    wmsParam.spatialReference = coordinateSystemReference;
+                    wmsParam.style = GetParamValueFromSourceUrl(sourceUrl, "styles");
+
+                    AddWMSLayer(wmsParam, url, wmsFolder, 0 < layerPrefab.DefaultEnabledLayersMax);
+
+                    wms = null;
+                    return;
                 }
-                else
-                {
-                    Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
-                    wmsVersion = defaultFallbackVersion;
-                    coordinateSystemType = defaultCoordinateSystemType;
-                    coordinateSystemReference = defaultCoordinateSystemReference;
-                }
+                default:
+                    Debug.LogError("Unrecognized WMS request type: " + wms.requestType);
+                    break;
 
-                wmsParam.spatialReferenceType = coordinateSystemType;
-                wmsParam.spatialReference = coordinateSystemReference;
-                wmsParam.style = GetParamValueFromSourceUrl(sourceUrl, "styles");
-
-                AddWMSLayer(wmsParam, url, wmsFolder, 0 < layerPrefab.DefaultEnabledLayersMax);
-
-                wms = null;
-                return;
             }
         }
 

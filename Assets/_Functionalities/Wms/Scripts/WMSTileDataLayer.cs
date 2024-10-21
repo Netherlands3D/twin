@@ -59,26 +59,6 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public void ReloadAllTiles()
-        {
-            for (int i = transform.childCount - 1; i >= 0; i--)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
-            tiles.Clear();
-            return;
-            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
-            {
-                if (tile.Value == null || tile.Value.gameObject == null)
-                    continue;
-
-                TileChange tileChange = new TileChange();
-                tileChange.X = tile.Key.x;
-                tileChange.Y = tile.Key.y;
-                StartCoroutine(DownloadDataAndGenerateTexture(tileChange, key => { }));
-            }
-        }
-
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
