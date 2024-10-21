@@ -79,17 +79,11 @@ namespace Netherlands3D.Twin.Layers
 
         public void UpdateLayerTreeOrder(int index)
         {
-            //LayerUIManager uiManager = GameObject.FindObjectOfType<LayerUIManager>();
             List<LayerData> children = GetLayerDataTree();
             int count = children.Count();
             for (int i = 0; i < count; i++)
             {
                 children[i].RootIndex = i;
-                //test
-                //children[i].Name = i.ToString();
-                //LayerUI ui = uiManager.GetLayerUI(children[i]);
-                //if (ui)
-                //    ui.MarkLayerUIAsDirty(); 
             }
         }
     }
