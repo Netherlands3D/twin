@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -9,16 +9,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class LayerURLPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
         [DataMember] public string url = "";
-
+        
         public IEnumerable<LayerAsset> GetAssets()
         {
-            Uri uri = null;
-            if (!string.IsNullOrEmpty(url))
-                uri = AssetUriFactory.CreateProjectAssetUri(url);
-
             return new List<LayerAsset>()
             {
-                new(this, uri)
+                new (this, !string.IsNullOrEmpty(url) ? new Uri(url) : null)
             };
         }
     }
