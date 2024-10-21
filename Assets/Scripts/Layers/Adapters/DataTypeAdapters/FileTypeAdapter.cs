@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin
             var newFilePathAbsolute = Path.Combine(assetsFolderPath, guid + extension);
             
             Debug.Log(absoluteFilePath + " will be moved to: " + newFilePathAbsolute);
-            File.Move(absoluteFilePath, newFilePathAbsolute);
+            File.Copy(absoluteFilePath, newFilePathAbsolute);
                 
             if (extension.StartsWith('.'))
                 extension = extension.Substring(1);
