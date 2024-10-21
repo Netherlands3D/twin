@@ -19,13 +19,6 @@ namespace Netherlands3D.Twin.Layers
            
         }
 
-        public void Initialize()
-        {
-            ReconstructParentsRecursive();
-            projectDataListener = data => UpdateLayerTreeOrder(0);
-            ProjectData.Current.OnDataChanged.AddListener(projectDataListener);
-        }
-
         public void AddLayerToSelection(LayerData layer)
         {
             if (!SelectedLayers.Contains(layer))
@@ -53,7 +46,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 child.DestroyLayer();
             }
-            ProjectData.Current.OnDataChanged.RemoveListener(projectDataListener);
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
