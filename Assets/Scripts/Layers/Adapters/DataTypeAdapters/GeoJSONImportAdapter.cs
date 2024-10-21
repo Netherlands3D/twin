@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin
         private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
             var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
-            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
+            var geoJsonLayerName = localFile.OriginalFileName;//Path.GetFileName(localFile.SourceUrl);
             if(localFile.SourceUrl.Length > 0)
                 geoJsonLayerName = localFile.SourceUrl;    
         
@@ -65,7 +65,6 @@ namespace Netherlands3D.Twin
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
-
             
             newLayer.SetURL(localFilePath, localFile.SourceUrl);
         }

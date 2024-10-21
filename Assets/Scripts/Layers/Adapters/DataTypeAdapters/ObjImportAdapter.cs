@@ -19,9 +19,8 @@ namespace Netherlands3D.Twin
         public void Execute(LocalFile localFile)
         {
             var fullPath = localFile.LocalFilePath;
-            var fileName = Path.GetFileName(fullPath);
             ObjSpawner newLayer = Instantiate(layerPrefab);
-            newLayer.gameObject.name = fileName;
+            newLayer.gameObject.name = localFile.OriginalFileName;
 
             var propertyData = newLayer.PropertyData as ObjPropertyData;
             propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);

@@ -34,10 +34,9 @@ namespace Netherlands3D.Twin
             }
 
             var fullPath = localFile.LocalFilePath;
-            var fileName = Path.GetFileName(fullPath);
             
             activeCartesianTileSubObjectColorLayer = Instantiate(layerGameObjectPrefab);
-            activeCartesianTileSubObjectColorLayer.gameObject.name = fileName;
+            activeCartesianTileSubObjectColorLayer.gameObject.name = localFile.OriginalFileName;
             var propertyData = activeCartesianTileSubObjectColorLayer.PropertyData as CartesianTileSubObjectColorPropertyData;
             propertyData.Data = AssetUriFactory.CreateProjectAssetUri(fullPath);
             
