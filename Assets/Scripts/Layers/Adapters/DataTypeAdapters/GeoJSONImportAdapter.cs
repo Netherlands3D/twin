@@ -58,9 +58,8 @@ namespace Netherlands3D.Twin
 
         private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
-            var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
-            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-            if(localFile.SourceUrl.Length > 0)
+            var geoJsonLayerName = localFile.OriginalFileName;
+            if(string.IsNullOrEmpty(geoJsonLayerName) && localFile.SourceUrl.Length > 0)
                 geoJsonLayerName = localFile.SourceUrl;    
         
             //Create a new geojson layer with random color (untill UI provides ways to choose colors)
@@ -71,7 +70,6 @@ namespace Netherlands3D.Twin
                 newLayer.OnParseError.AddListener(onErrorCallback.Invoke);
 
             var localPath = localFile.LocalFilePath;
-            var fileName = Path.GetFileName(localPath);
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
 
             if (localFile.SourceUrl.StartsWith("http"))
