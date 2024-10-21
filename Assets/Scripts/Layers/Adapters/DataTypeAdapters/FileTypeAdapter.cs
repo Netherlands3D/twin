@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Netherlands3D.Events;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,7 +17,7 @@ namespace Netherlands3D.Twin
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
     public class FileTypeAdapter : ScriptableObject
     {
-        [SerializeField] private string assetsFolderName = "Assets";
+        // [SerializeField] private string assetsFolderName = "Assets";
         [SerializeField] private List<FileTypeEvent> fileTypeEvents;
 
         public void ProcessFiles(string files)
@@ -38,21 +35,15 @@ namespace Netherlands3D.Twin
                 file = file.Remove(file.Length - 1);
             
             var absoluteFilePath = Path.Combine(Application.persistentDataPath, file);
-            var assetsFolderPath = Path.Combine(Application.persistentDataPath, assetsFolderName);
-            
-            if (!Directory.Exists(assetsFolderPath))
-            {
-                Directory.CreateDirectory(assetsFolderPath);
-            }
             
             var fileName = Path.GetFileNameWithoutExtension(file);
             var extension = Path.GetExtension(file).ToLower();
 
             var guid = Guid.NewGuid();
-            var newFilePathRelative = Path.Combine(assetsFolderName, guid + extension);
-            var newFilePathAbsolute = Path.Combine(assetsFolderPath, guid + extension);
+            var newFilePathRelative = guid + extension;
+            var newFilePathAbsolute = Path.Combine(Application.persistentDataPath, guid + extension);
             
-            Debug.Log(absoluteFilePath + " will be moved to: " + newFilePathAbsolute);
+            Debug.Log(absoluteFilePath + " will be copied to: " + newFilePathAbsolute);
             File.Copy(absoluteFilePath, newFilePathAbsolute);
                 
             if (extension.StartsWith('.'))
