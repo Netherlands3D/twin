@@ -268,19 +268,87 @@ namespace Netherlands3D.Twin.Layers
         }
 
 
+        private Dictionary<Feature, GameObject> featureMeshes = new Dictionary<Feature, GameObject>();
+
         private void ProcessObjectMapping(Feature feature, List<Mesh> meshes)
         {
-            GameObject featureContainer = new GameObject(feature.Id); 
-            ObjectMapping objectMapping = featureContainer.AddComponent<ObjectMapping>();
-            objectMapping.items = new List<ObjectMappingItem>();
+            GameObject parent;
+            if(featureMeshes.ContainsKey(feature)) 
+            {
+                parent = featureMeshes[feature];
+
+                //looks like everything after is a copy!?
+                return;
+            }
+            else
+            {
+                GameObject featureContainer = new GameObject(feature.Id);
+                featureMeshes.Add(feature, featureContainer);
+                parent = featureContainer;
+            }
+
+          
             for(int i = 0; i < meshes.Count; i++)
             {
                 Mesh mesh = meshes[i];
-                mesh.RecalculateNormals();
-                GameObject subObject = new GameObject("submesh" + i.ToString());
+                Vector3[] verts = mesh.vertices;
+                List<Vector3> vertices = new List<Vector3>();
+                List<int> triangles = new List<int>();
+                float width = 1f;
+                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + parent.transform.childCount.ToString());
                 subObject.AddComponent<MeshFilter>().mesh = mesh;
-                subObject.AddComponent<MeshCollider>();
-                subObject.transform.SetParent(featureContainer.transform);
+                if (verts.Length >= 2)
+                {
+                    //generate collider extruded lines for lines
+                    if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+                    {
+                        for (int j = 0; j < verts.Length - 1; j++)
+                        {
+                            Vector3 p1 = verts[j];      
+                            Vector3 p2 = verts[j + 1];                             
+                            Vector3 edgeDir = (p2 - p1).normalized;
+                            Vector3 perpDir = new Vector3(-edgeDir.z, 0, edgeDir.x);
+                            Vector3 v1 = p1 + perpDir * width;
+                            Vector3 v2 = p1 - perpDir * width;
+                            Vector3 v3 = p2 + perpDir * width;
+                            Vector3 v4 = p2 - perpDir * width;
+                            vertices.Add(v1); //tl
+                            vertices.Add(v2); //bl
+                            vertices.Add(v3); //tr
+                            vertices.Add(v4); //br
+                            int baseIndex = j * 4;
+                            //v1 v2 v3
+                            triangles.Add(baseIndex + 0); 
+                            triangles.Add(baseIndex + 1);
+                            triangles.Add(baseIndex + 2);
+                            //v2, v4, v3
+                            triangles.Add(baseIndex + 2);
+                            triangles.Add(baseIndex + 1);
+                            triangles.Add(baseIndex + 3);
+                        }
+                        mesh.vertices = vertices.ToArray();
+                        mesh.triangles = triangles.ToArray();
+                    }
+                }
+                else
+                {
+                    if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+                    {
+                        subObject.transform.position = verts[0];
+                    }
+                }
+
+
+                mesh.RecalculateNormals();
+                
+                if(verts.Length >= 3)
+                    subObject.AddComponent<MeshCollider>();
+                else
+                    subObject.AddComponent<SphereCollider>().radius = 1f;
+                subObject.transform.SetParent(parent.transform);
+
+                ObjectMapping objectMapping = subObject.AddComponent<ObjectMapping>();
+                objectMapping.items = new List<ObjectMappingItem>();
                 string id = feature.Id;
                 objectMapping.items.Add(new ObjectMappingItem()
                 {
