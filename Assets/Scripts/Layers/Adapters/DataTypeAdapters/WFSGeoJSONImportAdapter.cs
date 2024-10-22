@@ -28,6 +28,10 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
+            if ((!sourceUrl.ToLower().Contains("service=wfs") && !sourceUrl.ToLower().Contains("/wfs"))
+                || sourceUrl.ToLower().Contains("request=getmap")) //if request = getmap it means wms
+                return false;
+
             Debug.Log("Checking source WFS url: " + sourceUrl);
             wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
 
@@ -118,7 +122,7 @@ namespace Netherlands3D.Twin
             newLayer.Name = title;
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl); 
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
