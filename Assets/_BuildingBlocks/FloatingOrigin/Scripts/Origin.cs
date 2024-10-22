@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         /// <summary>
         /// A cached square root of the distanceBeforeShifting value for performance optimization.
         /// </summary>
-        private int sqrDistanceBeforeShifting = 100000000;
+        private ulong sqrDistanceBeforeShifting = 100000000;
 
         public UnityEvent<Coordinate, Coordinate> onPreShift = new(); 
         public UnityEvent<Coordinate, Coordinate> onPostShift = new();
@@ -42,17 +42,17 @@ namespace Netherlands3D.Twin.FloatingOrigin
             mainShifter = mainShifter == null ? Camera.main.transform : mainShifter;
 
             // Cache the square of the distance
-            sqrDistanceBeforeShifting = distanceBeforeShifting * distanceBeforeShifting;
+            sqrDistanceBeforeShifting = (ulong)distanceBeforeShifting * (ulong)distanceBeforeShifting;
 
             StartCoroutine(AttemptShift());
         }
 
-        private int CalculateDistanceSquaredInXZPlane(Vector3 pos1, Vector3 pos2)
+        private ulong CalculateDistanceSquaredInXZPlane(Vector3 pos1, Vector3 pos2)
         {
             float deltaX = pos1.x - pos2.x;
             float deltaZ = pos1.z - pos2.z;
             float distanceSquared = (deltaX * deltaX) + (deltaZ * deltaZ);
-            return (int)distanceSquared;
+            return (ulong)distanceSquared;
         }
 
         private IEnumerator AttemptShift() 
@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 yield return new WaitForEndOfFrame();
 
-                int squaredDistance = CalculateDistanceSquaredInXZPlane(mainShifter.position, transform.position);
+                ulong squaredDistance = CalculateDistanceSquaredInXZPlane(mainShifter.position, transform.position);
                 if (squaredDistance < sqrDistanceBeforeShifting)
                 {
                     continue;

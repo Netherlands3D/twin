@@ -29,7 +29,9 @@ namespace Netherlands3D.Twin.Projects
         public string SavedTimestamp = "";
         public string UUID = "";
         private double[] cameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
-        public double[] CameraPosition {
+
+        public double[] CameraPosition
+        {
             get => cameraPosition;
             set
             {
@@ -37,6 +39,7 @@ namespace Netherlands3D.Twin.Projects
                 OnCameraPositionChanged.Invoke(new Coordinate(CoordinateSystem.RDNAP, cameraPosition));
             }
         }
+
         public double[] CameraRotation = new double[3];
         public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
         public bool UseCurrentTime = false;
@@ -83,10 +86,9 @@ namespace Netherlands3D.Twin.Projects
         {
             if (!isLoading)
             {
-                RootLayer.AddChild(layer);
+                RootLayer.AddChild(layer, 0);
             }
-
-            LayerAdded.Invoke(layer);
+            LayerAdded.Invoke(layer);           
         }
 
         public static void AddReferenceLayer(LayerGameObject referencedLayer)
@@ -106,7 +108,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void RemoveLayer(LayerData layer)
         {
-            LayerDeleted.Invoke(layer);
+            LayerDeleted.Invoke(layer);            
         }
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
@@ -132,7 +134,7 @@ namespace Netherlands3D.Twin.Projects
             if (!functionalities.Contains(data))
                 functionalities.Add(data);
             else
-                Debug.LogError("A functionality with ID: " + data.Id + " already exists.");
+                Debug.LogWarning("Not adding " + data.Id + " to ProjectData. A functionality with this ID already exists.");
         }
 
         public void RemoveFunctionality(FunctionalityData data)

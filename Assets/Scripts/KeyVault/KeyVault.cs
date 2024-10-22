@@ -140,6 +140,7 @@ namespace Netherlands3D.Twin
             else
             {
                 Debug.LogError("Access denied with username and password for: " + url);
+                //todo: send an event here so UI can update
             }
         }
 
@@ -184,8 +185,6 @@ namespace Netherlands3D.Twin
             
             // Try input key as 'key' query parameter (remove a possible existing key query parameter and add the new one)
             var uriBuilder = new UriBuilder(url);
-            var queryParameters = new NameValueCollection();
-            uriBuilder.TryParseQueryString(queryParameters);
             uriBuilder.AddQueryParameter("key", key);
             var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return keyRequestUrl.SendWebRequest();

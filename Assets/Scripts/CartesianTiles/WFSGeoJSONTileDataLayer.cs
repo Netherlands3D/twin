@@ -140,6 +140,15 @@ namespace Netherlands3D.CartesianTiles
             {
                 ParseGeoJSON(geoJsonRequest.downloadHandler.text);
             }
+            else
+            {
+                // Show a message in the console, because otherwise you will never find out
+                // something went wrong. This should be replaced with a better error reporting
+                // system
+                Debug.LogWarning(
+                    $"Request to {url} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
+                );
+            }
             callback?.Invoke(tileChange);
         }
 
