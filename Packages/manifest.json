@@ -18,7 +18,7 @@
     "eu.netherlands3d.collada": "0.1.1",
     "eu.netherlands3d.coordinates": "1.7.1",
     "eu.netherlands3d.event-containers": "0.1.1",
-    "eu.netherlands3d.filebrowser": "https://github.com/Netherlands3D/FileBrowser.git#feature/stop-overwriting-files",
+    "eu.netherlands3d.filebrowser": "https://github.com/Netherlands3D/filebrowser.git#feature/stop-overwriting-files",
     "eu.netherlands3d.geojson": "1.1.0",
     "eu.netherlands3d.gltfast": "5.0.3",
     "eu.netherlands3d.json": "1.0.1",
