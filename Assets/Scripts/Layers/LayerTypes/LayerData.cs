@@ -19,13 +19,15 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
+        [JsonIgnore] protected int rootIndex = -1;
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
+        [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-
+        
         [JsonIgnore]
         public string Name
         {
@@ -67,6 +69,18 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
         [JsonIgnore]
+        public int RootIndex
+        {
+            get => rootIndex;
+            set
+            {
+                if(value != rootIndex)
+                    LayerOrderChanged.Invoke(value); 
+                rootIndex = value;
+            }
+        }
+
+        [JsonIgnore]
         public bool ActiveInHierarchy
         {
             get
@@ -92,12 +106,27 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        [JsonIgnore]
+        public bool HasValidCredentials
+        {
+            get
+            {
+                return hasValidCredentials;
+            }
+            set
+            {
+                hasValidCredentials = value;
+                HasValidCredentialsChanged.Invoke(value);
+            }
+        }
+
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
+        [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
 
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
@@ -107,14 +136,15 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
         { 
-            parent = initialParent;
-            
+            parent = initialParent;            
             if (initialParent == null)
             {
                 parent = Root;
+                ParentOrSiblingIndexChanged.AddListener(Root.UpdateLayerTreeOrder);
             }
         }
 
@@ -156,22 +186,31 @@ namespace Netherlands3D.Twin.Layers
 
             if (newParent == this)
                 return;
-
+            
             var parentChanged = ParentLayer != newParent;
             var oldSiblingIndex = SiblingIndex;
 
-            parent.children.Remove(this);
-            if (!parentChanged && siblingIndex > oldSiblingIndex) //if the parent did not change, and the new sibling index is larger than the old sibling index, we need to decrease the new siblingIndex by 1 because we previously removed one item from the children list
-                siblingIndex--;
-            parent.ChildrenChanged.Invoke(); //call event on old parent
-
             if (siblingIndex < 0)
                 siblingIndex = newParent.children.Count;
+            
+            if (!parentChanged && siblingIndex > oldSiblingIndex) // moved down: insert first, remove after to keep the correct indices
+            {
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.children.RemoveAt(oldSiblingIndex);
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            else
+            {
+                parent.children.RemoveAt(oldSiblingIndex);
 
-            parent = newParent;
-
-            newParent.children.Insert(siblingIndex, this);
-
+                parent = newParent;
+                newParent.children.Insert(siblingIndex, this);
+                
+                parent.ChildrenChanged.Invoke(); //call event on old parent
+            }
+            
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
@@ -196,7 +235,7 @@ namespace Netherlands3D.Twin.Layers
 
             ParentLayer.ChildrenLayers.Remove(this);
             parent.ChildrenChanged.Invoke(); //call event on old parent
-
+            ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
@@ -240,6 +279,18 @@ namespace Netherlands3D.Twin.Layers
                 .SelectMany(l => l.GetAssets());
 
             return assetsOfCurrentLayer.Concat(assetsOfAllChildLayers);
+        }
+
+        /// <summary>
+        /// Recursively get all layers within children
+        /// </summary>
+        /// <returns></returns>
+        public List<LayerData> GetLayerDataTree()
+        {
+            List<LayerData> layerDataTree = new List<LayerData>();
+            layerDataTree.Add(this);
+            layerDataTree.AddRange(children.SelectMany(l => l.GetLayerDataTree()).ToList());
+            return layerDataTree;
         }
     }
 }
