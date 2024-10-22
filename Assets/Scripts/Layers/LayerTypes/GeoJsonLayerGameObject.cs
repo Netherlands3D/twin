@@ -15,6 +15,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -111,6 +112,7 @@ namespace Netherlands3D.Twin.Layers
                 return;
             }
 
+        
             StartCoroutine(VisualizeQueue(featureCollection.Features));
         }
 
@@ -125,6 +127,7 @@ namespace Netherlands3D.Twin.Layers
                     yield break;
                 
                 VisualizeFeature(feature);
+                ProcessFeatureVisualisationForFeature(feature);
 
                 if (i % MaxFeatureVisualsPerFrame == 0)
                     yield return null;
@@ -234,6 +237,7 @@ namespace Netherlands3D.Twin.Layers
                 var feature = serializer.Deserialize<Feature>(jsonReader);
                 features.Add(feature);
                 VisualizeFeature(feature);
+                ProcessFeatureVisualisationForFeature(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
@@ -241,6 +245,49 @@ namespace Netherlands3D.Twin.Layers
                     yield return null;
                     startTime = Time.realtimeSinceStartup;
                 }
+            }
+        }
+
+        private void ProcessFeatureVisualisationForFeature(Feature feature)
+        {
+            var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
+            if (polygonData != null)
+            {
+                ProcessObjectMapping(feature, polygonData);
+            }
+            var lineData = lineFeaturesLayer?.GetMeshData(feature);
+            if (lineData != null)
+            {
+                ProcessObjectMapping(feature, lineData);
+            }
+            var pointData = pointFeaturesLayer?.GetMeshData(feature);
+            if (pointData != null)
+            {
+                ProcessObjectMapping(feature, pointData);
+            }          
+        }
+
+
+        private void ProcessObjectMapping(Feature feature, List<Mesh> meshes)
+        {
+            GameObject featureContainer = new GameObject(feature.Id); 
+            ObjectMapping objectMapping = featureContainer.AddComponent<ObjectMapping>();
+            objectMapping.items = new List<ObjectMappingItem>();
+            for(int i = 0; i < meshes.Count; i++)
+            {
+                Mesh mesh = meshes[i];
+                mesh.RecalculateNormals();
+                GameObject subObject = new GameObject("submesh" + i.ToString());
+                subObject.AddComponent<MeshFilter>().mesh = mesh;
+                subObject.AddComponent<MeshCollider>();
+                subObject.transform.SetParent(featureContainer.transform);
+                string id = feature.Id;
+                objectMapping.items.Add(new ObjectMappingItem()
+                {
+                    objectID = id,
+                    firstVertex = 0,
+                    verticesLength = meshes[i].vertices.Length,
+                });
             }
         }
 

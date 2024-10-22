@@ -8,8 +8,10 @@ namespace Netherlands3D.Twin.Layers
 {
     public partial class GeoJSONPolygonLayer
     {
-        public class FeaturePolygonVisualisations
+        public class FeaturePolygonVisualisations : IFeatureVisualisation<PolygonVisualisation>
         {
+            public List<PolygonVisualisation> Data => visualisations;
+
             internal GeoJSONPolygonLayer geoJsonPolygonLayer;
             public Feature feature;
             private readonly List<PolygonVisualisation> visualisations = new();

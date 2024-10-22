@@ -14,8 +14,20 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerGameObject
+    public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            List<PolygonVisualisation> visualisations = data.Data;
+            foreach (PolygonVisualisation polygon in visualisations)
+            {
+                meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
+            }
+            return meshes;
+        }
+
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
         private bool randomizeColorPerFeature = false;

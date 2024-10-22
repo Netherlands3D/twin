@@ -11,8 +11,36 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject
+    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeaturePointVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            foreach (List<Coordinate> points in data.Data)
+            {
+                Mesh mesh = new Mesh();
+                meshes.Add(mesh);
+                List<Vector3> vertices = new List<Vector3>();
+                foreach (Coordinate point in points)
+                {
+                    vertices.Add(point.ToUnity());
+                }
+                mesh.SetVertices(vertices);
+                if (points.Count < 3)              
+                    continue; 
+                int[] triangles = new int[(points.Count - 2) * 3];
+                for (int i = 0; i < points.Count - 2; i++)
+                {
+                    triangles[i * 3] = 0;
+                    triangles[i * 3 + 1] = i + 1;
+                    triangles[i * 3 + 2] = i + 2;
+                }
+                mesh.SetTriangles(triangles, 0);
+            }
+            return meshes;
+        }
+
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
         private bool randomizeColorPerFeature = false;
@@ -52,12 +80,12 @@ namespace Netherlands3D.Twin.Layers
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(multiPoint, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
             else if(feature.Geometry is Point point)
             {
                 var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizePoint(point, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
@@ -105,7 +133,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach(var pointCollection in featureVisualisation.pointCollection)
+            foreach(var pointCollection in featureVisualisation.Data)
                 PointRenderer3D.RemoveCollection(pointCollection);
 
             SpawnedVisualisations.Remove(featureVisualisation);
