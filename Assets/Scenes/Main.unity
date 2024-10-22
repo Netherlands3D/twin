@@ -2177,7 +2177,7 @@ PrefabInstance:
     - target: {fileID: 1748615501916967598, guid: 0d52ffd9c87ab484b88610c4acf5db24,
         type: 3}
       propertyPath: fileExtentions
-      value: nl3d,obj,csv,json,geojson
+      value: nl3d,obj,csv,json,geojson,gltf,glb
       objectReference: {fileID: 0}
     - target: {fileID: 2388221261345448311, guid: 0d52ffd9c87ab484b88610c4acf5db24,
         type: 3}

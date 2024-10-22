@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
+  m_Name: GltfImporter
+  m_EditorClassIdentifier: 
+  data:
+    Id: 3d-modellen-toevoegen
+    IsEnabled: 1
+  Title: 3D modellen toevoegen
+  Caption: Gltf / Glb
+  Header: Eigen .Gltf bestanden tonen in de 3D viewer
+  Description: "Maak het mogelijk jouw eigen .gltf of .glb modellen in de 3D wereld
+    te plaatsen. \n\nZorg dat het 3D model aan de volgende eisen voldoet:\n\n- Gltf
+    of Glb formaat\n- Maximaal 300MB bestandsgrootte\n"
+  configuration: {fileID: 0}
+  OnEnable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisable:
+    m_PersistentCalls:
+      m_Calls: []
