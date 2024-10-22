@@ -9,10 +9,9 @@ namespace Netherlands3D.Twin
             var camera = Camera.main;
             var cameraTransform = camera.transform;
 
-            var ray = camera.ScreenPointToRay(new Vector2(Screen.width / 2f, Screen.height / 2f));
+            var ray = camera.ScreenPointToRay(new Vector2(Screen.width * .5f, Screen.height * .5f));
             var plane = new Plane(Vector3.up, 0);
-            var intersect = plane.Raycast(ray, out float distance);
-            if (!intersect)
+            if (plane.Raycast(ray, out var distance) == false)
             {
                 distance = 10f;
             }
