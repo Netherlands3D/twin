@@ -34,7 +34,6 @@ namespace Netherlands3D.Rendering
         public override void SetTexture(Texture2D texture)
         {
             base.SetTexture(texture);
-
             if (!materialInstance)
             {
                 materialInstance = new Material(projector.material);
