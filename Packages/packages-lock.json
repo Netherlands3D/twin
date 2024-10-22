@@ -271,11 +271,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.filebrowser": {
-      "version": "https://github.com/Netherlands3D/filebrowser.git#feature/stop-overwriting-files",
+      "version": "2.2.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "bb4e5fabd4ab5d929f2300b49cd4fffc1b89ace3"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.geojson": {
       "version": "1.1.0",
