@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Projects
         {
             var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
             var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
-
+            
             var entry = new ZipEntry(relativePath);
             zipOutputStream.PutNextEntry(entry);
             byte[] fileBytes = File.ReadAllBytes(absolutePath);
