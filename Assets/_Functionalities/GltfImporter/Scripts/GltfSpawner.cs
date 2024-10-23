@@ -23,11 +23,19 @@ namespace Netherlands3D.Twin.Functionalities.GltfImporter
             var localPath = propertyData.Uri.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
             
+            Debug.Log("Reading GLB/GLTF file");
             byte[] data = await File.ReadAllBytesAsync(path);
             var gltf = new GltfImport();
+            Debug.Log("Loading GLB/GLTF binary data");
             bool success = await gltf.LoadGltfBinary(data, new Uri(path));
             if (success) {
+                Debug.Log("Creating Scene object(s) for GLB/GLTF");
                 await gltf.InstantiateMainSceneAsync(transform);
+                Debug.Log("Created Scene object(s) for GLB/GLTF");
+            }
+            else
+            {
+                Debug.LogError("Failed to load GLB/GLTF binary data");
             }
         }
 
