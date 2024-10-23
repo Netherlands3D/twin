@@ -20,11 +20,16 @@ namespace Netherlands3D.Twin.Functionalities.GltfImporter
             gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
         }
 
-        private IEnumerator Start()
+        private void Start()
         {
             var localPath = propertyData.Uri.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
             
+            StartCoroutine(StartLoading(path));
+        }
+
+        private IEnumerator StartLoading(string path)
+        {
             yield return LoadModel(path);
         }
 
@@ -32,6 +37,7 @@ namespace Netherlands3D.Twin.Functionalities.GltfImporter
         {
             Debug.Log("Reading GLB/GLTF file");
             byte[] data = await File.ReadAllBytesAsync(path);
+            Debug.Log("Instantiate GltfImport");
             var gltf = new GltfImport();
             Debug.Log("Loading GLB/GLTF binary data");
             bool success = await gltf.LoadGltfBinary(data, new Uri(path));
