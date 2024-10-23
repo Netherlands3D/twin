@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Functionalities.GltfImporter
             var path = Path.Combine(Application.persistentDataPath, localPath);
             
             Debug.Log("Reading GLB/GLTF file");
-            byte[] data = await File.ReadAllBytesAsync(path);
+            byte[] data = File.ReadAllBytes(path);
             var gltf = new GltfImport();
             Debug.Log("Loading GLB/GLTF binary data");
             bool success = await gltf.LoadGltfBinary(data, new Uri(path));
