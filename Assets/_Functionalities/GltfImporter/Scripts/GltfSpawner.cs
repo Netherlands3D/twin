@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using GLTFast;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -18,25 +20,30 @@ namespace Netherlands3D.Twin.Functionalities.GltfImporter
             gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
         }
 
-        private async void Start()
+        private IEnumerator Start()
         {
             var localPath = propertyData.Uri.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
             
+            yield return LoadModel(path);
+        }
+
+        private async Task LoadModel(string path)
+        {
             Debug.Log("Reading GLB/GLTF file");
-            byte[] data = File.ReadAllBytes(path);
+            byte[] data = await File.ReadAllBytesAsync(path);
             var gltf = new GltfImport();
             Debug.Log("Loading GLB/GLTF binary data");
             bool success = await gltf.LoadGltfBinary(data, new Uri(path));
-            if (success) {
-                Debug.Log("Creating Scene object(s) for GLB/GLTF");
-                await gltf.InstantiateMainSceneAsync(transform);
-                Debug.Log("Created Scene object(s) for GLB/GLTF");
-            }
-            else
+            if (!success)
             {
                 Debug.LogError("Failed to load GLB/GLTF binary data");
+                return;
             }
+
+            Debug.Log("Creating Scene object(s) for GLB/GLTF");
+            await gltf.InstantiateMainSceneAsync(transform);
+            Debug.Log("Created Scene object(s) for GLB/GLTF");
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
