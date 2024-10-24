@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &26099009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 26099011}
+  - component: {fileID: 26099010}
+  m_Layer: 0
+  m_Name: loadbundle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &26099010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26099009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8d7e62293860340a75d954d53c22bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &26099011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26099009}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 536.377, y: 103.56319, z: -942.4028}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &85805898 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2899205090272600502, guid: d944d4bb0f060484e901a4e0352d8836,
@@ -520,7 +564,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowTransform: {fileID: 7732943800119484194}
   NorthColor: {r: 0.46540874, g: 0.106839046, b: 0.106839046, a: 1}
-  snapSpeed: 10
   inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}
 --- !u!1001 &859080883
@@ -2176,8 +2219,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748615501916967598, guid: 0d52ffd9c87ab484b88610c4acf5db24,
         type: 3}
+      propertyPath: multiSelect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748615501916967598, guid: 0d52ffd9c87ab484b88610c4acf5db24,
+        type: 3}
       propertyPath: fileExtentions
-      value: nl3d,obj,csv,json,geojson
+      value: nl3d,obj,csv,json,geojson,mtl
       objectReference: {fileID: 0}
     - target: {fileID: 2388221261345448311, guid: 0d52ffd9c87ab484b88610c4acf5db24,
         type: 3}
@@ -9439,3 +9487,4 @@ SceneRoots:
   - {fileID: 887635104}
   - {fileID: 311190676}
   - {fileID: 2997518761711757160}
+  - {fileID: 26099011}

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ namespace Netherlands3D.Twin.Layers
 
             var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
-            
+
             ImportObj(path);
         }
 
@@ -63,8 +64,12 @@ namespace Netherlands3D.Twin.Layers
             string copiedFilename = path + ".temp";
             File.Copy(path, copiedFilename);
 
+            string replacedFilePath = Regex.Replace(copiedFilename, @"\([^)]*\)", "");
+            string removedObjExtention = Path.GetFileNameWithoutExtension(replacedFilePath);
+            string mtlPath = Path.Combine(Path.GetDirectoryName(copiedFilename), Path.ChangeExtension(removedObjExtention, ".mtl"));
+
             importer.objFilePath = copiedFilename;
-            importer.mtlFilePath = "";
+            importer.mtlFilePath = mtlPath;
             importer.imgFilePath = "";
 
             importer.BaseMaterial = baseMaterial;
