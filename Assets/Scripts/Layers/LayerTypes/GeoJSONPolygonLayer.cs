@@ -7,6 +7,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         [SerializeField] private Material polygonVisualizationMaterial;
-        private Material polygonVisualizationMaterialInstance;
+        internal Material polygonVisualizationMaterialInstance;
 
         public Material PolygonVisualizationMaterial
         {
@@ -59,12 +60,12 @@ namespace Netherlands3D.Twin.Layers
             };
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
-                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
+                var polygonVisualisations = GeometryVisualizationFactory.CreatePolygonVisualization(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
                 newFeatureVisualisation.AppendVisualisations(polygonVisualisations);
             }
             else if (feature.Geometry is Polygon polygon)
             {
-                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
+                var singlePolygonVisualisation = GeometryVisualizationFactory.CreatePolygonVisualisation(polygon, originalCoordinateSystem, featureRenderMaterial);
                 newFeatureVisualisation.AppendVisualisations(singlePolygonVisualisation);
             }
 
@@ -85,7 +86,12 @@ namespace Netherlands3D.Twin.Layers
 
             // Default to material with layer color
             if (polygonVisualizationMaterialInstance == null)
-                    polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial) { color = LayerData.Color };
+            {
+                polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
+                {
+                    color = LayerData.Color
+                };
+            }
 
             return polygonVisualizationMaterialInstance;
         }

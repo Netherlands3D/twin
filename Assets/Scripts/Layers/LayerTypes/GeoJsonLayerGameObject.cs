@@ -35,19 +35,12 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
         
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
         public UnityEvent<string> OnParseError = new();
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
-
-        protected virtual void Awake()
-        {
-            LoadDefaultValues();
-        }
 
         protected override void Start()
         {
@@ -56,14 +49,6 @@ namespace Netherlands3D.Twin.Layers
                 StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
             else if(urlPropertyData.Data.IsRemoteAsset())
                 StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
-        }
-
-        protected virtual void LoadDefaultValues()
-        {
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            LayerData.Color = randomLayerColor;
         }
 
         /// <summary>

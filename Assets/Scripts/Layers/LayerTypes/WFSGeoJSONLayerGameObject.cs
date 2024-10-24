@@ -14,9 +14,8 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSLayer;
         public WFSGeoJSONTileDataLayer CartesianTileWFSLayer { get => cartesianTileWFSLayer; }
 
-        protected override void Awake() 
+        protected void Awake() 
         {
-            base.Awake();            
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
