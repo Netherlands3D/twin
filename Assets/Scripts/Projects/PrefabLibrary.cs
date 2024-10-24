@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using netDxf.Collections;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -39,15 +40,35 @@ namespace Netherlands3D.Twin
             return fallbackPrefab;
         }
 
-        public void AddObjectToPrefabGroup(string groupName, LayerGameObject layerObject)
-        {
-            foreach (var group in prefabGroups)
-            {
-                if (group.groupName == groupName)
-                {
-                    group.prefabs.Add(layerObject);
-                }
-            }
-        }
+        //public void AddObjectToPrefabGroup(string groupName, LayerGameObject layerObject)
+        //{
+        //    foreach (var group in prefabGroups)
+        //    {
+        //        if (group.groupName == groupName)
+        //        {
+        //            foreach (LayerGameObject go in group.prefabs)
+        //                if (go.name == layerObject.name)
+        //                {
+        //                    group.prefabs.Remove(go);
+        //                }
+        //            group.prefabs.Add(layerObject);
+        //        }
+        //    }
+        //}
+
+        //public void RemoveObjectFromPrefabGroup(string groupName, LayerGameObject layerObject)
+        //{
+        //    foreach (var group in prefabGroups)
+        //    {
+        //        if (group.groupName == groupName)
+        //        {
+        //            foreach (LayerGameObject go in group.prefabs)
+        //                if (go.name == layerObject.name)
+        //                {
+        //                    group.prefabs.Remove(go);
+        //                }
+        //        }
+        //    }
+        //}
     }
 }

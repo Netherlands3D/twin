@@ -27,14 +27,27 @@ namespace Netherlands3D.Twin
         public string prefabName;
         public Vector3 spawnPosition;
 
+        private List<HierarchicalObjectLayerGameObject> hierarchicalObjectLayerGameObjects = new List<HierarchicalObjectLayerGameObject>();
+
         private void Awake()
+        {
+            OnProjectDataChanged(ProjectData.Current);
+        }
+
+        private void Start()
+        {
+            //ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
+        }
+
+        private void OnProjectDataChanged(ProjectData projectData)
         {
             LoadAssetFromAssetBundle(bundleName, prefabName, Vector3.zero, asset =>
             {
                 HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
                 if (layerObject != null)
                 {
-                    ProjectData.Current.PrefabLibrary.AddObjectToPrefabGroup("ObjectenBibliotheek", layerObject);
+                    //projectData.PrefabLibrary.AddObjectToPrefabGroup("ObjectenBibliotheek", layerObject);
+                    hierarchicalObjectLayerGameObjects.Add(layerObject);
                 }
             });
         }
@@ -42,7 +55,7 @@ namespace Netherlands3D.Twin
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Vector3 position, Action<GameObject> onLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
-            StartCoroutine(GetAndroidBundle(path, bundle =>
+            StartCoroutine(GetAssetBundle(path, bundle =>
             {
                 string[] names = bundle.GetAllAssetNames();
                 foreach (string n in names)
@@ -53,7 +66,7 @@ namespace Netherlands3D.Twin
                         if (asset != null)
                         {
                             GameObject model = Instantiate(asset);
-                            model.transform.SetParent(transform, false);
+                            //model.transform.SetParent(transform, false);
 
                             //the following fixes the pink bug in editor shaders                     
                             MeshRenderer[] renderers = model.GetComponentsInChildren<MeshRenderer>();
@@ -63,13 +76,14 @@ namespace Netherlands3D.Twin
                             }                            
                             onLoaded(model);
                         }
+                        bundle.Unload(false);
                         return;
                     }
                 }
             }));
         }
 
-        public IEnumerator GetAndroidBundle(string path, UnityAction<AssetBundle> callBack)
+        public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
         {
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
             yield return request.SendWebRequest();
@@ -85,6 +99,14 @@ namespace Netherlands3D.Twin
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                 callBack?.Invoke(bundle);
             }
+        }
+
+        private void OnDestroy()
+        {
+            //ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            //foreach (LayerGameObject go in hierarchicalObjectLayerGameObjects)
+            //    ProjectData.Current.PrefabLibrary.RemoveObjectFromPrefabGroup("ObjectenBibliotheek", go);
+            hierarchicalObjectLayerGameObjects.Clear();
         }
     }
 }
