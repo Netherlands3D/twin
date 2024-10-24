@@ -1,4 +1,7 @@
 using ICSharpCode.SharpZipLib.Core;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,12 +27,19 @@ namespace Netherlands3D.Twin
         public string prefabName;
         public Vector3 spawnPosition;
 
-        private void Start()
+        private void Awake()
         {
-            LoadAssetFromAssetBundle(bundleName, prefabName, Vector3.zero);
+            LoadAssetFromAssetBundle(bundleName, prefabName, Vector3.zero, asset =>
+            {
+                HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
+                if (layerObject != null)
+                {
+                    ProjectData.Current.PrefabLibrary.AddObjectToPrefabGroup("ObjectenBibliotheek", layerObject);
+                }
+            });
         }
 
-        public void LoadAssetFromAssetBundle(string bundleName, string fileName, Vector3 position)
+        public void LoadAssetFromAssetBundle(string bundleName, string fileName, Vector3 position, Action<GameObject> onLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
             StartCoroutine(GetAndroidBundle(path, bundle =>
@@ -51,6 +61,7 @@ namespace Netherlands3D.Twin
                             {
                                 renderer.material.shader = Shader.Find(renderer.material.shader.name);
                             }                            
+                            onLoaded(model);
                         }
                         return;
                     }

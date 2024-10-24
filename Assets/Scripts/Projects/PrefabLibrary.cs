@@ -38,5 +38,16 @@ namespace Netherlands3D.Twin
 
             return fallbackPrefab;
         }
+
+        public void AddObjectToPrefabGroup(string groupName, LayerGameObject layerObject)
+        {
+            foreach (var group in prefabGroups)
+            {
+                if (group.groupName == groupName)
+                {
+                    group.prefabs.Add(layerObject);
+                }
+            }
+        }
     }
 }
