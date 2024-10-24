@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2362124063262672280}
   - component: {fileID: 3482478533686408333}
   m_Layer: 0
-  m_Name: ObjLayer
+  m_Name: OBJLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMaterial: {fileID: 2100000, guid: 2750d0d1f9de43c40b93e8aae8cb7e7e, type: 2}
-  importerPrefab: {fileID: 7917579944522795273, guid: 17813655602a70c46a78e7f4ec2e2b97,
+  importerPrefab: {fileID: 7917579944522795273, guid: acc34c0ad9fa48c45ad404982fa0a6b9,
     type: 3}
   createSubMeshes: 0
 --- !u!114 &1646213389209705716
