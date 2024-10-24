@@ -4743,7 +4743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a728a3527b1f334390e5bfd25ce6aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileExtentions: obj,csv,json,geojson
+  fileExtentions: obj,csv,json,geojson,glb,gltf
   multiSelect: 0
   onFilesSelected:
     m_PersistentCalls:

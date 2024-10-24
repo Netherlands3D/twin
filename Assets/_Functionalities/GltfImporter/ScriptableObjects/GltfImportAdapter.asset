@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72250ba7f5614f81ad22fff0a1354a4c, type: 3}
+  m_Name: GltfImportAdapter
+  m_EditorClassIdentifier: 
+  layerPrefab: {fileID: 3094970985324844986, guid: a0c050d9c6beacb4593d8b7fccc08d05,
+    type: 3}
