@@ -1,0 +1,74 @@
+ManifestFileVersion: 0
+CRC: 604911458
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b0044ec7bf6d871da8caac227684929a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d27d605e56b00c7d193d3604b99a7461
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b0044ec7bf6d871da8caac227684929a
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetBundleAssets/textures/Image_10.jpg
+- Assets/AssetBundleAssets/textures/Image_1.jpg
+- Assets/AssetBundleAssets/textures/Spot_CF.001.mat
+- Assets/AssetBundleAssets/textures/Image_14.jpg
+- Assets/AssetBundleAssets/textures/Image_7.jpg
+- Assets/AssetBundleAssets/zuidoost.prefab
+- Assets/AssetBundleAssets/textures/Image_0.jpg
+- Assets/AssetBundleAssets/textures/Image_19.jpg
+- Assets/AssetBundleAssets/textures/Spot_E.001.mat
+- Assets/AssetBundleAssets/textures/Image_9.jpg
+- Assets/AssetBundleAssets/textures/Image_11.jpg
+- Assets/AssetBundleAssets/textures/Image_23.jpg
+- Assets/AssetBundleAssets/zuidoost.obj
+- Assets/AssetBundleAssets/textures/ZC.001.mat
+- Assets/AssetBundleAssets/textures/Image_22.jpg
+- Assets/AssetBundleAssets/textures/Image_8.jpg
+- Assets/AssetBundleAssets/textures/Spot_A2.001.mat
+- Assets/AssetBundleAssets/textures/Brightside.001.mat
+- Assets/AssetBundleAssets/textures/Parkside.001.mat
+- Assets/AssetBundleAssets/textures/03_-_Default.001.mat
+- Assets/AssetBundleAssets/textures/Paasheuvelweg_Ground_PBR.001.mat
+- Assets/AssetBundleAssets/textures/Image_4.jpg
+- Assets/AssetBundleAssets/textures/Image_15.jpg
+- Assets/AssetBundleAssets/textures/Image_18.jpg
+- Assets/AssetBundleAssets/textures/RubyGardens.001.mat
+- Assets/AssetBundleAssets/textures/Image_16.jpg
+- Assets/AssetBundleAssets/textures/Image_2.jpg
+- Assets/AssetBundleAssets/textures/Image_21.jpg
+- Assets/AssetBundleAssets/textures/Paasheuvelweg_PBR.001.mat
+- Assets/AssetBundleAssets/textures/Image_13.jpg
+- Assets/AssetBundleAssets/textures/Image_6.jpg
+- Assets/AssetBundleAssets/textures/04_-_Default.001.mat
+- Assets/AssetBundleAssets/textures/Spot_C1.001.mat
+- Assets/AssetBundleAssets/textures/Spot_A1.001.mat
+- Assets/AssetBundleAssets/textures/Spot_B2.001.mat
+- Assets/AssetBundleAssets/textures/Image_17.jpg
+- Assets/AssetBundleAssets/textures/Image_5.jpg
+- Assets/AssetBundleAssets/textures/Spot_D1.001.mat
+- Assets/AssetBundleAssets/textures/Image_20.jpg
+- Assets/AssetBundleAssets/textures/Image_12.jpg
+- Assets/AssetBundleAssets/textures/Image_3.jpg
+Dependencies: []
