@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using TMPro;
@@ -48,6 +49,26 @@ namespace Netherlands3D.Twin
                     CreateButton(prefab, groupPanel);
                 }
             }
+            foreach (var group in library.prefabGroupsRuntime)
+            {
+                if (!group.autoPopulateUI)
+                    continue;
+
+                var groupPanel = GetGroupPanel(group.groupName);
+                foreach (var prefab in group.prefabs)
+                {
+                    CreateButton(prefab, groupPanel);
+                }
+            }
+        }
+
+        private GameObject GetGroupPanel(string groupName)
+        {
+            Transform[] panels = contentParent.transform.GetComponentsInChildren<Transform>(true);
+            foreach (Transform t in panels)
+                if (t.gameObject.name == groupName)
+                    return t.gameObject;
+            return null;
         }
 
         private GameObject CreateGroupPanel(string groupGroupName)

@@ -27,10 +27,11 @@ namespace Netherlands3D.Twin
         public string prefabName;
         public Vector3 spawnPosition;
 
-        private List<HierarchicalObjectLayerGameObject> hierarchicalObjectLayerGameObjects = new List<HierarchicalObjectLayerGameObject>();
+        public static List<HierarchicalObjectLayerGameObject> hierarchicalObjectLayerGameObjects = new List<HierarchicalObjectLayerGameObject>();
 
         private void Awake()
         {
+            ProjectData.Current.PrefabLibrary.AddPrefabGroupRuntime("ObjectenBibliotheek");
             OnProjectDataChanged(ProjectData.Current);
         }
 
@@ -41,13 +42,15 @@ namespace Netherlands3D.Twin
 
         private void OnProjectDataChanged(ProjectData projectData)
         {
+            //we want only the original asset here and not an instantiation
             LoadAssetFromAssetBundle(bundleName, prefabName, Vector3.zero, asset =>
             {
                 HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
                 if (layerObject != null)
-                {
-                    //projectData.PrefabLibrary.AddObjectToPrefabGroup("ObjectenBibliotheek", layerObject);
-                    hierarchicalObjectLayerGameObjects.Add(layerObject);
+                {                
+                    projectData.PrefabLibrary.AddObjectToPrefabGroupRuntime("ObjectenBibliotheek", layerObject);
+                    if(!hierarchicalObjectLayerGameObjects.Contains(layerObject))
+                        hierarchicalObjectLayerGameObjects.Add(layerObject);
                 }
             });
         }
@@ -65,15 +68,35 @@ namespace Netherlands3D.Twin
                         GameObject asset = bundle.LoadAsset<GameObject>(n);
                         if (asset != null)
                         {
-                            GameObject model = Instantiate(asset);
-                            //model.transform.SetParent(transform, false);
+#if UNITY_EDITOR
+                            FixShadersForEditor(asset);
+#endif
+                            onLoaded(asset);
+                        }
+                        bundle.Unload(false);
+                        return;
+                    }
+                }
+            }));
+        }
 
-                            //the following fixes the pink bug in editor shaders                     
-                            MeshRenderer[] renderers = model.GetComponentsInChildren<MeshRenderer>();
-                            foreach (MeshRenderer renderer in renderers)
-                            {
-                                renderer.material.shader = Shader.Find(renderer.material.shader.name);
-                            }                            
+        public void CreateAssetFromAssetBundle(string bundleName, string fileName, Vector3 position, Action<GameObject> onLoaded)
+        {
+            string path = Path.Combine(Application.streamingAssetsPath, bundleName);
+            StartCoroutine(GetAssetBundle(path, bundle =>
+            {
+                string[] names = bundle.GetAllAssetNames();
+                foreach (string n in names)
+                {
+                    if (Path.GetFileName(n) == fileName)
+                    {
+                        GameObject asset = bundle.LoadAsset<GameObject>(n);
+                        if (asset != null)
+                        {
+                            GameObject model = Instantiate(asset);
+#if UNITY_EDITOR
+                            FixShadersForEditor(model);
+#endif
                             onLoaded(model);
                         }
                         bundle.Unload(false);
@@ -81,6 +104,19 @@ namespace Netherlands3D.Twin
                     }
                 }
             }));
+        }
+
+        private void FixShadersForEditor(GameObject asset)
+        {
+            //the following fixes the pink bug in editor shaders                     
+            MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer renderer in renderers)
+            {
+                if(renderer.material != null)
+                    renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                else
+                    renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
+            }
         }
 
         public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
@@ -103,9 +139,7 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy()
         {
-            //ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
-            //foreach (LayerGameObject go in hierarchicalObjectLayerGameObjects)
-            //    ProjectData.Current.PrefabLibrary.RemoveObjectFromPrefabGroup("ObjectenBibliotheek", go);
+            //ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);            
             hierarchicalObjectLayerGameObjects.Clear();
         }
     }
