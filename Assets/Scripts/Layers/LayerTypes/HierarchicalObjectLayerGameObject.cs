@@ -21,15 +21,22 @@ namespace Netherlands3D.Twin.Layers
         private Quaternion previousRotation;
         private Vector3 previousScale;
 
+        protected Coordinate coord;
+
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
 
         protected void Awake()
         {
-            var coord = new Coordinate(transform.position);
+            InitializeCoordinates();
             transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+        }
+
+        protected virtual void InitializeCoordinates()
+        {
+            coord = new Coordinate(transform.position);
         }
 
         protected override void OnEnable()
@@ -66,19 +73,19 @@ namespace Netherlands3D.Twin.Layers
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        private void UpdatePosition(Coordinate newPosition)
+        protected virtual void UpdatePosition(Coordinate newPosition)
         {
             if (newPosition.ToUnity() != transform.position)
                 transform.position = newPosition.ToUnity();
         }
 
-        private void UpdateRotation(Vector3 newAngles)
+        protected void UpdateRotation(Vector3 newAngles)
         {
             if (newAngles != transform.eulerAngles)
                 transform.eulerAngles = newAngles;
         }
 
-        private void UpdateScale(Vector3 newScale)
+        protected void UpdateScale(Vector3 newScale)
         {
             if (newScale != transform.localScale)
                 transform.localScale = newScale;

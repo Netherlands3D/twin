@@ -21,6 +21,8 @@ namespace Netherlands3D.Twin
     //step 4, your assetbundle will be put in streamingassets
     //step 5, use LoadAssetFromAssetBundle from any script to instantiate your prefab from the bundle
 
+    //for any change in any prefab within an assetbundle you need to rebuild the assetbundles
+
     public class AssetBundleLoader : MonoBehaviour
     {
         public string bundleName;
