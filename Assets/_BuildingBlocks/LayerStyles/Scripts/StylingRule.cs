@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.LayerStyles
 {
@@ -9,6 +10,12 @@ namespace Netherlands3D.LayerStyles
         [DataMember] public Symbolizer Symbolizer { get; } = new();
 
         [DataMember] public Expression Selector { get; private set; }
+
+        [JsonConstructor]
+        private StylingRule()
+        {
+            Name = "";
+        }
 
         public StylingRule(string name)
         {

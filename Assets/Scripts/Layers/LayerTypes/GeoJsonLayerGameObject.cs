@@ -13,6 +13,7 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
 
@@ -234,16 +235,25 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
-                        return polygonLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
+
+                return polygonLayer;
             }
 
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+            
+            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
+            //       of my current activity
+            var lineMaterial = new Material(newPolygonLayerGameObject.PolygonVisualizationMaterial)
+            {
+                color = newPolygonLayerGameObject.LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
+            };
+            newPolygonLayerGameObject.polygonVisualizationMaterialInstance = lineMaterial;
+
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
+            
             return newPolygonLayerGameObject;
         }
 
@@ -252,17 +262,25 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
-                        return lineLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
+
+                return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
+            // Replace default style with the parent's default style
+            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
+            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+
+            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
+            //       of my current activity
+            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial)
+            {
+                color = newLineLayerGameObject.LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white
+            };
             newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
@@ -274,17 +292,25 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
-                        return pointLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
+
+                return pointLayer;
             }
 
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
+            // Replace default style with the parent's default style
+            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
+            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+
+            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
+            //       of my current activity
+            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material)
+            {
+                color = newPointLayerGameObject.LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
+            };
             newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
