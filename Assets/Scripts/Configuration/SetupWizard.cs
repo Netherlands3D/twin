@@ -51,6 +51,8 @@ namespace Netherlands3D.Twin.Configuration
 
             functionalitiesPane.Init(configuration.Functionalities);
             functionalitiesPane.Toggled.AddListener(functionality => OnSettingsChanged.Invoke());
+
+            this.gameObject.SetActive(false);
         }
 
         private void Update()
