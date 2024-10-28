@@ -67,9 +67,10 @@ namespace Netherlands3D.Twin.Layers
 
         private Material GetMaterialInstance()
         {
+            var strokeColor = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
-                color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? Color.white
+                color = strokeColor
             };
         }
 

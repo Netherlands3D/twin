@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
     public class Symbolizer
     {
-        [DataMember] private Dictionary<string, object> properties = new();
+        [DataMember(Name = "properties")] 
+        private Dictionary<string, object> properties = new();
 
         internal object GetProperty(string key)
         {
@@ -17,6 +19,17 @@ namespace Netherlands3D.LayerStyles
         internal void SetProperty(string key, object value)
         {
             properties[key] = value;
+        }
+
+        public override string ToString()
+        {
+            var result = "";
+            foreach (var (name, value) in properties)
+            {
+                result += $"{name}: {value}\n";
+            }
+
+            return result;
         }
     }
 }

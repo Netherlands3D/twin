@@ -19,5 +19,10 @@ namespace Netherlands3D.LayerStyles
         {
             return value;
         }
+
+        public override string ToString()
+        {
+            return this.value ? "true" : "false";
+        }
     }
 }

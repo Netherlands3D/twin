@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
-        [JsonIgnore] private Dictionary<string, LayerStyle> Styles => styles;
+        [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
         /// <summary>
         /// Every layer has a default style, this is a style that applies to all objects and features in this
