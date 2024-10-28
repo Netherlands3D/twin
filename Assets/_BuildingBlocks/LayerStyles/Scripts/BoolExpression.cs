@@ -5,7 +5,7 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "Bool")]
     public class BoolExpression : LiteralExpression
     {
-        private readonly bool value;
+        [DataMember] private bool value;
 
         public BoolExpression(bool value)
         {

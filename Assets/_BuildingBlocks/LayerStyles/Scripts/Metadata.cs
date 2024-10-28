@@ -5,6 +5,6 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Metadata")]
     public class Metadata
     {
-        public string Name { get; set; }
+        [DataMember] public string Name { get; set; }
     }
 }

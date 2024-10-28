@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
-    public sealed class Symbolizer
+    public class Symbolizer
     {
-        private readonly Dictionary<string, object> properties = new();
+        [DataMember] private Dictionary<string, object> properties = new();
 
         internal object GetProperty(string key)
         {

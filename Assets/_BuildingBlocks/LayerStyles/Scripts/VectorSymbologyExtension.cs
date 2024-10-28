@@ -2,16 +2,31 @@ using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
+    /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#rc-vector" />
     public static class VectorSymbologyExtension
     {
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
         public static void SetFillColor(this Symbolizer symbology, Color color)
         {
-            symbology.SetProperty("fill", color);
+            symbology.SetProperty("fill-color", color);
         }
 
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
         public static Color? GetFillColor(this Symbolizer symbology)
         {
-            return symbology.GetProperty("fill") as Color?;
+            return symbology.GetProperty("fill-color") as Color?;
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
+        public static void SetStrokeColor(this Symbolizer symbology, Color color)
+        {
+            symbology.SetProperty("stroke-color", color);
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
+        public static Color? GetStrokeColor(this Symbolizer symbology)
+        {
+            return symbology.GetProperty("stroke-color") as Color?;
         }
     }
 }
