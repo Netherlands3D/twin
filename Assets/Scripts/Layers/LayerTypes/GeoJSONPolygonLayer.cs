@@ -6,6 +6,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
@@ -19,28 +20,29 @@ namespace Netherlands3D.Twin.Layers
     {
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
-
         [SerializeField] private Material polygonVisualizationMaterial;
         internal Material polygonVisualizationMaterialInstance;
 
         public Material PolygonVisualizationMaterial
         {
-            get { return polygonVisualizationMaterial; }
+            get => polygonVisualizationMaterial;
             set
             {
                 polygonVisualizationMaterial = value;
                 
                 foreach (var featureVisualisation in SpawnedVisualisations)
+                {
                     featureVisualisation.SetMaterial(value);
+                }
             }
         }
      
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in SpawnedVisualisations)
+            {
                 visualization.ShowVisualisations(activeInHierarchy);
+            }
         }
 
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
@@ -50,23 +52,30 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            // Create visual with random color if enabled
-            Material featureRenderMaterial = GetMaterialInstance();
-
-            // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
             var newFeatureVisualisation = new FeaturePolygonVisualisations { 
                 feature = feature,
                 geoJsonPolygonLayer = this
             };
-            if (feature.Geometry is MultiPolygon multiPolygon)
+            Material featureRenderMaterial = GetMaterialInstance();
+
+            // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature
+            // to the visualisations
+            switch (feature.Geometry)
             {
-                var polygonVisualisations = GeometryVisualizationFactory.CreatePolygonVisualization(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.AppendVisualisations(polygonVisualisations);
-            }
-            else if (feature.Geometry is Polygon polygon)
-            {
-                var singlePolygonVisualisation = GeometryVisualizationFactory.CreatePolygonVisualisation(polygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.AppendVisualisations(singlePolygonVisualisation);
+                case MultiPolygon multiPolygon:
+                    newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualization(
+                        multiPolygon, 
+                        originalCoordinateSystem, 
+                        featureRenderMaterial
+                    ));
+                    break;
+                case Polygon polygon:
+                    newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualisation(
+                        polygon, 
+                        originalCoordinateSystem, 
+                        featureRenderMaterial
+                    ));
+                    break;
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
@@ -74,22 +83,11 @@ namespace Netherlands3D.Twin.Layers
 
         private Material GetMaterialInstance()
         {
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
-            {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            if (polygonVisualizationMaterialInstance == null)
+            if (!polygonVisualizationMaterialInstance)
             {
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
-                    color = LayerData.Color
+                    color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
                 };
             }
 

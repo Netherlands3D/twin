@@ -6,6 +6,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
@@ -18,9 +19,6 @@ namespace Netherlands3D.Twin.Layers
     public partial class GeoJSONLineLayer : LayerGameObject
     {
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
-
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
@@ -69,20 +67,10 @@ namespace Netherlands3D.Twin.Layers
 
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            return new Material(lineRenderer3D.LineMaterial)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? Color.white
+            };
         }
 
         /// <summary>

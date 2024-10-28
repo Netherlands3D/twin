@@ -6,6 +6,8 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System;
+using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 
 namespace Netherlands3D.Twin
@@ -74,14 +76,15 @@ namespace Netherlands3D.Twin
             randomLayerColor.a = 0.5f;
             newLayer.LayerData.Color = randomLayerColor;
             
+            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
+            symbolizer?.SetFillColor(randomLayerColor);
+            symbolizer?.SetStrokeColor(randomLayerColor);
+            
             var localPath = localFile.LocalFilePath;
-            var fileName = Path.GetFileName(localPath);
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-
-            if (localFile.SourceUrl.StartsWith("http"))
-                propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl);
-            else
-                propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localPath);
+            propertyData.Data = localFile.SourceUrl.StartsWith("http") 
+                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl) 
+                : AssetUriFactory.CreateProjectAssetUri(localPath);
         }
     }
 }

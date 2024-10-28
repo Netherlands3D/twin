@@ -5,6 +5,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -15,9 +16,6 @@ namespace Netherlands3D.Twin.Layers
     public partial class GeoJSONPointLayer : LayerGameObject
     {
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
-
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
@@ -47,7 +45,6 @@ namespace Netherlands3D.Twin.Layers
 
             var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
 
-            // Create visual with random color if enabled
             pointRenderer3D.Material = GetMaterialInstance();
 
             if (feature.Geometry is MultiPoint multiPoint)
@@ -66,20 +63,10 @@ namespace Netherlands3D.Twin.Layers
 
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            return new Material(pointRenderer3D.Material)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(pointRenderer3D.Material) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(pointRenderer3D.Material) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
+            };
         }
 
         /// <summary>

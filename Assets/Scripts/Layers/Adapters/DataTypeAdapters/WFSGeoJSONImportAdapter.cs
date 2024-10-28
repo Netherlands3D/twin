@@ -6,6 +6,7 @@ using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.Properties;
@@ -128,6 +129,10 @@ namespace Netherlands3D.Twin
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             newLayer.LayerData.Color = randomLayerColor;
+            
+            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
+            symbolizer?.SetFillColor(randomLayerColor);
+            symbolizer?.SetStrokeColor(randomLayerColor);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)

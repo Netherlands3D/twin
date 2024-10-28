@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
         /// A list of styles with their names (which are meant as machine-readable names and not human-readable names,
         /// for the latter the 'title' field exists), including a default style that always applies.
         /// </summary>
-        [DataMember] private Dictionary<string, LayerStyle> styles = new()
+        [SerializeField, DataMember] protected Dictionary<string, LayerStyle> styles = new()
         {
             {"default", LayerStyle.CreateDefaultStyle()}
         };
@@ -152,7 +152,13 @@ namespace Netherlands3D.Twin.Layers
         /// Every layer has a default style, this is a style that applies to all objects and features in this
         /// layer without any conditions.
         /// </summary>
-        [JsonIgnore] public LayerStyle GetDefaultStyle => Styles["default"];
+        [JsonIgnore] public LayerStyle DefaultStyle => Styles["default"];
+
+        /// <summary>
+        /// Every layer has a default symbolizer, drawn from the default style, that can be queried for the appropriate
+        /// properties.
+        /// </summary>
+        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules.FirstOrDefault()?.Symbolizer;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
