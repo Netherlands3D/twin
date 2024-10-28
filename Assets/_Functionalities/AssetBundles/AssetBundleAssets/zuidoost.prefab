@@ -110,7 +110,7 @@ MonoBehaviour:
       m_Calls: []
   Rotation: {x: 0, y: 180, z: 0}
   Scale: {x: 1, y: 1, z: 1}
-  HeightCorrection: -3
+  TargetHeight: 0
   Coordinates: {x: 4.9418635, y: 52.31434}
   coordinateSystem: 4979
 --- !u!114 &8824428390786610554
@@ -146,3 +146,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 9e00c0494ae876841a666d0dc3db3a6d, type: 2}
+  alwaysHiddenData: {fileID: 11400000, guid: ef89af9250bd2bc45b2156fe410e83fd, type: 2}
