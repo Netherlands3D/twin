@@ -64,12 +64,8 @@ namespace Netherlands3D.Twin.Layers
             string copiedFilename = path + ".temp";
             File.Copy(path, copiedFilename);
 
-            string replacedFilePath = Regex.Replace(copiedFilename, @"\([^)]*\)", "");
-            string removedObjExtention = Path.GetFileNameWithoutExtension(replacedFilePath);
-            string mtlPath = Path.Combine(Path.GetDirectoryName(copiedFilename), Path.ChangeExtension(removedObjExtention, ".mtl"));
-
             importer.objFilePath = copiedFilename;
-            importer.mtlFilePath = mtlPath;
+            importer.mtlFilePath = "";
             importer.imgFilePath = "";
 
             importer.BaseMaterial = baseMaterial;
