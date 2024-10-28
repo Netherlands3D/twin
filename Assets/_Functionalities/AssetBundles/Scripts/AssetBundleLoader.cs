@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin
                 string[] names = bundle.GetAllAssetNames();
                 foreach (string n in names)
                 {
-                    if (Path.GetFileName(n) == fileName)
+                    if (Path.GetFileName(n) == fileName.ToLower())
                     {
                         GameObject asset = bundle.LoadAsset<GameObject>(n);
                         if (asset != null)
@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin
                 string[] names = bundle.GetAllAssetNames();
                 foreach (string n in names)
                 {
-                    if (Path.GetFileName(n) == fileName)
+                    if (Path.GetFileName(n) == fileName.ToLower())
                     {
                         GameObject asset = bundle.LoadAsset<GameObject>(n);
                         if (asset != null)
