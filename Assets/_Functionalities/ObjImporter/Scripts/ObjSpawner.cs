@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
+    [RequireComponent(typeof(LayerGameObject))]
     public class ObjSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")] 
@@ -41,6 +43,8 @@ namespace Netherlands3D.Twin.Layers
             // If we do that here, then this may conflict with the loading of the project file and it would
             // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
+            
+            
         }
 
         private void StartImport()
@@ -49,27 +53,38 @@ namespace Netherlands3D.Twin.Layers
 
             importer = Instantiate(importerPrefab);
 
-            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
+            var localObjPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
+            var objPath = Path.Combine(Application.persistentDataPath, localObjPath);
+
+            var mtlPath = propertyData.MtlFile.LocalPath.TrimStart('/', '\\'); 
             
-            ImportObj(path);
+            ImportObj(objPath, mtlPath);
         }
 
-        private void ImportObj(string path)
+        private void ImportObj(string objPath, string mtlPath)
         {
             // the obj-importer deletes the obj-file after importing.
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
-            string copiedFilename = path + ".temp";
-            File.Copy(path, copiedFilename);
+            string copiedFilename = objPath + ".temp";
+            File.Copy(objPath, copiedFilename);
 
             importer.objFilePath = copiedFilename;
-            importer.mtlFilePath = "";
+            importer.mtlFilePath = mtlPath;
             importer.imgFilePath = "";
 
             importer.BaseMaterial = baseMaterial;
             importer.createSubMeshes = createSubMeshes;
             importer.StartImporting(OnObjImported);
+        }
+
+        private void ImportMtl(string path)
+        {
+            propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(path);
+
+            importer.mtlFilePaht = path;
+            importer.ImportMtl();
+            // propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
         private void OnObjImported(GameObject returnedGameObject)

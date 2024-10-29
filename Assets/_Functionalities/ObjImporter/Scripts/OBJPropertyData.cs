@@ -12,8 +12,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class ObjPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
         [DataMember] private Uri objFile;
+        [DataMember] private Uri mtlFile;
+        [DataMember] private Uri[] textureFiles = Array.Empty<Uri>();
 
-        [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> OnObjDataChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> OnMtlDataChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri[]> OnTextureFilesDataChanged = new();
 
         [JsonIgnore]
         public Uri ObjFile
@@ -22,16 +26,45 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 objFile = value;
-                OnDataChanged.Invoke(value);
+                OnObjDataChanged.Invoke(value);
+            }
+        }
+        
+        [JsonIgnore]
+        public Uri MtlFile
+        {
+            get => mtlFile;
+            set
+            {
+                mtlFile = value;
+                OnMtlDataChanged.Invoke(value);
+            }
+        }
+        
+        [JsonIgnore]
+        public Uri[] TextureFiles
+        {
+            get => textureFiles;
+            set
+            {
+                textureFiles = value;
+                OnTextureFilesDataChanged.Invoke(textureFiles);
             }
         }
 
         public IEnumerable<LayerAsset> GetAssets()
         {
-            return new List<LayerAsset>()
+            var assetList = new List<LayerAsset>();
+            
+            assetList.Add(new (this, objFile != null ? objFile : null));
+            assetList.Add(new (this, mtlFile != null ? mtlFile : null));
+
+            foreach (var textureFile in textureFiles)
             {
-                new (this, objFile != null ? objFile : null)
-            };
+                assetList.Add(new (this, textureFile != null ? textureFile : null));
+            }
+
+            return assetList;
         }
     }
 }
