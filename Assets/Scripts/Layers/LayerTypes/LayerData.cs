@@ -158,7 +158,7 @@ namespace Netherlands3D.Twin.Layers
         /// Every layer has a default symbolizer, drawn from the default style, that can be queried for the appropriate
         /// properties.
         /// </summary>
-        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules.FirstOrDefault()?.Symbolizer;
+        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules["default"].Symbolizer;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();

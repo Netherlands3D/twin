@@ -8,9 +8,6 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Netherlands3D.Visualisers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -24,15 +21,9 @@ namespace Netherlands3D.Twin.Layers
 
         public LineRenderer3D LineRenderer3D
         {
-            get { return lineRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetLines(lineRenderer3D.Lines); 
-                // Destroy(lineRenderer3D.gameObject);
-                lineRenderer3D = value;
-            }
-        }       
+            get => lineRenderer3D;
+            set => lineRenderer3D = value;
+        }
 
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -46,10 +37,11 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            // Create visual with random color if enabled
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            Debug.Log("AddAndVisualizeFeature");
+
+            ApplyStyling();
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
@@ -65,9 +57,16 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
+        }
+        
         private Material GetMaterialInstance()
         {
-            var strokeColor = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? Color.white;
+            Debug.Log("Get Material Instance");
+            Debug.Log(LayerData.Styles["default"].StylingRules["default"].Symbolizer.GetStrokeColor());
+            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
                 color = strokeColor

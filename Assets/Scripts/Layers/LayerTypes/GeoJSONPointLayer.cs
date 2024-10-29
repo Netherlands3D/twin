@@ -43,9 +43,9 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
 
-            pointRenderer3D.Material = GetMaterialInstance();
+            ApplyStyling();
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -59,6 +59,11 @@ namespace Netherlands3D.Twin.Layers
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        public void ApplyStyling()
+        {
+            pointRenderer3D.Material = GetMaterialInstance();
         }
 
         private Material GetMaterialInstance()

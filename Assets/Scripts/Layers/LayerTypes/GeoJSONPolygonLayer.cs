@@ -81,13 +81,18 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            SpawnedVisualisations.ForEach(visualisations => visualisations.SetMaterial(GetMaterialInstance()));
+        }
+
         private Material GetMaterialInstance()
         {
             if (!polygonVisualizationMaterialInstance)
             {
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
-                    color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
+                    color = LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
                 };
             }
 

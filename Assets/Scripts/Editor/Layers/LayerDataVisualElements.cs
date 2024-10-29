@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Editor.Layers
             {
                 group.Add(FieldContent("This style doesn't have any styling rules associated with it (yet)."));
             }
-            foreach (var stylingRule in layerStyle.StylingRules)
+            foreach (var (_, stylingRule) in layerStyle.StylingRules)
             {
                 group.Add(StyleRuleFoldout(stylingRule));
             }
@@ -93,6 +93,10 @@ namespace Netherlands3D.Twin.Editor.Layers
 
         private static Label FieldContent(string content)
         {
+            if (string.IsNullOrEmpty(content))
+            {
+                content = "[None]";
+            }
             return new Label(content);
         }
 
@@ -110,7 +114,7 @@ namespace Netherlands3D.Twin.Editor.Layers
                     borderTopColor = new Color(0.7f, 0.7f, 0.7f), // Light gray color
                     borderLeftColor = new Color(0.7f, 0.7f, 0.7f), // Light gray color
                     borderRightColor = new Color(0.7f, 0.7f, 0.7f), // Light gray color
-                    paddingLeft = 4,
+                    paddingLeft = 8,
                     paddingRight = 8,
                     paddingTop = 4,
                     paddingBottom = 4,

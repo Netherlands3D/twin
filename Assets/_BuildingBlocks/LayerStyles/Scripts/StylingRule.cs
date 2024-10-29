@@ -6,15 +6,14 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "StylingRule")]
     public class StylingRule
     {
-        [DataMember] public string Name { get; private set; }
-        [DataMember] public Symbolizer Symbolizer { get; } = new();
+        [DataMember(Name = "name")] public string Name { get; private set; }
+        [DataMember(Name = "symbolizer")] public Symbolizer Symbolizer { get; } = new();
 
-        [DataMember] public Expression Selector { get; private set; }
+        [DataMember(Name = "selector")] public Expression Selector { get; private set; }
 
         [JsonConstructor]
         private StylingRule()
         {
-            Name = "";
         }
 
         public StylingRule(string name)

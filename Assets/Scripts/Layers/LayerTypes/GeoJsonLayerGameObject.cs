@@ -243,14 +243,11 @@ namespace Netherlands3D.Twin.Layers
 
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
-            
-            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
-            //       of my current activity
-            var lineMaterial = new Material(newPolygonLayerGameObject.PolygonVisualizationMaterial)
-            {
-                color = newPolygonLayerGameObject.LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
-            };
-            newPolygonLayerGameObject.polygonVisualizationMaterialInstance = lineMaterial;
+
+            // Replace default style with the parent's default style
+            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
+            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPolygonLayerGameObject.ApplyStyling();
 
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
             
@@ -265,23 +262,23 @@ namespace Netherlands3D.Twin.Layers
                 if (child is not ReferencedLayerData referencedLayerData) continue;
                 if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
 
+                Debug.Log("Return found line layer");
+                Debug.Log(lineLayer.LayerData.DefaultSymbolizer);
+                var stroke2Color = lineLayer.LayerData.DefaultSymbolizer.GetStrokeColor();
+                Debug.Log(stroke2Color);
+
                 return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
+            Debug.Log("Copy default style from parent onto child");
+
             // Replace default style with the parent's default style
             newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
             newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
-            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
-            //       of my current activity
-            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial)
-            {
-                color = newLineLayerGameObject.LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white
-            };
-            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+            newLineLayerGameObject.ApplyStyling();
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
@@ -304,14 +301,7 @@ namespace Netherlands3D.Twin.Layers
             // Replace default style with the parent's default style
             newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
             newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
-            // TODO: This should respond to changes in the style, and not be set directly. But that is beyond scope
-            //       of my current activity
-            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material)
-            {
-                color = newPointLayerGameObject.LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
-            };
-            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+            newPointLayerGameObject.ApplyStyling();
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 
