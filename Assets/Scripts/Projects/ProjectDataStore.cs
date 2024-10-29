@@ -76,6 +76,9 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.isLoading = true;
             JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
+
+
+            ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
             Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.isLoading = false;
@@ -121,7 +124,7 @@ namespace Netherlands3D.Twin.Projects
         {
             var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
             var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
-
+            
             var entry = new ZipEntry(relativePath);
             zipOutputStream.PutNextEntry(entry);
             byte[] fileBytes = File.ReadAllBytes(absolutePath);

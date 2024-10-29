@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3354824856556962616
+--- !u!1 &2418701555395206593
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,26 +8,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4114483817524287800}
-  - component: {fileID: 386381869955578018}
-  - component: {fileID: 4447745080902320339}
-  - component: {fileID: 8284198237993072344}
-  - component: {fileID: -4083834515804018632}
-  - component: {fileID: 8494173785329764173}
-  m_Layer: 6
-  m_Name: Maaiveld
+  - component: {fileID: 8363319932289052987}
+  - component: {fileID: 7611614742349668521}
+  - component: {fileID: 1347090001780688696}
+  - component: {fileID: 7900166245345724691}
+  - component: {fileID: -8300356283678966299}
+  - component: {fileID: -7699739382070360042}
+  m_Layer: 0
+  m_Name: WMSLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4114483817524287800
+--- !u!4 &8363319932289052987
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
+  m_GameObject: {fileID: 2418701555395206593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -36,29 +36,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &386381869955578018
+--- !u!114 &7611614742349668521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
+  m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f71fc497d67ae14ab62f78db75d7263, type: 3}
+  m_Script: {fileID: 11500000, guid: f84a01b8709a7af43a4239bdae96f22f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: 7ddb78a6acbf44d4e84910b5684042b7
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  TransparencyEnabled: 1
+  DefaultEnabledLayersMax: 5
+  PreferredImageSize: {x: 1024, y: 1024}
+--- !u!114 &1347090001780688696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b263dd2dfd59e74a8cf2f52ce1f64fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isenabled: 1
   tileSize: 1000
   layerPriority: 0
-  Datasets:
-  - Description: 
-    geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
-    pathQuery: 
-    maximumDistance: 10000
-    maximumDistanceSquared: 0
-    enabled: 1
+  Datasets: []
   pauseLoading: 0
   onLayerEnabled:
     m_PersistentCalls:
@@ -66,65 +81,33 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
-  hasMetaData: 0
-  removeFromID: 
-  DefaultMaterialList:
-  - {fileID: 2100000, guid: 6190c2cc181a6b145b8718f101342891, type: 2}
-  - {fileID: 2100000, guid: 0d648e7b76cfb144db5a03ca3456e3ab, type: 2}
-  - {fileID: 2100000, guid: 9415293c02a80f842994d670a66dc1ef, type: 2}
-  - {fileID: 2100000, guid: 3fefdffb602aea548a54cce8ee8e9a40, type: 2}
-  - {fileID: 2100000, guid: f04cf2fb61774b342a424e0043572dd9, type: 2}
-  - {fileID: 2100000, guid: b92bd5d80503fa349811354c8590bc12, type: 2}
-  - {fileID: 2100000, guid: c133b44751f6b29449e6a0cd385af696, type: 2}
-  - {fileID: 2100000, guid: 33cfde888f0f0de4f8317d8631f554f4, type: 2}
-  - {fileID: 2100000, guid: ae4388c306f589642b54e2e6d35f6380, type: 2}
-  - {fileID: 2100000, guid: 723d04de06fc6d246b17157d2a8a9e24, type: 2}
-  - {fileID: 2100000, guid: 369d289ffdad8ca44ad20d7a077adb12, type: 2}
-  - {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
-  tileShadowCastingMode: 0
-  brotliCompressedExtention: .br
-  createMeshcollider: 0
---- !u!114 &4447745080902320339
+  compressLoadedTextures: 0
+  projectorPrefab: {fileID: 4500353898809890024, guid: d62ffe26c4958754e9ee3be0a03b28f6,
+    type: 3}
+  onLogMessage:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 993751594a7a84246afa97ab77f89615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &8284198237993072344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
+  m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionalities:
-  - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
+  functionalities: []
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
   OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4447745080902320339}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+      - m_Target: {fileID: 7611614742349668521}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerGameObject, Assembly-CSharp
         m_MethodName: DestroyLayer
         m_Mode: 1
         m_Arguments:
@@ -135,20 +118,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-4083834515804018632
+--- !u!114 &-8300356283678966299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
+  m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
-  worldTransformShifter: {fileID: 8494173785329764173}
+  worldTransformShifter: {fileID: -7699739382070360042}
   referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
@@ -156,13 +138,13 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8494173785329764173
+--- !u!114 &-7699739382070360042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
+  m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}

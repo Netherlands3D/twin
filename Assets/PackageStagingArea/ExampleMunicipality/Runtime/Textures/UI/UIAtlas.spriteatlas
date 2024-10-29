@@ -38,7 +38,6 @@ SpriteAtlas:
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - d96ff64012b2ded42897d16e5fecc962: 21300000
-    - 501da0b1790c38940a72a0b213f4a191: 21300000
     - 7bd702f35fa298f45999c8cd49218026: 21300000
     - d6dc8e245632a6b4ca95db710fa9ca27: 21300000
     - e14e00d649f2e9c41a112db59455f5ef: 21300000
@@ -47,12 +46,10 @@ SpriteAtlas:
     - 6f6d754b76cca99429d3a5ddde66df5a: 21300000
     - 40aaffcb371d90b4f80c25b5ef64d6a3: 21300000
     - 18d57e0c862a50e46b2493db10c90efc: 21300000
-    - f98a5bac278a3164eb7f3670d4e032c1: 21300000
     - 9942ab7d6dc1bc243902ddf4d9d5a9b3: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d96ff64012b2ded42897d16e5fecc962, type: 3}
-  - {fileID: 21300000, guid: 501da0b1790c38940a72a0b213f4a191, type: 3}
   - {fileID: 21300000, guid: 7bd702f35fa298f45999c8cd49218026, type: 3}
   - {fileID: 21300000, guid: d6dc8e245632a6b4ca95db710fa9ca27, type: 3}
   - {fileID: 21300000, guid: e14e00d649f2e9c41a112db59455f5ef, type: 3}
@@ -61,11 +58,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6f6d754b76cca99429d3a5ddde66df5a, type: 3}
   - {fileID: 21300000, guid: 40aaffcb371d90b4f80c25b5ef64d6a3, type: 3}
   - {fileID: 21300000, guid: 18d57e0c862a50e46b2493db10c90efc, type: 3}
-  - {fileID: 21300000, guid: f98a5bac278a3164eb7f3670d4e032c1, type: 3}
   - {fileID: 21300000, guid: 9942ab7d6dc1bc243902ddf4d9d5a9b3, type: 3}
   m_PackedSpriteNamesToIndex:
   - Camera
-  - Sun
   - Search
   - Profile
   - Clock
@@ -74,7 +69,6 @@ SpriteAtlas:
   - Car
   - AreaSelection
   - Pointer
-  - WMS
   - MinimapPointer
   m_RenderDataMap: {}
   m_Tag: UIAtlas
