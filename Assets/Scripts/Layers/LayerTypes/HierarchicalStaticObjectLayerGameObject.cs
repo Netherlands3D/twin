@@ -8,20 +8,16 @@ namespace Netherlands3D.Twin.Layers
         public Vector3 Rotation = Vector3.zero; //TODO get this value from original template
         public Vector3 Scale = Vector3.one; //TODO get this value from original template
         public float TargetHeight;
-        public Vector2 Coordinates = Vector2.zero;
+        public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
-        protected override void InitializeCoordinates()
-        {
-            coord = new Coordinate(coordinateSystem, new double[3] { Coordinates.y, Coordinates.x, 0 });            
-        }
 
         protected override void Start()
         {
             base.Start();
-            UpdatePosition(coord);
-            UpdateRotation(Rotation);
-            UpdateScale(Scale);
+            transformPropertyData.Position = new Coordinate(coordinateSystem, new double[3] { Coordinates.y, Coordinates.x, Coordinates.z });
+            transformPropertyData.EulerRotation = Rotation;
+            transformPropertyData.LocalScale = Scale;
         }
 
         protected override void UpdatePosition(Coordinate newPosition)
@@ -32,12 +28,12 @@ namespace Netherlands3D.Twin.Layers
 
         public override void OnSelect()
         {
-         
+            //this is to prevent executing base class functionality
         }
 
         public override void OnDeselect()
         {
-         
+            //this is to prevent executing base class functionality
         }
     }
 }

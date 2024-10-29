@@ -29,17 +29,10 @@ namespace Netherlands3D.Twin
         public string prefabName;
         public Vector3 spawnPosition;
 
-        public static List<HierarchicalObjectLayerGameObject> hierarchicalObjectLayerGameObjects = new List<HierarchicalObjectLayerGameObject>();
-
         private void Awake()
         {
             ProjectData.Current.PrefabLibrary.AddPrefabGroupRuntime("ObjectenBibliotheek");
             OnProjectDataChanged(ProjectData.Current);
-        }
-
-        private void Start()
-        {
-            //ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
         private void OnProjectDataChanged(ProjectData projectData)
@@ -51,8 +44,6 @@ namespace Netherlands3D.Twin
                 if (layerObject != null)
                 {                
                     projectData.PrefabLibrary.AddObjectToPrefabGroupRuntime("ObjectenBibliotheek", layerObject);
-                    if(!hierarchicalObjectLayerGameObjects.Contains(layerObject))
-                        hierarchicalObjectLayerGameObjects.Add(layerObject);
                 }
             });
         }
@@ -137,12 +128,6 @@ namespace Netherlands3D.Twin
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                 callBack?.Invoke(bundle);
             }
-        }
-
-        private void OnDestroy()
-        {
-            //ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);            
-            hierarchicalObjectLayerGameObjects.Clear();
         }
     }
 }

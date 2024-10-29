@@ -16,27 +16,19 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        private TransformLayerPropertyData transformPropertyData;
+        protected TransformLayerPropertyData transformPropertyData;
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
-
-        protected Coordinate coord;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
 
         protected void Awake()
         {
-            InitializeCoordinates();
-            transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
+            transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-        }
-
-        protected virtual void InitializeCoordinates()
-        {
-            coord = new Coordinate(transform.position);
         }
 
         protected override void OnEnable()

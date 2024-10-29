@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using netDxf.Collections;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
