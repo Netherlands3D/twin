@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Netherlands3D.Twin
 {
     [RequireComponent(typeof(CanvasRenderer))]
-    public class UIBoundingBox : Graphic
+    public class UIBoundingBox : MaskableGraphic
     {
         public Vector2[] points;  // Array of points to draw lines between
         public float lineWidth = 2.0f; // Width of the line

@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin
 
             wmtsMap.PositionObjectOnMap(rTransform, CoordinateConverter.UnitytoRD(target));
             BoundingBox.center = target;
-            BoundingBox.size = Vector3.one * boxSize;
+            BoundingBox.size = new Vector3(boxSize, Mathf.Max(boxSize, 100000000), boxSize);
             //test.transform.position = BoundingBox.center;
             //test.transform.transform.localScale = Vector3.one * boxSize;
 
