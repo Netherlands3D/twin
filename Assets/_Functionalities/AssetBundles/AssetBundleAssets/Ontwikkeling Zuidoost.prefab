@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
       propertyPath: m_Name
-      value: zuidoost
+      value: Ontwikkeling Zuidoost
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -110,8 +110,8 @@ MonoBehaviour:
       m_Calls: []
   Rotation: {x: 0, y: 180, z: 0}
   Scale: {x: 1, y: 1, z: 1}
-  TargetHeight: 0
-  Coordinates: {x: 4.9418635, y: 52.31434}
+  TargetHeight: -3
+  Coordinates: {x: 4.9418635, y: 52.31434, z: 0}
   coordinateSystem: 4979
 --- !u!114 &8824428390786610554
 MonoBehaviour:
