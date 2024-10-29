@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime.Scripts.Cameras;
 using UnityEngine;
@@ -99,18 +98,12 @@ public class FreeCamera : MonoBehaviour
     private Vector3 previousPosition;
     public OrthographicSwitcher orthographicSwitcher;
 
-    private Bounds areaBoundingBox;
-    private GameObject test;
-
     void Awake()
     {
         cameraComponent = GetComponent<Camera>();
         orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();
 
         worldPlane = new Plane(Vector3.up, Vector3.zero);
-
-        areaBoundingBox = new Bounds();
-        test = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
         horizontalInput.AddListenerStarted(MoveHorizontally);
         verticalInput.AddListenerStarted(MoveForwardBackwards);
@@ -320,16 +313,6 @@ public class FreeCamera : MonoBehaviour
         {
             Clamp();
         }
-
-        //lon lat amstel 1
-        Coordinate coord = new Coordinate(CoordinateSystem.WGS84, 52.36748063234993, 4.901222522254939, 0);
-        areaBoundingBox.center = coord.ToUnity();
-        areaBoundingBox.size = Vector3.one * 10000;
-        test.transform.position = areaBoundingBox.center;
-        test.transform.transform.localScale = Vector3.one * 10000;
-
-        if(!areaBoundingBox.Contains(transform.position))
-            transform.position = areaBoundingBox.ClosestPoint(transform.position);
     }
 
     /// <summary>
