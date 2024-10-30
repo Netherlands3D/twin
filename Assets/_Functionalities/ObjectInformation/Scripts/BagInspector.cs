@@ -107,6 +107,35 @@ namespace Netherlands3D.Twin.Interface.BAG
 			}
 		}
 
+		private RaycastHit[] raycastHits = new RaycastHit[16];
+
+		public static Vector3 NearestPointOnLine(Vector3 lineOrigin, Vector3 lineDir, Vector3 target)
+		{
+			lineDir.Normalize();//this needs to be a unit vector
+			Vector3 v = target - lineOrigin;
+			float d = Vector3.Dot(v, lineDir);
+			return lineOrigin + lineDir * d;
+		}
+
+		public static Vector3 NearestPointOnFiniteLine(Vector3 start, Vector3 end, Vector3 pnt)
+		{
+			var line = (end - start);
+			var len = line.magnitude;
+			line.Normalize();
+
+			var v = pnt - start;
+			var d = Vector3.Dot(v, line);
+			d = Mathf.Clamp(d, 0f, len);
+			return start + line * d;
+		}
+
+
+		//gebruik de setvertexlinecolor methodes in de polygon/line/point layer buffers waar het renderen zit zoals de linerenderer3d om een selectie te kunnen blauw maken
+		//wat doen we met deselecteren?
+		//custom object mapping object schrijven voor features en 
+
+
+		private float hitDistance = 100000f;
 		/// <summary>
 		/// Find objectmapping by raycast and get the BAG ID
 		/// </summary>
@@ -115,13 +144,48 @@ namespace Netherlands3D.Twin.Interface.BAG
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
-			if (!Physics.Raycast(ray, out RaycastHit hit, 100000f)) return;
+			if (!Physics.Raycast(ray, out RaycastHit hit, hitDistance)) return;
 
 			var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
 			if (!objectMapping)
 			{
-				DeselectBuilding();
-				return;
+				RaycastHit sphereHit = new RaycastHit();
+				ObjectMapping targetMapping = null;
+				if (Physics.SphereCastNonAlloc(ray, 10, raycastHits, hitDistance) > 0)
+                {
+					Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+					groundPlane.Raycast(ray, out float distance);
+					Vector3 groundPosition = ray.GetPoint(distance);
+					float closest = float.MaxValue;
+					for(int i = 0; i < raycastHits.Length; i++)
+                    {
+						if (raycastHits[i].collider != null)
+						{
+							ObjectMapping mapping = raycastHits[i].collider.gameObject.GetComponent<ObjectMapping>();
+							if (mapping != null)
+							{
+								float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
+								if (dist < closest)
+								{
+									closest = dist;
+									targetMapping = mapping;
+									sphereHit = raycastHits[i];
+								}
+							}
+						}
+                    }
+                }
+				if (targetMapping != null)
+				{
+					objectMapping = targetMapping;
+					lastWorldClickedPosition = sphereHit.point;
+					SelectBuildingOnHit(objectMapping.getObjectID(sphereHit.triangleIndex));
+				}
+				else
+				{
+					DeselectBuilding();
+					return;
+				}
 			}
 
 			lastWorldClickedPosition = hit.point;
