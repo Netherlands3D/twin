@@ -253,24 +253,24 @@ namespace Netherlands3D.Twin.Layers
             var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
             if (polygonData != null)
             {
-                ProcessObjectMapping(feature, polygonData);
+                ProcessObjectMapping(polygonFeaturesLayer, feature, polygonData);
             }
             var lineData = lineFeaturesLayer?.GetMeshData(feature);
             if (lineData != null)
             {
-                ProcessObjectMapping(feature, lineData);
+                ProcessObjectMapping(lineFeaturesLayer, feature, lineData);
             }
             var pointData = pointFeaturesLayer?.GetMeshData(feature);
             if (pointData != null)
             {
-                ProcessObjectMapping(feature, pointData);
+                ProcessObjectMapping(pointFeaturesLayer, feature, pointData);
             }          
         }
 
 
         private Dictionary<Feature, GameObject> featureMeshes = new Dictionary<Feature, GameObject>();
 
-        private void ProcessObjectMapping(Feature feature, List<Mesh> meshes)
+        private void ProcessObjectMapping(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
             GameObject parent;
             if(featureMeshes.ContainsKey(feature)) 
@@ -347,15 +347,10 @@ namespace Netherlands3D.Twin.Layers
                     subObject.AddComponent<SphereCollider>().radius = 1f;
                 subObject.transform.SetParent(parent.transform);
 
-                ObjectMapping objectMapping = subObject.AddComponent<ObjectMapping>();
-                objectMapping.items = new List<ObjectMappingItem>();
-                string id = feature.Id;
-                objectMapping.items.Add(new ObjectMappingItem()
-                {
-                    objectID = id,
-                    firstVertex = 0,
-                    verticesLength = meshes[i].vertices.Length,
-                });
+                FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
+                objectMapping.SetFeature(feature);
+                objectMapping.SetMeshes(meshes);
+                objectMapping.SetVisualisationLayer(layer);
             }
         }
 

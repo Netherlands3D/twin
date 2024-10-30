@@ -5,7 +5,6 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Random = UnityEngine.Random;
 
 namespace Netherlands3D.Twin
 {
@@ -113,22 +112,29 @@ namespace Netherlands3D.Twin
 
         private void DrawLines()
         {
+            //for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
+            //{
+            //    var lineTransforms = segmentTransformMatrixCache[i];
+            //    // if (hasColors)
+            //    // {
+            //    //     MaterialPropertyBlock props = materialPropertyBlockCache[i];
+            //    //     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
+            //    //
+            //    //     if (DrawJoints)
+            //    //         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
+            //    //
+            //    //     continue;
+            //    // }         
+
+            //    Graphics.DrawMeshInstanced(lineMesh, 0, LineMaterial, lineTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
+            //    // Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
+            //}
+
+            
             for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
                 var lineTransforms = segmentTransformMatrixCache[i];
-                // if (hasColors)
-                // {
-                //     MaterialPropertyBlock props = materialPropertyBlockCache[i];
-                //     Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, props);
-                //
-                //     if (DrawJoints)
-                //         Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, props);
-                //
-                //     continue;
-                // }
-                
-                Graphics.DrawMeshInstanced(lineMesh, 0, LineMaterial, lineTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
-                // Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms);
+                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, hasColors ? materialPropertyBlockCache[i] : null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);                                    
             }
 
             if (DrawJoints)
@@ -170,16 +176,17 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Set specific line color for the line closest to a given point.
         /// </summary>
-        public int SetLineColorClosestToPoint(Vector3 point, Color color)
+        public int SetLineColorClosestToPoint(Vector3 point, Color color, out Color previousColor)
         {
             int closestLineIndex = GetClosestLineIndex(point);
             if (closestLineIndex == -1)
             {
                 Debug.LogWarning("No line found");
+                previousColor = Color.clear;
                 return -1;
             }
 
-            SetSpecificLineColorByIndex(closestLineIndex, color);
+            SetSpecificLineColorByIndex(closestLineIndex, color, out previousColor);
             return closestLineIndex;
         }
 
@@ -187,15 +194,27 @@ namespace Netherlands3D.Twin
         /// Set a specific line color by index of the line.
         /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
         /// </summary>
-        public void SetSpecificLineColorByIndex(int index, Color color)
+        public void SetSpecificLineColorByIndex(int index, Color color, out Color previousColor)
         {
+            if(materialPropertyBlockCache == null || Lines.Count != materialPropertyBlockCache.Count)
+            {
+                Color[] colors = new Color[Lines.Count];
+                for (int i = 0; i < colors.Length; i++)
+                {
+                    colors[i] = color;
+                }
+                SetSpecificLineMaterialColors(colors);
+            }
+
             if (index >= materialPropertyBlockCache.Count)
             {
                 Debug.LogWarning($"Index {index} is out of range");
+                previousColor = Color.clear;
                 return;
             }
 
             MaterialPropertyBlock props = materialPropertyBlockCache[index];
+            previousColor = materialPropertyBlockCache[index].GetColor("_BaseColor");
             props.SetColor("_BaseColor", color);
             materialPropertyBlockCache[index] = props;
         }
@@ -294,7 +313,7 @@ namespace Netherlands3D.Twin
             Color[] colors = new Color[Lines.Count];
             for (int i = 0; i < colors.Length; i++)
             {
-                colors[i] = Random.ColorHSV();
+                colors[i] = UnityEngine.Random.ColorHSV();
             }
 
             SetSpecificLineMaterialColors(colors);

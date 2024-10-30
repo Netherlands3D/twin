@@ -9,5 +9,6 @@ namespace Netherlands3D.Twin
     public interface IGeoJsonVisualisationLayer
     {
         List<Mesh> GetMeshData(Feature feature);
+        void SetVisualisationColor(List<Mesh> meshes, Color[] previousColors);
     }
 }

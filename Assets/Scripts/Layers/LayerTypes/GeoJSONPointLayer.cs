@@ -146,5 +146,10 @@ namespace Netherlands3D.Twin.Layers
                 
             base.DestroyLayerGameObject();
         }
+
+        public void SetVisualisationColor(List<Mesh> meshes, Color[] previousColors)
+        {
+            
+        }
     }
 }

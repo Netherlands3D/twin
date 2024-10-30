@@ -134,8 +134,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 		//wat doen we met deselecteren?
 		//custom object mapping object schrijven voor features en 
 
-
+		private FeatureMapping lastSelectedFeatureMapping;
 		private float hitDistance = 100000f;
+		private float tubeHitRadius = 10f;
 		/// <summary>
 		/// Find objectmapping by raycast and get the BAG ID
 		/// </summary>
@@ -144,53 +145,62 @@ namespace Netherlands3D.Twin.Interface.BAG
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
-			if (!Physics.Raycast(ray, out RaycastHit hit, hitDistance)) return;
-
-			var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-			if (!objectMapping)
+			if (Physics.Raycast(ray, out RaycastHit hit, hitDistance)) 
 			{
-				RaycastHit sphereHit = new RaycastHit();
-				ObjectMapping targetMapping = null;
-				if (Physics.SphereCastNonAlloc(ray, 10, raycastHits, hitDistance) > 0)
-                {
-					Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-					groundPlane.Raycast(ray, out float distance);
-					Vector3 groundPosition = ray.GetPoint(distance);
-					float closest = float.MaxValue;
-					for(int i = 0; i < raycastHits.Length; i++)
-                    {
-						if (raycastHits[i].collider != null)
-						{
-							ObjectMapping mapping = raycastHits[i].collider.gameObject.GetComponent<ObjectMapping>();
-							if (mapping != null)
-							{
-								float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
-								if (dist < closest)
-								{
-									closest = dist;
-									targetMapping = mapping;
-									sphereHit = raycastHits[i];
-								}
-							}
-						}
-                    }
-                }
-				if (targetMapping != null)
+				//lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and use a nonalloc to prevent memory allocations
+				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
+				if (!objectMapping)
 				{
-					objectMapping = targetMapping;
-					lastWorldClickedPosition = sphereHit.point;
-					SelectBuildingOnHit(objectMapping.getObjectID(sphereHit.triangleIndex));
+					DeselectBuilding();
 				}
 				else
 				{
-					DeselectBuilding();
+					lastWorldClickedPosition = hit.point;
+					SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
 					return;
 				}
 			}
 
-			lastWorldClickedPosition = hit.point;
-			SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
-		}
+			if (hit.collider == null)
+				return;
+
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            groundPlane.Raycast(ray, out float distance);
+			Vector3 groundPosition = ray.GetPoint(distance);
+			FeatureMapping targetMapping = null;
+            //if (Physics.CapsuleCastNonAlloc(ray.origin, ray.GetPoint(hitDistance), tubeHitRadius, ray.direction, raycastHits, hitDistance) > 0)
+            if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
+            {
+               
+                float closest = float.MaxValue;
+                for (int i = 0; i < raycastHits.Length; i++)
+                {
+                    if (raycastHits[i].collider != null)
+                    {
+                        FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
+                        if (mapping != null)
+                        {
+                            float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
+                            if (dist < closest)
+                            {
+                                closest = dist;
+                                targetMapping = mapping;
+                                hit = raycastHits[i];
+                            }
+                        }
+                    }
+                }
+            }
+            if (targetMapping != null)
+            {
+                lastWorldClickedPosition = hit.point;
+                SelectFeatureOnHit(targetMapping);
+            }
+			else
+			{
+                DeselectFeature();
+            }
+        }
 
 		private void SelectBuildingOnHit(string bagId)
 		{
@@ -220,6 +230,34 @@ namespace Netherlands3D.Twin.Interface.BAG
 			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
 			selectionlayerExists = false;
 		}
+
+		private void SelectFeatureOnHit(FeatureMapping mapping)
+		{
+            DeselectFeature();
+
+            contentPanel.SetActive(true);
+            placeholderPanel.SetActive(false);
+            selectionlayerExists = true;
+
+			lastSelectedFeatureMapping = mapping;
+			//TODO populate the baginspector ui
+			//TODO notify the feature renderer to color rendering blue for feature
+			mapping.SelectFeature();
+        }
+
+		private void DeselectFeature()
+		{
+			if (lastSelectedFeatureMapping != null)
+			{
+				lastSelectedFeatureMapping.DeselectFeature();
+				lastSelectedFeatureMapping = null;
+			}
+
+			//TODO notify the feature renderer to return back normal coloring
+            contentPanel.SetActive(false);
+            placeholderPanel.SetActive(true);
+            selectionlayerExists = false;
+        }
 
 		private void OnDestroy()
 		{

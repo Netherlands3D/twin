@@ -520,7 +520,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowTransform: {fileID: 7732943800119484194}
   NorthColor: {r: 0.46540874, g: 0.106839046, b: 0.106839046, a: 1}
-  snapSpeed: 10
   inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}
 --- !u!1001 &859080883

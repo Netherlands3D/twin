@@ -35,13 +35,34 @@ namespace Netherlands3D.Twin.Layers
                 int[] triangles = new int[(points.Count - 2) * 3];
                 for (int i = 0; i < points.Count - 2; i++)
                 {
-                    triangles[i * 3] = 0; 
-                    triangles[i * 3 + 1] = i + 1; 
-                    triangles[i * 3 + 2] = i + 2; 
+                    triangles[i * 3] = 0;
+                    triangles[i * 3 + 1] = i + 1;
+                    triangles[i * 3 + 2] = i + 2;
                 }
-                mesh.SetTriangles(triangles, 0);                
+                mesh.SetTriangles(triangles, 0);
             }
             return meshes;
+        }
+
+        /// <summary>
+        /// the previous colors of all vertices will be stored into the vertexColor buffer parameter
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <param name="vertexColors"></param>
+        public void SetVisualisationColor(List<Mesh> meshes, Color[] vertexColors)
+        {
+            int totalIndex = 0;
+            foreach(Mesh mesh in meshes) 
+            {
+                Vector3[] vertices = mesh.vertices;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Color previousColor;
+                    lineRenderer3D.SetLineColorClosestToPoint(vertices[i], vertexColors[totalIndex], out previousColor);
+                    vertexColors[totalIndex] = previousColor;
+                    totalIndex++;
+                }
+            }
         }
 
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();

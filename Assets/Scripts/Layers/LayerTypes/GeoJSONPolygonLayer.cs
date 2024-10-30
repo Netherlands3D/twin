@@ -142,5 +142,10 @@ namespace Netherlands3D.Twin.Layers
             featureVisualisation.DestroyAllVisualisations();
             SpawnedVisualisations.Remove(featureVisualisation);
         }
+
+        public void SetVisualisationColor(List<Mesh> meshes, Color[] previousColors)
+        {
+            
+        }
     }
 }
