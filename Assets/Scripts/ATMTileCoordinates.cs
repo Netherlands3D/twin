@@ -8,9 +8,8 @@ namespace Netherlands3D.Twin
 {
     public class ATMTileCoordinates : MonoBehaviour
     {
-        public int[] z = new[] { 16, 19 };
-        public int x, y;
-        public string url = @"https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png";
+        [SerializeField] private int[] z = new[] { 16, 19 };
+        [SerializeField] private string url = @"https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png";
         
         // magic ChatGPT function 
         public static (int x, int y) LatLonToTileXY(double lat, double lon, int zoom)
@@ -43,14 +42,6 @@ namespace Netherlands3D.Twin
         {
             var converted = CoordinateToTileXY(coord, zoomLevel);
             return GetTileUrl(zoomLevel, converted.x, converted.y);
-        }
-        
-        private void Start()
-        {
-            var rdCoord = new Coordinate(CoordinateSystem.RD, x, y);
-            var converted = CoordinateToTileXY(rdCoord, z[0]);
-            
-            print(converted.x + "\t" + converted.y);
         }
     }
 }
