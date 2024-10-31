@@ -341,7 +341,7 @@ namespace Netherlands3D.Twin.Layers
 
                 mesh.RecalculateNormals();
                 
-                if(verts.Length >= 3)
+                if(verts.Length >= 2)
                     subObject.AddComponent<MeshCollider>();
                 else
                     subObject.AddComponent<SphereCollider>().radius = 1f;
@@ -351,6 +351,7 @@ namespace Netherlands3D.Twin.Layers
                 objectMapping.SetFeature(feature);
                 objectMapping.SetMeshes(meshes);
                 objectMapping.SetVisualisationLayer(layer);
+                objectMapping.SetGeoJsonLayerParent(this);
             }
         }
 

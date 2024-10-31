@@ -142,7 +142,7 @@ namespace Netherlands3D.Twin
                 for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
                 {
                     var lineJointTransforms = jointsTransformMatrixCache[i];
-                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
+                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, hasColors ? materialPropertyBlockCache[i] : null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
                 }
             }
         }
@@ -176,17 +176,16 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Set specific line color for the line closest to a given point.
         /// </summary>
-        public int SetLineColorClosestToPoint(Vector3 point, Color color, out Color previousColor)
+        public int SetLineColorClosestToPoint(Vector3 point, Color color)
         {
             int closestLineIndex = GetClosestLineIndex(point);
             if (closestLineIndex == -1)
             {
                 Debug.LogWarning("No line found");
-                previousColor = Color.clear;
                 return -1;
             }
 
-            SetSpecificLineColorByIndex(closestLineIndex, color, out previousColor);
+            SetSpecificLineColorByIndex(closestLineIndex, color);
             return closestLineIndex;
         }
 
@@ -194,7 +193,7 @@ namespace Netherlands3D.Twin
         /// Set a specific line color by index of the line.
         /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
         /// </summary>
-        public void SetSpecificLineColorByIndex(int index, Color color, out Color previousColor)
+        public void SetSpecificLineColorByIndex(int index, Color color)
         {
             if(materialPropertyBlockCache == null || Lines.Count != materialPropertyBlockCache.Count)
             {
@@ -209,12 +208,10 @@ namespace Netherlands3D.Twin
             if (index >= materialPropertyBlockCache.Count)
             {
                 Debug.LogWarning($"Index {index} is out of range");
-                previousColor = Color.clear;
                 return;
             }
 
             MaterialPropertyBlock props = materialPropertyBlockCache[index];
-            previousColor = materialPropertyBlockCache[index].GetColor("_BaseColor");
             props.SetColor("_BaseColor", color);
             materialPropertyBlockCache[index] = props;
         }

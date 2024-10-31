@@ -147,9 +147,21 @@ namespace Netherlands3D.Twin.Layers
             base.DestroyLayerGameObject();
         }
 
-        public void SetVisualisationColor(List<Mesh> meshes, Color[] previousColors)
+        public void SetVisualisationColor(List<Mesh> meshes, Color color)
         {
-            
+            foreach (Mesh mesh in meshes)
+            {
+                Vector3[] vertices = mesh.vertices;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    pointRenderer3D.SetLineColorClosestToPoint(vertices[i], color);
+                }
+            }
+        }
+
+        public Color GetRenderColor()
+        {
+            return pointRenderer3D.Material.color;
         }
     }
 }

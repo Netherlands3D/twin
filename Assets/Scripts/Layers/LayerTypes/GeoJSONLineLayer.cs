@@ -49,20 +49,21 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="vertexColors"></param>
-        public void SetVisualisationColor(List<Mesh> meshes, Color[] vertexColors)
-        {
-            int totalIndex = 0;
+        public void SetVisualisationColor(List<Mesh> meshes, Color color)
+        {            
             foreach(Mesh mesh in meshes) 
             {
                 Vector3[] vertices = mesh.vertices;
                 for (int i = 0; i < vertices.Length; i++)
                 {
-                    Color previousColor;
-                    lineRenderer3D.SetLineColorClosestToPoint(vertices[i], vertexColors[totalIndex], out previousColor);
-                    vertexColors[totalIndex] = previousColor;
-                    totalIndex++;
+                    lineRenderer3D.SetLineColorClosestToPoint(vertices[i], color);                    
                 }
             }
+        }
+
+        public Color GetRenderColor()
+        {
+            return LineRenderer3D.LineMaterial.color;
         }
 
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();

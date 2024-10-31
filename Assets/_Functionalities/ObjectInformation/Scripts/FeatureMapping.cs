@@ -1,4 +1,5 @@
 using GeoJSON.Net.Feature;
+using Netherlands3D.Twin.Layers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,19 @@ namespace Netherlands3D.Twin
 {
     public class FeatureMapping : MonoBehaviour
     {
+        public string FeatureID { get { return feature.Id; } }
+        public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
+        public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
+
         private Feature feature;
         private List<Mesh> meshes;
         private IGeoJsonVisualisationLayer visualisationLayer;
-        private Color[] vertexColors;
+        private GeoJsonLayerGameObject geoJsonLayerParent;
+    
+        public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
+        {
+            geoJsonLayerParent = parentLayer;
+        }
 
         public void SetFeature(Feature feature)
         {
@@ -20,11 +30,7 @@ namespace Netherlands3D.Twin
 
         public void SetMeshes(List<Mesh> meshes)
         {
-            this.meshes = meshes;
-            int totalVertexCount = 0;
-            foreach (Mesh m in meshes)
-                totalVertexCount += m.vertexCount;
-            vertexColors = new Color[totalVertexCount];
+            this.meshes = meshes;            
         }
 
         public void SetVisualisationLayer(IGeoJsonVisualisationLayer visualisationLayer)
@@ -34,16 +40,33 @@ namespace Netherlands3D.Twin
 
         public void SelectFeature()
         {
-            for (int i = 0; i < vertexColors.Length; i++)
-                vertexColors[i] = Color.blue;
-
-            visualisationLayer.SetVisualisationColor(meshes, vertexColors);
+            Color selectionColor = Color.blue;
+            visualisationLayer.SetVisualisationColor(meshes, selectionColor);
         }
 
         public void DeselectFeature()
         {
-            //todo get instance material formn the visualisation layer to set back colors and remove the previouscolors functions, its bad and prone to bugs :D
-            visualisationLayer.SetVisualisationColor(meshes, vertexColors);
+            Color renderColor = visualisationLayer.GetRenderColor();
+            visualisationLayer.SetVisualisationColor(meshes, renderColor);
+        }
+
+        public float GetClosestDistanceAnyVertex(Vector3 point, out Vector3 closestVertex)
+        {
+            closestVertex = Vector3.zero;
+            float closest = float.MaxValue;
+            foreach (Mesh mesh in meshes)
+            {
+                foreach (Vector3 v in mesh.vertices)
+                {
+                    float distance = Vector3.Distance(point, v);
+                    if (distance < closest)
+                    {
+                        closest = distance;
+                        closestVertex = v;
+                    }
+                }
+            }
+            return closest;
         }
     }
 }

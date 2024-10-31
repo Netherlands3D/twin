@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -48,9 +49,6 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private RectTransform contentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
-
-		private bool selectionlayerExists = false;
-
 		private Vector3 lastWorldClickedPosition;
 
 		[Header("Practical information fields")]
@@ -134,14 +132,19 @@ namespace Netherlands3D.Twin.Interface.BAG
 		//wat doen we met deselecteren?
 		//custom object mapping object schrijven voor features en 
 
-		private FeatureMapping lastSelectedFeatureMapping;
 		private float hitDistance = 100000f;
-		private float tubeHitRadius = 10f;
-		/// <summary>
-		/// Find objectmapping by raycast and get the BAG ID
-		/// </summary>
-		private void FindObjectMapping()
+		private float tubeHitRadius = 5f;
+		private GameObject testHitPosition;
+		private GameObject testGroundPosition;
+        Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>>();
+        /// <summary>
+        /// Find objectmapping by raycast and get the BAG ID
+        /// </summary>
+        private void FindObjectMapping()
 		{
+			DeselectBuilding();
+			DeselectFeature();
+
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
@@ -149,11 +152,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			{
 				//lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and use a nonalloc to prevent memory allocations
 				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-				if (!objectMapping)
-				{
-					DeselectBuilding();
-				}
-				else
+				if (objectMapping)
 				{
 					lastWorldClickedPosition = hit.point;
 					SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
@@ -164,14 +163,29 @@ namespace Netherlands3D.Twin.Interface.BAG
 			if (hit.collider == null)
 				return;
 
+			if(testHitPosition == null)
+			{
+                testHitPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+				testHitPosition.transform.localScale = Vector3.one * 3;
+
+				testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+				testGroundPosition.transform.localScale = Vector3.one * tubeHitRadius;
+				testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+
             Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
             groundPlane.Raycast(ray, out float distance);
 			Vector3 groundPosition = ray.GetPoint(distance);
-			FeatureMapping targetMapping = null;
+			testGroundPosition.transform.position = groundPosition + Vector3.up * 5f;
+
+			//clear the hit list or else it will use previous collider values
+			raycastHits = new RaycastHit[16];
+
             //if (Physics.CapsuleCastNonAlloc(ray.origin, ray.GetPoint(hitDistance), tubeHitRadius, ray.direction, raycastHits, hitDistance) > 0)
             if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
+			//if(Physics.RaycastNonAlloc(ray, raycastHits, hitDistance) > 0)
             {
-               
+				
                 float closest = float.MaxValue;
                 for (int i = 0; i < raycastHits.Length; i++)
                 {
@@ -179,39 +193,40 @@ namespace Netherlands3D.Twin.Interface.BAG
                     {
                         FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
                         if (mapping != null)
-                        {
-                            float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
-                            if (dist < closest)
-                            {
-                                closest = dist;
-                                targetMapping = mapping;
-                                hit = raycastHits[i];
-                            }
+                        {							
+							if(!featureMappings.ContainsKey(mapping.VisualisationParent))
+								featureMappings.Add(mapping.VisualisationParent, new List<FeatureMapping>());
+							featureMappings[mapping.VisualisationParent].Add(mapping);
+
+							//Debug.Log(mapping.FeatureID + " " + mapping.VisualisationLayer.ToString());							
+							//float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
+       //                     if (dist < closest)
+       //                     {
+       //                         closest = dist;        
+       //                         hit = raycastHits[i];
+       //                     }
                         }
                     }
                 }
             }
-            if (targetMapping != null)
+            if (featureMappings.Count > 0)
             {
-                lastWorldClickedPosition = hit.point;
-                SelectFeatureOnHit(targetMapping);
-            }
-			else
-			{
-                DeselectFeature();
+                lastWorldClickedPosition = groundPosition;
+                foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings) 
+				{					
+					foreach(FeatureMapping mapping in pair.Value) 
+						SelectFeatureOnHit(mapping);
+
+					////for now lets always select the first set of featuremappings for a visiualisationlayer 
+					//break;
+				}
             }
         }
 
 		private void SelectBuildingOnHit(string bagId)
 		{
-			if (selectionlayerExists)
-			{
-				DeselectBuilding();
-			}
-
 			contentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
-			selectionlayerExists = true;
 
 			var objectIdAndColor = new Dictionary<string, Color>
 			{
@@ -228,35 +243,32 @@ namespace Netherlands3D.Twin.Interface.BAG
 			placeholderPanel.SetActive(true);
 
 			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-			selectionlayerExists = false;
+			ColorSetLayer = null;
 		}
 
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
-            DeselectFeature();
-
             contentPanel.SetActive(true);
             placeholderPanel.SetActive(false);
-            selectionlayerExists = true;
-
-			lastSelectedFeatureMapping = mapping;
-			//TODO populate the baginspector ui
-			//TODO notify the feature renderer to color rendering blue for feature
+			//TODO populate the baginspector ui		
 			mapping.SelectFeature();
         }
 
 		private void DeselectFeature()
 		{
-			if (lastSelectedFeatureMapping != null)
+			if (featureMappings.Count > 0)
 			{
-				lastSelectedFeatureMapping.DeselectFeature();
-				lastSelectedFeatureMapping = null;
+                foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings)
+                {
+					foreach(FeatureMapping mapping in pair.Value)
+						mapping.DeselectFeature();
+					//break;
+				}
 			}
-
+			featureMappings.Clear();
 			//TODO notify the feature renderer to return back normal coloring
             contentPanel.SetActive(false);
             placeholderPanel.SetActive(true);
-            selectionlayerExists = false;
         }
 
 		private void OnDestroy()

@@ -143,9 +143,14 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Remove(featureVisualisation);
         }
 
-        public void SetVisualisationColor(List<Mesh> meshes, Color[] previousColors)
+        public void SetVisualisationColor(List<Mesh> meshes, Color color)
         {
             
+        }
+
+        public Color GetRenderColor()
+        {
+            return Color.white;
         }
     }
 }
