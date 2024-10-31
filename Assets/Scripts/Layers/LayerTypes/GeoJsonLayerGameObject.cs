@@ -304,8 +304,8 @@ namespace Netherlands3D.Twin.Layers
                     {
                         for (int j = 0; j < verts.Length - 1; j++)
                         {
-                            Vector3 p1 = verts[j];      
-                            Vector3 p2 = verts[j + 1];                             
+                            Vector3 p1 = verts[j];
+                            Vector3 p2 = verts[j + 1];
                             Vector3 edgeDir = (p2 - p1).normalized;
                             Vector3 perpDir = new Vector3(-edgeDir.z, 0, edgeDir.x);
                             Vector3 v1 = p1 + perpDir * width;
@@ -318,7 +318,7 @@ namespace Netherlands3D.Twin.Layers
                             vertices.Add(v4); //br
                             int baseIndex = j * 4;
                             //v1 v2 v3
-                            triangles.Add(baseIndex + 0); 
+                            triangles.Add(baseIndex + 0);
                             triangles.Add(baseIndex + 1);
                             triangles.Add(baseIndex + 2);
                             //v2, v4, v3
@@ -328,23 +328,25 @@ namespace Netherlands3D.Twin.Layers
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
+                        subObject.AddComponent<MeshCollider>();
                     }
+                    else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+                    {
+                        //lets not add a meshcollider since its very heavy
+                    }                   
                 }
                 else
                 {
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         subObject.transform.position = verts[0];
+                        subObject.AddComponent<SphereCollider>().radius = 1f;
                     }
                 }
 
 
                 mesh.RecalculateNormals();
-                
-                if(verts.Length >= 2)
-                    subObject.AddComponent<MeshCollider>();
-                else
-                    subObject.AddComponent<SphereCollider>().radius = 1f;
+                    
                 subObject.transform.SetParent(parent.transform);
 
                 FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();

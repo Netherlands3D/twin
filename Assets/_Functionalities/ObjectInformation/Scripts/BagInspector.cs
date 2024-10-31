@@ -18,6 +18,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
 using TMPro;
@@ -136,7 +137,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private float tubeHitRadius = 5f;
 		private GameObject testHitPosition;
 		private GameObject testGroundPosition;
-        Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>>();
+        private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>>();
         /// <summary>
         /// Find objectmapping by raycast and get the BAG ID
         /// </summary>
@@ -221,9 +222,105 @@ namespace Netherlands3D.Twin.Interface.BAG
 					//break;
 				}
             }
+			else
+			{
+                var camera = Camera.main;
+                Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
+                //not ideal but better than caching, would be better to have an quadtree approach here
+                FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>();
+				for (int i = 0; i < mappings.Length; i++)
+				{
+					GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
+					if (polygonLayer != null)
+					{
+						List<Mesh> meshes = mappings[i].FeatureMeshes;
+						for (int j = 0; j < meshes.Count; j++)
+						{
+							bool isSelected = ProcessPolygonSelection(meshes[j], polygonLayer.transform, camera, frustumPlanes, groundPosition);
+							if(isSelected)
+							{
+                                if (!featureMappings.ContainsKey(mappings[i].VisualisationParent))
+                                    featureMappings.Add(mappings[i].VisualisationParent, new List<FeatureMapping>());
+                                featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
+                                SelectFeatureOnHit(mappings[i]);
+								return;
+							}
+						}
+					}
+				}
+			}
+        }       
+
+        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
+        {			
+            Bounds localBounds = polygon.bounds;
+			Matrix4x4 localToWorld = transform.localToWorldMatrix;
+			Vector3 worldCenter = localToWorld.MultiplyPoint3x4(localBounds.center);
+            //Vector3 worldExtents = Vector3.Scale(localBounds.extents, transform.lossyScale);
+            Bounds worldBounds = new Bounds(worldCenter, localBounds.extents * 2.1f); //we have to add a little bit... unity is not good at calculating exact bounds for meshes
+			
+			//GameObject testBounds = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			//testBounds.transform.position = worldBounds.center;
+			//testBounds.transform.localScale = worldBounds.size;
+
+			if (!IsBoundsInView(worldBounds, frustumPlanes))
+				return false;
+
+			
+			//if the click is outside of the polygon bounds, this polygon wasn't selected
+			var point2d = new Vector2(worldPoint.x, worldPoint.z);
+            if (!IsInBounds2D(worldBounds, point2d))
+                return false;
+
+            Matrix4x4 worldToLocal = transform.worldToLocalMatrix;
+            Vector3 localPosition = worldToLocal.MultiplyPoint(worldPoint);
+
+            //check if the click was in the polygon bounds
+            return IsPointInPolygon(localPosition, polygon);
         }
 
-		private void SelectBuildingOnHit(string bagId)
+        public static bool IsPointInPolygon(Vector3 point, Mesh polygon)
+        {
+            if (!ContainsPointProjected2D(polygon.vertices, point))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Check if a 2d polygon contains point p
+        /// </summary>
+        /// <param name="polygon">array of points that define the polygon</param>
+        /// <param name="p">point to test</param>
+        /// <returns>true if point p is inside the polygon, otherwise false</returns>
+        public static bool ContainsPointProjected2D(IList<Vector3> polygon, Vector3 p)
+        {
+            var j = polygon.Count - 1;
+            var inside = false;
+            for (int i = 0; i < polygon.Count; j = i++)
+            {
+                var pi = polygon[i];
+                var pj = polygon[j];
+                if (((pi.z <= p.z && p.z < pj.z) || (pj.z <= p.z && p.z < pi.z)) &&
+                    (p.x < (pj.x - pi.x) * (p.z - pi.z) / (pj.z - pi.z) + pi.x))
+                    inside = !inside;
+            }
+            return inside;
+        }
+
+        public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)
+        {
+            return GeometryUtility.TestPlanesAABB(frustumPlanes, bounds);
+        }
+
+        public static bool IsInBounds2D(Bounds bounds, Vector2 point)
+        {
+            return point.x > bounds.min.x && point.x < bounds.max.x && point.y > bounds.min.z && point.y < bounds.max.z;
+        }
+
+
+        private void SelectBuildingOnHit(string bagId)
 		{
 			contentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);

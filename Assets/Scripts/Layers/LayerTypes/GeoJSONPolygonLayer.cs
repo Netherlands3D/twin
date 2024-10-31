@@ -28,6 +28,33 @@ namespace Netherlands3D.Twin.Layers
             return meshes;
         }
 
+        /// <summary>
+        /// the previous colors of all vertices will be stored into the vertexColor buffer parameter
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <param name="vertexColors"></param>
+        public void SetVisualisationColor(List<Mesh> meshes, Color color)
+        {
+            //FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => meshes.Contains(f.Data[0].GetComponent<Mesh>())).FirstOrDefault();
+            foreach(FeaturePolygonVisualisations fpv in SpawnedVisualisations)
+            {
+                List<PolygonVisualisation> visualisations = fpv.Data;
+                foreach(PolygonVisualisation pv in visualisations)
+                {
+                    if(meshes.Contains(pv.GetComponent<MeshFilter>().mesh))
+                    {
+                        pv.gameObject.GetComponent<MeshRenderer>().material.color = color;
+                        return;
+                    }
+                }
+            }
+        }
+
+        public Color GetRenderColor()
+        {
+            return polygonVisualizationMaterialInstance.color;
+        }
+
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
         private bool randomizeColorPerFeature = false;
@@ -141,16 +168,6 @@ namespace Netherlands3D.Twin.Layers
         {
             featureVisualisation.DestroyAllVisualisations();
             SpawnedVisualisations.Remove(featureVisualisation);
-        }
-
-        public void SetVisualisationColor(List<Mesh> meshes, Color color)
-        {
-            
-        }
-
-        public Color GetRenderColor()
-        {
-            return Color.white;
         }
     }
 }

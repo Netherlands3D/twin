@@ -12,6 +12,8 @@ namespace Netherlands3D.Twin
         public string FeatureID { get { return feature.Id; } }
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
+        public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
+        public Feature Feature { get { return feature; } }
 
         private Feature feature;
         private List<Mesh> meshes;
