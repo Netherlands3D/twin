@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AssetBundleBuilder
 {
-    [MenuItem("Assets/Build AssetBundles")]
+    [MenuItem("Netherlands3D/Build AssetBundles")]
     static void BuildAllAssetBundles()
     {
         BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.WebGL);
