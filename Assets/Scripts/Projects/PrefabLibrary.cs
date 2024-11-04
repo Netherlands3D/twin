@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -17,61 +18,62 @@ namespace Netherlands3D.Twin
         public List<LayerGameObject> prefabs;
     }
 
-    //this should not be serialized
-    public class PrefabGroupRuntime
-    {
-        public string groupName;
-        public bool autoPopulateUI;
-        public List<LayerGameObject> prefabs;
-    }
-
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
     public class PrefabLibrary : ScriptableObject
     {
-        [JsonIgnore] public LayerGameObject fallbackPrefab;
-        [JsonIgnore] public List<PrefabGroup> prefabGroups;
-        [JsonIgnore] public List<PrefabGroupRuntime> prefabGroupsRuntime = new();
+        public LayerGameObject fallbackPrefab;
+        public List<PrefabGroup> prefabGroups;
+        [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
+        public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
 
         public LayerGameObject GetPrefabById(string id)
         {
-            foreach (var group in prefabGroups)
-            {
-                foreach (var prefab in group.prefabs)
-                {
-                    if (prefab.PrefabIdentifier == id)
-                    {
-                        return prefab;
-                    }
-                }
-            }
+            var prefabById = FindPrefabInGroups(id, prefabGroups);
+            if (prefabById) return prefabById;
+            
+            prefabById = FindPrefabInGroups(id, prefabRuntimeGroups);
+            if (prefabById) return prefabById;
 
             return fallbackPrefab;
         }
 
-        public void AddPrefabGroupRuntime(string groupName)
+        public void AddPrefabRuntimeGroup(string groupName)
         {
-            PrefabGroupRuntime prefabGroupRuntime = new PrefabGroupRuntime();
-            prefabGroupRuntime.groupName = groupName;
-            prefabGroupRuntime.autoPopulateUI = true;
-            prefabGroupRuntime.prefabs = new List<LayerGameObject>();
-            prefabGroupsRuntime.Add(prefabGroupRuntime);
+            prefabRuntimeGroups.Add(
+                new PrefabGroup
+                {
+                    groupName = groupName,
+                    autoPopulateUI = true,
+                    prefabs = new List<LayerGameObject>()
+                }
+            );
         }
 
-        public void AddObjectToPrefabGroupRuntime(string groupName, LayerGameObject layerObject)
+        public void AddObjectToPrefabRuntimeGroup(string groupName, LayerGameObject layerObject)
         {
-            foreach (var group in prefabGroupsRuntime)
+            foreach (var group in prefabRuntimeGroups.Where(group => group.groupName == groupName))
             {
-                if (group.groupName != groupName) continue;
-                
-                foreach (LayerGameObject go in group.prefabs)
-                {
-                    if (go.name != layerObject.name) continue;
-
-                    group.prefabs.Remove(go);
-                }
-
+                group.prefabs.RemoveAll(go => go.name == layerObject.name);
                 group.prefabs.Add(layerObject);
             }
+        }
+
+        private LayerGameObject FindPrefabInGroups(string id, List<PrefabGroup> prefabGroups)
+        {
+            foreach (var group in prefabGroups)
+            {
+                var findPrefabInGroups = FindPrefabInGroup(id, group);
+                if (findPrefabInGroups == null) continue;
+
+                return findPrefabInGroups;
+            }
+
+            return null;
+        }
+
+        private LayerGameObject FindPrefabInGroup(string id, PrefabGroup group)
+        {
+            return group.prefabs.FirstOrDefault(prefab => prefab.PrefabIdentifier == id);
         }
     }
 }
