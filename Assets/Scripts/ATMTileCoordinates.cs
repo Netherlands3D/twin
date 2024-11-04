@@ -22,8 +22,6 @@ namespace Netherlands3D.Twin
             double latRad = lat * Math.PI / 180.0d;
             var dy = (1 - Math.Log(Math.Tan(latRad) + 1 / Math.Cos(latRad)) / Math.PI) / 2 * (1 << zoom);
             int y = (int)Math.Floor(dy);
-            print("dx" + dx + " dy:" + dy);
-            print("x" + x + " y:" + y);
             
             return (x, y);
         }
@@ -42,10 +40,12 @@ namespace Netherlands3D.Twin
                 .Replace("{y}", y.ToString());
         }
 
+        public Vector2Int xy;
         public string GetTileUrl(Coordinate coord, int zoomLevel)
         {
             var converted = CoordinateToTileXY(coord, zoomLevel);
             print("conv: " + converted.x + ", " + converted.y);
+            xy = new Vector2Int(converted.x, converted.y);
             return GetTileUrl(zoomLevel, converted.x, converted.y);
         }
     }

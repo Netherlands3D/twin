@@ -13,15 +13,15 @@ namespace Netherlands3D.Twin
     public class ATMTileDataLayer : ImageProjectionLayer
     {
         private ATMTileCoordinates atmTileCoordinates;
-        
-        public int RenderIndex 
-        { 
+
+        public int RenderIndex
+        {
             get => renderIndex;
             set
             {
                 int oldIndex = renderIndex;
                 renderIndex = value;
-                if (oldIndex != renderIndex) 
+                if (oldIndex != renderIndex)
                     UpdateDrawOrderForChildren();
             }
         }
@@ -29,6 +29,7 @@ namespace Netherlands3D.Twin
         private int renderIndex = -1;
 
         private string wmsUrl = "";
+
         public string WmsUrl
         {
             get => wmsUrl;
@@ -38,12 +39,12 @@ namespace Netherlands3D.Twin
                 if (!wmsUrl.Contains("{0}"))
                     Debug.LogError("WMS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
             }
-        }       
+        }
 
         private void Awake()
         {
             atmTileCoordinates = GetComponent<ATMTileCoordinates>();
-            
+
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
@@ -56,6 +57,16 @@ namespace Netherlands3D.Twin
             }
         }
 
+        public GameObject debugTextPrefab;
+
+        private void AddDebugText(GameObject tile, string text)
+        {
+            var a = Instantiate(debugTextPrefab, tile.gameObject.transform, false);
+            a.GetComponentInChildren<TMPro.TMP_Text>().transform.Translate(0, 0, 970);
+            a.GetComponentInChildren<TMPro.TMP_Text>().text = text;
+        }
+
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -67,10 +78,11 @@ namespace Netherlands3D.Twin
             }
 
             Tile tile = tiles[tileKey];
-            var tileCoord = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            string url = atmTileCoordinates.GetTileUrl(tileCoord, 19);
-            // var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-            // string url = wmsUrl.Replace("{0}", bboxValue);
+            var tileCoord = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize / 2, tileChange.Y + tileSize / 2);
+            string url = atmTileCoordinates.GetTileUrl(tileCoord, 16);
+            var coord = ATMTileCoordinates.CoordinateToTileXY(tileCoord, 16);
+            AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString());
+            print(tileKey + "\t" + url);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
             tile.runningWebRequest = webRequest;
@@ -89,11 +101,11 @@ namespace Netherlands3D.Twin
                 tex.Compress(true);
                 tex.filterMode = FilterMode.Bilinear;
                 tex.Apply(false, true);
-                
+
                 if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                 {
                     projector.SetSize(tileSize, tileSize, tileSize);
-                    projector.gameObject.SetActive(isEnabled);                    
+                    projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);
                     //force the depth to be at least larger than its height to prevent z-fighting
                     DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
@@ -105,6 +117,7 @@ namespace Netherlands3D.Twin
                     textureDecalProjector.SetPriority(renderIndex);
                 }
             }
+
             callback(tileChange);
         }
 
@@ -116,8 +129,19 @@ namespace Netherlands3D.Twin
                     continue;
 
                 TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                projector.SetPriority(renderIndex);                    
+                projector.SetPriority(renderIndex);
             }
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            foreach (var tile in tiles)
+            {
+                Gizmos.DrawWireCube(CoordinateConverter.RDtoUnity(new Vector3(tile.Key.x + (tileSize / 2), tile.Key.y + (tileSize / 2), 0)), new Vector3(tileSize, 100, tileSize));
+            }
+        }
+#endif
     }
 }
