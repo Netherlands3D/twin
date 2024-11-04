@@ -61,15 +61,16 @@ namespace Netherlands3D.Twin
         {
             foreach (var group in prefabGroupsRuntime)
             {
-                if (group.groupName == groupName)
+                if (group.groupName != groupName) continue;
+                
+                foreach (LayerGameObject go in group.prefabs)
                 {
-                    foreach (LayerGameObject go in group.prefabs)
-                        if (go.name == layerObject.name)
-                        {
-                            group.prefabs.Remove(go);
-                        }
-                    group.prefabs.Add(layerObject);
+                    if (go.name != layerObject.name) continue;
+
+                    group.prefabs.Remove(go);
                 }
+
+                group.prefabs.Add(layerObject);
             }
         }
     }
