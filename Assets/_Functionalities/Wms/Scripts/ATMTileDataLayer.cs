@@ -66,6 +66,20 @@ namespace Netherlands3D.Twin
             a.GetComponentInChildren<TMPro.TMP_Text>().text = text;
         }
 
+        public Vector2 gridOffset;
+        private void Update()
+        {
+            foreach (var tile in tiles)
+            {
+                var projector = tile.Value.gameObject.GetComponent<DecalProjector>();
+                var tileObject = tile.Value.gameObject;
+                if (!projector)
+                    return;
+
+                projector.size = new Vector3(tileSize * tileObject.transform.localScale.x, tileSize * tileObject.transform.localScale.y, projector.size.z);
+            }
+        }
+
 
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
@@ -116,6 +130,8 @@ namespace Netherlands3D.Twin
                     //set the render index, to make sure the render order is maintained
                     textureDecalProjector.SetPriority(renderIndex);
                 }
+
+                tile.gameObject.transform.position += new Vector3(gridOffset.x, 0, gridOffset.y);
             }
 
             callback(tileChange);
