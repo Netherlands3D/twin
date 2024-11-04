@@ -51,24 +51,5 @@ namespace Netherlands3D.Twin
             Color renderColor = visualisationLayer.GetRenderColor();
             visualisationLayer.SetVisualisationColor(meshes, renderColor);
         }
-
-        public float GetClosestDistanceAnyVertex(Vector3 point, out Vector3 closestVertex)
-        {
-            closestVertex = Vector3.zero;
-            float closest = float.MaxValue;
-            foreach (Mesh mesh in meshes)
-            {
-                foreach (Vector3 v in mesh.vertices)
-                {
-                    float distance = Vector3.Distance(point, v);
-                    if (distance < closest)
-                    {
-                        closest = distance;
-                        closestVertex = v;
-                    }
-                }
-            }
-            return closest;
-        }
     }
 }

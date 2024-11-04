@@ -127,12 +127,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			d = Mathf.Clamp(d, 0f, len);
 			return start + line * d;
 		}
-
-
-		//gebruik de setvertexlinecolor methodes in de polygon/line/point layer buffers waar het renderen zit zoals de linerenderer3d om een selectie te kunnen blauw maken
-		//wat doen we met deselecteren?
-		//custom object mapping object schrijven voor features en 
-
+		
 		private float hitDistance = 100000f;
 		private float tubeHitRadius = 5f;
 		private GameObject testHitPosition;
@@ -236,7 +231,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 						List<Mesh> meshes = mappings[i].FeatureMeshes;
 						for (int j = 0; j < meshes.Count; j++)
 						{
-							bool isSelected = ProcessPolygonSelection(meshes[j], polygonLayer.transform, camera, frustumPlanes, groundPosition);
+							PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                            bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, camera, frustumPlanes, groundPosition);
 							if(isSelected)
 							{
                                 if (!featureMappings.ContainsKey(mappings[i].VisualisationParent))
@@ -249,43 +245,44 @@ namespace Netherlands3D.Twin.Interface.BAG
 					}
 				}
 			}
-        }       
+        }
 
         public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
-        {			
-            Bounds localBounds = polygon.bounds;
+        {
+		    Bounds localBounds = polygon.bounds;
 			Matrix4x4 localToWorld = transform.localToWorldMatrix;
 			Vector3 worldCenter = localToWorld.MultiplyPoint3x4(localBounds.center);
-            //Vector3 worldExtents = Vector3.Scale(localBounds.extents, transform.lossyScale);
-            Bounds worldBounds = new Bounds(worldCenter, localBounds.extents * 2.1f); //we have to add a little bit... unity is not good at calculating exact bounds for meshes
-			
-			//GameObject testBounds = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			//testBounds.transform.position = worldBounds.center;
-			//testBounds.transform.localScale = worldBounds.size;
+            Bounds worldBounds = new Bounds(worldCenter, polygon.bounds.size);
 
-			if (!IsBoundsInView(worldBounds, frustumPlanes))
+			if (!PolygonSelectionCalculator.IsBoundsInView(worldBounds, frustumPlanes))
 				return false;
 
-			
-			//if the click is outside of the polygon bounds, this polygon wasn't selected
-			var point2d = new Vector2(worldPoint.x, worldPoint.z);
-            if (!IsInBounds2D(worldBounds, point2d))
+            var point2d = new Vector2(worldPoint.x, worldPoint.z);
+            if (!PolygonSelectionCalculator.IsInBounds2D(worldBounds, point2d))
                 return false;
 
             Matrix4x4 worldToLocal = transform.worldToLocalMatrix;
             Vector3 localPosition = worldToLocal.MultiplyPoint(worldPoint);
 
-            //check if the click was in the polygon bounds
-            return IsPointInPolygon(localPosition, polygon);
-        }
+			return IsPointInMesh(polygon, localPosition);
+        }		
 
-        public static bool IsPointInPolygon(Vector3 point, Mesh polygon)
+        public static bool IsPointInMesh(Mesh mesh, Vector3 point)
         {
-            if (!ContainsPointProjected2D(polygon.vertices, point))
+            Vector3[] vertices = mesh.vertices;
+            int[] triangles = mesh.triangles;
+            Vector3 projectedPoint = new Vector3(point.x, 0, point.z);
+            for (int i = 0; i < triangles.Length; i += 3)
             {
-                return false;
+                Vector3 v0 = new Vector3(vertices[triangles[i]].x, 0, vertices[triangles[i]].z);
+                Vector3 v1 = new Vector3(vertices[triangles[i + 1]].x, 0, vertices[triangles[i + 1]].z);
+                Vector3 v2 = new Vector3(vertices[triangles[i + 2]].x, 0, vertices[triangles[i + 2]].z);
+                if (ContainsPointProjected2D(new List<Vector3> { v0, v1, v2 }, projectedPoint))
+                {
+                    return true; 
+                }
             }
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -308,17 +305,6 @@ namespace Netherlands3D.Twin.Interface.BAG
             }
             return inside;
         }
-
-        public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)
-        {
-            return GeometryUtility.TestPlanesAABB(frustumPlanes, bounds);
-        }
-
-        public static bool IsInBounds2D(Bounds bounds, Vector2 point)
-        {
-            return point.x > bounds.min.x && point.x < bounds.max.x && point.y > bounds.min.z && point.y < bounds.max.z;
-        }
-
 
         private void SelectBuildingOnHit(string bagId)
 		{

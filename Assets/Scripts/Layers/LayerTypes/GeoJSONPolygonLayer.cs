@@ -29,25 +29,38 @@ namespace Netherlands3D.Twin.Layers
         }
 
         /// <summary>
-        /// the previous colors of all vertices will be stored into the vertexColor buffer parameter
+        /// set the colors for the polygon visualisation within the feature polygon visualisation matching the meshes provided
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="vertexColors"></param>
         public void SetVisualisationColor(List<Mesh> meshes, Color color)
         {
             //FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => meshes.Contains(f.Data[0].GetComponent<Mesh>())).FirstOrDefault();
-            foreach(FeaturePolygonVisualisations fpv in SpawnedVisualisations)
+            PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
+            if(visualisation != null) 
+                visualisation.gameObject.GetComponent<MeshRenderer>().material.color = color;
+        }
+
+        /// <summary>
+        /// not ideal since the polygonvisualisation mesh is not cached. needs caching
+        /// returns the polygon visualisation matching the provided meshes
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <returns></returns>
+        public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
+        {
+            foreach (FeaturePolygonVisualisations fpv in SpawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Data;
-                foreach(PolygonVisualisation pv in visualisations)
+                foreach (PolygonVisualisation pv in visualisations)
                 {
-                    if(meshes.Contains(pv.GetComponent<MeshFilter>().mesh))
+                    if (meshes.Contains(pv.GetComponent<MeshFilter>().mesh))
                     {
-                        pv.gameObject.GetComponent<MeshRenderer>().material.color = color;
-                        return;
+                        return pv;
                     }
                 }
             }
+            return null;
         }
 
         public Color GetRenderColor()

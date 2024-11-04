@@ -21,23 +21,43 @@ namespace Netherlands3D.Twin
             return visualizations;
         }
 
+        /// <summary>
+        /// the polygon vertex positions are offseted back by its polygon centroid and added to the transform of the returned polygonvisualisation transform position
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="originalCoordinateSystem"></param>
+        /// <param name="visualizationMaterial"></param>
+        /// <returns></returns>
         public static PolygonVisualisation VisualizePolygon(Polygon polygon, CoordinateSystem originalCoordinateSystem, Material visualizationMaterial)
-        {
+        {            
             var ringList = new List<List<Vector3>>(polygon.Coordinates.Count);
-            
+            Vector3 centroid = Vector3.zero;
+            int count = 0;
             foreach (var lineString in polygon.Coordinates)
             {
-                var ring = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+                var ring = ConvertToCoordinates(lineString, originalCoordinateSystem);
+                foreach (var coord in ring)
+                {
+                    centroid += coord.ToUnity();
+                    count++;
+                }
+            }
+            centroid /= count;
+
+            foreach (var lineString in polygon.Coordinates)
+            {
+                var ring = ConvertToCoordinates(lineString, originalCoordinateSystem);
                 var unityRing = new List<Vector3>(ring.Count);
                 foreach (var coord in ring)
                 {
-                    unityRing.Add(coord.ToUnity());
+                    Vector3 c = coord.ToUnity() - centroid;
+                    unityRing.Add(c);
                 }
-
                 ringList.Add(unityRing);
             }
-
-            return CreatePolygonMesh(ringList, 10f, visualizationMaterial);
+            PolygonVisualisation polygonVisualisation = CreatePolygonMesh(ringList, 10f, visualizationMaterial);
+            polygonVisualisation.transform.position += centroid;
+            return polygonVisualisation;
         }
 
         public static List<List<Coordinate>> VisualizeMultiLineString(MultiLineString multiLineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
@@ -45,7 +65,7 @@ namespace Netherlands3D.Twin
             var lines = new List<List<Coordinate>>(multiLineString.Coordinates.Count);
             foreach (var lineString in multiLineString.Coordinates)
             {
-                var convertedLineString = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+                var convertedLineString = ConvertToCoordinates(lineString, originalCoordinateSystem);
                 lines.Add(convertedLineString);
             }
             renderer.AppendLines(lines);
@@ -55,7 +75,7 @@ namespace Netherlands3D.Twin
 
         public static List<Coordinate> VisualizeLineString(LineString lineString, CoordinateSystem originalCoordinateSystem, LineRenderer3D renderer)
         {
-            var line = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+            var line = ConvertToCoordinates(lineString, originalCoordinateSystem);
             renderer.AppendLine(line);
 
             return line;
@@ -63,7 +83,7 @@ namespace Netherlands3D.Twin
 
         public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
-            var convertedPoints = ConvertToUnityCoordinates(multipoint, coordinateSystem);
+            var convertedPoints = ConvertToCoordinates(multipoint, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
 
             return convertedPoints;
@@ -90,7 +110,7 @@ namespace Netherlands3D.Twin
             return polygonVisualisation;
         }
 
-        private static List<Coordinate> ConvertToUnityCoordinates(LineString lineString, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
+        private static List<Coordinate> ConvertToCoordinates(LineString lineString, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
         {
             var convertedCoordinates = new List<Coordinate>(lineString.Coordinates.Count);
 
@@ -104,7 +124,7 @@ namespace Netherlands3D.Twin
             return convertedCoordinates;
         }
         
-        private static List<Coordinate> ConvertToUnityCoordinates(MultiPoint multiPoint, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
+        private static List<Coordinate> ConvertToCoordinates(MultiPoint multiPoint, CoordinateSystem originalCoordinateSystem, float defaultNAPHeight = 0)
         {
             var convertedCoordinates = new List<Coordinate>(multiPoint.Coordinates.Count);
 
