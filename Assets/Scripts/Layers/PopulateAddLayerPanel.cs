@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using TMPro;
@@ -25,6 +23,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Button panelButtonPrefab;
         [SerializeField] private GameObject groupPanelPrefab;
         [SerializeField] private ObjectLibraryButton buttonPrefab;
+        
         private void Awake()
         {
             addLayerPanel = GetComponent<AddLayerPanel>();
@@ -39,8 +38,7 @@ namespace Netherlands3D.Twin
         {
             foreach (var group in library.prefabGroups)
             {
-                if (!group.autoPopulateUI)
-                    continue;
+                if (!group.autoPopulateUI) continue;
                 
                 var groupPanel = CreateGroupPanel(group.groupName);
                 foreach (var prefab in group.prefabs)
@@ -48,6 +46,26 @@ namespace Netherlands3D.Twin
                     CreateButton(prefab, groupPanel);
                 }
             }
+
+            foreach (var group in library.prefabGroupsRuntime)
+            {
+                if (!group.autoPopulateUI) continue;
+
+                var groupPanel = GetGroupPanel(group.groupName);
+                foreach (var prefab in group.prefabs)
+                {
+                    CreateButton(prefab, groupPanel);
+                }
+            }
+        }
+
+        private GameObject GetGroupPanel(string groupName)
+        {
+            Transform[] panels = contentParent.transform.GetComponentsInChildren<Transform>(true);
+            return panels
+                .Where(t => t.gameObject.name == groupName)
+                .Select(t => t.gameObject)
+                .FirstOrDefault();
         }
 
         private GameObject CreateGroupPanel(string groupGroupName)
@@ -80,6 +98,7 @@ namespace Netherlands3D.Twin
             var button = Instantiate(buttonPrefab, groupPanel.transform);
             button.Initialize(prefab.gameObject);
             button.GetComponentInChildren<TMP_Text>().text = prefab.name;
+
             return button;
         }
     }

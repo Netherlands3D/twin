@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
 
 			GetBAGID(bagId);
-		}
+		}	
 
 		private void DeselectBuilding()
 		{
