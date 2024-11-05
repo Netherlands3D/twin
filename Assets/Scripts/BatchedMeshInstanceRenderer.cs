@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using netDxf.Tables;
 using Netherlands3D.Coordinates;
 using Unity.Mathematics;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace Netherlands3D.Twin
         private List<List<Matrix4x4>> transformMatrixCache = new List<List<Matrix4x4>>();
 
         private List<MaterialPropertyBlock> materialPropertyBlockCache;
+        private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
 
         private Camera projectionCamera;
         private bool cacheReady = false;
@@ -132,15 +134,21 @@ namespace Netherlands3D.Twin
         {
             if (colors.Length != PositionCollections.Count)
             {
-                Debug.LogWarning($"The amount of colors ({colors.Length}) should match the amount of lines {PositionCollections.Count}");
+                Debug.LogWarning($"The amount of colors ({segmentColorCache.Count}) should match the amount of lines {PositionCollections.Count}");
                 return;
             }
 
             materialPropertyBlockCache = new List<MaterialPropertyBlock>();
-            foreach (Color color in colors)
-            {
-                MaterialPropertyBlock props = new();
-                props.SetColor("_BaseColor", color);
+           
+            for(int i = 0;i < transformMatrixCache.Count;i++)
+            {                
+                MaterialPropertyBlock props = new MaterialPropertyBlock();
+                Vector4[] colorCache = new Vector4[1023];
+                
+                for(int j = 0; j < colorCache.Length;j++)
+                    colorCache[j] = (Vector4)new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);                
+                props.SetVectorArray("_SegmentColors", colorCache);
+                segmentColorCache.Add(colorCache);
                 materialPropertyBlockCache.Add(props);
             }
 
@@ -150,7 +158,7 @@ namespace Netherlands3D.Twin
         /// Set a specific line color by index of the line.
         /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
         /// </summary>
-        public void SetSpecificLineColorByIndex(int index, Color color)
+        public void SetSpecificLineColorByIndex(int batchIndex, int segmentIndex, Color color)
         {
             if (materialPropertyBlockCache == null || PositionCollections.Count != materialPropertyBlockCache.Count)
             {
@@ -162,15 +170,15 @@ namespace Netherlands3D.Twin
                 SetSpecificLineMaterialColors(colors);
             }
 
-            if (index >= materialPropertyBlockCache.Count)
+            if (batchIndex >= materialPropertyBlockCache.Count)
             {
-                Debug.LogWarning($"Index {index} is out of range");
+                Debug.LogWarning($"Index {batchIndex} is out of range");
                 return;
             }
 
-            MaterialPropertyBlock props = materialPropertyBlockCache[index];
-            props.SetColor("_BaseColor", color);
-            materialPropertyBlockCache[index] = props;
+            //MaterialPropertyBlock props = materialPropertyBlockCache[batchIndex];
+            //props.SetColor("_BaseColor", color);
+            //materialPropertyBlockCache[batchIndex] = props;
         }
 
         /// <summary>
@@ -185,7 +193,7 @@ namespace Netherlands3D.Twin
                 return -1;
             }
 
-            SetSpecificLineColorByIndex(closestLineIndex, color);
+            SetSpecificLineColorByIndex(closestLineIndex, 0, color);
             return closestLineIndex;
         }        
 

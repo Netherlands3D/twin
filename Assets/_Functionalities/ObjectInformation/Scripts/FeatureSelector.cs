@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.ObjectInformation
 					if (raycastHits[i].collider == null) continue;
 	                
 					FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-					if (mapping) continue;
+					if (mapping == null) continue;
 
 					featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
 					featureMappings[mapping.VisualisationParent].Add(mapping);

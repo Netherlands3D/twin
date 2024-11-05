@@ -43,12 +43,7 @@ namespace Netherlands3D.Twin.Layers
             }
             return meshes;
         }
-
-        /// <summary>
-        /// the previous colors of all vertices will be stored into the vertexColor buffer parameter
-        /// </summary>
-        /// <param name="meshes"></param>
-        /// <param name="vertexColors"></param>
+        
         public void SetVisualisationColor(List<Mesh> meshes, Color color)
         {            
             foreach(Mesh mesh in meshes) 
