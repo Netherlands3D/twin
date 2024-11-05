@@ -25,78 +25,44 @@ namespace Netherlands3D.Twin
 
     public class AssetBundleLoader : MonoBehaviour
     {
+        private const string GroupName = "ObjectenBibliotheek";
+
         public string bundleName;
         public string prefabName;
-        public Vector3 spawnPosition;
 
         private void Awake()
         {
-            ProjectData.Current.PrefabLibrary.AddPrefabGroupRuntime("ObjectenBibliotheek");
-            OnProjectDataChanged(ProjectData.Current);
+            ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
+            LoadAssetFromAssetBundle(bundleName, prefabName, AddAssetToObjectLibrary);
         }
 
-        private void OnProjectDataChanged(ProjectData projectData)
-        {
-            //we want only the original asset here and not an instantiation
-            LoadAssetFromAssetBundle(bundleName, prefabName, Vector3.zero, asset =>
-            {
-                HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
-                if (layerObject != null)
-                {                
-                    projectData.PrefabLibrary.AddObjectToPrefabGroupRuntime("ObjectenBibliotheek", layerObject);
-                }
-            });
-        }
-
-        public void LoadAssetFromAssetBundle(string bundleName, string fileName, Vector3 position, Action<GameObject> onLoaded)
+        public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
-            StartCoroutine(GetAssetBundle(path, bundle =>
-            {
-                string[] names = bundle.GetAllAssetNames();
-                foreach (string n in names)
-                {
-                    if (Path.GetFileName(n) == fileName.ToLower())
-                    {
-                        GameObject asset = bundle.LoadAsset<GameObject>(n);
-                        if (asset != null)
-                        {
-#if UNITY_EDITOR
-                            FixShadersForEditor(asset);
-#endif
-                            onLoaded(asset);
-                        }
-                        bundle.Unload(false);
-                        return;
-                    }
-                }
-            }));
-        }
 
-        public void CreateAssetFromAssetBundle(string bundleName, string fileName, Vector3 position, Action<GameObject> onLoaded)
-        {
-            string path = Path.Combine(Application.streamingAssetsPath, bundleName);
-            StartCoroutine(GetAssetBundle(path, bundle =>
+            void OnAssetBundleLoaded(AssetBundle bundle)
             {
                 string[] names = bundle.GetAllAssetNames();
-                foreach (string n in names)
+                foreach (string name in names)
                 {
-                    if (Path.GetFileName(n) == fileName.ToLower())
+                    // if the file is not a match, move on
+                    if (Path.GetFileName(name) != fileName.ToLower()) continue;
+                    
+                    GameObject asset = bundle.LoadAsset<GameObject>(name);
+                    if (asset != null)
                     {
-                        GameObject asset = bundle.LoadAsset<GameObject>(n);
-                        if (asset != null)
-                        {
-                            GameObject model = Instantiate(asset);
 #if UNITY_EDITOR
-                            FixShadersForEditor(model);
+                        FixShadersForEditor(asset);
 #endif
-                            onLoaded(model);
-                        }
-                        bundle.Unload(false);
-                        return;
+                        onAssetLoaded(asset);
                     }
+
+                    bundle.Unload(false);
+                    return;
                 }
-            }));
+            }
+
+            StartCoroutine(GetAssetBundle(path, OnAssetBundleLoaded));
         }
 
         private void FixShadersForEditor(GameObject asset)
@@ -105,10 +71,14 @@ namespace Netherlands3D.Twin
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer renderer in renderers)
             {
-                if(renderer.material != null)
+                if (renderer.material != null)
+                {
                     renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                }
                 else
+                {
                     renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
+                }
             }
         }
 
@@ -128,6 +98,15 @@ namespace Netherlands3D.Twin
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                 callBack?.Invoke(bundle);
             }
+        }
+
+        private void AddAssetToObjectLibrary(GameObject asset)
+        {
+            // we want only the original asset here and not an instantiation
+            HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
+            if (!layerObject) return;
+
+            ProjectData.Current.PrefabLibrary.AddObjectToPrefabRuntimeGroup(GroupName, layerObject);
         }
     }
 }

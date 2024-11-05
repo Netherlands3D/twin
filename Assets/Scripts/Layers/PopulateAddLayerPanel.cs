@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin
                 }
             }
 
-            foreach (var group in library.prefabGroupsRuntime)
+            foreach (var group in library.PrefabRuntimeGroups)
             {
                 if (!group.autoPopulateUI) continue;
 
