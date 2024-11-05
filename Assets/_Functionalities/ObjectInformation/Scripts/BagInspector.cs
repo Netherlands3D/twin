@@ -1,22 +1,6 @@
-/*
-*  Copyright (C) X Gemeente
-*                X Amsterdam
-*                X Economic Services Departments
-*
-*  Licensed under the EUPL, Version 1.2 or later (the "License");
-*  You may not use this work except in compliance with the License.
-*  You may obtain a copy of the License at:
-*
-*    https://github.com/Amsterdam/Netherlands3D/blob/main/LICENSE.txt
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" basis,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-*  implied. See the License for the specific language governing
-*  permissions and limitations under the License.
-*/
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
@@ -30,11 +14,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 {
 	public class BagInspector : MonoBehaviour
 	{
-		private const int COLORIZER_PRIORITY = 0;
-
-		[Tooltip("Id replacement string will be replaced")]
-
 		[Header("GeoJSON Data Sources")]
+		[Tooltip("Id replacement string will be replaced")]
 		[SerializeField] private string idReplacementString = "{BagID}";
 		[SerializeField] private string geoJsonBagRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
@@ -70,6 +51,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private bool draggedBeforeRelease = false;
 		private bool waitingForRelease = false;
 
+		private RaycastHit[] raycastHits = new RaycastHit[16];
+
+		private float hitDistance = 100000f;
+		private float tubeHitRadius = 5f;
+		private GameObject testHitPosition;
+		private GameObject testGroundPosition;
+		private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
+
 		private void Awake()
 		{
 			mainCamera = Camera.main;
@@ -83,13 +72,21 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void Update()
 		{
+			if (IsClicked())
+			{
+				FindObjectMapping();
+			}
+		}
+
+		private bool IsClicked()
+		{
 			var click = Pointer.current.press.wasPressedThisFrame;
 
 			if (click)
 			{
 				waitingForRelease = true;
 				draggedBeforeRelease = false;
-				return;
+				return false;
 			}
 
 			if (waitingForRelease && !draggedBeforeRelease)
@@ -98,44 +95,15 @@ namespace Netherlands3D.Twin.Interface.BAG
 				draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0;
 			}
 
-			var released = Pointer.current.press.wasReleasedThisFrame;
-			if (released)
-			{
-				waitingForRelease = false;
+			if (Pointer.current.press.wasReleasedThisFrame == false) return false;
+			
+			waitingForRelease = false;
 
-				if (draggedBeforeRelease || cameraInputSystemProvider.OverLockingObject) return;
+			if (draggedBeforeRelease) return false;
 
-				FindObjectMapping();
-			}
+			return cameraInputSystemProvider.OverLockingObject == false;
 		}
 
-		private RaycastHit[] raycastHits = new RaycastHit[16];
-
-		public static Vector3 NearestPointOnLine(Vector3 lineOrigin, Vector3 lineDir, Vector3 target)
-		{
-			lineDir.Normalize();//this needs to be a unit vector
-			Vector3 v = target - lineOrigin;
-			float d = Vector3.Dot(v, lineDir);
-			return lineOrigin + lineDir * d;
-		}
-
-		public static Vector3 NearestPointOnFiniteLine(Vector3 start, Vector3 end, Vector3 pnt)
-		{
-			var line = (end - start);
-			var len = line.magnitude;
-			line.Normalize();
-
-			var v = pnt - start;
-			var d = Vector3.Dot(v, line);
-			d = Mathf.Clamp(d, 0f, len);
-			return start + line * d;
-		}
-		
-		private float hitDistance = 100000f;
-		private float tubeHitRadius = 5f;
-		private GameObject testHitPosition;
-		private GameObject testGroundPosition;
-        private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>>();
         /// <summary>
         /// Find objectmapping by raycast and get the BAG ID
         /// </summary>
@@ -159,10 +127,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 				}
 			}
 
-			if (hit.collider == null)
-				return;
+			if (hit.collider == null) return;
 
-			if(testHitPosition == null)
+			if (testHitPosition == null)
 			{
                 testHitPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 				testHitPosition.transform.localScale = Vector3.one * 3;
@@ -180,75 +147,60 @@ namespace Netherlands3D.Twin.Interface.BAG
 			//clear the hit list or else it will use previous collider values
 			raycastHits = new RaycastHit[16];
 
-            //if (Physics.CapsuleCastNonAlloc(ray.origin, ray.GetPoint(hitDistance), tubeHitRadius, ray.direction, raycastHits, hitDistance) > 0)
             if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
-			//if(Physics.RaycastNonAlloc(ray, raycastHits, hitDistance) > 0)
             {
-				
                 float closest = float.MaxValue;
                 for (int i = 0; i < raycastHits.Length; i++)
                 {
-                    if (raycastHits[i].collider != null)
-                    {
-                        FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                        if (mapping != null)
-                        {							
-							if(!featureMappings.ContainsKey(mapping.VisualisationParent))
-								featureMappings.Add(mapping.VisualisationParent, new List<FeatureMapping>());
-							featureMappings[mapping.VisualisationParent].Add(mapping);
+	                if (raycastHits[i].collider == null) continue;
+	                
+	                FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
+	                if (mapping) continue;
 
-							//Debug.Log(mapping.FeatureID + " " + mapping.VisualisationLayer.ToString());							
-							//float dist = Vector3.Distance(raycastHits[i].point, groundPosition);
-       //                     if (dist < closest)
-       //                     {
-       //                         closest = dist;        
-       //                         hit = raycastHits[i];
-       //                     }
-                        }
-                    }
+		            featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
+	                featureMappings[mapping.VisualisationParent].Add(mapping);
                 }
             }
+
             if (featureMappings.Count > 0)
             {
                 lastWorldClickedPosition = groundPosition;
                 foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings) 
 				{					
-					foreach(FeatureMapping mapping in pair.Value) 
-						SelectFeatureOnHit(mapping);
-
-					////for now lets always select the first set of featuremappings for a visiualisationlayer 
-					//break;
-				}
-            }
-			else
-			{
-                var camera = Camera.main;
-                Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-                //not ideal but better than caching, would be better to have an quadtree approach here
-                FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>();
-				for (int i = 0; i < mappings.Length; i++)
-				{
-					GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
-					if (polygonLayer != null)
+					foreach(FeatureMapping mapping in pair.Value)
 					{
-						List<Mesh> meshes = mappings[i].FeatureMeshes;
-						for (int j = 0; j < meshes.Count; j++)
-						{
-							PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-                            bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, camera, frustumPlanes, groundPosition);
-							if(isSelected)
-							{
-                                if (!featureMappings.ContainsKey(mappings[i].VisualisationParent))
-                                    featureMappings.Add(mappings[i].VisualisationParent, new List<FeatureMapping>());
-                                featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
-                                SelectFeatureOnHit(mappings[i]);
-								return;
-							}
-						}
+						SelectFeatureOnHit(mapping);
 					}
 				}
+
+				return;
+            }
+
+            var camera = Camera.main;
+			Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
+
+			//not ideal but better than caching, would be better to have an quadtree approach here
+			FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>();
+			for (int i = 0; i < mappings.Length; i++)
+			{
+				GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
+				if (polygonLayer == null) continue;
+					
+				List<Mesh> meshes = mappings[i].FeatureMeshes;
+					
+				for (int j = 0; j < meshes.Count; j++)
+				{
+					PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+					bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, camera, frustumPlanes, groundPosition);
+					if (!isSelected) continue;
+                            
+					featureMappings.TryAdd(mappings[i].VisualisationParent, new List<FeatureMapping>());
+					featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
+					SelectFeatureOnHit(mappings[i]);
+					return;
+				}
 			}
-        }
+		}
 
         public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
         {
@@ -347,11 +299,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 		{
 			if (featureMappings.Count > 0)
 			{
-                foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings)
-                {
-					foreach(FeatureMapping mapping in pair.Value)
-						mapping.DeselectFeature();
-					//break;
+				foreach (var mapping in featureMappings.SelectMany(pair => pair.Value))
+				{
+					mapping.DeselectFeature();
 				}
 			}
 			featureMappings.Clear();
@@ -372,16 +322,17 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void DownloadGeoJSONProperties(List<string> bagIDs)
 		{
-			if (bagIDs.Count > 0)
+			if (bagIDs.Count <= 0) return;
+			
+			var ID = bagIDs[0];
+			if (removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
+
+			if (downloadProcess != null)
 			{
-				var ID = bagIDs[0];
-				if (removeFromID.Length > 0) ID = ID.Replace(removeFromID, "");
-
-				if (downloadProcess != null)
-					StopCoroutine(downloadProcess);
-
-				downloadProcess = StartCoroutine(GetBagIDData(ID));
+				StopCoroutine(downloadProcess);
 			}
+
+			downloadProcess = StartCoroutine(GetBagIDData(ID));
 		}
 
 		private void ClearOldItems()
@@ -412,27 +363,26 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 			yield return webRequest.SendWebRequest();
 
-			if (webRequest.result == UnityWebRequest.Result.Success)
-			{
-				ClearOldItems();
-
-				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
-				while (customJsonHandler.GotoNextFeature())
-				{
-					var properties = customJsonHandler.GetProperties();
-
-					badIdText.text = properties["identificatie"].ToString();
-					buildYearText.text = properties["bouwjaar"].ToString();
-					statusText.text = properties["status"].ToString();
-
-					//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-					Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one * 50.0f);
-					buildingThumbnail.RenderThumbnail(currentObjectBounds);
-				}
-			}
-			else
+			if (webRequest.result != UnityWebRequest.Result.Success)
 			{
 				SpawnNewLine("Geen BAG data gevonden");
+				yield break;
+			}
+
+			ClearOldItems();
+
+			GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+			while (customJsonHandler.GotoNextFeature())
+			{
+				var properties = customJsonHandler.GetProperties();
+
+				badIdText.text = properties["identificatie"].ToString();
+				buildYearText.text = properties["bouwjaar"].ToString();
+				statusText.text = properties["status"].ToString();
+
+				//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+				Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one * 50.0f);
+				buildingThumbnail.RenderThumbnail(currentObjectBounds);
 			}
 		}
 
@@ -440,34 +390,32 @@ namespace Netherlands3D.Twin.Interface.BAG
 		{
 			var requestUrl = geoJsonAddressesRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
-			Debug.Log(requestUrl);
 			yield return webRequest.SendWebRequest();
 
-			if (webRequest.result == UnityWebRequest.Result.Success)
-			{
-				ClearOldItems();
-
-				GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
-				bool gotDistrict = false;
-				while (customJsonHandler.GotoNextFeature())
-				{
-					var properties = customJsonHandler.GetProperties();
-
-					//Use first address result to determine district
-					if (!gotDistrict)
-					{
-						districtText.text = properties["openbare_ruimte"].ToString();
-						gotDistrict = true;
-					}
-
-					//Spawn address
-					var addressText = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
-					SpawnNewLine(addressText);
-				}
-			}
-			else
+			if (webRequest.result != UnityWebRequest.Result.Success)
 			{
 				SpawnNewLine("Geen adressen gevonden");
+				yield break;
+			}
+
+			ClearOldItems();
+
+			GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+			bool gotDistrict = false;
+			while (customJsonHandler.GotoNextFeature())
+			{
+				var properties = customJsonHandler.GetProperties();
+
+				//Use first address result to determine district
+				if (!gotDistrict)
+				{
+					districtText.text = properties["openbare_ruimte"].ToString();
+					gotDistrict = true;
+				}
+	
+				SpawnNewLine(
+					$"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}"
+				);
 			}
 		}
 
