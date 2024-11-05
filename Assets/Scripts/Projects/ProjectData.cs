@@ -41,7 +41,17 @@ namespace Netherlands3D.Twin.Projects
         }
 
         public double[] CameraRotation = new double[3];
-        public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
+        
+        private DateTime currentDateTime = new DateTime(2024, 08, 19, 13, 0, 0); // Default time
+        public DateTime CurrentDateTime
+        {
+            get => currentDateTime;
+            set
+            {
+                currentDateTime = value;
+                OnCurrentDateTimeChanged.Invoke(value);
+            }
+        }
         public bool UseCurrentTime = false;
         [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
@@ -57,6 +67,9 @@ namespace Netherlands3D.Twin.Projects
                 rootLayer.ReconstructParentsRecursive();
             }
         }
+
+
+        [SerializeField] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
