@@ -40,6 +40,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private string geoJsonAddressesRequestURL = "https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e";
 		[SerializeField] private string removeFromID = "NL.IMBAG.Pand.";
 
+		[SerializeField] private GameObject addressTitle;
 		[SerializeField] private Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;
 
@@ -62,6 +63,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		[SerializeField] private GameObject placeholderPanel;
 		[SerializeField] private GameObject contentPanel;
+		[SerializeField] private GameObject extraContentPanel;
 
 		private Camera mainCamera;
 		private CameraInputSystemProvider cameraInputSystemProvider;
@@ -73,6 +75,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			mainCamera = Camera.main;
 			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 
+			addressTitle.gameObject.SetActive(false);
 			addressTemplate.gameObject.SetActive(false);
 			contentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
@@ -308,7 +311,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         private void SelectBuildingOnHit(string bagId)
 		{
-			contentPanel.SetActive(true);
+            addressTitle.gameObject.SetActive(true);
+            contentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
 
 			var objectIdAndColor = new Dictionary<string, Color>
@@ -322,7 +326,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void DeselectBuilding()
 		{
-			contentPanel.SetActive(false);
+            addressTitle.gameObject.SetActive(false);
+            contentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
 
 			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
@@ -331,6 +336,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
+            addressTitle.gameObject.SetActive(false);
             contentPanel.SetActive(true);
             placeholderPanel.SetActive(false);
 			//TODO populate the baginspector ui		
@@ -349,7 +355,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 				}
 			}
 			featureMappings.Clear();
-			//TODO notify the feature renderer to return back normal coloring
+            addressTitle.gameObject.SetActive(false);
             contentPanel.SetActive(false);
             placeholderPanel.SetActive(true);
         }

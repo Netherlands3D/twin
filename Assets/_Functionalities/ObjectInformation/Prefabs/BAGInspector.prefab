@@ -234,6 +234,7 @@ MonoBehaviour:
   geoJsonBagRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e
   geoJsonAddressesRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?service=wfs&request=getFeature&version=2.0.0&outputFormat=geojson&typeName=bag:verblijfsobject&filter=%3CFilter%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3Epandidentificatie%3C/PropertyName%3E%3CLiteral%3E{BagID}%3C/Literal%3E%3C/PropertyIsEqualTo%3E%3C/Filter%3E
   removeFromID: NL.IMBAG.Pand.
+  addressTitle: {fileID: 7100912000130059564}
   addressTemplate: {fileID: 7766899898881126437}
   loadingIndicatorPrefab: {fileID: 8319948408523725000, guid: 86adcad0d70ce534ebb23bd5bf66bff4,
     type: 3}
@@ -245,6 +246,7 @@ MonoBehaviour:
   statusText: {fileID: 3684285758634712291}
   placeholderPanel: {fileID: 8986235331824895525}
   contentPanel: {fileID: 7280905012064880113}
+  extraContentPanel: {fileID: 0}
 --- !u!1 &7280905012064880113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1441,6 +1443,12 @@ PrefabInstance:
 --- !u!224 &4407326839703623378 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 161698077972545604, guid: d4f86846d23100a4a9caa56b2eb00eae,
+    type: 3}
+  m_PrefabInstance: {fileID: 4546260555920217750}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7100912000130059564 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6745281962538245050, guid: d4f86846d23100a4a9caa56b2eb00eae,
     type: 3}
   m_PrefabInstance: {fileID: 4546260555920217750}
   m_PrefabAsset: {fileID: 0}
