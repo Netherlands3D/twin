@@ -69,6 +69,7 @@ namespace Netherlands3D.Twin.Layers
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
+            newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
         }
 
         private Material GetMaterialInstance()

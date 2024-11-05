@@ -7,13 +7,12 @@ namespace Netherlands3D.Twin.FloatingOrigin
     {
         private WorldTransform worldTransform;
 
-        private void Start()
+        private void Awake()
         {
             worldTransform = transform.GetComponent<WorldTransform>();
-            
             UpdateCoordinateBasedOnUnityTransform();
         }
-
+        
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             // Always update the coordinate based on the Unity transform before shifting to make sure the coordinate is up to date.
@@ -50,10 +49,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
             if(!this.worldTransform)
                 return;
 
-            
             this.worldTransform.Coordinate = new Coordinate(transform.position).Convert(this.worldTransform.ReferenceCoordinateSystem);
             this.worldTransform.Rotation = Quaternion.Inverse(this.worldTransform.Coordinate.RotationToLocalGravityUp()) * transform.rotation;
-            
         }
     }
 }
