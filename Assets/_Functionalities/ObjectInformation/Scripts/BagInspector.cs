@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.GeoJSON;
-using Netherlands3D.SelectionTools;
-using Netherlands3D.SubObjects;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.ObjectInformation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +9,8 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Interface.BAG
 {
+	[RequireComponent(typeof(FeatureSelector))]
+	[RequireComponent(typeof(SubObjectSelector))]
 	public class BagInspector : MonoBehaviour
 	{
 		[Header("GeoJSON Data Sources")]
@@ -40,34 +39,25 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text buildYearText;
 		[SerializeField] private TMP_Text statusText;
 
-		public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-
 		[SerializeField] private GameObject placeholderPanel;
 		[SerializeField] private GameObject contentPanel;
-		[SerializeField] private GameObject extraContentPanel;
 
 		private Camera mainCamera;
 		private CameraInputSystemProvider cameraInputSystemProvider;
 		private bool draggedBeforeRelease = false;
 		private bool waitingForRelease = false;
 
-		private RaycastHit[] raycastHits = new RaycastHit[16];
-
-		private float hitDistance = 100000f;
-		private float tubeHitRadius = 5f;
-		private GameObject testHitPosition;
-		private GameObject testGroundPosition;
-		private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
+		private FeatureSelector featureSelector;
+		private SubObjectSelector subObjectSelector;
 
 		private void Awake()
 		{
 			mainCamera = Camera.main;
 			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+			subObjectSelector = GetComponent<SubObjectSelector>();
+			featureSelector = GetComponent<FeatureSelector>();
 
-			addressTitle.gameObject.SetActive(false);
-			addressTemplate.gameObject.SetActive(false);
-			contentPanel.SetActive(false);
-			placeholderPanel.SetActive(true);
+			HideObjectInformation();
 		}
 
 		private void Update()
@@ -109,217 +99,56 @@ namespace Netherlands3D.Twin.Interface.BAG
         /// </summary>
         private void FindObjectMapping()
 		{
-			DeselectBuilding();
-			DeselectFeature();
+			Deselect();
 
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
-			if (Physics.Raycast(ray, out RaycastHit hit, hitDistance)) 
-			{
-				//lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and use a nonalloc to prevent memory allocations
-				var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-				if (objectMapping)
-				{
-					lastWorldClickedPosition = hit.point;
-					SelectBuildingOnHit(objectMapping.getObjectID(hit.triangleIndex));
-					return;
-				}
-			}
+			
+			if (subObjectSelector.FindSubObject(ray, out var hit, SelectBuildingOnHit)) return;
+
+			lastWorldClickedPosition = hit.point;
 
 			if (hit.collider == null) return;
 
-			if (testHitPosition == null)
-			{
-                testHitPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-				testHitPosition.transform.localScale = Vector3.one * 3;
-
-				testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-				testGroundPosition.transform.localScale = Vector3.one * tubeHitRadius;
-				testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-            groundPlane.Raycast(ray, out float distance);
-			Vector3 groundPosition = ray.GetPoint(distance);
-			testGroundPosition.transform.position = groundPosition + Vector3.up * 5f;
-
-			//clear the hit list or else it will use previous collider values
-			raycastHits = new RaycastHit[16];
-
-            if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
-            {
-                float closest = float.MaxValue;
-                for (int i = 0; i < raycastHits.Length; i++)
-                {
-	                if (raycastHits[i].collider == null) continue;
-	                
-	                FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-	                if (mapping) continue;
-
-		            featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
-	                featureMappings[mapping.VisualisationParent].Add(mapping);
-                }
-            }
-
-            if (featureMappings.Count > 0)
-            {
-                lastWorldClickedPosition = groundPosition;
-                foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings) 
-				{					
-					foreach(FeatureMapping mapping in pair.Value)
-					{
-						SelectFeatureOnHit(mapping);
-					}
-				}
-
-				return;
-            }
-
-            var camera = Camera.main;
-			Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-
-			//not ideal but better than caching, would be better to have an quadtree approach here
-			FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>();
-			for (int i = 0; i < mappings.Length; i++)
-			{
-				GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
-				if (polygonLayer == null) continue;
-					
-				List<Mesh> meshes = mappings[i].FeatureMeshes;
-					
-				for (int j = 0; j < meshes.Count; j++)
-				{
-					PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-					bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, camera, frustumPlanes, groundPosition);
-					if (!isSelected) continue;
-                            
-					featureMappings.TryAdd(mappings[i].VisualisationParent, new List<FeatureMapping>());
-					featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
-					SelectFeatureOnHit(mappings[i]);
-					return;
-				}
-			}
+			featureSelector.FindFeature(ray, SelectFeatureOnHit);
 		}
-
-        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
-        {
-		    Bounds localBounds = polygon.bounds;
-			Matrix4x4 localToWorld = transform.localToWorldMatrix;
-			Vector3 worldCenter = localToWorld.MultiplyPoint3x4(localBounds.center);
-            Bounds worldBounds = new Bounds(worldCenter, polygon.bounds.size);
-
-			if (!PolygonSelectionCalculator.IsBoundsInView(worldBounds, frustumPlanes))
-				return false;
-
-            var point2d = new Vector2(worldPoint.x, worldPoint.z);
-            if (!PolygonSelectionCalculator.IsInBounds2D(worldBounds, point2d))
-                return false;
-
-            Matrix4x4 worldToLocal = transform.worldToLocalMatrix;
-            Vector3 localPosition = worldToLocal.MultiplyPoint(worldPoint);
-
-			return IsPointInMesh(polygon, localPosition);
-        }		
-
-        public static bool IsPointInMesh(Mesh mesh, Vector3 point)
-        {
-            Vector3[] vertices = mesh.vertices;
-            int[] triangles = mesh.triangles;
-            Vector3 projectedPoint = new Vector3(point.x, 0, point.z);
-            for (int i = 0; i < triangles.Length; i += 3)
-            {
-                Vector3 v0 = new Vector3(vertices[triangles[i]].x, 0, vertices[triangles[i]].z);
-                Vector3 v1 = new Vector3(vertices[triangles[i + 1]].x, 0, vertices[triangles[i + 1]].z);
-                Vector3 v2 = new Vector3(vertices[triangles[i + 2]].x, 0, vertices[triangles[i + 2]].z);
-                if (ContainsPointProjected2D(new List<Vector3> { v0, v1, v2 }, projectedPoint))
-                {
-                    return true; 
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Check if a 2d polygon contains point p
-        /// </summary>
-        /// <param name="polygon">array of points that define the polygon</param>
-        /// <param name="p">point to test</param>
-        /// <returns>true if point p is inside the polygon, otherwise false</returns>
-        public static bool ContainsPointProjected2D(IList<Vector3> polygon, Vector3 p)
-        {
-            var j = polygon.Count - 1;
-            var inside = false;
-            for (int i = 0; i < polygon.Count; j = i++)
-            {
-                var pi = polygon[i];
-                var pj = polygon[j];
-                if (((pi.z <= p.z && p.z < pj.z) || (pj.z <= p.z && p.z < pi.z)) &&
-                    (p.x < (pj.x - pi.x) * (p.z - pi.z) / (pj.z - pi.z) + pi.x))
-                    inside = !inside;
-            }
-            return inside;
-        }
 
         private void SelectBuildingOnHit(string bagId)
 		{
-            addressTitle.gameObject.SetActive(true);
-            contentPanel.SetActive(true);
-			placeholderPanel.SetActive(false);
+            ShowObjectInformation();
 
-			var objectIdAndColor = new Dictionary<string, Color>
-			{
-				{ bagId, new Color(1, 0, 0, 0) }
-			};
-			ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-1, objectIdAndColor);
-
-			GetBAGID(bagId);
-		}
-
-		private void DeselectBuilding()
-		{
-            addressTitle.gameObject.SetActive(false);
-            contentPanel.SetActive(false);
-			placeholderPanel.SetActive(true);
-
-			GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-			ColorSetLayer = null;
+            subObjectSelector.Select(bagId);
+			LoadBuildingContent(bagId);
 		}
 
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
-            addressTitle.gameObject.SetActive(false);
-            contentPanel.SetActive(true);
-            placeholderPanel.SetActive(false);
-			//TODO populate the baginspector ui		
-			mapping.SelectFeature();
-        }
+			ShowObjectInformation();
 
-		private void DeselectFeature()
+			featureSelector.Select(mapping);
+			LoadFeatureContent(mapping);
+		}
+
+		private void Deselect()
 		{
-			if (featureMappings.Count > 0)
-			{
-				foreach (var mapping in featureMappings.SelectMany(pair => pair.Value))
-				{
-					mapping.DeselectFeature();
-				}
-			}
-			featureMappings.Clear();
-            addressTitle.gameObject.SetActive(false);
-            contentPanel.SetActive(false);
-            placeholderPanel.SetActive(true);
-        }
+            HideObjectInformation();
+
+            subObjectSelector.Deselect();
+			featureSelector.Deselect();
+		}
 
 		private void OnDestroy()
 		{
-			DeselectBuilding();
+			Deselect();
 		}
 
-		public void GetBAGID(string bagID)
+		public void LoadBuildingContent(string bagID)
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
 		}
 
+		#region Supporting methods to load building content
 		private void DownloadGeoJSONProperties(List<string> bagIDs)
 		{
 			if (bagIDs.Count <= 0) return;
@@ -335,15 +164,6 @@ namespace Netherlands3D.Twin.Interface.BAG
 			downloadProcess = StartCoroutine(GetBagIDData(ID));
 		}
 
-		private void ClearOldItems()
-		{
-			foreach (var item in dynamicInterfaceItems)
-			{
-				Destroy(item);
-			}
-			dynamicInterfaceItems.Clear();
-		}
-
 		private IEnumerator GetBagIDData(string bagID)
 		{
 			//Get fast bag data
@@ -352,7 +172,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			loadingIndicator.transform.SetAsLastSibling();
 
 			//Adressess (slower request next)
-			yield return GetAdresses(bagID);
+			yield return GetAddresses(bagID);
 			Destroy(loadingIndicator);
 		}
 
@@ -365,11 +185,11 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 			if (webRequest.result != UnityWebRequest.Result.Success)
 			{
-				SpawnNewLine("Geen BAG data gevonden");
+				SpawnLine("Geen BAG data gevonden");
 				yield break;
 			}
 
-			ClearOldItems();
+			ClearLines();
 
 			GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
 			while (customJsonHandler.GotoNextFeature())
@@ -386,7 +206,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			}
 		}
 
-		private IEnumerator GetAdresses(string bagID)
+		private IEnumerator GetAddresses(string bagID)
 		{
 			var requestUrl = geoJsonAddressesRequestURL.Replace(idReplacementString, bagID);
 			var webRequest = UnityWebRequest.Get(requestUrl);
@@ -394,11 +214,11 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 			if (webRequest.result != UnityWebRequest.Result.Success)
 			{
-				SpawnNewLine("Geen adressen gevonden");
+				SpawnLine("Geen adressen gevonden");
 				yield break;
 			}
 
-			ClearOldItems();
+			ClearLines();
 
 			GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
 			bool gotDistrict = false;
@@ -413,18 +233,53 @@ namespace Netherlands3D.Twin.Interface.BAG
 					gotDistrict = true;
 				}
 	
-				SpawnNewLine(
+				SpawnLine(
 					$"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}"
 				);
 			}
 		}
+		#endregion
 
-		private void SpawnNewLine(string addressText)
+		private void LoadFeatureContent(FeatureMapping mapping)
+		{
+			// TODO populate the baginspector ui
+		}
+
+		#region Supporting methods to load feature content
+		// TODO Add this
+		#endregion
+
+		#region UGUI methods
+		private void ShowObjectInformation()
+		{
+			addressTitle.gameObject.SetActive(true);
+			contentPanel.SetActive(true);
+			placeholderPanel.SetActive(false);
+		}
+
+		private void HideObjectInformation()
+		{
+			addressTitle.gameObject.SetActive(false);
+			contentPanel.SetActive(false);
+			placeholderPanel.SetActive(true);
+		}
+
+		private void SpawnLine(string text)
 		{
 			var spawnedField = Instantiate(addressTemplate, contentRectTransform);
-			spawnedField.Set(addressText);
+			spawnedField.Set(text);
 			spawnedField.gameObject.SetActive(true);
 			dynamicInterfaceItems.Add(spawnedField.gameObject);
 		}
+
+		private void ClearLines()
+		{
+			foreach (var item in dynamicInterfaceItems)
+			{
+				Destroy(item);
+			}
+			dynamicInterfaceItems.Clear();
+		}
+		#endregion
 	}
 }

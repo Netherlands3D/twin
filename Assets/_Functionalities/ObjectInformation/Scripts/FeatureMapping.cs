@@ -1,9 +1,7 @@
+using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin
 {
