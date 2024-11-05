@@ -95,9 +95,18 @@ namespace Netherlands3D.Twin
             var tileCoord = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize / 2, tileChange.Y + tileSize / 2);
             string url = atmTileCoordinates.GetTileUrl(tileCoord, 16);
             var coord = ATMTileCoordinates.CoordinateToTileXY(tileCoord, 16);
-            AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString());
+            
+            var test = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
+            
+            AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString()/*+"\n"+ test.ToString()*/);
             print(tileKey + "\t" + url);
-
+            
+            // var url = atmTileCoordinates.GetTileURL(tileKey, 16);
+            // var coords = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
+            // var coord = new Coordinate(CoordinateSystem.RD, coords.x, coords.y);
+            // AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coords.x + ", " + coords.y);
+            // print(tileKey + "\t" + url);
+            
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
