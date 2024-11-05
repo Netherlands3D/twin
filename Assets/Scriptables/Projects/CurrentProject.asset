@@ -10,23 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b2293ded97497ba4e8743e34c11901, type: 3}
-  m_Name: ProjectData
+  m_Name: CurrentProject
   m_EditorClassIdentifier: 
   Version: 1
   SavedTimestamp: 20240827093846
   UUID: 32ee685f-8719-4fe4-bbd0-9d2f24787392
-  CameraPosition:
-  - 154963.47788619995
-  - 462762.0704803467
-  - 300
   CameraRotation:
   - 60.000003814697266
   - 0
   - 0
-  rootLayer:
-    name: RootLayer
-    activeSelf: 1
-    color: {r: 0.3372549, g: 0.62352943, b: 0.8901961, a: 1}
-    children: []
-    layerProperties: []
+  UseCurrentTime: 0
+  functionalities: []
   PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
+  OnCurrentDateTimeChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c6ae15efb785bce408aa85b94846d3a6, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.DateTimeEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
