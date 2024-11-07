@@ -7,31 +7,31 @@ namespace Netherlands3D.Twin
 {
     [RequireComponent(typeof(Camera))]
     public class OpticalRaycaster : MonoBehaviour
-    { 
+    {
         [SerializeField] private Camera depthCamera;
         float totalDepth = 0;
         private Texture2D samplerTexture;
-        
-        [Header("Events")]
-        [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
+
+        [Header("Events")] [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
 
         void Start()
         {
-            if(depthCamera.targetTexture == null)
+            if (depthCamera.targetTexture == null)
             {
-                Debug.Log("Depth camera has no target texture. Please assign a render texture to the depth camera.",this.gameObject);
+                Debug.Log("Depth camera has no target texture. Please assign a render texture to the depth camera.", this.gameObject);
                 this.enabled = false;
                 return;
             }
 
             //We will only render on demand using camera.Render()
-            depthCamera.enabled = false; 
+            depthCamera.enabled = false;
 
             //Create a red channel texture that we can sample depth from
             samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             Destroy(samplerTexture);
         }
 
@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin
         {
             AlignDepthCameraToScreenPoint(camera, screenPoint);
             RenderDepthCamera();
-            
+
             return GetDepthCameraWorldPoint();
         }
 
@@ -55,6 +55,25 @@ namespace Netherlands3D.Twin
             RenderDepthCamera();
 
             return GetDepthCameraWorldPoint();
+        }
+
+        public Color GetColorFromPosition(Vector3 position, Vector3 direction, float length)
+        {
+            if (length == 0)
+                return new Color(0, 0, 0, 0);
+
+            AlignDepthCameraFromPositionToDirection(position, direction);
+            depthCamera.nearClipPlane = 0;
+            depthCamera.farClipPlane = length;
+            RenderDepthCamera();
+
+            var color = samplerTexture.GetPixel(0, 0);
+            OnDepthSampled.Invoke(ReadWorldPositionFromPixel());
+
+            if (color.r == 0 && color.g == 0 && color.b == 0) //todo: make color.a=0 when rendering instead of this crude check
+                color.a = 0;
+            
+            return color;
         }
 
         public void AlignDepthCameraToScreenPoint(Camera camera, Vector3 screenPoint)
@@ -90,11 +109,11 @@ namespace Netherlands3D.Twin
 
         private Vector3 ReadWorldPositionFromPixel()
         {
-            var worldPosition = samplerTexture.GetPixel(0,0);
-            
+            var worldPosition = samplerTexture.GetPixel(0, 0);
+
             return new Vector3(
-                worldPosition.r, 
-                worldPosition.g, 
+                worldPosition.r,
+                worldPosition.g,
                 worldPosition.b
             );
         }
