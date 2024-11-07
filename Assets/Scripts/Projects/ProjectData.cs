@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin.Projects
         }
 
 
-        [SerializeField] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
+        [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
 
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
