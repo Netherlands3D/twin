@@ -236,6 +236,7 @@ namespace Netherlands3D.Twin
         {
             PositionCollections.Clear();
             materialPropertyBlockCache.Clear();
+            segmentColorCache.Clear();
             transformMatrixCache = new List<List<Matrix4x4>>();
             cacheReady = false;
         }
