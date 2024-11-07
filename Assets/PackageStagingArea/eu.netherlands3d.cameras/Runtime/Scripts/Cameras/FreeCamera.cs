@@ -216,7 +216,7 @@ public class FreeCamera : MonoBehaviour
 
         StorePreviousTransform();
 
-        var eulerRotation = quaternion.Euler(0, value.x * dragRotateSpeed, 0);
+        var eulerRotation = Quaternion.Euler(0, value.x * dragRotateSpeed, 0);
         // intendedRotation *= WorldToLocalRotation(eulerRotation);
         this.transform.Rotate(0, value.x * dragRotateSpeed, 0, Space.World);
         if (!cameraComponent.orthographic)
@@ -238,7 +238,7 @@ public class FreeCamera : MonoBehaviour
 
         StorePreviousTransform();
 
-        var eulerRot = quaternion.Euler(0, value.x * gamepadRotateSpeed * Time.deltaTime, 0);
+        var eulerRot = Quaternion.Euler(0, value.x * gamepadRotateSpeed * Time.deltaTime, 0);
         // intendedRotation *= WorldToLocalRotation(eulerRot);
         this.transform.Rotate(0, value.x * gamepadRotateSpeed * Time.deltaTime, 0, Space.World);
         if (!cameraComponent.orthographic)
@@ -249,7 +249,7 @@ public class FreeCamera : MonoBehaviour
         }
     }
 
-    private quaternion WorldToLocalRotation(quaternion worldSpaceRotation)
+    private Quaternion WorldToLocalRotation(Quaternion worldSpaceRotation)
     {
         return Quaternion.Inverse(transform.rotation) * worldSpaceRotation * transform.rotation;
     }
