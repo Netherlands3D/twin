@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
-        private TransformLayerPropertyData transformPropertyData;
+        protected TransformLayerPropertyData transformPropertyData;
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
@@ -25,8 +25,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected void Awake()
         {
-            var coord = new Coordinate(transform.position);
-            transformPropertyData = new TransformLayerPropertyData(coord, transform.eulerAngles, transform.localScale);
+            transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
@@ -66,19 +65,19 @@ namespace Netherlands3D.Twin.Layers
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        private void UpdatePosition(Coordinate newPosition)
+        protected virtual void UpdatePosition(Coordinate newPosition)
         {
             if (newPosition.ToUnity() != transform.position)
                 transform.position = newPosition.ToUnity();
         }
 
-        private void UpdateRotation(Vector3 newAngles)
+        protected void UpdateRotation(Vector3 newAngles)
         {
             if (newAngles != transform.eulerAngles)
                 transform.eulerAngles = newAngles;
         }
 
-        private void UpdateScale(Vector3 newScale)
+        protected void UpdateScale(Vector3 newScale)
         {
             if (newScale != transform.localScale)
                 transform.localScale = newScale;

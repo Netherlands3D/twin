@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers
 
             var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
-            
+
             ImportObj(path);
         }
 
