@@ -51,8 +51,6 @@ namespace Netherlands3D.Twin.Projects
                 OnCurrentDateTimeChanged.Invoke(value);
             }
         }
-
-       
         public bool UseCurrentTime = false;
         [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
@@ -69,7 +67,7 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        [SerializeField] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
+        [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
         [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
