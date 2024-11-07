@@ -262,18 +262,11 @@ namespace Netherlands3D.Twin.Layers
                 if (child is not ReferencedLayerData referencedLayerData) continue;
                 if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
 
-                Debug.Log("Return found line layer");
-                Debug.Log(lineLayer.LayerData.DefaultSymbolizer);
-                var stroke2Color = lineLayer.LayerData.DefaultSymbolizer.GetStrokeColor();
-                Debug.Log(stroke2Color);
-
                 return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
-
-            Debug.Log("Copy default style from parent onto child");
 
             // Replace default style with the parent's default style
             newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);

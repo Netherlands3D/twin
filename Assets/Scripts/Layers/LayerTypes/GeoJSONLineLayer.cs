@@ -39,8 +39,6 @@ namespace Netherlands3D.Twin.Layers
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            Debug.Log("AddAndVisualizeFeature");
-
             ApplyStyling();
 
             if (feature.Geometry is MultiLineString multiLineString)
@@ -64,8 +62,6 @@ namespace Netherlands3D.Twin.Layers
         
         private Material GetMaterialInstance()
         {
-            Debug.Log("Get Material Instance");
-            Debug.Log(LayerData.Styles["default"].StylingRules["default"].Symbolizer.GetStrokeColor());
             var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
