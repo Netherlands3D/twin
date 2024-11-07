@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin
     public class ATMTileDataLayer : ImageProjectionLayer
     {
         private ATMTileCoordinates atmTileCoordinates;
-
+        private int zoomLevel = 19;
         public int RenderIndex
         {
             get => renderIndex;
@@ -66,7 +66,6 @@ namespace Netherlands3D.Twin
             a.GetComponentInChildren<TMPro.TMP_Text>().text = text;
         }
 
-        public Vector2 gridOffset;
         private void Update()
         {
             foreach (var tile in tiles)
@@ -93,16 +92,17 @@ namespace Netherlands3D.Twin
 
             Tile tile = tiles[tileKey];
             var tileCoord = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize / 2, tileChange.Y + tileSize / 2);
-            string url = atmTileCoordinates.GetTileUrl(tileCoord, 16);
-            var coord = ATMTileCoordinates.CoordinateToTileXY(tileCoord, 16);
+            string url = atmTileCoordinates.GetTileUrl(tileCoord, zoomLevel);
+            var coord = ATMTileCoordinates.CoordinateToTileXY(tileCoord, zoomLevel);
+            var offsetTileXY = ATMTileCoordinates.OffsetTileXY(coord.x, coord.y);
+
+            // var test = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, zoomLevel);
             
-            var test = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
-            
-            AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString()/*+"\n"+ test.ToString()*/);
             print(tileKey + "\t" + url);
+            // AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString()/*+"\n"+ test.ToString()*/);
             
-            // var url = atmTileCoordinates.GetTileURL(tileKey, 16);
-            // var coords = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
+            // var url = atmTileCoordinates.GetTileURL(tileKey, zoomLevel);
+            // var coords = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, zoomLevel);
             // var coord = new Coordinate(CoordinateSystem.RD, coords.x, coords.y);
             // AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coords.x + ", " + coords.y);
             // print(tileKey + "\t" + url);
@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin
                     textureDecalProjector.SetPriority(renderIndex);
                 }
 
-                tile.gameObject.transform.position += new Vector3(gridOffset.x, 0, gridOffset.y);
+                // tile.gameObject.transform.position += new Vector3(tileSize/2, 0, tileSize/2);
             }
 
             callback(tileChange);
