@@ -1127,11 +1127,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5315891981602308677, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
-      propertyPath: dragSpeed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315891981602308677, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
       propertyPath: opticalRaycaster
       value: 
       objectReference: {fileID: 1697023597}

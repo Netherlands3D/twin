@@ -55,7 +55,7 @@ MonoBehaviour:
   multiplySpeedBasedOnHeight: 1
   moveSpeed: 1
   upAndDownSpeed: 30
-  dragSpeed: 1
+  dragSpeed: 1000
   easing: 10
   zoomSpeed: 0.1
   minimumSpeed: 0.01
@@ -88,6 +88,7 @@ MonoBehaviour:
   focusAngle: 45
   focusDistanceMultiplier: 2
   orthographicSwitcher: {fileID: 0}
+  opticalRaycaster: {fileID: 0}
 --- !u!20 &1107191816428015816
 Camera:
   m_ObjectHideFlags: 0
