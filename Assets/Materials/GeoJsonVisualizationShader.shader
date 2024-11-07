@@ -1,6 +1,9 @@
 Shader "Custom/GeoJsonVisualizationShader"
 {
-    Properties {}
+    Properties 
+    {
+        _Color ("Main Color", Color) = (1, 1, 1, 1)
+    }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -25,6 +28,9 @@ Shader "Custom/GeoJsonVisualizationShader"
                 float4 vertex : SV_POSITION;
                 float instanceID : INSTANCEID; 
             };
+
+            //default color
+            fixed4 _Color;
 
             //float4 _SegmentColors[1023]; //lets keep this as fallback for incompatibility
             UNITY_INSTANCING_BUFFER_START(Props)

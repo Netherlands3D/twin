@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin
             return line;
         }
 
-        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, PointRenderer3D renderer)
         {
             var convertedPoints = ConvertToCoordinates(multipoint, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin
             return convertedPoints;
         }
 
-        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
+        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, PointRenderer3D renderer)
         {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, point.Coordinates);
             var singlePointList = new List<Coordinate>() { convertedPoint };

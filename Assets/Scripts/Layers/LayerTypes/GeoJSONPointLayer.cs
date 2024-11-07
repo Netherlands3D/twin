@@ -41,14 +41,31 @@ namespace Netherlands3D.Twin.Layers
             return meshes;
         }
 
+        public void SetVisualisationColor(List<Mesh> meshes, Color color)
+        {
+            foreach (Mesh mesh in meshes)
+            {
+                Vector3[] vertices = mesh.vertices;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    pointRenderer3D.SetLineColorClosestToPoint(vertices[i], color);
+                }
+            }
+        }
+
+        public Color GetRenderColor()
+        {
+            return pointRenderer3D.Material.color;
+        }
+
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private PointRenderer3D pointRenderer3D;
 
-        public BatchedMeshInstanceRenderer PointRenderer3D
+        public PointRenderer3D PointRenderer3D
         {
             get { return pointRenderer3D; }
             set
@@ -145,23 +162,6 @@ namespace Netherlands3D.Twin.Layers
                 GameObject.Destroy(PointRenderer3D.gameObject);
                 
             base.DestroyLayerGameObject();
-        }
-
-        public void SetVisualisationColor(List<Mesh> meshes, Color color)
-        {
-            foreach (Mesh mesh in meshes)
-            {
-                Vector3[] vertices = mesh.vertices;
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    pointRenderer3D.SetLineColorClosestToPoint(vertices[i], color);
-                }
-            }
-        }
-
-        public Color GetRenderColor()
-        {
-            return pointRenderer3D.Material.color;
         }
     }
 }
