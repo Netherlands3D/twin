@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public Transform Transform { get => transform; }
+
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeatureLineVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
@@ -44,16 +46,21 @@ namespace Netherlands3D.Twin.Layers
             return meshes;
         }
         
-        public void SetVisualisationColor(List<Mesh> meshes, Color color)
-        {            
-            foreach(Mesh mesh in meshes) 
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            foreach (Mesh mesh in meshes)
             {
                 Vector3[] vertices = mesh.vertices;
                 for (int i = 0; i < vertices.Length; i++)
                 {
-                    lineRenderer3D.SetLineColorClosestToPoint(vertices[i], color);                    
+                    lineRenderer3D.SetLineColorClosestToPoint(transform.position + vertices[i], color);
                 }
             }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            lineRenderer3D.SetDefaultColors();
         }
 
         public Color GetRenderColor()

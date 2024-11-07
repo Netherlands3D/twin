@@ -145,6 +145,23 @@ namespace Netherlands3D.Twin
             }
         }
 
+        public void SetDefaultColors()
+        {
+            Color defaultColor = Material.GetColor("_Color");
+            for (int batchIndex = 0; batchIndex < PositionCollections.Count; batchIndex++)
+            {
+                Vector4[] colors = segmentColorCache[batchIndex];
+                for(int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
+                {
+                    colors[segmentIndex] = defaultColor;
+                }
+                segmentColorCache[batchIndex] = colors;
+                MaterialPropertyBlock props = materialPropertyBlockCache[batchIndex];
+                props.SetVectorArray("_SegmentColors", colors);
+                materialPropertyBlockCache[batchIndex] = props;
+            }
+        }
+
         /// <summary>
         /// Set a specific line color by index of the line.
         /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.

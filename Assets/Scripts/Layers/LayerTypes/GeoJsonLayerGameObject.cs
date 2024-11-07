@@ -268,26 +268,10 @@ namespace Netherlands3D.Twin.Layers
         }
 
 
-        private Dictionary<Feature, GameObject> featureMeshes = new Dictionary<Feature, GameObject>();
+        private Dictionary<Feature, IGeoJsonVisualisationLayer> featureMeshes = new Dictionary<Feature, IGeoJsonVisualisationLayer>();
 
         private void ProcessObjectMapping(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
-            GameObject parent;
-            if(featureMeshes.ContainsKey(feature)) 
-            {
-                parent = featureMeshes[feature];
-
-                //looks like everything after is a copy!?
-                return;
-            }
-            else
-            {
-                GameObject featureContainer = new GameObject(feature.Id);
-                featureMeshes.Add(feature, featureContainer);
-                parent = featureContainer;
-            }
-
-          
             for(int i = 0; i < meshes.Count; i++)
             {
                 Mesh mesh = meshes[i];
@@ -295,13 +279,16 @@ namespace Netherlands3D.Twin.Layers
                 List<Vector3> vertices = new List<Vector3>();
                 List<int> triangles = new List<int>();
                 float width = 1f;
-                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + parent.transform.childCount.ToString());
+                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
                 subObject.AddComponent<MeshFilter>().mesh = mesh;
                 if (verts.Length >= 2)
                 {
                     //generate collider extruded lines for lines
                     if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
                     {
+                        GeoJSONLineLayer lineLayer = layer as GeoJSONLineLayer;
+                        width = lineLayer.LineRenderer3D.LineDiameter;
+
                         for (int j = 0; j < verts.Length - 1; j++)
                         {
                             Vector3 p1 = verts[j];
@@ -340,14 +327,17 @@ namespace Netherlands3D.Twin.Layers
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         subObject.transform.position = verts[0];
-                        subObject.AddComponent<SphereCollider>().radius = 1f;
+                        GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
+                        subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
+
                     }
                 }
 
 
                 mesh.RecalculateNormals();
+                mesh.RecalculateBounds();
                     
-                subObject.transform.SetParent(parent.transform);
+                subObject.transform.SetParent(layer.Transform);
 
                 FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
                 objectMapping.SetFeature(feature);

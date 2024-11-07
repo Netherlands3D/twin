@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.InputSystem;
 using GeoJSON.Net.Feature;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
+		public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
+
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
+		//private OpticalRaycaster opticalRaycaster;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
         private Camera mainCamera;
         private RaycastHit[] raycastHits = new RaycastHit[16];
@@ -19,9 +24,13 @@ namespace Netherlands3D.Twin.ObjectInformation
         [SerializeField] private float hitDistance = 100000f;
         [SerializeField] private float tubeHitRadius = 5f;
 
+		private ObjectMapping blockingObjectMapping;
+		private Vector3 blockingObjectMappingHitPoint;
+
         private void Awake()
         {
             mainCamera = Camera.main;
+            //opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
         }
 
         public void Deselect()
@@ -36,16 +45,44 @@ namespace Netherlands3D.Twin.ObjectInformation
 	        featureMappings.Clear();
         }
 
+		//in case an objectmappaing was already selected it should be handled in the feature selection too
+		public void SetBlockingObjectMapping(ObjectMapping mapping, Vector3 blockingObjectMappingHitPoint)
+		{
+			blockingObjectMapping = mapping;
+			this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
+		}
+
         public void FindFeature(Ray ray, Action<FeatureMapping> onFound)
 		{
-			Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-			groundPlane.Raycast(ray, out float distance);
-			Vector3 groundPosition = ray.GetPoint(distance);
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            groundPlane.Raycast(ray, out float distance);
+            Vector3 groundPosition = ray.GetPoint(distance);
 
-			ShowFeatureDebuggingIndicator(groundPosition);
+            if (blockingObjectMapping != null)
+			{
+                //clear the hit list or else it will use previous collider values
+                raycastHits = new RaycastHit[raycastHits.Length];
+				Collider potentialCollider = blockingObjectMapping.GetComponent<Collider>();
+				if(Physics.RaycastNonAlloc(new Ray(blockingObjectMappingHitPoint, Vector3.down), raycastHits, hitDistance) > 0)
+				{
+					for (int i = 0; i < raycastHits.Length; i++)
+					{
+                        if (raycastHits[i].collider == null || raycastHits[i].collider == potentialCollider) continue;
 
-			//clear the hit list or else it will use previous collider values
-			raycastHits = new RaycastHit[16];
+                        FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
+						if (mapping != null)
+						{
+							groundPosition = raycastHits[i].point;
+							break;
+						}
+                    }
+				}
+			}
+
+            ShowFeatureDebuggingIndicator(groundPosition);
+
+            //clear the hit list or else it will use previous collider values
+            raycastHits = new RaycastHit[raycastHits.Length];
 
 			if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
 			{

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
+using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.ObjectInformation;
 using TMPro;
 using UnityEngine;
@@ -104,15 +105,21 @@ namespace Netherlands3D.Twin.Interface.BAG
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
-			
-			if (subObjectSelector.FindSubObject(ray, out var hit, SelectBuildingOnHit)) return;
+						
+			if (subObjectSelector.FindSubObject(ray, out var hit, SelectBuildingOnHit)) 
+			{}//return; //somethings a feature can be projected on a building mesh
 
 			lastWorldClickedPosition = hit.point;
 
 			if (hit.collider == null) return;
 
+			//objectmappign should be null if no building was hit
+			featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
 			featureSelector.FindFeature(ray, SelectFeatureOnHit);
-		}
+			if (featureSelector.HasFeatureMapping)
+                subObjectSelector.Deselect();
+
+        }
 
         private void SelectBuildingOnHit(string bagId)
 		{

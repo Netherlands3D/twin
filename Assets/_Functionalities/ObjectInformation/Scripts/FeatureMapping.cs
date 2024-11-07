@@ -41,13 +41,12 @@ namespace Netherlands3D.Twin
         public void SelectFeature()
         {
             Color selectionColor = Color.blue;
-            visualisationLayer.SetVisualisationColor(meshes, selectionColor);
+            visualisationLayer.SetVisualisationColor(transform, meshes, selectionColor);
         }
 
         public void DeselectFeature()
         {
-            Color renderColor = visualisationLayer.GetRenderColor();
-            visualisationLayer.SetVisualisationColor(meshes, renderColor);
+            visualisationLayer.SetVisualisationColorToDefault();
         }
     }
 }

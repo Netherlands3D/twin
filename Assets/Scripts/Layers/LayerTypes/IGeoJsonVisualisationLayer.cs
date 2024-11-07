@@ -8,8 +8,10 @@ namespace Netherlands3D.Twin
 {
     public interface IGeoJsonVisualisationLayer
     {
+        Transform Transform { get; }
         Color GetRenderColor();
         List<Mesh> GetMeshData(Feature feature);
-        void SetVisualisationColor(List<Mesh> meshes, Color color);
+        void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color);
+        void SetVisualisationColorToDefault();
     }
 }

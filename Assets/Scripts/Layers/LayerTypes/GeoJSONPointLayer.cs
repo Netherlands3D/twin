@@ -13,6 +13,8 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public Transform Transform { get => transform; }
+
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeaturePointVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
@@ -41,16 +43,22 @@ namespace Netherlands3D.Twin.Layers
             return meshes;
         }
 
-        public void SetVisualisationColor(List<Mesh> meshes, Color color)
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (Mesh mesh in meshes)
             {
                 Vector3[] vertices = mesh.vertices;
                 for (int i = 0; i < vertices.Length; i++)
                 {
-                    pointRenderer3D.SetLineColorClosestToPoint(vertices[i], color);
+                    Vector3 localOffset = vertices[i] - mesh.bounds.center;
+                    pointRenderer3D.SetLineColorClosestToPoint(transform.position + localOffset, color);
                 }
             }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            PointRenderer3D.SetDefaultColors();
         }
 
         public Color GetRenderColor()

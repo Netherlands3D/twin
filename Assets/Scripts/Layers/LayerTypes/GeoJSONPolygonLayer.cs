@@ -7,8 +7,6 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -16,14 +14,20 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public Transform Transform { get => transform; }
+
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
-            List<Mesh> meshes = new List<Mesh>();
-            List<PolygonVisualisation> visualisations = data.Data;
-            foreach (PolygonVisualisation polygon in visualisations)
+            List<Mesh> meshes = null;
+            if (data != null)
             {
-                meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
+                meshes = new List<Mesh>();
+                List<PolygonVisualisation> visualisations = data.Data;
+                foreach (PolygonVisualisation polygon in visualisations)
+                {
+                    meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
+                }
             }
             return meshes;
         }
@@ -33,7 +37,7 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="vertexColors"></param>
-        public void SetVisualisationColor(List<Mesh> meshes, Color color)
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
             //FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => meshes.Contains(f.Data[0].GetComponent<Mesh>())).FirstOrDefault();
             PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
@@ -61,6 +65,20 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
             return null;
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            Color defaultColor = GetRenderColor();
+            foreach (FeaturePolygonVisualisations fpv in SpawnedVisualisations)
+            {
+                List<PolygonVisualisation> visualisations = fpv.Data;
+                foreach (PolygonVisualisation pv in visualisations)
+                {
+                    if (pv != null)
+                        pv.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
+                }
+            }
         }
 
         public Color GetRenderColor()
