@@ -102,6 +102,7 @@ public class FreeCamera : MonoBehaviour
 
     [SerializeField] private OpticalRaycaster opticalRaycaster;
     private Vector3 intendedMoveVector;
+    private Quaternion intendedRotation;
     private Color opticalRaycastColor;
     
     void Awake()
@@ -215,9 +216,12 @@ public class FreeCamera : MonoBehaviour
 
         StorePreviousTransform();
 
+        var eulerRotation = quaternion.Euler(0, value.x * dragRotateSpeed, 0);
+        // intendedRotation *= WorldToLocalRotation(eulerRotation);
         this.transform.Rotate(0, value.x * dragRotateSpeed, 0, Space.World);
         if (!cameraComponent.orthographic)
         {
+            // intendedRotation *= quaternion.Euler(value.y * dragRotateSpeed, 0, 0);
             this.transform.Rotate(value.y * dragRotateSpeed, 0, 0, Space.Self);
             RevertIfOverAxis();
         }
@@ -234,14 +238,22 @@ public class FreeCamera : MonoBehaviour
 
         StorePreviousTransform();
 
+        var eulerRot = quaternion.Euler(0, value.x * gamepadRotateSpeed * Time.deltaTime, 0);
+        // intendedRotation *= WorldToLocalRotation(eulerRot);
         this.transform.Rotate(0, value.x * gamepadRotateSpeed * Time.deltaTime, 0, Space.World);
         if (!cameraComponent.orthographic)
         {
+            // intendedRotation *= quaternion.Euler(value.y * gamepadRotateSpeed * Time.deltaTime, 0, 0);
             this.transform.Rotate(value.y * gamepadRotateSpeed * Time.deltaTime, 0, 0, Space.Self);
             RevertIfOverAxis();
         }
     }
 
+    private quaternion WorldToLocalRotation(quaternion worldSpaceRotation)
+    {
+        return Quaternion.Inverse(transform.rotation) * worldSpaceRotation * transform.rotation;
+    }
+    
     /// <summary>
     /// Stores previous transform position to reset to after moves that cross the bounds
     /// </summary>
@@ -261,13 +273,33 @@ public class FreeCamera : MonoBehaviour
 
         StorePreviousTransform();
 
-        this.transform.RotateAround(dragStart, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
+        transform.RotateAround(dragStart, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
         if (!cameraComponent.orthographic)
         {
-            this.transform.RotateAround(dragStart, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
-            print("TODO: take raycasting int account" ); //todo
+            transform.RotateAround(dragStart, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
             RevertIfOverAxis();
         }
+    } 
+    
+    public void RotateAround(Vector3 point, Vector3 axis, float angle)
+    {
+        // transform.RotateAround(point, axis, angle);
+        
+        // Vector3 position = transform.position;
+        // Vector3 vector3 = Quaternion.AngleAxis(angle, axis) * (position - point);
+        // Vector3 newPosition = point + vector3;
+        //
+        // intendedMoveVector += newPosition - transform.position;
+        //
+        Vector3 worldPos = transform.position;
+        Quaternion rot = Quaternion.AngleAxis(angle, axis);
+        Vector3 dif = worldPos - point;
+        dif = rot * dif;
+        worldPos = point + dif;
+        var newPosition = worldPos;
+        intendedMoveVector += newPosition - transform.position;
+        intendedRotation *= rot;
+        // transform.Rotate(axis, angle * Mathf.Deg2Rad);
     }
 
     /// <summary>
@@ -326,8 +358,10 @@ public class FreeCamera : MonoBehaviour
     private void LateUpdate()
     {
         opticalRaycastColor = opticalRaycaster.GetColorFromPosition(transform.position, intendedMoveVector.normalized, intendedMoveVector.magnitude);
-        print(intendedMoveVector + "\t" + intendedMoveVector.magnitude + "\t" + opticalRaycastColor);
+        // print(intendedMoveVector + "\t" + intendedMoveVector.magnitude + "\t" + opticalRaycastColor);
         LimitIntendedMoveVectorAndMoveCamera();
+        transform.rotation *= intendedRotation;
+        intendedRotation = Quaternion.identity;
     }
 
     private void LimitIntendedMoveVectorAndMoveCamera()
@@ -343,11 +377,17 @@ public class FreeCamera : MonoBehaviour
             intendedMoveVector = Vector3.zero; //move was applied
             return;
         }
-        
+
+        if (intendedMoveVector.magnitude < cameraComponent.nearClipPlane)
+        {
+            intendedMoveVector = Vector3.zero;
+            return;
+        }
+
         var worldPoint = new Vector3(opticalRaycastColor.r, opticalRaycastColor.g, opticalRaycastColor.b);
         var dir = intendedMoveVector.normalized;
-
-        transform.position = worldPoint + -dir * 0.01f; //if an obstruction was found, use the collision point, minus a little bit to avoid ending up exactly on the mesh
+        
+        transform.position = worldPoint + -dir * cameraComponent.nearClipPlane; //if an obstruction was found, use the collision point, minus a little bit to avoid ending up exactly on the mesh
         intendedMoveVector = Vector3.zero;
     }
 
