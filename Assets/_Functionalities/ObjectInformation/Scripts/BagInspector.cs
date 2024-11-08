@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.ObjectInformation;
@@ -23,7 +24,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		[SerializeField] private GameObject addressTitle;
 		[SerializeField] private Line addressTemplate;
-		[SerializeField] private GameObject loadingIndicatorPrefab;
+		[SerializeField] private GameObject loadingIndicatorPrefab;		
 
 		private Coroutine downloadProcess;
 
@@ -42,8 +43,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		[SerializeField] private GameObject placeholderPanel;
 		[SerializeField] private GameObject contentPanel;
+        [SerializeField] private GameObject extraContentPanel;
 
-		private Camera mainCamera;
+        private Camera mainCamera;
 		private CameraInputSystemProvider cameraInputSystemProvider;
 		private bool draggedBeforeRelease = false;
 		private bool waitingForRelease = false;
@@ -51,7 +53,12 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
 
-		private void Awake()
+		private List<GameObject> mappings = new List<GameObject>();
+		private float minClickDistance = 10;
+		private int currentSelectedMappingIndex = -1;
+
+
+        private void Awake()
 		{
 			mainCamera = Camera.main;
 			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
@@ -100,25 +107,65 @@ namespace Netherlands3D.Twin.Interface.BAG
         /// </summary>
         private void FindObjectMapping()
 		{
-			Deselect();
+			Deselect();		
 
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
-						
-			if (subObjectSelector.FindSubObject(ray, out var hit, SelectBuildingOnHit)) 
-			{}//return; //somethings a feature can be projected on a building mesh
 
-			lastWorldClickedPosition = hit.point;
-
+			//the following method calls need to run in order!
+			string bagId = subObjectSelector.FindSubObject(ray, out var hit);			
 			if (hit.collider == null) return;
 
-			//objectmappign should be null if no building was hit
-			featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-			featureSelector.FindFeature(ray, SelectFeatureOnHit);
-			if (featureSelector.HasFeatureMapping)
-                subObjectSelector.Deselect();
+			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
+            lastWorldClickedPosition = hit.point;           
 
+			if (!clickedSamePosition)
+			{
+                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
+                featureSelector.FindFeature(ray);
+
+                mappings.Clear();
+                //lets order all mappings by priority, first features like points and lines then buildings then polygons
+                if (featureSelector.HasFeatureMapping)
+				{
+					var nonPolygonMappings = featureSelector.FeatureMappings
+						.Where(fm => !fm.VisualisationLayer.IsPolygon)
+						.Select(fm => fm.gameObject);
+					mappings.AddRange(nonPolygonMappings);
+				}
+				if (subObjectSelector.HasObjectMapping)
+				{
+					mappings.Add(subObjectSelector.Object.gameObject);
+				}
+				if (featureSelector.HasFeatureMapping)
+				{
+					var polygonMappings = featureSelector.FeatureMappings
+						.Where(fm => fm.VisualisationLayer.IsPolygon)
+						.Select(fm => fm.gameObject);
+					mappings.AddRange(polygonMappings);
+				}
+				currentSelectedMappingIndex = 0;
+			}
+			else
+			{
+				//clicking at same position so lets toggle through the list
+				currentSelectedMappingIndex++;
+				if (currentSelectedMappingIndex >= mappings.Count)
+					currentSelectedMappingIndex = 0;
+			}
+
+			if (mappings.Count == 0) return;
+
+			GameObject selection = mappings[currentSelectedMappingIndex];
+			if (selection.GetComponent<ObjectMapping>())
+			{				
+				SelectBuildingOnHit(bagId);
+			}
+			else
+			{
+                SelectFeatureOnHit(selection.GetComponent<FeatureMapping>());				
+			}
         }
 
         private void SelectBuildingOnHit(string bagId)
@@ -131,7 +178,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
-			ShowObjectInformation();
+			ShowFeatureInformation();
 
 			featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
@@ -140,6 +187,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private void Deselect()
 		{
             HideObjectInformation();
+			HideFeatureInformation();
 
             subObjectSelector.Deselect();
 			featureSelector.Deselect();
@@ -262,6 +310,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			addressTitle.gameObject.SetActive(true);
 			contentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
+			extraContentPanel.SetActive(false);
 		}
 
 		private void HideObjectInformation()
@@ -269,7 +318,24 @@ namespace Netherlands3D.Twin.Interface.BAG
 			addressTitle.gameObject.SetActive(false);
 			contentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
+			extraContentPanel.SetActive(false);
 		}
+
+		private void ShowFeatureInformation()
+		{
+            addressTitle.gameObject.SetActive(false);
+            contentPanel.SetActive(true);
+            placeholderPanel.SetActive(false);
+            extraContentPanel.SetActive(true);
+        }
+
+		private void HideFeatureInformation()
+		{
+            addressTitle.gameObject.SetActive(false);
+            contentPanel.SetActive(false);
+            placeholderPanel.SetActive(true);
+            extraContentPanel.SetActive(false);
+        }
 
 		private void SpawnLine(string text)
 		{

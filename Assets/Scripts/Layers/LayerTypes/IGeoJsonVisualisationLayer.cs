@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin
 {
     public interface IGeoJsonVisualisationLayer
     {
+        bool IsPolygon { get; }
         Transform Transform { get; }
         Color GetRenderColor();
         List<Mesh> GetMeshData(Feature feature);

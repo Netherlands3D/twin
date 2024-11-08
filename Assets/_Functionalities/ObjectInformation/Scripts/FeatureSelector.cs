@@ -13,10 +13,26 @@ namespace Netherlands3D.Twin.ObjectInformation
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
 		public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
+        public bool HasPolygons
+        {
+            get
+            {
+                return featureMappings
+                    .SelectMany(entry => entry.Value)
+                    .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
+            }
+        }
+
+        public List<FeatureMapping> FeatureMappings
+		{
+			get
+			{
+				return featureMappings.SelectMany(entry => entry.Value).ToList();
+			}
+		}
 
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
-		//private OpticalRaycaster opticalRaycaster;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
         private Camera mainCamera;
         private RaycastHit[] raycastHits = new RaycastHit[16];
@@ -30,7 +46,6 @@ namespace Netherlands3D.Twin.ObjectInformation
         private void Awake()
         {
             mainCamera = Camera.main;
-            //opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
         }
 
         public void Deselect()
@@ -41,8 +56,7 @@ namespace Netherlands3D.Twin.ObjectInformation
 		        {
 			        mapping.DeselectFeature();
 		        }
-	        }
-	        featureMappings.Clear();
+	        }	       
         }
 
 		//in case an objectmappaing was already selected it should be handled in the feature selection too
@@ -52,12 +66,12 @@ namespace Netherlands3D.Twin.ObjectInformation
 			this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
 		}
 
-        public void FindFeature(Ray ray, Action<FeatureMapping> onFound)
+        public void FindFeature(Ray ray)
 		{
             Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
             groundPlane.Raycast(ray, out float distance);
             Vector3 groundPosition = ray.GetPoint(distance);
-
+            featureMappings.Clear();
             if (blockingObjectMapping != null)
 			{
                 //clear the hit list or else it will use previous collider values
@@ -100,15 +114,7 @@ namespace Netherlands3D.Twin.ObjectInformation
 			}
 
 			if (featureMappings.Count > 0)
-			{
-				foreach (KeyValuePair<GeoJsonLayerGameObject, List<FeatureMapping>> pair in featureMappings) 
-				{					
-					foreach(FeatureMapping mapping in pair.Value)
-					{
-						onFound(mapping);
-					}
-				}
-
+			{				
 				return;
 			}
 
@@ -130,9 +136,8 @@ namespace Netherlands3D.Twin.ObjectInformation
 					if (!isSelected) continue;
                             
 					featureMappings.TryAdd(mappings[i].VisualisationParent, new List<FeatureMapping>());
-					featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
-					onFound(mappings[i]);
-					return;
+					featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);					
+					//return; what if there are multiple overlapping polygons
 				}
 			}
 		}

@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public bool IsPolygon => true;
         public Transform Transform { get => transform; }
 
         public List<Mesh> GetMeshData(Feature feature)

@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public bool IsPolygon => false;
         public Transform Transform { get => transform; }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -43,6 +44,7 @@ namespace Netherlands3D.Twin.Layers
             return meshes;
         }
 
+        //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (Mesh mesh in meshes)
