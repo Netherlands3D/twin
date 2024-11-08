@@ -25,6 +25,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private GameObject addressTitle;
 		[SerializeField] private Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;		
+		[SerializeField] private KeyValuePair keyValuePairTemplate;
 
 		private Coroutine downloadProcess;
 
@@ -33,6 +34,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private RectTransform contentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
+		private List<GameObject> keyValueItems = new List<GameObject>();
 		private Vector3 lastWorldClickedPosition;
 
 		[Header("Practical information fields")]
@@ -297,7 +299,12 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void LoadFeatureContent(FeatureMapping mapping)
 		{
-			// TODO populate the baginspector ui
+			ClearKeyVaueItems();
+			Dictionary<string, object> properties = mapping.Feature.Properties as Dictionary<string, object>;
+			foreach (KeyValuePair<string, object> property in properties)
+			{
+				SpawnKeyValue(property.Key, property.Value.ToString());
+			}
 		}
 
 		#region Supporting methods to load feature content
@@ -311,6 +318,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			contentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
 			extraContentPanel.SetActive(false);
+			addressTemplate.gameObject.SetActive(true);
 		}
 
 		private void HideObjectInformation()
@@ -319,6 +327,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 			contentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
 			extraContentPanel.SetActive(false);
+			addressTemplate.gameObject.SetActive(false);
+			ClearLines();
 		}
 
 		private void ShowFeatureInformation()
@@ -327,6 +337,7 @@ namespace Netherlands3D.Twin.Interface.BAG
             contentPanel.SetActive(true);
             placeholderPanel.SetActive(false);
             extraContentPanel.SetActive(true);
+			addressTemplate.gameObject.SetActive(false);
         }
 
 		private void HideFeatureInformation()
@@ -335,6 +346,8 @@ namespace Netherlands3D.Twin.Interface.BAG
             contentPanel.SetActive(false);
             placeholderPanel.SetActive(true);
             extraContentPanel.SetActive(false);
+			addressTemplate.gameObject.SetActive(false);
+			ClearKeyVaueItems();
         }
 
 		private void SpawnLine(string text)
@@ -345,6 +358,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 			dynamicInterfaceItems.Add(spawnedField.gameObject);
 		}
 
+		private void SpawnKeyValue(string key, string value)
+		{
+			var keyValue = Instantiate(keyValuePairTemplate, extraContentPanel.GetComponent<RectTransform>());
+			keyValue.Set(key, value);
+			keyValue.gameObject.SetActive(true);
+			keyValueItems.Add(keyValue.gameObject);
+		}
+
 		private void ClearLines()
 		{
 			foreach (var item in dynamicInterfaceItems)
@@ -352,6 +373,15 @@ namespace Netherlands3D.Twin.Interface.BAG
 				Destroy(item);
 			}
 			dynamicInterfaceItems.Clear();
+		}
+
+		private void ClearKeyVaueItems()
+		{
+			foreach (var item in keyValueItems)
+			{
+				Destroy(item);
+			}
+			keyValueItems.Clear();
 		}
 		#endregion
 	}

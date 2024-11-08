@@ -240,6 +240,8 @@ MonoBehaviour:
   addressTemplate: {fileID: 7766899898881126437}
   loadingIndicatorPrefab: {fileID: 8319948408523725000, guid: 86adcad0d70ce534ebb23bd5bf66bff4,
     type: 3}
+  keyValuePairTemplate: {fileID: 7083339210696183614, guid: f4b8a3735430bf0429d86078c44c0f65,
+    type: 3}
   buildingThumbnail: {fileID: 851798359977636826}
   contentRectTransform: {fileID: 2185119870173728605}
   badIdText: {fileID: 3480281518799679887}

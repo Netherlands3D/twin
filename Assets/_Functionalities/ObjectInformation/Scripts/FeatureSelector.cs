@@ -113,16 +113,16 @@ namespace Netherlands3D.Twin.ObjectInformation
 				}
 			}
 
-			if (featureMappings.Count > 0)
-			{				
-				return;
-			}
+			//if (featureMappings.Count > 0)
+			//{				
+			//	return;
+			//}
 
 			Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
 
-			//not ideal but better than caching, would be better to have an quadtree approach here
-			FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>();
-			for (int i = 0; i < mappings.Length; i++)
+            //not ideal but better than caching, would be better to have an quadtree approach here
+            FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>().Where(fm => fm.VisualisationLayer.IsPolygon).ToArray();
+            for (int i = 0; i < mappings.Length; i++)
 			{
 				GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
 				if (polygonLayer == null) continue;
