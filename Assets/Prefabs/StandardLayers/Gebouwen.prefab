@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: -1780917372914214898}
   - component: {fileID: 2626529733265145809}
   - component: {fileID: -1431062917293908258}
+  - component: {fileID: 6927593752456423393}
+  - component: {fileID: 2244550181562593895}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -159,7 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: -1431062917293908258}
   referenceCoordinateSystem: 2
   onPreShift:
@@ -180,3 +181,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6927593752456423393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c860393bc2a458dba1df2e4057a7ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: a1b88120c148848c0be5dd43aaf063fa, type: 2}
+  alwaysHiddenData: {fileID: 0}
+--- !u!114 &2244550181562593895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446fc5f29d6b6400ab1bcb6ac2b450be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  csv: {fileID: 4900000, guid: 14867a3b0bf2c4dde8ad4579ddeed170, type: 3}
+  hiddenBagIds: {fileID: 11400000, guid: a1b88120c148848c0be5dd43aaf063fa, type: 2}
