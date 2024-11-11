@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
+        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
 
         private Feature feature;
         private List<Mesh> meshes;

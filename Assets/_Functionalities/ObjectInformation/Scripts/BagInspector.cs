@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.ObjectInformation;
 using TMPro;
 using UnityEngine;
@@ -55,8 +56,10 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
 
-		private List<GameObject> mappings = new List<GameObject>();
+		private List<GameObject> orderedMappings = new List<GameObject>();
 		private float minClickDistance = 10;
+		private float minClickTime = 0.5f;
+		private float lastTimeClicked = 0;
 		private int currentSelectedMappingIndex = -1;
 
 
@@ -120,46 +123,53 @@ namespace Netherlands3D.Twin.Interface.BAG
 			if (hit.collider == null) return;
 
 			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
-            lastWorldClickedPosition = hit.point;           
+            lastWorldClickedPosition = hit.point; 
+			
+			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
+			lastTimeClicked = Time.time;
 
-			if (!clickedSamePosition)
+			if (!clickedSamePosition || refreshSelection)
 			{
                 featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
                 featureSelector.FindFeature(ray);
 
-                mappings.Clear();
-                //lets order all mappings by priority, first features like points and lines then buildings then polygons
+				orderedMappings.Clear();
+                Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
+                //lets order all mappings by layerorder (rootindex) from layerdata
                 if (featureSelector.HasFeatureMapping)
 				{
-					var nonPolygonMappings = featureSelector.FeatureMappings
-						.Where(fm => !fm.VisualisationLayer.IsPolygon)
-						.Select(fm => fm.gameObject);
-					mappings.AddRange(nonPolygonMappings);
-				}
+					foreach (FeatureMapping feature in featureSelector.FeatureMappings)
+					{
+						if(feature.VisualisationParent.LayerData.ActiveInHierarchy)
+							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+                    }
+                }
 				if (subObjectSelector.HasObjectMapping)
 				{
-					mappings.Add(subObjectSelector.Object.gameObject);
+					LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
+					if (subObjectParent != null)
+					{
+						if(subObjectParent.LayerData.ActiveInHierarchy)
+							mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+					}
 				}
-				if (featureSelector.HasFeatureMapping)
-				{
-					var polygonMappings = featureSelector.FeatureMappings
-						.Where(fm => fm.VisualisationLayer.IsPolygon)
-						.Select(fm => fm.gameObject);
-					mappings.AddRange(polygonMappings);
-				}
-				currentSelectedMappingIndex = 0;
+
+                orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
+                currentSelectedMappingIndex = 0;
 			}
 			else
 			{
 				//clicking at same position so lets toggle through the list
 				currentSelectedMappingIndex++;
-				if (currentSelectedMappingIndex >= mappings.Count)
+				if (currentSelectedMappingIndex >= orderedMappings.Count)
 					currentSelectedMappingIndex = 0;
 			}
 
-			if (mappings.Count == 0) return;
+			if (orderedMappings.Count == 0) return;
 
-			GameObject selection = mappings[currentSelectedMappingIndex];
+			Debug.Log(orderedMappings[currentSelectedMappingIndex]);
+
+			GameObject selection = orderedMappings[currentSelectedMappingIndex];
 			if (selection.GetComponent<ObjectMapping>())
 			{				
 				SelectBuildingOnHit(bagId);
