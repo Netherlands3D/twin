@@ -48,6 +48,11 @@ namespace Netherlands3D.Twin.ObjectInformation
             mainCamera = Camera.main;
         }
 
+        public void Select(FeatureMapping mapping)
+        {           
+            mapping.SelectFeature();
+        }
+
         public void Deselect()
         {
 	        if (featureMappings.Count > 0)
@@ -56,7 +61,7 @@ namespace Netherlands3D.Twin.ObjectInformation
 		        {
 			        mapping.DeselectFeature();
 		        }
-	        }	       
+	        }           
         }
 
 		//in case an objectmappaing was already selected it should be handled in the feature selection too
@@ -98,7 +103,7 @@ namespace Netherlands3D.Twin.ObjectInformation
             //clear the hit list or else it will use previous collider values
             raycastHits = new RaycastHit[raycastHits.Length];
 
-			if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.up, raycastHits, hitDistance) > 0)
+			if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.down, raycastHits, hitDistance) > 0)
 			{
 				float closest = float.MaxValue;
 				for (int i = 0; i < raycastHits.Length; i++)
@@ -214,11 +219,6 @@ namespace Netherlands3D.Twin.ObjectInformation
 					inside = !inside;
 			}
 			return inside;
-		}
-
-		public void Select(FeatureMapping mapping)
-		{
-			mapping.SelectFeature();
-		}
+		}		
     }
 }

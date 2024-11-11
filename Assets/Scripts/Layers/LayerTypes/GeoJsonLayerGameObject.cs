@@ -275,7 +275,9 @@ namespace Netherlands3D.Twin.Layers
             for(int i = 0; i < meshes.Count; i++)
             {
                 Mesh mesh = meshes[i];
+                
                 Vector3[] verts = mesh.vertices;
+                
                 List<Vector3> vertices = new List<Vector3>();
                 List<int> triangles = new List<int>();
                 float width = 1f;
@@ -294,7 +296,7 @@ namespace Netherlands3D.Twin.Layers
                             Vector3 p1 = verts[j];
                             Vector3 p2 = verts[j + 1];
                             Vector3 edgeDir = (p2 - p1).normalized;
-                            Vector3 perpDir = new Vector3(-edgeDir.z, 0, edgeDir.x);
+                            Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
                             Vector3 v1 = p1 + perpDir * width;
                             Vector3 v2 = p1 - perpDir * width;
                             Vector3 v3 = p2 + perpDir * width;
@@ -303,6 +305,7 @@ namespace Netherlands3D.Twin.Layers
                             vertices.Add(v2); //bl
                             vertices.Add(v3); //tr
                             vertices.Add(v4); //br
+
                             int baseIndex = j * 4;
                             //v1 v2 v3
                             triangles.Add(baseIndex + 0);
@@ -316,6 +319,7 @@ namespace Netherlands3D.Twin.Layers
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
                         subObject.AddComponent<MeshCollider>();
+                        subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
                     }
                     else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
                     {
@@ -333,11 +337,12 @@ namespace Netherlands3D.Twin.Layers
                     }
                 }
 
-
-                mesh.RecalculateNormals();
+                               
                 mesh.RecalculateBounds();
-                    
+                meshes[i] = mesh;
+
                 subObject.transform.SetParent(layer.Transform);
+                subObject.layer = LayerMask.NameToLayer("Projected");
 
                 FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
                 objectMapping.SetFeature(feature);

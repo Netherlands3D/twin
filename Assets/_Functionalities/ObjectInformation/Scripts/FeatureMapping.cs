@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
+using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ namespace Netherlands3D.Twin
         private List<Mesh> meshes;
         private IGeoJsonVisualisationLayer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
-    
+
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
             geoJsonLayerParent = parentLayer;
@@ -31,7 +33,7 @@ namespace Netherlands3D.Twin
 
         public void SetMeshes(List<Mesh> meshes)
         {
-            this.meshes = meshes;            
+            this.meshes = meshes;       
         }
 
         public void SetVisualisationLayer(IGeoJsonVisualisationLayer visualisationLayer)
@@ -43,11 +45,30 @@ namespace Netherlands3D.Twin
         {
             Color selectionColor = Color.blue;
             visualisationLayer.SetVisualisationColor(transform, meshes, selectionColor);
+            foreach (Mesh mesh in meshes)
+            {
+                Color[] colors = new Color[mesh.vertexCount];
+                for (int i = 0; i < mesh.vertexCount; i++)
+                    colors[i] = THUMBNAIL_COLOR;
+                mesh.SetColors(colors);
+            }
         }
 
         public void DeselectFeature()
         {
             visualisationLayer.SetVisualisationColorToDefault();
+            foreach (Mesh mesh in meshes)
+            {
+                Color[] colors = new Color[mesh.vertexCount];
+                for (int i = 0; i < mesh.vertexCount; i++)
+                    colors[i] = NO_OVERRIDE_COLOR;
+                mesh.SetColors(colors);
+            }
         }
+
+        private static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
+        private static readonly Color THUMBNAIL_COLOR = new Color(1, 0, 0, 0);  
+
+
     }
 }

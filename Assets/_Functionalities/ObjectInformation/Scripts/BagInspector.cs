@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.GeoJSON;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.ObjectInformation;
@@ -26,13 +28,15 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private GameObject addressTitle;
 		[SerializeField] private Line addressTemplate;
 		[SerializeField] private GameObject loadingIndicatorPrefab;		
-		[SerializeField] private KeyValuePair keyValuePairTemplate;
+		[SerializeField] private GameObject keyValuePairTemplate;
 
 		private Coroutine downloadProcess;
 
 		[SerializeField] private RenderedThumbnail buildingThumbnail;
+        [SerializeField] private RenderedThumbnail featureThumbnail;
 
-		[SerializeField] private RectTransform contentRectTransform;
+        [SerializeField] private RectTransform buildingContentRectTransform;
+		[SerializeField] private RectTransform featureContentRectTransform;
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
 		private List<GameObject> keyValueItems = new List<GameObject>();
@@ -69,6 +73,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 			subObjectSelector = GetComponent<SubObjectSelector>();
 			featureSelector = GetComponent<FeatureSelector>();
+
+			keyValuePairTemplate.gameObject.SetActive(false);
 
 			HideObjectInformation();
 		}
@@ -189,12 +195,44 @@ namespace Netherlands3D.Twin.Interface.BAG
 		}
 
 		private void SelectFeatureOnHit(FeatureMapping mapping)
-		{
-			ShowFeatureInformation();
+		{          
+            ShowFeatureInformation();
 
 			featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
-		}
+
+            if (mapping.VisualisationLayer is GeoJSONPolygonLayer)
+            {
+                GeoJSONPolygonLayer polygonLayer = mapping.VisualisationLayer as GeoJSONPolygonLayer;
+                List<Mesh> meshes = mapping.FeatureMeshes;
+                for (int j = 0; j < meshes.Count; j++)
+                {
+                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                    Bounds currentObjectBounds = new Bounds(pv.transform.position, meshes[j].bounds.size);
+                    featureThumbnail.RenderThumbnail(currentObjectBounds);
+                    break;
+                }
+            }
+            if (mapping.VisualisationLayer is GeoJSONLineLayer)
+            {
+				Vector3 centroid = Vector3.zero;
+				Vector3[] vertices = mapping.FeatureMeshes[0].vertices;
+				foreach(Vector3 v in vertices)
+					centroid += v;
+				centroid /= vertices.Length;
+				Vector3 size = mapping.FeatureMeshes[0].bounds.size;
+				size.y = Mathf.Min(50, size.y);
+				size.x = Mathf.Clamp(size.x, 50, 100);
+				size.z = Mathf.Clamp(size.z, 50, 100);
+                Bounds currentObjectBounds = new Bounds(mapping.gameObject.transform.position + centroid, size);
+                featureThumbnail.RenderThumbnail(currentObjectBounds);
+            }
+            else if (mapping.VisualisationLayer is GeoJSONPointLayer)
+            {
+                Bounds currentObjectBounds = new Bounds(mapping.gameObject.transform.position + mapping.FeatureMeshes[0].vertices[0] - mapping.FeatureMeshes[0].bounds.center, Vector3.one * 50);
+                featureThumbnail.RenderThumbnail(currentObjectBounds);
+            }
+        }
 
 		private void Deselect()
 		{
@@ -234,7 +272,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private IEnumerator GetBagIDData(string bagID)
 		{
 			//Get fast bag data
-			var loadingIndicator = Instantiate(loadingIndicatorPrefab, contentRectTransform);
+			var loadingIndicator = Instantiate(loadingIndicatorPrefab, buildingContentRectTransform);
 			yield return GetBAGData(bagID);
 			loadingIndicator.transform.SetAsLastSibling();
 
@@ -354,7 +392,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void SpawnLine(string text)
 		{
-			var spawnedField = Instantiate(addressTemplate, contentRectTransform);
+			var spawnedField = Instantiate(addressTemplate, buildingContentRectTransform);
 			spawnedField.Set(text);
 			spawnedField.gameObject.SetActive(true);
 			dynamicInterfaceItems.Add(spawnedField.gameObject);
@@ -362,13 +400,22 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void SpawnKeyValue(string key, string value)
 		{
-			var keyValue = Instantiate(keyValuePairTemplate, featureContentPanel.GetComponent<RectTransform>());
-			keyValue.Set(key, value);
+			GameObject keyValue = Instantiate(keyValuePairTemplate, featureContentRectTransform);
+			KeyValuePair keyValuePair = keyValue.GetComponent<KeyValuePair>();
+			AdjustHeightOnTextChange adjustHeightOnTextChange = keyValue.GetComponent<AdjustHeightOnTextChange>();
+			keyValuePair.Set(key, value);
 			keyValue.gameObject.SetActive(true);
+			StartCoroutine(WaitForNextFrame(() => { adjustHeightOnTextChange.UpdateHeight(); }));			
 			keyValueItems.Add(keyValue.gameObject);
 		}
 
-		private void ClearLines()
+        private IEnumerator WaitForNextFrame(Action onNextFrame)
+        {
+            yield return new WaitForEndOfFrame();
+            onNextFrame.Invoke();
+        }
+
+        private void ClearLines()
 		{
 			foreach (var item in dynamicInterfaceItems)
 			{
