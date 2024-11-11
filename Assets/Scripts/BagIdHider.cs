@@ -13,8 +13,7 @@ namespace Netherlands3D.Twin
 
         private void Start()
         {
-            SetBuildingIdsToHide(data.bagIds);
-            SetBuildingColorsHidden(true);
+            data.bagIds.Clear();
         }
 
         private void OnEnable()
@@ -29,6 +28,7 @@ namespace Netherlands3D.Twin
 
         public void UpdateHiddenBuildings(bool hidden)
         {
+            ColorSetLayer?.ColorSet.Clear();
             SetBuildingIdsToHide(data.bagIds);
             SetBuildingColorsHidden(hidden);
         }
@@ -38,12 +38,13 @@ namespace Netherlands3D.Twin
             buildingColors.Clear();
             foreach (string id in ids)
                 buildingColors.Add(id, Color.clear);
+            ColorSetLayer = new ColorSetLayer(-2, buildingColors);
         }
 
         public void SetBuildingColorsHidden(bool enabled)
         {
             if (enabled)
-                ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-2, buildingColors);
+                ColorSetLayer = GeometryColorizer.AddAndMergeCustomColorSet(-2, buildingColors);
             else
                 GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
         }
