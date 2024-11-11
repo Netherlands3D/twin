@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private TextAsset csv;
         [SerializeField] private HiddenBagIds hiddenBagIds;
-        private Dictionary<string, DateTime> availableBagIdStartTimes;
+        private Dictionary<string, DateTime> availableBagIdStartTimes = new();
         private BagIdHider bagIdHider;
 
         private void Awake()
@@ -46,20 +46,8 @@ namespace Netherlands3D.Twin
         {
             var lines = CsvParser.ReadLines(csv.text, 1);
 
-            int i = 0;
             foreach (var line in lines)
             {
-                if (i < 10)
-                {
-                    var a = "";
-                    foreach (var l in line)
-                    {
-                        a += l;
-                    }
-                    print(line.Length +"\t: " + a);
-                    i++;
-                }
-                
                 var startTime = new DateTime(int.Parse(line[1]), 1, 1);
                 availableBagIdStartTimes.Add(line[0], startTime);
             }
