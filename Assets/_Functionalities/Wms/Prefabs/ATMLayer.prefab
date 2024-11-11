@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isenabled: 1
-  tileSize: 47
+  tileSize: 373
   layerPriority: 0
   Datasets: []
   pauseLoading: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
       m_Calls: []
   debugTextPrefab: {fileID: 954509655106132641, guid: 7fa6230d2bcee4833a6b325c873ad77b,
     type: 3}
+  gridOffset: {x: -159, y: 127}
 --- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,5 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b3fb76cb96645348155bd1ea16ae5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: https://t2.data.amsterdam.nl/publieke-werken-1943-rd/{z}/{x}/{y}.png
+  z: 1000000013000000
+  url: https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png
   xy: {x: 0, y: 0}
