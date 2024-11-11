@@ -44,8 +44,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private TMP_Text statusText;
 
 		[SerializeField] private GameObject placeholderPanel;
-		[SerializeField] private GameObject contentPanel;
-        [SerializeField] private GameObject extraContentPanel;
+		[SerializeField] private GameObject buildingContentPanel;
+        [SerializeField] private GameObject featureContentPanel;
 
         private Camera mainCamera;
 		private CameraInputSystemProvider cameraInputSystemProvider;
@@ -314,39 +314,31 @@ namespace Netherlands3D.Twin.Interface.BAG
 		#region UGUI methods
 		private void ShowObjectInformation()
 		{
-			addressTitle.gameObject.SetActive(true);
-			contentPanel.SetActive(true);
+			buildingContentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
-			extraContentPanel.SetActive(false);
-			addressTemplate.gameObject.SetActive(true);
+			featureContentPanel.SetActive(false);		
 		}
 
 		private void HideObjectInformation()
 		{
-			addressTitle.gameObject.SetActive(false);
-			contentPanel.SetActive(false);
+			buildingContentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
-			extraContentPanel.SetActive(false);
-			addressTemplate.gameObject.SetActive(false);
+			featureContentPanel.SetActive(false);
 			ClearLines();
 		}
 
 		private void ShowFeatureInformation()
 		{
-            addressTitle.gameObject.SetActive(false);
-            contentPanel.SetActive(true);
+            buildingContentPanel.SetActive(false);
             placeholderPanel.SetActive(false);
-            extraContentPanel.SetActive(true);
-			addressTemplate.gameObject.SetActive(false);
+            featureContentPanel.SetActive(true);			
         }
 
 		private void HideFeatureInformation()
 		{
-            addressTitle.gameObject.SetActive(false);
-            contentPanel.SetActive(false);
+            buildingContentPanel.SetActive(false);
             placeholderPanel.SetActive(true);
-            extraContentPanel.SetActive(false);
-			addressTemplate.gameObject.SetActive(false);
+            featureContentPanel.SetActive(false);
 			ClearKeyVaueItems();
         }
 
@@ -360,7 +352,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void SpawnKeyValue(string key, string value)
 		{
-			var keyValue = Instantiate(keyValuePairTemplate, extraContentPanel.GetComponent<RectTransform>());
+			var keyValue = Instantiate(keyValuePairTemplate, featureContentPanel.GetComponent<RectTransform>());
 			keyValue.Set(key, value);
 			keyValue.gameObject.SetActive(true);
 			keyValueItems.Add(keyValue.gameObject);
