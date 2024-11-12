@@ -1810,7 +1810,7 @@ PrefabInstance:
     - target: {fileID: 4340828260705003768, guid: ff2dfab9038be504ba2a27035433d1f8,
         type: 3}
       propertyPath: m_text
-      value: "\u200B"
+      value: "1625\u200B"
       objectReference: {fileID: 0}
     - target: {fileID: 4340828260705003768, guid: ff2dfab9038be504ba2a27035433d1f8,
         type: 3}
@@ -1861,6 +1861,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ATM_Timeslider
+      objectReference: {fileID: 0}
+    - target: {fileID: 4582650397192924716, guid: ff2dfab9038be504ba2a27035433d1f8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4702311810458066433, guid: ff2dfab9038be504ba2a27035433d1f8,
         type: 3}
@@ -1971,7 +1976,7 @@ PrefabInstance:
     - target: {fileID: 4885331759994187772, guid: ff2dfab9038be504ba2a27035433d1f8,
         type: 3}
       propertyPath: m_text
-      value: "\u200B"
+      value: "2024\u200B"
       objectReference: {fileID: 0}
     - target: {fileID: 4885331759994187772, guid: ff2dfab9038be504ba2a27035433d1f8,
         type: 3}
@@ -3810,7 +3815,7 @@ PrefabInstance:
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 36.41
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 70272756425911697, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -9088,12 +9093,12 @@ PrefabInstance:
     - target: {fileID: 7411100529678208555, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 90.53
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7411100529678208555, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30.41
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7421002197754756774, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -10079,12 +10084,12 @@ PrefabInstance:
     - target: {fileID: 8682700239227410447, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_Name
-      value: InterfaceUtilities <MOET AAN
+      value: InterfaceUtilities
       objectReference: {fileID: 0}
     - target: {fileID: 8682700239227410447, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8775540143604058498, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -10358,7 +10363,7 @@ PrefabInstance:
       addedObject: {fileID: 645481521}
     - targetCorrespondingSourceObject: {fileID: 2773908478669454240, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
-      insertIndex: -1
+      insertIndex: 2
       addedObject: {fileID: 1810673488}
     - targetCorrespondingSourceObject: {fileID: 8632740765308209879, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
