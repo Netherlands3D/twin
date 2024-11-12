@@ -51,6 +51,8 @@ namespace Netherlands3D.Twin.Layers
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
+            //TODO multi lines still cause a buffer error in batchrendering, figure out if its the mesh or the batcher
+            //probably the closest to point is too close to another line while looping through the transformmatrixcache
             foreach (Mesh mesh in meshes)
             {
                 Vector3[] vertices = mesh.vertices;

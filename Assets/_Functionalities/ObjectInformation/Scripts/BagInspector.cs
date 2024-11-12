@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GG.Extensions;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
@@ -193,14 +194,53 @@ namespace Netherlands3D.Twin.Interface.BAG
             subObjectSelector.Select(bagId);
 			LoadBuildingContent(bagId);
 		}
-
+		
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{          
             ShowFeatureInformation();
-
-			featureSelector.Select(mapping);
+			ExtrudePointsForSelection(mapping);
+            featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
+			RenderThumbnailForFeature(mapping);            
+        }
 
+		//we need to make the points visible, so temporary extrude the feature point mesh to a disc 
+		//TODO reduce the dics back to a vertex after deselecting
+		private void ExtrudePointsForSelection(FeatureMapping mapping)
+		{
+            if (mapping.VisualisationLayer is GeoJSONPointLayer)
+            {
+                float radius = ((GeoJSONPointLayer)mapping.VisualisationLayer).PointRenderer3D.MeshScale;
+                List<Mesh> meshes = mapping.FeatureMeshes;
+                int segments = 12;
+                for (int i = 0; i < meshes.Count; i++)
+                {
+                    Vector3 centerVertex = Vector3.zero;
+                    Vector3[] vertices = new Vector3[segments + 1];
+                    int[] triangles = new int[segments * 3];                    
+                    float angleIncrement = 360.0f / segments;
+                    for (int j = 0; j < segments; j++)
+                    {
+                        float angle = Mathf.Deg2Rad * (j * angleIncrement);
+                        float x = Mathf.Cos(angle) * radius;
+                        float z = Mathf.Sin(angle) * radius;
+                        vertices[j + 1] = new Vector3(centerVertex.x + x, centerVertex.y, centerVertex.z + z);
+                        triangles[j * 3] = 0;
+                        triangles[j * 3 + 1] = (j + 2 > segments) ? 1 : j + 2;
+                        triangles[j * 3 + 2] = j + 1;
+                    }
+                    meshes[i].vertices = vertices;
+                    meshes[i].triangles = triangles;
+                }
+                mapping.SetMeshes(meshes);
+				//todo make this more efficient through the featuremapper
+                mapping.gameObject.GetComponent<MeshFilter>().mesh = meshes[0];
+                mapping.gameObject.GetOrAddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)mapping.VisualisationLayer).PointRenderer3D.Material;
+            }
+        }
+
+		private void RenderThumbnailForFeature(FeatureMapping mapping)
+		{
             if (mapping.VisualisationLayer is GeoJSONPolygonLayer)
             {
                 GeoJSONPolygonLayer polygonLayer = mapping.VisualisationLayer as GeoJSONPolygonLayer;
@@ -215,15 +255,15 @@ namespace Netherlands3D.Twin.Interface.BAG
             }
             if (mapping.VisualisationLayer is GeoJSONLineLayer)
             {
-				Vector3 centroid = Vector3.zero;
-				Vector3[] vertices = mapping.FeatureMeshes[0].vertices;
-				foreach(Vector3 v in vertices)
-					centroid += v;
-				centroid /= vertices.Length;
-				Vector3 size = mapping.FeatureMeshes[0].bounds.size;
-				size.y = Mathf.Min(50, size.y);
-				size.x = Mathf.Clamp(size.x, 50, 100);
-				size.z = Mathf.Clamp(size.z, 50, 100);
+                Vector3 centroid = Vector3.zero;
+                Vector3[] vertices = mapping.FeatureMeshes[0].vertices;
+                foreach (Vector3 v in vertices)
+                    centroid += v;
+                centroid /= vertices.Length;
+                Vector3 size = mapping.FeatureMeshes[0].bounds.size;
+                size.y = Mathf.Min(50, size.y);
+                size.x = Mathf.Clamp(size.x, 50, 100);
+                size.z = Mathf.Clamp(size.z, 50, 100);
                 Bounds currentObjectBounds = new Bounds(mapping.gameObject.transform.position + centroid, size);
                 featureThumbnail.RenderThumbnail(currentObjectBounds);
             }

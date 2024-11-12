@@ -274,10 +274,8 @@ namespace Netherlands3D.Twin.Layers
         {
             for(int i = 0; i < meshes.Count; i++)
             {
-                Mesh mesh = meshes[i];
-                
-                Vector3[] verts = mesh.vertices;
-                
+                Mesh mesh = meshes[i];                
+                Vector3[] verts = mesh.vertices;                
                 List<Vector3> vertices = new List<Vector3>();
                 List<int> triangles = new List<int>();
                 float width = 1f;
@@ -311,7 +309,7 @@ namespace Netherlands3D.Twin.Layers
                             triangles.Add(baseIndex + 0);
                             triangles.Add(baseIndex + 1);
                             triangles.Add(baseIndex + 2);
-                            //v2, v4, v3
+                            //v2 v4 v3
                             triangles.Add(baseIndex + 2);
                             triangles.Add(baseIndex + 1);
                             triangles.Add(baseIndex + 3);
