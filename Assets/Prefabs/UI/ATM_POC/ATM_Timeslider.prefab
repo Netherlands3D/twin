@@ -337,9 +337,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yearPrefab: {fileID: 0}
-  timelineCanvas: {fileID: 0}
-  minYear: 1625
-  maxYear: 2024
+  content: {fileID: 0}
+  yearInputField: {fileID: 0}
+  centerYearText: {fileID: 0}
+  speedSlider: {fileID: 0}
+  startYearInput: {fileID: 0}
+  endYearInput: {fileID: 0}
+  currentYear: 0
+  eventYears: 59060000a406000008070000560700006c0700008a0700009d070000cf070000c50700009d070000d0070000e8070000
 --- !u!1 &5182201814865059879
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +533,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -538,7 +543,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -593,7 +598,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 568
+      value: -398.9
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -842,7 +847,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -852,7 +857,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
@@ -907,7 +912,7 @@ PrefabInstance:
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -568
+      value: 398.7
       objectReference: {fileID: 0}
     - target: {fileID: 5868752843910826168, guid: 2ae4535c62cdb144b9610806f19cdcf8,
         type: 3}
