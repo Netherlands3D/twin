@@ -164,3 +164,43 @@ following section detailing each environment variable and its influence on the a
 ### NL3D_TRAFFIC
 
 *true/false, is the Traffic Simulation feature enabled*
+
+## Testing the docker build
+
+When you make changes to the docker setup, the easiest way to test this is to locally
+build and run your container.
+
+This can be done, after performing a successful WebGL build of the application in the 
+Build folder, by executing the following command:
+
+```bash
+docker build -f .docker/Dockerfile -t nl3d:test .
+```
+
+In the example above you may want to replace `nl3d:test` with any image name that you
+like, this will stay on your computer.
+
+After successful build, you can try it out using the following command:
+
+```bash
+docker run --rm -ti --name nl3d -p 8011:80 nl3d:test
+```
+
+## Using a customized Project file as default
+
+The project uses a file called `StreamingAssets/ProjectTemplate.nl3d` as a default project file,
+if you want to configure your own; use a bind mount to mount your own file on top of it:
+
+```bash
+docker run --rm -ti --name nl3d -p 8011:80 --mount type=bind,source="C:\Users\mike\Projecten\zuidoost.nl3d",target=/usr/share/nginx/html/StreamingAssets/ProjectTemplate.nl3d nl3d:test 
+```
+
+Unfortunately some cloud providers, such as Azure, are unable to mount individual files, but instead
+they can only mount folders. To circumvent this issue, a special folder is designated ("Projects"); if that contains a 
+file called `ProjectTemplate.nl3d`, the startup script will copy that on top of the default ProjectTemplate.
+
+As an example, this will work as well:
+
+```bash
+docker run --rm -ti --name nl3d -p 8011:80 --mount type=bind,source="C:\Users\mike\Projecten\zuidoost.nl3d",target=/usr/share/nginx/html/StreamingAssets/Projects/ProjectTemplate.nl3d nl3d:test 
+```
