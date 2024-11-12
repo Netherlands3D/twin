@@ -1,9 +1,9 @@
-using Netherlands3D.CartesianTiles;
-using Netherlands3D.Rendering;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Rendering;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
@@ -12,7 +12,8 @@ namespace Netherlands3D.Twin
 {
     public class ATMTileDataLayer : ImageProjectionLayer
     {
-        private ATMTileCoordinates atmTileCoordinates;
+        [SerializeField] private int zoomLevel = 16;
+        private XyzTiles xyzTiles;
 
         public int RenderIndex
         {
@@ -28,60 +29,61 @@ namespace Netherlands3D.Twin
 
         private int renderIndex = -1;
 
-        private string wmsUrl = "";
+        /// <summary>
+        /// Cached zoom level, because we need to compute the actual tilesize from the quad tree; we cache the previous
+        /// value and only if it changed will we recompute the tileSize.
+        /// </summary>
+        private int previousZoomLevel;
 
-        public string WmsUrl
-        {
-            get => wmsUrl;
-            set
-            {
-                wmsUrl = value;
-                if (!wmsUrl.Contains("{0}"))
-                    Debug.LogError("WMS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
-            }
-        }
+        private double referenceTileWidth;
+        private double referenceTileHeight;
 
         private void Awake()
         {
-            atmTileCoordinates = GetComponent<ATMTileCoordinates>();
+            xyzTiles = GetComponent<XyzTiles>();
 
             //Make sure Datasets at least has one item
-            if (Datasets.Count == 0)
+            if (Datasets.Count != 0) return;
+
+            Datasets.Add(new DataSet
             {
-                var baseDataset = new DataSet()
-                {
-                    maximumDistance = 3000,
-                    maximumDistanceSquared = 1000 * 1000
-                };
-                Datasets.Add(baseDataset);
-            }
+                maximumDistance = 3000,
+                maximumDistanceSquared = 3000 * 3000
+            });
         }
 
-        public GameObject debugTextPrefab;
 
-        private void AddDebugText(GameObject tile, string text)
-        {
-            var a = Instantiate(debugTextPrefab, tile.gameObject.transform, false);
-            a.GetComponentInChildren<TMPro.TMP_Text>().transform.Translate(0, 0, 970);
-            a.GetComponentInChildren<TMPro.TMP_Text>().text = text;
-        }
-
-        public Vector2 gridOffset;
         private void Update()
         {
+            if (zoomLevel != previousZoomLevel)
+            {
+                this.previousZoomLevel = zoomLevel;
+
+                UpdateReferenceSizes();
+            }
+
+            // Every frame, update all tiles as the list might have changed.
             foreach (var tile in tiles)
             {
-                var projector = tile.Value.gameObject.GetComponent<DecalProjector>();
-                var tileObject = tile.Value.gameObject;
-                if (!projector)
-                    return;
+                DecalProjector projector = tile.Value.gameObject.GetComponent<DecalProjector>();
+                if (!projector) return;
 
-                projector.size = new Vector3(tileSize * tileObject.transform.localScale.x, tileSize * tileObject.transform.localScale.y, projector.size.z);
+                var localScale = projector.transform.localScale;
+
+                // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
+                // projection dimensions
+                projector.size = new Vector3(
+                    (float)(referenceTileWidth * localScale.x),
+                    (float)(referenceTileWidth * localScale.y),
+                    projector.size.z
+                );
             }
         }
 
-
-        protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
+        protected override IEnumerator DownloadDataAndGenerateTexture(
+            TileChange tileChange,
+            Action<TileChange> callback = null
+        )
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
@@ -92,28 +94,22 @@ namespace Netherlands3D.Twin
             }
 
             Tile tile = tiles[tileKey];
-            var tileCoord = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize / 2, tileChange.Y + tileSize / 2);
-            string url = atmTileCoordinates.GetTileUrl(tileCoord, 16);
-            var coord = ATMTileCoordinates.CoordinateToTileXY(tileCoord, 16);
+
+            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
+            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
             
-            var test = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
-            
-            AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coord.ToString()/*+"\n"+ test.ToString()*/);
-            print(tileKey + "\t" + url);
-            
-            // var url = atmTileCoordinates.GetTileURL(tileKey, 16);
-            // var coords = ATMTileCoordinates.RDToTileXY(tileKey.x, tileKey.y, 16);
-            // var coord = new Coordinate(CoordinateSystem.RD, coords.x, coords.y);
-            // AddDebugText(tile.gameObject, tileKey.ToString() + "\n" + coords.x + ", " + coords.y);
-            // print(tileKey + "\t" + url);
-            
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
+            // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
+            // for the projector to align both grids; this must be done per tile to prevent rounding issues and
+            // have the cleanest match
+            var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+
+            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
             tile.runningWebRequest = null;
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"Could not download {url}");
+                Debug.LogWarning($"Could not download {xyzTile.URL}");
                 RemoveGameObjectFromTile(tileKey);
             }
             else
@@ -127,7 +123,7 @@ namespace Netherlands3D.Twin
 
                 if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                 {
-                    projector.SetSize(tileSize, tileSize, tileSize);
+                    projector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
                     projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);
                     //force the depth to be at least larger than its height to prevent z-fighting
@@ -135,15 +131,48 @@ namespace Netherlands3D.Twin
                     TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
                     if (ProjectorHeight >= decalProjector.size.z)
                         textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+                    decalProjector.transform.position -= offset;
 
                     //set the render index, to make sure the render order is maintained
                     textureDecalProjector.SetPriority(renderIndex);
                 }
-
-                tile.gameObject.transform.position += new Vector3(gridOffset.x, 0, gridOffset.y);
             }
 
             callback(tileChange);
+        }
+
+        private void UpdateReferenceSizes()
+        {
+            // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
+            // that after casting
+            var referenceTileIndex = new Vector2Int(33659, 21539);
+            var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
+            referenceTileWidth = tileWidth;
+            referenceTileHeight = tileHeight;
+
+            tileSize = (int)tileWidth;
+        }
+
+        private (double tileWidth, double tileHeight) CalculateTileDimensionsInRdMeters(Vector2Int tileIndex)
+        {
+            var (minBound, maxBound) = xyzTiles.FromTileXYToBoundingBox(tileIndex, zoomLevel);
+            var minBoundRd = minBound.Convert(CoordinateSystem.RD);
+            var maxBoundRd = maxBound.Convert(CoordinateSystem.RD);
+            var tileWidth = maxBoundRd.Points[0] - minBoundRd.Points[0];
+            var tileHeight = maxBoundRd.Points[1] - minBoundRd.Points[1];
+
+            return (tileWidth, tileHeight);
+        }
+
+        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCoordRd)
+        {
+            var minBound = xyzTile.MinBound.Convert(CoordinateSystem.RD);
+
+            return new Vector3(
+                (float)(tileCoordRd.Points[0] - minBound.Points[0]),
+                0,
+                (float)(tileCoordRd.Points[1] - minBound.Points[1])
+            );
         }
 
         private void UpdateDrawOrderForChildren()
@@ -157,16 +186,5 @@ namespace Netherlands3D.Twin
                 projector.SetPriority(renderIndex);
             }
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            foreach (var tile in tiles)
-            {
-                Gizmos.DrawWireCube(CoordinateConverter.RDtoUnity(new Vector3(tile.Key.x + (tileSize / 2), tile.Key.y + (tileSize / 2), 0)), new Vector3(tileSize, 100, tileSize));
-            }
-        }
-#endif
     }
 }
