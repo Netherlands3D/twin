@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin
         private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
 
         private Camera projectionCamera;
-        private int layerMask = -1;
+        private LayerMask layerMask = -1;
         private bool cacheReady = false;
 
         public Mesh LineMesh
@@ -134,7 +134,7 @@ namespace Netherlands3D.Twin
         /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
         /// </summary>
-        public (int, int) GetClosestPointIndex(Vector3 point)
+        public (int batchindex, int lineIndex) GetClosestPointIndex(Vector3 point)
         {
             int closestBatchIndex = -1;
             int closestLineIndex = -1;
@@ -213,14 +213,14 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetLineColorClosestToPoint(Vector3 point, Color color)
         {
-            (int, int) indexPosition = GetClosestPointIndex(point);
+            var indexPosition = GetClosestPointIndex(point);
             if (indexPosition.Item1 == -1 || indexPosition.Item2 == -1)
             {
                 Debug.LogWarning("No line found");
                 return;
             }
 
-            SetSpecificLineColorByIndex(indexPosition.Item1, indexPosition.Item2, color);
+            SetSpecificLineColorByIndex(indexPosition.batchindex, indexPosition.lineIndex, color);
         }
 
         /// <summary>

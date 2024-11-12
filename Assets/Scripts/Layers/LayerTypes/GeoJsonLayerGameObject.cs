@@ -272,9 +272,7 @@ namespace Netherlands3D.Twin.Layers
             for(int i = 0; i < meshes.Count; i++)
             {
                 Mesh mesh = meshes[i];                
-                Vector3[] verts = mesh.vertices;                
-                List<Vector3> vertices = new List<Vector3>();
-                List<int> triangles = new List<int>();
+                Vector3[] verts = mesh.vertices;
                 float width = 1f;
                 GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
                 subObject.AddComponent<MeshFilter>().mesh = mesh;
@@ -285,31 +283,43 @@ namespace Netherlands3D.Twin.Layers
                     {
                         GeoJSONLineLayer lineLayer = layer as GeoJSONLineLayer;
                         width = lineLayer.LineRenderer3D.LineDiameter;
+                        float halfWidth = width * 0.5f;
 
-                        for (int j = 0; j < verts.Length - 1; j++)
+                        int segmentCount = verts.Length - 1;
+                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
+                        int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
+
+                        Vector3[] vertices = new Vector3[vertexCount];
+                        int[] triangles = new int[triangleCount];
+
+                        for (int j = 0; j < segmentCount; j++)
                         {
                             Vector3 p1 = verts[j];
                             Vector3 p2 = verts[j + 1];
                             Vector3 edgeDir = (p2 - p1).normalized;
                             Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
-                            Vector3 v1 = p1 + perpDir * width;
-                            Vector3 v2 = p1 - perpDir * width;
-                            Vector3 v3 = p2 + perpDir * width;
-                            Vector3 v4 = p2 - perpDir * width;
-                            vertices.Add(v1); //tl
-                            vertices.Add(v2); //bl
-                            vertices.Add(v3); //tr
-                            vertices.Add(v4); //br
+
+                            Vector3 v1 = p1 + perpDir * halfWidth;
+                            Vector3 v2 = p1 - perpDir * halfWidth;
+                            Vector3 v3 = p2 + perpDir * halfWidth;
+                            Vector3 v4 = p2 - perpDir * halfWidth;
 
                             int baseIndex = j * 4;
-                            //v1 v2 v3
-                            triangles.Add(baseIndex + 0);
-                            triangles.Add(baseIndex + 1);
-                            triangles.Add(baseIndex + 2);
-                            //v2 v4 v3
-                            triangles.Add(baseIndex + 2);
-                            triangles.Add(baseIndex + 1);
-                            triangles.Add(baseIndex + 3);
+                            vertices[baseIndex + 0] = v1; // Top left
+                            vertices[baseIndex + 1] = v2; // Bottom left
+                            vertices[baseIndex + 2] = v3; // Top right
+                            vertices[baseIndex + 3] = v4; // Bottom right
+
+                            int triBaseIndex = j * 6;
+                            // Triangle 1
+                            triangles[triBaseIndex + 0] = baseIndex + 0;
+                            triangles[triBaseIndex + 1] = baseIndex + 1;
+                            triangles[triBaseIndex + 2] = baseIndex + 2;
+
+                            // Triangle 2
+                            triangles[triBaseIndex + 3] = baseIndex + 2;
+                            triangles[triBaseIndex + 4] = baseIndex + 1;
+                            triangles[triBaseIndex + 5] = baseIndex + 3;
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
