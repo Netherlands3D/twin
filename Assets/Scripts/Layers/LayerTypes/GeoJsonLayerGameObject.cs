@@ -127,7 +127,7 @@ namespace Netherlands3D.Twin.Layers
                     yield break;
                 
                 VisualizeFeature(feature);
-                ProcessFeatureVisualisationForFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 if (i % MaxFeatureVisualsPerFrame == 0)
                     yield return null;
@@ -237,7 +237,7 @@ namespace Netherlands3D.Twin.Layers
                 var feature = serializer.Deserialize<Feature>(jsonReader);
                 features.Add(feature);
                 VisualizeFeature(feature);
-                ProcessFeatureVisualisationForFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
@@ -248,29 +248,26 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private void ProcessFeatureVisualisationForFeature(Feature feature)
+        private void ProcessFeatureMapping(Feature feature)
         {
             var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
             if (polygonData != null)
             {
-                ProcessObjectMapping(polygonFeaturesLayer, feature, polygonData);
+                CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
             }
             var lineData = lineFeaturesLayer?.GetMeshData(feature);
             if (lineData != null)
             {
-                ProcessObjectMapping(lineFeaturesLayer, feature, lineData);
+                CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
             }
             var pointData = pointFeaturesLayer?.GetMeshData(feature);
             if (pointData != null)
             {
-                ProcessObjectMapping(pointFeaturesLayer, feature, pointData);
+                CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
             }          
         }
 
-
-        private Dictionary<Feature, IGeoJsonVisualisationLayer> featureMeshes = new Dictionary<Feature, IGeoJsonVisualisationLayer>();
-
-        private void ProcessObjectMapping(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
+        private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
             for(int i = 0; i < meshes.Count; i++)
             {
