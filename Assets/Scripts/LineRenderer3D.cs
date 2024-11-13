@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin
         private Mesh jointMesh;
 
         [SerializeField] private Material lineMaterial;
+        [SerializeField] private Material jointMaterial;
         [SerializeField] private Material lineSelectionMaterial;
 
         [Header("Settings")] [SerializeField] private bool drawJoints = true;
@@ -36,8 +37,10 @@ namespace Netherlands3D.Twin
 
         private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
 
-        private List<MaterialPropertyBlock> materialPropertyBlockCache = new List<MaterialPropertyBlock>();
+        private List<MaterialPropertyBlock> segmentPropertyBlockCache = new List<MaterialPropertyBlock>();
+        private List<MaterialPropertyBlock> jointPropertyBlockCache = new List<MaterialPropertyBlock>();
         private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
+        private List<Vector4[]> jointColorCache = new List<Vector4[]>();
 
         private MaterialPropertyBlock selectedMaterialPropertyBlock;
         private List<Matrix4x4> selectedLineTransforms = new List<Matrix4x4>();
@@ -124,7 +127,7 @@ namespace Netherlands3D.Twin
             for (var i = 0; i < segmentTransformMatrixCache.Count; i++)
             {
                 var lineTransforms = segmentTransformMatrixCache[i];
-                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, materialPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, projectionCamera);
+                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, segmentPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, projectionCamera);
             }
 
             if (DrawJoints)
@@ -132,13 +135,13 @@ namespace Netherlands3D.Twin
                 for (var i = 0; i < jointsTransformMatrixCache.Count; i++)
                 {
                     var lineJointTransforms = jointsTransformMatrixCache[i];
-                    Graphics.DrawMeshInstanced(JointMesh, 0, LineMaterial, lineJointTransforms, materialPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, projectionCamera);
+                    Graphics.DrawMeshInstanced(JointMesh, 0, jointMaterial, lineJointTransforms, jointPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, projectionCamera);
                 }
             }
             if (selectedLineIndex >= 0)
-            {               
+            {
                 Graphics.DrawMeshInstanced(LineMesh, 0, lineSelectionMaterial, selectedLineTransforms, selectedMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
-                if(DrawJoints)
+                if (DrawJoints)
                     Graphics.DrawMeshInstanced(JointMesh, 0, lineSelectionMaterial, selectedJointTransforms, selectedMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
             }
         }
@@ -219,7 +222,7 @@ namespace Netherlands3D.Twin
 
         private void UpdateBuffers()
         {
-            while (Lines.Count > materialPropertyBlockCache.Count)
+            while (Lines.Count > segmentPropertyBlockCache.Count)
             {
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 Vector4[] colorCache = new Vector4[1023];
@@ -231,7 +234,21 @@ namespace Netherlands3D.Twin
                         colorCache[j] = defaultColor;
                 }
                 props.SetVectorArray("_SegmentColors", colorCache);
-                materialPropertyBlockCache.Add(props);
+                segmentPropertyBlockCache.Add(props);
+            }
+            while (Lines.Count > jointPropertyBlockCache.Count)
+            {
+                MaterialPropertyBlock props = new MaterialPropertyBlock();
+                Vector4[] colorCache = new Vector4[1023];
+                Color defaultColor = LineMaterial.GetColor("_Color");
+                for (int i = 0; i < Lines.Count; i++)
+                {
+                    jointColorCache.Add(colorCache);
+                    for (int j = 0; j < colorCache.Length; j++)
+                        colorCache[j] = defaultColor;
+                }
+                props.SetVectorArray("_SegmentColors", colorCache);
+                jointPropertyBlockCache.Add(props);
             }
         }
 
@@ -242,58 +259,67 @@ namespace Netherlands3D.Twin
             for (int batchIndex = 0; batchIndex < Lines.Count; batchIndex++)
             {
                 Vector4[] colors = segmentColorCache[batchIndex];
+                Vector4[] colors2 = jointColorCache[batchIndex];
                 for (int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
                 {
                     colors[segmentIndex] = defaultColor;
                 }
+                for (int segmentIndex = 0; segmentIndex < colors2.Length; segmentIndex++)
+                {                    
+                    colors2[segmentIndex] = defaultColor;
+                }
                 segmentColorCache[batchIndex] = colors;
-                MaterialPropertyBlock props = materialPropertyBlockCache[batchIndex];
+                jointColorCache[batchIndex] = colors2;
+                MaterialPropertyBlock props = segmentPropertyBlockCache[batchIndex];
                 props.SetVectorArray("_SegmentColors", colors);
-                materialPropertyBlockCache[batchIndex] = props;
+                segmentPropertyBlockCache[batchIndex] = props;
+                MaterialPropertyBlock props2 = jointPropertyBlockCache[batchIndex];
+                props2.SetVectorArray("_SegmentColors", colors2);
+                jointPropertyBlockCache[batchIndex] = props2;
             }
         }
 
-        /// <summary>
-        /// Set a specific line color by index of the line.
-        /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
-        /// </summary>
-        public void SetSpecificLineColorByIndex(int batchIndex, int segmentIndex, Color color)
-        {
-            if (batchIndex >= materialPropertyBlockCache.Count)
-            {
-                Debug.LogWarning($"Index {batchIndex} is out of range");
-                return;
-            }
-            UpdateBuffers();
-            segmentColorCache[batchIndex][segmentIndex] = color;
-            materialPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[batchIndex]);
-        }
+        ///// <summary>
+        ///// Set a specific line color by index of the line.
+        ///// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
+        ///// </summary>
+        //public void SetSpecificLineColorByIndex(int batchIndex, int segmentIndex, Color color)
+        //{
+        //    if (batchIndex >= segmentPropertyBlockCache.Count)
+        //    {
+        //        Debug.LogWarning($"Index {batchIndex} is out of range");
+        //        return;
+        //    }
+        //    UpdateBuffers();
+        //    segmentColorCache[batchIndex][segmentIndex] = color;
+        //    segmentPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[batchIndex]);
+        //}
 
-        public void SetSpecificLineHeightByIndex(int batchIndex, int segmentIndex, float height)
-        {
-            Vector3 position = segmentTransformMatrixCache[batchIndex][segmentIndex].GetColumn(3); // Get the current position as a Vector3
-            position.y = height;
-            segmentTransformMatrixCache[batchIndex][segmentIndex].SetColumn(3, new Vector4(position.x, position.y, position.z, 1.0f));
-        }
+        //public void SetSpecificLineHeightByIndex(int batchIndex, int segmentIndex, float height)
+        //{
+        //    Vector3 position = segmentTransformMatrixCache[batchIndex][segmentIndex].GetColumn(3); // Get the current position as a Vector3
+        //    position.y = height;
+        //    segmentTransformMatrixCache[batchIndex][segmentIndex].SetColumn(3, new Vector4(position.x, position.y, position.z, 1.0f));
+        //}
 
-        /// <summary>
-        /// Set specific line color for the line closest to a given point.
-        /// </summary>
-        public void SetLineColorClosestToPoint(Vector3 point, Color color)
-        {
-            var indexPosition = GetClosestLineIndex(point);
-            if (indexPosition.batchindex == -1 || indexPosition.lineIndex == -1)
-            {
-                Debug.LogWarning("No line found");
-                return;
-            }
-            SetSpecificLineColorByIndex(indexPosition.batchindex, indexPosition.lineIndex, color);
-        }
+        ///// <summary>
+        ///// Set specific line color for the line closest to a given point.
+        ///// </summary>
+        //public void SetLineColorClosestToPoint(Vector3 point, Color color)
+        //{
+        //    var indexPosition = GetClosestLineIndex(point);
+        //    if (indexPosition.batchindex == -1 || indexPosition.lineIndex == -1)
+        //    {
+        //        Debug.LogWarning("No line found");
+        //        return;
+        //    }
+        //    SetSpecificLineColorByIndex(indexPosition.batchindex, indexPosition.lineIndex, color);
+        //}
 
         private int selectedLineIndex = -1;
         public void SetLineColorFromPoint(Vector3 point, Color color)
         {
-            SetDefaultColors();
+           
             float closest = float.MaxValue;
             int lineStartIndex = -1;
             for (int i = 0; i < Lines.Count; i++)
@@ -312,39 +338,47 @@ namespace Netherlands3D.Twin
             List<Coordinate> tempLine = Lines[lineStartIndex];
             RemoveLine(Lines[lineStartIndex]);
             lineStartIndex = AppendLine(tempLine);
-
+            SetDefaultColors();
             if (lineStartIndex < 0) return;
 
-            //if(selectedMaterialPropertyBlock == null)
-            //    selectedMaterialPropertyBlock = new MaterialPropertyBlock();
+            if (selectedMaterialPropertyBlock == null)
+                selectedMaterialPropertyBlock = new MaterialPropertyBlock();
 
-            //selectedLineIndex = lineStartIndex;
-            //var positions = GetSegmentMatrixIndices(selectedLineIndex);
-            //int count = Lines[selectedLineIndex].Count;
-            //selectedLineTransforms.Clear();
-            //selectedJointTransforms.Clear();
-            //selectedLineColorCache.Clear();
+            selectedLineIndex = lineStartIndex;
+            var segPositions = GetSegmentMatrixIndices(selectedLineIndex);
+            var jntPositions = GetJointMatrixIndices(selectedLineIndex);
+            int count = Lines[selectedLineIndex].Count;
+            selectedLineTransforms.Clear();
+            selectedJointTransforms.Clear();
+            selectedLineColorCache.Clear();
 
-            //for (int i = 0; i < count; i++)
-            //{
-            //    //Vector3 vertex = Lines[selectedLineIndex][i].ToUnity();
-            //    ////if(i < count - 1)
-            //    //    selectedLineTransforms.Add(GetSegmentMatrixFromPosition(vertex));
-            //    //selectedJointTransforms.Add(GetJointMatrixFromPosition(vertex));
-            //    selectedLineTransforms.Add(segmentTransformMatrixCache[positions.batchIndex][positions.matrixIndex + i]);
-            //    selectedJointTransforms.Add(jointsTransformMatrixCache[positions.batchIndex][positions.matrixIndex + i]);
-            //    selectedLineColorCache.Add(color);
-            //}
-            //selectedMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedLineColorCache);
+            for (int i = 0; i < count; i++)
+            {
+                //Vector3 vertex = Lines[selectedLineIndex][i].ToUnity();
+                ////if(i < count - 1)
+                //    selectedLineTransforms.Add(GetSegmentMatrixFromPosition(vertex));
+                //selectedJointTransforms.Add(GetJointMatrixFromPosition(vertex));
+
+                if (i < count - 1)
+                    selectedLineTransforms.Add(segmentTransformMatrixCache[segPositions.batchIndex][segPositions.matrixIndex + i]);
+                selectedJointTransforms.Add(jointsTransformMatrixCache[jntPositions.batchIndex][jntPositions.matrixIndex + i]);
+                selectedLineColorCache.Add(color);
+            }
+            selectedMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedLineColorCache);
 
             ////todo take in account when overflowing the buffer
             var segmentIndices = GetSegmentMatrixIndices(lineStartIndex);
             for (int i = 0; i < Lines[lineStartIndex].Count - 1; i++) //-1 we dont want to color the last segment
             {
-                //SetSpecificLineColorByIndex(segmentIndices.batchIndex, segmentIndices.matrixIndex + i, color);
                 segmentColorCache[segmentIndices.batchIndex][segmentIndices.matrixIndex + i] = color;
             }
-            materialPropertyBlockCache[segmentIndices.batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[segmentIndices.batchIndex]);
+            var jointIndices = GetJointMatrixIndices(lineStartIndex);
+            for (int i = 0; i < Lines[lineStartIndex].Count; i++) //we do want to color the last segment
+            {
+                jointColorCache[jointIndices.batchIndex][jointIndices.matrixIndex + i] = color;
+            }            
+            segmentPropertyBlockCache[segmentIndices.batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[segmentIndices.batchIndex]);
+            jointPropertyBlockCache[jointIndices.batchIndex].SetVectorArray("_SegmentColors", jointColorCache[jointIndices.batchIndex]);
 
         }
 
@@ -459,8 +493,10 @@ namespace Netherlands3D.Twin
         public void ClearLines()
         {
             Lines.Clear();
-            materialPropertyBlockCache.Clear();
+            segmentPropertyBlockCache.Clear();
             segmentColorCache.Clear();
+            jointPropertyBlockCache.Clear();
+            jointColorCache.Clear();
             segmentTransformMatrixCache = new List<List<Matrix4x4>>();
             jointsTransformMatrixCache = new List<List<Matrix4x4>>();
             cacheReady = false;
