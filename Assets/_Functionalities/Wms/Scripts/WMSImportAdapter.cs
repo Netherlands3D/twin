@@ -4,6 +4,7 @@ using System;
 using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using Netherlands3D.Twin.Layers;
 using System.Text;
 using Netherlands3D.Twin.Layers.Properties;
@@ -36,9 +37,13 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if ((!sourceUrl.ToLower().Contains("service=wms") && !sourceUrl.ToLower().Contains("/wms")) 
-                || sourceUrl.ToLower().Contains("request=getfeature")) //if request = getfeature it means wfs
-                return false;
+            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+            var bodyContents = File.ReadAllText(cachedDataPath);
+            var couldBeWmsCapabilities = bodyContents.Contains("<WMS_Capabilities") || bodyContents.Contains("<wms:WMS_Capabilities");
+
+            var urlContainsWmsServiceSignifier = sourceUrl.ToLower().Contains("service=wms");
+            
+            if (couldBeWmsCapabilities == false && urlContainsWmsServiceSignifier == false) return false;
 
             Debug.Log("Checking source WMS url: " + sourceUrl);
             wms = new WMS(sourceUrl, cachedDataPath);
@@ -46,12 +51,16 @@ namespace Netherlands3D.Twin
             //If the body is a specific GetFeature request; directly continue to execute
             bool isGetMapRequest = wms.IsGetMapRequest();
             if (isGetMapRequest)
+            {
                 return true;
+            }
 
             //If the body is a GetCapabilities request; check if the WMS supports BBOX filter
             bool IsGetCapabilitiesRequest = wms.IsGetCapabilitiesRequest();
             if(!IsGetCapabilitiesRequest)
+            {
                 return false;
+            }
 
             wms.ParseBodyAsXML();
             if (!wms.HasBboxFilterCapability())
@@ -229,9 +238,13 @@ namespace Netherlands3D.Twin
 
             public bool IsGetCapabilitiesRequest()
             {
+                // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+                var bodyContents = File.ReadAllText(cachedBodyContent);
+                var couldBeWmsCapabilities = bodyContents.Contains("<WMS_Capabilities") || bodyContents.Contains("<wms:WMS_Capabilities");
+
                 var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
                 requestType = RequestType.GetCapabilities;
-                return getCapabilitiesRequest;
+                return getCapabilitiesRequest || couldBeWmsCapabilities;
             }
 
             public bool HasBboxFilterCapability()
