@@ -72,6 +72,8 @@ MonoBehaviour:
   jointMesh: {fileID: 4711208715938537054, guid: 0de12834fe259ec4cbcffaca05de9fc6,
     type: 3}
   lineMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
+    type: 2}
   drawJoints: 1
   flattenY: 0
   offsetY: 0

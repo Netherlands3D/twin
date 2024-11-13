@@ -23,6 +23,12 @@ namespace Netherlands3D.Twin.Layers
         {
             FeatureLineVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
             List<Mesh> meshes = new List<Mesh>();
+            if(data == null)
+            {
+                Debug.LogWarning("visualisation was not spawned for feature" + feature.Id);
+                return null;
+            }
+
             foreach (List<Coordinate> points in data.Data)
             {
                 Mesh mesh = new Mesh();
@@ -38,7 +44,7 @@ namespace Netherlands3D.Twin.Layers
                 int[] triangles = new int[(points.Count - 2) * 3];
                 for (int i = 0; i < points.Count - 2; i++)
                 {
-                    triangles[i * 3] = 0;
+                    triangles[i * 3] = i;
                     triangles[i * 3 + 1] = i + 1;
                     triangles[i * 3 + 2] = i + 2;
                 }
@@ -50,16 +56,12 @@ namespace Netherlands3D.Twin.Layers
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
-        {
-            //TODO multi lines still cause a buffer error in batchrendering, figure out if its the mesh or the batcher
-            //probably the closest to point is too close to another line while looping through the transformmatrixcache
+        {            
             foreach (Mesh mesh in meshes)
-            {
+            {              
                 Vector3[] vertices = mesh.vertices;
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    lineRenderer3D.SetLineColorClosestToPoint(transform.position + vertices[i], color);
-                }
+                Vector3 centroid = 0.5f * (vertices[0] + vertices[1]);  //because of extrusion we need exact position               
+                lineRenderer3D.SetLineColorFromPoint(centroid, color);
             }
         }
 

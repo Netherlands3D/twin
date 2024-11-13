@@ -8,6 +8,7 @@ Shader "Custom/GeoJsonVisualizationShader"
     {
         Tags { "RenderType"="Opaque" }
         LOD 100
+        ZWrite Off
 
         Pass
         {

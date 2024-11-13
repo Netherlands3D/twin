@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Layers
                 int[] triangles = new int[(points.Count - 2) * 3];
                 for (int i = 0; i < points.Count - 2; i++)
                 {
-                    triangles[i * 3] = 0;
+                    triangles[i * 3] = i;
                     triangles[i * 3 + 1] = i + 1;
                     triangles[i * 3 + 2] = i + 2;
                 }
