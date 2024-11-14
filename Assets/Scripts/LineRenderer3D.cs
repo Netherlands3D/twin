@@ -335,9 +335,17 @@ namespace Netherlands3D.Twin
             if (lineStartIndex < 0) return;
 
             if (selectedSegmentMaterialPropertyBlock == null)
+            {
                 selectedSegmentMaterialPropertyBlock = new MaterialPropertyBlock();
+                for (int i = 0; i < 1023; i++)
+                    selectedLineColorCache.Add(color);
+            }
             if (selectedJointMaterialPropertyBlock == null)
+            {
                 selectedJointMaterialPropertyBlock = new MaterialPropertyBlock();
+                for (int i = 0; i < 1023; i++)
+                    selectedJointColorCache.Add(color);
+            }
 
             selectedLineIndex = lineStartIndex;
 
@@ -347,8 +355,8 @@ namespace Netherlands3D.Twin
             int count = Lines[selectedLineIndex].Count;
             selectedLineTransforms.Clear();
             selectedJointTransforms.Clear();
-            selectedLineColorCache.Clear();
-            selectedJointColorCache.Clear();
+            //selectedLineColorCache.Clear();
+            //selectedJointColorCache.Clear();
                         
             for (int i = 0; i < count; i++)
             {
@@ -357,7 +365,7 @@ namespace Netherlands3D.Twin
                 {
                     Matrix4x4 segMatrix = GetSegmentMatrixFromPosition(vertex);
                     selectedLineTransforms.Add(segMatrix);
-                    selectedLineColorCache.Add(color);
+                    //selectedLineColorCache.Add(color);
                     if (testLinePointsEanbled)
                     {
                         GameObject testObjectPoint3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -368,7 +376,7 @@ namespace Netherlands3D.Twin
                 }
                 Matrix4x4 jntMatrix = GetJointMatrixFromPosition(vertex);
                 selectedJointTransforms.Add(jntMatrix);
-                selectedJointColorCache.Add(color);
+                //selectedJointColorCache.Add(color);
             }
             selectedSegmentMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedLineColorCache);
             selectedJointMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedJointColorCache);

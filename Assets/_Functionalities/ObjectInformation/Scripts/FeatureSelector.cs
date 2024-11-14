@@ -98,7 +98,8 @@ namespace Netherlands3D.Twin.ObjectInformation
 				}
 			}
 
-            ShowFeatureDebuggingIndicator(groundPosition);
+			//please dont remove as this can be very useful to check where the user clicked
+            //ShowFeatureDebuggingIndicator(groundPosition);
 
             //clear the hit list or else it will use previous collider values
             raycastHits = new RaycastHit[raycastHits.Length];

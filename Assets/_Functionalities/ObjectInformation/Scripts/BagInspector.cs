@@ -174,7 +174,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 			if (orderedMappings.Count == 0) return;
 
-			Debug.Log(orderedMappings[currentSelectedMappingIndex]);
+			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
 			GameObject selection = orderedMappings[currentSelectedMappingIndex];
 			if (selection.GetComponent<ObjectMapping>())
