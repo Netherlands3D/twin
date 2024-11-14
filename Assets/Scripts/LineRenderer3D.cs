@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private Material lineMaterial;
         [SerializeField] private Material jointMaterial;
         [SerializeField] private Material lineSelectionMaterial;
+        [SerializeField] private Material jointSelectionMaterial;
 
         [Header("Settings")] [SerializeField] private bool drawJoints = true;
 
@@ -42,14 +43,22 @@ namespace Netherlands3D.Twin
         private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
         private List<Vector4[]> jointColorCache = new List<Vector4[]>();
 
-        private MaterialPropertyBlock selectedMaterialPropertyBlock;
+        private MaterialPropertyBlock selectedSegmentMaterialPropertyBlock;
+        private MaterialPropertyBlock selectedJointMaterialPropertyBlock;
         private List<Matrix4x4> selectedLineTransforms = new List<Matrix4x4>();
         private List<Matrix4x4> selectedJointTransforms = new List<Matrix4x4>();
         private List<Vector4> selectedLineColorCache = new List<Vector4>();
+        private List<Vector4> selectedJointColorCache = new List<Vector4>();
+        private int selectedLineIndex = -1;
 
         private Camera projectionCamera;
         private LayerMask layerMask = -1;
         private bool cacheReady = false;
+
+        //can be used to see if the transformcache is used correctly when selecting
+        private static bool testLinePointsEanbled = false;
+        private static GameObject testObjectPoint, testObjectPoint2 = null;
+        private static List<GameObject> testLinePoints = new List<GameObject>();
 
         public Mesh LineMesh
         {
@@ -140,22 +149,10 @@ namespace Netherlands3D.Twin
             }
             if (selectedLineIndex >= 0)
             {
-                Graphics.DrawMeshInstanced(LineMesh, 0, lineSelectionMaterial, selectedLineTransforms, selectedMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
+                Graphics.DrawMeshInstanced(LineMesh, 0, lineSelectionMaterial, selectedLineTransforms, selectedSegmentMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
                 if (DrawJoints)
-                    Graphics.DrawMeshInstanced(JointMesh, 0, lineSelectionMaterial, selectedJointTransforms, selectedMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
+                    Graphics.DrawMeshInstanced(JointMesh, 0, jointSelectionMaterial, selectedJointTransforms, selectedJointMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, projectionCamera);
             }
-        }
-
-        private Matrix4x4 GetSegmentMatrixFromPosition(Vector3 position)
-        {
-            var indexPosition = GetClosestLineIndex(position);
-            return segmentTransformMatrixCache[indexPosition.batchindex][indexPosition.lineIndex];
-        }
-
-        private Matrix4x4 GetJointMatrixFromPosition(Vector3 position)
-        {
-            var indexPosition = GetClosestJointIndex(position);
-            return jointsTransformMatrixCache[indexPosition.batchindex][indexPosition.jointIndex];
         }
 
         /// <summary>
@@ -182,10 +179,6 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
-
-            //GameObject testPoint = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            //testPoint.transform.position = (Vector3)segmentTransformMatrixCache[closestBatchIndex][closestLineIndex].GetColumn(3) + Vector3.up * 15;
-
             return (closestBatchIndex, closestLineIndex);
         }
 
@@ -213,10 +206,6 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
-
-            //GameObject testPoint = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            //testPoint.transform.position = (Vector3)segmentTransformMatrixCache[closestBatchIndex][closestLineIndex].GetColumn(3) + Vector3.up * 15;
-
             return (closestBatchIndex, closestJointIndex);
         }
 
@@ -277,96 +266,117 @@ namespace Netherlands3D.Twin
                 props2.SetVectorArray("_SegmentColors", colors2);
                 jointPropertyBlockCache[batchIndex] = props2;
             }
-        }
+        } 
 
-        ///// <summary>
-        ///// Set a specific line color by index of the line.
-        ///// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
-        ///// </summary>
-        //public void SetSpecificLineColorByIndex(int batchIndex, int segmentIndex, Color color)
-        //{
-        //    if (batchIndex >= segmentPropertyBlockCache.Count)
-        //    {
-        //        Debug.LogWarning($"Index {batchIndex} is out of range");
-        //        return;
-        //    }
-        //    UpdateBuffers();
-        //    segmentColorCache[batchIndex][segmentIndex] = color;
-        //    segmentPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[batchIndex]);
-        //}
-
-        //public void SetSpecificLineHeightByIndex(int batchIndex, int segmentIndex, float height)
-        //{
-        //    Vector3 position = segmentTransformMatrixCache[batchIndex][segmentIndex].GetColumn(3); // Get the current position as a Vector3
-        //    position.y = height;
-        //    segmentTransformMatrixCache[batchIndex][segmentIndex].SetColumn(3, new Vector4(position.x, position.y, position.z, 1.0f));
-        //}
-
-        ///// <summary>
-        ///// Set specific line color for the line closest to a given point.
-        ///// </summary>
-        //public void SetLineColorClosestToPoint(Vector3 point, Color color)
-        //{
-        //    var indexPosition = GetClosestLineIndex(point);
-        //    if (indexPosition.batchindex == -1 || indexPosition.lineIndex == -1)
-        //    {
-        //        Debug.LogWarning("No line found");
-        //        return;
-        //    }
-        //    SetSpecificLineColorByIndex(indexPosition.batchindex, indexPosition.lineIndex, color);
-        //}
-
-        private int selectedLineIndex = -1;
-        public void SetLineColorFromPoint(Vector3 point, Color color)
+        /// <summary>
+        /// all vertices of the line mesh are needed as input to solve the issue of other lines having overlapping points
+        /// problem, multiple feature meshes have points at the same position in the segmenttransformmatrixcache
+        /// so we need to do an extra check which centroid of the both closest points are matching with all the points
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="color"></param>
+        public void SetLineColorFromPoints(Vector3[] points, Color color)
         {
-           
+            //calculate the centroid of the targeted line
+            Vector3 selectionCentroid = Vector3.zero;
+            for (int i = 0; i < points.Length; i++)
+                selectionCentroid += points[i];
+            selectionCentroid /= points.Length;
+
+            if (testLinePointsEanbled)
+            {
+                if (testObjectPoint != null)
+                    Destroy(testObjectPoint);
+                if (testObjectPoint2 != null)
+                    Destroy(testObjectPoint2);
+                if (testLinePoints.Count > 0)
+                {
+                    for (int i = testLinePoints.Count - 1; i >= 0; i--)
+                        Destroy(testLinePoints[i]);
+                    testLinePoints.Clear();
+                }
+                testObjectPoint = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                testObjectPoint.transform.position = selectionCentroid + Vector3.up * 35;
+                testObjectPoint.GetComponent<MeshRenderer>().material.color = Color.green;
+            }
+
+            //compare the centroids of other lines to be sure the line is matching as the closest selected line
+            //todo, maybe cache the line centroids for optimisation but now only happens when selecting
             float closest = float.MaxValue;
             int lineStartIndex = -1;
+            Vector3 testTarget = Vector3.zero;
             for (int i = 0; i < Lines.Count; i++)
             {
+                Vector3 lineCentroid = Vector3.zero;
                 for (int j = 0; j < Lines[i].Count; j++)
+                    lineCentroid += Lines[i][j].ToUnity();
+                lineCentroid /= Lines[i].Count;
+                float dist = Vector3.Distance(selectionCentroid, lineCentroid);
+                if(dist < closest)
                 {
-                    float dist = Vector3.Distance(point, Lines[i][j].ToUnity());
-                    if (dist < closest)
-                    {
-                        closest = dist;
-                        lineStartIndex = i;
-                    }
+                    closest = dist;
+                    lineStartIndex = i;
+                    testTarget = lineCentroid;
                 }
             }
 
-            List<Coordinate> tempLine = Lines[lineStartIndex];
-            RemoveLine(Lines[lineStartIndex]);
-            lineStartIndex = AppendLine(tempLine);
-            SetDefaultColors();
+            if (testLinePointsEanbled && lineStartIndex >= 0)
+            {
+                testObjectPoint2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                testObjectPoint2.transform.position = testTarget + Vector3.up * 30;
+                testObjectPoint2.GetComponent<MeshRenderer>().material.color = Color.magenta;
+            }
+
+            //move the line to the end of the render batch (keep this here incase the Zwrite value of the shader needs to be replaced)
+            //List<Coordinate> tempLine = Lines[lineStartIndex];
+            //RemoveLine(Lines[lineStartIndex]);
+            //lineStartIndex = AppendLine(tempLine);
+           
             if (lineStartIndex < 0) return;
 
-            if (selectedMaterialPropertyBlock == null)
-                selectedMaterialPropertyBlock = new MaterialPropertyBlock();
+            if (selectedSegmentMaterialPropertyBlock == null)
+                selectedSegmentMaterialPropertyBlock = new MaterialPropertyBlock();
+            if (selectedJointMaterialPropertyBlock == null)
+                selectedJointMaterialPropertyBlock = new MaterialPropertyBlock();
 
             selectedLineIndex = lineStartIndex;
-            var segPositions = GetSegmentMatrixIndices(selectedLineIndex);
-            var jntPositions = GetJointMatrixIndices(selectedLineIndex);
+
+            //using the cache positions directly does not work as some line segments are skipped
+            //var segPositions = GetSegmentMatrixIndices(selectedLineIndex);
+            //var jntPositions = GetJointMatrixIndices(selectedLineIndex);
             int count = Lines[selectedLineIndex].Count;
             selectedLineTransforms.Clear();
             selectedJointTransforms.Clear();
             selectedLineColorCache.Clear();
-
+            selectedJointColorCache.Clear();
+                        
             for (int i = 0; i < count; i++)
             {
-                //Vector3 vertex = Lines[selectedLineIndex][i].ToUnity();
-                ////if(i < count - 1)
-                //    selectedLineTransforms.Add(GetSegmentMatrixFromPosition(vertex));
-                //selectedJointTransforms.Add(GetJointMatrixFromPosition(vertex));
-
+                Vector3 vertex = Lines[selectedLineIndex][i].ToUnity();
                 if (i < count - 1)
-                    selectedLineTransforms.Add(segmentTransformMatrixCache[segPositions.batchIndex][segPositions.matrixIndex + i]);
-                selectedJointTransforms.Add(jointsTransformMatrixCache[jntPositions.batchIndex][jntPositions.matrixIndex + i]);
-                selectedLineColorCache.Add(color);
+                {
+                    Matrix4x4 segMatrix = GetSegmentMatrixFromPosition(vertex);
+                    selectedLineTransforms.Add(segMatrix);
+                    selectedLineColorCache.Add(color);
+                    if (testLinePointsEanbled)
+                    {
+                        GameObject testObjectPoint3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        testObjectPoint3.transform.position = (Vector3)segMatrix.GetColumn(3) + Vector3.up * 25;
+                        testObjectPoint3.GetComponent<MeshRenderer>().material.color = Color.red;
+                        testLinePoints.Add(testObjectPoint3);
+                    }
+                }
+                Matrix4x4 jntMatrix = GetJointMatrixFromPosition(vertex);
+                selectedJointTransforms.Add(jntMatrix);
+                selectedJointColorCache.Add(color);
             }
-            selectedMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedLineColorCache);
+            selectedSegmentMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedLineColorCache);
+            selectedJointMaterialPropertyBlock.SetVectorArray("_SegmentColors", selectedJointColorCache);
 
-            ////todo take in account when overflowing the buffer
+            if (Lines[lineStartIndex].Count > 1023)
+                Debug.LogError("the selected line feature is over 1023 vertices, a fix is needed for buffer overflow");
+
+            //todo take in account when overflowing the buffer, but probably not needed because no selected line is 1023 vertices
             var segmentIndices = GetSegmentMatrixIndices(lineStartIndex);
             for (int i = 0; i < Lines[lineStartIndex].Count - 1; i++) //-1 we dont want to color the last segment
             {
@@ -426,18 +436,6 @@ namespace Netherlands3D.Twin
 
             return startIndex;
         }
-
-        //public void  InsertLine(List<Coordinate> linePoints)
-        //{
-        //    var validLine = ValidateLine(linePoints);
-        //    if (!validLine) return;
-
-        //    if (Lines == null)
-        //        Lines = new List<List<Coordinate>>(); 
-            
-        //    Lines.Insert(0, linePoints);
-        //    GenerateTransformMatrixCache(0);
-        //}
 
         /// <summary>
         /// Remove a line using start and length
@@ -615,6 +613,28 @@ namespace Netherlands3D.Twin
             else
                 batchList[arrayIndex].Add(valueToAdd);
             matrixIndex++;
+        }
+
+        /// <summary>
+        /// this may work incorrectly as some lines have overlapping vertices and need to be checked by centroid
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        private Matrix4x4 GetSegmentMatrixFromPosition(Vector3 position)
+        {
+            var indexPosition = GetClosestLineIndex(position);
+            return segmentTransformMatrixCache[indexPosition.batchindex][indexPosition.lineIndex];
+        }
+
+        /// <summary>
+        /// this may work incorrectly as some joints have overlapping vertices and need to be checked by centroid
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        private Matrix4x4 GetJointMatrixFromPosition(Vector3 position)
+        {
+            var indexPosition = GetClosestJointIndex(position);
+            return jointsTransformMatrixCache[indexPosition.batchindex][indexPosition.jointIndex];
         }
 
         private (int batchIndex, int matrixIndex) GetJointMatrixIndices(int lineStartIndex)

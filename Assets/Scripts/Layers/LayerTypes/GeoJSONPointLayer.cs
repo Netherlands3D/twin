@@ -29,17 +29,7 @@ namespace Netherlands3D.Twin.Layers
                 {
                     vertices.Add(point.ToUnity());
                 }
-                mesh.SetVertices(vertices);
-                if (points.Count < 3)              
-                    continue; 
-                int[] triangles = new int[(points.Count - 2) * 3];
-                for (int i = 0; i < points.Count - 2; i++)
-                {
-                    triangles[i * 3] = i;
-                    triangles[i * 3 + 1] = i + 1;
-                    triangles[i * 3 + 2] = i + 2;
-                }
-                mesh.SetTriangles(triangles, 0);
+                mesh.SetVertices(vertices);                
             }
             return meshes;
         }

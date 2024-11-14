@@ -75,9 +75,11 @@ MonoBehaviour:
   jointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
   lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
     type: 2}
+  jointSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
+    type: 2}
   drawJoints: 1
   flattenY: 0
-  offsetY: 0
+  offsetY: 1.87
   lineDiameter: 1
 --- !u!114 &5447569626426196056
 MonoBehaviour:
