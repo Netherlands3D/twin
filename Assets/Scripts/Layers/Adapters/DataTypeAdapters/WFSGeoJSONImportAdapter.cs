@@ -28,9 +28,13 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if ((!sourceUrl.ToLower().Contains("service=wfs") && !sourceUrl.ToLower().Contains("/wfs"))
-                || sourceUrl.ToLower().Contains("request=getmap")) //if request = getmap it means wms
-                return false;
+            var urlContainsWfsSignifier = sourceUrl.ToLower().Contains("service=wfs");
+
+            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+            var bodyContents = File.ReadAllText(cachedDataPath);
+            var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
+
+            if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
             wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
@@ -205,9 +209,13 @@ namespace Netherlands3D.Twin
 
             public bool IsGetCapabilitiesRequest()
             {
+                // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+                var bodyContents = File.ReadAllText(cachedBodyContent);
+                var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
+
                 var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
                 requestType = RequestType.GetCapabilities;
-                return getCapabilitiesRequest;
+                return getCapabilitiesRequest || couldBeWfsCapabilities;
             }
 
             public bool IsGetFeatureRequest()
