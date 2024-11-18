@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,8 +23,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void Awake()
         {
-            base.Awake();
-            atmProjectionLayer = GetComponent<ATMTileDataLayer>();
+            base.Awake();           
         }
 
         protected override void Start()
