@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Specialized;
 using System.Xml;
-using Netherlands3D.Web;
+using KindMen.Uxios;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Wms
 {
@@ -34,28 +32,26 @@ namespace Netherlands3D.Twin.Wms
 
         internal Map CreateMapFromCapabilitiesUrl(int width, int height, bool transparent)
         {
-            var version = GetParamValueFromSourceUrl(url.ToString(), "version");
+            var version = GetParamValueFromSourceUrl(url, "version");
             if (string.IsNullOrEmpty(version))
             {
                 version = defaultFallbackVersion;
                 Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
             }
             
-            bool isHigherOrEqualVersion = Version.Parse(version) >= Version.Parse("1.3.0");
-
             var wmsParam = new Map
             {
-                name = GetParamValueFromSourceUrl(url.ToString(), "layers"),
-                spatialReferenceType = isHigherOrEqualVersion ? "CRS" : "SRS",
+                name = GetParamValueFromSourceUrl(url, "layers"),
+                spatialReferenceType = SpatialReferenceTypeFromVersion(new Version(version)),
                 spatialReference = defaultCoordinateSystemReference,
-                style = GetParamValueFromSourceUrl(url.ToString(), "styles"),
+                style = GetParamValueFromSourceUrl(url, "styles"),
                 version = version,
                 width = width,
                 height = height,
                 transparent = transparent
             };
 
-            var crs = GetParamValueFromSourceUrl(url.ToString(), wmsParam.spatialReferenceType);
+            var crs = GetParamValueFromSourceUrl(url, wmsParam.spatialReferenceType);
             wmsParam.spatialReference = !string.IsNullOrEmpty(crs) ? crs : defaultCoordinateSystemReference;
 
             return wmsParam;
@@ -84,14 +80,17 @@ namespace Netherlands3D.Twin.Wms
             return namespaceManager;
         }
 
-        private static string GetParamValueFromSourceUrl(string sourceUrl, string param)
+        public static string SpatialReferenceTypeFromVersion(Version version)
         {
-            string value = string.Empty;
-            string p = param + "=";
+            return version.CompareTo(new Version("1.3.0")) >= 0 ? "CRS" : "SRS";
+        }
 
-            if (!sourceUrl.ToLower().Contains(p)) return value;
 
-            return sourceUrl.ToLower().Split(p)[1].Split("&")[0];
+        private static string GetParamValueFromSourceUrl(Uri sourceUrl, string param)
+        {
+            var queryParameters = QueryString.Decode(sourceUrl.Query);
+
+            return queryParameters.Get(param) ?? queryParameters.Get(param.ToLower());
         }
     }
 }

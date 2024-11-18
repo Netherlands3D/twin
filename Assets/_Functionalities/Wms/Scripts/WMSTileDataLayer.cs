@@ -1,8 +1,11 @@
-using Netherlands3D.CartesianTiles;
-using Netherlands3D.Rendering;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KindMen.Uxios;
+using Netherlands3D.CartesianTiles;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Rendering;
+using Netherlands3D.Twin.Wms;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
@@ -62,8 +65,12 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
+            var mapData = Map.FromUrl(new Uri(wmsUrl));
             Tile tile = tiles[tileKey];
-            var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
+
+            var boundingBox = DetermineBoundingBox(tileChange, mapData);
+            var bboxValue = $"{boundingBox.min.Points[0]},{boundingBox.min.Points[1]},{boundingBox.max.Points[0]},{boundingBox.max.Points[1]}";
+
             string url = wmsUrl.Replace("{0}", bboxValue);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
@@ -100,6 +107,24 @@ namespace Netherlands3D.Twin
                 }
             }
             callback(tileChange);
+        }
+
+        private (Coordinate min, Coordinate max) DetermineBoundingBox(TileChange tileChange, Map mapData)
+        {
+            var minCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var maxCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+
+            var splitReferenceCode = mapData.spatialReference.Split(':');
+            string coordinateSystemAsString = "28992";
+            if (splitReferenceCode[0].ToLower() == "epsg")
+            {
+                coordinateSystemAsString = splitReferenceCode[^1];
+            }
+
+            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+            minCoordinate = minCoordinate.Convert(foundCoordinateSystem);
+            maxCoordinate = maxCoordinate.Convert(foundCoordinateSystem);
+            return (minCoordinate, maxCoordinate);
         }
 
         private void UpdateDrawOrderForChildren()

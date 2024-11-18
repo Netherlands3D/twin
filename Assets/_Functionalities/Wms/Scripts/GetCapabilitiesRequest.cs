@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Wms
 {
@@ -112,6 +113,10 @@ namespace Netherlands3D.Twin.Wms
                 // Extract styles for the layer
                 var styles = ExtractStyles(mapNode);
 
+                // CRS/SRS may be defined in the current MapNode, but can also inherit from a parent if it is not
+                // specified the flag at the end of this function will check the current node and its parents
+                var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
+                
                 var map = new Map()
                 {
                     name = layerNameNode,
@@ -120,7 +125,7 @@ namespace Netherlands3D.Twin.Wms
                     height = mapTemplate.height,
                     transparent = mapTemplate.transparent,
                     spatialReferenceType = mapTemplate.spatialReferenceType,
-                    spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType),
+                    spatialReference = spatialReference,
                     style = styles.FirstOrDefault()
                 };
                 maps.Add(map);
@@ -138,14 +143,9 @@ namespace Netherlands3D.Twin.Wms
                 width = width,
                 height = height,
                 transparent = transparent,
-                spatialReferenceType = "SRS"
+                spatialReferenceType = GetMapRequest.SpatialReferenceTypeFromVersion(new Version(Version))
             };
-
-            if (new Version(mapTemplate.version) >= new Version("1.3.0"))
-            {
-                mapTemplate.spatialReferenceType = "CRS";
-            }
-
+            
             return mapTemplate;
         }
 
@@ -170,14 +170,32 @@ namespace Netherlands3D.Twin.Wms
             return layerNode.SelectNodes($".//*[local-name()='{nodeName}']", namespaceManager);
         }
 
-        private string GetInnerTextForNode(XmlNode layerNode, string nodeName)
+        private string GetInnerTextForNode(XmlNode layerNode, string nodeName, bool searchInParents = false)
         {
-            return GetSingleNodeByName(layerNode, nodeName).InnerText;
+            try
+            {
+                return GetSingleNodeByName(layerNode, nodeName, searchInParents).InnerText;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to get text for node {nodeName} in node {layerNode.InnerXml}: " + e.Message);
+                return "";
+            }
         }
 
-        private XmlNode GetSingleNodeByName(XmlNode layerNode, string nodeName)
+        private XmlNode GetSingleNodeByName(XmlNode layerNode, string nodeName, bool searchInParents = false)
         {
-            return layerNode.SelectSingleNode($".//*[local-name()='{nodeName}']", namespaceManager);
+            // Base query that will attempt to find the node; but we need more ...
+            var queryForNode = $"*[local-name()='{nodeName}']";
+            
+            if (searchInParents)
+            {
+                // ... when this flag is provided, check 'self' first and then traverse ancestors, or ...
+                return layerNode.SelectSingleNode($"ancestor-or-self::*/child::{queryForNode}", namespaceManager);
+            }
+
+            // ... without the flag we limit the search to the layerNode for performance and to prevent unwanted hits
+            return layerNode.SelectSingleNode($".//{queryForNode}", namespaceManager);
         }
     }
 }

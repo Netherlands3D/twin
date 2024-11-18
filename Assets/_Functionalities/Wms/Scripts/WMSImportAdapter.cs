@@ -86,7 +86,7 @@ namespace Netherlands3D.Twin
             newLayer.Name = map.name;
             newLayer.LayerData.ActiveSelf = defaultEnabled;
             
-            url = map.CreateRequestUrlBasedOn(url.AbsoluteUri);
+            url = map.ToUrlBasedOn(url);
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
             propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(url);
