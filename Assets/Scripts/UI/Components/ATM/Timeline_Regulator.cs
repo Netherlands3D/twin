@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using TMPro;
 using UnityEngine.EventSystems;
 
@@ -9,25 +11,26 @@ namespace Netherlands3D.Twin
 {
     public class Timeline_Regulator : MonoBehaviour
     {
-        public GameObject yearPrefab; // Prefab for the year instance  
+        public GameObject YearVisualPrefab; // Prefab for the year instance visual in the timeline  
         public RectTransform content; // Content RectTransform of the ScrollView  
-        public TMP_InputField yearInputField; // Input field for the year  
-        public TMP_InputField centerYearText; // Text object to display the centered year  
+        public TMP_InputField SelectedYearInputField; // Input field for the selected year  
+        public TMP_InputField SelectedYearText; // Text object to display the selected year  
         public Slider speedSlider; // Slider to control year modification  
-        int minYear = 1625;
-        int maxYear = 2024;
+        private int minYear = 1625;
+        private int maxYear = 2024;
         public TMP_InputField startYearInput; // Reference to the start year input field  
         public TMP_InputField endYearInput; // Reference to the end year input field  
 
         private List<RectTransform> yearInstances = new List<RectTransform>();
         public int currentYear;
+        public UnityEvent YearChanged;
 
         private float lerpSpeed = 10f; // Speed of the lerp transition  
         private Vector2 targetPosition; // Target position for the content  
         private Coroutine yearUpdateCoroutine; // Reference to the coroutine
 
         // Define original, highlighted and neighbor height values  
-        private float defaultHeight = 3; // Original height of YearPrefab  
+        private float defaultHeight = 3; // Original height of YearVisualPrefab  
         private float highlightedHeight = 12f; // Height for the current year  
         private float neighborHeight = 8; // Height for adjacent years
 
@@ -60,13 +63,13 @@ namespace Netherlands3D.Twin
         // Coroutine to wait before scrolling to max year  
         private IEnumerator ScrollToMaxYearAfterDelay()
         {
-            yield return new WaitForEndOfFrame(); // Wait until the end of the frame  
+            yield return new WaitForEndOfFrame(); // Wait until the end of the frame. Delay is needed for the timeline to be fully rebuilt.  
             ScrollToYear(maxYear); // Now scroll to the maximum year  
         }
 
         private IEnumerator RebuildToCurrentAfterDelay()
         {
-            yield return new WaitForEndOfFrame(); // Wait until the end of the frame  
+            yield return new WaitForEndOfFrame(); // Wait until the end of the frame. Delay is needed for the timeline to be fully rebuilt.
             ScrollToYear(currentYear); // Now scroll to the maximum year  
         }
 
@@ -85,7 +88,7 @@ namespace Netherlands3D.Twin
 
             for (int year = minYear; year <= maxYear; year++)
             {
-                GameObject yearInstance = Instantiate(yearPrefab, content);
+                GameObject yearInstance = Instantiate(YearVisualPrefab, content);
                 yearInstance.GetComponentInChildren<TMP_Text>().text = year.ToString();
                 yearInstances.Add(yearInstance.GetComponent<RectTransform>());
 
@@ -131,10 +134,10 @@ namespace Netherlands3D.Twin
             content.anchoredPosition = Vector2.Lerp(content.anchoredPosition, targetPosition, Time.deltaTime * lerpSpeed);
 
             // Handle year input submission  
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Keyboard.current.enterKey.wasPressedThisFrame)
             {
                 int inputYear;
-                if (int.TryParse(yearInputField.text, out inputYear))
+                if (int.TryParse(SelectedYearInputField.text, out inputYear))
                 {
                     ScrollToYear(inputYear);
                 }
@@ -162,7 +165,7 @@ namespace Netherlands3D.Twin
         {
             while (true) // Loop indefinitely 
             {
-                yield return new WaitForSeconds(0.1f); // Wait for 0.1 second 
+                yield return new WaitForSeconds(0.1f); // Wait for 0.1 second < this is a speed interval (a brake) to make the timeline slide slower or faster. he higher the number, the slower the timeline scrolls.
 
                 float sliderValue = speedSlider.value;
                 if (sliderValue != 0f)
@@ -177,14 +180,7 @@ namespace Netherlands3D.Twin
 
         void ScrollToYear(int year)
         {
-            if (year < minYear)
-            {
-                year = minYear; // Set to lowest available year  
-            }
-            else if (year > maxYear)
-            {
-                year = maxYear; // Set to highest available year  
-            }
+            year = Mathf.Clamp(year, minYear, maxYear);
 
             int index = year - minYear;
             if (index >= 0 && index < yearInstances.Count)
@@ -192,7 +188,8 @@ namespace Netherlands3D.Twin
                 // Set the target position to smoothly lerp to  
                 targetPosition = new Vector2((-yearInstances[index].anchoredPosition.x + 362), content.anchoredPosition.y);
                 currentYear = year; // Update the current year  
-                centerYearText.text = currentYear.ToString(); // Update the UI text  
+                SelectedYearText.text = currentYear.ToString(); // Update the UI text  
+                YearChanged.Invoke(); //Fires the UnityEvent that changes the year
 
                 // Adjust height, color, and text visibility  
                 for (int i = 0; i < yearInstances.Count; i++)
@@ -232,6 +229,6 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
-        }
+        }S
     }
 }
