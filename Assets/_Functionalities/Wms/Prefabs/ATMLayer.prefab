@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8363319932289052987}
-  - component: {fileID: 7611614742349668521}
+  - component: {fileID: 1950731496240471435}
   - component: {fileID: 2816984785408510274}
   - component: {fileID: 7900166245345724691}
   - component: {fileID: -8300356283678966299}
@@ -37,7 +37,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7611614742349668521
+--- !u!114 &1950731496240471435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,10 +46,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84a01b8709a7af43a4239bdae96f22f, type: 3}
+  m_Script: {fileID: 11500000, guid: b161ae9a7d130d34289c0b84300e7cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 7ddb78a6acbf44d4e84910b5684042b7
+  prefabIdentifier: 4bed2799dfbb342c5a5eb194351dcab9
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -58,7 +58,7 @@ MonoBehaviour:
       m_Calls: []
   TransparencyEnabled: 1
   DefaultEnabledLayersMax: 5
-  PreferredImageSize: {x: 256, y: 256}
+  PreferredImageSize: {x: 512, y: 512}
 --- !u!114 &2816984785408510274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,9 +88,7 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
-  debugTextPrefab: {fileID: 954509655106132641, guid: 7fa6230d2bcee4833a6b325c873ad77b,
-    type: 3}
-  gridOffset: {x: -159, y: 127}
+  zoomLevel: 16
 --- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +108,7 @@ MonoBehaviour:
   OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7611614742349668521}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerGameObject, Assembly-CSharp
         m_MethodName: DestroyLayer
         m_Mode: 1
@@ -166,6 +164,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b3fb76cb96645348155bd1ea16ae5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  z: 1000000013000000
-  url: https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png
-  xy: {x: 0, y: 0}

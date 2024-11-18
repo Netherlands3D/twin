@@ -49,6 +49,8 @@ namespace Netherlands3D.Twin
         private double referenceTileWidth;
         private double referenceTileHeight;
 
+        private ATMDataController.ATMDataHandler ATMDataHandler;
+
         private void Awake()
         {
             xyzTiles = GetComponent<XyzTiles>();
@@ -56,7 +58,8 @@ namespace Netherlands3D.Twin
             if (timeController == null)
             {
                 timeController = gameObject.AddComponent<ATMDataController>();
-                timeController.ChangeYear += (a) => SetVisibleTilesDirty();
+                ATMDataHandler = (a) => SetVisibleTilesDirty();
+                timeController.ChangeYear += ATMDataHandler;
             }
             
             //Make sure Datasets at least has one item
@@ -69,6 +72,12 @@ namespace Netherlands3D.Twin
             });
         }
 
+        private void OnDestroy()
+        {
+            if(timeController != null && ATMDataHandler != null)
+                timeController.ChangeYear -= ATMDataHandler;
+        }
+
 
         private void Update()
         {
@@ -77,7 +86,7 @@ namespace Netherlands3D.Twin
                 this.previousZoomLevel = zoomLevel;
                 SetVisibleTilesDirty();
             }
-        }        
+        }
 
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
@@ -130,6 +139,17 @@ namespace Netherlands3D.Twin
                     TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
                     if (ProjectorHeight >= decalProjector.size.z)
                         textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+
+                    Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
+                    var rdCoordinate = new Coordinate(
+                        CoordinateSystem.RD,
+                        origin.x,
+                        origin.y,
+                        0.0d
+                    );
+                    var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+                    originCoordinate.y = ProjectorHeight;
+                    tile.gameObject.transform.position = originCoordinate; 
                     decalProjector.transform.position -= offset;
 
                     //set the render index, to make sure the render order is maintained
@@ -212,9 +232,9 @@ namespace Netherlands3D.Twin
 
                 if (tile.Value.runningCoroutine != null)
                     StopCoroutine(tile.Value.runningCoroutine);
+                               
 
-                //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                //projector.gameObject.SetActive(false);
+                
 
                 TileChange tileChange = new TileChange();
                 tileChange.X = tile.Key.x;
@@ -244,18 +264,19 @@ namespace Netherlands3D.Twin
                         {
                             ready = true;
                             Vector2Int downloadedKey = new Vector2Int(key.X, key.Y);
-                            DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
-                            if (!projector) return;
+                            //DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
+                            //if (!projector) return;
 
-                            var localScale = projector.transform.localScale;
+                            //var localScale = projector.transform.localScale;
 
-                            // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
-                            // projection dimensions
-                            projector.size = new Vector3(
-                                (float)(referenceTileWidth * localScale.x),
-                                (float)(referenceTileWidth * localScale.y),
-                                projector.size.z
-                            );
+                            //// because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
+                            //// projection dimensions
+                            //projector.size = new Vector3(
+                            //    (float)(referenceTileWidth * localScale.x),
+                            //    (float)(referenceTileWidth * localScale.y),
+                            //    projector.size.z
+                            //);
+
                         }));
                     }
                     else
