@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.ObjectInformation
         private RaycastHit[] raycastHits = new RaycastHit[16];
 
         [SerializeField] private float hitDistance = 100000f;
-        [SerializeField] private float tubeHitRadius = 5f;
+        [SerializeField] private float tubeHitRadius = 1.5f;
 
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
