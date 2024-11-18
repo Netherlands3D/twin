@@ -219,14 +219,8 @@ namespace Netherlands3D.Twin
                     }
 
                     // Reactivate the event GameObject if the year is in the list  
-                    if (eventYears.Contains(i + minYear))
-                    {
-                        eventObject.SetActive(true);
-                    }
-                    else
-                    {
-                        eventObject.SetActive(false);
-                    }
+                    var isEventYear = eventYears.Contains(i + minYear);
+                    eventObject.SetActive(isEventYear);
                 }
             }
         }
