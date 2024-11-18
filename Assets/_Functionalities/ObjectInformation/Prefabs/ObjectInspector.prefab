@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitDistance: 100000
-  tubeHitRadius: 5
+  tubeHitRadius: 1.5
 --- !u!114 &3250020502134624231
 MonoBehaviour:
   m_ObjectHideFlags: 0
