@@ -65,9 +65,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Klik op een gebouw op de kaart om de Basisregistratie Adressen en Gebouwen
-    (BAG) informatie te bekijken. Na uw selectie verschijnt hier de offici\xEBle
-    informatie over het adres, bouwjaar en wijk van het gebouw."
+  m_text: "Onderdelen in de 3D kaart kunnen informatie bevatten. Klik op een onderdeel
+    om deze te bekijken. Indien aanwezig wordt de informatie in dit scherm getoond. 
+    \n\nAchter de basislaag 'gebouwen' die in Netherlands 3D te vinden is, zit informatie
+    over alle adressen in het gebouw (bron: BAG). Indien je zelf een kaartlaag toevoegt
+    en deze bevat informatie gekoppeld aan onderdelen in die laag (bijvoorbeeld bij
+    WFS of GeoJSON bestanden), dan wordt ook deze informatie hier getoond. "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -2237,7 +2240,7 @@ PrefabInstance:
     - target: {fileID: 5381855212316052579, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00046980908
+      value: 0.0005766329
       objectReference: {fileID: 0}
     - target: {fileID: 8065810425275369335, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2282,7 +2285,7 @@ PrefabInstance:
     - target: {fileID: 8637168638281038544, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_Size
-      value: 0.9998991
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8637168638281038544, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
