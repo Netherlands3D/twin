@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
+            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
         }
 

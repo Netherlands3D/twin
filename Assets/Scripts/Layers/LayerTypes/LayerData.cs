@@ -14,6 +14,8 @@ namespace Netherlands3D.Twin.Layers
     [Serializable]
     public abstract class LayerData
     {
+        private const string NameOfDefaultStyle = "default";
+
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
@@ -42,7 +44,7 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         [SerializeField, DataMember] protected Dictionary<string, LayerStyle> styles = new()
         {
-            {"default", LayerStyle.CreateDefaultStyle()}
+            {NameOfDefaultStyle, LayerStyle.CreateDefaultStyle()}
         };
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
@@ -152,13 +154,13 @@ namespace Netherlands3D.Twin.Layers
         /// Every layer has a default style, this is a style that applies to all objects and features in this
         /// layer without any conditions.
         /// </summary>
-        [JsonIgnore] public LayerStyle DefaultStyle => Styles["default"];
+        [JsonIgnore] public LayerStyle DefaultStyle => Styles[NameOfDefaultStyle];
 
         /// <summary>
         /// Every layer has a default symbolizer, drawn from the default style, that can be queried for the appropriate
         /// properties.
         /// </summary>
-        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules["default"].Symbolizer;
+        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules[NameOfDefaultStyle].Symbolizer;
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();

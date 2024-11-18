@@ -67,9 +67,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             CoordinateSystem coordinateSystem, 
             LineRenderer3D renderer
         ) {
-            renderer.AppendLine(ConvertToUnityCoordinates(geometry, coordinateSystem));
+            var linePoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
+            renderer.AppendLine(linePoints);
 
-            return ConvertToUnityCoordinates(geometry, coordinateSystem);
+            return linePoints;
         }
 
         public static List<Coordinate> CreatePointVisualisation(

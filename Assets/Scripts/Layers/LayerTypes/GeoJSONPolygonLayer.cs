@@ -83,7 +83,10 @@ namespace Netherlands3D.Twin.Layers
 
         public void ApplyStyling()
         {
-            SpawnedVisualisations.ForEach(visualisations => visualisations.SetMaterial(GetMaterialInstance()));
+            foreach (var visualisations in SpawnedVisualisations)
+            {
+                visualisations.SetMaterial(GetMaterialInstance());
+            }
         }
 
         private Material GetMaterialInstance()
