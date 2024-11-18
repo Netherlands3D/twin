@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin
 
         public bool Supports(LocalFile localFile)
         {
+            Debug.LogError("testetseTE");
             // Check if the file has JSON content
             if (!LooksLikeAJSONFile(localFile.LocalFilePath))
                 return false;
