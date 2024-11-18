@@ -35,7 +35,6 @@ namespace Netherlands3D.Twin
         public List<List<Coordinate>> Lines { get; private set; }
 
         private List<List<Matrix4x4>> segmentTransformMatrixCache = new List<List<Matrix4x4>>();
-
         private List<List<Matrix4x4>> jointsTransformMatrixCache = new List<List<Matrix4x4>>();
 
         private List<MaterialPropertyBlock> segmentPropertyBlockCache = new List<MaterialPropertyBlock>();
@@ -169,11 +168,11 @@ namespace Netherlands3D.Twin
                 var lineTransforms = segmentTransformMatrixCache[i];
                 for (int j = 0; j < lineTransforms.Count; j++)
                 {
-                    var linePoint = lineTransforms[j].GetColumn(3);
-                    var distance = Vector3.Distance(linePoint, point);
-                    if (distance < closestDistance)
+                    Vector3 linePoint = lineTransforms[j].GetColumn(3);
+                    float distance = Vector3.SqrMagnitude(point - linePoint);
+                    if (distance < closestDistance * closestDistance)
                     {
-                        closestDistance = distance;
+                        closestDistance = Mathf.Sqrt(distance);
                         closestBatchIndex = i;
                         closestLineIndex = j;
                     }
@@ -196,11 +195,11 @@ namespace Netherlands3D.Twin
                 var jointTransforms = jointsTransformMatrixCache[i];
                 for (int j = 0; j < jointTransforms.Count; j++)
                 {
-                    var linePoint = jointTransforms[j].GetColumn(3);
-                    var distance = Vector3.Distance(linePoint, point);
-                    if (distance < closestDistance)
+                    Vector3 linePoint = jointTransforms[j].GetColumn(3);
+                    float distance = Vector3.SqrMagnitude(point - linePoint);
+                    if (distance < closestDistance * closestDistance)
                     {
-                        closestDistance = distance;
+                        closestDistance = Mathf.Sqrt(distance);
                         closestBatchIndex = i;
                         closestJointIndex = j;
                     }
@@ -211,31 +210,25 @@ namespace Netherlands3D.Twin
 
         private void UpdateBuffers()
         {
-            while (Lines.Count > segmentPropertyBlockCache.Count)
+            while (segmentTransformMatrixCache.Count > segmentPropertyBlockCache.Count)
             {
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 Vector4[] colorCache = new Vector4[1023];
                 Color defaultColor = LineMaterial.GetColor("_Color");
-                for (int i = 0; i < Lines.Count; i++)
-                {
-                    segmentColorCache.Add(colorCache);
-                    for (int j = 0; j < colorCache.Length; j++)
-                        colorCache[j] = defaultColor;
-                }
+                for (int j = 0; j < colorCache.Length; j++)
+                    colorCache[j] = defaultColor;
+                segmentColorCache.Add(colorCache);
                 props.SetVectorArray("_SegmentColors", colorCache);
                 segmentPropertyBlockCache.Add(props);
             }
-            while (Lines.Count > jointPropertyBlockCache.Count)
+            while (jointsTransformMatrixCache.Count > jointPropertyBlockCache.Count)
             {
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 Vector4[] colorCache = new Vector4[1023];
                 Color defaultColor = LineMaterial.GetColor("_Color");
-                for (int i = 0; i < Lines.Count; i++)
-                {
-                    jointColorCache.Add(colorCache);
-                    for (int j = 0; j < colorCache.Length; j++)
-                        colorCache[j] = defaultColor;
-                }
+                for (int j = 0; j < colorCache.Length; j++)
+                    colorCache[j] = defaultColor;
+                jointColorCache.Add(colorCache);
                 props.SetVectorArray("_SegmentColors", colorCache);
                 jointPropertyBlockCache.Add(props);
             }
@@ -245,7 +238,7 @@ namespace Netherlands3D.Twin
         {
             selectedLineIndex = -1;
             Color defaultColor = LineMaterial.GetColor("_Color");
-            for (int batchIndex = 0; batchIndex < Lines.Count; batchIndex++)
+            for (int batchIndex = 0; batchIndex < segmentTransformMatrixCache.Count; batchIndex++)
             {
                 Vector4[] colors = segmentColorCache[batchIndex];
                 Vector4[] colors2 = jointColorCache[batchIndex];
@@ -310,11 +303,11 @@ namespace Netherlands3D.Twin
                 Vector3 lineCentroid = Vector3.zero;
                 for (int j = 0; j < Lines[i].Count; j++)
                     lineCentroid += Lines[i][j].ToUnity();
-                lineCentroid /= Lines[i].Count;
-                float dist = Vector3.Distance(selectionCentroid, lineCentroid);
-                if(dist < closest)
+                lineCentroid /= Lines[i].Count;                
+                float dist = Vector3.SqrMagnitude(selectionCentroid - lineCentroid);
+                if(dist < closest * closest)
                 {
-                    closest = dist;
+                    closest = Mathf.Sqrt(dist);
                     lineStartIndex = i;
                     testTarget = lineCentroid;
                 }

@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin
 {
-    public class PointRenderer3D : MonoBehaviour
+    public class BatchedMeshInstanceRenderer : MonoBehaviour
     {
         [Tooltip("The mesh to use for the points")] [SerializeField]
         private Mesh mesh;
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin
         private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
 
         private Camera projectionCamera;
-        private int layerMask = -1;
+        private LayerMask layerMask = -1;
         private bool cacheReady = false;
 
         public Mesh Mesh
@@ -104,7 +104,7 @@ namespace Netherlands3D.Twin
         /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
         /// </summary>
-        public (int,int) GetClosestPointIndex(Vector3 point)
+        public (int batchIndex, int instanceIndex) GetClosestInstanceIndex(Vector3 point)
         {
             int closestBatchIndex = -1;
             int closestLineIndex = -1;
@@ -129,17 +129,14 @@ namespace Netherlands3D.Twin
 
         private void UpdateBuffers()
         {
-            while (PositionCollections.Count > materialPropertyBlockCache.Count)
+            while (transformMatrixCache.Count > materialPropertyBlockCache.Count)
             {
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 Vector4[] colorCache = new Vector4[1023];
                 Color defaultColor = Material.GetColor("_Color");
-                for (int i = 0; i < PositionCollections.Count; i++)
-                {
-                    segmentColorCache.Add(colorCache);
-                    for(int j = 0; j < colorCache.Length; j++)
-                        colorCache[j] = defaultColor;
-                }
+                for (int j = 0; j < colorCache.Length; j++)
+                    colorCache[j] = defaultColor;
+                segmentColorCache.Add(colorCache);
                 props.SetVectorArray("_SegmentColors", colorCache);
                 materialPropertyBlockCache.Add(props);
             }
@@ -148,13 +145,11 @@ namespace Netherlands3D.Twin
         public void SetDefaultColors()
         {
             Color defaultColor = Material.GetColor("_Color");
-            for (int batchIndex = 0; batchIndex < PositionCollections.Count; batchIndex++)
+            for (int batchIndex = 0; batchIndex < transformMatrixCache.Count; batchIndex++)
             {
                 Vector4[] colors = segmentColorCache[batchIndex];
                 for(int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
-                {
                     colors[segmentIndex] = defaultColor;
-                }
                 segmentColorCache[batchIndex] = colors;
                 MaterialPropertyBlock props = materialPropertyBlockCache[batchIndex];
                 props.SetVectorArray("_SegmentColors", colors);
@@ -170,7 +165,7 @@ namespace Netherlands3D.Twin
         {
             if (batchIndex >= materialPropertyBlockCache.Count)
             {
-                Debug.LogWarning($"Index {batchIndex} is out of range");
+                Debug.LogError($"Index {batchIndex} is out of range");
                 return;
             }
             UpdateBuffers();            
@@ -183,14 +178,14 @@ namespace Netherlands3D.Twin
         /// </summary>
         public void SetLineColorClosestToPoint(Vector3 point, Color color)
         {
-            (int, int) indexPosition = GetClosestPointIndex(point);
+            var indexPosition = GetClosestInstanceIndex(point);
             if (indexPosition.Item1 == -1 || indexPosition.Item2 == -1)
             {
-                Debug.LogWarning("No line found");
+                Debug.LogError("No line found");
                 return;
             }
 
-            SetSpecificLineColorByIndex(indexPosition.Item1, indexPosition.Item2, color);            
+            SetSpecificLineColorByIndex(indexPosition.batchIndex, indexPosition.instanceIndex, color);            
         }        
 
         /// <summary>

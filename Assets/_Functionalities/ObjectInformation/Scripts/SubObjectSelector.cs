@@ -7,9 +7,9 @@ namespace Netherlands3D.Twin.ObjectInformation
 {
     public class SubObjectSelector : MonoBehaviour, IObjectSelector
     {
-        public bool HasObjectMapping { get => foundObject != null; }
-        public ObjectMapping Object { get => foundObject; }
-        public string ObjectID { get => foundId; }
+        public bool HasObjectMapping => foundObject != null;
+        public ObjectMapping Object => foundObject; 
+        public string ObjectID => foundId; 
 
         [SerializeField] private float hitDistance = 100000f;
         private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());

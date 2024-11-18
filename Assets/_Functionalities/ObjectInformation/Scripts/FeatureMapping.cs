@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin
 {
     public class FeatureMapping : MonoBehaviour
     {
-        public string FeatureID { get { return feature.Id; } }
+        public string FeatureID => feature.Id;
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }

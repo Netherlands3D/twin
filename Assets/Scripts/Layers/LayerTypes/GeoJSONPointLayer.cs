@@ -63,9 +63,9 @@ namespace Netherlands3D.Twin.Layers
         private bool randomizeColorPerFeature = false;
         public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
-        [SerializeField] private PointRenderer3D pointRenderer3D;
+        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
-        public PointRenderer3D PointRenderer3D
+        public BatchedMeshInstanceRenderer PointRenderer3D
         {
             get { return pointRenderer3D; }
             set

@@ -32,17 +32,16 @@ namespace Netherlands3D.Twin
         {            
             var ringList = new List<List<Vector3>>(polygon.Coordinates.Count);
             Vector3 centroid = Vector3.zero;
-            int count = 0;
             foreach (var lineString in polygon.Coordinates)
             {
                 var ring = ConvertToCoordinates(lineString, originalCoordinateSystem);
+                int ringCount = ring.Count;
                 foreach (var coord in ring)
                 {
-                    centroid += coord.ToUnity();
-                    count++;
+                    centroid += coord.ToUnity() / ringCount;
                 }
             }
-            centroid /= count;
+            centroid /= polygon.Coordinates.Count;
 
             foreach (var lineString in polygon.Coordinates)
             {
@@ -81,7 +80,7 @@ namespace Netherlands3D.Twin
             return line;
         }
 
-        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, PointRenderer3D renderer)
+        public static List<Coordinate> VisualizeMultiPoint(MultiPoint multipoint, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoints = ConvertToCoordinates(multipoint, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
@@ -89,7 +88,7 @@ namespace Netherlands3D.Twin
             return convertedPoints;
         }
 
-        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, PointRenderer3D renderer)
+        public static List<Coordinate> VisualizePoint(Point point, CoordinateSystem coordinateSystem, BatchedMeshInstanceRenderer renderer)
         {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, point.Coordinates);
             var singlePointList = new List<Coordinate>() { convertedPoint };
