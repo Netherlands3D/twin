@@ -60,6 +60,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5416903671490076247}
   - {fileID: 8027559627503466897}
   - {fileID: 1246744998147892042}
   - {fileID: 8655083008812607972}
@@ -69,13 +70,59 @@ Transform:
   - {fileID: 8230852100525442625}
   - {fileID: 6329644105682424471}
   - {fileID: 8447935934222000345}
-  - {fileID: 7440955795247456445}
   - {fileID: 4515907520926526781}
   - {fileID: 4930656928155257700}
   - {fileID: 9043962494800117598}
   - {fileID: 5356120492737783712}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8584105182119254496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5416903671490076247}
+  - component: {fileID: 39599883149469642}
+  m_Layer: 0
+  m_Name: ZuidOostAssetBundle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5416903671490076247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8584105182119254496}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10.558289, y: 105.47519, z: -333.44604}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919916255551741050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &39599883149469642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8584105182119254496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8d7e62293860340a75d954d53c22bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bundleName: zuidoostbundle
+  prefabName: Ontwikkeling Zuidoost.prefab
+  spawnPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &1688929104974317282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -917,7 +964,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 4586736435321042259}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 713a30b12e4a47e4595f7a546c9c4440, type: 3}
   m_Name: 
@@ -927,121 +974,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
     type: 3}
   m_PrefabInstance: {fileID: 4586736435321042259}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &4898830400746007185
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 3919916255551741050}
-    m_Modifications:
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2648030356980255278, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: m_Name
-      value: ObjImportManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: d87e3c002030244839b10dd526a5a009,
-        type: 2}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvokeStarted
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Events.GameObjectEvent, eu.netherlands3d.event-system.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 4687299167847755297, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-        type: 3}
-      propertyPath: CreatedMoveableGameObject.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3b1d8c004c65ae5488f8e271d65d05a6, type: 3}
---- !u!4 &7440955795247456445 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2648030356980255276, guid: 3b1d8c004c65ae5488f8e271d65d05a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 4898830400746007185}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5463074100605834998
 PrefabInstance:
