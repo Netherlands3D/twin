@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class BagIdHider : MonoBehaviour
+    public class ATMBagIdHider : MonoBehaviour
     {
         [SerializeField] private HiddenBagIds data;
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
