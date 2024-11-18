@@ -6,8 +6,7 @@ namespace Netherlands3D.Twin
 {
     /// <see href="en.wikipedia.org/wiki/Tiled_web_map"/>
     public class XyzTiles : MonoBehaviour
-    {
-        [SerializeField] private string url = @"https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png";
+    {        
         
         /// <summary>
         /// Initialize a Quadtree with the boundaries for an XYZTiles, which is a modified EPSG:3857 projection space
@@ -31,7 +30,7 @@ namespace Netherlands3D.Twin
             public string URL;
         }
         
-        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel)
+        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel, ATMDataController timeController)
         {
             // Ensure the coordinate is in EPSG:3857
             at = at.Convert(CoordinateSystem.WGS84_PseudoMercator);
@@ -46,14 +45,15 @@ namespace Netherlands3D.Twin
             {
                 TileIndex = tileIndex,
                 ZoomLevel = zoomLevel,
-                URL = this.GetTileUrl(tileIndex, zoomLevel),
+                URL = this.GetTileUrl(tileIndex, zoomLevel, timeController),
                 MaxBound = maxBound,
                 MinBound = minBound
             };
         }
 
-        private string GetTileUrl(Vector2Int tileIndex, int zoomLevel)
+        private string GetTileUrl(Vector2Int tileIndex, int zoomLevel, ATMDataController timeController)
         {
+            string url = timeController.GetUrl();
             return url.Replace("{z}", zoomLevel.ToString())
                 .Replace("{x}", tileIndex.x.ToString())
                 .Replace("{y}", tileIndex.y.ToString());

@@ -7,11 +7,22 @@ using Netherlands3D.Rendering;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Timeline;
 
 namespace Netherlands3D.Twin
 {
     public class ATMTileDataLayer : ImageProjectionLayer
     {
+        private ATMDataController timeController;
+
+        private float lastUpdatedTimeStamp = 0;
+        private float lastUpdatedInterval = 1f;
+        private bool visibleTilesDirty = false;
+        private List<TileChange> queuedChanges = new List<TileChange>();
+        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
+        private Coroutine updateTilesRoutine = null;
+
+
         [SerializeField] private int zoomLevel = 16;
         private XyzTiles xyzTiles;
 
@@ -42,6 +53,12 @@ namespace Netherlands3D.Twin
         {
             xyzTiles = GetComponent<XyzTiles>();
 
+            if (timeController == null)
+            {
+                timeController = gameObject.AddComponent<ATMDataController>();
+                timeController.ChangeYear += (a) => SetVisibleTilesDirty();
+            }
+            
             //Make sure Datasets at least has one item
             if (Datasets.Count != 0) return;
 
@@ -58,27 +75,9 @@ namespace Netherlands3D.Twin
             if (zoomLevel != previousZoomLevel)
             {
                 this.previousZoomLevel = zoomLevel;
-
-                UpdateReferenceSizes();
+                SetVisibleTilesDirty();
             }
-
-            // Every frame, update all tiles as the list might have changed.
-            foreach (var tile in tiles)
-            {
-                DecalProjector projector = tile.Value.gameObject.GetComponent<DecalProjector>();
-                if (!projector) return;
-
-                var localScale = projector.transform.localScale;
-
-                // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
-                // projection dimensions
-                projector.size = new Vector3(
-                    (float)(referenceTileWidth * localScale.x),
-                    (float)(referenceTileWidth * localScale.y),
-                    projector.size.z
-                );
-            }
-        }
+        }        
 
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
@@ -96,7 +95,7 @@ namespace Netherlands3D.Twin
             Tile tile = tiles[tileKey];
 
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
+            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
             
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
@@ -184,6 +183,110 @@ namespace Netherlands3D.Twin
 
                 TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
                 projector.SetPriority(renderIndex);
+            }
+        }
+
+        public void SetVisibleTilesDirty()
+        {
+            UpdateReferenceSizes();
+
+            //is the update already running cancel it
+            if (visibleTilesDirty && updateTilesRoutine != null)
+            {
+                queuedChanges.Clear();
+                StopCoroutine(updateTilesRoutine);
+            }
+
+            lastUpdatedTimeStamp = Time.time;
+            visibleTilesDirty = true;
+            updateTilesRoutine = StartCoroutine(UpdateVisibleTiles());
+        }
+
+        private IEnumerator UpdateVisibleTiles()
+        {
+            //get current tiles
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                if (tile.Value.runningCoroutine != null)
+                    StopCoroutine(tile.Value.runningCoroutine);
+
+                //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                //projector.gameObject.SetActive(false);
+
+                TileChange tileChange = new TileChange();
+                tileChange.X = tile.Key.x;
+                tileChange.Y = tile.Key.y;
+                queuedChanges.Add(tileChange);
+            }
+
+            if (!isEnabled)
+            {
+                queuedChanges.Clear();
+                yield break;
+            }
+
+            bool ready = true;
+            while (queuedChanges.Count > 0)
+            {
+                //lets wait half a second in case a slider is moving
+                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
+                {
+                    ready = false;
+                    TileChange next = queuedChanges[0];
+                    queuedChanges.RemoveAt(0);
+                    Vector2Int key = new Vector2Int(next.X, next.Y);
+                    if (tiles.ContainsKey(key))
+                    {
+                        tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next, key =>
+                        {
+                            ready = true;
+                            Vector2Int downloadedKey = new Vector2Int(key.X, key.Y);
+                            DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
+                            if (!projector) return;
+
+                            var localScale = projector.transform.localScale;
+
+                            // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
+                            // projection dimensions
+                            projector.size = new Vector3(
+                                (float)(referenceTileWidth * localScale.x),
+                                (float)(referenceTileWidth * localScale.y),
+                                projector.size.z
+                            );
+                        }));
+                    }
+                    else
+                    {
+                        ready = true;
+                    }
+                }
+                yield return wfs;
+            }
+
+            updateTilesRoutine = null;
+            visibleTilesDirty = false;
+        }
+
+        public override void LayerToggled()
+        {
+            base.LayerToggled();
+            if (!isEnabled)
+            {
+                //get current tiles
+                foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+                {
+                    if (tile.Value == null || tile.Value.gameObject == null)
+                        continue;
+
+                    if (tile.Value.runningCoroutine != null)
+                        StopCoroutine(tile.Value.runningCoroutine);
+
+                    //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                    //projector.gameObject.SetActive(false);
+                }
             }
         }
     }
