@@ -229,6 +229,6 @@ namespace Netherlands3D.Twin
                     }
                 }
             }
-        }S
+        }
     }
 }
