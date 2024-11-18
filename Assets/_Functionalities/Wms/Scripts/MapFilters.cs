@@ -1,11 +1,10 @@
 using System;
 using KindMen.Uxios;
 using Netherlands3D.Web;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Wms
 {
-    public struct Map
+    public struct MapFilters
     {
         public string name;
         public string version;
@@ -16,7 +15,7 @@ namespace Netherlands3D.Twin.Wms
         public int height;
         public bool transparent;
 
-        public static Map FromUrl(Uri url)
+        public static MapFilters FromUrl(Uri url)
         {
             var queryParameters = QueryString.Decode(url.Query);
             if (queryParameters["request"].ToLower() != "getmap")
@@ -30,7 +29,7 @@ namespace Netherlands3D.Twin.Wms
             int.TryParse(queryParameters["height"], out var parsedHeight);
             bool.TryParse(queryParameters["transparent"], out var parsedTransparent);
 
-            return new Map
+            return new MapFilters
             {
                 name = queryParameters["layers"],
                 version = version,

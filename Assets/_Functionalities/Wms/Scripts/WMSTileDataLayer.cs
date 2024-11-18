@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
@@ -65,13 +64,11 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            var mapData = Map.FromUrl(new Uri(wmsUrl));
+            var mapData = MapFilters.FromUrl(new Uri(wmsUrl));
             Tile tile = tiles[tileKey];
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
-            var bboxValue = $"{boundingBox.min.Points[0]},{boundingBox.min.Points[1]},{boundingBox.max.Points[0]},{boundingBox.max.Points[1]}";
-
-            string url = wmsUrl.Replace("{0}", bboxValue);
+            string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
             tile.runningWebRequest = webRequest;
@@ -109,22 +106,24 @@ namespace Netherlands3D.Twin
             callback(tileChange);
         }
 
-        private (Coordinate min, Coordinate max) DetermineBoundingBox(TileChange tileChange, Map mapData)
+        private Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
         {
-            var minCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
-            var maxCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
 
-            var splitReferenceCode = mapData.spatialReference.Split(':');
-            string coordinateSystemAsString = "28992";
-            if (splitReferenceCode[0].ToLower() == "epsg")
+            var splitReferenceCode = mapFilters.spatialReference.Split(':');
+            string coordinateSystemAsString = splitReferenceCode[0].ToLower() switch
             {
-                coordinateSystemAsString = splitReferenceCode[^1];
-            }
+                "epsg" => splitReferenceCode[^1],
+                _ => "28992"
+            };
 
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
-            minCoordinate = minCoordinate.Convert(foundCoordinateSystem);
-            maxCoordinate = maxCoordinate.Convert(foundCoordinateSystem);
-            return (minCoordinate, maxCoordinate);
+            
+            var boundingBox = new Wms.BoundingBox(bottomLeft, topRight);
+            boundingBox.Convert(foundCoordinateSystem);
+            
+            return boundingBox;
         }
 
         private void UpdateDrawOrderForChildren()

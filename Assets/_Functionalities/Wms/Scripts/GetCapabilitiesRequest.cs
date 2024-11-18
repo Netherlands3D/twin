@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Wms
             return namespaceManager;
         }
         
-        public List<Map> GetMaps(int width, int height, bool transparent)
+        public List<MapFilters> GetMaps(int width, int height, bool transparent)
         {
             // Select the Layer nodes from the WMS capabilities document
             var capabilityNode = GetSingleNodeByName(xmlDocument, "Capability");
@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Wms
             // Create a template that we can use as a basis for individual layers
             var mapTemplate = CreateMapTemplate(width, height, transparent);
 
-            var maps = new List<Map>();
+            var maps = new List<MapFilters>();
 
             // Loop through the Layer nodes and get their names
             foreach (XmlNode mapNode in mapNodes)
@@ -117,7 +117,7 @@ namespace Netherlands3D.Twin.Wms
                 // specified the flag at the end of this function will check the current node and its parents
                 var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
                 
-                var map = new Map()
+                var map = new MapFilters()
                 {
                     name = layerNameNode,
                     version = mapTemplate.version,
@@ -135,9 +135,9 @@ namespace Netherlands3D.Twin.Wms
             return maps;
         }
 
-        private Map CreateMapTemplate(int width, int height, bool transparent)
+        private MapFilters CreateMapTemplate(int width, int height, bool transparent)
         {
-            var mapTemplate = new Map
+            var mapTemplate = new MapFilters
             {
                 version = Version,
                 width = width,

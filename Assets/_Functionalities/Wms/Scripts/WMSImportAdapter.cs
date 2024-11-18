@@ -79,14 +79,14 @@ namespace Netherlands3D.Twin
             Debug.LogError("Unrecognized WMS request type at " + url);
         }
 
-        private void CreateLayer(Map map, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
+        private void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
         {
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = map.name;
+            newLayer.Name = mapFilters.name;
             newLayer.LayerData.ActiveSelf = defaultEnabled;
             
-            url = map.ToUrlBasedOn(url);
+            url = mapFilters.ToUrlBasedOn(url);
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
             propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(url);

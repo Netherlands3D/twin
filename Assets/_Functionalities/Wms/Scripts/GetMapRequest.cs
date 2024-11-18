@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Wms
             this.namespaceManager = CreateNameSpaceManager(this.xmlDocument);
         }
 
-        internal Map CreateMapFromCapabilitiesUrl(int width, int height, bool transparent)
+        internal MapFilters CreateMapFromCapabilitiesUrl(int width, int height, bool transparent)
         {
             var version = GetParamValueFromSourceUrl(url, "version");
             if (string.IsNullOrEmpty(version))
@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Wms
                 Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
             }
             
-            var wmsParam = new Map
+            var wmsParam = new MapFilters
             {
                 name = GetParamValueFromSourceUrl(url, "layers"),
                 spatialReferenceType = SpatialReferenceTypeFromVersion(new Version(version)),
