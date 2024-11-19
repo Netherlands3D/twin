@@ -12,8 +12,8 @@ public class GeoJsonTiler : MonoBehaviour
     [SerializeField] private string extension = ".geojson";
     const int TileSize = 1000;
 
-    const string SrcDir = "/Users/Tom/Documents/TSCD/Repos/NL3DPackages/Twin/Assets/StreamingAssets/ATMBuildingGeojson/";
-    const string DstDir = "/Users/Tom/Documents/TSCD/Repos/NL3DPackages/Twin/Assets/StreamingAssets/ATMBuildingGeojson/Tiles/";
+    const string SrcDir = "ATMBuildingGeojson/";
+    const string DstDir = "ATMBuildingGeojson/Tiles/";
 
     static double MinX = double.MaxValue;
     static double MaxX = double.MinValue;
@@ -24,7 +24,7 @@ public class GeoJsonTiler : MonoBehaviour
 
     public void Start()
     {
-        var SrcFile = Path.Combine(SrcDir, $"{baseName}{extension}" );
+        var SrcFile = Path.Combine(Application.streamingAssetsPath, SrcDir, $"{baseName}{extension}");
         string geojsonString = File.ReadAllText(SrcFile);
         JObject geojson = JObject.Parse(geojsonString);
         var features = geojson["features"];
@@ -50,62 +50,12 @@ public class GeoJsonTiler : MonoBehaviour
         {
             Vector2Int key = kvp.Key;
             Debug.Log($"Writing tile {key}.json, {kvp.Value.Features.Count} features");
-            string filePath = Path.Combine(DstDir, $"{baseName}{key}{extension}");
+            string filePath = Path.Combine(Application.streamingAssetsPath, DstDir, baseName, $"{baseName}{key}{extension}");
             File.WriteAllText(filePath, kvp.Value.ToJson());
         }
 
         Debug.Log("Done.");
     }
-
-    // static TileBBox GetTileBBox(JToken polygon)
-    // {
-    //     double minLon = double.PositiveInfinity, maxLon = double.NegativeInfinity;
-    //     double minLat = double.PositiveInfinity, maxLat = double.NegativeInfinity;
-    //
-    //     foreach (var point in polygon)
-    //     {
-    //         double lon = (double)point[0];
-    //         double lat = (double)point[1];
-    //
-    //         minLon = Math.Min(minLon, lon);
-    //         maxLon = Math.Max(maxLon, lon);
-    //         minLat = Math.Min(minLat, lat);
-    //         maxLat = Math.Max(maxLat, lat);
-    //     }
-    //
-    //     var minXY = ProjectToRDMeters(minLat, minLon);
-    //     var maxXY = ProjectToRDMeters(maxLat, maxLon);
-    //
-    //     return new TileBBox
-    //     {
-    //         MinX = (int)(minXY.X / TileSize),
-    //         MinY = (int)(minXY.Y / TileSize),
-    //         MaxX = (int)(maxXY.X / TileSize),
-    //         MaxY = (int)(maxXY.Y / TileSize)
-    //     };
-    // }
-
-    // static void AddToTiles(JToken feature, TileBBox tileBBox)
-    // {
-    //     for (int y = tileBBox.MinY; y <= tileBBox.MaxY; y++)
-    //     {
-    //         for (int x = tileBBox.MinX; x <= tileBBox.MaxX; x++)
-    //         {
-    //             Vector2Int key = new Vector2Int(x, y);
-    //             if (!Tiles.ContainsKey(key))
-    //             {
-    //                 MaxX = Math.Max(MaxX, x);
-    //                 MaxY = Math.Max(MaxY, y);
-    //                 MinX = Math.Min(MinX, x);
-    //                 MinY = Math.Min(MinY, y);
-    //
-    //                 Tiles[key] = new FeatureCollection();
-    //             }
-    //
-    //             Tiles[key].Features.Add(feature);
-    //         }
-    //     }
-    // }
 
     static void AddToTiles(JToken feature, Vector2Int key)
     {
@@ -124,7 +74,6 @@ public class GeoJsonTiler : MonoBehaviour
         var rd = rdCoord.ToVector3RD();
 
         return rd;
-        // return new Point { X = rd.x, Y = rd.y };
     }
 
     class FeatureCollection
@@ -133,18 +82,4 @@ public class GeoJsonTiler : MonoBehaviour
 
         public string ToJson() => JObject.FromObject(new { type = "FeatureCollection", features = Features }).ToString();
     }
-
-    // class TileBBox
-    // {
-    //     public int MinX { get; set; }
-    //     public int MinY { get; set; }
-    //     public int MaxX { get; set; }
-    //     public int MaxY { get; set; }
-    // }
-
-    // struct Point
-    // {
-    //     public double X;
-    //     public double Y;
-    // }
 }
