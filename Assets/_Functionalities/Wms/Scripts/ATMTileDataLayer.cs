@@ -87,13 +87,6 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private static int boundsMinX = int.MaxValue;
-        private static int boundsMaxX = int.MinValue;
-        private static int boundsMinY = int.MaxValue;
-        private static int boundsMaxY = int.MinValue;
-
-        
-
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
             Action<TileChange> callback = null
@@ -112,8 +105,8 @@ namespace Netherlands3D.Twin
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
 
-            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
-            
+            //because of the predefined map bounds, we dont have to check outside these bounds
+            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;           
             
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
@@ -131,53 +124,51 @@ namespace Netherlands3D.Twin
             }
             else
             {
-                if (xyzTile.TileIndex.x < boundsMinX)
-                    boundsMinX = xyzTile.TileIndex.x;
-                if (xyzTile.TileIndex.x > boundsMaxX)
-                    boundsMaxX = xyzTile.TileIndex.x;
-                if (xyzTile.TileIndex.y < boundsMinY)
-                    boundsMinY = xyzTile.TileIndex.y;
-                if (xyzTile.TileIndex.y > boundsMaxY)
-                    boundsMaxY = xyzTile.TileIndex.y;
-
-                Debug.Log("minx:" + boundsMinX + "miny:" + boundsMinY + "maxx:" + boundsMaxX + "maxy:" + boundsMaxY);
-
-                ClearPreviousTexture(tile);
+                ClearPreviousTexture(tile);                
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
                 tex.Compress(true);
                 tex.filterMode = FilterMode.Bilinear;
                 tex.Apply(false, true);
-
-                if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
-                {
-                    projector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
-                    projector.gameObject.SetActive(isEnabled);
-                    projector.SetTexture(tex);
-                    //force the depth to be at least larger than its height to prevent z-fighting
-                    DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
-                    TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
-                    if (ProjectorHeight >= decalProjector.size.z)
-                        textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
-
-                    Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
-                    var rdCoordinate = new Coordinate(
-                        CoordinateSystem.RD,
-                        origin.x,
-                        origin.y,
-                        0.0d
-                    );
-                    var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
-                    originCoordinate.y = ProjectorHeight;
-                    tile.gameObject.transform.position = originCoordinate; 
-                    decalProjector.transform.position -= offset;
-
-                    //set the render index, to make sure the render order is maintained
-                    textureDecalProjector.SetPriority(renderIndex);
-                }
+                OnTextureDownloaded(tex, tileKey, offset);
             }
 
             callback(tileChange);
+        }
+
+        private void OnTextureDownloaded(Texture2D tex, Vector2Int tileKey, Vector3 projectorOffset)
+        {
+            Tile tile = tiles[tileKey];
+
+            if (tiles[tileKey] == null || tiles[tileKey].gameObject == null)
+                return;
+
+            if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+            {
+                projector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
+                projector.gameObject.SetActive(isEnabled);
+                projector.SetTexture(tex);
+                //force the depth to be at least larger than its height to prevent z-fighting
+                DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
+                TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
+                if (ProjectorHeight >= decalProjector.size.z)
+                    textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+
+                Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
+                var rdCoordinate = new Coordinate(
+                    CoordinateSystem.RD,
+                    origin.x,
+                    origin.y,
+                    0.0d
+                );
+                var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+                originCoordinate.y = ProjectorHeight;
+                tile.gameObject.transform.position = originCoordinate;
+                decalProjector.transform.position -= projectorOffset;
+
+                //set the render index, to make sure the render order is maintained
+                textureDecalProjector.SetPriority(renderIndex);
+            }
         }
 
         private void UpdateReferenceSizes()
@@ -252,9 +243,6 @@ namespace Netherlands3D.Twin
 
                 if (tile.Value.runningCoroutine != null)
                     StopCoroutine(tile.Value.runningCoroutine);
-                               
-
-                
 
                 TileChange tileChange = new TileChange();
                 tileChange.X = tile.Key.x;
@@ -284,18 +272,18 @@ namespace Netherlands3D.Twin
                         {
                             ready = true;
                             Vector2Int downloadedKey = new Vector2Int(key.X, key.Y);
-                            //DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
-                            //if (!projector) return;
+                            DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
+                            if (!projector) return;
 
-                            //var localScale = projector.transform.localScale;
+                            var localScale = projector.transform.localScale;
 
-                            //// because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
-                            //// projection dimensions
-                            //projector.size = new Vector3(
-                            //    (float)(referenceTileWidth * localScale.x),
-                            //    (float)(referenceTileWidth * localScale.y),
-                            //    projector.size.z
-                            //);
+                            // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
+                            // projection dimensions
+                            projector.size = new Vector3(
+                                (float)(referenceTileWidth * localScale.x),
+                                (float)(referenceTileWidth * localScale.y),
+                                projector.size.z
+                            );
 
                         }));
                     }
