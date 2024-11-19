@@ -22,6 +22,9 @@ namespace Netherlands3D.Twin
         private WaitForSeconds wfs = new WaitForSeconds(0.5f);
         private Coroutine updateTilesRoutine = null;
 
+        private const float earthRadius = 6378.137f;
+        private const float equatorialCircumference = 2 * Mathf.PI * earthRadius;
+        private const float log2x = 0.30102999566f;
 
         [SerializeField] private int zoomLevel = 16;
         private XyzTiles xyzTiles;
@@ -79,12 +82,35 @@ namespace Netherlands3D.Twin
         }
 
         private void Update()
-        {
+        {            
+            //zoomLevel = CalculateZoomLevel();
+            Debug.Log(zoomLevel);
             if (zoomLevel != previousZoomLevel)
             {
                 this.previousZoomLevel = zoomLevel;
                 SetVisibleTilesDirty();
             }
+        }
+
+        public int CalculateZoomLevel()
+        {
+            Vector3 camPosition = Camera.main.transform.position;
+            float viewDistance = camPosition.y; //lets keep it orthographic?
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                camPosition.x,
+                camPosition.z,
+                0
+            );
+            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+            float latitude = (float)coord.Points[0];
+            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad); //to rad
+
+            //https://wiki.openstreetmap.org/wiki/Zoom_levels
+            float numerator = equatorialCircumference * cosLatitude;
+            float zoomLevel = Mathf.Log(numerator / viewDistance) / log2x;
+
+            return Mathf.RoundToInt(zoomLevel);
         }
 
         protected override IEnumerator DownloadDataAndGenerateTexture(
