@@ -102,16 +102,19 @@ namespace Netherlands3D.Twin
 
             Tile tile = tiles[tileKey];
 
-            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
+            //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
+            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + 0.5f * tileSize, tileChange.Y + 0.5f * tileSize);
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
 
             //because of the predefined map bounds, we dont have to check outside these bounds
-            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;           
-            
+            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
+
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+            //set the output position back to the right coordinate as this was adjusted before
+            offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
@@ -272,19 +275,21 @@ namespace Netherlands3D.Twin
                         {
                             ready = true;
                             Vector2Int downloadedKey = new Vector2Int(key.X, key.Y);
-                            DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
-                            if (!projector) return;
+                            if (tiles[downloadedKey] != null && tiles[downloadedKey].gameObject != null)
+                            {
+                                DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
+                                if (!projector) return;
 
-                            var localScale = projector.transform.localScale;
+                                var localScale = projector.transform.localScale;
 
-                            // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
-                            // projection dimensions
-                            projector.size = new Vector3(
-                                (float)(referenceTileWidth * localScale.x),
-                                (float)(referenceTileWidth * localScale.y),
-                                projector.size.z
-                            );
-
+                                // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
+                                // projection dimensions
+                                projector.size = new Vector3(
+                                    (float)(referenceTileWidth * localScale.x),
+                                    (float)(referenceTileWidth * localScale.y),
+                                    projector.size.z
+                                );
+                            }
                         }));
                     }
                     else
