@@ -78,7 +78,6 @@ namespace Netherlands3D.Twin
                 timeController.ChangeYear -= ATMDataHandler;
         }
 
-
         private void Update()
         {
             if (zoomLevel != previousZoomLevel)
@@ -87,6 +86,13 @@ namespace Netherlands3D.Twin
                 SetVisibleTilesDirty();
             }
         }
+
+        private static int boundsMinX = int.MaxValue;
+        private static int boundsMaxX = int.MinValue;
+        private static int boundsMinY = int.MaxValue;
+        private static int boundsMaxY = int.MinValue;
+
+        
 
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
@@ -105,6 +111,9 @@ namespace Netherlands3D.Twin
 
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
+
+            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
+            
             
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
@@ -122,6 +131,17 @@ namespace Netherlands3D.Twin
             }
             else
             {
+                if (xyzTile.TileIndex.x < boundsMinX)
+                    boundsMinX = xyzTile.TileIndex.x;
+                if (xyzTile.TileIndex.x > boundsMaxX)
+                    boundsMaxX = xyzTile.TileIndex.x;
+                if (xyzTile.TileIndex.y < boundsMinY)
+                    boundsMinY = xyzTile.TileIndex.y;
+                if (xyzTile.TileIndex.y > boundsMaxY)
+                    boundsMaxY = xyzTile.TileIndex.y;
+
+                Debug.Log("minx:" + boundsMinX + "miny:" + boundsMinY + "maxx:" + boundsMaxX + "maxy:" + boundsMaxY);
+
                 ClearPreviousTexture(tile);
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
@@ -192,7 +212,7 @@ namespace Netherlands3D.Twin
                 0,
                 (float)(tileCoordRd.Points[1] - minBound.Points[1])
             );
-        }
+        }        
 
         private void UpdateDrawOrderForChildren()
         {
