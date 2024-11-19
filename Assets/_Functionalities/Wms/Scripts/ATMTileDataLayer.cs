@@ -133,12 +133,12 @@ namespace Netherlands3D.Twin
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
 
             //because of the predefined map bounds, we dont have to check outside these bounds
-            if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
+            //if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
 
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
             // have the cleanest match
-            var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+            var offset = CalculateTileOffset(xyzTile, tileCoordinate, zoomLevel);
             //set the output position back to the right coordinate as this was adjusted before
             offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
 
@@ -223,16 +223,23 @@ namespace Netherlands3D.Twin
             return (tileWidth, tileHeight);
         }
 
-        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCoordRd)
+        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCoordRd, int zoomLevel)
         {
             var minBound = xyzTile.MinBound.Convert(CoordinateSystem.RD);
+            //convert minbound by zoomlevel 
+            //todo here
+
+            var minBoundRd = xyzTile.MinBound.Convert(CoordinateSystem.RD);
+            var maxBoundRd = xyzTile.MaxBound.Convert(CoordinateSystem.RD);
+            var tileWidth = maxBoundRd.Points[0] - minBoundRd.Points[0];
+            double tileSizeAtZoom = tileWidth / Math.Pow(2, xyzTile.ZoomLevel);
 
             return new Vector3(
                 (float)(tileCoordRd.Points[0] - minBound.Points[0]),
                 0,
                 (float)(tileCoordRd.Points[1] - minBound.Points[1])
             );
-        }        
+        }       
 
         private void UpdateDrawOrderForChildren()
         {
