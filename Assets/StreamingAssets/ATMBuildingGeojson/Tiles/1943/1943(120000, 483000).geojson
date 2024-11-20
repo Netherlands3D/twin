@@ -1,0 +1,215 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875811,
+          52.340157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175819",
+        "label": "Zuidelijke Wandelweg 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883351,
+          52.340844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A179523",
+        "label": "Zuidelijke Wandelweg 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87786,
+          52.340505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175818",
+        "label": "Zuidelijke Wandelweg 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884,
+          52.341349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169258",
+        "label": "Koninginnedok 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883929,
+          52.341111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169260",
+        "label": "Koninginnedok 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873774,
+          52.341237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175817",
+        "label": "Tuinderspad 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885286,
+          52.339925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A179526",
+        "label": "Binnendijksche Buitenveldersche Polder 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875811,
+          52.340157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175819",
+        "label": "Zuidelijke Wandelweg 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883351,
+          52.340844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A179523",
+        "label": "Zuidelijke Wandelweg 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87786,
+          52.340505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175818",
+        "label": "Zuidelijke Wandelweg 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884,
+          52.341349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169258",
+        "label": "Koninginnedok 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883929,
+          52.341111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169260",
+        "label": "Koninginnedok 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873774,
+          52.341237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A175817",
+        "label": "Tuinderspad 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885286,
+          52.339925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A179526",
+        "label": "Binnendijksche Buitenveldersche Polder 23",
+        "year": "1943"
+      }
+    }
+  ]
+}

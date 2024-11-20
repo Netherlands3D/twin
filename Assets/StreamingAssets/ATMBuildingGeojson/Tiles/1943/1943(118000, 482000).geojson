@@ -1,0 +1,1505 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857771,
+          52.330556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185178",
+        "label": "Amstelveenseweg 685",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85883,
+          52.333713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185159",
+        "label": "Amstelveenseweg 587",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857775,
+          52.330466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185180",
+        "label": "Amstelveenseweg 689",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857755,
+          52.330888
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185172",
+        "label": "Amstelveenseweg 673",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85777,
+          52.330646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185176",
+        "label": "Amstelveenseweg 681",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185206",
+        "label": "Amstelveenseweg 838",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185199",
+        "label": "Amstelveenseweg 822",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857193,
+          52.329943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185192",
+        "label": "Amstelveenseweg 808",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858008,
+          52.331386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185165",
+        "label": "Amstelveenseweg 653",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85775,
+          52.329335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185187",
+        "label": "Amstelveenseweg 725",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857201,
+          52.32966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185197",
+        "label": "Amstelveenseweg 818",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857746,
+          52.329628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185183",
+        "label": "Amstelveenseweg 717",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856869,
+          52.329436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185201",
+        "label": "Amstelveenseweg 828",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857746,
+          52.331306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185166",
+        "label": "Amstelveenseweg 661",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856876,
+          52.329352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185203",
+        "label": "Amstelveenseweg 832",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857197,
+          52.329314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185207",
+        "label": "Amstelveenseweg 840",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857763,
+          52.331137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185168",
+        "label": "Amstelveenseweg 665",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857759,
+          52.330981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185170",
+        "label": "Amstelveenseweg 669",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857735,
+          52.329479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185185",
+        "label": "Amstelveenseweg 721",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857736,
+          52.329389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185186",
+        "label": "Amstelveenseweg 723",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857763,
+          52.330723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185175",
+        "label": "Amstelveenseweg 679",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857772,
+          52.330514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185179",
+        "label": "Amstelveenseweg 687",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857751,
+          52.329538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185184",
+        "label": "Amstelveenseweg 719",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857922,
+          52.333502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185160",
+        "label": "Amstelveenseweg 593",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857197,
+          52.329609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185198",
+        "label": "Amstelveenseweg 820",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858049,
+          52.333072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185162",
+        "label": "Amstelveenseweg 601",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856877,
+          52.329396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185202",
+        "label": "Amstelveenseweg 830",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857199,
+          52.330048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185190",
+        "label": "Amstelveenseweg 804",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857186,
+          52.330113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185189",
+        "label": "Amstelveenseweg 802",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857204,
+          52.329414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185205",
+        "label": "Amstelveenseweg 836",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857859,
+          52.332818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185163",
+        "label": "Amstelveenseweg 609",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856864,
+          52.329476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185200",
+        "label": "Amstelveenseweg 826",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185193",
+        "label": "Amstelveenseweg 810",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857191,
+          52.329994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185191",
+        "label": "Amstelveenseweg 806",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857187,
+          52.329466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185204",
+        "label": "Amstelveenseweg 834",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857204,
+          52.329839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185194",
+        "label": "Amstelveenseweg 812",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857766,
+          52.329671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185182",
+        "label": "Amstelveenseweg 715",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857761,
+          52.330606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185177",
+        "label": "Amstelveenseweg 683",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857762,
+          52.33093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185171",
+        "label": "Amstelveenseweg 671",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857743,
+          52.33124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185167",
+        "label": "Amstelveenseweg 663",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857748,
+          52.330837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185173",
+        "label": "Amstelveenseweg 675",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857194,
+          52.32973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185196",
+        "label": "Amstelveenseweg 816",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857766,
+          52.331032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185169",
+        "label": "Amstelveenseweg 667",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185195",
+        "label": "Amstelveenseweg 814",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858026,
+          52.329997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185181",
+        "label": "Amstelveenseweg 703",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857198,
+          52.329271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185208",
+        "label": "Amstelveenseweg 842",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857732,
+          52.329262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185188",
+        "label": "Amstelveenseweg 727",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857879,
+          52.333349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185161",
+        "label": "Amstelveenseweg 595",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857759,
+          52.330789
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185174",
+        "label": "Amstelveenseweg 677",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857869,
+          52.332425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185164",
+        "label": "Amstelveenseweg 613",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857771,
+          52.330556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185178",
+        "label": "Amstelveenseweg 685",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85883,
+          52.333713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185159",
+        "label": "Amstelveenseweg 587",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857775,
+          52.330466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185180",
+        "label": "Amstelveenseweg 689",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857755,
+          52.330888
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185172",
+        "label": "Amstelveenseweg 673",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85777,
+          52.330646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185176",
+        "label": "Amstelveenseweg 681",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185206",
+        "label": "Amstelveenseweg 838",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185199",
+        "label": "Amstelveenseweg 822",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857193,
+          52.329943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185192",
+        "label": "Amstelveenseweg 808",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858008,
+          52.331386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185165",
+        "label": "Amstelveenseweg 653",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85775,
+          52.329335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185187",
+        "label": "Amstelveenseweg 725",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857201,
+          52.32966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185197",
+        "label": "Amstelveenseweg 818",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857746,
+          52.329628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185183",
+        "label": "Amstelveenseweg 717",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856869,
+          52.329436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185201",
+        "label": "Amstelveenseweg 828",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857746,
+          52.331306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185166",
+        "label": "Amstelveenseweg 661",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856876,
+          52.329352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185203",
+        "label": "Amstelveenseweg 832",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857197,
+          52.329314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185207",
+        "label": "Amstelveenseweg 840",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857763,
+          52.331137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185168",
+        "label": "Amstelveenseweg 665",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857759,
+          52.330981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185170",
+        "label": "Amstelveenseweg 669",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857735,
+          52.329479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185185",
+        "label": "Amstelveenseweg 721",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857736,
+          52.329389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185186",
+        "label": "Amstelveenseweg 723",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857763,
+          52.330723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185175",
+        "label": "Amstelveenseweg 679",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857772,
+          52.330514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185179",
+        "label": "Amstelveenseweg 687",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857751,
+          52.329538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185184",
+        "label": "Amstelveenseweg 719",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857922,
+          52.333502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185160",
+        "label": "Amstelveenseweg 593",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857197,
+          52.329609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185198",
+        "label": "Amstelveenseweg 820",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858049,
+          52.333072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185162",
+        "label": "Amstelveenseweg 601",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856877,
+          52.329396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185202",
+        "label": "Amstelveenseweg 830",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857199,
+          52.330048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185190",
+        "label": "Amstelveenseweg 804",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857186,
+          52.330113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185189",
+        "label": "Amstelveenseweg 802",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857204,
+          52.329414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185205",
+        "label": "Amstelveenseweg 836",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857859,
+          52.332818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185163",
+        "label": "Amstelveenseweg 609",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856864,
+          52.329476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185200",
+        "label": "Amstelveenseweg 826",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185193",
+        "label": "Amstelveenseweg 810",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857191,
+          52.329994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185191",
+        "label": "Amstelveenseweg 806",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857187,
+          52.329466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185204",
+        "label": "Amstelveenseweg 834",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857204,
+          52.329839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185194",
+        "label": "Amstelveenseweg 812",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857766,
+          52.329671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185182",
+        "label": "Amstelveenseweg 715",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857761,
+          52.330606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185177",
+        "label": "Amstelveenseweg 683",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857762,
+          52.33093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185171",
+        "label": "Amstelveenseweg 671",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857743,
+          52.33124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185167",
+        "label": "Amstelveenseweg 663",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857748,
+          52.330837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185173",
+        "label": "Amstelveenseweg 675",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857194,
+          52.32973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185196",
+        "label": "Amstelveenseweg 816",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857766,
+          52.331032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185169",
+        "label": "Amstelveenseweg 667",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857196,
+          52.329782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185195",
+        "label": "Amstelveenseweg 814",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858026,
+          52.329997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185181",
+        "label": "Amstelveenseweg 703",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857198,
+          52.329271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185208",
+        "label": "Amstelveenseweg 842",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857732,
+          52.329262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185188",
+        "label": "Amstelveenseweg 727",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857879,
+          52.333349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185161",
+        "label": "Amstelveenseweg 595",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857759,
+          52.330789
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185174",
+        "label": "Amstelveenseweg 677",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857869,
+          52.332425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185164",
+        "label": "Amstelveenseweg 613",
+        "year": "1943"
+      }
+    }
+  ]
+}

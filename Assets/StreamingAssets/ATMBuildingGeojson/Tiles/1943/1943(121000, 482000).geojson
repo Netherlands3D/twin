@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897658,
+          52.331316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185113",
+        "label": "Amsteldijk 316",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897341,
+          52.332104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185112",
+        "label": "Amsteldijk 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897364,
+          52.330412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185115",
+        "label": "Amsteldijk 320",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897947,
+          52.330487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185114",
+        "label": "Amsteldijk 318",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897658,
+          52.331316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185113",
+        "label": "Amsteldijk 316",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897341,
+          52.332104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185112",
+        "label": "Amsteldijk 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897364,
+          52.330412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185115",
+        "label": "Amsteldijk 320",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897947,
+          52.330487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185114",
+        "label": "Amsteldijk 318",
+        "year": "1943"
+      }
+    }
+  ]
+}

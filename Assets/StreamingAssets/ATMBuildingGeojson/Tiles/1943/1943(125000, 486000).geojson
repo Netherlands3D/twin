@@ -1,0 +1,3125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949211,
+          52.367216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207515",
+        "label": "Zeeburgerdorp 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950058,
+          52.367219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207504",
+        "label": "Zeeburgerdorp 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954704,
+          52.368207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208669",
+        "label": "Cruquiusweg 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948693,
+          52.367209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207521",
+        "label": "Zeeburgerdorp 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955944,
+          52.366322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208680",
+        "label": "Zeeburgerdijk 325",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948038,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207529",
+        "label": "Zeeburgerdorp 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949465,
+          52.367005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207492",
+        "label": "Zeeburgerdorp 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948502,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207481",
+        "label": "Zeeburgerdorp 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947867,
+          52.3672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207531",
+        "label": "Zeeburgerdorp 59",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948198,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207477",
+        "label": "Zeeburgerdorp 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94984,
+          52.367221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207507",
+        "label": "Zeeburgerdorp 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950692,
+          52.361801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208687",
+        "label": "Ringsloot 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953055,
+          52.365971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208677",
+        "label": "Zeeburgerdijk 228",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954487,
+          52.368919
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208672",
+        "label": "Cruquiusweg 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948358,
+          52.367208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207525",
+        "label": "Zeeburgerdorp 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95526,
+          52.366278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208678",
+        "label": "Zeeburgerdijk 319",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94887,
+          52.367001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207485",
+        "label": "Zeeburgerdorp 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948099,
+          52.368468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207470",
+        "label": "Cruquiusweg 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948281,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207478",
+        "label": "Zeeburgerdorp 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94991,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207506",
+        "label": "Zeeburgerdorp 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954405,
+          52.368602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208670",
+        "label": "Cruquiusweg 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954495,
+          52.366216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153759",
+        "label": "Zeeburgerdijk 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955688,
+          52.365873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153738",
+        "label": "Zeeburgerdijk 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948335,
+          52.366996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207479",
+        "label": "Zeeburgerdorp 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953386,
+          52.367961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208668",
+        "label": "Cruquiusweg 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948114,
+          52.367207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207528",
+        "label": "Zeeburgerdorp 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949148,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207488",
+        "label": "Zeeburgerdorp 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954278,
+          52.366218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153754",
+        "label": "Zeeburgerdijk 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950546,
+          52.361844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208688",
+        "label": "Ringsloot 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954212,
+          52.366214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153752",
+        "label": "Zeeburgerdijk 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949044,
+          52.367001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207487",
+        "label": "Zeeburgerdorp 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949772,
+          52.367221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207508",
+        "label": "Zeeburgerdorp 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949526,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207511",
+        "label": "Zeeburgerdorp 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94877,
+          52.367212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207520",
+        "label": "Zeeburgerdorp 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960797,
+          52.363226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208686",
+        "label": "Diemerzeedijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954075,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208665",
+        "label": "Cruquiusweg 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954699,
+          52.369635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208673",
+        "label": "Cruquiusweg 142",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949613,
+          52.367006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207494",
+        "label": "Zeeburgerdorp 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948599,
+          52.367202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207522",
+        "label": "Zeeburgerdorp 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952709,
+          52.368328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208663",
+        "label": "Cruquiusweg 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95464,
+          52.369843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208674",
+        "label": "Cruquiusweg 144",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948511,
+          52.3672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207523",
+        "label": "Zeeburgerdorp 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948422,
+          52.366998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207480",
+        "label": "Zeeburgerdorp 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947965,
+          52.367197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207530",
+        "label": "Zeeburgerdorp 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953383,
+          52.368088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208667",
+        "label": "Cruquiusweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94782,
+          52.36699
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207473",
+        "label": "Zeeburgerdorp 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953774,
+          52.367808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208675",
+        "label": "Nieuwevaartweg 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949027,
+          52.368492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207471",
+        "label": "Cruquiusweg 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948956,
+          52.36721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207518",
+        "label": "Zeeburgerdorp 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954252,
+          52.365925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153741",
+        "label": "Zeeburgerdijk 230",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949229,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207489",
+        "label": "Zeeburgerdorp 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947155,
+          52.367044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207400",
+        "label": "Zeeburgerpad 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949952,
+          52.368675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207472",
+        "label": "Cruquiusweg 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949315,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207514",
+        "label": "Zeeburgerdorp 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950129,
+          52.367226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207503",
+        "label": "Zeeburgerdorp 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949839,
+          52.367057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207497",
+        "label": "Zeeburgerdorp 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956129,
+          52.365733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153736",
+        "label": "Zeeburgerdijk 236",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950141,
+          52.367064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207501",
+        "label": "Zeeburgerdorp 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94962,
+          52.367214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207510",
+        "label": "Zeeburgerdorp 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948782,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207484",
+        "label": "Zeeburgerdorp 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95258,
+          52.368328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208662",
+        "label": "Cruquiusweg 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94887,
+          52.367208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207519",
+        "label": "Zeeburgerdorp 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949753,
+          52.367033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207496",
+        "label": "Zeeburgerdorp 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953759,
+          52.367636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208676",
+        "label": "Nieuwevaartweg 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954078,
+          52.369164
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208666",
+        "label": "Cruquiusweg 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949992,
+          52.367222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207505",
+        "label": "Zeeburgerdorp 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948265,
+          52.367205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207526",
+        "label": "Zeeburgerdorp 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949324,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207490",
+        "label": "Zeeburgerdorp 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953675,
+          52.369113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208661",
+        "label": "Cruquiusweg 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949468,
+          52.367214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207512",
+        "label": "Zeeburgerdorp 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954355,
+          52.366219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153756",
+        "label": "Zeeburgerdijk 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948137,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207476",
+        "label": "Zeeburgerdorp 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95444,
+          52.36885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208671",
+        "label": "Cruquiusweg 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949533,
+          52.367006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207493",
+        "label": "Zeeburgerdorp 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950214,
+          52.362033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208689",
+        "label": "Ringsloot 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949388,
+          52.367005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207491",
+        "label": "Zeeburgerdorp 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94991,
+          52.36706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207498",
+        "label": "Zeeburgerdorp 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954005,
+          52.368874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208664",
+        "label": "Cruquiusweg 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949679,
+          52.367007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207495",
+        "label": "Zeeburgerdorp 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949687,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207509",
+        "label": "Zeeburgerdorp 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949148,
+          52.367211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207516",
+        "label": "Zeeburgerdorp 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207482",
+        "label": "Zeeburgerdorp 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94797,
+          52.366991
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207474",
+        "label": "Zeeburgerdorp 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950065,
+          52.367064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207500",
+        "label": "Zeeburgerdorp 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948192,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207527",
+        "label": "Zeeburgerdorp 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949053,
+          52.367211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207517",
+        "label": "Zeeburgerdorp 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948046,
+          52.36699
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207475",
+        "label": "Zeeburgerdorp 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949617,
+          52.366006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153743",
+        "label": "Zeeburgerdijk 226",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948964,
+          52.367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207486",
+        "label": "Zeeburgerdorp 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948698,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207483",
+        "label": "Zeeburgerdorp 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949983,
+          52.367061
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207499",
+        "label": "Zeeburgerdorp 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948404,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207524",
+        "label": "Zeeburgerdorp 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94938,
+          52.367215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207513",
+        "label": "Zeeburgerdorp 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947765,
+          52.367218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207532",
+        "label": "Zeeburgerdorp 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958554,
+          52.364715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153726",
+        "label": "Ijdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958575,
+          52.36461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153728",
+        "label": "Ijdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958599,
+          52.364503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153730",
+        "label": "Ijdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958686,
+          52.364753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153732",
+        "label": "Ijdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958757,
+          52.364493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153734",
+        "label": "Ijdijk 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958263,
+          52.368701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153911",
+        "label": "Ijdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946882,
+          52.36704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207399",
+        "label": "Zeeburgerpad 86 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950364,
+          52.367174
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207502",
+        "label": "Zeeburgerdorp 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958892,
+          52.364183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208660",
+        "label": "Ijdijk 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955406,
+          52.366278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208679",
+        "label": "Zeeburgerdijk 321",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949211,
+          52.367216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207515",
+        "label": "Zeeburgerdorp 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950058,
+          52.367219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207504",
+        "label": "Zeeburgerdorp 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954704,
+          52.368207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208669",
+        "label": "Cruquiusweg 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948693,
+          52.367209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207521",
+        "label": "Zeeburgerdorp 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955944,
+          52.366322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208680",
+        "label": "Zeeburgerdijk 325",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948038,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207529",
+        "label": "Zeeburgerdorp 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949465,
+          52.367005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207492",
+        "label": "Zeeburgerdorp 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948502,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207481",
+        "label": "Zeeburgerdorp 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947867,
+          52.3672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207531",
+        "label": "Zeeburgerdorp 59",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948198,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207477",
+        "label": "Zeeburgerdorp 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94984,
+          52.367221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207507",
+        "label": "Zeeburgerdorp 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950692,
+          52.361801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208687",
+        "label": "Ringsloot 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953055,
+          52.365971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208677",
+        "label": "Zeeburgerdijk 228",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954487,
+          52.368919
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208672",
+        "label": "Cruquiusweg 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948358,
+          52.367208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207525",
+        "label": "Zeeburgerdorp 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95526,
+          52.366278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208678",
+        "label": "Zeeburgerdijk 319",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94887,
+          52.367001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207485",
+        "label": "Zeeburgerdorp 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948099,
+          52.368468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207470",
+        "label": "Cruquiusweg 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948281,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207478",
+        "label": "Zeeburgerdorp 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94991,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207506",
+        "label": "Zeeburgerdorp 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954405,
+          52.368602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208670",
+        "label": "Cruquiusweg 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954495,
+          52.366216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153759",
+        "label": "Zeeburgerdijk 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955688,
+          52.365873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153738",
+        "label": "Zeeburgerdijk 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948335,
+          52.366996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207479",
+        "label": "Zeeburgerdorp 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953386,
+          52.367961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208668",
+        "label": "Cruquiusweg 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948114,
+          52.367207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207528",
+        "label": "Zeeburgerdorp 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949148,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207488",
+        "label": "Zeeburgerdorp 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954278,
+          52.366218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153754",
+        "label": "Zeeburgerdijk 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950546,
+          52.361844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208688",
+        "label": "Ringsloot 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954212,
+          52.366214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153752",
+        "label": "Zeeburgerdijk 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949044,
+          52.367001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207487",
+        "label": "Zeeburgerdorp 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949772,
+          52.367221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207508",
+        "label": "Zeeburgerdorp 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949526,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207511",
+        "label": "Zeeburgerdorp 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94877,
+          52.367212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207520",
+        "label": "Zeeburgerdorp 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960797,
+          52.363226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208686",
+        "label": "Diemerzeedijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954075,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208665",
+        "label": "Cruquiusweg 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954699,
+          52.369635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208673",
+        "label": "Cruquiusweg 142",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949613,
+          52.367006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207494",
+        "label": "Zeeburgerdorp 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948599,
+          52.367202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207522",
+        "label": "Zeeburgerdorp 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952709,
+          52.368328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208663",
+        "label": "Cruquiusweg 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95464,
+          52.369843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208674",
+        "label": "Cruquiusweg 144",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948511,
+          52.3672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207523",
+        "label": "Zeeburgerdorp 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948422,
+          52.366998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207480",
+        "label": "Zeeburgerdorp 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947965,
+          52.367197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207530",
+        "label": "Zeeburgerdorp 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953383,
+          52.368088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208667",
+        "label": "Cruquiusweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94782,
+          52.36699
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207473",
+        "label": "Zeeburgerdorp 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953774,
+          52.367808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208675",
+        "label": "Nieuwevaartweg 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949027,
+          52.368492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207471",
+        "label": "Cruquiusweg 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948956,
+          52.36721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207518",
+        "label": "Zeeburgerdorp 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954252,
+          52.365925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153741",
+        "label": "Zeeburgerdijk 230",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949229,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207489",
+        "label": "Zeeburgerdorp 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947155,
+          52.367044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207400",
+        "label": "Zeeburgerpad 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949952,
+          52.368675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207472",
+        "label": "Cruquiusweg 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949315,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207514",
+        "label": "Zeeburgerdorp 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950129,
+          52.367226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207503",
+        "label": "Zeeburgerdorp 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949839,
+          52.367057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207497",
+        "label": "Zeeburgerdorp 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956129,
+          52.365733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153736",
+        "label": "Zeeburgerdijk 236",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950141,
+          52.367064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207501",
+        "label": "Zeeburgerdorp 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94962,
+          52.367214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207510",
+        "label": "Zeeburgerdorp 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948782,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207484",
+        "label": "Zeeburgerdorp 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95258,
+          52.368328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208662",
+        "label": "Cruquiusweg 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94887,
+          52.367208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207519",
+        "label": "Zeeburgerdorp 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949753,
+          52.367033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207496",
+        "label": "Zeeburgerdorp 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953759,
+          52.367636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208676",
+        "label": "Nieuwevaartweg 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954078,
+          52.369164
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208666",
+        "label": "Cruquiusweg 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949992,
+          52.367222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207505",
+        "label": "Zeeburgerdorp 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948265,
+          52.367205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207526",
+        "label": "Zeeburgerdorp 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949324,
+          52.367002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207490",
+        "label": "Zeeburgerdorp 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953675,
+          52.369113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208661",
+        "label": "Cruquiusweg 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949468,
+          52.367214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207512",
+        "label": "Zeeburgerdorp 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954355,
+          52.366219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153756",
+        "label": "Zeeburgerdijk 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948137,
+          52.366992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207476",
+        "label": "Zeeburgerdorp 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95444,
+          52.36885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208671",
+        "label": "Cruquiusweg 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949533,
+          52.367006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207493",
+        "label": "Zeeburgerdorp 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950214,
+          52.362033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208689",
+        "label": "Ringsloot 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949388,
+          52.367005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207491",
+        "label": "Zeeburgerdorp 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94991,
+          52.36706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207498",
+        "label": "Zeeburgerdorp 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954005,
+          52.368874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208664",
+        "label": "Cruquiusweg 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949679,
+          52.367007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207495",
+        "label": "Zeeburgerdorp 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949687,
+          52.367217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207509",
+        "label": "Zeeburgerdorp 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949148,
+          52.367211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207516",
+        "label": "Zeeburgerdorp 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207482",
+        "label": "Zeeburgerdorp 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94797,
+          52.366991
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207474",
+        "label": "Zeeburgerdorp 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950065,
+          52.367064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207500",
+        "label": "Zeeburgerdorp 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948192,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207527",
+        "label": "Zeeburgerdorp 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949053,
+          52.367211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207517",
+        "label": "Zeeburgerdorp 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948046,
+          52.36699
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207475",
+        "label": "Zeeburgerdorp 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949617,
+          52.366006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153743",
+        "label": "Zeeburgerdijk 226",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948964,
+          52.367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207486",
+        "label": "Zeeburgerdorp 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948698,
+          52.366999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207483",
+        "label": "Zeeburgerdorp 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949983,
+          52.367061
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207499",
+        "label": "Zeeburgerdorp 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948404,
+          52.367206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207524",
+        "label": "Zeeburgerdorp 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94938,
+          52.367215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207513",
+        "label": "Zeeburgerdorp 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947765,
+          52.367218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207532",
+        "label": "Zeeburgerdorp 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958554,
+          52.364715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153726",
+        "label": "Ijdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958575,
+          52.36461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153728",
+        "label": "Ijdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958599,
+          52.364503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153730",
+        "label": "Ijdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958686,
+          52.364753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153732",
+        "label": "Ijdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958757,
+          52.364493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153734",
+        "label": "Ijdijk 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958263,
+          52.368701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153911",
+        "label": "Ijdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946882,
+          52.36704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207399",
+        "label": "Zeeburgerpad 86 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950364,
+          52.367174
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207502",
+        "label": "Zeeburgerdorp 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958892,
+          52.364183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208660",
+        "label": "Ijdijk 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955406,
+          52.366278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208679",
+        "label": "Zeeburgerdijk 321",
+        "year": "1943"
+      }
+    }
+  ]
+}

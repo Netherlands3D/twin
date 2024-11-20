@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962459,
+          52.350407
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208692",
+        "label": "Oosterringdijk 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961957,
+          52.349666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182438",
+        "label": "Ooster Ringdijk 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962521,
+          52.350465
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208691",
+        "label": "Oosterringdijk 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962796,
+          52.350821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208690",
+        "label": "Oosterringdijk 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962459,
+          52.350407
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208692",
+        "label": "Oosterringdijk 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961957,
+          52.349666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182438",
+        "label": "Ooster Ringdijk 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962521,
+          52.350465
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208691",
+        "label": "Oosterringdijk 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962796,
+          52.350821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208690",
+        "label": "Oosterringdijk 75",
+        "year": "1943"
+      }
+    }
+  ]
+}

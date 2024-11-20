@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961574,
+          52.40481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198693",
+        "label": "Zunderdorpergouw 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961388,
+          52.404807
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198694",
+        "label": "Zunderdorpergouw 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961261,
+          52.404706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198695",
+        "label": "Zunderdorpergouw 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961574,
+          52.40481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198693",
+        "label": "Zunderdorpergouw 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961388,
+          52.404807
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198694",
+        "label": "Zunderdorpergouw 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961261,
+          52.404706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198695",
+        "label": "Zunderdorpergouw 111",
+        "year": "1943"
+      }
+    }
+  ]
+}

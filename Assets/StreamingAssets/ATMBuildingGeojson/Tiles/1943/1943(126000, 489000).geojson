@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961187,
+          52.391084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204876",
+        "label": "Wijkergouw 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962287,
+          52.389368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207252",
+        "label": "Wijkergouw 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962746,
+          52.388358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207251",
+        "label": "Wijkergouw 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961187,
+          52.391084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204876",
+        "label": "Wijkergouw 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962287,
+          52.389368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207252",
+        "label": "Wijkergouw 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962746,
+          52.388358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207251",
+        "label": "Wijkergouw 36",
+        "year": "1943"
+      }
+    }
+  ]
+}

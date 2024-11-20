@@ -1,0 +1,275 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850504,
+          52.415545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193207",
+        "label": "Kanaalweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853591,
+          52.415511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193208",
+        "label": "Kanaalweg 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853118,
+          52.415615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193209",
+        "label": "Kanaalweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851001,
+          52.415424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193210",
+        "label": "Weg door den Amsterdammer Polder 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850949,
+          52.415377
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193211",
+        "label": "Weg door den Amsterdammer Polder 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850886,
+          52.415341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193212",
+        "label": "Weg door den Amsterdammer Polder 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850855,
+          52.415305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193213",
+        "label": "Weg door den Amsterdammer Polder 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850814,
+          52.415275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193214",
+        "label": "Weg door den Amsterdammer Polder 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850754,
+          52.415227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193215",
+        "label": "Weg door den Amsterdammer Polder 6 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850504,
+          52.415545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193207",
+        "label": "Kanaalweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853591,
+          52.415511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193208",
+        "label": "Kanaalweg 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853118,
+          52.415615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193209",
+        "label": "Kanaalweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851001,
+          52.415424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193210",
+        "label": "Weg door den Amsterdammer Polder 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850949,
+          52.415377
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193211",
+        "label": "Weg door den Amsterdammer Polder 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850886,
+          52.415341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193212",
+        "label": "Weg door den Amsterdammer Polder 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850855,
+          52.415305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193213",
+        "label": "Weg door den Amsterdammer Polder 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850814,
+          52.415275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193214",
+        "label": "Weg door den Amsterdammer Polder 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850754,
+          52.415227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193215",
+        "label": "Weg door den Amsterdammer Polder 6 a",
+        "year": "1943"
+      }
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95615,
+          52.344011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182433",
+        "label": "Ooster Ringdijk 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960631,
+          52.347645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182436",
+        "label": "Ooster Ringdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956084,
+          52.343967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182434",
+        "label": "Ooster Ringdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958573,
+          52.346429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182435",
+        "label": "Ooster Ringdijk 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947,
+          52.343105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182324",
+        "label": "Middenweg 204",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960511,
+          52.347681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182437",
+        "label": "Ooster Ringdijk 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95615,
+          52.344011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182433",
+        "label": "Ooster Ringdijk 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960631,
+          52.347645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182436",
+        "label": "Ooster Ringdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956084,
+          52.343967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182434",
+        "label": "Ooster Ringdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958573,
+          52.346429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182435",
+        "label": "Ooster Ringdijk 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947,
+          52.343105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182324",
+        "label": "Middenweg 204",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960511,
+          52.347681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182437",
+        "label": "Ooster Ringdijk 92",
+        "year": "1943"
+      }
+    }
+  ]
+}

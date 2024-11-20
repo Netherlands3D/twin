@@ -1,0 +1,8795 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923003,
+          52.399096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199975",
+        "label": "Buikslotermeerdijk 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917194,
+          52.398817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199242",
+        "label": "Bitterzoetstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923408,
+          52.398027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199962",
+        "label": "Buikslotermeerdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917154,
+          52.398949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199244",
+        "label": "Bitterzoetstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923439,
+          52.397944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199963",
+        "label": "Buikslotermeerdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918399,
+          52.399124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199300",
+        "label": "Kalmoesstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917259,
+          52.399595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199248",
+        "label": "Bitterzoetstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923167,
+          52.402424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199988",
+        "label": "Noordhollandsch Kanaaldijk 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917705,
+          52.397196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199375",
+        "label": "Wingerdweg 301",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922575,
+          52.398122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199952",
+        "label": "Buiksloterdijk 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92312,
+          52.399738
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199981",
+        "label": "Buikslotermeerdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920559,
+          52.39985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199681",
+        "label": "Buiksloterdijk 296",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923111,
+          52.402121
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199987",
+        "label": "Noordhollandsch Kanaaldijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917502,
+          52.397688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199393",
+        "label": "Wingerdweg 337",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923304,
+          52.398218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199960",
+        "label": "Buikslotermeerdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917699,
+          52.397224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199376",
+        "label": "Wingerdweg 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917086,
+          52.397323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199438",
+        "label": "Aurikelstraat 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91778,
+          52.397013
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199367",
+        "label": "Wingerdweg 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924762,
+          52.402547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199985",
+        "label": "Buikslotermeerdijk 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921966,
+          52.398944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199666",
+        "label": "Buiksloterdijk 268",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917361,
+          52.397822
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199399",
+        "label": "Wingerdweg 349",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917649,
+          52.397338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199381",
+        "label": "Wingerdweg 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923132,
+          52.403008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199993",
+        "label": "Noordhollandsch Kanaaldijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918161,
+          52.399469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199297",
+        "label": "Kamillestraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917728,
+          52.396938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A201518",
+        "label": "Heliotroopstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917785,
+          52.396976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199366",
+        "label": "Wingerdweg 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918387,
+          52.399265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199303",
+        "label": "Kalmoesstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923092,
+          52.399642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199979",
+        "label": "Buikslotermeerdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917096,
+          52.397307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199437",
+        "label": "Aurikelstraat 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917459,
+          52.397721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199394",
+        "label": "Wingerdweg 339",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917116,
+          52.39726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199435",
+        "label": "Aurikelstraat 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919406,
+          52.400256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199699",
+        "label": "Buiksloterdijk 326",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922329,
+          52.400425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199807",
+        "label": "Noordhollandsch Kanaaldijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.397378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199969",
+        "label": "Buikslotermeerdijk 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920426,
+          52.39994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199684",
+        "label": "Buiksloterdijk 300 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923532,
+          52.402541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199989",
+        "label": "Noordhollandsch Kanaaldijk 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917212,
+          52.397023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199425",
+        "label": "Aurikelstraat 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918533,
+          52.40049
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199709",
+        "label": "Buiksloterdijk 350",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91777,
+          52.399359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199281",
+        "label": "Kamillestraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920633,
+          52.399804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199680",
+        "label": "Buiksloterdijk 294",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923144,
+          52.397222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199937",
+        "label": "Buiksloterdijk 206",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917432,
+          52.399389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199265",
+        "label": "Bitterzoetstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923636,
+          52.402974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199994",
+        "label": "Noordhollandsch Kanaaldijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917587,
+          52.399596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199269",
+        "label": "Bitterzoetstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920949,
+          52.399661
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199674",
+        "label": "Buiksloterdijk 284",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917463,
+          52.399012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199257",
+        "label": "Bitterzoetstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917245,
+          52.396933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199421",
+        "label": "Aurikelstraat 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917622,
+          52.397405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199384",
+        "label": "Wingerdweg 319",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.399304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199978",
+        "label": "Buikslotermeerdijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92265,
+          52.39801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199949",
+        "label": "Buiksloterdijk 230",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918106,
+          52.399391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199295",
+        "label": "Kamillestraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923241,
+          52.398307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199959",
+        "label": "Buikslotermeerdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917147,
+          52.397185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199432",
+        "label": "Aurikelstraat 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923596,
+          52.397679
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199967",
+        "label": "Buikslotermeerdijk 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92076,
+          52.399754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199679",
+        "label": "Buiksloterdijk 290",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917202,
+          52.397982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199407",
+        "label": "Wingerdweg 365",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922287,
+          52.400081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199806",
+        "label": "Noordhollandsch Kanaaldijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917109,
+          52.400835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199724",
+        "label": "Buiksloterdijk 384",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923168,
+          52.397175
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199936",
+        "label": "Buiksloterdijk 204",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920303,
+          52.399958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199686",
+        "label": "Buiksloterdijk 302",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922982,
+          52.399181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199977",
+        "label": "Buikslotermeerdijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922575,
+          52.401279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199812",
+        "label": "Noordhollandsch Kanaaldijk 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91846,
+          52.399005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199298",
+        "label": "Kalmoesstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917744,
+          52.397088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199370",
+        "label": "Wingerdweg 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91759,
+          52.397474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199387",
+        "label": "Wingerdweg 325",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921232,
+          52.399513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199671",
+        "label": "Buiksloterdijk 276",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917054,
+          52.39928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199307",
+        "label": "Cyclamenstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921983,
+          52.398707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199659",
+        "label": "Buiksloterdijk 254",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91755,
+          52.398831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199254",
+        "label": "Bitterzoetstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922612,
+          52.398066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199951",
+        "label": "Buiksloterdijk 232",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92329,
+          52.396957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199933",
+        "label": "Buiksloterdijk 198",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923735,
+          52.397437
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199968",
+        "label": "Buikslotermeerdijk 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921877,
+          52.398832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199664",
+        "label": "Buiksloterdijk 264",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918455,
+          52.399389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199305",
+        "label": "Kalmoesstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922092,
+          52.399618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199803",
+        "label": "Noordhollandsch Kanaaldijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917532,
+          52.397621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199392",
+        "label": "Wingerdweg 335",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917121,
+          52.397238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199434",
+        "label": "Aurikelstraat 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917775,
+          52.399208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199278",
+        "label": "Kamillestraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.400562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199715",
+        "label": "Buiksloterdijk 360",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917883,
+          52.39888
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199272",
+        "label": "Kamillestraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922918,
+          52.397553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199942",
+        "label": "Buiksloterdijk 218",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923551,
+          52.397792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199965",
+        "label": "Buikslotermeerdijk 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923057,
+          52.398733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199955",
+        "label": "Buikslotermeerdijk 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92321,
+          52.398386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199958",
+        "label": "Buikslotermeerdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917563,
+          52.397547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199390",
+        "label": "Wingerdweg 331",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918084,
+          52.399076
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199289",
+        "label": "Kamillestraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921331,
+          52.399442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199670",
+        "label": "Buiksloterdijk 272",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923271,
+          52.402673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199990",
+        "label": "Noordhollandsch Kanaaldijk 21 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923073,
+          52.397363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199938",
+        "label": "Buiksloterdijk 210",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920101,
+          52.400051
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199689",
+        "label": "Buiksloterdijk 308",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917074,
+          52.398116
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199413",
+        "label": "Wingerdweg 377",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918708,
+          52.40045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199708",
+        "label": "Buiksloterdijk 346",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918073,
+          52.399119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199290",
+        "label": "Kamillestraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917758,
+          52.397054
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199369",
+        "label": "Wingerdweg 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923589,
+          52.397726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199966",
+        "label": "Buikslotermeerdijk 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922772,
+          52.397846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199947",
+        "label": "Buiksloterdijk 226",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917059,
+          52.398133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199414",
+        "label": "Wingerdweg 379",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919974,
+          52.400106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199691",
+        "label": "Buiksloterdijk 312",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923542,
+          52.402726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199991",
+        "label": "Noordhollandsch Kanaaldijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92228,
+          52.400022
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199805",
+        "label": "Noordhollandsch Kanaaldijk 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922138,
+          52.401348
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199811",
+        "label": "Noordhollandsch Kanaaldijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91777,
+          52.397031
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199368",
+        "label": "Wingerdweg 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920387,
+          52.399911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199683",
+        "label": "Buiksloterdijk 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.399776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199982",
+        "label": "Buikslotermeerdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.399057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199974",
+        "label": "Buikslotermeerdijk 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917339,
+          52.397846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199400",
+        "label": "Wingerdweg 351",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917082,
+          52.39908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199309",
+        "label": "Cyclamenstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917061,
+          52.397393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199441",
+        "label": "Aurikelstraat 128",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917614,
+          52.398751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199252",
+        "label": "Bitterzoetstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918096,
+          52.39901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199288",
+        "label": "Kamillestraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922181,
+          52.399013
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199660",
+        "label": "Buiksloterdijk 256",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917148,
+          52.398027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199409",
+        "label": "Wingerdweg 369",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921153,
+          52.399653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199673",
+        "label": "Buiksloterdijk 280 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917461,
+          52.398969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199256",
+        "label": "Bitterzoetstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917727,
+          52.397149
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199373",
+        "label": "Wingerdweg 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917457,
+          52.399152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199260",
+        "label": "Bitterzoetstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917166,
+          52.397105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199429",
+        "label": "Aurikelstraat 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917097,
+          52.398096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199412",
+        "label": "Wingerdweg 375",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917631,
+          52.397384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199383",
+        "label": "Wingerdweg 317",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922821,
+          52.397763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199946",
+        "label": "Buiksloterdijk 224",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91719,
+          52.39707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199427",
+        "label": "Aurikelstraat 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917325,
+          52.397861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199401",
+        "label": "Wingerdweg 353",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917312,
+          52.400827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199723",
+        "label": "Buiksloterdijk 380",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917805,
+          52.399428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199282",
+        "label": "Kamillestraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917221,
+          52.396997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199424",
+        "label": "Aurikelstraat 94",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917217,
+          52.39955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199247",
+        "label": "Bitterzoetstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920044,
+          52.400074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199690",
+        "label": "Buiksloterdijk 310",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91715,
+          52.399283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199306",
+        "label": "Cyclamenstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917326,
+          52.399675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199250",
+        "label": "Bitterzoetstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917661,
+          52.396923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A201519",
+        "label": "Heliotroopstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917119,
+          52.399447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199246",
+        "label": "Bitterzoetstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923081,
+          52.397447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199939",
+        "label": "Buiksloterdijk 212",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917247,
+          52.397939
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199405",
+        "label": "Wingerdweg 361",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918069,
+          52.399257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199293",
+        "label": "Kamillestraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91779,
+          52.399075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199275",
+        "label": "Kamillestraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917335,
+          52.398667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199932",
+        "label": "Sneeuwbalweg 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917627,
+          52.399641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199270",
+        "label": "Bitterzoetstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91773,
+          52.397125
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199372",
+        "label": "Wingerdweg 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92289,
+          52.397613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199944",
+        "label": "Buiksloterdijk 220",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922715,
+          52.397948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199948",
+        "label": "Buiksloterdijk 228",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917598,
+          52.397454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199386",
+        "label": "Wingerdweg 323",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918056,
+          52.400602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199716",
+        "label": "Buiksloterdijk 364",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917442,
+          52.397736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199395",
+        "label": "Wingerdweg 341",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917223,
+          52.397961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199406",
+        "label": "Wingerdweg 363",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917053,
+          52.397434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199442",
+        "label": "Aurikelstraat 130",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91729,
+          52.399638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199249",
+        "label": "Bitterzoetstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917082,
+          52.397353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199439",
+        "label": "Aurikelstraat 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917176,
+          52.397091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199428",
+        "label": "Aurikelstraat 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918064,
+          52.399169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199291",
+        "label": "Kamillestraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91769,
+          52.397239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199377",
+        "label": "Wingerdweg 305",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917117,
+          52.398066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199411",
+        "label": "Wingerdweg 373",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923048,
+          52.398791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199971",
+        "label": "Buikslotermeerdijk 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917652,
+          52.397318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199380",
+        "label": "Wingerdweg 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923097,
+          52.399682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199980",
+        "label": "Buikslotermeerdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.397446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199940",
+        "label": "Buiksloterdijk 214",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917772,
+          52.399307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199280",
+        "label": "Kamillestraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917779,
+          52.399259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199279",
+        "label": "Kamillestraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917164,
+          52.397146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199430",
+        "label": "Aurikelstraat 106",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917591,
+          52.398794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199253",
+        "label": "Bitterzoetstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923038,
+          52.398877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199972",
+        "label": "Buikslotermeerdijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917225,
+          52.398781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199241",
+        "label": "Bitterzoetstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917442,
+          52.399343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199264",
+        "label": "Bitterzoetstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917548,
+          52.400758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199722",
+        "label": "Buiksloterdijk 374 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917555,
+          52.399552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199268",
+        "label": "Bitterzoetstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917584,
+          52.3975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199388",
+        "label": "Wingerdweg 327",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91892,
+          52.400396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199706",
+        "label": "Buiksloterdijk 340",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917125,
+          52.399403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199245",
+        "label": "Bitterzoetstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91772,
+          52.397172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199374",
+        "label": "Wingerdweg 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923144,
+          52.399842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199983",
+        "label": "Buikslotermeerdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918128,
+          52.398961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199287",
+        "label": "Kamillestraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917079,
+          52.399792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199311",
+        "label": "Floraweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917522,
+          52.399512
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199267",
+        "label": "Bitterzoetstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923326,
+          52.398969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199973",
+        "label": "Buikslotermeerdijk 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917134,
+          52.398047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199410",
+        "label": "Wingerdweg 371",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921721,
+          52.400833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199808",
+        "label": "Noordhollandsch Kanaaldijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917429,
+          52.397751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199396",
+        "label": "Wingerdweg 343",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917553,
+          52.397579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199391",
+        "label": "Wingerdweg 333",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917636,
+          52.397367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199382",
+        "label": "Wingerdweg 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917071,
+          52.397369
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199440",
+        "label": "Aurikelstraat 126",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923629,
+          52.403016
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199995",
+        "label": "Noordhollandsch Kanaaldijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917395,
+          52.397785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199397",
+        "label": "Wingerdweg 345",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917919,
+          52.398837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199271",
+        "label": "Kamillestraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917186,
+          52.397998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199408",
+        "label": "Wingerdweg 367",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917808,
+          52.396946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199365",
+        "label": "Wingerdweg 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917165,
+          52.399082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199308",
+        "label": "Cyclamenstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923335,
+          52.398169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199961",
+        "label": "Buikslotermeerdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917127,
+          52.397221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199433",
+        "label": "Aurikelstraat 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922104,
+          52.398924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199662",
+        "label": "Buiksloterdijk 260",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922956,
+          52.39749
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199941",
+        "label": "Buiksloterdijk 216",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923252,
+          52.397059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199935",
+        "label": "Buiksloterdijk 202",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920867,
+          52.399736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199677",
+        "label": "Buiksloterdijk 288",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922396,
+          52.398308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199954",
+        "label": "Buiksloterdijk 240",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922857,
+          52.397667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199945",
+        "label": "Buiksloterdijk 222",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917487,
+          52.399471
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199266",
+        "label": "Bitterzoetstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917164,
+          52.398905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199243",
+        "label": "Bitterzoetstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921072,
+          52.399602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199672",
+        "label": "Buiksloterdijk 280",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923102,
+          52.398555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199957",
+        "label": "Buikslotermeerdijk 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917195,
+          52.397045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199426",
+        "label": "Aurikelstraat 98",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91813,
+          52.399439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199296",
+        "label": "Kamillestraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917104,
+          52.397282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199436",
+        "label": "Aurikelstraat 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917384,
+          52.397799
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199398",
+        "label": "Wingerdweg 347",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921959,
+          52.401034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199810",
+        "label": "Noordhollandsch Kanaaldijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917224,
+          52.396968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199423",
+        "label": "Aurikelstraat 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917514,
+          52.398871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199255",
+        "label": "Bitterzoetstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917447,
+          52.399205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199261",
+        "label": "Bitterzoetstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923782,
+          52.403126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199996",
+        "label": "Noordhollandsch Kanaaldijk 25 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919843,
+          52.400165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199693",
+        "label": "Buiksloterdijk 316",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918419,
+          52.399065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199299",
+        "label": "Kalmoesstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91716,
+          52.397165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199431",
+        "label": "Aurikelstraat 108",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92328,
+          52.397006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199934",
+        "label": "Buiksloterdijk 200",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917606,
+          52.397438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199385",
+        "label": "Wingerdweg 321",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917454,
+          52.399107
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199259",
+        "label": "Bitterzoetstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922168,
+          52.398554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199656",
+        "label": "Buiksloterdijk 248",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918163,
+          52.398921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199286",
+        "label": "Kamillestraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917296,
+          52.397883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199402",
+        "label": "Wingerdweg 355",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.39871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199956",
+        "label": "Buikslotermeerdijk 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919634,
+          52.400256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199696",
+        "label": "Buiksloterdijk 322 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917878,
+          52.399514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199284",
+        "label": "Kamillestraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91744,
+          52.399301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199263",
+        "label": "Bitterzoetstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91791,
+          52.399549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199285",
+        "label": "Kamillestraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922986,
+          52.399144
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199976",
+        "label": "Buikslotermeerdijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920503,
+          52.399873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199682",
+        "label": "Buiksloterdijk 298",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918368,
+          52.400543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199713",
+        "label": "Buiksloterdijk 354",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917718,
+          52.400686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199719",
+        "label": "Buiksloterdijk 370",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917362,
+          52.399716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199251",
+        "label": "Bitterzoetstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917265,
+          52.397923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199404",
+        "label": "Wingerdweg 359",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917452,
+          52.39925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199262",
+        "label": "Bitterzoetstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919895,
+          52.400137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199692",
+        "label": "Buiksloterdijk 314",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918444,
+          52.400521
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199712",
+        "label": "Buiksloterdijk 352",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917738,
+          52.397106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199371",
+        "label": "Wingerdweg 293",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918422,
+          52.399352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199304",
+        "label": "Kalmoesstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917853,
+          52.398926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199273",
+        "label": "Kamillestraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918397,
+          52.399169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199301",
+        "label": "Kalmoesstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920136,
+          52.399553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199813",
+        "label": "Buiksloterdijk 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921819,
+          52.398905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199665",
+        "label": "Buiksloterdijk 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917265,
+          52.398648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199931",
+        "label": "Sneeuwbalweg 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917141,
+          52.399775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199310",
+        "label": "Floraweg 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923999,
+          52.397062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199970",
+        "label": "Buikslotermeerdijk 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923471,
+          52.397889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199964",
+        "label": "Buikslotermeerdijk 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918829,
+          52.400422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199707",
+        "label": "Buiksloterdijk 342",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917804,
+          52.400656
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199717",
+        "label": "Buiksloterdijk 368",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919233,
+          52.400315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199702",
+        "label": "Buiksloterdijk 332",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921392,
+          52.399388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199667",
+        "label": "Buiksloterdijk 270",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917049,
+          52.397489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199443",
+        "label": "Aurikelstraat 132",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92316,
+          52.399887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199984",
+        "label": "Buikslotermeerdijk 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917459,
+          52.399065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199258",
+        "label": "Bitterzoetstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919486,
+          52.40023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199697",
+        "label": "Buiksloterdijk 324",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917791,
+          52.399119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199276",
+        "label": "Kamillestraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917235,
+          52.396949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199422",
+        "label": "Aurikelstraat 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9221,
+          52.398606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199657",
+        "label": "Buiksloterdijk 250",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917661,
+          52.397297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199379",
+        "label": "Wingerdweg 309",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917846,
+          52.399466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199283",
+        "label": "Kamillestraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91914,
+          52.400342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199703",
+        "label": "Buiksloterdijk 334",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917279,
+          52.397906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199403",
+        "label": "Wingerdweg 357",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917789,
+          52.399024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199274",
+        "label": "Kamillestraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.400219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199695",
+        "label": "Buiksloterdijk 322",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923639,
+          52.402698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199992",
+        "label": "Noordhollandsch Kanaaldijk 22 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918389,
+          52.399217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199302",
+        "label": "Kalmoesstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918328,
+          52.400637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199714",
+        "label": "Buiksloterdijk 356",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920231,
+          52.399996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199687",
+        "label": "Buiksloterdijk 304",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918065,
+          52.39921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199292",
+        "label": "Kamillestraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91984,
+          52.400305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199694",
+        "label": "Buiksloterdijk 318",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919076,
+          52.400358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199704",
+        "label": "Buiksloterdijk 336",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917037,
+          52.398156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199415",
+        "label": "Wingerdweg 381",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918071,
+          52.3993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199294",
+        "label": "Kamillestraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917781,
+          52.399164
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199277",
+        "label": "Kamillestraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917572,
+          52.397523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199389",
+        "label": "Wingerdweg 329",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922219,
+          52.398967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199661",
+        "label": "Buiksloterdijk 258",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922052,
+          52.398648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199658",
+        "label": "Buiksloterdijk 252",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918993,
+          52.400377
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199705",
+        "label": "Buiksloterdijk 338",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919513,
+          52.400264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199698",
+        "label": "Buiksloterdijk 324 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917676,
+          52.397268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199378",
+        "label": "Wingerdweg 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922008,
+          52.398886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199663",
+        "label": "Buiksloterdijk 262",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9193,
+          52.400296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199701",
+        "label": "Buiksloterdijk 330",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92175,
+          52.400918
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199809",
+        "label": "Noordhollandsch Kanaaldijk 15 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917527,
+          52.400726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199721",
+        "label": "Buiksloterdijk 374",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919436,
+          52.400283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199700",
+        "label": "Buiksloterdijk 326 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920175,
+          52.400018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199688",
+        "label": "Buiksloterdijk 306",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917647,
+          52.400707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199720",
+        "label": "Buiksloterdijk 372",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92151,
+          52.399398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199668",
+        "label": "Buiksloterdijk 270 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921473,
+          52.399434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199669",
+        "label": "Buiksloterdijk 270 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921048,
+          52.399675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199675",
+        "label": "Buiksloterdijk 284 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920998,
+          52.399694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199676",
+        "label": "Buiksloterdijk 284 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920972,
+          52.399815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199678",
+        "label": "Buiksloterdijk 288 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920457,
+          52.399962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199685",
+        "label": "Buiksloterdijk 300 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918563,
+          52.400534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199710",
+        "label": "Buiksloterdijk 350 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918604,
+          52.400605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199711",
+        "label": "Buiksloterdijk 350 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917836,
+          52.400693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199718",
+        "label": "Buiksloterdijk 368 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922193,
+          52.399732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199804",
+        "label": "Noordhollandsch Kanaaldijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.397574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199943",
+        "label": "Buiksloterdijk 218 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922786,
+          52.398042
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199950",
+        "label": "Buiksloterdijk 230 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922506,
+          52.398185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199953",
+        "label": "Buiksloterdijk 238",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924936,
+          52.402986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199986",
+        "label": "Buikslotermeerdijk 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923003,
+          52.399096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199975",
+        "label": "Buikslotermeerdijk 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917194,
+          52.398817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199242",
+        "label": "Bitterzoetstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923408,
+          52.398027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199962",
+        "label": "Buikslotermeerdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917154,
+          52.398949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199244",
+        "label": "Bitterzoetstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923439,
+          52.397944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199963",
+        "label": "Buikslotermeerdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918399,
+          52.399124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199300",
+        "label": "Kalmoesstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917259,
+          52.399595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199248",
+        "label": "Bitterzoetstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923167,
+          52.402424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199988",
+        "label": "Noordhollandsch Kanaaldijk 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917705,
+          52.397196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199375",
+        "label": "Wingerdweg 301",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922575,
+          52.398122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199952",
+        "label": "Buiksloterdijk 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92312,
+          52.399738
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199981",
+        "label": "Buikslotermeerdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920559,
+          52.39985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199681",
+        "label": "Buiksloterdijk 296",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923111,
+          52.402121
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199987",
+        "label": "Noordhollandsch Kanaaldijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917502,
+          52.397688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199393",
+        "label": "Wingerdweg 337",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923304,
+          52.398218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199960",
+        "label": "Buikslotermeerdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917699,
+          52.397224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199376",
+        "label": "Wingerdweg 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917086,
+          52.397323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199438",
+        "label": "Aurikelstraat 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91778,
+          52.397013
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199367",
+        "label": "Wingerdweg 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924762,
+          52.402547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199985",
+        "label": "Buikslotermeerdijk 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921966,
+          52.398944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199666",
+        "label": "Buiksloterdijk 268",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917361,
+          52.397822
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199399",
+        "label": "Wingerdweg 349",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917649,
+          52.397338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199381",
+        "label": "Wingerdweg 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923132,
+          52.403008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199993",
+        "label": "Noordhollandsch Kanaaldijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918161,
+          52.399469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199297",
+        "label": "Kamillestraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917728,
+          52.396938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A201518",
+        "label": "Heliotroopstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917785,
+          52.396976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199366",
+        "label": "Wingerdweg 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918387,
+          52.399265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199303",
+        "label": "Kalmoesstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923092,
+          52.399642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199979",
+        "label": "Buikslotermeerdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917096,
+          52.397307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199437",
+        "label": "Aurikelstraat 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917459,
+          52.397721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199394",
+        "label": "Wingerdweg 339",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917116,
+          52.39726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199435",
+        "label": "Aurikelstraat 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919406,
+          52.400256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199699",
+        "label": "Buiksloterdijk 326",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922329,
+          52.400425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199807",
+        "label": "Noordhollandsch Kanaaldijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.397378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199969",
+        "label": "Buikslotermeerdijk 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920426,
+          52.39994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199684",
+        "label": "Buiksloterdijk 300 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923532,
+          52.402541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199989",
+        "label": "Noordhollandsch Kanaaldijk 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917212,
+          52.397023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199425",
+        "label": "Aurikelstraat 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918533,
+          52.40049
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199709",
+        "label": "Buiksloterdijk 350",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91777,
+          52.399359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199281",
+        "label": "Kamillestraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920633,
+          52.399804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199680",
+        "label": "Buiksloterdijk 294",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923144,
+          52.397222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199937",
+        "label": "Buiksloterdijk 206",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917432,
+          52.399389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199265",
+        "label": "Bitterzoetstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923636,
+          52.402974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199994",
+        "label": "Noordhollandsch Kanaaldijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917587,
+          52.399596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199269",
+        "label": "Bitterzoetstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920949,
+          52.399661
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199674",
+        "label": "Buiksloterdijk 284",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917463,
+          52.399012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199257",
+        "label": "Bitterzoetstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917245,
+          52.396933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199421",
+        "label": "Aurikelstraat 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917622,
+          52.397405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199384",
+        "label": "Wingerdweg 319",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.399304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199978",
+        "label": "Buikslotermeerdijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92265,
+          52.39801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199949",
+        "label": "Buiksloterdijk 230",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918106,
+          52.399391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199295",
+        "label": "Kamillestraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923241,
+          52.398307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199959",
+        "label": "Buikslotermeerdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917147,
+          52.397185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199432",
+        "label": "Aurikelstraat 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923596,
+          52.397679
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199967",
+        "label": "Buikslotermeerdijk 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92076,
+          52.399754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199679",
+        "label": "Buiksloterdijk 290",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917202,
+          52.397982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199407",
+        "label": "Wingerdweg 365",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922287,
+          52.400081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199806",
+        "label": "Noordhollandsch Kanaaldijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917109,
+          52.400835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199724",
+        "label": "Buiksloterdijk 384",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923168,
+          52.397175
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199936",
+        "label": "Buiksloterdijk 204",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920303,
+          52.399958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199686",
+        "label": "Buiksloterdijk 302",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922982,
+          52.399181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199977",
+        "label": "Buikslotermeerdijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922575,
+          52.401279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199812",
+        "label": "Noordhollandsch Kanaaldijk 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91846,
+          52.399005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199298",
+        "label": "Kalmoesstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917744,
+          52.397088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199370",
+        "label": "Wingerdweg 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91759,
+          52.397474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199387",
+        "label": "Wingerdweg 325",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921232,
+          52.399513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199671",
+        "label": "Buiksloterdijk 276",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917054,
+          52.39928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199307",
+        "label": "Cyclamenstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921983,
+          52.398707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199659",
+        "label": "Buiksloterdijk 254",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91755,
+          52.398831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199254",
+        "label": "Bitterzoetstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922612,
+          52.398066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199951",
+        "label": "Buiksloterdijk 232",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92329,
+          52.396957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199933",
+        "label": "Buiksloterdijk 198",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923735,
+          52.397437
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199968",
+        "label": "Buikslotermeerdijk 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921877,
+          52.398832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199664",
+        "label": "Buiksloterdijk 264",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918455,
+          52.399389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199305",
+        "label": "Kalmoesstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922092,
+          52.399618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199803",
+        "label": "Noordhollandsch Kanaaldijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917532,
+          52.397621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199392",
+        "label": "Wingerdweg 335",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917121,
+          52.397238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199434",
+        "label": "Aurikelstraat 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917775,
+          52.399208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199278",
+        "label": "Kamillestraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.400562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199715",
+        "label": "Buiksloterdijk 360",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917883,
+          52.39888
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199272",
+        "label": "Kamillestraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922918,
+          52.397553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199942",
+        "label": "Buiksloterdijk 218",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923551,
+          52.397792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199965",
+        "label": "Buikslotermeerdijk 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923057,
+          52.398733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199955",
+        "label": "Buikslotermeerdijk 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92321,
+          52.398386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199958",
+        "label": "Buikslotermeerdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917563,
+          52.397547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199390",
+        "label": "Wingerdweg 331",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918084,
+          52.399076
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199289",
+        "label": "Kamillestraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921331,
+          52.399442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199670",
+        "label": "Buiksloterdijk 272",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923271,
+          52.402673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199990",
+        "label": "Noordhollandsch Kanaaldijk 21 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923073,
+          52.397363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199938",
+        "label": "Buiksloterdijk 210",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920101,
+          52.400051
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199689",
+        "label": "Buiksloterdijk 308",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917074,
+          52.398116
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199413",
+        "label": "Wingerdweg 377",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918708,
+          52.40045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199708",
+        "label": "Buiksloterdijk 346",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918073,
+          52.399119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199290",
+        "label": "Kamillestraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917758,
+          52.397054
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199369",
+        "label": "Wingerdweg 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923589,
+          52.397726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199966",
+        "label": "Buikslotermeerdijk 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922772,
+          52.397846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199947",
+        "label": "Buiksloterdijk 226",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917059,
+          52.398133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199414",
+        "label": "Wingerdweg 379",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919974,
+          52.400106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199691",
+        "label": "Buiksloterdijk 312",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923542,
+          52.402726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199991",
+        "label": "Noordhollandsch Kanaaldijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92228,
+          52.400022
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199805",
+        "label": "Noordhollandsch Kanaaldijk 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922138,
+          52.401348
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199811",
+        "label": "Noordhollandsch Kanaaldijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91777,
+          52.397031
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199368",
+        "label": "Wingerdweg 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920387,
+          52.399911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199683",
+        "label": "Buiksloterdijk 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.399776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199982",
+        "label": "Buikslotermeerdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.399057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199974",
+        "label": "Buikslotermeerdijk 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917339,
+          52.397846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199400",
+        "label": "Wingerdweg 351",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917082,
+          52.39908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199309",
+        "label": "Cyclamenstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917061,
+          52.397393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199441",
+        "label": "Aurikelstraat 128",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917614,
+          52.398751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199252",
+        "label": "Bitterzoetstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918096,
+          52.39901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199288",
+        "label": "Kamillestraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922181,
+          52.399013
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199660",
+        "label": "Buiksloterdijk 256",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917148,
+          52.398027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199409",
+        "label": "Wingerdweg 369",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921153,
+          52.399653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199673",
+        "label": "Buiksloterdijk 280 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917461,
+          52.398969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199256",
+        "label": "Bitterzoetstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917727,
+          52.397149
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199373",
+        "label": "Wingerdweg 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917457,
+          52.399152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199260",
+        "label": "Bitterzoetstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917166,
+          52.397105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199429",
+        "label": "Aurikelstraat 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917097,
+          52.398096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199412",
+        "label": "Wingerdweg 375",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917631,
+          52.397384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199383",
+        "label": "Wingerdweg 317",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922821,
+          52.397763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199946",
+        "label": "Buiksloterdijk 224",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91719,
+          52.39707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199427",
+        "label": "Aurikelstraat 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917325,
+          52.397861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199401",
+        "label": "Wingerdweg 353",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917312,
+          52.400827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199723",
+        "label": "Buiksloterdijk 380",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917805,
+          52.399428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199282",
+        "label": "Kamillestraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917221,
+          52.396997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199424",
+        "label": "Aurikelstraat 94",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917217,
+          52.39955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199247",
+        "label": "Bitterzoetstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920044,
+          52.400074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199690",
+        "label": "Buiksloterdijk 310",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91715,
+          52.399283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199306",
+        "label": "Cyclamenstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917326,
+          52.399675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199250",
+        "label": "Bitterzoetstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917661,
+          52.396923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A201519",
+        "label": "Heliotroopstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917119,
+          52.399447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199246",
+        "label": "Bitterzoetstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923081,
+          52.397447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199939",
+        "label": "Buiksloterdijk 212",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917247,
+          52.397939
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199405",
+        "label": "Wingerdweg 361",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918069,
+          52.399257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199293",
+        "label": "Kamillestraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91779,
+          52.399075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199275",
+        "label": "Kamillestraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917335,
+          52.398667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199932",
+        "label": "Sneeuwbalweg 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917627,
+          52.399641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199270",
+        "label": "Bitterzoetstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91773,
+          52.397125
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199372",
+        "label": "Wingerdweg 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92289,
+          52.397613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199944",
+        "label": "Buiksloterdijk 220",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922715,
+          52.397948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199948",
+        "label": "Buiksloterdijk 228",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917598,
+          52.397454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199386",
+        "label": "Wingerdweg 323",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918056,
+          52.400602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199716",
+        "label": "Buiksloterdijk 364",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917442,
+          52.397736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199395",
+        "label": "Wingerdweg 341",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917223,
+          52.397961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199406",
+        "label": "Wingerdweg 363",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917053,
+          52.397434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199442",
+        "label": "Aurikelstraat 130",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91729,
+          52.399638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199249",
+        "label": "Bitterzoetstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917082,
+          52.397353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199439",
+        "label": "Aurikelstraat 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917176,
+          52.397091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199428",
+        "label": "Aurikelstraat 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918064,
+          52.399169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199291",
+        "label": "Kamillestraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91769,
+          52.397239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199377",
+        "label": "Wingerdweg 305",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917117,
+          52.398066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199411",
+        "label": "Wingerdweg 373",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923048,
+          52.398791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199971",
+        "label": "Buikslotermeerdijk 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917652,
+          52.397318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199380",
+        "label": "Wingerdweg 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923097,
+          52.399682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199980",
+        "label": "Buikslotermeerdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.397446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199940",
+        "label": "Buiksloterdijk 214",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917772,
+          52.399307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199280",
+        "label": "Kamillestraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917779,
+          52.399259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199279",
+        "label": "Kamillestraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917164,
+          52.397146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199430",
+        "label": "Aurikelstraat 106",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917591,
+          52.398794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199253",
+        "label": "Bitterzoetstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923038,
+          52.398877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199972",
+        "label": "Buikslotermeerdijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917225,
+          52.398781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199241",
+        "label": "Bitterzoetstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917442,
+          52.399343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199264",
+        "label": "Bitterzoetstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917548,
+          52.400758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199722",
+        "label": "Buiksloterdijk 374 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917555,
+          52.399552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199268",
+        "label": "Bitterzoetstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917584,
+          52.3975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199388",
+        "label": "Wingerdweg 327",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91892,
+          52.400396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199706",
+        "label": "Buiksloterdijk 340",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917125,
+          52.399403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199245",
+        "label": "Bitterzoetstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91772,
+          52.397172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199374",
+        "label": "Wingerdweg 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923144,
+          52.399842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199983",
+        "label": "Buikslotermeerdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918128,
+          52.398961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199287",
+        "label": "Kamillestraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917079,
+          52.399792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199311",
+        "label": "Floraweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917522,
+          52.399512
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199267",
+        "label": "Bitterzoetstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923326,
+          52.398969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199973",
+        "label": "Buikslotermeerdijk 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917134,
+          52.398047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199410",
+        "label": "Wingerdweg 371",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921721,
+          52.400833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199808",
+        "label": "Noordhollandsch Kanaaldijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917429,
+          52.397751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199396",
+        "label": "Wingerdweg 343",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917553,
+          52.397579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199391",
+        "label": "Wingerdweg 333",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917636,
+          52.397367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199382",
+        "label": "Wingerdweg 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917071,
+          52.397369
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199440",
+        "label": "Aurikelstraat 126",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923629,
+          52.403016
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199995",
+        "label": "Noordhollandsch Kanaaldijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917395,
+          52.397785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199397",
+        "label": "Wingerdweg 345",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917919,
+          52.398837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199271",
+        "label": "Kamillestraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917186,
+          52.397998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199408",
+        "label": "Wingerdweg 367",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917808,
+          52.396946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199365",
+        "label": "Wingerdweg 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917165,
+          52.399082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199308",
+        "label": "Cyclamenstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923335,
+          52.398169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199961",
+        "label": "Buikslotermeerdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917127,
+          52.397221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199433",
+        "label": "Aurikelstraat 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922104,
+          52.398924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199662",
+        "label": "Buiksloterdijk 260",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922956,
+          52.39749
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199941",
+        "label": "Buiksloterdijk 216",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923252,
+          52.397059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199935",
+        "label": "Buiksloterdijk 202",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920867,
+          52.399736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199677",
+        "label": "Buiksloterdijk 288",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922396,
+          52.398308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199954",
+        "label": "Buiksloterdijk 240",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922857,
+          52.397667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199945",
+        "label": "Buiksloterdijk 222",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917487,
+          52.399471
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199266",
+        "label": "Bitterzoetstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917164,
+          52.398905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199243",
+        "label": "Bitterzoetstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921072,
+          52.399602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199672",
+        "label": "Buiksloterdijk 280",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923102,
+          52.398555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199957",
+        "label": "Buikslotermeerdijk 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917195,
+          52.397045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199426",
+        "label": "Aurikelstraat 98",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91813,
+          52.399439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199296",
+        "label": "Kamillestraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917104,
+          52.397282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199436",
+        "label": "Aurikelstraat 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917384,
+          52.397799
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199398",
+        "label": "Wingerdweg 347",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921959,
+          52.401034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199810",
+        "label": "Noordhollandsch Kanaaldijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917224,
+          52.396968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199423",
+        "label": "Aurikelstraat 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917514,
+          52.398871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199255",
+        "label": "Bitterzoetstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917447,
+          52.399205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199261",
+        "label": "Bitterzoetstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923782,
+          52.403126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199996",
+        "label": "Noordhollandsch Kanaaldijk 25 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919843,
+          52.400165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199693",
+        "label": "Buiksloterdijk 316",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918419,
+          52.399065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199299",
+        "label": "Kalmoesstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91716,
+          52.397165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199431",
+        "label": "Aurikelstraat 108",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92328,
+          52.397006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199934",
+        "label": "Buiksloterdijk 200",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917606,
+          52.397438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199385",
+        "label": "Wingerdweg 321",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917454,
+          52.399107
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199259",
+        "label": "Bitterzoetstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922168,
+          52.398554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199656",
+        "label": "Buiksloterdijk 248",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918163,
+          52.398921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199286",
+        "label": "Kamillestraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917296,
+          52.397883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199402",
+        "label": "Wingerdweg 355",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.39871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199956",
+        "label": "Buikslotermeerdijk 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919634,
+          52.400256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199696",
+        "label": "Buiksloterdijk 322 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917878,
+          52.399514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199284",
+        "label": "Kamillestraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91744,
+          52.399301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199263",
+        "label": "Bitterzoetstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91791,
+          52.399549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199285",
+        "label": "Kamillestraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922986,
+          52.399144
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199976",
+        "label": "Buikslotermeerdijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920503,
+          52.399873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199682",
+        "label": "Buiksloterdijk 298",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918368,
+          52.400543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199713",
+        "label": "Buiksloterdijk 354",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917718,
+          52.400686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199719",
+        "label": "Buiksloterdijk 370",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917362,
+          52.399716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199251",
+        "label": "Bitterzoetstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917265,
+          52.397923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199404",
+        "label": "Wingerdweg 359",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917452,
+          52.39925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199262",
+        "label": "Bitterzoetstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919895,
+          52.400137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199692",
+        "label": "Buiksloterdijk 314",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918444,
+          52.400521
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199712",
+        "label": "Buiksloterdijk 352",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917738,
+          52.397106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199371",
+        "label": "Wingerdweg 293",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918422,
+          52.399352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199304",
+        "label": "Kalmoesstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917853,
+          52.398926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199273",
+        "label": "Kamillestraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918397,
+          52.399169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199301",
+        "label": "Kalmoesstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920136,
+          52.399553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199813",
+        "label": "Buiksloterdijk 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921819,
+          52.398905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199665",
+        "label": "Buiksloterdijk 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917265,
+          52.398648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199931",
+        "label": "Sneeuwbalweg 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917141,
+          52.399775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199310",
+        "label": "Floraweg 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923999,
+          52.397062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199970",
+        "label": "Buikslotermeerdijk 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923471,
+          52.397889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199964",
+        "label": "Buikslotermeerdijk 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918829,
+          52.400422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199707",
+        "label": "Buiksloterdijk 342",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917804,
+          52.400656
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199717",
+        "label": "Buiksloterdijk 368",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919233,
+          52.400315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199702",
+        "label": "Buiksloterdijk 332",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921392,
+          52.399388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199667",
+        "label": "Buiksloterdijk 270",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917049,
+          52.397489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199443",
+        "label": "Aurikelstraat 132",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92316,
+          52.399887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199984",
+        "label": "Buikslotermeerdijk 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917459,
+          52.399065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199258",
+        "label": "Bitterzoetstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919486,
+          52.40023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199697",
+        "label": "Buiksloterdijk 324",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917791,
+          52.399119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199276",
+        "label": "Kamillestraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917235,
+          52.396949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199422",
+        "label": "Aurikelstraat 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9221,
+          52.398606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199657",
+        "label": "Buiksloterdijk 250",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917661,
+          52.397297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199379",
+        "label": "Wingerdweg 309",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917846,
+          52.399466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199283",
+        "label": "Kamillestraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91914,
+          52.400342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199703",
+        "label": "Buiksloterdijk 334",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917279,
+          52.397906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199403",
+        "label": "Wingerdweg 357",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917789,
+          52.399024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199274",
+        "label": "Kamillestraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.400219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199695",
+        "label": "Buiksloterdijk 322",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923639,
+          52.402698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199992",
+        "label": "Noordhollandsch Kanaaldijk 22 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918389,
+          52.399217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199302",
+        "label": "Kalmoesstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918328,
+          52.400637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199714",
+        "label": "Buiksloterdijk 356",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920231,
+          52.399996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199687",
+        "label": "Buiksloterdijk 304",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918065,
+          52.39921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199292",
+        "label": "Kamillestraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91984,
+          52.400305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199694",
+        "label": "Buiksloterdijk 318",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919076,
+          52.400358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199704",
+        "label": "Buiksloterdijk 336",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917037,
+          52.398156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199415",
+        "label": "Wingerdweg 381",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918071,
+          52.3993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199294",
+        "label": "Kamillestraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917781,
+          52.399164
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199277",
+        "label": "Kamillestraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917572,
+          52.397523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199389",
+        "label": "Wingerdweg 329",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922219,
+          52.398967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199661",
+        "label": "Buiksloterdijk 258",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922052,
+          52.398648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199658",
+        "label": "Buiksloterdijk 252",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918993,
+          52.400377
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199705",
+        "label": "Buiksloterdijk 338",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919513,
+          52.400264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199698",
+        "label": "Buiksloterdijk 324 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917676,
+          52.397268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199378",
+        "label": "Wingerdweg 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922008,
+          52.398886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199663",
+        "label": "Buiksloterdijk 262",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9193,
+          52.400296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199701",
+        "label": "Buiksloterdijk 330",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92175,
+          52.400918
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199809",
+        "label": "Noordhollandsch Kanaaldijk 15 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917527,
+          52.400726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199721",
+        "label": "Buiksloterdijk 374",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919436,
+          52.400283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199700",
+        "label": "Buiksloterdijk 326 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920175,
+          52.400018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199688",
+        "label": "Buiksloterdijk 306",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917647,
+          52.400707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199720",
+        "label": "Buiksloterdijk 372",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92151,
+          52.399398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199668",
+        "label": "Buiksloterdijk 270 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921473,
+          52.399434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199669",
+        "label": "Buiksloterdijk 270 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921048,
+          52.399675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199675",
+        "label": "Buiksloterdijk 284 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920998,
+          52.399694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199676",
+        "label": "Buiksloterdijk 284 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920972,
+          52.399815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199678",
+        "label": "Buiksloterdijk 288 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920457,
+          52.399962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199685",
+        "label": "Buiksloterdijk 300 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918563,
+          52.400534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199710",
+        "label": "Buiksloterdijk 350 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918604,
+          52.400605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199711",
+        "label": "Buiksloterdijk 350 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917836,
+          52.400693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199718",
+        "label": "Buiksloterdijk 368 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922193,
+          52.399732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199804",
+        "label": "Noordhollandsch Kanaaldijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922993,
+          52.397574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199943",
+        "label": "Buiksloterdijk 218 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922786,
+          52.398042
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199950",
+        "label": "Buiksloterdijk 230 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922506,
+          52.398185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199953",
+        "label": "Buiksloterdijk 238",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924936,
+          52.402986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199986",
+        "label": "Buikslotermeerdijk 63",
+        "year": "1943"
+      }
+    }
+  ]
+}

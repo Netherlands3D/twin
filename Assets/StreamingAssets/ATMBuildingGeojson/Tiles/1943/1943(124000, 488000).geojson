@@ -1,0 +1,485 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946509,
+          52.387691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202914",
+        "label": "Nieuwendammerdijk 491",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93666,
+          52.386713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206847",
+        "label": "Nieuwendammerkade 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937241,
+          52.38642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206845",
+        "label": "Nieuwendammerkade 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93281,
+          52.385887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206501",
+        "label": "Plaatijzerweg 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946234,
+          52.387882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202909",
+        "label": "Nieuwendammerdijk 481",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946144,
+          52.387969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202908",
+        "label": "Nieuwendammerdijk 479",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946458,
+          52.387734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202913",
+        "label": "Nieuwendammerdijk 489",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936921,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206846",
+        "label": "Nieuwendammerkade 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946342,
+          52.387823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202911",
+        "label": "Nieuwendammerdijk 485",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946389,
+          52.387786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202912",
+        "label": "Nieuwendammerdijk 487",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936355,
+          52.384509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206844",
+        "label": "Nieuwendammerkade 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936445,
+          52.38443
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206843",
+        "label": "Nieuwendammerkade 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946258,
+          52.387896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202910",
+        "label": "Nieuwendammerdijk 481 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946093,
+          52.38801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202907",
+        "label": "Nieuwendammerdijk 477",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945946,
+          52.384362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206848",
+        "label": "Nieuwendammerkade 528",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94604,
+          52.384366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206849",
+        "label": "Nieuwendammerkade 530",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946509,
+          52.387691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202914",
+        "label": "Nieuwendammerdijk 491",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93666,
+          52.386713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206847",
+        "label": "Nieuwendammerkade 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937241,
+          52.38642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206845",
+        "label": "Nieuwendammerkade 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93281,
+          52.385887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206501",
+        "label": "Plaatijzerweg 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946234,
+          52.387882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202909",
+        "label": "Nieuwendammerdijk 481",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946144,
+          52.387969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202908",
+        "label": "Nieuwendammerdijk 479",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946458,
+          52.387734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202913",
+        "label": "Nieuwendammerdijk 489",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936921,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206846",
+        "label": "Nieuwendammerkade 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946342,
+          52.387823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202911",
+        "label": "Nieuwendammerdijk 485",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946389,
+          52.387786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202912",
+        "label": "Nieuwendammerdijk 487",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936355,
+          52.384509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206844",
+        "label": "Nieuwendammerkade 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936445,
+          52.38443
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206843",
+        "label": "Nieuwendammerkade 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946258,
+          52.387896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202910",
+        "label": "Nieuwendammerdijk 481 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946093,
+          52.38801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202907",
+        "label": "Nieuwendammerdijk 477",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945946,
+          52.384362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206848",
+        "label": "Nieuwendammerkade 528",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94604,
+          52.384366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206849",
+        "label": "Nieuwendammerkade 530",
+        "year": "1943"
+      }
+    }
+  ]
+}

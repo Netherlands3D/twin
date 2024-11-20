@@ -1,0 +1,155 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962069,
+          52.356474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208682",
+        "label": "Oosterringdijk 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961798,
+          52.356623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208681",
+        "label": "Oosterringdijk 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964305,
+          52.352615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208693",
+        "label": "Oosterringdijk 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962122,
+          52.356705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208683",
+        "label": "Oosterringdijk 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962794,
+          52.353462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208694",
+        "label": "Molenwatering 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962069,
+          52.356474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208682",
+        "label": "Oosterringdijk 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961798,
+          52.356623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208681",
+        "label": "Oosterringdijk 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964305,
+          52.352615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208693",
+        "label": "Oosterringdijk 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962122,
+          52.356705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208683",
+        "label": "Oosterringdijk 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962794,
+          52.353462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208694",
+        "label": "Molenwatering 60",
+        "year": "1943"
+      }
+    }
+  ]
+}

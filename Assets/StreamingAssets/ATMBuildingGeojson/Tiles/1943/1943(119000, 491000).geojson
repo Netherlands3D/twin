@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859267,
+          52.410315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193216",
+        "label": "Kanaalweg 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859178,
+          52.410257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193217",
+        "label": "Kanaalweg 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870785,
+          52.407333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196317",
+        "label": "Kanaalweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8707,
+          52.407411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196318",
+        "label": "Kanaalweg 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859267,
+          52.410315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193216",
+        "label": "Kanaalweg 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859178,
+          52.410257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193217",
+        "label": "Kanaalweg 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870785,
+          52.407333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196317",
+        "label": "Kanaalweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8707,
+          52.407411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196318",
+        "label": "Kanaalweg 6",
+        "year": "1943"
+      }
+    }
+  ]
+}
