@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -6,7 +5,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -17,8 +15,6 @@ namespace Netherlands3D.CartesianTiles
     /// </summary>
     public class ATMPointLayer : Layer
     {
-        public int[] years = { 1802, 1853, 1870, 1876, 1909, 1920, 1943 };
-
         private TileHandler tileHandler;
         [SerializeField] private string year = "1943";
         [SerializeField] private string tileFolderPath = "ATMBuildingGeojson/Tiles";

@@ -56,6 +56,7 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
+  years: 0a0700003d0700004e07000054070000750700008007000097070000
   year: 1943
   tileFolderPath: ATMBuildingGeojson/Tiles
 --- !u!114 &8159352025500753490
