@@ -16,12 +16,18 @@ namespace Netherlands3D.Twin
         
         private void OnEnable()
         {
-            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
+            ProjectData.Current.OnDataChanged.AddListener(Initialize);
         }
-        
+
         private void OnDisable()
         {
+            ProjectData.Current.OnDataChanged.RemoveListener(Initialize);
             ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);
+        }
+
+        private void Initialize(ProjectData newProject)
+        {
+            newProject.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
         }
         
         private void OnTimeChanged(DateTime newTime)
