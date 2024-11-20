@@ -49,7 +49,7 @@ public class GeoJsonTiler : MonoBehaviour
         foreach (var kvp in Tiles)
         {
             Vector2Int key = kvp.Key;
-            Debug.Log($"Writing tile {key}.json, {kvp.Value.Features.Count} features");
+            Debug.Log($"Writing tile {key}.json,{kvp.Value.Features.Count} features");
             string filePath = Path.Combine(Application.streamingAssetsPath, DstDir, baseName, $"{baseName}{key}{extension}");
             File.WriteAllText(filePath, kvp.Value.ToJson());
         }
