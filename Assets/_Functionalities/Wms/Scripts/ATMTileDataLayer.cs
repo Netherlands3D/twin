@@ -13,21 +13,18 @@ namespace Netherlands3D.Twin
 {
     public class ATMTileDataLayer : ImageProjectionLayer
     {
-        private ATMDataController timeController;
+        public int ZoomLevel => zoomLevel;
 
         private float lastUpdatedTimeStamp = 0;
         private float lastUpdatedInterval = 1f;
         private bool visibleTilesDirty = false;
         private List<TileChange> queuedChanges = new List<TileChange>();
         private WaitForSeconds wfs = new WaitForSeconds(0.5f);
-        private Coroutine updateTilesRoutine = null;
+        private Coroutine updateTilesRoutine = null;      
 
-        private const float earthRadius = 6378.137f;
-        private const float equatorialCircumference = 2 * Mathf.PI * earthRadius;
-        private const float log2x = 0.30102999566f;
-
-        [SerializeField] private int zoomLevel = 16;
+        private int zoomLevel = -1;
         private XyzTiles xyzTiles;
+        private ATMDataController atmDataController;
 
         public int RenderIndex
         {
@@ -46,24 +43,13 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Cached zoom level, because we need to compute the actual tilesize from the quad tree; we cache the previous
         /// value and only if it changed will we recompute the tileSize.
-        /// </summary>
-        private int previousZoomLevel;
-
+        /// </summary>        
         private double referenceTileWidth;
-        private double referenceTileHeight;
-
-        private ATMDataController.ATMDataHandler ATMDataHandler;
+        private double referenceTileHeight;       
 
         private void Awake()
         {
             xyzTiles = GetComponent<XyzTiles>();
-
-            if (timeController == null)
-            {
-                timeController = gameObject.AddComponent<ATMDataController>();
-                ATMDataHandler = (a) => SetVisibleTilesDirty();
-                timeController.ChangeYear += ATMDataHandler;
-            }
             
             //Make sure Datasets at least has one item
             if (Datasets.Count != 0) return;
@@ -73,44 +59,26 @@ namespace Netherlands3D.Twin
                 maximumDistance = 3000,
                 maximumDistanceSquared = 3000 * 3000
             });
+
+           
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            if(timeController != null && ATMDataHandler != null)
-                timeController.ChangeYear -= ATMDataHandler;
-        }
-
-        private void Update()
-        {            
-            //zoomLevel = CalculateZoomLevel();
-            Debug.Log(zoomLevel);
-            if (zoomLevel != previousZoomLevel)
+            if (updateTilesRoutine != null)
             {
-                this.previousZoomLevel = zoomLevel;
-                SetVisibleTilesDirty();
+                StopCoroutine(updateTilesRoutine);
             }
         }
-
-        public int CalculateZoomLevel()
+        
+        public void SetDataController(ATMDataController controller)
         {
-            Vector3 camPosition = Camera.main.transform.position;
-            float viewDistance = camPosition.y; //lets keep it orthographic?
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                camPosition.x,
-                camPosition.z,
-                0
-            );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-            float latitude = (float)coord.Points[0];
-            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad); //to rad
+            atmDataController = controller;
+        }
 
-            //https://wiki.openstreetmap.org/wiki/Zoom_levels
-            float numerator = equatorialCircumference * cosLatitude;
-            float zoomLevel = Mathf.Log(numerator / viewDistance) / log2x;
-
-            return Mathf.RoundToInt(zoomLevel);
+        public void SetZoomLevel(int zoomLevel)
+        {
+            this.zoomLevel = zoomLevel;
         }
 
         protected override IEnumerator DownloadDataAndGenerateTexture(
@@ -119,6 +87,9 @@ namespace Netherlands3D.Twin
         )
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+
+            if (zoomLevel < 0)
+                yield break;
 
             if (!tiles.ContainsKey(tileKey))
             {
@@ -130,7 +101,7 @@ namespace Netherlands3D.Twin
 
             //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
+            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, atmDataController);
 
             //because of the predefined map bounds, we dont have to check outside these bounds
             //if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
@@ -205,7 +176,7 @@ namespace Netherlands3D.Twin
             // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
             // that after casting
             // 120000 - 480000
-            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, timeController);
+            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, atmDataController);
             var referenceTileIndex = pos.TileIndex;
             var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
             referenceTileWidth = tileWidth;
@@ -257,6 +228,9 @@ namespace Netherlands3D.Twin
 
         public void SetVisibleTilesDirty()
         {
+            if (zoomLevel < 0)
+                return;
+
             UpdateReferenceSizes();
 
             //is the update already running cancel it

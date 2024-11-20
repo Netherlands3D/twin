@@ -40,6 +40,58 @@ namespace Netherlands3D.Twin
             { 1625, new Vector4(33652, 21530, 33664, 21541) }
         };
 
+        private Dictionary<int, Vector2Int> yearZoomBounds = new Dictionary<int, Vector2Int>()
+        {
+            { 1985, new Vector2Int(12 , 21) },
+            { 1943, new Vector2Int(12 , 21) },
+            { 1909, new Vector2Int(12 , 21) },
+            { 1876, new Vector2Int(12 , 20) },
+            { 1724, new Vector2Int(14 , 19) },
+            { 1625, new Vector2Int(14 , 19) }
+        };
+
+        private Dictionary<int, int> atmZoomTileSizes = new Dictionary<int, int>()
+        {
+            { 12, 6037 },
+            { 13, 3018 },
+            { 14, 1509 },
+            { 15, 754 },
+            { 16, 377 },
+            { 17, 188 },
+            { 18, 94 },
+            { 19, 47 },
+            { 20, 23 },
+            { 21, 11 }
+
+        };
+
+        public int GetTileSizeForZoomLevel(int zoomLevel)
+        {
+            return atmZoomTileSizes[zoomLevel];
+        }
+
+        public (int minZoom, int maxZoom) GetZoomBounds()
+        {
+            int year = GetClosestMapYearToCurrentYear();
+            if (yearZoomBounds.ContainsKey(year))
+                return (yearZoomBounds[year].x, yearZoomBounds[year].y);
+            return (16, 16); //closest to default
+        }
+
+        public Vector2Int GetZoomBoundsAllYears()
+        {
+            int lowest = 100;
+            int highest = 0;
+            foreach(KeyValuePair<int, Vector2Int> v in yearZoomBounds)
+            {
+                if(v.Value.x < lowest)
+                    lowest = v.Value.x;
+                if(v.Value.y > highest)
+                    highest = v.Value.y;
+            }
+            return new Vector2Int(lowest, highest);
+        }
+
 
         private int GetClosestMapYearToCurrentYear()
         {
@@ -90,6 +142,9 @@ namespace Netherlands3D.Twin
         {
             if (!yearUrls.ContainsKey(currentYear))
             {
+                //todo fix this default
+                if (lastValidYear == 0)
+                    lastValidYear = GetClosestMapYearToCurrentYear();
                 return yearUrls[lastValidYear];
             }
             else
