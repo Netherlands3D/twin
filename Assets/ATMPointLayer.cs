@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -18,15 +21,12 @@ namespace Netherlands3D.CartesianTiles
         private TileHandler tileHandler;
         [SerializeField] private string year = "1943";
         [SerializeField] private string tileFolderPath = "ATMBuildingGeojson/Tiles";
-        
+        private LayerURLPropertyData urlPropertyData;
+
         public string Year
         {
             get => year;
-            set
-            {
-                year = value; 
-                
-            }
+            set { year = value; }
         }
 
         private GeoJsonLayerGameObject geoJsonLayer;
@@ -47,6 +47,14 @@ namespace Netherlands3D.CartesianTiles
         private void Awake()
         {
             geoJsonLayer = GetComponent<GeoJsonLayerGameObject>();
+
+            string file = Year + "({x}, {y}).geojson";
+            string uri = Path.Combine(Application.streamingAssetsPath, tileFolderPath, Year, file);
+
+            print(uri);
+            
+            urlPropertyData = (LayerURLPropertyData)geoJsonLayer.PropertyData;
+            urlPropertyData.Data = new Uri(uri);
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
@@ -89,7 +97,6 @@ namespace Netherlands3D.CartesianTiles
                 case TileAction.Create:
                     Tile newTile = CreateNewTile(tileKey);
                     tiles.Add(tileKey, newTile);
-                    print(newTile);
                     newTile.runningCoroutine = StartCoroutine(DownloadGeoJSON(tileChange, newTile, callback));
                     break;
                 case TileAction.Upgrade:
@@ -127,7 +134,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 unityLOD = 0,
                 tileKey = tileKey,
-                layer = this//transform.gameObject.GetComponent<Layer>()
+                layer = this //transform.gameObject.GetComponent<Layer>()
             };
 
             return tile;
@@ -135,13 +142,15 @@ namespace Netherlands3D.CartesianTiles
 
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {
-            var bboxValue = $"({tileChange.X}, {tileChange.Y})";
-            string file = Year + bboxValue + ".geojson";
-            string uri = Path.Combine(Application.streamingAssetsPath, tileFolderPath, Year, file);
-            
+            // var bboxValue = $"({tileChange.X}, {tileChange.Y})";
+            var uri = urlPropertyData.Data.ToString();
+            uri = uri.Replace("{x}", tileChange.X.ToString());
+            uri = uri.Replace("{y}", tileChange.Y.ToString());
+
+            print(uri);
             var geoJsonRequest = UnityWebRequest.Get(uri);
             tile.runningWebRequest = geoJsonRequest;
-#if UNITY_WEBGL && !UNITY_EDITOR
+// #if UNITY_WEBGL && !UNITY_EDITOR
             yield return geoJsonRequest.SendWebRequest();
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
@@ -156,11 +165,12 @@ namespace Netherlands3D.CartesianTiles
                     $"Request to {uri} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
                 );
             }
-#else
-            string json = File.ReadAllText(uri);
-            yield return null;
-            ParseGeoJSON(json);
-#endif
+// #else
+//             // uri = AssetUriFactory.CreateProjectAssetUri(uri).ToString();
+//             string json = File.ReadAllText(uri);
+//             yield return null;
+//             ParseGeoJSON(json);
+// #endif
             // if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             // {
             //     ParseGeoJSON(geoJsonRequest.downloadHandler.text);
