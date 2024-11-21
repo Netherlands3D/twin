@@ -1,0 +1,215 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868328,
+          52.39897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169055",
+        "label": "Weg om de Minervahaven 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867064,
+          52.40205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169056",
+        "label": "Weg om de Minervahaven 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.864147,
+          52.402932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169057",
+        "label": "Hemweg 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.864005,
+          52.402687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169058",
+        "label": "Hemweg 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.862174,
+          52.404226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169059",
+        "label": "Hemweg 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859066,
+          52.404856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169060",
+        "label": "Hemweg 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859422,
+          52.405026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169060",
+        "label": "Hemweg 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868328,
+          52.39897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169055",
+        "label": "Weg om de Minervahaven 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867064,
+          52.40205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169056",
+        "label": "Weg om de Minervahaven 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.864147,
+          52.402932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169057",
+        "label": "Hemweg 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.864005,
+          52.402687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169058",
+        "label": "Hemweg 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.862174,
+          52.404226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169059",
+        "label": "Hemweg 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859066,
+          52.404856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169060",
+        "label": "Hemweg 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859422,
+          52.405026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169060",
+        "label": "Hemweg 83",
+        "year": "1909"
+      }
+    }
+  ]
+}

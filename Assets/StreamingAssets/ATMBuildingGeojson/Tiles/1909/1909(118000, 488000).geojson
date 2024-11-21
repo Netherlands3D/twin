@@ -1,0 +1,515 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857309,
+          52.379153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163675",
+        "label": "Houtmanstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856391,
+          52.378847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163663",
+        "label": "Houtmanstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856514,
+          52.378891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163661",
+        "label": "Houtmanstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856379,
+          52.379232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163681",
+        "label": "Admiraal de Ruyterweg 228",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856835,
+          52.378715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163651",
+        "label": "Admiraal de Ruyterweg 216",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856785,
+          52.37877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163653",
+        "label": "Admiraal de Ruyterweg 218",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856748,
+          52.378823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163655",
+        "label": "Admiraal de Ruyterweg 220",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856706,
+          52.378869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163657",
+        "label": "Admiraal de Ruyterweg 222",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856661,
+          52.378924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163659",
+        "label": "Admiraal de Ruyterweg 222 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857168,
+          52.378881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163665",
+        "label": "Admiraal de Ruyterweg 217",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857125,
+          52.378933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163667",
+        "label": "Admiraal de Ruyterweg 219",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857095,
+          52.378983
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163669",
+        "label": "Admiraal de Ruyterweg 221",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857051,
+          52.37904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163671",
+        "label": "Admiraal de Ruyterweg 223",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857228,
+          52.379124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163673",
+        "label": "Houtmanstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856474,
+          52.379128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163677",
+        "label": "Admiraal de Ruyterweg 224",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85642,
+          52.379184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163679",
+        "label": "Admiraal de Ruyterweg 226",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856325,
+          52.379273
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163683",
+        "label": "Admiraal de Ruyterweg 230",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857309,
+          52.379153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163675",
+        "label": "Houtmanstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856391,
+          52.378847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163663",
+        "label": "Houtmanstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856514,
+          52.378891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163661",
+        "label": "Houtmanstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856379,
+          52.379232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163681",
+        "label": "Admiraal de Ruyterweg 228",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856835,
+          52.378715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163651",
+        "label": "Admiraal de Ruyterweg 216",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856785,
+          52.37877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163653",
+        "label": "Admiraal de Ruyterweg 218",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856748,
+          52.378823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163655",
+        "label": "Admiraal de Ruyterweg 220",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856706,
+          52.378869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163657",
+        "label": "Admiraal de Ruyterweg 222",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856661,
+          52.378924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163659",
+        "label": "Admiraal de Ruyterweg 222 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857168,
+          52.378881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163665",
+        "label": "Admiraal de Ruyterweg 217",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857125,
+          52.378933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163667",
+        "label": "Admiraal de Ruyterweg 219",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857095,
+          52.378983
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163669",
+        "label": "Admiraal de Ruyterweg 221",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857051,
+          52.37904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163671",
+        "label": "Admiraal de Ruyterweg 223",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857228,
+          52.379124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163673",
+        "label": "Houtmanstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856474,
+          52.379128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163677",
+        "label": "Admiraal de Ruyterweg 224",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85642,
+          52.379184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163679",
+        "label": "Admiraal de Ruyterweg 226",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856325,
+          52.379273
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A163683",
+        "label": "Admiraal de Ruyterweg 230",
+        "year": "1909"
+      }
+    }
+  ]
+}

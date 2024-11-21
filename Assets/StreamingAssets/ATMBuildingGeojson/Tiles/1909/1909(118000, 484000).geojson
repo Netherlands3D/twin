@@ -1,0 +1,1385 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856607,
+          52.347997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135026",
+        "label": "Amstelveenscheweg 306",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85705,
+          52.345118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135038",
+        "label": "Amstelveenscheweg 346",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857825,
+          52.351719
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134962",
+        "label": "Koninginneweg 253",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857736,
+          52.351703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134964",
+        "label": "Koninginneweg 255",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857649,
+          52.351682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134966",
+        "label": "Koninginneweg 257",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857577,
+          52.351659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134968",
+        "label": "Koninginneweg 259",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857506,
+          52.351631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134970",
+        "label": "Koninginneweg 261",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857415,
+          52.351618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134972",
+        "label": "Koninginneweg 263",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857329,
+          52.351595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134974",
+        "label": "Koninginneweg 265",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857247,
+          52.351579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134976",
+        "label": "Koninginneweg 267",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857175,
+          52.351556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134978",
+        "label": "Koninginneweg 269",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857093,
+          52.351534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134980",
+        "label": "Koninginneweg 271",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857004,
+          52.351518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134982",
+        "label": "Koninginneweg 273",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856929,
+          52.35148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134984",
+        "label": "Koninginneweg 275",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857015,
+          52.351343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134986",
+        "label": "Amstelveenscheweg 137",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85647,
+          52.35064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134987",
+        "label": "Amstelveenscheweg 240",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856493,
+          52.35059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134989",
+        "label": "Amstelveenscheweg 242",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856511,
+          52.350548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134991",
+        "label": "Amstelveenscheweg 244",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856533,
+          52.350502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134993",
+        "label": "Amstelveenscheweg 246",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856556,
+          52.350456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134995",
+        "label": "Amstelveenscheweg 248",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856571,
+          52.350409
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134997",
+        "label": "Amstelveenscheweg 250",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856693,
+          52.350375
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134998",
+        "label": "Amstelveenscheweg 252",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856797,
+          52.349999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135000",
+        "label": "Amstelveenscheweg 254",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856581,
+          52.349913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135002",
+        "label": "Amstelveenscheweg 256",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856234,
+          52.349816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135004",
+        "label": "Amstelveenscheweg 258",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855867,
+          52.349725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135006",
+        "label": "Amstelveenscheweg 260",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854804,
+          52.350187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135008",
+        "label": "Vaartstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855056,
+          52.350202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135010",
+        "label": "Vaartstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855132,
+          52.350229
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135012",
+        "label": "Vaartstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855209,
+          52.350247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135014",
+        "label": "Vaartstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855269,
+          52.35027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135016",
+        "label": "Vaartstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855341,
+          52.350292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135018",
+        "label": "Vaartstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855404,
+          52.350312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135020",
+        "label": "Vaartstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857837,
+          52.348979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135021",
+        "label": "Amstelveenscheweg 161",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857487,
+          52.348636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135022",
+        "label": "Amstelveenscheweg 163",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857578,
+          52.34865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135023",
+        "label": "Amstelveenscheweg 165",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857063,
+          52.348226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135024",
+        "label": "Amstelveenscheweg 302",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856684,
+          52.348011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135025",
+        "label": "Amstelveenscheweg 304",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857631,
+          52.347501
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135027",
+        "label": "Amstelveenscheweg 195",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857695,
+          52.346091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135028",
+        "label": "Amstelveenscheweg 225",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857707,
+          52.34604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135029",
+        "label": "Amstelveenscheweg 227",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857096,
+          52.346373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135030",
+        "label": "Amstelveenscheweg 326",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857124,
+          52.346256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135031",
+        "label": "Amstelveenscheweg 330",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857166,
+          52.34602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135033",
+        "label": "Amstelveenscheweg 334",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858408,
+          52.345293
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135036",
+        "label": "Amstelveenscheweg 229",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857049,
+          52.345195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135037",
+        "label": "Amstelveenscheweg 344",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856607,
+          52.347997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135026",
+        "label": "Amstelveenscheweg 306",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85705,
+          52.345118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135038",
+        "label": "Amstelveenscheweg 346",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857825,
+          52.351719
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134962",
+        "label": "Koninginneweg 253",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857736,
+          52.351703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134964",
+        "label": "Koninginneweg 255",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857649,
+          52.351682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134966",
+        "label": "Koninginneweg 257",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857577,
+          52.351659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134968",
+        "label": "Koninginneweg 259",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857506,
+          52.351631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134970",
+        "label": "Koninginneweg 261",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857415,
+          52.351618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134972",
+        "label": "Koninginneweg 263",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857329,
+          52.351595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134974",
+        "label": "Koninginneweg 265",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857247,
+          52.351579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134976",
+        "label": "Koninginneweg 267",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857175,
+          52.351556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134978",
+        "label": "Koninginneweg 269",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857093,
+          52.351534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134980",
+        "label": "Koninginneweg 271",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857004,
+          52.351518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134982",
+        "label": "Koninginneweg 273",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856929,
+          52.35148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134984",
+        "label": "Koninginneweg 275",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857015,
+          52.351343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134986",
+        "label": "Amstelveenscheweg 137",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85647,
+          52.35064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134987",
+        "label": "Amstelveenscheweg 240",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856493,
+          52.35059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134989",
+        "label": "Amstelveenscheweg 242",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856511,
+          52.350548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134991",
+        "label": "Amstelveenscheweg 244",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856533,
+          52.350502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134993",
+        "label": "Amstelveenscheweg 246",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856556,
+          52.350456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134995",
+        "label": "Amstelveenscheweg 248",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856571,
+          52.350409
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134997",
+        "label": "Amstelveenscheweg 250",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856693,
+          52.350375
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A134998",
+        "label": "Amstelveenscheweg 252",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856797,
+          52.349999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135000",
+        "label": "Amstelveenscheweg 254",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856581,
+          52.349913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135002",
+        "label": "Amstelveenscheweg 256",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856234,
+          52.349816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135004",
+        "label": "Amstelveenscheweg 258",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855867,
+          52.349725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135006",
+        "label": "Amstelveenscheweg 260",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854804,
+          52.350187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135008",
+        "label": "Vaartstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855056,
+          52.350202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135010",
+        "label": "Vaartstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855132,
+          52.350229
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135012",
+        "label": "Vaartstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855209,
+          52.350247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135014",
+        "label": "Vaartstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855269,
+          52.35027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135016",
+        "label": "Vaartstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855341,
+          52.350292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135018",
+        "label": "Vaartstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855404,
+          52.350312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135020",
+        "label": "Vaartstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857837,
+          52.348979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135021",
+        "label": "Amstelveenscheweg 161",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857487,
+          52.348636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135022",
+        "label": "Amstelveenscheweg 163",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857578,
+          52.34865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135023",
+        "label": "Amstelveenscheweg 165",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857063,
+          52.348226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135024",
+        "label": "Amstelveenscheweg 302",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856684,
+          52.348011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135025",
+        "label": "Amstelveenscheweg 304",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857631,
+          52.347501
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135027",
+        "label": "Amstelveenscheweg 195",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857695,
+          52.346091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135028",
+        "label": "Amstelveenscheweg 225",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857707,
+          52.34604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135029",
+        "label": "Amstelveenscheweg 227",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857096,
+          52.346373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135030",
+        "label": "Amstelveenscheweg 326",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857124,
+          52.346256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135031",
+        "label": "Amstelveenscheweg 330",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857166,
+          52.34602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135033",
+        "label": "Amstelveenscheweg 334",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858408,
+          52.345293
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135036",
+        "label": "Amstelveenscheweg 229",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857049,
+          52.345195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135037",
+        "label": "Amstelveenscheweg 344",
+        "year": "1909"
+      }
+    }
+  ]
+}

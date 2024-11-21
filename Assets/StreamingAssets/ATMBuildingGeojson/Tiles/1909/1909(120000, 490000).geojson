@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873652,
+          52.405451
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169072",
+        "label": "Kompaal 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885593,
+          52.404945
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169313",
+        "label": "Noordelijke Kanaaldijk 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873652,
+          52.405451
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169072",
+        "label": "Kompaal 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885593,
+          52.404945
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169313",
+        "label": "Noordelijke Kanaaldijk 40",
+        "year": "1909"
+      }
+    }
+  ]
+}

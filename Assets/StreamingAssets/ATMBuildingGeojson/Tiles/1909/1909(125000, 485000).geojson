@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948532,
+          52.35842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153722",
+        "label": "Zeeburgerkade 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950245,
+          52.358224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153723",
+        "label": "Zeeburgerkade 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951689,
+          52.358082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153724",
+        "label": "Zeeburgerkade 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954863,
+          52.35797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153725",
+        "label": "Zeeburgerkade 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948532,
+          52.35842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153722",
+        "label": "Zeeburgerkade 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950245,
+          52.358224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153723",
+        "label": "Zeeburgerkade 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951689,
+          52.358082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153724",
+        "label": "Zeeburgerkade 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954863,
+          52.35797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153725",
+        "label": "Zeeburgerkade 13",
+        "year": "1909"
+      }
+    }
+  ]
+}

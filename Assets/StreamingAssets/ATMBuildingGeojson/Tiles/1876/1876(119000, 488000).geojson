@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871109,
+          52.385078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171704",
+        "label": "Haarlemmerweg 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872808,
+          52.385211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171702",
+        "label": "Haarlemmerweg 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87282,
+          52.386002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171710",
+        "label": "Haarlemmer Trekvaart 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872846,
+          52.386212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171711",
+        "label": "Haarlemmer Trekvaart 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871109,
+          52.385078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171704",
+        "label": "Haarlemmerweg 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872808,
+          52.385211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171702",
+        "label": "Haarlemmerweg 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87282,
+          52.386002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171710",
+        "label": "Haarlemmer Trekvaart 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872846,
+          52.386212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171711",
+        "label": "Haarlemmer Trekvaart 14",
+        "year": "1876"
+      }
+    }
+  ]
+}

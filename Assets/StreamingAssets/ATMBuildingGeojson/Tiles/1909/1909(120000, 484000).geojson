@@ -1,0 +1,1835 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88675,
+          52.350732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140706",
+        "label": "Rustenburgerstraat 485",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886933,
+          52.350865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140710",
+        "label": "Rustenburgerstraat 477",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886748,
+          52.350836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140708",
+        "label": "Rustenburgerstraat 481",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886755,
+          52.350692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140705",
+        "label": "Rustenburgerstraat 487",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887018,
+          52.35087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140711",
+        "label": "Rustenburgerstraat 475",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88625,
+          52.350585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135894",
+        "label": "Boerenwetering 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887566,
+          52.351118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140490",
+        "label": "Rustenburgerstraat 440",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886754,
+          52.350785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140707",
+        "label": "Rustenburgerstraat 483",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887091,
+          52.350876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140712",
+        "label": "Rustenburgerstraat 473",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886118,
+          52.351392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135892",
+        "label": "Boerenwetering 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886234,
+          52.351028
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135893",
+        "label": "Boerenwetering 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886932,
+          52.35182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140250",
+        "label": "Ruysdaelkade 195",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140252",
+        "label": "Ruysdaelkade 197",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140254",
+        "label": "Ruysdaelkade 199",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886926,
+          52.351671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140256",
+        "label": "Ruysdaelkade 201",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140258",
+        "label": "Ruysdaelkade 203",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887072,
+          52.351634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140259",
+        "label": "Van Ostadestraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887172,
+          52.351641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140261",
+        "label": "Van Ostadestraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887262,
+          52.351658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140263",
+        "label": "Van Ostadestraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887336,
+          52.351665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140265",
+        "label": "Van Ostadestraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88741,
+          52.351676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140267",
+        "label": "Van Ostadestraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887498,
+          52.351687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140269",
+        "label": "Van Ostadestraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887581,
+          52.351702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140271",
+        "label": "Van Ostadestraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887664,
+          52.351709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140273",
+        "label": "Van Ostadestraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887752,
+          52.351721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140275",
+        "label": "Van Ostadestraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88784,
+          52.351734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140277",
+        "label": "Van Ostadestraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887925,
+          52.351745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140279",
+        "label": "Van Ostadestraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888008,
+          52.351757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140281",
+        "label": "Van Ostadestraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888084,
+          52.351766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140283",
+        "label": "Van Ostadestraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888166,
+          52.351781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140285",
+        "label": "Van Ostadestraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886899,
+          52.351353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140483",
+        "label": "Ruysdaelkade 207",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886896,
+          52.351305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140485",
+        "label": "Ruysdaelkade 209",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886892,
+          52.351268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140487",
+        "label": "Ruysdaelkade 211",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886911,
+          52.351224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140489",
+        "label": "Ruysdaelkade 213",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888128,
+          52.351585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140549",
+        "label": "Van Ostadestraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888055,
+          52.351577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140551",
+        "label": "Van Ostadestraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887987,
+          52.351574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140553",
+        "label": "Van Ostadestraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887923,
+          52.351563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140555",
+        "label": "Van Ostadestraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887852,
+          52.351553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140557",
+        "label": "Van Ostadestraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887785,
+          52.351539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140559",
+        "label": "Van Ostadestraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887705,
+          52.351531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140561",
+        "label": "Van Ostadestraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887639,
+          52.351522
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140563",
+        "label": "Van Ostadestraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887558,
+          52.35151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140565",
+        "label": "Van Ostadestraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887495,
+          52.351504
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140567",
+        "label": "Van Ostadestraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887414,
+          52.351493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140569",
+        "label": "Van Ostadestraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887348,
+          52.351486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140571",
+        "label": "Van Ostadestraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887266,
+          52.351475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140573",
+        "label": "Van Ostadestraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887198,
+          52.351464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140575",
+        "label": "Van Ostadestraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887124,
+          52.35146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140577",
+        "label": "Van Ostadestraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887055,
+          52.351451
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140579",
+        "label": "Van Ostadestraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886983,
+          52.351442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140581",
+        "label": "Van Ostadestraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886906,
+          52.351427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140582",
+        "label": "Van Ostadestraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886981,
+          52.350635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140709",
+        "label": "Rustenburgerstraat 479",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887397,
+          52.350898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140713",
+        "label": "Rustenburgerstraat 465",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887494,
+          52.350914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140714",
+        "label": "Rustenburgerstraat 463",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887583,
+          52.350922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140715",
+        "label": "Rustenburgerstraat 461",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887892,
+          52.350958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140716",
+        "label": "Rustenburgerstraat 455",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887971,
+          52.350969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140717",
+        "label": "Rustenburgerstraat 453",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888027,
+          52.350977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140718",
+        "label": "Rustenburgerstraat 451",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888084,
+          52.350984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140719",
+        "label": "Rustenburgerstraat 449",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888176,
+          52.350973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140720",
+        "label": "Rustenburgerstraat 441",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88675,
+          52.350732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140706",
+        "label": "Rustenburgerstraat 485",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886933,
+          52.350865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140710",
+        "label": "Rustenburgerstraat 477",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886748,
+          52.350836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140708",
+        "label": "Rustenburgerstraat 481",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886755,
+          52.350692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140705",
+        "label": "Rustenburgerstraat 487",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887018,
+          52.35087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140711",
+        "label": "Rustenburgerstraat 475",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88625,
+          52.350585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135894",
+        "label": "Boerenwetering 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887566,
+          52.351118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140490",
+        "label": "Rustenburgerstraat 440",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886754,
+          52.350785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140707",
+        "label": "Rustenburgerstraat 483",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887091,
+          52.350876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140712",
+        "label": "Rustenburgerstraat 473",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886118,
+          52.351392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135892",
+        "label": "Boerenwetering 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886234,
+          52.351028
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135893",
+        "label": "Boerenwetering 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886932,
+          52.35182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140250",
+        "label": "Ruysdaelkade 195",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140252",
+        "label": "Ruysdaelkade 197",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140254",
+        "label": "Ruysdaelkade 199",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886926,
+          52.351671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140256",
+        "label": "Ruysdaelkade 201",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886927,
+          52.351619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140258",
+        "label": "Ruysdaelkade 203",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887072,
+          52.351634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140259",
+        "label": "Van Ostadestraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887172,
+          52.351641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140261",
+        "label": "Van Ostadestraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887262,
+          52.351658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140263",
+        "label": "Van Ostadestraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887336,
+          52.351665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140265",
+        "label": "Van Ostadestraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88741,
+          52.351676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140267",
+        "label": "Van Ostadestraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887498,
+          52.351687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140269",
+        "label": "Van Ostadestraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887581,
+          52.351702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140271",
+        "label": "Van Ostadestraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887664,
+          52.351709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140273",
+        "label": "Van Ostadestraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887752,
+          52.351721
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140275",
+        "label": "Van Ostadestraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88784,
+          52.351734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140277",
+        "label": "Van Ostadestraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887925,
+          52.351745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140279",
+        "label": "Van Ostadestraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888008,
+          52.351757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140281",
+        "label": "Van Ostadestraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888084,
+          52.351766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140283",
+        "label": "Van Ostadestraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888166,
+          52.351781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140285",
+        "label": "Van Ostadestraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886899,
+          52.351353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140483",
+        "label": "Ruysdaelkade 207",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886896,
+          52.351305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140485",
+        "label": "Ruysdaelkade 209",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886892,
+          52.351268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140487",
+        "label": "Ruysdaelkade 211",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886911,
+          52.351224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140489",
+        "label": "Ruysdaelkade 213",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888128,
+          52.351585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140549",
+        "label": "Van Ostadestraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888055,
+          52.351577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140551",
+        "label": "Van Ostadestraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887987,
+          52.351574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140553",
+        "label": "Van Ostadestraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887923,
+          52.351563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140555",
+        "label": "Van Ostadestraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887852,
+          52.351553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140557",
+        "label": "Van Ostadestraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887785,
+          52.351539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140559",
+        "label": "Van Ostadestraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887705,
+          52.351531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140561",
+        "label": "Van Ostadestraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887639,
+          52.351522
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140563",
+        "label": "Van Ostadestraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887558,
+          52.35151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140565",
+        "label": "Van Ostadestraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887495,
+          52.351504
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140567",
+        "label": "Van Ostadestraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887414,
+          52.351493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140569",
+        "label": "Van Ostadestraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887348,
+          52.351486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140571",
+        "label": "Van Ostadestraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887266,
+          52.351475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140573",
+        "label": "Van Ostadestraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887198,
+          52.351464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140575",
+        "label": "Van Ostadestraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887124,
+          52.35146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140577",
+        "label": "Van Ostadestraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887055,
+          52.351451
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140579",
+        "label": "Van Ostadestraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886983,
+          52.351442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140581",
+        "label": "Van Ostadestraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886906,
+          52.351427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140582",
+        "label": "Van Ostadestraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886981,
+          52.350635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140709",
+        "label": "Rustenburgerstraat 479",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887397,
+          52.350898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140713",
+        "label": "Rustenburgerstraat 465",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887494,
+          52.350914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140714",
+        "label": "Rustenburgerstraat 463",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887583,
+          52.350922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140715",
+        "label": "Rustenburgerstraat 461",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887892,
+          52.350958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140716",
+        "label": "Rustenburgerstraat 455",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887971,
+          52.350969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140717",
+        "label": "Rustenburgerstraat 453",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888027,
+          52.350977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140718",
+        "label": "Rustenburgerstraat 451",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888084,
+          52.350984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140719",
+        "label": "Rustenburgerstraat 449",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888176,
+          52.350973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A140720",
+        "label": "Rustenburgerstraat 441",
+        "year": "1909"
+      }
+    }
+  ]
+}

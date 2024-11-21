@@ -1,0 +1,4955 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92482,
+          52.342487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169840",
+        "label": "Dr. Leijdsstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922601,
+          52.342562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169970",
+        "label": "Weesperzijde 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924268,
+          52.342834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169824",
+        "label": "Dr. Leijdsstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924309,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169826",
+        "label": "Dr. Leijdsstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.34277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169828",
+        "label": "Dr. Leijdsstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924415,
+          52.342735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169830",
+        "label": "Dr. Leijdsstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924623,
+          52.342622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169832",
+        "label": "Dr. Leijdsstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169834",
+        "label": "Dr. Leijdsstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924722,
+          52.34255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169836",
+        "label": "Dr. Leijdsstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924777,
+          52.342517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169838",
+        "label": "Dr. Leijdsstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924869,
+          52.342456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169842",
+        "label": "Dr. Leijdsstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924925,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169844",
+        "label": "Dr. Leijdsstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92498,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169846",
+        "label": "Dr. Leijdsstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925366,
+          52.342358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169848",
+        "label": "Steijnstraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925414,
+          52.342391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169850",
+        "label": "Steijnstraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925463,
+          52.342423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169852",
+        "label": "Steijnstraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925513,
+          52.342458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169854",
+        "label": "Steijnstraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92557,
+          52.342491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169856",
+        "label": "Steijnstraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169858",
+        "label": "Steijnstraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.342557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169860",
+        "label": "Steijnstraat 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925738,
+          52.342589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169862",
+        "label": "Steijnstraat 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92579,
+          52.342623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169864",
+        "label": "Steijnstraat 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925846,
+          52.342657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169866",
+        "label": "Steijnstraat 52",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925903,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169868",
+        "label": "Steijnstraat 54",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.342722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169870",
+        "label": "Steijnstraat 56",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92601,
+          52.342752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169872",
+        "label": "Steijnstraat 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926063,
+          52.342787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169874",
+        "label": "Steijnstraat 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926118,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169876",
+        "label": "Steijnstraat 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.342852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169878",
+        "label": "Steijnstraat 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92623,
+          52.342883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169880",
+        "label": "Steijnstraat 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925564,
+          52.342745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169882",
+        "label": "Steijnstraat 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925514,
+          52.342708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169884",
+        "label": "Steijnstraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.342674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169886",
+        "label": "Steijnstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925404,
+          52.342642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169888",
+        "label": "Steijnstraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925353,
+          52.34261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169890",
+        "label": "Steijnstraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.342576
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169892",
+        "label": "Steijnstraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925246,
+          52.342545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169894",
+        "label": "Steijnstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925195,
+          52.342514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169896",
+        "label": "Steijnstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.342748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169898",
+        "label": "Bothastraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924871,
+          52.342778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169900",
+        "label": "Bothastraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924921,
+          52.342808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169902",
+        "label": "Bothastraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92497,
+          52.342838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169904",
+        "label": "Bothastraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925029,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169906",
+        "label": "Bothastraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92508,
+          52.342902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169908",
+        "label": "Bothastraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925135,
+          52.342935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169910",
+        "label": "Bothastraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925197,
+          52.34297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169912",
+        "label": "Bothastraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924599,
+          52.34288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169914",
+        "label": "Bothastraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924647,
+          52.342915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169916",
+        "label": "Bothastraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924702,
+          52.342948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169918",
+        "label": "Bothastraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92475,
+          52.342978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169920",
+        "label": "Bothastraat 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924805,
+          52.34301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169922",
+        "label": "Bothastraat 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924106,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169930",
+        "label": "De Wetstraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924063,
+          52.342966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169932",
+        "label": "De Wetstraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923599,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169934",
+        "label": "De Wetstraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92354,
+          52.342926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169936",
+        "label": "De Wetstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923499,
+          52.3429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169938",
+        "label": "De Wetstraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92346,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169940",
+        "label": "De Wetstraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923416,
+          52.34285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169942",
+        "label": "De Wetstraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923373,
+          52.342828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169944",
+        "label": "De Wetstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923327,
+          52.342804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169946",
+        "label": "De Wetstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923286,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169948",
+        "label": "De Wetstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923244,
+          52.342754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169950",
+        "label": "De Wetstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923201,
+          52.342725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169952",
+        "label": "De Wetstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923164,
+          52.342701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169954",
+        "label": "De Wetstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923127,
+          52.342675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169956",
+        "label": "De Wetstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923086,
+          52.342651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169958",
+        "label": "De Wetstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923044,
+          52.342624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169960",
+        "label": "De Wetstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923005,
+          52.3426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169962",
+        "label": "De Wetstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922964,
+          52.342574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169964",
+        "label": "De Wetstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922825,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169966",
+        "label": "De Wetstraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922743,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169967",
+        "label": "Weesperzijde 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922691,
+          52.34252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169968",
+        "label": "Weesperzijde 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922648,
+          52.342537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169969",
+        "label": "Weesperzijde 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.342357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169972",
+        "label": "Weesperzijde 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.342324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169974",
+        "label": "Weesperzijde 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923184,
+          52.342295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169976",
+        "label": "Weesperzijde 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923247,
+          52.342265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169978",
+        "label": "Weesperzijde 65",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92331,
+          52.342233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169980",
+        "label": "Weesperzijde 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923371,
+          52.342208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169982",
+        "label": "Weesperzijde 67",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923436,
+          52.342171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169984",
+        "label": "Weesperzijde 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923606,
+          52.34227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169986",
+        "label": "Bothastraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923648,
+          52.342296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169988",
+        "label": "Bothastraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923687,
+          52.342322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169990",
+        "label": "Bothastraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923734,
+          52.342347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169992",
+        "label": "Bothastraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923775,
+          52.34237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169994",
+        "label": "Bothastraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923817,
+          52.342399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169996",
+        "label": "Bothastraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923854,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169998",
+        "label": "Bothastraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9239,
+          52.342447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170000",
+        "label": "Bothastraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923939,
+          52.342472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170002",
+        "label": "Bothastraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923982,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170004",
+        "label": "Bothastraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924021,
+          52.342523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170006",
+        "label": "Bothastraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924064,
+          52.342551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170008",
+        "label": "Bothastraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924104,
+          52.342575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170010",
+        "label": "Bothastraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924161,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170012",
+        "label": "Bothastraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924051,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170014",
+        "label": "Dr. Leijdsstraat 27 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923834,
+          52.342821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170016",
+        "label": "De Wetstraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923779,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170018",
+        "label": "De Wetstraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92374,
+          52.342777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170020",
+        "label": "De Wetstraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923694,
+          52.342751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170022",
+        "label": "De Wetstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923651,
+          52.342726999999996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170024",
+        "label": "De Wetstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923614,
+          52.3427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170026",
+        "label": "De Wetstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923566,
+          52.342672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170028",
+        "label": "De Wetstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923523,
+          52.34265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170030",
+        "label": "De Wetstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923484,
+          52.342626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170032",
+        "label": "De Wetstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923442,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170034",
+        "label": "De Wetstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923399,
+          52.342573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170036",
+        "label": "De Wetstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923355,
+          52.342549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170038",
+        "label": "De Wetstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923314,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170040",
+        "label": "De Wetstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92327,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170042",
+        "label": "De Wetstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923233,
+          52.342475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170044",
+        "label": "De Wetstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924394,
+          52.342462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170046",
+        "label": "Bothastraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924339,
+          52.342436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170048",
+        "label": "Bothastraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924298,
+          52.342412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170050",
+        "label": "Bothastraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924255,
+          52.342383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170052",
+        "label": "Bothastraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924215,
+          52.342364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170054",
+        "label": "Bothastraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924174,
+          52.342338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170056",
+        "label": "Bothastraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924135,
+          52.342316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170058",
+        "label": "Bothastraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924092,
+          52.342292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170060",
+        "label": "Bothastraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924057,
+          52.342267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170062",
+        "label": "Bothastraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924017,
+          52.342245
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170064",
+        "label": "Bothastraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923974,
+          52.342219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170066",
+        "label": "Bothastraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923927,
+          52.342196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170068",
+        "label": "Bothastraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92389,
+          52.34217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170070",
+        "label": "Bothastraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923718,
+          52.342071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170072",
+        "label": "Bothastraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923758,
+          52.342032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170074",
+        "label": "Weesperzijde 69",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9238,
+          52.342007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170076",
+        "label": "Weesperzijde 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923838,
+          52.341988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170078",
+        "label": "Weesperzijde 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923884,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170080",
+        "label": "Weesperzijde 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923936,
+          52.341942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170082",
+        "label": "Weesperzijde 73",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.341917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170084",
+        "label": "Weesperzijde 74",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170086",
+        "label": "Weesperzijde 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924311,
+          52.341998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170088",
+        "label": "Steijnstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924364,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170090",
+        "label": "Steijnstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924412,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170092",
+        "label": "Steijnstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92446,
+          52.342086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170094",
+        "label": "Steijnstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924515,
+          52.342126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170096",
+        "label": "Steijnstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924563,
+          52.342156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170098",
+        "label": "Steijnstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924618,
+          52.342189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170100",
+        "label": "Steijnstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170102",
+        "label": "Steijnstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924732,
+          52.342251
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170104",
+        "label": "Steijnstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924629,
+          52.342325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170106",
+        "label": "Dr. Leijdsstraat 19 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924519,
+          52.342394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170108",
+        "label": "Dr. Leijdsstraat 26 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925162,
+          52.342214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170110",
+        "label": "Steijnstraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925093,
+          52.342183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170112",
+        "label": "Steijnstraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.342154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170114",
+        "label": "Steijnstraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924987,
+          52.342122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170116",
+        "label": "Steijnstraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924926,
+          52.342091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170118",
+        "label": "Steijnstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924878,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170120",
+        "label": "Steijnstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170122",
+        "label": "Steijnstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92477,
+          52.341999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170124",
+        "label": "Steijnstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924718,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170126",
+        "label": "Steijnstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924662,
+          52.341935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170128",
+        "label": "Steijnstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924614,
+          52.341901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170130",
+        "label": "Steijnstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924568,
+          52.341877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170132",
+        "label": "Steijnstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924527,
+          52.341849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170134",
+        "label": "Steijnstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924474,
+          52.341821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170136",
+        "label": "Steijnstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924417,
+          52.341788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170138",
+        "label": "Steijnstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924369,
+          52.341757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170140",
+        "label": "Steijnstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924277,
+          52.341639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170141",
+        "label": "Weesperzijde 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924335,
+          52.341621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170142",
+        "label": "Weesperzijde 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924381,
+          52.341604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170143",
+        "label": "Weesperzijde 78",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92443,
+          52.341586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170144",
+        "label": "Weesperzijde 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924476,
+          52.341562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170145",
+        "label": "Weesperzijde 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926621,
+          52.34055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170147",
+        "label": "Weesperzijde 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926017,
+          52.343001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182120",
+        "label": "Von Guerickestraat 94",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92482,
+          52.342487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169840",
+        "label": "Dr. Leijdsstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922601,
+          52.342562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169970",
+        "label": "Weesperzijde 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924268,
+          52.342834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169824",
+        "label": "Dr. Leijdsstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924309,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169826",
+        "label": "Dr. Leijdsstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.34277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169828",
+        "label": "Dr. Leijdsstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924415,
+          52.342735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169830",
+        "label": "Dr. Leijdsstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924623,
+          52.342622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169832",
+        "label": "Dr. Leijdsstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169834",
+        "label": "Dr. Leijdsstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924722,
+          52.34255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169836",
+        "label": "Dr. Leijdsstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924777,
+          52.342517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169838",
+        "label": "Dr. Leijdsstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924869,
+          52.342456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169842",
+        "label": "Dr. Leijdsstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924925,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169844",
+        "label": "Dr. Leijdsstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92498,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169846",
+        "label": "Dr. Leijdsstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925366,
+          52.342358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169848",
+        "label": "Steijnstraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925414,
+          52.342391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169850",
+        "label": "Steijnstraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925463,
+          52.342423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169852",
+        "label": "Steijnstraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925513,
+          52.342458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169854",
+        "label": "Steijnstraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92557,
+          52.342491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169856",
+        "label": "Steijnstraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169858",
+        "label": "Steijnstraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.342557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169860",
+        "label": "Steijnstraat 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925738,
+          52.342589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169862",
+        "label": "Steijnstraat 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92579,
+          52.342623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169864",
+        "label": "Steijnstraat 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925846,
+          52.342657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169866",
+        "label": "Steijnstraat 52",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925903,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169868",
+        "label": "Steijnstraat 54",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.342722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169870",
+        "label": "Steijnstraat 56",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92601,
+          52.342752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169872",
+        "label": "Steijnstraat 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926063,
+          52.342787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169874",
+        "label": "Steijnstraat 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926118,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169876",
+        "label": "Steijnstraat 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.342852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169878",
+        "label": "Steijnstraat 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92623,
+          52.342883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169880",
+        "label": "Steijnstraat 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925564,
+          52.342745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169882",
+        "label": "Steijnstraat 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925514,
+          52.342708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169884",
+        "label": "Steijnstraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.342674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169886",
+        "label": "Steijnstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925404,
+          52.342642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169888",
+        "label": "Steijnstraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925353,
+          52.34261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169890",
+        "label": "Steijnstraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.342576
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169892",
+        "label": "Steijnstraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925246,
+          52.342545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169894",
+        "label": "Steijnstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925195,
+          52.342514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169896",
+        "label": "Steijnstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.342748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169898",
+        "label": "Bothastraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924871,
+          52.342778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169900",
+        "label": "Bothastraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924921,
+          52.342808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169902",
+        "label": "Bothastraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92497,
+          52.342838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169904",
+        "label": "Bothastraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925029,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169906",
+        "label": "Bothastraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92508,
+          52.342902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169908",
+        "label": "Bothastraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925135,
+          52.342935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169910",
+        "label": "Bothastraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925197,
+          52.34297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169912",
+        "label": "Bothastraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924599,
+          52.34288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169914",
+        "label": "Bothastraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924647,
+          52.342915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169916",
+        "label": "Bothastraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924702,
+          52.342948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169918",
+        "label": "Bothastraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92475,
+          52.342978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169920",
+        "label": "Bothastraat 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924805,
+          52.34301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169922",
+        "label": "Bothastraat 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924106,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169930",
+        "label": "De Wetstraat 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924063,
+          52.342966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169932",
+        "label": "De Wetstraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923599,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169934",
+        "label": "De Wetstraat 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92354,
+          52.342926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169936",
+        "label": "De Wetstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923499,
+          52.3429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169938",
+        "label": "De Wetstraat 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92346,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169940",
+        "label": "De Wetstraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923416,
+          52.34285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169942",
+        "label": "De Wetstraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923373,
+          52.342828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169944",
+        "label": "De Wetstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923327,
+          52.342804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169946",
+        "label": "De Wetstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923286,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169948",
+        "label": "De Wetstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923244,
+          52.342754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169950",
+        "label": "De Wetstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923201,
+          52.342725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169952",
+        "label": "De Wetstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923164,
+          52.342701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169954",
+        "label": "De Wetstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923127,
+          52.342675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169956",
+        "label": "De Wetstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923086,
+          52.342651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169958",
+        "label": "De Wetstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923044,
+          52.342624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169960",
+        "label": "De Wetstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923005,
+          52.3426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169962",
+        "label": "De Wetstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922964,
+          52.342574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169964",
+        "label": "De Wetstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922825,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169966",
+        "label": "De Wetstraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922743,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169967",
+        "label": "Weesperzijde 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922691,
+          52.34252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169968",
+        "label": "Weesperzijde 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922648,
+          52.342537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169969",
+        "label": "Weesperzijde 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.342357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169972",
+        "label": "Weesperzijde 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.342324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169974",
+        "label": "Weesperzijde 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923184,
+          52.342295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169976",
+        "label": "Weesperzijde 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923247,
+          52.342265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169978",
+        "label": "Weesperzijde 65",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92331,
+          52.342233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169980",
+        "label": "Weesperzijde 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923371,
+          52.342208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169982",
+        "label": "Weesperzijde 67",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923436,
+          52.342171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169984",
+        "label": "Weesperzijde 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923606,
+          52.34227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169986",
+        "label": "Bothastraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923648,
+          52.342296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169988",
+        "label": "Bothastraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923687,
+          52.342322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169990",
+        "label": "Bothastraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923734,
+          52.342347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169992",
+        "label": "Bothastraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923775,
+          52.34237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169994",
+        "label": "Bothastraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923817,
+          52.342399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169996",
+        "label": "Bothastraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923854,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169998",
+        "label": "Bothastraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9239,
+          52.342447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170000",
+        "label": "Bothastraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923939,
+          52.342472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170002",
+        "label": "Bothastraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923982,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170004",
+        "label": "Bothastraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924021,
+          52.342523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170006",
+        "label": "Bothastraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924064,
+          52.342551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170008",
+        "label": "Bothastraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924104,
+          52.342575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170010",
+        "label": "Bothastraat 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924161,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170012",
+        "label": "Bothastraat 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924051,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170014",
+        "label": "Dr. Leijdsstraat 27 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923834,
+          52.342821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170016",
+        "label": "De Wetstraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923779,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170018",
+        "label": "De Wetstraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92374,
+          52.342777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170020",
+        "label": "De Wetstraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923694,
+          52.342751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170022",
+        "label": "De Wetstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923651,
+          52.342726999999996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170024",
+        "label": "De Wetstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923614,
+          52.3427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170026",
+        "label": "De Wetstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923566,
+          52.342672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170028",
+        "label": "De Wetstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923523,
+          52.34265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170030",
+        "label": "De Wetstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923484,
+          52.342626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170032",
+        "label": "De Wetstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923442,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170034",
+        "label": "De Wetstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923399,
+          52.342573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170036",
+        "label": "De Wetstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923355,
+          52.342549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170038",
+        "label": "De Wetstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923314,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170040",
+        "label": "De Wetstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92327,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170042",
+        "label": "De Wetstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923233,
+          52.342475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170044",
+        "label": "De Wetstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924394,
+          52.342462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170046",
+        "label": "Bothastraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924339,
+          52.342436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170048",
+        "label": "Bothastraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924298,
+          52.342412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170050",
+        "label": "Bothastraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924255,
+          52.342383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170052",
+        "label": "Bothastraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924215,
+          52.342364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170054",
+        "label": "Bothastraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924174,
+          52.342338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170056",
+        "label": "Bothastraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924135,
+          52.342316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170058",
+        "label": "Bothastraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924092,
+          52.342292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170060",
+        "label": "Bothastraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924057,
+          52.342267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170062",
+        "label": "Bothastraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924017,
+          52.342245
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170064",
+        "label": "Bothastraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923974,
+          52.342219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170066",
+        "label": "Bothastraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923927,
+          52.342196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170068",
+        "label": "Bothastraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92389,
+          52.34217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170070",
+        "label": "Bothastraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923718,
+          52.342071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170072",
+        "label": "Bothastraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923758,
+          52.342032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170074",
+        "label": "Weesperzijde 69",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9238,
+          52.342007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170076",
+        "label": "Weesperzijde 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923838,
+          52.341988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170078",
+        "label": "Weesperzijde 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923884,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170080",
+        "label": "Weesperzijde 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923936,
+          52.341942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170082",
+        "label": "Weesperzijde 73",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.341917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170084",
+        "label": "Weesperzijde 74",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170086",
+        "label": "Weesperzijde 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924311,
+          52.341998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170088",
+        "label": "Steijnstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924364,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170090",
+        "label": "Steijnstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924412,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170092",
+        "label": "Steijnstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92446,
+          52.342086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170094",
+        "label": "Steijnstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924515,
+          52.342126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170096",
+        "label": "Steijnstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924563,
+          52.342156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170098",
+        "label": "Steijnstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924618,
+          52.342189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170100",
+        "label": "Steijnstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170102",
+        "label": "Steijnstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924732,
+          52.342251
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170104",
+        "label": "Steijnstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924629,
+          52.342325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170106",
+        "label": "Dr. Leijdsstraat 19 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924519,
+          52.342394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170108",
+        "label": "Dr. Leijdsstraat 26 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925162,
+          52.342214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170110",
+        "label": "Steijnstraat 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925093,
+          52.342183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170112",
+        "label": "Steijnstraat 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.342154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170114",
+        "label": "Steijnstraat 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924987,
+          52.342122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170116",
+        "label": "Steijnstraat 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924926,
+          52.342091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170118",
+        "label": "Steijnstraat 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924878,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170120",
+        "label": "Steijnstraat 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170122",
+        "label": "Steijnstraat 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92477,
+          52.341999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170124",
+        "label": "Steijnstraat 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924718,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170126",
+        "label": "Steijnstraat 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924662,
+          52.341935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170128",
+        "label": "Steijnstraat 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924614,
+          52.341901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170130",
+        "label": "Steijnstraat 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924568,
+          52.341877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170132",
+        "label": "Steijnstraat 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924527,
+          52.341849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170134",
+        "label": "Steijnstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924474,
+          52.341821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170136",
+        "label": "Steijnstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924417,
+          52.341788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170138",
+        "label": "Steijnstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924369,
+          52.341757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170140",
+        "label": "Steijnstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924277,
+          52.341639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170141",
+        "label": "Weesperzijde 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924335,
+          52.341621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170142",
+        "label": "Weesperzijde 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924381,
+          52.341604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170143",
+        "label": "Weesperzijde 78",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92443,
+          52.341586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170144",
+        "label": "Weesperzijde 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924476,
+          52.341562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170145",
+        "label": "Weesperzijde 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926621,
+          52.34055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170147",
+        "label": "Weesperzijde 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926017,
+          52.343001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182120",
+        "label": "Von Guerickestraat 94",
+        "year": "1909"
+      }
+    }
+  ]
+}

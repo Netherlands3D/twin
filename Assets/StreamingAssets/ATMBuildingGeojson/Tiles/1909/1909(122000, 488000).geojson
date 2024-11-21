@@ -1,0 +1,3245 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908925,
+          52.385101
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169125",
+        "label": "Buiksloterweg 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906839,
+          52.384725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169105",
+        "label": "Buiksloterweg 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908377,
+          52.385079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169117",
+        "label": "Buiksloterweg 43 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907748,
+          52.385041
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169112",
+        "label": "Buiksloterweg 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90811,
+          52.384345
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169097",
+        "label": "Buiksloterweg 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909129,
+          52.385111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169129",
+        "label": "Buiksloterweg 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908049,
+          52.384323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169095",
+        "label": "Buiksloterweg 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907964,
+          52.384286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169093",
+        "label": "Buiksloterweg 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909215,
+          52.385114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169131",
+        "label": "Buiksloterweg 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908209,
+          52.385075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169114",
+        "label": "Buiksloterweg 39 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904919,
+          52.383053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169232",
+        "label": "Buiksloterweg 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908554,
+          52.385092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169119",
+        "label": "Buiksloterweg 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907467,
+          52.384975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169111",
+        "label": "Buiksloterweg 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909335,
+          52.38513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169132",
+        "label": "Buiksloterweg 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907298,
+          52.384911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169109",
+        "label": "Buiksloterweg 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907609,
+          52.384153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169091",
+        "label": "Buiksloterweg 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908157,
+          52.384372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169099",
+        "label": "Buiksloterweg 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906632,
+          52.384628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169101",
+        "label": "Buiksloterweg 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909038,
+          52.385105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169127",
+        "label": "Buiksloterweg 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90674,
+          52.384682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169103",
+        "label": "Buiksloterweg 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90696,
+          52.384765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169107",
+        "label": "Buiksloterweg 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908695,
+          52.385093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169121",
+        "label": "Buiksloterweg 47 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905321,
+          52.383274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169233",
+        "label": "Buiksloterweg 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908301,
+          52.385075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169116",
+        "label": "Buiksloterweg 41 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90562,
+          52.383414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169234",
+        "label": "Buiksloterweg 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906611,
+          52.383761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169090",
+        "label": "Buiksloterweg 9 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906481,
+          52.383976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169076",
+        "label": "Buiksloterweg 9 c",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90648,
+          52.384025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169078",
+        "label": "Buiksloterweg 9 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906489,
+          52.384079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169080",
+        "label": "Buiksloterweg 9 e",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906492,
+          52.384127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169082",
+        "label": "Buiksloterweg 9 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906505,
+          52.384237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169084",
+        "label": "Buiksloterweg 9 g",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906504,
+          52.38429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169086",
+        "label": "Buiksloterweg 9 h",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906879,
+          52.383935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169087",
+        "label": "Buiksloterweg 13 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906831,
+          52.383863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169089",
+        "label": "Buiksloterweg 9 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908805,
+          52.385099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169123",
+        "label": "Buiksloterweg 47 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909136,
+          52.385886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169133",
+        "label": "Laanweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909492,
+          52.385917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169135",
+        "label": "Laanweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909603,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169137",
+        "label": "Laanweg 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909744,
+          52.386037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169139",
+        "label": "Laanweg 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909953,
+          52.386088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169141",
+        "label": "Laanweg 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910141,
+          52.38616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169143",
+        "label": "Laanweg 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90969,
+          52.386305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169145",
+        "label": "Laanweg 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909775,
+          52.386335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169147",
+        "label": "Laanweg 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909851,
+          52.38636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169149",
+        "label": "Laanweg 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909946,
+          52.386389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169151",
+        "label": "Laanweg 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910035,
+          52.386419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169153",
+        "label": "Laanweg 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910119,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169155",
+        "label": "Laanweg 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910199,
+          52.386474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169157",
+        "label": "Laanweg 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910277,
+          52.3865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169159",
+        "label": "Laanweg 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910489,
+          52.386606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169161",
+        "label": "Laanweg 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910569,
+          52.386626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169163",
+        "label": "Laanweg 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910645,
+          52.386653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169165",
+        "label": "Laanweg 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910761,
+          52.386682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169167",
+        "label": "Laanweg 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910833,
+          52.386707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169169",
+        "label": "Laanweg 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910907,
+          52.386735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169171",
+        "label": "Laanweg 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910617,
+          52.38635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169173",
+        "label": "Laanweg 18 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910778,
+          52.386404
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169175",
+        "label": "Laanweg 18 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910918,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169177",
+        "label": "Laanweg 18 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911074,
+          52.38649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169179",
+        "label": "Laanweg 18 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911264,
+          52.386649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169181",
+        "label": "Laanweg 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911416,
+          52.386536
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169183",
+        "label": "Laanweg 20 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911451,
+          52.386503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169185",
+        "label": "Laanweg 20 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91148,
+          52.386474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169187",
+        "label": "Laanweg 20 c",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911509,
+          52.38644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169189",
+        "label": "Laanweg 20 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911541,
+          52.386413
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169191",
+        "label": "Laanweg 20 e",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911564,
+          52.386378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169193",
+        "label": "Laanweg 20 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911647,
+          52.386513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169195",
+        "label": "Laanweg 20 g",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911707,
+          52.386449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169197",
+        "label": "Laanweg 20 h",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911383,
+          52.386267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169199",
+        "label": "Laanweg 20 j",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911429,
+          52.386226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169201",
+        "label": "Laanweg 20 k",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91152,
+          52.386277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169203",
+        "label": "Laanweg 20 l",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911598,
+          52.386306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169205",
+        "label": "Laanweg 20 m",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911479,
+          52.386697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169207",
+        "label": "Laanweg 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911577,
+          52.386583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169209",
+        "label": "Laanweg 22 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911629,
+          52.386553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169211",
+        "label": "Laanweg 22 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911834,
+          52.386827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169213",
+        "label": "Laanweg 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911836,
+          52.386454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169214",
+        "label": "Laanweg 24 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911886,
+          52.386468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169215",
+        "label": "Laanweg 24 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91254,
+          52.38708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169216",
+        "label": "Laanweg 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912894,
+          52.387205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169217",
+        "label": "Laanweg 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913277,
+          52.387355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169218",
+        "label": "Laanweg 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.914067,
+          52.387641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169219",
+        "label": "Laanweg 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911886,
+          52.383358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169226",
+        "label": "Meeuwenlaan 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912475,
+          52.383265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169228",
+        "label": "Meeuwenlaan 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912702,
+          52.38329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169230",
+        "label": "Meeuwenlaan 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905856,
+          52.38352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169235",
+        "label": "Buiksloterweg 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908087,
+          52.383362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169237",
+        "label": "Valkenweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908199,
+          52.383264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169239",
+        "label": "Valkenweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90881,
+          52.382383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169240",
+        "label": "Valkenweg 4 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910337,
+          52.381297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169242",
+        "label": "Valkenweg 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915558,
+          52.381906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169243",
+        "label": "Droogdok 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915688,
+          52.381925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169244",
+        "label": "Droogdok 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91576,
+          52.381931
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169245",
+        "label": "Droogdok 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915822,
+          52.381936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169246",
+        "label": "Droogdok 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915901,
+          52.381944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169247",
+        "label": "Droogdok 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915959,
+          52.381955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169248",
+        "label": "Droogdok 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916026,
+          52.381958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169249",
+        "label": "Droogdok 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916088,
+          52.381967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169250",
+        "label": "Droogdok 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91616,
+          52.381975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169251",
+        "label": "Droogdok 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916226,
+          52.381987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169252",
+        "label": "Droogdok 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916302,
+          52.381994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169253",
+        "label": "Droogdok 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916462,
+          52.38184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916542,
+          52.38185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916605,
+          52.38186
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916677,
+          52.381867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916742,
+          52.381875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916813,
+          52.381883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916874,
+          52.38189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908925,
+          52.385101
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169125",
+        "label": "Buiksloterweg 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906839,
+          52.384725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169105",
+        "label": "Buiksloterweg 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908377,
+          52.385079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169117",
+        "label": "Buiksloterweg 43 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907748,
+          52.385041
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169112",
+        "label": "Buiksloterweg 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90811,
+          52.384345
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169097",
+        "label": "Buiksloterweg 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909129,
+          52.385111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169129",
+        "label": "Buiksloterweg 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908049,
+          52.384323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169095",
+        "label": "Buiksloterweg 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907964,
+          52.384286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169093",
+        "label": "Buiksloterweg 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909215,
+          52.385114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169131",
+        "label": "Buiksloterweg 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908209,
+          52.385075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169114",
+        "label": "Buiksloterweg 39 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904919,
+          52.383053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169232",
+        "label": "Buiksloterweg 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908554,
+          52.385092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169119",
+        "label": "Buiksloterweg 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907467,
+          52.384975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169111",
+        "label": "Buiksloterweg 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909335,
+          52.38513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169132",
+        "label": "Buiksloterweg 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907298,
+          52.384911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169109",
+        "label": "Buiksloterweg 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907609,
+          52.384153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169091",
+        "label": "Buiksloterweg 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908157,
+          52.384372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169099",
+        "label": "Buiksloterweg 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906632,
+          52.384628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169101",
+        "label": "Buiksloterweg 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909038,
+          52.385105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169127",
+        "label": "Buiksloterweg 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90674,
+          52.384682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169103",
+        "label": "Buiksloterweg 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90696,
+          52.384765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169107",
+        "label": "Buiksloterweg 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908695,
+          52.385093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169121",
+        "label": "Buiksloterweg 47 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905321,
+          52.383274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169233",
+        "label": "Buiksloterweg 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908301,
+          52.385075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169116",
+        "label": "Buiksloterweg 41 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90562,
+          52.383414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169234",
+        "label": "Buiksloterweg 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906611,
+          52.383761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169090",
+        "label": "Buiksloterweg 9 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906481,
+          52.383976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169076",
+        "label": "Buiksloterweg 9 c",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90648,
+          52.384025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169078",
+        "label": "Buiksloterweg 9 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906489,
+          52.384079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169080",
+        "label": "Buiksloterweg 9 e",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906492,
+          52.384127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169082",
+        "label": "Buiksloterweg 9 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906505,
+          52.384237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169084",
+        "label": "Buiksloterweg 9 g",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906504,
+          52.38429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169086",
+        "label": "Buiksloterweg 9 h",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906879,
+          52.383935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169087",
+        "label": "Buiksloterweg 13 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906831,
+          52.383863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169089",
+        "label": "Buiksloterweg 9 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908805,
+          52.385099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169123",
+        "label": "Buiksloterweg 47 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909136,
+          52.385886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169133",
+        "label": "Laanweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909492,
+          52.385917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169135",
+        "label": "Laanweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909603,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169137",
+        "label": "Laanweg 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909744,
+          52.386037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169139",
+        "label": "Laanweg 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909953,
+          52.386088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169141",
+        "label": "Laanweg 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910141,
+          52.38616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169143",
+        "label": "Laanweg 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90969,
+          52.386305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169145",
+        "label": "Laanweg 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909775,
+          52.386335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169147",
+        "label": "Laanweg 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909851,
+          52.38636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169149",
+        "label": "Laanweg 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909946,
+          52.386389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169151",
+        "label": "Laanweg 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910035,
+          52.386419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169153",
+        "label": "Laanweg 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910119,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169155",
+        "label": "Laanweg 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910199,
+          52.386474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169157",
+        "label": "Laanweg 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910277,
+          52.3865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169159",
+        "label": "Laanweg 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910489,
+          52.386606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169161",
+        "label": "Laanweg 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910569,
+          52.386626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169163",
+        "label": "Laanweg 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910645,
+          52.386653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169165",
+        "label": "Laanweg 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910761,
+          52.386682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169167",
+        "label": "Laanweg 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910833,
+          52.386707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169169",
+        "label": "Laanweg 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910907,
+          52.386735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169171",
+        "label": "Laanweg 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910617,
+          52.38635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169173",
+        "label": "Laanweg 18 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910778,
+          52.386404
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169175",
+        "label": "Laanweg 18 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910918,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169177",
+        "label": "Laanweg 18 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911074,
+          52.38649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169179",
+        "label": "Laanweg 18 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911264,
+          52.386649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169181",
+        "label": "Laanweg 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911416,
+          52.386536
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169183",
+        "label": "Laanweg 20 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911451,
+          52.386503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169185",
+        "label": "Laanweg 20 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91148,
+          52.386474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169187",
+        "label": "Laanweg 20 c",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911509,
+          52.38644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169189",
+        "label": "Laanweg 20 d",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911541,
+          52.386413
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169191",
+        "label": "Laanweg 20 e",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911564,
+          52.386378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169193",
+        "label": "Laanweg 20 f",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911647,
+          52.386513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169195",
+        "label": "Laanweg 20 g",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911707,
+          52.386449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169197",
+        "label": "Laanweg 20 h",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911383,
+          52.386267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169199",
+        "label": "Laanweg 20 j",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911429,
+          52.386226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169201",
+        "label": "Laanweg 20 k",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91152,
+          52.386277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169203",
+        "label": "Laanweg 20 l",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911598,
+          52.386306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169205",
+        "label": "Laanweg 20 m",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911479,
+          52.386697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169207",
+        "label": "Laanweg 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911577,
+          52.386583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169209",
+        "label": "Laanweg 22 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911629,
+          52.386553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169211",
+        "label": "Laanweg 22 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911834,
+          52.386827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169213",
+        "label": "Laanweg 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911836,
+          52.386454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169214",
+        "label": "Laanweg 24 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911886,
+          52.386468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169215",
+        "label": "Laanweg 24 b",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91254,
+          52.38708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169216",
+        "label": "Laanweg 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912894,
+          52.387205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169217",
+        "label": "Laanweg 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913277,
+          52.387355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169218",
+        "label": "Laanweg 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.914067,
+          52.387641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169219",
+        "label": "Laanweg 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911886,
+          52.383358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169226",
+        "label": "Meeuwenlaan 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912475,
+          52.383265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169228",
+        "label": "Meeuwenlaan 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912702,
+          52.38329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169230",
+        "label": "Meeuwenlaan 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905856,
+          52.38352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169235",
+        "label": "Buiksloterweg 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908087,
+          52.383362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169237",
+        "label": "Valkenweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908199,
+          52.383264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169239",
+        "label": "Valkenweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90881,
+          52.382383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169240",
+        "label": "Valkenweg 4 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910337,
+          52.381297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169242",
+        "label": "Valkenweg 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915558,
+          52.381906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169243",
+        "label": "Droogdok 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915688,
+          52.381925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169244",
+        "label": "Droogdok 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91576,
+          52.381931
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169245",
+        "label": "Droogdok 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915822,
+          52.381936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169246",
+        "label": "Droogdok 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915901,
+          52.381944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169247",
+        "label": "Droogdok 28",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915959,
+          52.381955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169248",
+        "label": "Droogdok 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916026,
+          52.381958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169249",
+        "label": "Droogdok 32",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916088,
+          52.381967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169250",
+        "label": "Droogdok 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91616,
+          52.381975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169251",
+        "label": "Droogdok 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916226,
+          52.381987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169252",
+        "label": "Droogdok 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916302,
+          52.381994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169253",
+        "label": "Droogdok 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916462,
+          52.38184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916542,
+          52.38185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916605,
+          52.38186
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916677,
+          52.381867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916742,
+          52.381875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916813,
+          52.381883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916874,
+          52.38189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169254",
+        "label": "Droogdok 12",
+        "year": "1909"
+      }
+    }
+  ]
+}

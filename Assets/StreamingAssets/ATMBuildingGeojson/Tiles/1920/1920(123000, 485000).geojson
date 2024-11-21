@@ -1,0 +1,1445 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920116,
+          52.355449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229096",
+        "label": "Tugelaweg 67",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920193,
+          52.355472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229097",
+        "label": "Tugelaweg 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920465,
+          52.355558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229098",
+        "label": "Tugelaweg 65",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920547,
+          52.355587
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229099",
+        "label": "Tugelaweg 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921989,
+          52.356035
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229100",
+        "label": "Tugelaweg 49",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922067,
+          52.356062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229101",
+        "label": "Tugelaweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922726,
+          52.356279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229102",
+        "label": "Laing Nekstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922743,
+          52.356256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229103",
+        "label": "Laings Nekstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922762,
+          52.35623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229104",
+        "label": "Laings Nekstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921888,
+          52.355758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229105",
+        "label": "Magersfonteinstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921963,
+          52.35567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229106",
+        "label": "Magersfonteinstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921993,
+          52.355638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229107",
+        "label": "Magersfonteinstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922005,
+          52.355992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229108",
+        "label": "Magersfonteinstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92204,
+          52.355949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229109",
+        "label": "Magersfonteinstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922091,
+          52.355887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229110",
+        "label": "Magersfonteinstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922149,
+          52.35582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229111",
+        "label": "Magersfonteinstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922199,
+          52.355761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229112",
+        "label": "Magersfonteinstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922241,
+          52.355718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229113",
+        "label": "Magersfonteinstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920236,
+          52.355441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229114",
+        "label": "Spitskopstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920267,
+          52.355406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229115",
+        "label": "Spitskopstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920325,
+          52.355333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229116",
+        "label": "Spitskopstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920382,
+          52.355272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229117",
+        "label": "Spitskopstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920435,
+          52.355204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229118",
+        "label": "Spitskopstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920477,
+          52.355159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229119",
+        "label": "Spitskopstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920487,
+          52.35552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229120",
+        "label": "Spitskopstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920513,
+          52.355485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229121",
+        "label": "Spitskopstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920583,
+          52.355401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229122",
+        "label": "Spitskopstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920618,
+          52.355364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229123",
+        "label": "Spitskopstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920686,
+          52.355279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229124",
+        "label": "Spitskopstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920714,
+          52.355246
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229125",
+        "label": "Spitskopstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920417,
+          52.355093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229126",
+        "label": "Retiefstraat 116",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920505,
+          52.355117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229127",
+        "label": "Retiefstraat 114",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920763,
+          52.355196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229128",
+        "label": "Retiefstraat 112",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920851,
+          52.355224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229129",
+        "label": "Retiefstraat 110",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921934,
+          52.355573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229130",
+        "label": "Retiefstraat 76",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922023,
+          52.355595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229131",
+        "label": "Retiefstraat 74",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922281,
+          52.35568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229132",
+        "label": "Retiefstraat 72",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922373,
+          52.355708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229133",
+        "label": "Retiefstraat 70",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922447,
+          52.355734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229134",
+        "label": "Retiefstraat 68",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922525,
+          52.355759
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229135",
+        "label": "Retiefstraat 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922597,
+          52.35578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229136",
+        "label": "Retiefstraat 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922686,
+          52.355809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229137",
+        "label": "Retiefstraat 62",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92276,
+          52.35583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229138",
+        "label": "Retiefstraat 60",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922843,
+          52.355856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229139",
+        "label": "Retiefstraat 58",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919594,
+          52.352777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229156",
+        "label": "Louis Bothastraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919502,
+          52.352732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229157",
+        "label": "Louis Bothastraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919447,
+          52.352708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229158",
+        "label": "Louis Bothastraat 25",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919372,
+          52.352672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229159",
+        "label": "Louis Bothastraat 27",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920116,
+          52.355449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229096",
+        "label": "Tugelaweg 67",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920193,
+          52.355472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229097",
+        "label": "Tugelaweg 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920465,
+          52.355558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229098",
+        "label": "Tugelaweg 65",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920547,
+          52.355587
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229099",
+        "label": "Tugelaweg 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921989,
+          52.356035
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229100",
+        "label": "Tugelaweg 49",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922067,
+          52.356062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229101",
+        "label": "Tugelaweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922726,
+          52.356279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229102",
+        "label": "Laing Nekstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922743,
+          52.356256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229103",
+        "label": "Laings Nekstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922762,
+          52.35623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229104",
+        "label": "Laings Nekstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921888,
+          52.355758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229105",
+        "label": "Magersfonteinstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921963,
+          52.35567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229106",
+        "label": "Magersfonteinstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921993,
+          52.355638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229107",
+        "label": "Magersfonteinstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922005,
+          52.355992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229108",
+        "label": "Magersfonteinstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92204,
+          52.355949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229109",
+        "label": "Magersfonteinstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922091,
+          52.355887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229110",
+        "label": "Magersfonteinstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922149,
+          52.35582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229111",
+        "label": "Magersfonteinstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922199,
+          52.355761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229112",
+        "label": "Magersfonteinstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922241,
+          52.355718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229113",
+        "label": "Magersfonteinstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920236,
+          52.355441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229114",
+        "label": "Spitskopstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920267,
+          52.355406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229115",
+        "label": "Spitskopstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920325,
+          52.355333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229116",
+        "label": "Spitskopstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920382,
+          52.355272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229117",
+        "label": "Spitskopstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920435,
+          52.355204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229118",
+        "label": "Spitskopstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920477,
+          52.355159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229119",
+        "label": "Spitskopstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920487,
+          52.35552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229120",
+        "label": "Spitskopstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920513,
+          52.355485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229121",
+        "label": "Spitskopstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920583,
+          52.355401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229122",
+        "label": "Spitskopstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920618,
+          52.355364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229123",
+        "label": "Spitskopstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920686,
+          52.355279
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229124",
+        "label": "Spitskopstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920714,
+          52.355246
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229125",
+        "label": "Spitskopstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920417,
+          52.355093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229126",
+        "label": "Retiefstraat 116",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920505,
+          52.355117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229127",
+        "label": "Retiefstraat 114",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920763,
+          52.355196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229128",
+        "label": "Retiefstraat 112",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920851,
+          52.355224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229129",
+        "label": "Retiefstraat 110",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921934,
+          52.355573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229130",
+        "label": "Retiefstraat 76",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922023,
+          52.355595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229131",
+        "label": "Retiefstraat 74",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922281,
+          52.35568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229132",
+        "label": "Retiefstraat 72",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922373,
+          52.355708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229133",
+        "label": "Retiefstraat 70",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922447,
+          52.355734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229134",
+        "label": "Retiefstraat 68",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922525,
+          52.355759
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229135",
+        "label": "Retiefstraat 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922597,
+          52.35578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229136",
+        "label": "Retiefstraat 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922686,
+          52.355809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229137",
+        "label": "Retiefstraat 62",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92276,
+          52.35583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229138",
+        "label": "Retiefstraat 60",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922843,
+          52.355856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229139",
+        "label": "Retiefstraat 58",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919594,
+          52.352777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229156",
+        "label": "Louis Bothastraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919502,
+          52.352732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229157",
+        "label": "Louis Bothastraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919447,
+          52.352708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229158",
+        "label": "Louis Bothastraat 25",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919372,
+          52.352672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229159",
+        "label": "Louis Bothastraat 27",
+        "year": "1920"
+      }
+    }
+  ]
+}

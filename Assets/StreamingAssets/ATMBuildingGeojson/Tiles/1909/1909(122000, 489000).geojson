@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.914563,
+          52.388335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169220",
+        "label": "Laanweg 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915639,
+          52.388718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169222",
+        "label": "Laanweg 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916752,
+          52.389469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169224",
+        "label": "Laanweg 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.914563,
+          52.388335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169220",
+        "label": "Laanweg 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915639,
+          52.388718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169222",
+        "label": "Laanweg 34",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916752,
+          52.389469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169224",
+        "label": "Laanweg 36",
+        "year": "1909"
+      }
+    }
+  ]
+}

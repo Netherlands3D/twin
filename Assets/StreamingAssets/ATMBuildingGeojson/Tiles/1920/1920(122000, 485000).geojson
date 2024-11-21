@@ -1,0 +1,755 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917078,
+          52.354438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229140",
+        "label": "Reitzstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917127,
+          52.354384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229141",
+        "label": "Reitzstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916184,
+          52.35334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229142",
+        "label": "President Brandstraat 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916278,
+          52.353311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229143",
+        "label": "President Brandstraat 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916364,
+          52.353283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229144",
+        "label": "President Brandstraat 68",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916451,
+          52.353247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229145",
+        "label": "President Brandstraat 70",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916704,
+          52.353153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229146",
+        "label": "President Brandstraat 76",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916614,
+          52.35304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229147",
+        "label": "Joubertstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916567,
+          52.352978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229148",
+        "label": "Joubertstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91586,
+          52.352958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229149",
+        "label": "Ben Viljoenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915954,
+          52.352943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229150",
+        "label": "Ben Viljoenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916055,
+          52.352926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229151",
+        "label": "Ben Viljoenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916152,
+          52.352915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229152",
+        "label": "Ben Viljoenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916246,
+          52.352902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229153",
+        "label": "Ben Viljoenstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916352,
+          52.352889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229154",
+        "label": "Ben Viljoenstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916434,
+          52.352872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229155",
+        "label": "Ben Viljoenstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910447,
+          52.356411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229160",
+        "label": "Miquelstraat 56",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91044,
+          52.356442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229161",
+        "label": "Miquelstraat 54",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910416,
+          52.356479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229162",
+        "label": "Miquelstraat 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910387,
+          52.356514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229163",
+        "label": "Miquelstraat 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910363,
+          52.356549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229164",
+        "label": "Miquelstraat 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910336,
+          52.356592
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229165",
+        "label": "Miquelstraat 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9103,
+          52.356639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229166",
+        "label": "Miquelstraat 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910278,
+          52.356679
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229167",
+        "label": "Miquelstraat 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910247,
+          52.356722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229168",
+        "label": "Miquelstraat 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917078,
+          52.354438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229140",
+        "label": "Reitzstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917127,
+          52.354384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229141",
+        "label": "Reitzstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916184,
+          52.35334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229142",
+        "label": "President Brandstraat 64",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916278,
+          52.353311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229143",
+        "label": "President Brandstraat 66",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916364,
+          52.353283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229144",
+        "label": "President Brandstraat 68",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916451,
+          52.353247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229145",
+        "label": "President Brandstraat 70",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916704,
+          52.353153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229146",
+        "label": "President Brandstraat 76",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916614,
+          52.35304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229147",
+        "label": "Joubertstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916567,
+          52.352978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229148",
+        "label": "Joubertstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91586,
+          52.352958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229149",
+        "label": "Ben Viljoenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915954,
+          52.352943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229150",
+        "label": "Ben Viljoenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916055,
+          52.352926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229151",
+        "label": "Ben Viljoenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916152,
+          52.352915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229152",
+        "label": "Ben Viljoenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916246,
+          52.352902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229153",
+        "label": "Ben Viljoenstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916352,
+          52.352889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229154",
+        "label": "Ben Viljoenstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.916434,
+          52.352872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229155",
+        "label": "Ben Viljoenstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910447,
+          52.356411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229160",
+        "label": "Miquelstraat 56",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91044,
+          52.356442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229161",
+        "label": "Miquelstraat 54",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910416,
+          52.356479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229162",
+        "label": "Miquelstraat 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910387,
+          52.356514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229163",
+        "label": "Miquelstraat 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910363,
+          52.356549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229164",
+        "label": "Miquelstraat 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910336,
+          52.356592
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229165",
+        "label": "Miquelstraat 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9103,
+          52.356639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229166",
+        "label": "Miquelstraat 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910278,
+          52.356679
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229167",
+        "label": "Miquelstraat 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910247,
+          52.356722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229168",
+        "label": "Miquelstraat 40",
+        "year": "1920"
+      }
+    }
+  ]
+}

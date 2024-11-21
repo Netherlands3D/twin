@@ -1,0 +1,1565 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887152,
+          52.388572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109265",
+        "label": "Zoutkeetsgracht 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875347,
+          52.392723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169030",
+        "label": "Spaarndammerdijk 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875704,
+          52.392735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169028",
+        "label": "Spaarndammerdijk 99",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887144,
+          52.388459
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109226",
+        "label": "Zoutkeetsgracht 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887165,
+          52.388506
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109269",
+        "label": "Zoutkeetsgracht 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873845,
+          52.392685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169033",
+        "label": "Spaarndammerdijk 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886405,
+          52.388408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109261",
+        "label": "Zoutkeetsgracht 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885643,
+          52.388414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109102",
+        "label": "Bolwerk de Bogt 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885808,
+          52.388523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109104",
+        "label": "Bolwerk de Bogt 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885417,
+          52.38858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109109",
+        "label": "Bolwerk de Bogt 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885343,
+          52.388601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109112",
+        "label": "Bolwerk de Bogt 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885291,
+          52.388614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109115",
+        "label": "Bolwerk de Bogt 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885313,
+          52.388719
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109119",
+        "label": "Bolwerk de Bogt 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886908,
+          52.388442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109231",
+        "label": "Zoutkeetsgracht 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88682,
+          52.388435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109236",
+        "label": "Zoutkeetsgracht 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886739,
+          52.388432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109241",
+        "label": "Zoutkeetsgracht 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886646,
+          52.388423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109246",
+        "label": "Zoutkeetsgracht 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886576,
+          52.388418
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109251",
+        "label": "Zoutkeetsgracht 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88649,
+          52.388416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109256",
+        "label": "Zoutkeetsgracht 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887018,
+          52.38783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109552",
+        "label": "Vierwindendwarsstraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880653,
+          52.388183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168304",
+        "label": "Spaarndammerdijk 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880544,
+          52.387814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168381",
+        "label": "Spaarndammerdijk 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880395,
+          52.388007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168385",
+        "label": "Spaarndammerdijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879982,
+          52.388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168389",
+        "label": "Spaarndammerdijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879668,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168393",
+        "label": "Spaarndammerdijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879277,
+          52.388665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168448",
+        "label": "Spaarndammerdijk 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879308,
+          52.388625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168451",
+        "label": "Spaarndammerdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879457,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168482",
+        "label": "Spaarndammerdijk 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876885,
+          52.3897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168902",
+        "label": "Houtrijkkade 61",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87683,
+          52.389883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168904",
+        "label": "Houtrijkkade 63",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876685,
+          52.390059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168907",
+        "label": "Houtrijkkade 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876549,
+          52.390412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168910",
+        "label": "Houtrijkkade 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876261,
+          52.390955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168915",
+        "label": "Houtrijkkade 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876214,
+          52.391073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168917",
+        "label": "Houtrijkkade 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877287,
+          52.391476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168987",
+        "label": "Tweede Spaarndammerstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87665,
+          52.391509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168989",
+        "label": "Tweede Spaarndammerstraat 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877376,
+          52.391724
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168991",
+        "label": "Tweede Spaarndammerstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876989,
+          52.392015
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168993",
+        "label": "Notweg 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876514,
+          52.391849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168995",
+        "label": "Notweg 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877776,
+          52.391863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169001",
+        "label": "Tweede Spaarndammerstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879173,
+          52.387824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171725",
+        "label": "Spaarndammerdijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881936,
+          52.388779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171726",
+        "label": "Spaarndammerdijk 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878907,
+          52.389386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171728",
+        "label": "Spaarndammerdijk 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878874,
+          52.389484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171729",
+        "label": "Spaarndammerdijk 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878801,
+          52.389568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171730",
+        "label": "Spaarndammerdijk 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878749,
+          52.389694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171731",
+        "label": "Spaarndammerdijk 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878701,
+          52.389748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171732",
+        "label": "Spaarndammerdijk 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876613,
+          52.390235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171733",
+        "label": "Houtrijkkade 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876273,
+          52.390687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171734",
+        "label": "Houtrijkkade 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876182,
+          52.390832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171735",
+        "label": "Houtrijkkade 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876987,
+          52.392291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171736",
+        "label": "Spaarndammerdijk 95",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876862,
+          52.392408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171737",
+        "label": "Spaarndammerdijk 97",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887152,
+          52.388572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109265",
+        "label": "Zoutkeetsgracht 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875347,
+          52.392723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169030",
+        "label": "Spaarndammerdijk 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875704,
+          52.392735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169028",
+        "label": "Spaarndammerdijk 99",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887144,
+          52.388459
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109226",
+        "label": "Zoutkeetsgracht 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887165,
+          52.388506
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109269",
+        "label": "Zoutkeetsgracht 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873845,
+          52.392685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169033",
+        "label": "Spaarndammerdijk 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886405,
+          52.388408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109261",
+        "label": "Zoutkeetsgracht 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885643,
+          52.388414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109102",
+        "label": "Bolwerk de Bogt 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885808,
+          52.388523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109104",
+        "label": "Bolwerk de Bogt 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885417,
+          52.38858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109109",
+        "label": "Bolwerk de Bogt 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885343,
+          52.388601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109112",
+        "label": "Bolwerk de Bogt 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885291,
+          52.388614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109115",
+        "label": "Bolwerk de Bogt 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885313,
+          52.388719
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109119",
+        "label": "Bolwerk de Bogt 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886908,
+          52.388442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109231",
+        "label": "Zoutkeetsgracht 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88682,
+          52.388435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109236",
+        "label": "Zoutkeetsgracht 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886739,
+          52.388432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109241",
+        "label": "Zoutkeetsgracht 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886646,
+          52.388423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109246",
+        "label": "Zoutkeetsgracht 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886576,
+          52.388418
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109251",
+        "label": "Zoutkeetsgracht 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88649,
+          52.388416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109256",
+        "label": "Zoutkeetsgracht 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887018,
+          52.38783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109552",
+        "label": "Vierwindendwarsstraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880653,
+          52.388183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168304",
+        "label": "Spaarndammerdijk 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880544,
+          52.387814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168381",
+        "label": "Spaarndammerdijk 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880395,
+          52.388007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168385",
+        "label": "Spaarndammerdijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879982,
+          52.388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168389",
+        "label": "Spaarndammerdijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879668,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168393",
+        "label": "Spaarndammerdijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879277,
+          52.388665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168448",
+        "label": "Spaarndammerdijk 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879308,
+          52.388625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168451",
+        "label": "Spaarndammerdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879457,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168482",
+        "label": "Spaarndammerdijk 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876885,
+          52.3897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168902",
+        "label": "Houtrijkkade 61",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87683,
+          52.389883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168904",
+        "label": "Houtrijkkade 63",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876685,
+          52.390059
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168907",
+        "label": "Houtrijkkade 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876549,
+          52.390412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168910",
+        "label": "Houtrijkkade 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876261,
+          52.390955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168915",
+        "label": "Houtrijkkade 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876214,
+          52.391073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168917",
+        "label": "Houtrijkkade 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877287,
+          52.391476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168987",
+        "label": "Tweede Spaarndammerstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87665,
+          52.391509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168989",
+        "label": "Tweede Spaarndammerstraat 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877376,
+          52.391724
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168991",
+        "label": "Tweede Spaarndammerstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876989,
+          52.392015
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168993",
+        "label": "Notweg 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876514,
+          52.391849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168995",
+        "label": "Notweg 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877776,
+          52.391863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169001",
+        "label": "Tweede Spaarndammerstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879173,
+          52.387824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171725",
+        "label": "Spaarndammerdijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881936,
+          52.388779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171726",
+        "label": "Spaarndammerdijk 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878907,
+          52.389386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171728",
+        "label": "Spaarndammerdijk 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878874,
+          52.389484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171729",
+        "label": "Spaarndammerdijk 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878801,
+          52.389568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171730",
+        "label": "Spaarndammerdijk 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878749,
+          52.389694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171731",
+        "label": "Spaarndammerdijk 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878701,
+          52.389748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171732",
+        "label": "Spaarndammerdijk 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876613,
+          52.390235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171733",
+        "label": "Houtrijkkade 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876273,
+          52.390687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171734",
+        "label": "Houtrijkkade 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876182,
+          52.390832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171735",
+        "label": "Houtrijkkade 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876987,
+          52.392291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171736",
+        "label": "Spaarndammerdijk 95",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876862,
+          52.392408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171737",
+        "label": "Spaarndammerdijk 97",
+        "year": "1876"
+      }
+    }
+  ]
+}

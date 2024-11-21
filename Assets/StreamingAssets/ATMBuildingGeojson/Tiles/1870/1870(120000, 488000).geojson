@@ -1,0 +1,3005 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876856,
+          52.381552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227490",
+        "label": "WW 107 h (Beltweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885554,
+          52.3827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227491",
+        "label": "UU 680 (Binnen Dommerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886811,
+          52.381926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227492",
+        "label": "UU 606 a (Binnen Oranjestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886649,
+          52.381827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227504",
+        "label": "UU 605 a (Brouwersgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876736,
+          52.379331
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227623",
+        "label": "WW 131 e (Buiten Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879671,
+          52.382886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227624",
+        "label": "WW 88 c (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879793,
+          52.382928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227625",
+        "label": "WW 88 e (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879881,
+          52.382953
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227626",
+        "label": "WW 88 g (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883281,
+          52.382683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227631",
+        "label": "QQ 198 c (Driehoekstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883235,
+          52.382642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227632",
+        "label": "QQ 198 d (Driehoekstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885521,
+          52.381256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227649",
+        "label": "QQ 111 (1e Goudsbloemdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884394,
+          52.379685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227652",
+        "label": "PP 178 (1e Lindendwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887454,
+          52.385557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227704",
+        "label": "VV 247 a (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887401,
+          52.38556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227705",
+        "label": "VV 247 (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887401,
+          52.38556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227706",
+        "label": "VV 247 b (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88728,
+          52.385646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227707",
+        "label": "VV 253 a (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881506,
+          52.38017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227755",
+        "label": "QQ 340 g (Goudsbloemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88347,
+          52.380532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227756",
+        "label": "QQ 378 b (Goudsbloemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884145,
+          52.385342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227788",
+        "label": "UU 837 (Groote Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883979,
+          52.385297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227789",
+        "label": "UU 83 c (Groote Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885149,
+          52.384622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885184,
+          52.384601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885246,
+          52.384568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885356,
+          52.384508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227811",
+        "label": "UU 98 b (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885623,
+          52.384357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227812",
+        "label": "UU 98 (Haarlemmerhouttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885623,
+          52.384357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227813",
+        "label": "UU 98 c (Haarlemmerhouttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885711,
+          52.384312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227814",
+        "label": "UU 99 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885711,
+          52.384312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227815",
+        "label": "UU 99 b (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885615,
+          52.384248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227816",
+        "label": "UU 99 c (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885581,
+          52.38422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227817",
+        "label": "UU 99 d (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885532,
+          52.384191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227818",
+        "label": "UU 99 e (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886482,
+          52.383872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227819",
+        "label": "UU 112 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873571,
+          52.384976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227822",
+        "label": "WW 27 (Haarl. weg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884903,
+          52.384688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227994",
+        "label": "UU 813 a (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885015,
+          52.384622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227995",
+        "label": "UU 813 b (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88518,
+          52.384527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227996",
+        "label": "UU 813 c (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885065,
+          52.384448
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227997",
+        "label": "UU 813 d (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884969,
+          52.384386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227998",
+        "label": "UU 813 e (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881913,
+          52.381644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228234",
+        "label": "QQ 848 a (Lijnbaansgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882464,
+          52.382476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228235",
+        "label": "QQ 945 a (Lijnbaansgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880366,
+          52.378936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228236",
+        "label": "PP 158 a (Lijnbaangracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886901,
+          52.380702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228255",
+        "label": "QQ 64 a (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884689,
+          52.380454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228256",
+        "label": "QQ 758 (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884716,
+          52.38037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228256",
+        "label": "QQ 758 (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883624,
+          52.379728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228257",
+        "label": "PP 74 a (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883504,
+          52.379299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228258",
+        "label": "PP 672 a (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883757,
+          52.379352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228259",
+        "label": "PP 669 a (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883545,
+          52.379197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228260",
+        "label": "PP 672 b (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883874,
+          52.379475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228261",
+        "label": "PP 690 b (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87964,
+          52.38014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228268",
+        "label": "QQ 1058 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879553,
+          52.379993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228269",
+        "label": "QQ 1061 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879521,
+          52.379943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228270",
+        "label": "QQ 1062 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879487,
+          52.379895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228271",
+        "label": "QQ 1063 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879425,
+          52.379788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228272",
+        "label": "QQ 1065 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878957,
+          52.379041
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228273",
+        "label": "QQ 1076 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879826,
+          52.379264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228274",
+        "label": "QQ 978 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228275",
+        "label": "QQ 979 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228276",
+        "label": "QQ 980 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228277",
+        "label": "QQ 981 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886435,
+          52.382768
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228278",
+        "label": "UU 661 a (Mouthaansteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884567,
+          52.381716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228460",
+        "label": "QQ 788 a (Palmstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884576,
+          52.386015
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228534",
+        "label": "UU 846 a (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884634,
+          52.386108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228535",
+        "label": "UU 847 a (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884656,
+          52.386142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228536",
+        "label": "UU 847 b (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884656,
+          52.386142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228537",
+        "label": "UU 876 b (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88527,
+          52.387742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228538",
+        "label": "UU 874 a (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885134,
+          52.387434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228539",
+        "label": "UU 874 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885023,
+          52.387275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228540",
+        "label": "UU 873 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884942,
+          52.38716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228541",
+        "label": "UU 872 (Planciusstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884738,
+          52.386862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228542",
+        "label": "UU 871 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884625,
+          52.386709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228543",
+        "label": "UU 870 (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884534,
+          52.386575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228544",
+        "label": "UU 869 (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884137,
+          52.386055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228545",
+        "label": "UU 868 (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884137,
+          52.386055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228546",
+        "label": "UU 875 (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886698,
+          52.386497
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228584",
+        "label": "VV 157 a (Prinsen Eiland)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884947,
+          52.387292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228707",
+        "label": "UU 876 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884863,
+          52.387178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228708",
+        "label": "UU 877 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884771,
+          52.387043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228709",
+        "label": "UU 878 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884659,
+          52.38688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228710",
+        "label": "UU 879 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884557,
+          52.386727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228711",
+        "label": "UU 880 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884467,
+          52.386597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228712",
+        "label": "UU 881 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883891,
+          52.386283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228712",
+        "label": "UU 881 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875188,
+          52.381977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228858",
+        "label": "WW 95 (Steurweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880532,
+          52.379334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228862",
+        "label": "PP 307 (Tigchelstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88393,
+          52.380803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228865",
+        "label": "QQ 222 a (2e Goudsbloemdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887009,
+          52.387354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228943",
+        "label": "VV 135 b (Vierwindendwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887009,
+          52.387354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228944",
+        "label": "VV 135 a (Vierwindendwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887641,
+          52.387634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228945",
+        "label": "VV 145 c (Vierwindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887641,
+          52.387634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228946",
+        "label": "VV 146 c (Vierwindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885147,
+          52.383452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228960",
+        "label": "UU 451 (Vinkenstraat Rozennobelgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884138,
+          52.37887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229021",
+        "label": "PP 442 (Westerstraatgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883581,
+          52.381018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229054",
+        "label": "QQ 548 (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885506,
+          52.381458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229055",
+        "label": "QQ 638 (Willemstraat Duifjesgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884308,
+          52.381467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229056",
+        "label": "QQ 802 b (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883539,
+          52.381173
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229057",
+        "label": "QQ 713 c (Willemstraat Tollegang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882166,
+          52.380969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229058",
+        "label": "QQ 739 b (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884673,
+          52.3811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229059",
+        "label": "QQ 594 (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885378,
+          52.381637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229060",
+        "label": "QQ 802 c (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885408,
+          52.381558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229061",
+        "label": "QQ 802 e (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876847,
+          52.380704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229062",
+        "label": "WW 114 (Wolfsweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876856,
+          52.381552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227490",
+        "label": "WW 107 h (Beltweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885554,
+          52.3827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227491",
+        "label": "UU 680 (Binnen Dommerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886811,
+          52.381926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227492",
+        "label": "UU 606 a (Binnen Oranjestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886649,
+          52.381827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227504",
+        "label": "UU 605 a (Brouwersgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876736,
+          52.379331
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227623",
+        "label": "WW 131 e (Buiten Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879671,
+          52.382886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227624",
+        "label": "WW 88 c (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879793,
+          52.382928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227625",
+        "label": "WW 88 e (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879881,
+          52.382953
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227626",
+        "label": "WW 88 g (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883281,
+          52.382683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227631",
+        "label": "QQ 198 c (Driehoekstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883235,
+          52.382642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227632",
+        "label": "QQ 198 d (Driehoekstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885521,
+          52.381256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227649",
+        "label": "QQ 111 (1e Goudsbloemdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884394,
+          52.379685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227652",
+        "label": "PP 178 (1e Lindendwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887454,
+          52.385557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227704",
+        "label": "VV 247 a (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887401,
+          52.38556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227705",
+        "label": "VV 247 (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887401,
+          52.38556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227706",
+        "label": "VV 247 b (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88728,
+          52.385646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227707",
+        "label": "VV 253 a (Galgenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881506,
+          52.38017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227755",
+        "label": "QQ 340 g (Goudsbloemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88347,
+          52.380532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227756",
+        "label": "QQ 378 b (Goudsbloemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884145,
+          52.385342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227788",
+        "label": "UU 837 (Groote Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883979,
+          52.385297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227789",
+        "label": "UU 83 c (Groote Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885149,
+          52.384622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885184,
+          52.384601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885246,
+          52.384568
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227810",
+        "label": "UU 97 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885356,
+          52.384508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227811",
+        "label": "UU 98 b (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885623,
+          52.384357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227812",
+        "label": "UU 98 (Haarlemmerhouttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885623,
+          52.384357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227813",
+        "label": "UU 98 c (Haarlemmerhouttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885711,
+          52.384312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227814",
+        "label": "UU 99 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885711,
+          52.384312
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227815",
+        "label": "UU 99 b (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885615,
+          52.384248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227816",
+        "label": "UU 99 c (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885581,
+          52.38422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227817",
+        "label": "UU 99 d (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885532,
+          52.384191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227818",
+        "label": "UU 99 e (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886482,
+          52.383872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227819",
+        "label": "UU 112 a (Haarlemmer Houttuinen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873571,
+          52.384976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227822",
+        "label": "WW 27 (Haarl. weg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884903,
+          52.384688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227994",
+        "label": "UU 813 a (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885015,
+          52.384622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227995",
+        "label": "UU 813 b (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88518,
+          52.384527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227996",
+        "label": "UU 813 c (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885065,
+          52.384448
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227997",
+        "label": "UU 813 d (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884969,
+          52.384386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227998",
+        "label": "UU 813 e (Kleine Houtstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881913,
+          52.381644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228234",
+        "label": "QQ 848 a (Lijnbaansgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882464,
+          52.382476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228235",
+        "label": "QQ 945 a (Lijnbaansgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880366,
+          52.378936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228236",
+        "label": "PP 158 a (Lijnbaangracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886901,
+          52.380702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228255",
+        "label": "QQ 64 a (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884689,
+          52.380454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228256",
+        "label": "QQ 758 (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884716,
+          52.38037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228256",
+        "label": "QQ 758 (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883624,
+          52.379728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228257",
+        "label": "PP 74 a (Lindengracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883504,
+          52.379299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228258",
+        "label": "PP 672 a (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883757,
+          52.379352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228259",
+        "label": "PP 669 a (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883545,
+          52.379197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228260",
+        "label": "PP 672 b (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883874,
+          52.379475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228261",
+        "label": "PP 690 b (Lindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87964,
+          52.38014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228268",
+        "label": "QQ 1058 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879553,
+          52.379993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228269",
+        "label": "QQ 1061 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879521,
+          52.379943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228270",
+        "label": "QQ 1062 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879487,
+          52.379895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228271",
+        "label": "QQ 1063 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879425,
+          52.379788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228272",
+        "label": "QQ 1065 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878957,
+          52.379041
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228273",
+        "label": "QQ 1076 (Marnixkade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879826,
+          52.379264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228274",
+        "label": "QQ 978 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228275",
+        "label": "QQ 979 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228276",
+        "label": "QQ 980 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879801,
+          52.379203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228277",
+        "label": "QQ 981 (Marnixstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886435,
+          52.382768
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228278",
+        "label": "UU 661 a (Mouthaansteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884567,
+          52.381716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228460",
+        "label": "QQ 788 a (Palmstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884576,
+          52.386015
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228534",
+        "label": "UU 846 a (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884634,
+          52.386108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228535",
+        "label": "UU 847 a (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884656,
+          52.386142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228536",
+        "label": "UU 847 b (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884656,
+          52.386142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228537",
+        "label": "UU 876 b (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88527,
+          52.387742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228538",
+        "label": "UU 874 a (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885134,
+          52.387434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228539",
+        "label": "UU 874 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885023,
+          52.387275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228540",
+        "label": "UU 873 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884942,
+          52.38716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228541",
+        "label": "UU 872 (Planciusstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884738,
+          52.386862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228542",
+        "label": "UU 871 (Smalle Pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884625,
+          52.386709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228543",
+        "label": "UU 870 (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884534,
+          52.386575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228544",
+        "label": "UU 869 (Smalle pad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884137,
+          52.386055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228545",
+        "label": "UU 868 (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884137,
+          52.386055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228546",
+        "label": "UU 875 (Smallepad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886698,
+          52.386497
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228584",
+        "label": "VV 157 a (Prinsen Eiland)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884947,
+          52.387292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228707",
+        "label": "UU 876 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884863,
+          52.387178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228708",
+        "label": "UU 877 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884771,
+          52.387043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228709",
+        "label": "UU 878 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884659,
+          52.38688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228710",
+        "label": "UU 879 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884557,
+          52.386727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228711",
+        "label": "UU 880 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884467,
+          52.386597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228712",
+        "label": "UU 881 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883891,
+          52.386283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228712",
+        "label": "UU 881 (Schans)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875188,
+          52.381977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228858",
+        "label": "WW 95 (Steurweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880532,
+          52.379334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228862",
+        "label": "PP 307 (Tigchelstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88393,
+          52.380803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228865",
+        "label": "QQ 222 a (2e Goudsbloemdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887009,
+          52.387354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228943",
+        "label": "VV 135 b (Vierwindendwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887009,
+          52.387354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228944",
+        "label": "VV 135 a (Vierwindendwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887641,
+          52.387634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228945",
+        "label": "VV 145 c (Vierwindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887641,
+          52.387634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228946",
+        "label": "VV 146 c (Vierwindenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885147,
+          52.383452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228960",
+        "label": "UU 451 (Vinkenstraat Rozennobelgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884138,
+          52.37887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229021",
+        "label": "PP 442 (Westerstraatgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883581,
+          52.381018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229054",
+        "label": "QQ 548 (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885506,
+          52.381458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229055",
+        "label": "QQ 638 (Willemstraat Duifjesgang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884308,
+          52.381467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229056",
+        "label": "QQ 802 b (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883539,
+          52.381173
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229057",
+        "label": "QQ 713 c (Willemstraat Tollegang)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882166,
+          52.380969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229058",
+        "label": "QQ 739 b (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884673,
+          52.3811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229059",
+        "label": "QQ 594 (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885378,
+          52.381637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229060",
+        "label": "QQ 802 c (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885408,
+          52.381558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229061",
+        "label": "QQ 802 e (Willemstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.876847,
+          52.380704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229062",
+        "label": "WW 114 (Wolfsweg)",
+        "year": "1870"
+      }
+    }
+  ]
+}

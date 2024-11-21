@@ -1,0 +1,1175 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938408,
+          52.370744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153886",
+        "label": "Zeeburgerpolder 151",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932038,
+          52.371524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129722",
+        "label": "Czaar Peterstraat 196",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932097,
+          52.371564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129724",
+        "label": "Czaar Peterstraat 198",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932015,
+          52.371264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129740",
+        "label": "Blankenstraat 189",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93209,
+          52.371305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129742",
+        "label": "Blankenstraat 191",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935531,
+          52.370119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153878",
+        "label": "Zeeburgerpolder 194",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936406,
+          52.370495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153879",
+        "label": "Zeeburgerpolder 188",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936708,
+          52.370529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153880",
+        "label": "Zeeburgerpolder 184",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937181,
+          52.370511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153881",
+        "label": "Zeeburgerpolder 168",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937367,
+          52.370643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153882",
+        "label": "Zeeburgerpolder 163",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93773,
+          52.370682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153883",
+        "label": "Zeeburgerpolder 158",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938054,
+          52.370705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153884",
+        "label": "Zeeburgerpolder 153",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938266,
+          52.370726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153885",
+        "label": "Zeeburgerpolder 152",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938525,
+          52.370758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153887",
+        "label": "Zeeburgerpolder 150",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940761,
+          52.370162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153888",
+        "label": "Zeeburgerpolder 145",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940946,
+          52.370296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153889",
+        "label": "Zeeburgerpolder 140",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94047,
+          52.37097
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153890",
+        "label": "Zeeburgerpolder 135",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940663,
+          52.37099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153891",
+        "label": "Zeeburgerpolder 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940823,
+          52.371017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153892",
+        "label": "Zeeburgerpolder 129",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940943,
+          52.371021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153893",
+        "label": "Zeeburgerpolder 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.941672,
+          52.371085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153894",
+        "label": "Zeeburgerpolder 127",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.942314,
+          52.371189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153895",
+        "label": "Zeeburgerpolder 124",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94287,
+          52.371242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153896",
+        "label": "Zeeburgerpolder 120",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945333,
+          52.37133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153897",
+        "label": "Zeeburgerpolder 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945505,
+          52.371215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153898",
+        "label": "Zeeburgerpolder 109",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945614,
+          52.373253
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153921",
+        "label": "Kraanspoort 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.944776,
+          52.373152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153922",
+        "label": "Kraanspoort 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938085,
+          52.372384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153923",
+        "label": "Kraanspoort 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937768,
+          52.37209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153924",
+        "label": "Kraanspoort 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935997,
+          52.371462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153925",
+        "label": "Kraanspoort 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935356,
+          52.370984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153926",
+        "label": "Kraanspoort 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935303,
+          52.370968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153927",
+        "label": "Kraanspoort 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935243,
+          52.370943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153928",
+        "label": "Kraanspoort 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935198,
+          52.370917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153929",
+        "label": "Kraanspoort 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935146,
+          52.370897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153930",
+        "label": "Kraanspoort 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935088,
+          52.370875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153931",
+        "label": "Kraanspoort 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935041,
+          52.370849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153932",
+        "label": "Kraanspoort 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937893,
+          52.376105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169268",
+        "label": "Verbindingsdam 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.939632,
+          52.373746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169279",
+        "label": "Rijwielpad 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938408,
+          52.370744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153886",
+        "label": "Zeeburgerpolder 151",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932038,
+          52.371524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129722",
+        "label": "Czaar Peterstraat 196",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932097,
+          52.371564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129724",
+        "label": "Czaar Peterstraat 198",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932015,
+          52.371264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129740",
+        "label": "Blankenstraat 189",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93209,
+          52.371305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129742",
+        "label": "Blankenstraat 191",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935531,
+          52.370119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153878",
+        "label": "Zeeburgerpolder 194",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936406,
+          52.370495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153879",
+        "label": "Zeeburgerpolder 188",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936708,
+          52.370529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153880",
+        "label": "Zeeburgerpolder 184",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937181,
+          52.370511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153881",
+        "label": "Zeeburgerpolder 168",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937367,
+          52.370643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153882",
+        "label": "Zeeburgerpolder 163",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93773,
+          52.370682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153883",
+        "label": "Zeeburgerpolder 158",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938054,
+          52.370705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153884",
+        "label": "Zeeburgerpolder 153",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938266,
+          52.370726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153885",
+        "label": "Zeeburgerpolder 152",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938525,
+          52.370758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153887",
+        "label": "Zeeburgerpolder 150",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940761,
+          52.370162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153888",
+        "label": "Zeeburgerpolder 145",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940946,
+          52.370296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153889",
+        "label": "Zeeburgerpolder 140",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94047,
+          52.37097
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153890",
+        "label": "Zeeburgerpolder 135",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940663,
+          52.37099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153891",
+        "label": "Zeeburgerpolder 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940823,
+          52.371017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153892",
+        "label": "Zeeburgerpolder 129",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.940943,
+          52.371021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153893",
+        "label": "Zeeburgerpolder 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.941672,
+          52.371085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153894",
+        "label": "Zeeburgerpolder 127",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.942314,
+          52.371189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153895",
+        "label": "Zeeburgerpolder 124",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94287,
+          52.371242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153896",
+        "label": "Zeeburgerpolder 120",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945333,
+          52.37133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153897",
+        "label": "Zeeburgerpolder 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945505,
+          52.371215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153898",
+        "label": "Zeeburgerpolder 109",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945614,
+          52.373253
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153921",
+        "label": "Kraanspoort 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.944776,
+          52.373152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153922",
+        "label": "Kraanspoort 30",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938085,
+          52.372384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153923",
+        "label": "Kraanspoort 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937768,
+          52.37209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153924",
+        "label": "Kraanspoort 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935997,
+          52.371462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153925",
+        "label": "Kraanspoort 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935356,
+          52.370984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153926",
+        "label": "Kraanspoort 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935303,
+          52.370968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153927",
+        "label": "Kraanspoort 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935243,
+          52.370943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153928",
+        "label": "Kraanspoort 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935198,
+          52.370917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153929",
+        "label": "Kraanspoort 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935146,
+          52.370897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153930",
+        "label": "Kraanspoort 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935088,
+          52.370875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153931",
+        "label": "Kraanspoort 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935041,
+          52.370849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153932",
+        "label": "Kraanspoort 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937893,
+          52.376105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169268",
+        "label": "Verbindingsdam 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.939632,
+          52.373746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169279",
+        "label": "Rijwielpad 44",
+        "year": "1909"
+      }
+    }
+  ]
+}
