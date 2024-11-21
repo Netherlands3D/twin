@@ -48,10 +48,8 @@ namespace Netherlands3D.Twin.Layers
             if (!isParentLayer)
                 return;
 
-            zoomLevel = CalculateZoomLevel();
+            zoomLevel = CalculateZoomLevel();          
            
-            var currentYearZoomBounds = timeController.GetZoomBounds();
-            zoomLevel = Mathf.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
             UpdateCurrentZoomLayer();
         }
 
@@ -62,14 +60,16 @@ namespace Netherlands3D.Twin.Layers
 
             if (zoomLevel != lastZoomLevel || force)
             {
-                CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();               
-
+                CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
+               
                 //get the current enabled zoom layer and update it with setvisibletilesdirty
                 int index = GetZoomLayerIndex(zoomLevel);
 
                 for (int i = 0; i < ATMTileDataLayers.Length; i++)
                 {
                     ATMTileDataLayers[i].isEnabled = index == i;
+                    if(i != index)
+                        ATMTileDataLayers[i].CancelTiles();
                 }
 
 
@@ -113,7 +113,12 @@ namespace Netherlands3D.Twin.Layers
 
             ATMLayerGameObject parent = transform.parent.GetComponent<ATMLayerGameObject>();
             if (parent != null)
+            {
+                //when instantiating as a sublayer this overrides the parent, so we need to disable this agian
+                currentDataLayer = GetComponent<ATMTileDataLayer>();                
+                currentDataLayer.isEnabled = parent.zoomLevel == currentDataLayer.ZoomLevel;
                 return;
+            }
 
             isParentLayer = true;
 
@@ -134,9 +139,9 @@ namespace Netherlands3D.Twin.Layers
             Destroy(GetComponent<WorldTransform>());
             Destroy(GetComponent<ChildWorldTransformShifter>());
 
-            CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
+            CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();           
 
-            zoomLevel = 16;
+            zoomLevel = CalculateZoomLevel();
             zoomBounds = timeController.GetZoomBoundsAllYears();
             int length = zoomBounds.y - zoomBounds.x + 1;
             ATMTileDataLayers = new ATMTileDataLayer[length];
@@ -165,14 +170,16 @@ namespace Netherlands3D.Twin.Layers
             int index = GetZoomLayerIndex(zoomLevel);
             for (int i = 0; i < ATMTileDataLayers.Length; i++)
             {
-                if (!handler.layers.Contains(ATMTileDataLayers[i]))
-                    handler.AddLayer(ATMTileDataLayers[i]);
+                //if (!handler.layers.Contains(ATMTileDataLayers[i]))
+                //    handler.AddLayer(ATMTileDataLayers[i]);
 
-                //if (i != index)
-                //    ATMTileDataLayers[i].isEnabled = false;
+                if (i != index)
+                    ATMTileDataLayers[i].isEnabled = false;
             }
-            
+
             //handler.RemoveLayer(currentDataLayer);
+
+            UpdateCurrentZoomLayer(true);
             SetRenderOrder(LayerData.RootIndex);
         }
 
@@ -223,7 +230,8 @@ namespace Netherlands3D.Twin.Layers
             float latitude = (float)coord.Points[0];
             float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad);
             float zoomLevel = Mathf.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
-
+            var currentYearZoomBounds = timeController.GetZoomBounds();
+            zoomLevel = Mathf.Clamp(zoomLevel, currentYearZoomBounds.minZoom + 1, currentYearZoomBounds.maxZoom - 1); //for some reason better to keep them within the bounds
             return Mathf.RoundToInt(zoomLevel);  // Return the zoom level as an integer
         }
 

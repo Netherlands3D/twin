@@ -64,16 +64,17 @@ namespace Netherlands3D.Twin
            
         }
 
-        //public void ClearAllTiles()
-        //{
-        //    List<Vector2Int> keys = tiles.Keys.ToList();
-        //    foreach(Vector2Int key in keys)
-        //    {
-        //        InteruptRunningProcesses(key);
-        //        RemoveGameObjectFromTile(key);
-        //        tiles.Remove(key);
-        //    }
-        //}
+        public void CancelTiles()
+        {
+            List<Vector2Int> keys = tiles.Keys.ToList();
+            foreach (Vector2Int key in keys)
+            {
+                InteruptRunningProcesses(key);
+                ClearPreviousTexture(tiles[key]);
+                //RemoveGameObjectFromTile(key);
+                //tiles.Remove(key);
+            }
+        }
 
         private void OnDisable()
         {
