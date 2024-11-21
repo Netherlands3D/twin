@@ -41,7 +41,6 @@ namespace Netherlands3D.Twin.Layers
         protected override void Awake()
         {
             base.Awake();  
-
         }
 
         void Update()
@@ -50,7 +49,9 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             zoomLevel = CalculateZoomLevel();
-            zoomLevel = Mathf.Clamp(zoomLevel, zoomBounds.x, zoomBounds.y);
+           
+            var currentYearZoomBounds = timeController.GetZoomBounds();
+            zoomLevel = Mathf.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
             UpdateCurrentZoomLayer();
         }
 
@@ -61,48 +62,45 @@ namespace Netherlands3D.Twin.Layers
 
             if (zoomLevel != lastZoomLevel || force)
             {
-                CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
+                CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();               
+
                 //get the current enabled zoom layer and update it with setvisibletilesdirty
                 int index = GetZoomLayerIndex(zoomLevel);
+
                 for (int i = 0; i < ATMTileDataLayers.Length; i++)
                 {
-                    //if (i != index)
-                        ATMTileDataLayers[i].isEnabled = true;
-                }
-                for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                {
-
-                    //
-
-                    if (i != index)
-                    {
-                        handler.RemoveLayer(ATMTileDataLayers[i]);
-                        handler.AddLayer(ATMTileDataLayers[i]);
-                      
-                        //ATMTileDataLayers[i].ClearAllTiles();
-                    }
-
+                    ATMTileDataLayers[i].isEnabled = index == i;
                 }
 
 
-                //if (handler.layers.Contains(ATMTileDataLayers[i]))
-                //    handler.RemoveLayer(ATMTileDataLayers[i]);
 
+                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
+                //{
+                //    ATMTileDataLayers[i].isEnabled = true;
+                //}
 
-                //ATMTileDataLayers[index].isEnabled = true;
-                //handler.RemoveLayer(ATMTileDataLayers[index]);
-                
-                if (!handler.layers.Contains(ATMTileDataLayers[index]))
-                    handler.AddLayer(ATMTileDataLayers[index]);
+                //if (handler.layers.Contains(currentDataLayer))
+                //    handler.RemoveLayer(currentDataLayer);
+
+                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
+                //{
+                //    if (i != index)
+                //    {
+                //        handler.RemoveLayer(ATMTileDataLayers[i]);
+                //        handler.AddLayer(ATMTileDataLayers[i]);
+                //    }
+                //}
+                //if (!handler.layers.Contains(ATMTileDataLayers[index]))
+                //    handler.AddLayer(ATMTileDataLayers[index]);
                 
                 ATMTileDataLayers[index].SetVisibleTilesDirty();
 
-                for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                    if (i != index)
-                    {
-                        //disable each layer after the refresh loop or tilehandler will error on the cached tilesizes
-                        ATMTileDataLayers[i].isEnabled = false;
-                    }
+                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
+                //    if (i != index)
+                //    {
+                //        //disable each layer after the refresh loop or tilehandler will error on the cached tilesizes
+                //        ATMTileDataLayers[i].isEnabled = false;
+                //    }
 
                 lastZoomLevel = zoomLevel;
             }
@@ -133,6 +131,9 @@ namespace Netherlands3D.Twin.Layers
             //current.enabled = false;
             currentDataLayer.isEnabled = false;
 
+            Destroy(GetComponent<WorldTransform>());
+            Destroy(GetComponent<ChildWorldTransformShifter>());
+
             CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
 
             zoomLevel = 16;
@@ -143,8 +144,10 @@ namespace Netherlands3D.Twin.Layers
             {
                 GameObject zoomLayerObject = new GameObject((zoomBounds.x + i).ToString());
                 zoomLayerObject.AddComponent<XyzTiles>();
-                zoomLayerObject.AddComponent<WorldTransform>();
-                zoomLayerObject.AddComponent<ChildWorldTransformShifter>();
+                WorldTransform wt = zoomLayerObject.AddComponent<WorldTransform>();
+                ChildWorldTransformShifter cts = zoomLayerObject.AddComponent<ChildWorldTransformShifter>();
+                wt.SetShifter(cts);
+                Destroy(zoomLayerObject.GetComponent<GameObjectWorldTransformShifter>());
                 
                 ATMTileDataLayers[i] = zoomLayerObject.AddComponent<ATMTileDataLayer>();
                 
@@ -161,11 +164,13 @@ namespace Netherlands3D.Twin.Layers
             //yes afterwards or the tilehandler will clear the tilesizes for inactive layers
             int index = GetZoomLayerIndex(zoomLevel);
             for (int i = 0; i < ATMTileDataLayers.Length; i++)
+            {
                 if (!handler.layers.Contains(ATMTileDataLayers[i]))
                     handler.AddLayer(ATMTileDataLayers[i]);
 
-            //    if(i!=index)
-            //    ATMTileDataLayers[i].isEnabled = false;
+                //if (i != index)
+                //    ATMTileDataLayers[i].isEnabled = false;
+            }
             
             //handler.RemoveLayer(currentDataLayer);
             SetRenderOrder(LayerData.RootIndex);
@@ -199,29 +204,27 @@ namespace Netherlands3D.Twin.Layers
 
         public int CalculateZoomLevel()
         {
-            Vector3 camPosition = Camera.main.transform.position;
-            float viewDistance = camPosition.y; //lets keep it orthographic?
-            Ray camRay = new Ray(camPosition, Camera.main.transform.forward);         
-            float denominator = Vector3.Dot(Vector3.up, camRay.direction);
-            float t = Vector3.Dot(Vector3.zero - camPosition, Vector3.up) / denominator;
-            Vector3 intersection = camRay.origin + t * camRay.direction;
-            viewDistance = Vector3.Distance(camPosition, intersection);
 
+            Vector3 camPosition = Camera.main.transform.position;
+            //Extent cameraExtent = Camera.main.GetRDExtent(Camera.main.farClipPlane + 6037);
+            //Vector4 viewRange = new Vector4();
+            //viewRange.x = (float)cameraExtent.MinX;
+            //viewRange.y = (float)cameraExtent.MinY;
+            //viewRange.z = (float)(cameraExtent.MaxX - cameraExtent.MinX);
+            //viewRange.w = (float)(cameraExtent.MaxY - cameraExtent.MinY);
+            //float viewDistance = viewRange.z;
             var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                camPosition.x,
-                camPosition.z,
-                0
-            );
+                  CoordinateSystem.Unity,
+                  camPosition.x,
+                  0,
+                  camPosition.z
+              );
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
             float latitude = (float)coord.Points[0];
-            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad); //to rad
+            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad);
+            float zoomLevel = Mathf.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
 
-            //https://wiki.openstreetmap.org/wiki/Zoom_levels
-            float numerator = equatorialCircumference * cosLatitude;
-            float zoomLevel = Mathf.Log(numerator / viewDistance) / log2x;
-
-            return Mathf.RoundToInt(zoomLevel);
+            return Mathf.RoundToInt(zoomLevel);  // Return the zoom level as an integer
         }
 
         public override void DestroyLayerGameObject()

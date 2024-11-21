@@ -112,7 +112,7 @@ namespace Netherlands3D.Twin
             Tile tile = tiles[tileKey];
 
             //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
-            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + 0.5f * tileSize, tileChange.Y + 0.5f * tileSize);
+            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, atmDataController);
 
             //because of the predefined map bounds, we dont have to check outside these bounds
@@ -123,7 +123,7 @@ namespace Netherlands3D.Twin
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
             //set the output position back to the right coordinate as this was adjusted before
-            offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
+            //offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
@@ -201,7 +201,7 @@ namespace Netherlands3D.Twin
             referenceTileWidth = tileWidth;
             referenceTileHeight = tileHeight;
 
-            //tileSize = (int)tileWidth; this is from cache now
+            tileSize = (int)tileWidth; 
         }
 
         private (double tileWidth, double tileHeight) CalculateTileDimensionsInRdMeters(Vector2Int tileIndex)
