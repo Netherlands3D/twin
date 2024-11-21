@@ -791,7 +791,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2997518761711757160}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481272596}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a728a3527b1f334390e5bfd25ce6aa5, type: 3}
@@ -1045,26 +1045,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1481272596 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2388221261345448311, guid: 0d52ffd9c87ab484b88610c4acf5db24,
-    type: 3}
-  m_PrefabInstance: {fileID: 2997518761711757160}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1481272598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481272596}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7c52380e8b8249b7ad55b3e2815e8cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseName: 1943
-  extension: .geojson
 --- !u!1 &1759892628 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4972300510601120780, guid: 9963fec33e379324db2affcb3f83332f,
@@ -2450,11 +2430,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2388221261345448311, guid: 0d52ffd9c87ab484b88610c4acf5db24,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1481272598}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d52ffd9c87ab484b88610c4acf5db24, type: 3}
 --- !u!1001 &3528890258559586318
 PrefabInstance:
