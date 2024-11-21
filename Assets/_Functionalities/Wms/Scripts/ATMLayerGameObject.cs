@@ -25,7 +25,8 @@ namespace Netherlands3D.Twin.Layers
         private const float log2x = 0.30102999566f;
         public LayerPropertyData PropertyData => urlPropertyData;
 
-        private static ATMTileDataLayer[] ATMTileDataLayers;
+        private ATMTileDataLayer[] ATMTileDataLayers;
+        private ATMTileDataLayer currentDataLayer;
         private ATMDataController timeController;
         private ATMDataController.ATMDataHandler ATMDataHandler;
 
@@ -34,22 +35,18 @@ namespace Netherlands3D.Twin.Layers
         private Vector2Int zoomBounds = Vector2Int.zero;
 
         protected LayerURLPropertyData urlPropertyData = new();
+
+        private bool isParentLayer = false;
         
         protected override void Awake()
         {
             base.Awake();  
 
-            if (timeController == null)
-            {
-                timeController = gameObject.AddComponent<ATMDataController>();
-                ATMDataHandler = (a) => UpdateCurrentZoomLayer(true);
-                timeController.ChangeYear += ATMDataHandler;
-            }
         }
 
         void Update()
         {
-            if (zoomLevel < 0)
+            if (!isParentLayer)
                 return;
 
             zoomLevel = CalculateZoomLevel();
@@ -59,7 +56,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void UpdateCurrentZoomLayer(bool force = false)
         {
-            if(ATMTileDataLayers == null || zoomLevel < 0)
+            if(ATMTileDataLayers == null || !isParentLayer)
                 return;
 
             if (zoomLevel != lastZoomLevel || force)
@@ -68,16 +65,45 @@ namespace Netherlands3D.Twin.Layers
                 //get the current enabled zoom layer and update it with setvisibletilesdirty
                 int index = GetZoomLayerIndex(zoomLevel);
                 for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                    if (i != index)
-                        ATMTileDataLayers[i].isEnabled = false;
-                        //if (handler.layers.Contains(ATMTileDataLayers[i]))
-                        //    handler.RemoveLayer(ATMTileDataLayers[i]);
-               
+                {
+                    //if (i != index)
+                        ATMTileDataLayers[i].isEnabled = true;
+                }
+                for (int i = 0; i < ATMTileDataLayers.Length; i++)
+                {
 
-                ATMTileDataLayers[index].isEnabled = true;
-                //if (!handler.layers.Contains(ATMTileDataLayers[index]))
-                //    handler.AddLayer(ATMTileDataLayers[index]);
+                    //
+
+                    if (i != index)
+                    {
+                        handler.RemoveLayer(ATMTileDataLayers[i]);
+                        handler.AddLayer(ATMTileDataLayers[i]);
+                      
+                        //ATMTileDataLayers[i].ClearAllTiles();
+                    }
+
+                }
+
+
+                //if (handler.layers.Contains(ATMTileDataLayers[i]))
+                //    handler.RemoveLayer(ATMTileDataLayers[i]);
+
+
+                //ATMTileDataLayers[index].isEnabled = true;
+                //handler.RemoveLayer(ATMTileDataLayers[index]);
+                
+                if (!handler.layers.Contains(ATMTileDataLayers[index]))
+                    handler.AddLayer(ATMTileDataLayers[index]);
+                
                 ATMTileDataLayers[index].SetVisibleTilesDirty();
+
+                for (int i = 0; i < ATMTileDataLayers.Length; i++)
+                    if (i != index)
+                    {
+                        //disable each layer after the refresh loop or tilehandler will error on the cached tilesizes
+                        ATMTileDataLayers[i].isEnabled = false;
+                    }
+
                 lastZoomLevel = zoomLevel;
             }
         }
@@ -91,15 +117,23 @@ namespace Netherlands3D.Twin.Layers
             if (parent != null)
                 return;
 
-            
-            ATMTileDataLayer current = GetComponent<ATMTileDataLayer>();
-            TextureProjectorBase projectorPrefab = current.ProjectorPrefab;
-            current.SetZoomLevel(-1);
+            isParentLayer = true;
+
+
+            if (timeController == null)
+            {
+                timeController = gameObject.AddComponent<ATMDataController>();
+                ATMDataHandler = (a) => UpdateCurrentZoomLayer(true);
+                timeController.ChangeYear += ATMDataHandler;
+            }
+
+            currentDataLayer = GetComponent<ATMTileDataLayer>();
+            TextureProjectorBase projectorPrefab = currentDataLayer.ProjectorPrefab;
+            currentDataLayer.SetZoomLevel(-1);
             //current.enabled = false;
-            current.isEnabled = false;
+            currentDataLayer.isEnabled = false;
 
             CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
-            //handler.RemoveLayer(current);
 
             zoomLevel = 16;
             zoomBounds = timeController.GetZoomBoundsAllYears();
@@ -132,7 +166,8 @@ namespace Netherlands3D.Twin.Layers
 
             //    if(i!=index)
             //    ATMTileDataLayers[i].isEnabled = false;
-
+            
+            //handler.RemoveLayer(currentDataLayer);
             SetRenderOrder(LayerData.RootIndex);
         }
 
@@ -166,6 +201,12 @@ namespace Netherlands3D.Twin.Layers
         {
             Vector3 camPosition = Camera.main.transform.position;
             float viewDistance = camPosition.y; //lets keep it orthographic?
+            Ray camRay = new Ray(camPosition, Camera.main.transform.forward);         
+            float denominator = Vector3.Dot(Vector3.up, camRay.direction);
+            float t = Vector3.Dot(Vector3.zero - camPosition, Vector3.up) / denominator;
+            Vector3 intersection = camRay.origin + t * camRay.direction;
+            viewDistance = Vector3.Distance(camPosition, intersection);
+
             var unityCoordinate = new Coordinate(
                 CoordinateSystem.Unity,
                 camPosition.x,

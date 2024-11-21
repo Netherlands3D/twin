@@ -12,13 +12,9 @@ namespace Netherlands3D.Twin
         private int currentYear;
         private int lastValidYear;
         public delegate void ATMDataHandler (int year);
-        public event ATMDataHandler ChangeYear;
+        public event ATMDataHandler ChangeYear;        
 
-        //public UnityEvent<int> ChangeYear;
-
-        //lets save the bounds of maps here
-        //private static Vector4[] mapBounds;
-        //private List<int> yearKeys = new List<int>();
+        private List<int> yearsUnsupported = new List<int>() { 1625, 1724 };
 
         private Dictionary<int, string> yearUrls = new Dictionary<int, string>()
         {
@@ -30,6 +26,8 @@ namespace Netherlands3D.Twin
             { 1625, @"https://images.huygens.knaw.nl/webmapper/maps/berckenrode/{z}/{x}/{y}.png"}
         };
 
+        //improved performance but too much work for multiple zoom levels
+        //bounds for zoomlevel 16
         private Dictionary<int, Vector4> yearBounds = new Dictionary<int, Vector4>()
         {
             { 1985, new Vector4(33627, 21516, 33691, 21566) },
@@ -84,6 +82,9 @@ namespace Netherlands3D.Twin
             int highest = 0;
             foreach(KeyValuePair<int, Vector2Int> v in yearZoomBounds)
             {
+                if (yearsUnsupported.Contains(v.Key))
+                    continue;
+
                 if(v.Value.x < lowest)
                     lowest = v.Value.x;
                 if(v.Value.y > highest)
@@ -100,6 +101,9 @@ namespace Netherlands3D.Twin
             float closestDistance = float.MaxValue;
             foreach(KeyValuePair<int, string> kvp in yearUrls)
             {
+                if (yearsUnsupported.Contains(kvp.Key))
+                    continue;
+
                 float distToYear = Mathf.Abs(kvp.Key - projectYear);
                 if (distToYear < closestDistance)
                 {

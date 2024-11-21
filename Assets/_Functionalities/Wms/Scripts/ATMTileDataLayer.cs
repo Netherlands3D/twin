@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
@@ -63,6 +64,17 @@ namespace Netherlands3D.Twin
            
         }
 
+        //public void ClearAllTiles()
+        //{
+        //    List<Vector2Int> keys = tiles.Keys.ToList();
+        //    foreach(Vector2Int key in keys)
+        //    {
+        //        InteruptRunningProcesses(key);
+        //        RemoveGameObjectFromTile(key);
+        //        tiles.Remove(key);
+        //    }
+        //}
+
         private void OnDisable()
         {
             if (updateTilesRoutine != null)
@@ -100,7 +112,7 @@ namespace Netherlands3D.Twin
             Tile tile = tiles[tileKey];
 
             //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
-            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
+            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + 0.5f * tileSize, tileChange.Y + 0.5f * tileSize);
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, atmDataController);
 
             //because of the predefined map bounds, we dont have to check outside these bounds
@@ -111,7 +123,7 @@ namespace Netherlands3D.Twin
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
             //set the output position back to the right coordinate as this was adjusted before
-            //offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
+            offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
@@ -124,6 +136,13 @@ namespace Netherlands3D.Twin
             }
             else
             {
+                if (tiles[tileKey] != null && tiles[tileKey].gameObject != null)
+                {
+                    tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector);
+                    ((TextureDecalProjector)projector).debugUrl = xyzTile.URL;
+                }
+
+
                 ClearPreviousTexture(tile);                
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
@@ -182,7 +201,7 @@ namespace Netherlands3D.Twin
             referenceTileWidth = tileWidth;
             referenceTileHeight = tileHeight;
 
-            tileSize = (int)tileWidth;
+            //tileSize = (int)tileWidth; this is from cache now
         }
 
         private (double tileWidth, double tileHeight) CalculateTileDimensionsInRdMeters(Vector2Int tileIndex)
