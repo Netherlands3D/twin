@@ -48,13 +48,8 @@ namespace Netherlands3D.CartesianTiles
         {
             geoJsonLayer = GetComponent<GeoJsonLayerGameObject>();
 
-            string file = Year + "({x}, {y}).geojson";
-            string uri = Path.Combine(Application.streamingAssetsPath, tileFolderPath, Year, file);
-
-            print(uri);
+            UpdateUri(Year);
             
-            urlPropertyData = (LayerURLPropertyData)geoJsonLayer.PropertyData;
-            urlPropertyData.Data = new Uri(uri);
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
@@ -67,6 +62,15 @@ namespace Netherlands3D.CartesianTiles
             }
 
             StartCoroutine(FindTileHandler());
+        }
+
+        public void UpdateUri(string year)
+        {
+            string file = year + "({x}, {y}).geojson";
+            string uri = Path.Combine(Application.streamingAssetsPath, tileFolderPath, year, file);
+
+            urlPropertyData = (LayerURLPropertyData)geoJsonLayer.PropertyData;
+            urlPropertyData.Data = new Uri(uri);
         }
 
         private IEnumerator FindTileHandler()
@@ -142,15 +146,14 @@ namespace Netherlands3D.CartesianTiles
 
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {
-            // var bboxValue = $"({tileChange.X}, {tileChange.Y})";
             var uri = urlPropertyData.Data.ToString();
             uri = uri.Replace("{x}", tileChange.X.ToString());
             uri = uri.Replace("{y}", tileChange.Y.ToString());
 
-            print(uri);
+            print("loading: " + uri);
             var geoJsonRequest = UnityWebRequest.Get(uri);
             tile.runningWebRequest = geoJsonRequest;
-// #if UNITY_WEBGL && !UNITY_EDITOR
+
             yield return geoJsonRequest.SendWebRequest();
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
@@ -165,25 +168,6 @@ namespace Netherlands3D.CartesianTiles
                     $"Request to {uri} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
                 );
             }
-// #else
-//             // uri = AssetUriFactory.CreateProjectAssetUri(uri).ToString();
-//             string json = File.ReadAllText(uri);
-//             yield return null;
-//             ParseGeoJSON(json);
-// #endif
-            // if (geoJsonRequest.result == UnityWebRequest.Result.Success)
-            // {
-            //     ParseGeoJSON(geoJsonRequest.downloadHandler.text);
-            // }
-            // else
-            // {
-            //     // Show a message in the console, because otherwise you will never find out
-            //     // something went wrong. This should be replaced with a better error reporting
-            //     // system
-            //     Debug.LogWarning(
-            //         $"Request to {uri} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
-            //     );
-            // }
             callback?.Invoke(tileChange);
         }
 

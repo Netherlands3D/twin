@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using TMPro;
-using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin
 {
@@ -39,7 +38,8 @@ namespace Netherlands3D.Twin
 
         // List of years with corresponding events  
         public List<int> eventYears = new List<int>() { 1625, 1700, 1800, 1878, 1900, 1930, 1949, 1999, 1989, 1949, 2000, 2024 }; // Example years
-
+        private int previousYear;
+        
         void Start()
         {
             // Set the initial years to the default values  
@@ -181,7 +181,7 @@ namespace Netherlands3D.Twin
         void ScrollToYear(int year)
         {
             year = Mathf.Clamp(year, minYear, maxYear);
-
+            
             int index = year - minYear;
             if (index >= 0 && index < yearInstances.Count)
             {
@@ -189,7 +189,11 @@ namespace Netherlands3D.Twin
                 targetPosition = new Vector2((-yearInstances[index].anchoredPosition.x + 362), content.anchoredPosition.y);
                 currentYear = year; // Update the current year  
                 SelectedYearText.text = currentYear.ToString(); // Update the UI text  
-                YearChanged.Invoke(year); //Fires the UnityEvent that changes the year
+                if (previousYear != year)
+                {
+                    YearChanged.Invoke(year); //Fires the UnityEvent that changes the year
+                    previousYear = year;
+                }
 
                 // Adjust height, color, and text visibility  
                 for (int i = 0; i < yearInstances.Count; i++)

@@ -39,6 +39,7 @@ namespace Netherlands3D.Twin
                     visibleLayer.GeoJSONLayer.DestroyLayer();
                 
                 visibleLayer = Instantiate(pointLayerPrefab, transform);
+                visibleLayer.UpdateUri(yearToLoad.ToString());
                 visibleLayer.GeoJSONLayer.Name = yearToLoad.ToString();
                 currentVisibleYear = yearToLoad;
             }
