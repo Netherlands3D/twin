@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
@@ -11,16 +12,41 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public class LayerData
+    public abstract class LayerData
     {
+        private const string NameOfDefaultStyle = "default";
+
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
-        [SerializeField, DataMember] protected Color color = new Color(86f / 256f, 160f / 256f, 227f / 255f);
+        
+        /// <summary>
+        /// The default color of a layer.
+        /// 
+        /// This will influence how it is displayed in the layers side-panel, it does not automatically imply any
+        /// coloring in the styling of the layer but can be used to tell layers apart from one another in the layer
+        /// panel.
+        ///
+        /// Each type of layer could decide to use this value to influence the default styling by listening to the
+        /// ColorChanged event and applying the color to the relevant color field in the default Style, such as fill
+        /// for polygon vector layers, or stroke color for line polygon layers.
+        /// </summary>
+        [SerializeField, DataMember] protected Color color = new(86f / 256f, 160f / 256f, 227f / 255f);
+
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
         [JsonIgnore] protected int rootIndex = -1;
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
+        
+        /// <summary>
+        /// A list of styles with their names (which are meant as machine-readable names and not human-readable names,
+        /// for the latter the 'title' field exists), including a default style that always applies.
+        /// </summary>
+        [SerializeField, DataMember] protected Dictionary<string, LayerStyle> styles = new()
+        {
+            {NameOfDefaultStyle, LayerStyle.CreateDefaultStyle()}
+        };
+
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;
@@ -122,6 +148,20 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
 
+        [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
+        
+        /// <summary>
+        /// Every layer has a default style, this is a style that applies to all objects and features in this
+        /// layer without any conditions.
+        /// </summary>
+        [JsonIgnore] public LayerStyle DefaultStyle => Styles[NameOfDefaultStyle];
+
+        /// <summary>
+        /// Every layer has a default symbolizer, drawn from the default style, that can be queried for the appropriate
+        /// properties.
+        /// </summary>
+        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules[NameOfDefaultStyle].Symbolizer;
+
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
@@ -136,6 +176,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
 
         public void InitializeParent(LayerData initialParent = null)
@@ -258,6 +300,22 @@ namespace Netherlands3D.Twin.Layers
         {
             layerProperties.Remove(propertyData);
             PropertyRemoved.Invoke(propertyData);
+        }
+
+        public void AddStyle(LayerStyle style)
+        {
+            if (Styles.TryAdd(style.Metadata.Name, style))
+            {
+                StyleAdded.Invoke(style);
+            }
+        }
+
+        public void RemoveStyle(LayerStyle style)
+        {
+            if (Styles.Remove(style.Metadata.Name))
+            {
+                StyleRemoved.Invoke(style);
+            }
         }
 
         /// <summary>
