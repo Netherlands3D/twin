@@ -74,7 +74,11 @@ namespace Netherlands3D.Twin
         public Material LineMaterial
         {
             get => lineMaterial;
-            set => lineMaterial = value;
+            set
+            {
+                lineMaterial = value;
+                SetDefaultColors();
+            }
         }
 
         public bool DrawJoints
