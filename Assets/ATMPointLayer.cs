@@ -150,7 +150,6 @@ namespace Netherlands3D.CartesianTiles
             uri = uri.Replace("{x}", tileChange.X.ToString());
             uri = uri.Replace("{y}", tileChange.Y.ToString());
 
-            print("loading: " + uri);
             var geoJsonRequest = UnityWebRequest.Get(uri);
             tile.runningWebRequest = geoJsonRequest;
 

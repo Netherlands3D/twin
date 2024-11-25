@@ -223,6 +223,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 51725507429344324, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_DecalLayerMask
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
         type: 3}
       propertyPath: m_LocalPosition.x
