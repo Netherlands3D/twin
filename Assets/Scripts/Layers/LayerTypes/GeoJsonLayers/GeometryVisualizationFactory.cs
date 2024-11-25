@@ -24,26 +24,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return visualizations;
         }
 
+        /// <summary>
+        /// the polygon vertex positions are offseted back by its polygon centroid and added to the transform of the returned polygonvisualisation transform position
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="originalCoordinateSystem"></param>
+        /// <param name="visualizationMaterial"></param>
+        /// <returns></returns>
         public static PolygonVisualisation CreatePolygonVisualisation(
-            Polygon geometry, 
-            CoordinateSystem coordinateSystem, 
-            Material material
+            Polygon polygon, 
+            CoordinateSystem originalCoordinateSystem, 
+            Material visualizationMaterial
         ) {
-            var ringList = new List<List<Vector3>>(geometry.Coordinates.Count);
-            
-            foreach (var lineString in geometry.Coordinates)
+            var ringList = new List<List<Vector3>>(polygon.Coordinates.Count);
+            Vector3 centroid = Vector3.zero;
+            foreach (var lineString in polygon.Coordinates)
             {
-                var loop = ConvertToUnityCoordinates(lineString, coordinateSystem);
-                var unityRing = new List<Vector3>(loop.Count);
-                foreach (var coord in loop)
+                var ring = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+                int ringCount = ring.Count;
+                foreach (var coord in ring)
                 {
-                    unityRing.Add(coord.ToUnity());
+                    centroid += coord.ToUnity() / ringCount;
                 }
+            }
+            centroid /= polygon.Coordinates.Count;
 
+            foreach (var lineString in polygon.Coordinates)
+            {
+                var ring = ConvertToUnityCoordinates(lineString, originalCoordinateSystem);
+                var unityRing = new List<Vector3>(ring.Count);
+                foreach (var coord in ring)
+                {
+                    Vector3 c = coord.ToUnity() - centroid;
+                    unityRing.Add(c);
+                }
                 ringList.Add(unityRing);
             }
+            PolygonVisualisation polygonVisualisation = CreatePolygonMesh(ringList, 10f, visualizationMaterial);
+            polygonVisualisation.transform.position += centroid;
 
-            return CreatePolygonMesh(ringList, 10f, material);
+            return polygonVisualisation;
         }
 
         public static List<List<Coordinate>> CreateLineVisualisation(

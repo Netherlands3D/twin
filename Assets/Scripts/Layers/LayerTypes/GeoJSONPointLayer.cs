@@ -13,8 +13,54 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject
+    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public bool IsPolygon => false;
+        public Transform Transform { get => transform; }
+
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeaturePointVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            foreach (List<Coordinate> points in data.Data)
+            {
+                Mesh mesh = new Mesh();
+                meshes.Add(mesh);
+                List<Vector3> vertices = new List<Vector3>();
+                foreach (Coordinate point in points)
+                {
+                    vertices.Add(point.ToUnity());
+                }
+                mesh.SetVertices(vertices);                
+            }
+
+            return meshes;
+        }
+
+        //here we have to local offset the vertices with the position of the transform because the transform gets shifted
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            foreach (Mesh mesh in meshes)
+            {
+                Vector3[] vertices = mesh.vertices;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Vector3 localOffset = vertices[i] - mesh.bounds.center;
+                    pointRenderer3D.SetLineColorClosestToPoint(transform.position + localOffset, color);
+                }
+            }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            PointRenderer3D.SetDefaultColors();
+        }
+
+        public Color GetRenderColor()
+        {
+            return pointRenderer3D.Material.color;
+        }
+
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
@@ -50,12 +96,12 @@ namespace Netherlands3D.Twin.Layers
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
             else if(feature.Geometry is Point point)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
@@ -98,7 +144,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach(var pointCollection in featureVisualisation.pointCollection)
+            foreach(var pointCollection in featureVisualisation.Data)
                 PointRenderer3D.RemoveCollection(pointCollection);
 
             SpawnedVisualisations.Remove(featureVisualisation);

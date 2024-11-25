@@ -9,15 +9,89 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerGameObject
+    public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public bool IsPolygon => true;
+        public Transform Transform { get => transform; }
+
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            if (data == null) return meshes;
+
+            List<PolygonVisualisation> visualisations = data.Data;
+            foreach (PolygonVisualisation polygon in visualisations)
+            {
+                //TODO would really like to have the meshfilter or mesh cached within the polygonvisualisation (in external package)
+                meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
+            }
+
+            return meshes;
+        }
+
+        /// <summary>
+        /// set the colors for the polygon visualisation within the feature polygon visualisation matching the meshes provided
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <param name="vertexColors"></param>
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
+            PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
+            if(visualisation != null)
+            {
+                visualisation.gameObject.GetComponent<MeshRenderer>().material.color = color;
+            }
+        }
+
+        /// <summary>
+        /// not ideal since the polygonvisualisation mesh is not cached. needs caching
+        /// returns the polygon visualisation matching the provided meshes
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <returns></returns>
+        public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
+        {
+            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
+            foreach (FeaturePolygonVisualisations fpv in SpawnedVisualisations)
+            {
+                List<PolygonVisualisation> visualisations = fpv.Data;
+                foreach (PolygonVisualisation pv in visualisations)
+                {
+                    if (!meshes.Contains(pv.GetComponent<MeshFilter>().mesh)) continue;
+    
+                    return pv;
+                }
+            }
+            return null;
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
+            Color defaultColor = GetRenderColor();
+            foreach (FeaturePolygonVisualisations fpv in SpawnedVisualisations)
+            {
+                List<PolygonVisualisation> visualisations = fpv.Data;
+                foreach (PolygonVisualisation pv in visualisations)
+                {
+                    if (pv != null)
+                        pv.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
+                }
+            }
+        }
+
+        public Color GetRenderColor()
+        {
+            return polygonVisualizationMaterialInstance.color;
+        }
+
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private Material polygonVisualizationMaterial;

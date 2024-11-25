@@ -7,10 +7,12 @@ namespace Netherlands3D.Twin.Layers
 {
     public partial class GeoJSONLineLayer
     {
-        public class FeatureLineVisualisations : IFeatureVisualisation
+        public class FeatureLineVisualisations : IFeatureVisualisation<List<Coordinate>>
         {
+            public List<List<Coordinate>> Data => lines;
+
             public Feature feature;
-            public List<List<Coordinate>> lines = new();
+            private List<List<Coordinate>> lines = new();
             public Bounds bounds;
 
             private float boundsRoundingCeiling = 1000;

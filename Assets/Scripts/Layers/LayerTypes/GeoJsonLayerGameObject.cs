@@ -16,6 +16,7 @@ using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -97,6 +98,7 @@ namespace Netherlands3D.Twin.Layers
                 return;
             }
 
+        
             StartCoroutine(VisualizeQueue(featureCollection.Features));
         }
 
@@ -111,6 +113,7 @@ namespace Netherlands3D.Twin.Layers
                     yield break;
                 
                 VisualizeFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 if (i % MaxFeatureVisualsPerFrame == 0)
                     yield return null;
@@ -220,6 +223,7 @@ namespace Netherlands3D.Twin.Layers
                 var feature = serializer.Deserialize<Feature>(jsonReader);
                 features.Add(feature);
                 VisualizeFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
@@ -227,6 +231,115 @@ namespace Netherlands3D.Twin.Layers
                     yield return null;
                     startTime = Time.realtimeSinceStartup;
                 }
+            }
+        }
+
+        private void ProcessFeatureMapping(Feature feature)
+        {
+            var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
+            if (polygonData != null)
+            {
+                CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
+            }
+            var lineData = lineFeaturesLayer?.GetMeshData(feature);
+            if (lineData != null)
+            {
+                CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
+            }
+            var pointData = pointFeaturesLayer?.GetMeshData(feature);
+            if (pointData != null)
+            {
+                CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
+            }          
+        }
+
+        private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
+        {
+            for(int i = 0; i < meshes.Count; i++)
+            {
+                Mesh mesh = meshes[i];                
+                Vector3[] verts = mesh.vertices;
+                float width = 1f;
+                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
+                subObject.AddComponent<MeshFilter>().mesh = mesh;
+                if (verts.Length >= 2)
+                {
+                    //generate collider extruded lines for lines
+                    if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+                    {
+                        GeoJSONLineLayer lineLayer = layer as GeoJSONLineLayer;
+                        width = lineLayer.LineRenderer3D.LineDiameter;
+                        float halfWidth = width * 0.5f;
+
+                        int segmentCount = verts.Length - 1;
+                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
+                        int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
+
+                        Vector3[] vertices = new Vector3[vertexCount];
+                        int[] triangles = new int[triangleCount];
+
+                        for (int j = 0; j < segmentCount; j++)
+                        {
+                            Vector3 p1 = verts[j];
+                            Vector3 p2 = verts[j + 1];
+                            Vector3 edgeDir = (p2 - p1).normalized;
+                            Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
+
+                            Vector3 v1 = p1 + perpDir * halfWidth;
+                            Vector3 v2 = p1 - perpDir * halfWidth;
+                            Vector3 v3 = p2 + perpDir * halfWidth;
+                            Vector3 v4 = p2 - perpDir * halfWidth;
+
+                            int baseIndex = j * 4;
+                            vertices[baseIndex + 0] = v1; // Top left
+                            vertices[baseIndex + 1] = v2; // Bottom left
+                            vertices[baseIndex + 2] = v3; // Top right
+                            vertices[baseIndex + 3] = v4; // Bottom right
+
+                            int triBaseIndex = j * 6;
+                            // Triangle 1
+                            triangles[triBaseIndex + 0] = baseIndex + 0;
+                            triangles[triBaseIndex + 1] = baseIndex + 1;
+                            triangles[triBaseIndex + 2] = baseIndex + 2;
+
+                            // Triangle 2
+                            triangles[triBaseIndex + 3] = baseIndex + 2;
+                            triangles[triBaseIndex + 4] = baseIndex + 1;
+                            triangles[triBaseIndex + 5] = baseIndex + 3;
+                        }
+                        mesh.vertices = vertices.ToArray();
+                        mesh.triangles = triangles.ToArray();
+                        subObject.AddComponent<MeshCollider>();
+                        subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
+                    }
+                    else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+                    {
+                        //lets not add a meshcollider since its very heavy
+                    }                   
+                }
+                else
+                {
+                    if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+                    {
+                        subObject.transform.position = verts[0];
+                        GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
+                        subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
+
+                    }
+                }
+
+                               
+                mesh.RecalculateBounds();
+                meshes[i] = mesh;
+
+                subObject.transform.SetParent(layer.Transform);
+                subObject.layer = LayerMask.NameToLayer("Projected");
+
+                FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
+                objectMapping.SetFeature(feature);
+                objectMapping.SetMeshes(meshes);
+                objectMapping.SetVisualisationLayer(layer);
+                objectMapping.SetGeoJsonLayerParent(this);
             }
         }
 
