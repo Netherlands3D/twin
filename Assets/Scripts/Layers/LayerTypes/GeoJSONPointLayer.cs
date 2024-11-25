@@ -5,6 +5,8 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
@@ -14,9 +16,6 @@ namespace Netherlands3D.Twin.Layers
     public partial class GeoJSONPointLayer : LayerGameObject
     {
         public List<FeaturePointVisualisations> SpawnedVisualisations = new();
-
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
 
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
@@ -44,41 +43,35 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
 
-            // Create visual with random color if enabled
-            pointRenderer3D.Material = GetMaterialInstance();
+            ApplyStyling();
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
-                var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(multiPoint, originalCoordinateSystem, PointRenderer3D);
+                var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.pointCollection.Add(newPointCollection);
             }
             else if(feature.Geometry is Point point)
             {
-                var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizePoint(point, originalCoordinateSystem, PointRenderer3D);
+                var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.pointCollection.Add(newPointCollection);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            pointRenderer3D.Material = GetMaterialInstance();
+        }
+
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            return new Material(pointRenderer3D.Material)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(pointRenderer3D.Material) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(pointRenderer3D.Material) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
+            };
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
 
@@ -35,19 +36,12 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
         
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
         public UnityEvent<string> OnParseError = new();
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
-
-        protected virtual void Awake()
-        {
-            LoadDefaultValues();
-        }
 
         protected override void Start()
         {
@@ -56,14 +50,6 @@ namespace Netherlands3D.Twin.Layers
                 StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
             else if(urlPropertyData.Data.IsRemoteAsset())
                 StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
-        }
-
-        protected virtual void LoadDefaultValues()
-        {
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            LayerData.Color = randomLayerColor;
         }
 
         /// <summary>
@@ -249,16 +235,22 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
-                        return polygonLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
+
+                return polygonLayer;
             }
 
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+
+            // Replace default style with the parent's default style
+            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
+            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPolygonLayerGameObject.ApplyStyling();
+
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
+            
             return newPolygonLayerGameObject;
         }
 
@@ -267,18 +259,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
-                        return lineLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
+
+                return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
-            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+            // Replace default style with the parent's default style
+            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
+            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newLineLayerGameObject.ApplyStyling();
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
@@ -289,18 +282,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
-                        return pointLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
+
+                return pointLayer;
             }
 
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
-            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+            // Replace default style with the parent's default style
+            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
+            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPointLayerGameObject.ApplyStyling();
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 
