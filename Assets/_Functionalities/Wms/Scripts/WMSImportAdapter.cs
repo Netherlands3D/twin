@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Wms;
 using UnityEngine;
 
@@ -27,7 +26,7 @@ namespace Netherlands3D.Twin
                 return GetMapRequest.Supports(url);
             }
 
-            var request = new GetCapabilitiesRequest(cachedDataPath);
+            var request = new GetCapabilitiesRequest(url, cachedDataPath);
                 
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
@@ -49,7 +48,7 @@ namespace Netherlands3D.Twin
 
             if (GetCapabilitiesRequest.Supports(url, bodyContents))
             {
-                var request = new GetCapabilitiesRequest(cachedDataPath);
+                var request = new GetCapabilitiesRequest(url, cachedDataPath);
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x, 
                     layerPrefab.PreferredImageSize.y,
@@ -67,6 +66,7 @@ namespace Netherlands3D.Twin
             {
                 var request = new GetMapRequest(url, cachedDataPath);
                 var map = request.CreateMapFromCapabilitiesUrl(
+                    url,
                     layerPrefab.PreferredImageSize.x, 
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin
             url = mapFilters.ToUrlBasedOn(url);
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(url);
+            propertyData.Data = url;
         }
     }
 }

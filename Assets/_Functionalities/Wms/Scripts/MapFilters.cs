@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Wms
             }
 
             var version = queryParameters["version"];
-            var spatialReferenceType = GetMapRequest.SpatialReferenceTypeFromVersion(new Version(version));
+            var spatialReferenceType = SpatialReferenceTypeFromVersion(new Version(version));
             int.TryParse(queryParameters["width"], out var parsedWidth);
             int.TryParse(queryParameters["height"], out var parsedHeight);
             bool.TryParse(queryParameters["transparent"], out var parsedTransparent);
@@ -40,6 +40,11 @@ namespace Netherlands3D.Twin.Wms
                 height = parsedHeight,
                 transparent = parsedTransparent,
             };
+        }
+        
+        public static string SpatialReferenceTypeFromVersion(Version version)
+        {
+            return version.CompareTo(new Version("1.3.0")) >= 0 ? "CRS" : "SRS";
         }
         
         public Uri ToUrlBasedOn(Uri otherUrl)

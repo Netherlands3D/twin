@@ -15,10 +15,5 @@ namespace Netherlands3D.Twin.Projects
             
             return new Uri(url);
         }
-
-        public static Uri CreateRemoteAssetUri(Uri url)
-        {
-            return url.Scheme is "http" or "https" ? url : null;
-        }
     }
 }

@@ -12,7 +12,8 @@ using UnityEngine.Rendering.Universal;
 namespace Netherlands3D.Twin
 {
     public class WMSTileDataLayer : ImageProjectionLayer
-    {      
+    {
+        private const string DefaultEpsgCoordinateSystem = "28992";
 
         public int RenderIndex 
         { 
@@ -112,11 +113,9 @@ namespace Netherlands3D.Twin
             var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
 
             var splitReferenceCode = mapFilters.spatialReference.Split(':');
-            string coordinateSystemAsString = splitReferenceCode[0].ToLower() switch
-            {
-                "epsg" => splitReferenceCode[^1],
-                _ => "28992"
-            };
+            string coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg" 
+                ? splitReferenceCode[^1] 
+                : DefaultEpsgCoordinateSystem;
 
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
             
