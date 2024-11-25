@@ -6,9 +6,8 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Netherlands3D.Visualisers;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -68,22 +67,14 @@ namespace Netherlands3D.Twin.Layers
 
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
-
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
         {
-            get { return lineRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetLines(lineRenderer3D.Lines); 
-                // Destroy(lineRenderer3D.gameObject);
-                lineRenderer3D = value;
-            }
-        }       
+            get => lineRenderer3D;
+            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            set => lineRenderer3D = value;
+        }
 
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -97,41 +88,36 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            // Create visual with random color if enabled
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            ApplyStyling();
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
-                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
-                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
+        }
+        
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
+            return new Material(lineRenderer3D.LineMaterial)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = strokeColor
+            };
         }
 
         /// <summary>

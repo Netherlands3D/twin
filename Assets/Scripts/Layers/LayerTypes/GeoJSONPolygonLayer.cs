@@ -6,7 +6,9 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -92,28 +94,29 @@ namespace Netherlands3D.Twin.Layers
 
         public List<FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
-
         [SerializeField] private Material polygonVisualizationMaterial;
-        private Material polygonVisualizationMaterialInstance;
+        internal Material polygonVisualizationMaterialInstance;
 
         public Material PolygonVisualizationMaterial
         {
-            get { return polygonVisualizationMaterial; }
+            get => polygonVisualizationMaterial;
             set
             {
                 polygonVisualizationMaterial = value;
                 
                 foreach (var featureVisualisation in SpawnedVisualisations)
+                {
                     featureVisualisation.SetMaterial(value);
+                }
             }
         }
      
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in SpawnedVisualisations)
+            {
                 visualization.ShowVisualisations(activeInHierarchy);
+            }
         }
 
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
@@ -123,43 +126,53 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            // Create visual with random color if enabled
-            Material featureRenderMaterial = GetMaterialInstance();
-
-            // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature to the visualisations
             var newFeatureVisualisation = new FeaturePolygonVisualisations { 
                 feature = feature,
                 geoJsonPolygonLayer = this
             };
-            if (feature.Geometry is MultiPolygon multiPolygon)
+            Material featureRenderMaterial = GetMaterialInstance();
+
+            // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature
+            // to the visualisations
+            switch (feature.Geometry)
             {
-                var polygonVisualisations = GeoJSONGeometryVisualizerUtility.VisualizeMultiPolygon(multiPolygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.AppendVisualisations(polygonVisualisations);
-            }
-            else if (feature.Geometry is Polygon polygon)
-            {
-                var singlePolygonVisualisation = GeoJSONGeometryVisualizerUtility.VisualizePolygon(polygon, originalCoordinateSystem, featureRenderMaterial);
-                newFeatureVisualisation.AppendVisualisations(singlePolygonVisualisation);
+                case MultiPolygon multiPolygon:
+                    newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualization(
+                        multiPolygon, 
+                        originalCoordinateSystem, 
+                        featureRenderMaterial
+                    ));
+                    break;
+                case Polygon polygon:
+                    newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualisation(
+                        polygon, 
+                        originalCoordinateSystem, 
+                        featureRenderMaterial
+                    ));
+                    break;
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
+            newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
+        }
+
+        public void ApplyStyling()
+        {
+            foreach (var visualisations in SpawnedVisualisations)
+            {
+                visualisations.SetMaterial(GetMaterialInstance());
+            }
         }
 
         private Material GetMaterialInstance()
         {
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            if (!polygonVisualizationMaterialInstance)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                var featureMaterialInstance = new Material(PolygonVisualizationMaterial) { color = randomColor };
-                return featureMaterialInstance;
+                polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
+                {
+                    color = LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
+                };
             }
-
-            // Default to material with layer color
-            if (polygonVisualizationMaterialInstance == null)
-                    polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial) { color = LayerData.Color };
 
             return polygonVisualizationMaterialInstance;
         }

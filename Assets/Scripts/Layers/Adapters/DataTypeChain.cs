@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
+using KindMen.Uxios;
+using KindMen.Uxios.Api;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
@@ -61,22 +61,20 @@ namespace Netherlands3D.Twin
 
         private void AbortChain()
         {
-            if(chain != null)
-                StopCoroutine(chain);
+            if (chain == null) return;
+
+            StopCoroutine(chain);
         }
 
         private IEnumerator DownloadAndCheckSupport(string url)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var urlAndData = new LocalFile()
-            {
-                SourceUrl = url,
-                LocalFilePath = ""
-            };
+            var urlAndData = new LocalFile { SourceUrl = url, LocalFilePath = "" };
+
             yield return DownloadDataToLocalCache(urlAndData);
 
             // No local cache? Download failed.
-            if(string.IsNullOrEmpty(urlAndData.LocalFilePath))
+            if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
                 OnDownloadFailed.Invoke(url);
                 yield break;
@@ -94,22 +92,28 @@ namespace Netherlands3D.Twin
         /// <returns></returns>
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
-            var url = urlAndData.SourceUrl;
-            var uwr = UnityWebRequest.Get(url);
-            var optionalExtention = Path.GetExtension(url).Split("?")[0];
-            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
-            string path = Path.Combine(Application.persistentDataPath, guidFilename);
+            var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
+            
+            // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
+            futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
+            futureFileInfo.Catch(error => DownloadFailed(urlAndData, error));
+            
+            yield return Uxios.WaitForRequest(futureFileInfo);
+        }
 
-            uwr.downloadHandler = new DownloadHandlerFile(path);
-            yield return uwr.SendWebRequest();
-            if (uwr.result == UnityWebRequest.Result.Success)
+        private string DownloadSucceeded(LocalFile urlAndData, FileSystemInfo info)
+        {
+            // Ideally, we want to keep the fileInfo object because you can do cool stuff with it, but for now:
+            // let's fit it in the existing LocalFile object.
+            return urlAndData.LocalFilePath = info.FullName;
+        }
+
+        private void DownloadFailed(LocalFile urlAndData, Exception error)
+        {
+            urlAndData.LocalFilePath = "";
+            if (debugLog)
             {
-                urlAndData.LocalFilePath = path;
-            }
-            else
-            {
-                urlAndData.LocalFilePath = "";
-                if(debugLog) Debug.LogError("Download failed: " + uwr.error);
+                Debug.LogError("Download failed: " + error.Message);
             }
         }
 
