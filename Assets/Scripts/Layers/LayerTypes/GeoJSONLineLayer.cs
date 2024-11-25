@@ -6,9 +6,8 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Netherlands3D.Visualisers;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -22,14 +21,9 @@ namespace Netherlands3D.Twin.Layers
 
         public LineRenderer3D LineRenderer3D
         {
-            get { return lineRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetLines(lineRenderer3D.Lines); 
-                // Destroy(lineRenderer3D.gameObject);
-                lineRenderer3D = value;
-            }
+            get => lineRenderer3D;
+            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            set => lineRenderer3D = value;
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
@@ -44,20 +38,36 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
+
+            ApplyStyling();
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
-                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.lines.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
-                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
+                var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.lines.Add(newLine);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        public void ApplyStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
+        }
+        
+        private Material GetMaterialInstance()
+        {
+            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
+            return new Material(lineRenderer3D.LineMaterial)
+            {
+                color = strokeColor
+            };
         }
 
         /// <summary>

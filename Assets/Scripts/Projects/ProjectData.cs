@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Zip;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 #if UNITY_EDITOR
@@ -26,10 +28,31 @@ namespace Netherlands3D.Twin.Projects
         [Header("Serialized data")] public int Version = 1;
         public string SavedTimestamp = "";
         public string UUID = "";
-        public double[] CameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+        private double[] cameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
+
+        public double[] CameraPosition
+        {
+            get => cameraPosition;
+            set
+            {
+                cameraPosition = value;
+                OnCameraPositionChanged.Invoke(new Coordinate(CoordinateSystem.RDNAP, cameraPosition));
+            }
+        }
+
         public double[] CameraRotation = new double[3];
-        public DateTime CurrentDateTime = new(2024, 08, 19, 13, 0, 0); //default time
+        private DateTime currentDateTime = new DateTime(2024, 08, 19, 13, 0, 0); // Default time
+        public DateTime CurrentDateTime
+        {
+            get => currentDateTime;
+            set
+            {
+                currentDateTime = value;
+                OnCurrentDateTimeChanged.Invoke(value);
+            }
+        }
         public bool UseCurrentTime = false;
+        [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
 
@@ -44,7 +67,9 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
+        [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
+        [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
         [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 
@@ -71,10 +96,9 @@ namespace Netherlands3D.Twin.Projects
         {
             if (!isLoading)
             {
-                RootLayer.AddChild(layer);
+                RootLayer.AddChild(layer, 0);
             }
-
-            LayerAdded.Invoke(layer);
+            LayerAdded.Invoke(layer);           
         }
 
         public static void AddReferenceLayer(LayerGameObject referencedLayer)
@@ -94,7 +118,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void RemoveLayer(LayerData layer)
         {
-            LayerDeleted.Invoke(layer);
+            LayerDeleted.Invoke(layer);            
         }
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
@@ -102,6 +126,7 @@ namespace Netherlands3D.Twin.Projects
             Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
+            current.functionalities = new();
         }
 
         /// <summary>
@@ -112,6 +137,24 @@ namespace Netherlands3D.Twin.Projects
         public IEnumerable<LayerAsset> GetAssets()
         {
             return rootLayer.GetAssets();
+        }
+
+        public void AddFunctionality(FunctionalityData data)
+        {
+            if (!functionalities.Contains(data))
+                functionalities.Add(data);
+            else
+                Debug.LogWarning("Not adding " + data.Id + " to ProjectData. A functionality with this ID already exists.");
+        }
+
+        public void RemoveFunctionality(FunctionalityData data)
+        {
+            functionalities.Remove(data);
+        }
+
+        public void ClearFunctionalityData()
+        {
+            functionalities.Clear();
         }
     }
 }

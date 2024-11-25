@@ -13,7 +13,8 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
-using netDxf.Tables;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
@@ -35,23 +36,20 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
         
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
         public UnityEvent<string> OnParseError = new();
-        private Coroutine streamParseCoroutine;
         protected LayerURLPropertyData urlPropertyData = new();
-        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        public LayerPropertyData PropertyData => urlPropertyData;
 
-        protected virtual void Awake()
+        protected override void Start()
         {
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            LayerData.Color = randomLayerColor;
-
+            base.Start();
+            if(urlPropertyData.Data.IsStoredInProject())
+                StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
+            else if(urlPropertyData.Data.IsRemoteAsset())
+                StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
         }
 
         /// <summary>
@@ -64,7 +62,6 @@ namespace Netherlands3D.Twin.Layers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
-                StartCoroutine(RestoreGeoJsonLocalFile(urlProperty.url));
             }
         }
 
@@ -120,33 +117,46 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        /// <summary>
-        /// Sets URL and start a 'streaming' parse of the GeoJSON file. This will spread out the generation of visuals over multiple frames.
-        /// Ideal for large single files.
-        /// </summary>
-        public void SetURL(string path, string sourceUrl = "")
-        {
-            this.urlPropertyData.url = sourceUrl;
-
-            if (streamParseCoroutine != null)
-                StopCoroutine(streamParseCoroutine);
-
-            streamParseCoroutine = StartCoroutine(ParseGeoJSONStream(path, 1000));
-        }
-
-        private IEnumerator RestoreGeoJsonLocalFile(string url)
+        private IEnumerator ParseGeoJSONStreamRemote(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
             //create LocalFile so we can use it in the ParseGeoJSONStream function
+            string url = uri.ToString();
             var uwr = UnityWebRequest.Get(url);
-            var optionalExtention = Path.GetExtension(url).Split("?")[0];
-            var guidFilename = Guid.NewGuid().ToString() + optionalExtention;
-            string path = Path.Combine(Application.persistentDataPath, guidFilename);
 
-            uwr.downloadHandler = new DownloadHandlerFile(path);
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                SetURL(path);
+                var startFrame = Time.frameCount;
+                // Get the downloaded text
+                string jsonText = uwr.downloadHandler.text;
+                StringReader reader = new StringReader(jsonText);
+                JsonTextReader jsonReader = new JsonTextReader(reader);
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Error += OnSerializerError;
+
+                FindTypeAndCRS(jsonReader, serializer);
+
+                //reset position of reader
+                jsonReader.Close();
+                reader.Dispose(); 
+
+                reader = new StringReader(jsonText); // Reset to start of JSON
+                jsonReader = new JsonTextReader(reader);
+
+                while (jsonReader.Read())
+                {
+                    // Read features depending on type
+                    if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
+                    {
+                        jsonReader.Read(); // Start array
+                        yield return ReadFeaturesArrayStream(jsonReader, serializer);
+                    }
+                }
+                jsonReader.Close();
+
+                var frameCount = Time.frameCount - startFrame;
+                if (frameCount == 0)
+                    yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
             }
             else
             {
@@ -154,8 +164,10 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private IEnumerator ParseGeoJSONStream(string path, int maxParsesPerFrame = Int32.MaxValue)
+        private IEnumerator ParseGeoJSONStreamLocal(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
         {
+            string path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\')); 
+          
             var startFrame = Time.frameCount;
             var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);
@@ -223,16 +235,22 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
-                        return polygonLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
+
+                return polygonLayer;
             }
 
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+
+            // Replace default style with the parent's default style
+            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
+            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPolygonLayerGameObject.ApplyStyling();
+
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
+            
             return newPolygonLayerGameObject;
         }
 
@@ -241,18 +259,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
-                        return lineLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
+
+                return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
-            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+            // Replace default style with the parent's default style
+            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
+            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newLineLayerGameObject.ApplyStyling();
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
@@ -263,18 +282,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
-                        return pointLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
+
+                return pointLayer;
             }
 
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
-            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+            // Replace default style with the parent's default style
+            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
+            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPointLayerGameObject.ApplyStyling();
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 

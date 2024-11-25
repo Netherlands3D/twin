@@ -1,25 +1,46 @@
+using System;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
     public class ToolButton : MonoBehaviour
     {
-        [SerializeField] private Tool tool;   
+        [SerializeField] private Tool tool;
         [SerializeField] private Toolbar toolbar;
 
-        [Header("Tool button visuals")]
-        [SerializeField] private GameObject enabledObjects;
+        [Header("Tool button visuals")] [SerializeField]
+        private GameObject enabledObjects;
+
         [SerializeField] private GameObject disabledObjects;
 
-        public Tool Tool { get => tool; private set => tool = value; }
+        public Tool Tool
+        {
+            get => tool;
+            private set => tool = value;
+        }
 
-        private void Start() {
+        private void OnEnable()
+        {
+            //use events in case the tool is opened/closed by another script to keep the visuals matching the tool state
+            Tool.onOpen.AddListener(UpdateVisuals); 
+            Tool.onClose.AddListener(UpdateVisuals);
+        }
+        
+        private void OnDisable()
+        {
+            Tool.onOpen.RemoveListener(UpdateVisuals);
+            Tool.onClose.RemoveListener(UpdateVisuals);
+        }
+
+        private void Start()
+        {
             //Always start button Tool as disabled
             Tool.Open = false;
         }
 
-        private void OnValidate() {
-            if(toolbar) return;
+        private void OnValidate()
+        {
+            if (toolbar) return;
 
             toolbar = GetComponentInParent<Toolbar>();
         }
@@ -28,10 +49,7 @@ namespace Netherlands3D.Twin
         {
             Tool.ToggleInspector();
 
-            enabledObjects.SetActive(Tool.Open);
-            disabledObjects.SetActive(!Tool.Open);
-
-            if(toolbar)
+            if (toolbar)
             {
                 toolbar.DisableOutsideToolGroup(Tool);
             }
@@ -40,13 +58,17 @@ namespace Netherlands3D.Twin
         public void ToggleWithoutNotify(bool active, bool destroySpawnedPrefabs = false)
         {
             tool.Open = active;
-            enabledObjects.SetActive(active);
-            disabledObjects.SetActive(!active);
 
-            if(destroySpawnedPrefabs)
+            if (destroySpawnedPrefabs)
             {
                 tool.DestroyPrefabInstances();
             }
+        }
+
+        public void UpdateVisuals()
+        {
+            enabledObjects.SetActive(Tool.Open);
+            disabledObjects.SetActive(!Tool.Open);
         }
     }
 }

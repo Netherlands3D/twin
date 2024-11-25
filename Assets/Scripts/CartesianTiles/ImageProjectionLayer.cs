@@ -83,7 +83,8 @@ namespace Netherlands3D.CartesianTiles
                 {
                     return;
                 }
-
+                //to be sure its not held in memory
+                ClearPreviousTexture(tile);
                 //destroy the gameobject
                 Destroy(tile.gameObject);
             }
@@ -100,7 +101,6 @@ namespace Netherlands3D.CartesianTiles
             tile.gameObject.transform.parent = transform.gameObject.transform;            
             tile.gameObject.layer = tile.gameObject.transform.parent.gameObject.layer;
             Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
-            //Vector3 originCoordinate = CoordinateConverter.ConvertTo(origin);
 
             var rdCoordinate = new Coordinate(
                 CoordinateSystem.RD,
@@ -109,7 +109,6 @@ namespace Netherlands3D.CartesianTiles
                 0.0d
             );
             var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
-
 
             originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
@@ -132,7 +131,7 @@ namespace Netherlands3D.CartesianTiles
             }
 
             Tile tile = tiles[tileKey];
-            string url = Datasets[tiles[tileKey].unityLOD].path;  
+            string url = Datasets[tiles[tileKey].unityLOD].path;
             
             var webRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = webRequest;
@@ -148,8 +147,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 ClearPreviousTexture(tile);               
                 callback(tileChange);
-            }
-            yield return null;          
+            }     
         }
 
         /// <summary>

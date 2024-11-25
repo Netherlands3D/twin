@@ -168,22 +168,23 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         {
             switch (layer)
             {
+                case WMSLayerGameObject _:
+                case GeoJsonLayerGameObject _:
+                    return layerTypeSprites[8];
                 case CartesianTileLayerGameObject _:
-                    return layerTypeSprites[1];
                 case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
                     return layerTypeSprites[4];
-                case DatasetLayerGameObject _:
+                case CartesianTileSubObjectColorLayerGameObject _:
                     return layerTypeSprites[5];
                 case GeoJSONPolygonLayer _:
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer _:
-                    return layerTypeSprites[7];
-                case GeoJsonLayerGameObject _:
-                    return layerTypeSprites[8];
+                    return layerTypeSprites[7];                
+                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
                 default:

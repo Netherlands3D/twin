@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Linq;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Web
 {
@@ -8,9 +9,12 @@ namespace Netherlands3D.Web
     {
         public static void AddQueryParameter(this UriBuilder uriBuilder, string key, string value)
         {
-            var query = uriBuilder.Query;
+            var nameValueCollection = new NameValueCollection();
+            QueryStringAsNameValueCollection(uriBuilder.Query, nameValueCollection);
 
-            uriBuilder.Query = AddQueryParameterToQueryString(key, value, query);
+            nameValueCollection.Add(key, value);
+
+            uriBuilder.Query = nameValueCollection.ToQueryString();
         }
 
         public static void AddQueryParameter(this UriBuilder uriBuilder, UriQueryParameter parameter)
@@ -29,15 +33,16 @@ namespace Netherlands3D.Web
             var nameValueCollection = new NameValueCollection();
             QueryStringAsNameValueCollection(query, nameValueCollection);
 
-            var isUpperCase = false;
+            // If a pre-existing value exists and it is all-caps, assume that the new value 
+            // should be uppercase as well because of quirks between map servers
             if (nameValueCollection.AllKeys.Contains(key))
             {
-                var exisitingValue = nameValueCollection[key];
-                isUpperCase = exisitingValue == exisitingValue.ToUpper();
-
+                var existingValue = nameValueCollection[key];
+                if (existingValue == existingValue.ToUpper())
+                {
+                    value = value.ToUpper();
+                }
             }
-            if(isUpperCase) 
-                value = value.ToUpper();
 
             nameValueCollection.Remove(key);
             nameValueCollection.Add(key, value);
@@ -52,19 +57,17 @@ namespace Netherlands3D.Web
             var nameValueCollection = new NameValueCollection();
             QueryStringAsNameValueCollection(query, nameValueCollection);
 
-            //Remove if exists
-            if (nameValueCollection.AllKeys.Contains(key))
-                nameValueCollection.Remove(key);
+            nameValueCollection.Remove(key);
 
             uriBuilder.Query = nameValueCollection.ToQueryString();
         }
 
         private static string ToQueryString(this NameValueCollection nameValueCollection)
         {
-            var queryString = string.Join("&", nameValueCollection.AllKeys
-                .Select(key => $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(nameValueCollection[key])}"));
+            var escapedQueryParameters = nameValueCollection.AllKeys
+                .Select(key => $"{UnityWebRequest.EscapeURL(key)}={UnityWebRequest.EscapeURL(nameValueCollection[key])}");
 
-            return queryString;
+            return string.Join("&", escapedQueryParameters);
         }
 
         /// <summary>
@@ -81,21 +84,6 @@ namespace Netherlands3D.Web
         public static void TryParseQueryString(this Uri uri, NameValueCollection nameValueCollection)
         {
             QueryStringAsNameValueCollection(uri.Query, nameValueCollection);
-        }
-
-        private static string AddQueryParameterToQueryString(string key, string value, string query)
-        {
-            var encodedKey = Uri.EscapeDataString(key);
-            var encodedValue = Uri.EscapeDataString(value);
-            var keyValuePair = $"{encodedKey}={encodedValue}";
-
-            var newQueryString = keyValuePair;
-            if (string.IsNullOrEmpty(query) == false)
-            {
-                newQueryString = $"{query.TrimStart('?')}&{newQueryString}";
-            }
-
-            return newQueryString;
         }
 
         /// <see href="https://gist.github.com/ranqn/d966423305ce70cbc320f319d9485fa2" />
@@ -139,7 +127,7 @@ namespace Netherlands3D.Web
                 }
                 else
                 {
-                    name = Uri.UnescapeDataString(query.Substring(namePos, valuePos - namePos - 1));
+                    name = UnityWebRequest.UnEscapeURL(query.Substring(namePos, valuePos - namePos - 1));
                 }
 
                 if (valueEnd < 0)
@@ -152,7 +140,7 @@ namespace Netherlands3D.Web
                     namePos = valueEnd + 1;
                 }
 
-                var value = Uri.UnescapeDataString(query.Substring(valuePos, valueEnd - valuePos));
+                var value = UnityWebRequest.UnEscapeURL(query.Substring(valuePos, valueEnd - valuePos));
 
                 result.Add(name, value);
                 if (namePos == -1)

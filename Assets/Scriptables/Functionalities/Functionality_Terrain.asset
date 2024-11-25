@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_Terrain
   m_EditorClassIdentifier: 
-  Id: terrain
+  data:
+    Id: terrein
+    IsEnabled: 1
   Title: Terrein
   Caption: Kadaster
   Header: Toont het 3D maaiveld voor heel Nederland
@@ -25,7 +27,6 @@ MonoBehaviour:
     <link=https://www.geonovum.nl/geo-standaarden/3d-omgevingsinformatie/productbeschrijving-3d-basisvoorziening><u><color=blue>3D
     Basisvoorziening</color></u></link>\r\nDatum: 2020\r\nActualisatie: Jaarlijks\n</i>"
   configuration: {fileID: 0}
-  isEnabled: 1
   OnEnable:
     m_PersistentCalls:
       m_Calls:

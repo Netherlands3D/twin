@@ -283,6 +283,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458, type: 2}
   - {fileID: 11400000, guid: d871bbbfa65952f479a5bec4788aac0c, type: 2}
   - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+  - {fileID: 11400000, guid: 026e6f320af008042bbfcd161fc66506, type: 2}
   OnAdapterFound:
     m_PersistentCalls:
       m_Calls:
@@ -2418,7 +2419,7 @@ PrefabInstance:
     - target: {fileID: 2925110442081368954, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1870
+      value: 3790
       objectReference: {fileID: 0}
     - target: {fileID: 2925110442081368954, guid: eb072abfa5c622d4ba5e8e89f7f570d8,
         type: 3}

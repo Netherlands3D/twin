@@ -22,6 +22,15 @@ namespace Netherlands3D.Twin
     {
         [SerializeField] private List<FileTypeEvent> fileTypeEvents;
 
+        public void ProcessFiles(string files)
+        {
+            var filesAsArray = files.Split(",");
+            foreach (string file in filesAsArray)
+            {
+                ProcessFile(file);
+            }
+        }
+
         public void ProcessFile(string file)
         {
             if (file.EndsWith(','))

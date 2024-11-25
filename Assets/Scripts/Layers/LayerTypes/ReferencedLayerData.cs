@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
@@ -7,10 +8,10 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")]
     public class ReferencedLayerData : LayerData
     {
-        [SerializeField, JsonProperty] private string prefabId;
+        [DataMember] private string prefabId;
         [JsonIgnore] public LayerGameObject Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
 
@@ -33,6 +34,7 @@ namespace Netherlands3D.Twin.Layers
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.LayerData = this;
+            this.layerProperties = layerProperties;
 
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
