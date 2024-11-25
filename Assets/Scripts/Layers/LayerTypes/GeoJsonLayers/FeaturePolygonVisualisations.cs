@@ -8,8 +8,10 @@ namespace Netherlands3D.Twin.Layers
 {
     public partial class GeoJSONPolygonLayer
     {
-        public class FeaturePolygonVisualisations
+        public class FeaturePolygonVisualisations : IFeatureVisualisation<PolygonVisualisation>
         {
+            public List<PolygonVisualisation> Data => visualisations;
+
             internal GeoJSONPolygonLayer geoJsonPolygonLayer;
             public Feature feature;
             private readonly List<PolygonVisualisation> visualisations = new();
@@ -34,7 +36,9 @@ namespace Netherlands3D.Twin.Layers
             public void AppendVisualisations(List<PolygonVisualisation> visualisations)
             {
                 foreach (var visualisation in visualisations)
+                {
                     visualisation.gameObject.SetActive(geoJsonPolygonLayer.isActiveAndEnabled);
+                }
 
                 this.visualisations.AddRange(visualisations);
             }
@@ -48,8 +52,10 @@ namespace Netherlands3D.Twin.Layers
                 {
                     bounds = GetVisualisationBounds(visualisations[0]);
 
-                    for(int i = 1; i < visualisations.Count; i++)
+                    for (int i = 1; i < visualisations.Count; i++)
+                    {
                         GetVisualisationBounds(visualisations[i]);
+                    }
                 }
 
                 // Expand bounds to ceiling to steps
@@ -72,8 +78,9 @@ namespace Netherlands3D.Twin.Layers
             {
                 foreach (var visualisation in visualisations)
                 {
-                    if (visualisation != null)
-                        Destroy(visualisation.gameObject);
+                    if (!visualisation) continue;
+
+                    Destroy(visualisation.gameObject);
                 }
                 visualisations.Clear();
             }

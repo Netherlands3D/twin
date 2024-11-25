@@ -13,8 +13,10 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -35,19 +37,12 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
         
-        [SerializeField] private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
         public UnityEvent<string> OnParseError = new();
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
-
-        protected virtual void Awake()
-        {
-            LoadDefaultValues();
-        }
 
         protected override void Start()
         {
@@ -56,14 +51,6 @@ namespace Netherlands3D.Twin.Layers
                 StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
             else if(urlPropertyData.Data.IsRemoteAsset())
                 StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
-        }
-
-        protected virtual void LoadDefaultValues()
-        {
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            LayerData.Color = randomLayerColor;
         }
 
         /// <summary>
@@ -111,6 +98,7 @@ namespace Netherlands3D.Twin.Layers
                 return;
             }
 
+        
             StartCoroutine(VisualizeQueue(featureCollection.Features));
         }
 
@@ -125,6 +113,7 @@ namespace Netherlands3D.Twin.Layers
                     yield break;
                 
                 VisualizeFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 if (i % MaxFeatureVisualsPerFrame == 0)
                     yield return null;
@@ -234,6 +223,7 @@ namespace Netherlands3D.Twin.Layers
                 var feature = serializer.Deserialize<Feature>(jsonReader);
                 features.Add(feature);
                 VisualizeFeature(feature);
+                ProcessFeatureMapping(feature);
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
@@ -244,21 +234,136 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        private void ProcessFeatureMapping(Feature feature)
+        {
+            var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
+            if (polygonData != null)
+            {
+                CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
+            }
+            var lineData = lineFeaturesLayer?.GetMeshData(feature);
+            if (lineData != null)
+            {
+                CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
+            }
+            var pointData = pointFeaturesLayer?.GetMeshData(feature);
+            if (pointData != null)
+            {
+                CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
+            }          
+        }
+
+        private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
+        {
+            for(int i = 0; i < meshes.Count; i++)
+            {
+                Mesh mesh = meshes[i];                
+                Vector3[] verts = mesh.vertices;
+                float width = 1f;
+                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
+                subObject.AddComponent<MeshFilter>().mesh = mesh;
+                if (verts.Length >= 2)
+                {
+                    //generate collider extruded lines for lines
+                    if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+                    {
+                        GeoJSONLineLayer lineLayer = layer as GeoJSONLineLayer;
+                        width = lineLayer.LineRenderer3D.LineDiameter;
+                        float halfWidth = width * 0.5f;
+
+                        int segmentCount = verts.Length - 1;
+                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
+                        int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
+
+                        Vector3[] vertices = new Vector3[vertexCount];
+                        int[] triangles = new int[triangleCount];
+
+                        for (int j = 0; j < segmentCount; j++)
+                        {
+                            Vector3 p1 = verts[j];
+                            Vector3 p2 = verts[j + 1];
+                            Vector3 edgeDir = (p2 - p1).normalized;
+                            Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
+
+                            Vector3 v1 = p1 + perpDir * halfWidth;
+                            Vector3 v2 = p1 - perpDir * halfWidth;
+                            Vector3 v3 = p2 + perpDir * halfWidth;
+                            Vector3 v4 = p2 - perpDir * halfWidth;
+
+                            int baseIndex = j * 4;
+                            vertices[baseIndex + 0] = v1; // Top left
+                            vertices[baseIndex + 1] = v2; // Bottom left
+                            vertices[baseIndex + 2] = v3; // Top right
+                            vertices[baseIndex + 3] = v4; // Bottom right
+
+                            int triBaseIndex = j * 6;
+                            // Triangle 1
+                            triangles[triBaseIndex + 0] = baseIndex + 0;
+                            triangles[triBaseIndex + 1] = baseIndex + 1;
+                            triangles[triBaseIndex + 2] = baseIndex + 2;
+
+                            // Triangle 2
+                            triangles[triBaseIndex + 3] = baseIndex + 2;
+                            triangles[triBaseIndex + 4] = baseIndex + 1;
+                            triangles[triBaseIndex + 5] = baseIndex + 3;
+                        }
+                        mesh.vertices = vertices.ToArray();
+                        mesh.triangles = triangles.ToArray();
+                        subObject.AddComponent<MeshCollider>();
+                        subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
+                    }
+                    else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+                    {
+                        //lets not add a meshcollider since its very heavy
+                    }                   
+                }
+                else
+                {
+                    if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+                    {
+                        subObject.transform.position = verts[0];
+                        GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
+                        subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
+
+                    }
+                }
+
+                               
+                mesh.RecalculateBounds();
+                meshes[i] = mesh;
+
+                subObject.transform.SetParent(layer.Transform);
+                subObject.layer = LayerMask.NameToLayer("Projected");
+
+                FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
+                objectMapping.SetFeature(feature);
+                objectMapping.SetMeshes(meshes);
+                objectMapping.SetVisualisationLayer(layer);
+                objectMapping.SetGeoJsonLayerParent(this);
+            }
+        }
+
         private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
         {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPolygonLayer polygonLayer)
-                        return polygonLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
+
+                return polygonLayer;
             }
 
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+
+            // Replace default style with the parent's default style
+            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
+            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPolygonLayerGameObject.ApplyStyling();
+
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
+            
             return newPolygonLayerGameObject;
         }
 
@@ -267,18 +372,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONLineLayer lineLayer)
-                        return lineLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
+
+                return lineLayer;
             }
 
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var lineMaterial = new Material(newLineLayerGameObject.LineRenderer3D.LineMaterial) { color = LayerData.Color };
-            newLineLayerGameObject.LineRenderer3D.LineMaterial = lineMaterial;
+            // Replace default style with the parent's default style
+            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
+            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newLineLayerGameObject.ApplyStyling();
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
@@ -289,18 +395,19 @@ namespace Netherlands3D.Twin.Layers
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
-                if(child is ReferencedLayerData referencedLayerData)
-                {
-                    if(referencedLayerData.Reference is GeoJSONPointLayer pointLayer)
-                        return pointLayer;
-                }
+                if (child is not ReferencedLayerData referencedLayerData) continue;
+                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
+
+                return pointLayer;
             }
 
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
-            var pointMaterial = new Material(newPointLayerGameObject.PointRenderer3D.Material) { color = LayerData.Color };
-            newPointLayerGameObject.PointRenderer3D.Material = pointMaterial;
+            // Replace default style with the parent's default style
+            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
+            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
+            newPointLayerGameObject.ApplyStyling();
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -8140904490283006168}
   - component: {fileID: 373191915858293964}
   - component: {fileID: 5447569626426196056}
+  - component: {fileID: 2184948650164356377}
   m_Layer: 12
   m_Name: GeoJsonLineLayer
   m_TagString: Untagged
@@ -71,9 +72,14 @@ MonoBehaviour:
   jointMesh: {fileID: 4711208715938537054, guid: 0de12834fe259ec4cbcffaca05de9fc6,
     type: 3}
   lineMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  jointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
+    type: 2}
+  jointSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
+    type: 2}
   drawJoints: 1
   flattenY: 0
-  offsetY: 0
+  offsetY: 1.87
   lineDiameter: 1
 --- !u!114 &5447569626426196056
 MonoBehaviour:
@@ -107,3 +113,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2184948650164356377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

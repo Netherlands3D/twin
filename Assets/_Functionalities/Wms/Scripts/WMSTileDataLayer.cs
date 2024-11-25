@@ -1,8 +1,10 @@
-using Netherlands3D.CartesianTiles;
-using Netherlands3D.Rendering;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Rendering;
+using Netherlands3D.Twin.Wms;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
@@ -10,7 +12,8 @@ using UnityEngine.Rendering.Universal;
 namespace Netherlands3D.Twin
 {
     public class WMSTileDataLayer : ImageProjectionLayer
-    {      
+    {
+        private const string DefaultEpsgCoordinateSystem = "28992";
 
         public int RenderIndex 
         { 
@@ -62,9 +65,11 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
+            var mapData = MapFilters.FromUrl(new Uri(wmsUrl));
             Tile tile = tiles[tileKey];
-            var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-            string url = wmsUrl.Replace("{0}", bboxValue);
+
+            var boundingBox = DetermineBoundingBox(tileChange, mapData);
+            string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
             tile.runningWebRequest = webRequest;
@@ -100,6 +105,24 @@ namespace Netherlands3D.Twin
                 }
             }
             callback(tileChange);
+        }
+
+        private Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
+        {
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+
+            var splitReferenceCode = mapFilters.spatialReference.Split(':');
+            string coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg" 
+                ? splitReferenceCode[^1] 
+                : DefaultEpsgCoordinateSystem;
+
+            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+            
+            var boundingBox = new Wms.BoundingBox(bottomLeft, topRight);
+            boundingBox.Convert(foundCoordinateSystem);
+            
+            return boundingBox;
         }
 
         private void UpdateDrawOrderForChildren()
