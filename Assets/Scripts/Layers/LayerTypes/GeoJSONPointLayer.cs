@@ -16,7 +16,8 @@ namespace Netherlands3D.Twin.Layers
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
         public bool IsPolygon => false;
-        public Transform Transform { get => transform; }
+
+        public Transform Transform => transform;
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -31,7 +32,8 @@ namespace Netherlands3D.Twin.Layers
                 {
                     vertices.Add(point.ToUnity());
                 }
-                mesh.SetVertices(vertices);                
+
+                mesh.SetVertices(vertices);
             }
 
             return meshes;
@@ -85,9 +87,10 @@ namespace Netherlands3D.Twin.Layers
         public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
             where T : GeoJSONObject
         {
-            // Skip if feature already exists (comparison is done using hashcode based on geometry)
-            if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
-                return;
+            // don't skip, in order to increase performance
+            // // Skip if feature already exists (comparison is done using hashcode based on geometry)
+            // if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
+            //     return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
 
@@ -98,7 +101,7 @@ namespace Netherlands3D.Twin.Layers
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
-            else if(feature.Geometry is Point point)
+            else if (feature.Geometry is Point point)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
@@ -109,7 +112,8 @@ namespace Netherlands3D.Twin.Layers
 
         public void ApplyStyling()
         {
-            pointRenderer3D.Material = GetMaterialInstance();
+            if (!pointRenderer3D.Material)
+                pointRenderer3D.Material = GetMaterialInstance();
         }
 
         private Material GetMaterialInstance()
@@ -125,10 +129,10 @@ namespace Netherlands3D.Twin.Layers
         /// to remove visualisations that are out of view
         /// </summary>
         public void RemoveFeaturesOutOfView()
-        {         
+        {
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
+            for (int i = SpawnedVisualisations.Count - 1; i >= 0; i--)
             {
                 // Make sure to recalculate bounds because they can change due to shifts
                 SpawnedVisualisations[i].CalculateBounds();
@@ -141,10 +145,10 @@ namespace Netherlands3D.Twin.Layers
                 RemoveFeature(featureVisualisation);
             }
         }
-        
+
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach(var pointCollection in featureVisualisation.Data)
+            foreach (var pointCollection in featureVisualisation.Data)
                 PointRenderer3D.RemoveCollection(pointCollection);
 
             SpawnedVisualisations.Remove(featureVisualisation);
@@ -154,7 +158,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (Application.isPlaying && PointRenderer3D && PointRenderer3D.gameObject)
                 GameObject.Destroy(PointRenderer3D.gameObject);
-                
+
             base.DestroyLayerGameObject();
         }
     }
