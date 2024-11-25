@@ -22,17 +22,16 @@ namespace Netherlands3D.Twin.Layers
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeaturePolygonVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
-            List<Mesh> meshes = null;
-            if (data != null)
+            List<Mesh> meshes = new List<Mesh>();
+            if (data == null) return meshes;
+
+            List<PolygonVisualisation> visualisations = data.Data;
+            foreach (PolygonVisualisation polygon in visualisations)
             {
-                meshes = new List<Mesh>();
-                List<PolygonVisualisation> visualisations = data.Data;
-                foreach (PolygonVisualisation polygon in visualisations)
-                {
-                    //TODO would really like to have the meshfilter or mesh cached within the polygonvisualisation (in external package)
-                    meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
-                }
+                //TODO would really like to have the meshfilter or mesh cached within the polygonvisualisation (in external package)
+                meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
             }
+
             return meshes;
         }
 
@@ -45,8 +44,10 @@ namespace Netherlands3D.Twin.Layers
         {
             //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
             PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
-            if(visualisation != null) 
+            if(visualisation != null)
+            {
                 visualisation.gameObject.GetComponent<MeshRenderer>().material.color = color;
+            }
         }
 
         /// <summary>
@@ -63,10 +64,9 @@ namespace Netherlands3D.Twin.Layers
                 List<PolygonVisualisation> visualisations = fpv.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
-                    if (meshes.Contains(pv.GetComponent<MeshFilter>().mesh))
-                    {
-                        return pv;
-                    }
+                    if (!meshes.Contains(pv.GetComponent<MeshFilter>().mesh)) continue;
+    
+                    return pv;
                 }
             }
             return null;

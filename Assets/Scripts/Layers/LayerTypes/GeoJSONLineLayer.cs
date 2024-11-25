@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
             if(data == null)
             {
                 Debug.LogWarning("visualisation was not spawned for feature" + feature.Id);
-                return null;
+                return meshes;
             }
 
             foreach (List<Coordinate> points in data.Data)
@@ -38,8 +38,8 @@ namespace Netherlands3D.Twin.Layers
                     vertices.Add(point.ToUnity());
                 }
                 mesh.SetVertices(vertices);
-
             }
+
             return meshes;
         }
         

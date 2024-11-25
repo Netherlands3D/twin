@@ -33,6 +33,7 @@ namespace Netherlands3D.Twin.Layers
                 }
                 mesh.SetVertices(vertices);                
             }
+
             return meshes;
         }
 
