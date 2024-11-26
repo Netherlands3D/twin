@@ -81,8 +81,6 @@ namespace Netherlands3D.Twin.Interface.BAG
 			featureSelector = GetComponent<FeatureSelector>();
 
 			keyValuePairTemplate.gameObject.SetActive(false);
-
-			HideObjectInformation();
 		}
 
 		private void Update()
