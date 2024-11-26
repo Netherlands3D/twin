@@ -75,11 +75,7 @@ namespace Netherlands3D.Twin
 
             // Calculate minY and maxY (note Y increases downwards in the tile grid)
             double tileMaxY = this.boundingBox.MaxY - tileIndex.y * tileSizeY;
-            double tileMinY = tileMaxY - tileSizeY;
-            //double tileMinY = this.boundingBox.MinY + tileIndex.y * tileSizeY;
-            //double tileMaxY = tileMinY + tileSizeY;
-
-            
+            double tileMinY = tileMaxY - tileSizeY;            
 
             return new BoundingBox(tileMinX, tileMinY, tileMaxX, tileMaxY);
         }      
