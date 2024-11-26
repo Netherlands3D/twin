@@ -46,7 +46,15 @@ namespace Netherlands3D.Tiles3D
                     Tile rootTile = new Tile();
                     rootTile.transform = root.transform;
                     root = ReadExplicitNode(rootnode, rootTile);
-                    root.screenSpaceError = float.MaxValue;
+                    
+                    if (root.children.Count==0 )
+                    {
+                        Tile childTile = new Tile();
+                        childTile = ReadExplicitNode(rootnode, childTile);
+                        childTile.parent = rootTile;
+                        rootTile.children.Add(childTile);
+                        
+                    }
                     break;
                 case TilingMethod.ImplicitTiling:
                     Debug.Log("Implicit tiling"); 
