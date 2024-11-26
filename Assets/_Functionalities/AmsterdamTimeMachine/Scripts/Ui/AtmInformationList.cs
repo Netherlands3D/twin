@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private AtmInformationListItem photoListItem;
         [SerializeField] private AtmInformationListItem regularListItem;
         private const string bagUriTemplate = "https://api.lod.uba.uva.nl/queries/ATM/images-building-nl3d/2/run?bag=http://bag.basisregistraties.overheid.nl/bag/id/pand/{id}";
-        private const string adamLinkTemplate = "https://api.lod.uba.uva.nl/queries/ATM/images-historical-address-nl3d/2/run?address=https://adamlink.nl/geo/address/{id}";
+        private const string adamLinkTemplate = "https://api.lod.uba.uva.nl/queries/ATM/images-historical-address-nl3d/2/run?address={id}";
 
         public void LoadFromBagId(string bagId)
         {
@@ -40,6 +40,13 @@ namespace Netherlands3D.Twin
         public void LoadFromFeature(FeatureMapping featureMapping)
         {
             var adamLinkId = featureMapping.Feature.Properties["id"]?.ToString();
+
+            // check for an id field, otherwise it is not an Amsterdam Time Machine feature
+            if (string.IsNullOrEmpty(adamLinkId)) return;
+            
+            // check if it is a valid Amsterdam Time Machine feature, otherwise we ignore it 
+            if (adamLinkId.StartsWith("https://adamlink.nl/geo/address/") == false) return;
+
             QueryParameters parameters = new() {{"id", adamLinkId}};
 
             PopulateList(new TemplatedUri(adamLinkTemplate, parameters));
