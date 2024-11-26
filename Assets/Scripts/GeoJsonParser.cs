@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
     {
         public float maxParseDuration = 0.01f;
         public GeoJSONObjectType Type { get; private set; }
-        public CRSBase CRS { get; set; }
+        public ICRSObject CRS { get; set; }
 
         [Space, Header("Parse events")] public UnityEvent<Feature> OnFeatureParsed = new();
         public UnityEvent<string> OnParseError = new();
@@ -123,6 +123,11 @@ namespace Netherlands3D.Twin
                 }
 
                 var feature = serializer.Deserialize<Feature>(jsonReader);
+                if (feature.CRS == null)
+                {
+                    feature.CRS = CRS;
+                }
+                
                 features.Add(feature);
                 OnFeatureParsed.Invoke(feature);
 
@@ -136,18 +141,18 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public CoordinateSystem GetCoordinateSystem()
+        public static CoordinateSystem GetCoordinateSystem(ICRSObject crs)
         {
             var coordinateSystem = CoordinateSystem.CRS84;
 
-            if (CRS is NamedCRS)
+            if (crs is NamedCRS namedCrs)
             {
-                if (CoordinateSystems.FindCoordinateSystem((CRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
+                if (CoordinateSystems.FindCoordinateSystem(namedCrs.Properties["name"].ToString(), out var globalCoordinateSystem))
                 {
                     coordinateSystem = globalCoordinateSystem;
                 }
             }
-            else if (CRS is LinkedCRS)
+            else if (crs is LinkedCRS linkedCrs)
             {
                 Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
             }
@@ -228,7 +233,6 @@ namespace Netherlands3D.Twin
             {
                 reader.Read(); //read the value of the Type Object
                 Type = serializer.Deserialize<GeoJSONObjectType>(reader);
-                // print("parsed type: " + Type);
             }
         }
 

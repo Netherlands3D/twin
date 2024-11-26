@@ -140,7 +140,6 @@ namespace Netherlands3D.CartesianTiles
                 var parser = new GeoJsonParser(0.01f);
                 parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
                 yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
-                // ParseGeoJSON(geoJsonRequest.downloadHandler.text);
             }
             else
             {
@@ -153,17 +152,5 @@ namespace Netherlands3D.CartesianTiles
             }
             callback?.Invoke(tileChange);
         }
-
-        // private void ParseGeoJSON(string jsonText)
-        // {
-        //     // var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-        //     //
-        //     // if (featureCollection.Features.Count > 0)
-        //     //     wfsGeoJSONLayer.AppendFeatureCollection(featureCollection);
-        //
-        //     print(jsonText);
-        //     
-        //     StartCoroutine(wfsGeoJSONLayer.GeoJsonParser.ParseJSONString(jsonText));
-        // }
     }
 }

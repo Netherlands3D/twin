@@ -2,28 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using SimpleJSON;
-using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         private GeoJsonParser parser = new GeoJsonParser(0.01f);
-        // public GeoJsonParser GeoJsonParser => parser;
-        public GeoJSONObjectType Type => parser.Type;
-        public CRSBase CRS => parser.CRS;
 
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
@@ -98,44 +91,6 @@ namespace Netherlands3D.Twin.Layers
 
             if (pointFeaturesLayer != null)
                 pointFeaturesLayer.RemoveFeaturesOutOfView();
-        }
-
-        public void AppendFeatureCollection(FeatureCollection featureCollection)
-        {
-            var collectionCRS = featureCollection.CRS;
-            //Determine if CRS is LinkedCRS or NamedCRS
-            if (collectionCRS is NamedCRS)
-            {
-                if (CoordinateSystems.FindCoordinateSystem((collectionCRS as NamedCRS).Properties["name"].ToString(), out var globalCoordinateSystem))
-                {
-                    parser.CRS = collectionCRS as NamedCRS;
-                }
-            }
-            else if (collectionCRS is LinkedCRS)
-            {
-                Debug.LogError("Linked CRS parsing is currently not supported, using default CRS (WGS84) instead"); //todo: implement this
-                return;
-            }
-        
-            StartCoroutine(VisualizeQueue(featureCollection.Features));
-        }
-
-        IEnumerator VisualizeQueue(List<Feature> features)
-        {
-            for (int i = 0; i < features.Count; i++)
-            {
-                var feature = features[i];
-
-                //If a feature was not found, stop queue
-                if (feature == null)
-                    yield break;
-                
-                VisualizeFeature(feature);
-                ProcessFeatureMapping(feature);
-
-                if (i % MaxFeatureVisualsPerFrame == 0)
-                    yield return null;
-            }
         }
 
         private void ProcessFeatureMapping(Feature feature)
@@ -320,7 +275,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void VisualizeFeature(Feature feature)
         {
-            var originalCoordinateSystem = parser.GetCoordinateSystem();
+            var originalCoordinateSystem = GeoJsonParser.GetCoordinateSystem(feature.CRS);
             switch (feature.Geometry.Type)
             {
                 case GeoJSONObjectType.MultiPolygon:
