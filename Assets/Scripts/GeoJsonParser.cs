@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
     {
         public float maxParseDuration = 0.01f;
         public GeoJSONObjectType Type { get; private set; }
-        public CRSBase CRS { get; private set; }
+        public CRSBase CRS { get; set; }
 
         [Space, Header("Parse events")] public UnityEvent<Feature> OnFeatureParsed = new();
         public UnityEvent<string> OnParseError = new();
