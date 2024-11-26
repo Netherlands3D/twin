@@ -6,6 +6,7 @@ using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Xml.Serialization;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.Properties;
@@ -28,9 +29,13 @@ namespace Netherlands3D.Twin
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            if ((!sourceUrl.ToLower().Contains("service=wfs") && !sourceUrl.ToLower().Contains("/wfs"))
-                || sourceUrl.ToLower().Contains("request=getmap")) //if request = getmap it means wms
-                return false;
+            var urlContainsWfsSignifier = sourceUrl.ToLower().Contains("service=wfs");
+
+            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+            var bodyContents = File.ReadAllText(cachedDataPath);
+            var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
+
+            if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
             wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
@@ -122,7 +127,16 @@ namespace Netherlands3D.Twin
             newLayer.Name = title;
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl); 
+            
+            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
+            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
+            randomLayerColor.a = 0.5f;
+            newLayer.LayerData.Color = randomLayerColor;
+            
+            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
+            symbolizer?.SetFillColor(randomLayerColor);
+            symbolizer?.SetStrokeColor(randomLayerColor);
         }
 
         private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
@@ -205,9 +219,13 @@ namespace Netherlands3D.Twin
 
             public bool IsGetCapabilitiesRequest()
             {
+                // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+                var bodyContents = File.ReadAllText(cachedBodyContent);
+                var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
+
                 var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
                 requestType = RequestType.GetCapabilities;
-                return getCapabilitiesRequest;
+                return getCapabilitiesRequest || couldBeWfsCapabilities;
             }
 
             public bool IsGetFeatureRequest()
