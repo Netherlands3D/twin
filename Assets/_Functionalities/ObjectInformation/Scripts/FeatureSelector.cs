@@ -32,14 +32,34 @@ namespace Netherlands3D.Twin.ObjectInformation
         private RaycastHit[] raycastHits = new RaycastHit[16];
 
         [SerializeField] private float hitDistance = 100000f;
-        [SerializeField] private float tubeHitRadius = 1.5f;
+        private float pointHitRadius = 1f; //when points are meshscale 5
+        private float lineHitRadius = 1f;
 
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
 
+        private OpticalRaycaster opticalRaycaster;
+
         private void Awake()
         {
             mainCamera = Camera.main;
+            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+        }
+
+        private void OnEnable()
+        {
+            ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
+        }
+
+        private void OnDisable()
+        {
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
+        }
+
+        private void ProcessClick()
+        {
+           
+            
         }
 
         public void Select(FeatureMapping mapping)
@@ -67,9 +87,9 @@ namespace Netherlands3D.Twin.ObjectInformation
 
         public void FindFeature(Ray ray)
         {
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-            groundPlane.Raycast(ray, out float distance);
-            Vector3 groundPosition = ray.GetPoint(distance);
+            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+            var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(mainCamera, Pointer.current.position.ReadValue());
+            Vector3 groundPosition = worldPoint;
             featureMappings.Clear();
             if (blockingObjectMapping != null)
             {
@@ -98,22 +118,28 @@ namespace Netherlands3D.Twin.ObjectInformation
             //clear the hit list or else it will use previous collider values
             raycastHits = new RaycastHit[raycastHits.Length];
 
-            if (Physics.SphereCastNonAlloc(groundPosition, tubeHitRadius, Vector3.down, raycastHits, hitDistance) > 0)
+            if (Physics.SphereCastNonAlloc(groundPosition, Mathf.Max(pointHitRadius, lineHitRadius), Vector3.down, raycastHits, hitDistance) > 0)
             {
-                float closest = float.MaxValue;
                 for (int i = 0; i < raycastHits.Length; i++)
                 {
                     if (raycastHits[i].collider == null) continue;
 
                     FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                    if (mapping == null) continue;
+                    if (mapping == null) continue;      
+                    
+                    if(mapping.VisualisationLayer is GeoJSONPointLayer)
+                    {
+                        Vector3 closestPoint = raycastHits[i].collider.ClosestPoint(new Vector3(groundPosition.x, raycastHits[i].collider.bounds.center.y, groundPosition.z)); //xz plane 2d distance check
+                        closestPoint.y = groundPosition.y; //make points equal in xz plane
+                        float dist = Vector3.Distance(closestPoint, groundPosition);
+                        if (dist > pointHitRadius)
+                            continue;
+                    }
 
                     featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
                     featureMappings[mapping.VisualisationParent].Add(mapping);
                 }
             }
-
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
 
             //not ideal but better than caching, would be better to have an quadtree approach here
             FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>().Where(fm => fm.VisualisationLayer.IsPolygon).ToArray();
@@ -145,7 +171,7 @@ namespace Netherlands3D.Twin.ObjectInformation
                 testHitPosition.transform.localScale = Vector3.one * 3;
 
                 testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                testGroundPosition.transform.localScale = Vector3.one * tubeHitRadius;
+                testGroundPosition.transform.localScale = Vector3.one * Mathf.Max(lineHitRadius, pointHitRadius);
                 testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
             }
 
@@ -209,6 +235,18 @@ namespace Netherlands3D.Twin.ObjectInformation
                     inside = !inside;
             }
             return inside;
+        }
+
+        public static Vector3 NearestPointOnFiniteLine(Vector3 start, Vector3 end, Vector3 pnt)
+        {
+            var line = (end - start);
+            var len = line.magnitude;
+            line.Normalize();
+
+            var v = pnt - start;
+            var d = Vector3.Dot(v, line);
+            d = Mathf.Clamp(d, 0f, len);
+            return start + line * d;
         }
     }
 }
