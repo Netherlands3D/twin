@@ -453,14 +453,15 @@ namespace Netherlands3D.Tiles3D
                     visibleTiles.RemoveAt(i);
                     continue;
                 }
-
-                if (tile.parent.CountLoadedParents() + tile.parent.CountLoadingParents() > 1)
+                if (tile.refine == "REPLACE")
                 {
-                    tilePrioritiser.RequestDispose(tile, true);
-                    visibleTiles.RemoveAt(i);
-                    continue;
+                    if (tile.parent.CountLoadedParents() + tile.parent.CountLoadingParents() > 1)
+                    {
+                        tilePrioritiser.RequestDispose(tile, true);
+                        visibleTiles.RemoveAt(i);
+                        continue;
+                    }
                 }
-
                 if (tile.screenSpaceError > maximumScreenSpaceError) //too little detail
                 {
                     if (tile.CountLoadingChildren() == 0)
