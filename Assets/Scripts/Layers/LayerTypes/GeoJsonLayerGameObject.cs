@@ -13,10 +13,8 @@ using SimpleJSON;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine.Networking;
-using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -48,9 +46,9 @@ namespace Netherlands3D.Twin.Layers
         {
             base.Start();
             if(urlPropertyData.Data.IsStoredInProject())
-                StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data, 1000));
+                StartCoroutine(ParseGeoJSONStreamLocal(urlPropertyData.Data));
             else if(urlPropertyData.Data.IsRemoteAsset())
-                StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data, 1000));
+                StartCoroutine(ParseGeoJSONStreamRemote(urlPropertyData.Data));
         }
 
         /// <summary>
@@ -120,7 +118,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private IEnumerator ParseGeoJSONStreamRemote(Uri uri, int maxParsesPerFrame = Int32.MaxValue)
+        private IEnumerator ParseGeoJSONStreamRemote(Uri uri)
         {
             //create LocalFile so we can use it in the ParseGeoJSONStream function
             string url = uri.ToString();
@@ -129,42 +127,48 @@ namespace Netherlands3D.Twin.Layers
             yield return uwr.SendWebRequest();
             if (uwr.result == UnityWebRequest.Result.Success)
             {
-                var startFrame = Time.frameCount;
-                // Get the downloaded text
-                string jsonText = uwr.downloadHandler.text;
-                StringReader reader = new StringReader(jsonText);
-                JsonTextReader jsonReader = new JsonTextReader(reader);
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Error += OnSerializerError;
-
-                FindTypeAndCRS(jsonReader, serializer);
-
-                //reset position of reader
-                jsonReader.Close();
-                reader.Dispose(); 
-
-                reader = new StringReader(jsonText); // Reset to start of JSON
-                jsonReader = new JsonTextReader(reader);
-
-                while (jsonReader.Read())
-                {
-                    // Read features depending on type
-                    if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
-                    {
-                        jsonReader.Read(); // Start array
-                        yield return ReadFeaturesArrayStream(jsonReader, serializer);
-                    }
-                }
-                jsonReader.Close();
-
-                var frameCount = Time.frameCount - startFrame;
-                if (frameCount == 0)
-                    yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
+                yield return ParseJSONResult(uwr.downloadHandler.text);
             }
             else
             {
                 OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
             }
+        }
+
+        public IEnumerator ParseJSONResult(string jsonText)
+        {
+            var startFrame = Time.frameCount;
+            // Get the downloaded text
+            // string jsonText = uwr.downloadHandler.text;
+            StringReader reader = new StringReader(jsonText);
+            JsonTextReader jsonReader = new JsonTextReader(reader);
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Error += OnSerializerError;
+
+            FindTypeAndCRS(jsonReader, serializer);
+            
+            //reset position of reader
+            jsonReader.Close();
+            reader.Dispose();
+
+            reader = new StringReader(jsonText); // Reset to start of JSON
+            jsonReader = new JsonTextReader(reader);
+
+            while (jsonReader.Read())
+            {
+                // Read features depending on type
+                if (jsonReader.TokenType == JsonToken.PropertyName && IsAtFeaturesToken(jsonReader))
+                {
+                    jsonReader.Read(); // Start array
+                    yield return ReadFeaturesArrayStream(jsonReader, serializer);
+                }
+            }
+
+            jsonReader.Close();
+
+            var frameCount = Time.frameCount - startFrame;
+            if (frameCount == 0)
+                yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
         }
 
         private IEnumerator ParseGeoJSONStreamLocal(Uri uri, int maxParsesPerFrame = Int32.MaxValue)

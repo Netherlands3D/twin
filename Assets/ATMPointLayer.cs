@@ -158,7 +158,7 @@ namespace Netherlands3D.CartesianTiles
             yield return geoJsonRequest.SendWebRequest();
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
-                ParseGeoJSON(geoJsonRequest.downloadHandler.text);
+                yield return GeoJSONLayer.ParseJSONResult(geoJsonRequest.downloadHandler.text);
             }
             else
             {
@@ -171,73 +171,6 @@ namespace Netherlands3D.CartesianTiles
             }
 
             callback?.Invoke(tileChange);
-        }
-
-        private void ParseGeoJSON(string jsonText)
-        {
-            StartCoroutine(ChunkDeserialization(jsonText, geoJsonLayer.AppendFeatureCollection));
-            // var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-            //
-            // if (featureCollection.Features.Count > 0)
-            //     geoJsonLayer.AppendFeatureCollection(featureCollection);
-        }
-
-        private IEnumerator ChunkDeserialization(string json, Action<FeatureCollection> onFinish)
-        {
-            print("starting coroutine");
-            WaitForSeconds wfe = new WaitForSeconds(0.1f);
-            List<Feature> allFeatures = new List<Feature>();
-            JsonSerializer serializer = new JsonSerializer();
-            //we can NOT use standard JObject.Parse(json) / JsonConvert.DeserializeObject<FeatureCollection>(json) here because of larger sets
-            using (StringReader stringReader = new StringReader(json))
-            {
-                using (JsonTextReader jsonReader = new JsonTextReader(stringReader))
-                {
-                    while (jsonReader.Read())
-                    {
-                        // Look for the "features" property
-                        if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "features")
-                        {
-                            break;
-                        }
-                    }
-
-                    jsonReader.Read();
-                    //read all features until end
-                    while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndArray)
-                    {
-                        var feature = serializer.Deserialize<Feature>(jsonReader);
-                        allFeatures.Add(feature);
-                        yield return wfe;
-                    }
-                }
-            }
-
-            print("all features count:" + allFeatures.Count);
-            if (allFeatures.Count > 0)
-            {
-                //this is a bit hacky to circumvent the json.parse of the full json, but solves the performance issues by alot
-                //its necessary the next node after features is always totalFeatures!
-                int featuresIndex = json.IndexOf("\"features\"");
-                int featuresEndIndex = json.IndexOf("\"totalFeatures\"");
-                if (featuresIndex != -1)
-                {
-                    //find the start of the features node
-                    int startIndex = json.IndexOf('[', featuresIndex) + 1;
-                    //find the end of the features node by stepping back from the next
-                    int endIndex = json.IndexOf(']', featuresEndIndex - 2);
-                    //remove the features from the json to have faster parsing
-                    json = json.Remove(startIndex, endIndex - startIndex);
-                }
-            }
-
-            print("creating root object");
-
-            JObject root = JObject.Parse(json);
-            FeatureCollection featureCollection = root.ToObject<FeatureCollection>();
-            featureCollection.Features.AddRange(allFeatures);
-            // var featureCollection = new FeatureCollection(allFeatures);
-            onFinish.Invoke(featureCollection);
         }
     }
 }
