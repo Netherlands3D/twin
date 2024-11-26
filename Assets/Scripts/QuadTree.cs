@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -10,18 +11,23 @@ namespace Netherlands3D.Twin
         public double MaxX { get; }
         public double MaxY { get; }
 
+        public double cx;
+        public double cy;
+
         public BoundingBox(double minX, double minY, double maxX, double maxY)
         {
             MinX = minX;
             MinY = minY;
             MaxX = maxX;
             MaxY = maxY;
+            cx = (maxX - minX) * 0.5f + minX;
+            cy = (maxY - minY) * 0.5f + minY;
         }
 
         public double Width => MaxX - MinX;
         public double Height => MaxY - MinY;
 
-        public (double centerX, double centerY) Center => ((MinX + MaxX) / 2, (MinY + MaxY) / 2);
+        public (double centerX, double centerY) Center => (cx, cy);
 
         public bool Contains(double x, double y)
         {
@@ -43,7 +49,7 @@ namespace Netherlands3D.Twin
     /// </summary>
     public class QuadTree
     {
-        private readonly BoundingBox boundingBox;
+        public readonly BoundingBox boundingBox;
 
         public QuadTree(BoundingBox boundingBox)
         {
@@ -70,10 +76,14 @@ namespace Netherlands3D.Twin
             // Calculate minY and maxY (note Y increases downwards in the tile grid)
             double tileMaxY = this.boundingBox.MaxY - tileIndex.y * tileSizeY;
             double tileMinY = tileMaxY - tileSizeY;
+            //double tileMinY = this.boundingBox.MinY + tileIndex.y * tileSizeY;
+            //double tileMaxY = tileMinY + tileSizeY;
+
+            
 
             return new BoundingBox(tileMinX, tileMinY, tileMaxX, tileMaxY);
-        }
-        
+        }      
+
         public Vector2Int GetTileIndex(double x, double y, int zoomLevel)
         {
             // Calculate the size of each tile in meters at the given zoom level
@@ -82,6 +92,7 @@ namespace Netherlands3D.Twin
             // Calculate the X and Y indices
             int tileIndexX = (int)((x - this.boundingBox.MinX) / tileSizeX);
             int tileIndexY = (int)((this.boundingBox.MaxY - y) / tileSizeY);
+            //int tileIndexY = (int)((y - this.boundingBox.MinY) / tileSizeY);
 
             return new Vector2Int(tileIndexX, tileIndexY);
         }

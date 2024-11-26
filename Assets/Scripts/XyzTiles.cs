@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 
@@ -6,7 +7,9 @@ namespace Netherlands3D.Twin
 {
     /// <see href="en.wikipedia.org/wiki/Tiled_web_map"/>
     public class XyzTiles : MonoBehaviour
-    {        
+    {
+
+        private static Dictionary<Vector3Int, XyzTile> debugTiles = new Dictionary<Vector3Int, XyzTile>();
         
         /// <summary>
         /// Initialize a Quadtree with the boundaries for an XYZTiles, which is a modified EPSG:3857 projection space
@@ -28,6 +31,7 @@ namespace Netherlands3D.Twin
             public Coordinate MinBound;
             public Coordinate MaxBound;
             public string URL;
+            public Coordinate QTcenter;
         }
         
         public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel, ATMDataController timeController)
@@ -41,14 +45,27 @@ namespace Netherlands3D.Twin
             // Determine the bounds from the tile index
             var (minBound, maxBound) = this.FromTileXYToBoundingBox(tileIndex, zoomLevel);
 
-            return new XyzTile()
+            var (minQ, maxQ) = this.FromTileXYToBoundingBox(Vector2Int.zero, 0);
+            const CoordinateSystem crs = CoordinateSystem.WGS84_PseudoMercator;
+            
+
+            XyzTile tile = new XyzTile()
             {
                 TileIndex = tileIndex,
                 ZoomLevel = zoomLevel,
                 URL = this.GetTileUrl(tileIndex, zoomLevel, timeController),
                 MaxBound = maxBound,
-                MinBound = minBound
+                MinBound = minBound,
+                QTcenter = minQ
             };
+
+            debugTiles.TryAdd(new Vector3Int(tileIndex.x, tileIndex.y, zoomLevel), tile);
+            return tile;
+        }
+
+        public void ClearDebugTiles()
+        {
+            debugTiles.Clear();
         }
 
         private string GetTileUrl(Vector2Int tileIndex, int zoomLevel, ATMDataController timeController)
@@ -85,5 +102,23 @@ namespace Netherlands3D.Twin
             
             return (min, max);
         }
+
+        private void OnDrawGizmos()
+        {
+            foreach(KeyValuePair<Vector3Int, XyzTile> tile in debugTiles)
+            {
+                Vector3 min = tile.Value.MinBound.ToUnity();
+                Vector3 max = tile.Value.MaxBound.ToUnity();
+                Debug.DrawLine(new Vector3(min.x,100, max.z), new Vector3(max.x,100, max.z), Color.green);
+                Debug.DrawLine(new Vector3(max.x, 100, max.z), new Vector3(max.x, 100, min.z), Color.green);
+                Debug.DrawLine(new Vector3(max.x, 100, min.z), new Vector3(min.x, 100, min.z), Color.green);
+                Debug.DrawLine(new Vector3(min.x, 100, min.z), new Vector3(min.x, 100, max.z), Color.green);
+
+                Vector3 qtCenter = tile.Value.QTcenter.ToUnity();
+                Debug.DrawLine(new Vector3(min.x, 100, min.z), new Vector3(qtCenter.x, 100, qtCenter.z), Color.magenta);
+
+            }
+        }
+
     }
 }

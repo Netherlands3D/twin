@@ -2,12 +2,10 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -21,8 +19,8 @@ namespace Netherlands3D.Twin.Layers
         public int DefaultEnabledLayersMax = 5;  //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
         private const float earthRadius = 6378.137f;
-        private const float equatorialCircumference = 2 * Mathf.PI * earthRadius;
-        private const float log2x = 0.30102999566f;
+        private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
+        private const double log2x = 0.30102999566d;
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private ATMTileDataLayer[] ATMTileDataLayers;
@@ -122,7 +120,6 @@ namespace Netherlands3D.Twin.Layers
 
             isParentLayer = true;
 
-
             if (timeController == null)
             {
                 timeController = gameObject.AddComponent<ATMDataController>();
@@ -211,28 +208,20 @@ namespace Netherlands3D.Twin.Layers
 
         public int CalculateZoomLevel()
         {
-
-            Vector3 camPosition = Camera.main.transform.position;
-            //Extent cameraExtent = Camera.main.GetRDExtent(Camera.main.farClipPlane + 6037);
-            //Vector4 viewRange = new Vector4();
-            //viewRange.x = (float)cameraExtent.MinX;
-            //viewRange.y = (float)cameraExtent.MinY;
-            //viewRange.z = (float)(cameraExtent.MaxX - cameraExtent.MinX);
-            //viewRange.w = (float)(cameraExtent.MaxY - cameraExtent.MinY);
-            //float viewDistance = viewRange.z;
+            Vector3 camPosition = Camera.main.transform.position;      
             var unityCoordinate = new Coordinate(
                   CoordinateSystem.Unity,
                   camPosition.x,
-                  0,
+                  camPosition.y,
                   camPosition.z
               );
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-            float latitude = (float)coord.Points[0];
-            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad);
-            float zoomLevel = Mathf.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
+            double latitude = coord.northing;
+            double cosLatitude = Math.Cos(latitude * Mathf.Deg2Rad);
+            double zoomLevel = Math.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
             var currentYearZoomBounds = timeController.GetZoomBounds();
-            zoomLevel = Mathf.Clamp(zoomLevel, currentYearZoomBounds.minZoom + 1, currentYearZoomBounds.maxZoom - 1); //for some reason better to keep them within the bounds
-            return Mathf.RoundToInt(zoomLevel);  // Return the zoom level as an integer
+            zoomLevel = Math.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
+            return (int)zoomLevel;  
         }
 
         public override void DestroyLayerGameObject()

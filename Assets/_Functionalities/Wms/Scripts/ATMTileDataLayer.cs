@@ -5,6 +5,7 @@ using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
@@ -61,16 +62,23 @@ namespace Netherlands3D.Twin
                 maximumDistanceSquared = 3000 * 3000
             });
 
-           
+            GetComponent<WorldTransform>().onPostShift.AddListener(ShiftUpdateTiles);
         }
 
+        private void ShiftUpdateTiles(WorldTransform worldTransform, Coordinate cd)
+        {
+            xyzTiles.ClearDebugTiles();
+            SetVisibleTilesDirty();
+        }
+        
         public void CancelTiles()
         {
             List<Vector2Int> keys = tiles.Keys.ToList();
             foreach (Vector2Int key in keys)
             {
                 InteruptRunningProcesses(key);
-                ClearPreviousTexture(tiles[key]);
+                if (tiles[key] != null && tiles[key].gameObject != null)
+                    ClearPreviousTexture(tiles[key]);
                 //RemoveGameObjectFromTile(key);
                 //tiles.Remove(key);
             }
@@ -125,6 +133,7 @@ namespace Netherlands3D.Twin
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
             //set the output position back to the right coordinate as this was adjusted before
             //offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
+            //var offset = Vector3.zero;
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
@@ -220,12 +229,13 @@ namespace Netherlands3D.Twin
         {
             var minBound = xyzTile.MinBound.Convert(CoordinateSystem.RD);           
             return new Vector3(
-                (float)(tileCoordRd.Points[0] - minBound.Points[0]),
+                (float)(tileCoordRd.Points[0] - minBound.Points[0]), 
                 0,
-                (float)(tileCoordRd.Points[1] - minBound.Points[1])
+                (float)(tileCoordRd.Points[1] - minBound.Points[1]) 
             );
-        }       
+        }
 
+        
         private void UpdateDrawOrderForChildren()
         {
             foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
@@ -283,9 +293,9 @@ namespace Netherlands3D.Twin
             bool ready = true;
             while (queuedChanges.Count > 0)
             {
-                //lets wait half a second in case a slider is moving
-                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
-                {
+                ////lets wait half a second in case a slider is moving
+                //if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
+                //{
                     ready = false;
                     TileChange next = queuedChanges[0];
                     queuedChanges.RemoveAt(0);
@@ -317,7 +327,7 @@ namespace Netherlands3D.Twin
                     {
                         ready = true;
                     }
-                }
+                //}
                 yield return wfs;
             }
 
