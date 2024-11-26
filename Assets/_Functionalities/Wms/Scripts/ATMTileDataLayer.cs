@@ -86,7 +86,7 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {            
-            //zoomLevel = CalculateZoomLevel();
+            zoomLevel = CalculateZoomLevel();
             Debug.Log(zoomLevel);
             if (zoomLevel != previousZoomLevel)
             {
@@ -245,9 +245,36 @@ namespace Netherlands3D.Twin
             }
         }
 
+        #region FILTHIEST HACK EVER TO WORK AROUND TILEHANDLER NOT BEING BUILT FOR MULTIPLE ZOOMS - DO NOT REUSE
+        private class SelfDestructingLayer : Layer
+        {
+            public CartesianTiles.TileHandler tileHandler;
+            
+            public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
+            {
+            }
+
+            public void LateUpdate()
+            {
+                tileHandler.RemoveLayer(this);
+                Destroy(gameObject);
+            }
+        }
+
+        private void AddTileSizeToTileSizesList()
+        {
+            var tileHandler = gameObject.GetComponentInParent<CartesianTiles.TileHandler>();
+            var newSizedLayer = new GameObject().AddComponent<SelfDestructingLayer>();
+            newSizedLayer.tileSize = tileSize;
+            newSizedLayer.tileHandler = tileHandler;
+            tileHandler.AddLayer(newSizedLayer);
+        }
+        #endregion
+
         public void SetVisibleTilesDirty()
         {
             UpdateReferenceSizes();
+            AddTileSizeToTileSizesList();
 
             //is the update already running cancel it
             if (visibleTilesDirty && updateTilesRoutine != null)
