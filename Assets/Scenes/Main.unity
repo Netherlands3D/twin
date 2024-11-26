@@ -9113,7 +9113,7 @@ PrefabInstance:
       addedObject: {fileID: 645481521}
     - targetCorrespondingSourceObject: {fileID: 2773908478669454240, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
-      insertIndex: 2
+      insertIndex: 1
       addedObject: {fileID: 1810673488}
     - targetCorrespondingSourceObject: {fileID: 8632740765308209879, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
