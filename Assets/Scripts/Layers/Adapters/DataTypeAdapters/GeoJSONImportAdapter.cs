@@ -69,8 +69,8 @@ namespace Netherlands3D.Twin
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.Name = geoJsonLayerName;
             newLayer.gameObject.name = geoJsonLayerName;
-            if (onErrorCallback != null)
-                newLayer.GeoJsonParser.OnParseError.AddListener(onErrorCallback.Invoke);
+            // if (onErrorCallback != null)
+            //     newLayer.GeoJsonParser.OnParseError.AddListener(onErrorCallback.Invoke);
 
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);

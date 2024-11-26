@@ -168,7 +168,7 @@ namespace Netherlands3D.Twin
             do //process the found object, and continue reading after processing is done
             {
                 // Log the current token
-                Debug.Log("Token: " + reader.TokenType + " Value: " + reader.Value);
+                // Debug.Log("Token: " + reader.TokenType + " Value: " + reader.Value);
 
                 if (!IsAtTypeToken(reader) && !IsAtCRSToken(reader))
                 {

@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
-using GeoJSON.Net.Feature;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 
 namespace Netherlands3D.CartesianTiles
@@ -139,7 +138,9 @@ namespace Netherlands3D.CartesianTiles
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
                 print(geoJsonRequest.downloadHandler.text);
-                yield return wfsGeoJSONLayer.GeoJsonParser.ParseJSONString(geoJsonRequest.downloadHandler.text);
+                var parser = new GeoJsonParser(0.01f);
+                parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
+                yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
                 // ParseGeoJSON(geoJsonRequest.downloadHandler.text);
             }
             else

@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         private GeoJsonParser parser = new GeoJsonParser(0.01f);
-        public GeoJsonParser GeoJsonParser => parser;
+        // public GeoJsonParser GeoJsonParser => parser;
         public GeoJSONObjectType Type => parser.Type;
         public CRSBase CRS => parser.CRS;
 
@@ -66,9 +66,8 @@ namespace Netherlands3D.Twin.Layers
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
         }
 
-        private void AddFeatureVisualisation(Feature feature)
+        public void AddFeatureVisualisation(Feature feature)
         {
-            print("visualizing: " + feature.ToString());
             VisualizeFeature(feature);
             ProcessFeatureMapping(feature);
         }
