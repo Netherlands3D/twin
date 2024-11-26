@@ -320,10 +320,23 @@ namespace Netherlands3D.Twin
             if (startIndex < 0)
                 return (-1, -1);
 
-            // Iterate over the Lines to find the total number of Vector3s before the startIndex
-            int totalJointsBeforeStartIndex = collections.Take(startIndex).Sum(list => list.Count);
+            int totalJointsBeforeStartIndex = 0;
+            int currentBatchSize = 1023;
 
-            return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
+            // Traverse through collections to calculate the cumulative count directly
+            foreach (var collection in collections)
+            {
+                if (startIndex < collection.Count)
+                {
+                    totalJointsBeforeStartIndex += startIndex;
+                    break;
+                }
+
+                startIndex -= collection.Count;
+                totalJointsBeforeStartIndex += collection.Count;
+            }
+
+            return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
         }
     }
 }
