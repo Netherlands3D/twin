@@ -59,7 +59,13 @@ namespace Netherlands3D.Twin
                 QTcenter = minQ
             };
 
-            debugTiles.TryAdd(new Vector3Int(tileIndex.x, tileIndex.y, zoomLevel), tile);
+            Vector3Int key = new Vector3Int(tileIndex.x, tileIndex.y, zoomLevel);
+            if(debugTiles.ContainsKey(key))
+            {
+                debugTiles[key] = tile;
+            }
+            else
+                debugTiles.Add(key, tile);
             return tile;
         }
 
@@ -84,8 +90,8 @@ namespace Netherlands3D.Twin
             }
 
             Vector2Int tileIndex = quadTree.GetTileIndex(
-                coord.Points[0], 
-                coord.Points[1], 
+                coord.easting, 
+                coord.northing, 
                 zoomLevel
             );
             
@@ -109,6 +115,9 @@ namespace Netherlands3D.Twin
             {
                 Vector3 min = tile.Value.MinBound.ToUnity();
                 Vector3 max = tile.Value.MaxBound.ToUnity();
+
+                Gizmos.DrawWireCube((min + max) * 0.5f, max - min);
+
                 Debug.DrawLine(new Vector3(min.x,100, max.z), new Vector3(max.x,100, max.z), Color.green);
                 Debug.DrawLine(new Vector3(max.x, 100, max.z), new Vector3(max.x, 100, min.z), Color.green);
                 Debug.DrawLine(new Vector3(max.x, 100, min.z), new Vector3(min.x, 100, min.z), Color.green);

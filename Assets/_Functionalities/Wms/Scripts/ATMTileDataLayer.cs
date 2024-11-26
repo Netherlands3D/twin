@@ -130,10 +130,10 @@ namespace Netherlands3D.Twin
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
             // have the cleanest match
-            var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+            //var offset = CalculateTileOffset(xyzTile, tileCoordinate);
             //set the output position back to the right coordinate as this was adjusted before
             //offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
-            //var offset = Vector3.zero;
+            var offset = Vector3.zero;
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
             tile.runningWebRequest = webRequest;
