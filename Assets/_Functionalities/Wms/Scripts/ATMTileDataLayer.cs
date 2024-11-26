@@ -52,8 +52,6 @@ namespace Netherlands3D.Twin
         private double referenceTileWidth;
         private double referenceTileHeight;
 
-        private ATMDataController.ATMDataHandler ATMDataHandler;
-
         private void Awake()
         {
             xyzTiles = GetComponent<XyzTiles>();
@@ -61,8 +59,7 @@ namespace Netherlands3D.Twin
             if (timeController == null)
             {
                 timeController = gameObject.AddComponent<ATMDataController>();
-                ATMDataHandler = (a) => SetVisibleTilesDirty();
-                timeController.ChangeYear += ATMDataHandler;
+                timeController.ChangeYear += OnYearChanged;
             }
             
             //Make sure Datasets at least has one item
@@ -77,8 +74,14 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy()
         {
-            if(timeController != null && ATMDataHandler != null)
-                timeController.ChangeYear -= ATMDataHandler;
+            if(timeController != null)
+                timeController.ChangeYear -= OnYearChanged;
+        }
+
+        private void OnYearChanged(int year)
+        {
+            xyzTiles.UrlTemplate = timeController.GetUrl();
+            SetVisibleTilesDirty();
         }
 
         private void Update()
@@ -130,19 +133,14 @@ namespace Netherlands3D.Twin
 
             //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel, timeController);
-
-            //because of the predefined map bounds, we dont have to check outside these bounds
-            //if (!timeController.IsTileWithinXY(xyzTile.TileIndex.x, xyzTile.TileIndex.y)) yield break;
+            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
 
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
-            //set the output position back to the right coordinate as this was adjusted before
-            //offset += new Vector3(-0.5f * tileSize, 0, -0.5f * tileSize);
 
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(xyzTile.URL);
+            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)xyzTile.URL);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
             tile.runningWebRequest = null;
@@ -204,8 +202,7 @@ namespace Netherlands3D.Twin
         {
             // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
             // that after casting
-            // 120000 - 480000
-            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, timeController);
+            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel);
             var referenceTileIndex = pos.TileIndex;
             var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
             referenceTileWidth = tileWidth;
