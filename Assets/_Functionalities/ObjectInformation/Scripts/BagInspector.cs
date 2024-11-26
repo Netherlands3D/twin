@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.ObjectInformation;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
@@ -52,6 +53,10 @@ namespace Netherlands3D.Twin.Interface.BAG
 		[SerializeField] private GameObject placeholderPanel;
 		[SerializeField] private GameObject buildingContentPanel;
         [SerializeField] private GameObject featureContentPanel;
+
+        public UnityEvent<string> BuildingSelected = new();
+        public UnityEvent<FeatureMapping> FeatureSelected = new();
+        public UnityEvent Deselected = new();
 
         private Camera mainCamera;
 		private CameraInputSystemProvider cameraInputSystemProvider;
@@ -189,17 +194,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         private void SelectBuildingOnHit(string bagId)
 		{
-            ShowObjectInformation();
-
-            subObjectSelector.Select(bagId);
+			BuildingSelected.Invoke(bagId);
 			LoadBuildingContent(bagId);
 		}
 		
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{          
-            ShowFeatureInformation();
+			FeatureSelected.Invoke(mapping);
 			ExtrudePointsForSelection(mapping);
-            featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
 			RenderThumbnailForFeature(mapping);            
         }
@@ -276,11 +278,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void Deselect()
 		{
-            HideObjectInformation();
-			HideFeatureInformation();
-
-            subObjectSelector.Deselect();
-			featureSelector.Deselect();
+			Deselected.Invoke();
 		}
 
 		private void OnDestroy()
@@ -400,14 +398,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 		#endregion
 
 		#region UGUI methods
-		private void ShowObjectInformation()
+		public void ShowObjectInformation()
 		{
 			buildingContentPanel.SetActive(true);
 			placeholderPanel.SetActive(false);
 			featureContentPanel.SetActive(false);		
 		}
 
-		private void HideObjectInformation()
+		public void HideObjectInformation()
 		{
 			buildingContentPanel.SetActive(false);
 			placeholderPanel.SetActive(true);
@@ -415,14 +413,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 			ClearLines();
 		}
 
-		private void ShowFeatureInformation()
+		public void ShowFeatureInformation()
 		{
             buildingContentPanel.SetActive(false);
             placeholderPanel.SetActive(false);
             featureContentPanel.SetActive(true);			
         }
 
-		private void HideFeatureInformation()
+		public void HideFeatureInformation()
 		{
             buildingContentPanel.SetActive(false);
             placeholderPanel.SetActive(true);

@@ -334,6 +334,119 @@ MonoBehaviour:
   placeholderPanel: {fileID: 8986235331824895525}
   buildingContentPanel: {fileID: 7280905012064880113}
   featureContentPanel: {fileID: 2809667015185763040}
+  BuildingSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4191480216153404035}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Interface.BAG.BagInspector,
+          Assembly-CSharp
+        m_MethodName: ShowObjectInformation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3250020502134624231}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjectInformation.SubObjectSelector,
+          Assembly-CSharp
+        m_MethodName: Select
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  FeatureSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4191480216153404035}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Interface.BAG.BagInspector,
+          Assembly-CSharp
+        m_MethodName: ShowFeatureInformation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3327197618826175379}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjectInformation.FeatureSelector,
+          Assembly-CSharp
+        m_MethodName: Select
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Deselected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4191480216153404035}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Interface.BAG.BagInspector,
+          Assembly-CSharp
+        m_MethodName: HideFeatureInformation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4191480216153404035}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Interface.BAG.BagInspector,
+          Assembly-CSharp
+        m_MethodName: HideObjectInformation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3327197618826175379}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjectInformation.FeatureSelector,
+          Assembly-CSharp
+        m_MethodName: Deselect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3250020502134624231}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ObjectInformation.SubObjectSelector,
+          Assembly-CSharp
+        m_MethodName: Deselect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3327197618826175379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2070,7 +2183,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1898
+      value: 1889
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2115,7 +2228,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 951
+      value: 946.5
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2175,12 +2288,12 @@ PrefabInstance:
     - target: {fileID: 1485832949817359289, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1485832949817359289, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1485832949817359289, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2245,7 +2358,7 @@ PrefabInstance:
     - target: {fileID: 4544874626990740323, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5078733024073835164, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2255,7 +2368,7 @@ PrefabInstance:
     - target: {fileID: 5381855212316052579, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0005766329
+      value: 0.000518874
       objectReference: {fileID: 0}
     - target: {fileID: 8065810425275369335, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2492,7 +2605,7 @@ PrefabInstance:
     - target: {fileID: 1781802643554129927, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3286731148600885667, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
@@ -2597,12 +2710,12 @@ PrefabInstance:
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
@@ -2899,12 +3012,12 @@ PrefabInstance:
     - target: {fileID: 5600597860905115593, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5600597860905115593, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5600597860905115593, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
@@ -2919,7 +3032,7 @@ PrefabInstance:
     - target: {fileID: 7572964915398819101, guid: 94f30d1acd3790145be90ba474006eed,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
