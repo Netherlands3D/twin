@@ -160,7 +160,7 @@ namespace Netherlands3D.CartesianTiles
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
                 var parser = new GeoJsonParser(0.01f);
-                parser.OnFeatureParsed.AddListener(geoJsonLayer.AddFeatureVisualisation);
+                parser.OnFeatureBatchParsed.AddListener(geoJsonLayer.AddFeatureBatchVisualisation);
                 yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
             }
             else

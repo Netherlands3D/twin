@@ -21,24 +21,28 @@ namespace Netherlands3D.Twin.Layers
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
-        
-        [Header("Visualizer settings")]
-        [SerializeField] private int maxFeatureVisualsPerFrame = 20;
+
+        [Header("Visualizer settings")] [SerializeField]
+        private int maxFeatureVisualsPerFrame = 20;
+
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        
-        public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
-        [Space]
-        protected LayerURLPropertyData urlPropertyData = new();
+        public int MaxFeatureVisualsPerFrame
+        {
+            get => maxFeatureVisualsPerFrame;
+            set => maxFeatureVisualsPerFrame = value;
+        }
+
+        [Space] protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private void Awake()
         {
-            parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+            parser.OnFeatureBatchParsed.AddListener(AddFeatureBatchVisualisation);
         }
-        
+
         protected override void Start()
         {
             base.Start();
@@ -56,13 +60,16 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnDestroy()
         {
-            parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
+            parser.OnFeatureBatchParsed.RemoveListener(AddFeatureBatchVisualisation);
         }
 
-        public void AddFeatureVisualisation(Feature feature)
+        public void AddFeatureBatchVisualisation(List<Feature> features)
         {
-            VisualizeFeature(feature);
-            ProcessFeatureMapping(feature);
+            foreach (var feature in features)
+            {
+                VisualizeFeature(feature);
+                ProcessFeatureMapping(feature);
+            }
         }
 
         /// <summary>
@@ -100,23 +107,25 @@ namespace Netherlands3D.Twin.Layers
             {
                 CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
             }
+
             var lineData = lineFeaturesLayer?.GetMeshData(feature);
             if (lineData != null)
             {
                 CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
             }
+
             var pointData = pointFeaturesLayer?.GetMeshData(feature);
             if (pointData != null)
             {
                 CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
-            }          
+            }
         }
 
         private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
-            for(int i = 0; i < meshes.Count; i++)
+            for (int i = 0; i < meshes.Count; i++)
             {
-                Mesh mesh = meshes[i];                
+                Mesh mesh = meshes[i];
                 Vector3[] verts = mesh.vertices;
                 float width = 1f;
                 GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
@@ -131,7 +140,7 @@ namespace Netherlands3D.Twin.Layers
                         float halfWidth = width * 0.5f;
 
                         int segmentCount = verts.Length - 1;
-                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
+                        int vertexCount = segmentCount * 4; // 4 vertices per segment
                         int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
 
                         Vector3[] vertices = new Vector3[vertexCount];
@@ -166,6 +175,7 @@ namespace Netherlands3D.Twin.Layers
                             triangles[triBaseIndex + 4] = baseIndex + 1;
                             triangles[triBaseIndex + 5] = baseIndex + 3;
                         }
+
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
                         subObject.AddComponent<MeshCollider>();
@@ -174,7 +184,7 @@ namespace Netherlands3D.Twin.Layers
                     else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
                     {
                         //lets not add a meshcollider since its very heavy
-                    }                   
+                    }
                 }
                 else
                 {
@@ -183,11 +193,10 @@ namespace Netherlands3D.Twin.Layers
                         subObject.transform.position = verts[0];
                         GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
                         subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
-
                     }
                 }
 
-                               
+
                 mesh.RecalculateBounds();
                 meshes[i] = mesh;
 
@@ -222,7 +231,7 @@ namespace Netherlands3D.Twin.Layers
             newPolygonLayerGameObject.ApplyStyling();
 
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
-            
+
             return newPolygonLayerGameObject;
         }
 
@@ -272,7 +281,7 @@ namespace Netherlands3D.Twin.Layers
 
             return newPointLayerGameObject;
         }
-        
+
         private void VisualizeFeature(Feature feature)
         {
             var originalCoordinateSystem = GeoJsonParser.GetCoordinateSystem(feature.CRS);

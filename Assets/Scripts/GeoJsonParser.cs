@@ -20,14 +20,17 @@ namespace Netherlands3D.Twin
         public GeoJSONObjectType Type { get; private set; }
         public ICRSObject CRS { get; set; }
 
-        [Space, Header("Parse events")] public UnityEvent<Feature> OnFeatureParsed = new();
+        [Space, Header("Parse events")]
+        // public UnityEvent<Feature> OnFeatureParsed = new();
+        public UnityEvent<List<Feature>> OnFeatureBatchParsed = new();
+
         public UnityEvent<string> OnParseError = new();
 
         public GeoJsonParser(float maxParsePerFrameDuration)
         {
             maxParseDuration = maxParsePerFrameDuration;
         }
-        
+
         public IEnumerator ParseJSONString(string jsonText)
         {
             // Get the downloaded text
@@ -66,7 +69,7 @@ namespace Netherlands3D.Twin
 
             yield return ParseFeatures(jsonReader, serializer);
         }
-        
+
         public IEnumerator ParseGeoJSONStreamRemote(Uri uri)
         {
             //create LocalFile so we can use it in the ParseGeoJSONStream function
@@ -111,7 +114,9 @@ namespace Netherlands3D.Twin
 
         private IEnumerator ReadFeaturesArrayStream(JsonTextReader jsonReader, JsonSerializer serializer)
         {
-            var features = new List<Feature>();
+            var features = new List<Feature>(1024);
+            int index = 0;
+
             var startTime = Time.realtimeSinceStartup;
 
             while (jsonReader.Read())
@@ -127,17 +132,40 @@ namespace Netherlands3D.Twin
                 {
                     feature.CRS = CRS;
                 }
-                
-                features.Add(feature);
-                OnFeatureParsed.Invoke(feature);
 
+                features.Add(feature);
+                index++;
+
+                // OnFeatureParsed.Invoke(feature);
+                if (index >= 1024)
+                {
+                    OnFeatureBatchParsed.Invoke(features);
+
+                    //event functions from other scripts are executed here
+
+                    features.Clear();
+                    index = 0;
+                }
 
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
                 {
+                    if (features.Count > 0) //if we are not in a frame that already sent out the batch previously
+                    {
+                        OnFeatureBatchParsed.Invoke(features);
+                        features.Clear();
+                        index = 0;
+                    }
+
                     yield return null;
                     startTime = Time.realtimeSinceStartup;
                 }
+            }
+
+            if (features.Count > 0) //if we have remaining features
+            {
+                OnFeatureBatchParsed.Invoke(features);
+                features.Clear();
             }
         }
 
