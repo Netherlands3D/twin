@@ -20,7 +20,8 @@ namespace Netherlands3D.Twin.Layers
 {
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
-        private GeoJsonParser parser;
+        private GeoJsonParser parser = new GeoJsonParser(0.01f);
+        public GeoJsonParser GeoJsonParser => parser;
         public GeoJSONObjectType Type => parser.Type;
         public CRSBase CRS => parser.CRS;
 
@@ -40,12 +41,14 @@ namespace Netherlands3D.Twin.Layers
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
 
+        private void Awake()
+        {
+            parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+        }
+        
         protected override void Start()
         {
             base.Start();
-
-            parser = new GeoJsonParser(0.01f);
-            parser.OnFeatureParsed.AddListener(AddFeatureVisualisation); //todo
 
             if (urlPropertyData.Data.IsStoredInProject())
             {
@@ -56,6 +59,11 @@ namespace Netherlands3D.Twin.Layers
             {
                 StartCoroutine(parser.ParseGeoJSONStreamRemote(urlPropertyData.Data));
             }
+        }
+
+        private void OnDestroy()
+        {
+            parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
         }
 
         private void AddFeatureVisualisation(Feature feature)

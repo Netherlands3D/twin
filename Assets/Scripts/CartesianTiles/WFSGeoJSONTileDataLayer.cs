@@ -154,10 +154,11 @@ namespace Netherlands3D.CartesianTiles
 
         private void ParseGeoJSON(string jsonText)
         {
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
+            // var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
 
-            if (featureCollection.Features.Count > 0)
-                wfsGeoJSONLayer.AppendFeatureCollection(featureCollection);
+            // if (featureCollection.Features.Count > 0)
+            //     wfsGeoJSONLayer.AppendFeatureCollection(featureCollection);
+            StartCoroutine(wfsGeoJSONLayer.GeoJsonParser.ParseJSONString(jsonText));
         }
     }
 }
