@@ -30,22 +30,19 @@ public static class B3dmReader
                 bytes.Add(glbBuffer[i]);
 
         }
+        //readGltfByteSize
+        glbLength = bytes[11] * 256;
+        glbLength = (glbLength + bytes[10]) * 256;
+        glbLength = (glbLength + bytes[9]) * 256;
+        glbLength = glbLength + bytes[8];
 
-        for (int i = bytes.Count - 1; i >= 0; i--)
+        for (int i = bytes.Capacity - 1; i >= glbLength; i--)
         {
-            if (bytes[i]==paddingbyte)
-            {
-                bytes.RemoveAt(i);
-               
-            }
-            else
-            {
-                i = -1;
-            }
+            bytes.RemoveAt(i);
         }
         
         glbBuffer = bytes.ToArray();
-        //glbBuffer = glbBuffer.TakeWhile((v, index) => glbBuffer.Skip(index).Any(w => (w != 0x20))).ToArray();
+
 
         var b3dm = new B3dm {
             B3dmHeader = b3dmHeader,
