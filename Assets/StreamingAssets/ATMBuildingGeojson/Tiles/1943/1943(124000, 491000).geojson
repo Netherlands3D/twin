@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937584,
+          52.412073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198689",
+        "label": "Buikslotermeerdijk 157",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936822,
+          52.411825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198690",
+        "label": "Buikslotermeerdijk 145",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935376,
+          52.411543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198687",
+        "label": "Kanaaldijk 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932876,
+          52.411286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198688",
+        "label": "Kanaaldijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945076,
+          52.410604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198691",
+        "label": "Zunderdorpergouw 147",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.943661,
+          52.412139
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198692",
+        "label": "Zunderdorpergouw 108",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937584,
+          52.412073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198689",
+        "label": "Buikslotermeerdijk 157",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936822,
+          52.411825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198690",
+        "label": "Buikslotermeerdijk 145",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935376,
+          52.411543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198687",
+        "label": "Kanaaldijk 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932876,
+          52.411286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198688",
+        "label": "Kanaaldijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.945076,
+          52.410604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198691",
+        "label": "Zunderdorpergouw 147",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.943661,
+          52.412139
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198692",
+        "label": "Zunderdorpergouw 108",
+        "year": "1943"
+      }
+    }
+  ]
+}

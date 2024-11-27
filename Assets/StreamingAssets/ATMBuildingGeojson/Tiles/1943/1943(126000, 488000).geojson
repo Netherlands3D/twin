@@ -1,0 +1,1565 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96349,
+          52.38385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207211",
+        "label": "Schellingwouderdijk 269",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961713,
+          52.383257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207241",
+        "label": "Ijdijk 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963825,
+          52.383605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207218",
+        "label": "Schellingwouderdijk 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961588,
+          52.38258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207223",
+        "label": "Ijdijk 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962892,
+          52.38373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207248",
+        "label": "Ijdijk 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964015,
+          52.384863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207257",
+        "label": "Wijkergouw 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961539,
+          52.382578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207224",
+        "label": "Ijdijk 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963371,
+          52.383953
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207210",
+        "label": "Schellingwouderdijk 265",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963961,
+          52.38352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207220",
+        "label": "Schellingwouderdijk 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961845,
+          52.383193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207243",
+        "label": "Ijdijk 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963649,
+          52.383757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207214",
+        "label": "Schellingwouderdijk 275",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962744,
+          52.384226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207209",
+        "label": "Schellingwouderdijk 251",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964152,
+          52.383393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207222",
+        "label": "Schellingwouderdijk 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96163,
+          52.383291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207240",
+        "label": "Ijdijk 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963987,
+          52.384916
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207258",
+        "label": "Wijkergouw 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964088,
+          52.384761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207255",
+        "label": "Wijkergouw 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961819,
+          52.384492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207204",
+        "label": "Schellingwouderdijk 239",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964063,
+          52.383449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207221",
+        "label": "Schellingwouderdijk 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963771,
+          52.383637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207217",
+        "label": "Schellingwouderdijk 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961391,
+          52.384681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207201",
+        "label": "Schellingwouderdijk 233",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962363,
+          52.38429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207206",
+        "label": "Schellingwouderdijk 247 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963688,
+          52.383726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207215",
+        "label": "Schellingwouderdijk 277",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964053,
+          52.38481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207256",
+        "label": "Wijkergouw 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962144,
+          52.384393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207205",
+        "label": "Schellingwouderdijk 243",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963893,
+          52.383567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207219",
+        "label": "Schellingwouderdijk 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961404,
+          52.382739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207225",
+        "label": "Ijdijk 67",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961268,
+          52.3828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207227",
+        "label": "Ijdijk 71",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961925,
+          52.383159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207244",
+        "label": "Ijdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963917,
+          52.385028
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207260",
+        "label": "Wijkergouw 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961417,
+          52.38338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207237",
+        "label": "Ijdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961282,
+          52.383439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207235",
+        "label": "Ijdijk 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96148,
+          52.383346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207238",
+        "label": "Ijdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964168,
+          52.3846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207253",
+        "label": "Wijkergouw 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962546,
+          52.384228
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207208",
+        "label": "Schellingwouderdijk 249",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963528,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207249",
+        "label": "Wijkergouw 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963731,
+          52.3837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207216",
+        "label": "Schellingwouderdijk 279",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963528,
+          52.383825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207212",
+        "label": "Schellingwouderdijk 271",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961779,
+          52.383225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207242",
+        "label": "Ijdijk 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964164,
+          52.384649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207254",
+        "label": "Wijkergouw 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961304,
+          52.384713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207200",
+        "label": "Schellingwouderdijk 231",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962047,
+          52.383358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207245",
+        "label": "Ijdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962391,
+          52.383637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207247",
+        "label": "Ijdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961713,
+          52.384527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207203",
+        "label": "Schellingwouderdijk 235 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963392,
+          52.387127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207250",
+        "label": "Wijkergouw 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961619,
+          52.384563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207202",
+        "label": "Schellingwouderdijk 235",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963952,
+          52.384978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207259",
+        "label": "Wijkergouw 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9622,
+          52.383473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207246",
+        "label": "Ijdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961334,
+          52.383412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207236",
+        "label": "Ijdijk 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963599,
+          52.383787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207213",
+        "label": "Schellingwouderdijk 273",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961334,
+          52.382771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207226",
+        "label": "Ijdijk 69",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96156,
+          52.383318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207239",
+        "label": "Ijdijk 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962436,
+          52.384261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207207",
+        "label": "Schellingwouderdijk 247 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96349,
+          52.38385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207211",
+        "label": "Schellingwouderdijk 269",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961713,
+          52.383257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207241",
+        "label": "Ijdijk 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963825,
+          52.383605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207218",
+        "label": "Schellingwouderdijk 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961588,
+          52.38258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207223",
+        "label": "Ijdijk 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962892,
+          52.38373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207248",
+        "label": "Ijdijk 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964015,
+          52.384863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207257",
+        "label": "Wijkergouw 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961539,
+          52.382578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207224",
+        "label": "Ijdijk 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963371,
+          52.383953
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207210",
+        "label": "Schellingwouderdijk 265",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963961,
+          52.38352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207220",
+        "label": "Schellingwouderdijk 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961845,
+          52.383193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207243",
+        "label": "Ijdijk 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963649,
+          52.383757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207214",
+        "label": "Schellingwouderdijk 275",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962744,
+          52.384226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207209",
+        "label": "Schellingwouderdijk 251",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964152,
+          52.383393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207222",
+        "label": "Schellingwouderdijk 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96163,
+          52.383291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207240",
+        "label": "Ijdijk 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963987,
+          52.384916
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207258",
+        "label": "Wijkergouw 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964088,
+          52.384761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207255",
+        "label": "Wijkergouw 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961819,
+          52.384492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207204",
+        "label": "Schellingwouderdijk 239",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964063,
+          52.383449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207221",
+        "label": "Schellingwouderdijk 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963771,
+          52.383637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207217",
+        "label": "Schellingwouderdijk 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961391,
+          52.384681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207201",
+        "label": "Schellingwouderdijk 233",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962363,
+          52.38429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207206",
+        "label": "Schellingwouderdijk 247 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963688,
+          52.383726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207215",
+        "label": "Schellingwouderdijk 277",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964053,
+          52.38481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207256",
+        "label": "Wijkergouw 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962144,
+          52.384393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207205",
+        "label": "Schellingwouderdijk 243",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963893,
+          52.383567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207219",
+        "label": "Schellingwouderdijk 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961404,
+          52.382739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207225",
+        "label": "Ijdijk 67",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961268,
+          52.3828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207227",
+        "label": "Ijdijk 71",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961925,
+          52.383159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207244",
+        "label": "Ijdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963917,
+          52.385028
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207260",
+        "label": "Wijkergouw 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961417,
+          52.38338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207237",
+        "label": "Ijdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961282,
+          52.383439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207235",
+        "label": "Ijdijk 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96148,
+          52.383346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207238",
+        "label": "Ijdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964168,
+          52.3846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207253",
+        "label": "Wijkergouw 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962546,
+          52.384228
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207208",
+        "label": "Schellingwouderdijk 249",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963528,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207249",
+        "label": "Wijkergouw 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963731,
+          52.3837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207216",
+        "label": "Schellingwouderdijk 279",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963528,
+          52.383825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207212",
+        "label": "Schellingwouderdijk 271",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961779,
+          52.383225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207242",
+        "label": "Ijdijk 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.964164,
+          52.384649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207254",
+        "label": "Wijkergouw 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961304,
+          52.384713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207200",
+        "label": "Schellingwouderdijk 231",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962047,
+          52.383358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207245",
+        "label": "Ijdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962391,
+          52.383637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207247",
+        "label": "Ijdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961713,
+          52.384527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207203",
+        "label": "Schellingwouderdijk 235 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963392,
+          52.387127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207250",
+        "label": "Wijkergouw 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961619,
+          52.384563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207202",
+        "label": "Schellingwouderdijk 235",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963952,
+          52.384978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207259",
+        "label": "Wijkergouw 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9622,
+          52.383473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207246",
+        "label": "Ijdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961334,
+          52.383412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207236",
+        "label": "Ijdijk 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.963599,
+          52.383787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207213",
+        "label": "Schellingwouderdijk 273",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961334,
+          52.382771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207226",
+        "label": "Ijdijk 69",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96156,
+          52.383318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207239",
+        "label": "Ijdijk 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962436,
+          52.384261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207207",
+        "label": "Schellingwouderdijk 247 b",
+        "year": "1943"
+      }
+    }
+  ]
+}

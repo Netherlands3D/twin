@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902042,
+          52.397951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198701",
+        "label": "Papaverweg 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902157,
+          52.397928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198700",
+        "label": "Papaverweg 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901827,
+          52.398123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198702",
+        "label": "Papaverweg 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902042,
+          52.397951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198701",
+        "label": "Papaverweg 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902157,
+          52.397928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198700",
+        "label": "Papaverweg 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901827,
+          52.398123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198702",
+        "label": "Papaverweg 57",
+        "year": "1943"
+      }
+    }
+  ]
+}

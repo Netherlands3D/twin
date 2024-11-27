@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857761,
+          52.36126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157475",
+        "label": "Derde Kostverlorenkade 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858689,
+          52.361586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157454",
+        "label": "Jacob van Lennepkade 293",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858608,
+          52.361567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157456",
+        "label": "Jacob van Lennepkade 295",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858523,
+          52.361548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157458",
+        "label": "Jacob van Lennepkade 297",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858437,
+          52.361531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157460",
+        "label": "Jacob van Lennepkade 299",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858359,
+          52.361508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157462",
+        "label": "Jacob van Lennepkade 301",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85827,
+          52.361488
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157464",
+        "label": "Jacob van Lennepkade 303",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858194,
+          52.361469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157466",
+        "label": "Jacob van Lennepkade 305",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858116,
+          52.361448
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157468",
+        "label": "Jacob van Lennepkade 307",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858034,
+          52.361428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157470",
+        "label": "Jacob van Lennepkade 309",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857942,
+          52.361408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157472",
+        "label": "Jacob van Lennepkade 311",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857797,
+          52.36136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157474",
+        "label": "Jacob van Lennepkade 313",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857745,
+          52.361196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157476",
+        "label": "Derde Kostverlorenkade 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857761,
+          52.36126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157475",
+        "label": "Derde Kostverlorenkade 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858689,
+          52.361586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157454",
+        "label": "Jacob van Lennepkade 293",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858608,
+          52.361567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157456",
+        "label": "Jacob van Lennepkade 295",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858523,
+          52.361548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157458",
+        "label": "Jacob van Lennepkade 297",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858437,
+          52.361531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157460",
+        "label": "Jacob van Lennepkade 299",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858359,
+          52.361508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157462",
+        "label": "Jacob van Lennepkade 301",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85827,
+          52.361488
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157464",
+        "label": "Jacob van Lennepkade 303",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858194,
+          52.361469
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157466",
+        "label": "Jacob van Lennepkade 305",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858116,
+          52.361448
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157468",
+        "label": "Jacob van Lennepkade 307",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858034,
+          52.361428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157470",
+        "label": "Jacob van Lennepkade 309",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857942,
+          52.361408
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157472",
+        "label": "Jacob van Lennepkade 311",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857797,
+          52.36136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157474",
+        "label": "Jacob van Lennepkade 313",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857745,
+          52.361196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A157476",
+        "label": "Derde Kostverlorenkade 2",
+        "year": "1909"
+      }
+    }
+  ]
+}

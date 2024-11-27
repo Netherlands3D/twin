@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947288,
+          52.357586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208697",
+        "label": "Oosterringdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952625,
+          52.354645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208695",
+        "label": "Kruislaan 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956684,
+          52.357205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208684",
+        "label": "Kruislaan 350",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947288,
+          52.357586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208697",
+        "label": "Oosterringdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952625,
+          52.354645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208695",
+        "label": "Kruislaan 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956684,
+          52.357205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208684",
+        "label": "Kruislaan 350",
+        "year": "1943"
+      }
+    }
+  ]
+}

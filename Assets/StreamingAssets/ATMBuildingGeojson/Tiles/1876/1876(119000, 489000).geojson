@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872986,
+          52.392656
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169035",
+        "label": "Spaarndammerdijk 105",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872986,
+          52.392656
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169035",
+        "label": "Spaarndammerdijk 105",
+        "year": "1876"
+      }
+    }
+  ]
+}

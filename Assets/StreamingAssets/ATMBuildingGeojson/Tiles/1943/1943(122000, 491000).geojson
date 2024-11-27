@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908884,
+          52.408987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198686",
+        "label": "Buiksloterdijk 662",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908536,
+          52.406466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198685",
+        "label": "Buikslotermeerdijk 650",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908884,
+          52.408987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198686",
+        "label": "Buiksloterdijk 662",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908536,
+          52.406466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198685",
+        "label": "Buikslotermeerdijk 650",
+        "year": "1943"
+      }
+    }
+  ]
+}

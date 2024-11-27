@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859019,
+          52.338772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185141",
+        "label": "Zuidelijke Wandelweg 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86231,
+          52.339844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185140",
+        "label": "Zuidelijke Wandelweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859805,
+          52.334354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185152",
+        "label": "Amstelveenseweg 561",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859519,
+          52.335869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185150",
+        "label": "Amstelveenseweg 509",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859019,
+          52.338772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185141",
+        "label": "Zuidelijke Wandelweg 65",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86231,
+          52.339844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185140",
+        "label": "Zuidelijke Wandelweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859805,
+          52.334354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185152",
+        "label": "Amstelveenseweg 561",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859519,
+          52.335869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185150",
+        "label": "Amstelveenseweg 509",
+        "year": "1943"
+      }
+    }
+  ]
+}

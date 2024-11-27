@@ -1,0 +1,5045 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.414897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198110",
+        "label": "Kometensingel 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89378,
+          52.416051
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198621",
+        "label": "Oostzanerdijk 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889191,
+          52.415076
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198580",
+        "label": "Kometensingel 150",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889535,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198115",
+        "label": "Kometensingel 135",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891423,
+          52.415705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198641",
+        "label": "Oostzanerdijk 126",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890868,
+          52.41508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198103",
+        "label": "Kometensingel 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890015,
+          52.41487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198109",
+        "label": "Kometensingel 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889935,
+          52.415496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198650",
+        "label": "Oostzanerdijk 152",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897111,
+          52.416194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198661",
+        "label": "Oostzanerdijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891136,
+          52.415399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198571",
+        "label": "Kometensingel 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890465,
+          52.41521
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198576",
+        "label": "Kometensingel 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897566,
+          52.416219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198657",
+        "label": "Oostzanerdijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888829,
+          52.414779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198123",
+        "label": "Kometensingel 151",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890752,
+          52.414883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198304",
+        "label": "Spicastraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891019,
+          52.415659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198644",
+        "label": "Oostzanerdijk 132",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89419,
+          52.415844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198675",
+        "label": "Oostzanerdijk 67",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890661,
+          52.415247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198574",
+        "label": "Kometensingel 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891883,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198637",
+        "label": "Oostzanerdijk 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892419,
+          52.414876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198087",
+        "label": "Kometensingel 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892996,
+          52.415899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198629",
+        "label": "Oostzanerdijk 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895666,
+          52.416087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198668",
+        "label": "Oostzanerdijk 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894819,
+          52.415871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198672",
+        "label": "Oostzanerdijk 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894691,
+          52.416004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198613",
+        "label": "Oostzanerdijk 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89123,
+          52.414913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198102",
+        "label": "Kometensingel 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896481,
+          52.416333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198599",
+        "label": "Oostzanerdijk 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890223,
+          52.415222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198578",
+        "label": "Kometensingel 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896333,
+          52.416173
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198666",
+        "label": "Oostzanerdijk 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890858,
+          52.414958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198306",
+        "label": "Spicastraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891503,
+          52.41571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198640",
+        "label": "Oostzanerdijk 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89555,
+          52.416197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198605",
+        "label": "Oostzanerdijk 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891054,
+          52.415385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198572",
+        "label": "Kometensingel 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893688,
+          52.415951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198622",
+        "label": "Oostzanerdijk 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897589,
+          52.416383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198592",
+        "label": "Oostzanerdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892784,
+          52.415875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198631",
+        "label": "Oostzanerdijk 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890154,
+          52.415511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198649",
+        "label": "Oostzanerdijk 148",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889771,
+          52.414913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198112",
+        "label": "Kometensingel 129",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891777,
+          52.415513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198569",
+        "label": "Kometensingel 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897032,
+          52.416343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198597",
+        "label": "Oostzanerdijk 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890411,
+          52.41503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198108",
+        "label": "Kometensingel 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897943,
+          52.416317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198589",
+        "label": "Oostzanerdijk 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896241,
+          52.416299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198601",
+        "label": "Oostzanerdijk 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893201,
+          52.415911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198627",
+        "label": "Oostzanerdijk 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89294,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198682",
+        "label": "Oostzanerdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893363,
+          52.415804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198681",
+        "label": "Oostzanerdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895765,
+          52.416234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198603",
+        "label": "Oostzanerdijk 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896975,
+          52.416209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198662",
+        "label": "Oostzanerdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897773,
+          52.416352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198591",
+        "label": "Oostzanerdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89403,
+          52.415847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198676",
+        "label": "Oostzanerdijk 71",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897176,
+          52.416354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198596",
+        "label": "Oostzanerdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894851,
+          52.416055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198612",
+        "label": "Oostzanerdijk 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890359,
+          52.415191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198577",
+        "label": "Kometensingel 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891849,
+          52.415529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198568",
+        "label": "Kometensingel 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894611,
+          52.415869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198673",
+        "label": "Oostzanerdijk 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89806,
+          52.416637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198588",
+        "label": "Oostzanerdijk 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893947,
+          52.416082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198620",
+        "label": "Oostzanerdijk 80 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893065,
+          52.415905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198628",
+        "label": "Oostzanerdijk 98",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890795,
+          52.414922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198305",
+        "label": "Spicastraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892601,
+          52.41479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198084",
+        "label": "Kometensingel 73",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894453,
+          52.415992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198616",
+        "label": "Oostzanerdijk 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891049,
+          52.414861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198310",
+        "label": "Spicastraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897481,
+          52.416222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198658",
+        "label": "Oostzanerdijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892189,
+          52.415805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198634",
+        "label": "Oostzanerdijk 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893434,
+          52.415929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198626",
+        "label": "Oostzanerdijk 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891011,
+          52.414822
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198309",
+        "label": "Spicastraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895445,
+          52.416036
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198671",
+        "label": "Oostzanerdijk 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892869,
+          52.415754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198683",
+        "label": "Oostzanerdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895537,
+          52.41606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198670",
+        "label": "Oostzanerdijk 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892483,
+          52.41484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198086",
+        "label": "Kometensingel 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896128,
+          52.416288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198602",
+        "label": "Oostzanerdijk 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890941,
+          52.415365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198573",
+        "label": "Kometensingel 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891346,
+          52.41485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198100",
+        "label": "Kometensingel 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89386,
+          52.415837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198677",
+        "label": "Oostzanerdijk 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896551,
+          52.416202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198665",
+        "label": "Oostzanerdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890235,
+          52.415517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198648",
+        "label": "Oostzanerdijk 146",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895612,
+          52.416075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198669",
+        "label": "Oostzanerdijk 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891626,
+          52.415487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198570",
+        "label": "Kometensingel 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889467,
+          52.414853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198116",
+        "label": "Kometensingel 137",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89082,
+          52.415106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198104",
+        "label": "Kometensingel 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891419,
+          52.414821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198099",
+        "label": "Kometensingel 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896822,
+          52.416208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198663",
+        "label": "Oostzanerdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896865,
+          52.416347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198598",
+        "label": "Oostzanerdijk 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892365,
+          52.414899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198088",
+        "label": "Kometensingel 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893536,
+          52.415929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198624",
+        "label": "Oostzanerdijk 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892115,
+          52.415797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198635",
+        "label": "Oostzanerdijk 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892607,
+          52.415663
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198562",
+        "label": "Kometensingel 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896245,
+          52.416162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198667",
+        "label": "Oostzanerdijk 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89743,
+          52.416387
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198594",
+        "label": "Oostzanerdijk 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892261,
+          52.415597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198565",
+        "label": "Kometensingel 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897111,
+          52.416237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198660",
+        "label": "Oostzanerdijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88962,
+          52.415495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198652",
+        "label": "Oostzanerdijk 158",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897309,
+          52.41622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198659",
+        "label": "Oostzanerdijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893933,
+          52.416053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198619",
+        "label": "Oostzanerdijk 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892054,
+          52.41491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198092",
+        "label": "Kometensingel 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897293,
+          52.41635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198595",
+        "label": "Oostzanerdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892009,
+          52.414876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198093",
+        "label": "Kometensingel 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89014,
+          52.415214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198579",
+        "label": "Kometensingel 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894465,
+          52.415861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198674",
+        "label": "Oostzanerdijk 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897849,
+          52.416185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198654",
+        "label": "Oostzanerdijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89173,
+          52.415744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198638",
+        "label": "Oostzanerdijk 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894621,
+          52.415998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198614",
+        "label": "Oostzanerdijk 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894101,
+          52.41607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198618",
+        "label": "Oostzanerdijk 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892852,
+          52.415884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198630",
+        "label": "Oostzanerdijk 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896365,
+          52.416321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198600",
+        "label": "Oostzanerdijk 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892287,
+          52.414934
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198089",
+        "label": "Kometensingel 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893606,
+          52.415824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198679",
+        "label": "Oostzanerdijk 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894315,
+          52.415986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198617",
+        "label": "Oostzanerdijk 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89245,
+          52.415633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198564",
+        "label": "Kometensingel 74",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891252,
+          52.415683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198642",
+        "label": "Oostzanerdijk 128",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891659,
+          52.415732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198639",
+        "label": "Oostzanerdijk 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890566,
+          52.415234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198575",
+        "label": "Kometensingel 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891913,
+          52.415541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198567",
+        "label": "Kometensingel 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8975,
+          52.416385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198593",
+        "label": "Oostzanerdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88876,
+          52.414773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198124",
+        "label": "Kometensingel 153",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891165,
+          52.415675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198643",
+        "label": "Oostzanerdijk 130",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893451,
+          52.415813
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198680",
+        "label": "Oostzanerdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891303,
+          52.414874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198101",
+        "label": "Kometensingel 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890957,
+          52.414781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198308",
+        "label": "Spicastraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89047,
+          52.414873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198224",
+        "label": "Kleine Beerstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892092,
+          52.415575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198566",
+        "label": "Kometensingel 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894533,
+          52.41599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198615",
+        "label": "Oostzanerdijk 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890595,
+          52.414812
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198222",
+        "label": "Kleine Beerstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893695,
+          52.415831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198678",
+        "label": "Oostzanerdijk 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895047,
+          52.416065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198610",
+        "label": "Oostzanerdijk 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895134,
+          52.416102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198609",
+        "label": "Oostzanerdijk 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889705,
+          52.4155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198651",
+        "label": "Oostzanerdijk 156",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892697,
+          52.415678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198561",
+        "label": "Kometensingel 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891963,
+          52.414839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198094",
+        "label": "Kometensingel 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892374,
+          52.415833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198633",
+        "label": "Oostzanerdijk 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890533,
+          52.41485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198223",
+        "label": "Kleine Beerstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893608,
+          52.415935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198623",
+        "label": "Oostzanerdijk 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890715,
+          52.4156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198647",
+        "label": "Oostzanerdijk 138",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892528,
+          52.415646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198563",
+        "label": "Kometensingel 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890896,
+          52.414996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198307",
+        "label": "Spicastraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891113,
+          52.414905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198311",
+        "label": "Spicastraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889358,
+          52.414825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198117",
+        "label": "Kometensingel 139",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890348,
+          52.414933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198226",
+        "label": "Kleine Beerstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889305,
+          52.414795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198118",
+        "label": "Kometensingel 141",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896606,
+          52.416209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198664",
+        "label": "Oostzanerdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889693,
+          52.414898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198113",
+        "label": "Kometensingel 131",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892236,
+          52.41496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198090",
+        "label": "Kometensingel 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890482,
+          52.415045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198107",
+        "label": "Kometensingel 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890566,
+          52.415062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198106",
+        "label": "Kometensingel 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895668,
+          52.41622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198604",
+        "label": "Oostzanerdijk 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890786,
+          52.415619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198646",
+        "label": "Oostzanerdijk 136",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895193,
+          52.416115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198608",
+        "label": "Oostzanerdijk 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890632,
+          52.415074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198105",
+        "label": "Kometensingel 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895283,
+          52.416147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198607",
+        "label": "Oostzanerdijk 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897929,
+          52.416172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198653",
+        "label": "Oostzanerdijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889841,
+          52.414921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198111",
+        "label": "Kometensingel 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897841,
+          52.416338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198590",
+        "label": "Oostzanerdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898046,
+          52.41659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198587",
+        "label": "Oostzanerdijk 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893622,
+          52.415962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198625",
+        "label": "Oostzanerdijk 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890039,
+          52.414789
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197132",
+        "label": "Maanstraat 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88962,
+          52.414881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198114",
+        "label": "Kometensingel 133",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89254,
+          52.414816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198085",
+        "label": "Kometensingel 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892612,
+          52.415854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198632",
+        "label": "Oostzanerdijk 106",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890658,
+          52.414791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198221",
+        "label": "Kleine Beerstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892102,
+          52.414948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198091",
+        "label": "Kometensingel 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89778,
+          52.416198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198655",
+        "label": "Oostzanerdijk 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891977,
+          52.415783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198636",
+        "label": "Oostzanerdijk 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895478,
+          52.416182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198606",
+        "label": "Oostzanerdijk 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897703,
+          52.416208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198656",
+        "label": "Oostzanerdijk 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887718,
+          52.414983
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198582",
+        "label": "Kometensingel 174",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894955,
+          52.416044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198611",
+        "label": "Oostzanerdijk 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890936,
+          52.415639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198645",
+        "label": "Oostzanerdijk 134",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890401,
+          52.414905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198225",
+        "label": "Kleine Beerstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898072,
+          52.4163
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198586",
+        "label": "Oostzanerdijk 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888104,
+          52.414969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198581",
+        "label": "Kometensingel 156",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.414897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198110",
+        "label": "Kometensingel 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89378,
+          52.416051
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198621",
+        "label": "Oostzanerdijk 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889191,
+          52.415076
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198580",
+        "label": "Kometensingel 150",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889535,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198115",
+        "label": "Kometensingel 135",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891423,
+          52.415705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198641",
+        "label": "Oostzanerdijk 126",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890868,
+          52.41508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198103",
+        "label": "Kometensingel 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890015,
+          52.41487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198109",
+        "label": "Kometensingel 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889935,
+          52.415496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198650",
+        "label": "Oostzanerdijk 152",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897111,
+          52.416194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198661",
+        "label": "Oostzanerdijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891136,
+          52.415399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198571",
+        "label": "Kometensingel 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890465,
+          52.41521
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198576",
+        "label": "Kometensingel 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897566,
+          52.416219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198657",
+        "label": "Oostzanerdijk 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888829,
+          52.414779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198123",
+        "label": "Kometensingel 151",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890752,
+          52.414883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198304",
+        "label": "Spicastraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891019,
+          52.415659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198644",
+        "label": "Oostzanerdijk 132",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89419,
+          52.415844
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198675",
+        "label": "Oostzanerdijk 67",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890661,
+          52.415247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198574",
+        "label": "Kometensingel 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891883,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198637",
+        "label": "Oostzanerdijk 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892419,
+          52.414876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198087",
+        "label": "Kometensingel 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892996,
+          52.415899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198629",
+        "label": "Oostzanerdijk 100",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895666,
+          52.416087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198668",
+        "label": "Oostzanerdijk 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894819,
+          52.415871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198672",
+        "label": "Oostzanerdijk 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894691,
+          52.416004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198613",
+        "label": "Oostzanerdijk 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89123,
+          52.414913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198102",
+        "label": "Kometensingel 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896481,
+          52.416333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198599",
+        "label": "Oostzanerdijk 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890223,
+          52.415222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198578",
+        "label": "Kometensingel 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896333,
+          52.416173
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198666",
+        "label": "Oostzanerdijk 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890858,
+          52.414958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198306",
+        "label": "Spicastraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891503,
+          52.41571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198640",
+        "label": "Oostzanerdijk 124",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89555,
+          52.416197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198605",
+        "label": "Oostzanerdijk 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891054,
+          52.415385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198572",
+        "label": "Kometensingel 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893688,
+          52.415951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198622",
+        "label": "Oostzanerdijk 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897589,
+          52.416383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198592",
+        "label": "Oostzanerdijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892784,
+          52.415875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198631",
+        "label": "Oostzanerdijk 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890154,
+          52.415511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198649",
+        "label": "Oostzanerdijk 148",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889771,
+          52.414913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198112",
+        "label": "Kometensingel 129",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891777,
+          52.415513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198569",
+        "label": "Kometensingel 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897032,
+          52.416343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198597",
+        "label": "Oostzanerdijk 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890411,
+          52.41503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198108",
+        "label": "Kometensingel 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897943,
+          52.416317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198589",
+        "label": "Oostzanerdijk 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896241,
+          52.416299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198601",
+        "label": "Oostzanerdijk 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893201,
+          52.415911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198627",
+        "label": "Oostzanerdijk 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89294,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198682",
+        "label": "Oostzanerdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893363,
+          52.415804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198681",
+        "label": "Oostzanerdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895765,
+          52.416234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198603",
+        "label": "Oostzanerdijk 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896975,
+          52.416209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198662",
+        "label": "Oostzanerdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897773,
+          52.416352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198591",
+        "label": "Oostzanerdijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89403,
+          52.415847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198676",
+        "label": "Oostzanerdijk 71",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897176,
+          52.416354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198596",
+        "label": "Oostzanerdijk 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894851,
+          52.416055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198612",
+        "label": "Oostzanerdijk 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890359,
+          52.415191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198577",
+        "label": "Kometensingel 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891849,
+          52.415529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198568",
+        "label": "Kometensingel 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894611,
+          52.415869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198673",
+        "label": "Oostzanerdijk 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89806,
+          52.416637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198588",
+        "label": "Oostzanerdijk 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893947,
+          52.416082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198620",
+        "label": "Oostzanerdijk 80 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893065,
+          52.415905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198628",
+        "label": "Oostzanerdijk 98",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890795,
+          52.414922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198305",
+        "label": "Spicastraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892601,
+          52.41479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198084",
+        "label": "Kometensingel 73",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894453,
+          52.415992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198616",
+        "label": "Oostzanerdijk 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891049,
+          52.414861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198310",
+        "label": "Spicastraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897481,
+          52.416222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198658",
+        "label": "Oostzanerdijk 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892189,
+          52.415805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198634",
+        "label": "Oostzanerdijk 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893434,
+          52.415929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198626",
+        "label": "Oostzanerdijk 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891011,
+          52.414822
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198309",
+        "label": "Spicastraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895445,
+          52.416036
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198671",
+        "label": "Oostzanerdijk 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892869,
+          52.415754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198683",
+        "label": "Oostzanerdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895537,
+          52.41606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198670",
+        "label": "Oostzanerdijk 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892483,
+          52.41484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198086",
+        "label": "Kometensingel 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896128,
+          52.416288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198602",
+        "label": "Oostzanerdijk 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890941,
+          52.415365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198573",
+        "label": "Kometensingel 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891346,
+          52.41485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198100",
+        "label": "Kometensingel 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89386,
+          52.415837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198677",
+        "label": "Oostzanerdijk 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896551,
+          52.416202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198665",
+        "label": "Oostzanerdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890235,
+          52.415517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198648",
+        "label": "Oostzanerdijk 146",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895612,
+          52.416075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198669",
+        "label": "Oostzanerdijk 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891626,
+          52.415487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198570",
+        "label": "Kometensingel 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889467,
+          52.414853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198116",
+        "label": "Kometensingel 137",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89082,
+          52.415106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198104",
+        "label": "Kometensingel 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891419,
+          52.414821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198099",
+        "label": "Kometensingel 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896822,
+          52.416208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198663",
+        "label": "Oostzanerdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896865,
+          52.416347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198598",
+        "label": "Oostzanerdijk 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892365,
+          52.414899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198088",
+        "label": "Kometensingel 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893536,
+          52.415929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198624",
+        "label": "Oostzanerdijk 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892115,
+          52.415797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198635",
+        "label": "Oostzanerdijk 114",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892607,
+          52.415663
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198562",
+        "label": "Kometensingel 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896245,
+          52.416162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198667",
+        "label": "Oostzanerdijk 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89743,
+          52.416387
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198594",
+        "label": "Oostzanerdijk 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892261,
+          52.415597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198565",
+        "label": "Kometensingel 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897111,
+          52.416237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198660",
+        "label": "Oostzanerdijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88962,
+          52.415495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198652",
+        "label": "Oostzanerdijk 158",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897309,
+          52.41622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198659",
+        "label": "Oostzanerdijk 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893933,
+          52.416053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198619",
+        "label": "Oostzanerdijk 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892054,
+          52.41491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198092",
+        "label": "Kometensingel 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897293,
+          52.41635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198595",
+        "label": "Oostzanerdijk 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892009,
+          52.414876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198093",
+        "label": "Kometensingel 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89014,
+          52.415214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198579",
+        "label": "Kometensingel 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894465,
+          52.415861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198674",
+        "label": "Oostzanerdijk 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897849,
+          52.416185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198654",
+        "label": "Oostzanerdijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89173,
+          52.415744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198638",
+        "label": "Oostzanerdijk 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894621,
+          52.415998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198614",
+        "label": "Oostzanerdijk 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894101,
+          52.41607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198618",
+        "label": "Oostzanerdijk 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892852,
+          52.415884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198630",
+        "label": "Oostzanerdijk 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896365,
+          52.416321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198600",
+        "label": "Oostzanerdijk 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892287,
+          52.414934
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198089",
+        "label": "Kometensingel 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893606,
+          52.415824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198679",
+        "label": "Oostzanerdijk 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894315,
+          52.415986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198617",
+        "label": "Oostzanerdijk 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89245,
+          52.415633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198564",
+        "label": "Kometensingel 74",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891252,
+          52.415683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198642",
+        "label": "Oostzanerdijk 128",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891659,
+          52.415732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198639",
+        "label": "Oostzanerdijk 122",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890566,
+          52.415234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198575",
+        "label": "Kometensingel 112",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891913,
+          52.415541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198567",
+        "label": "Kometensingel 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8975,
+          52.416385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198593",
+        "label": "Oostzanerdijk 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88876,
+          52.414773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198124",
+        "label": "Kometensingel 153",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891165,
+          52.415675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198643",
+        "label": "Oostzanerdijk 130",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893451,
+          52.415813
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198680",
+        "label": "Oostzanerdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891303,
+          52.414874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198101",
+        "label": "Kometensingel 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890957,
+          52.414781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198308",
+        "label": "Spicastraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89047,
+          52.414873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198224",
+        "label": "Kleine Beerstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892092,
+          52.415575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198566",
+        "label": "Kometensingel 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894533,
+          52.41599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198615",
+        "label": "Oostzanerdijk 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890595,
+          52.414812
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198222",
+        "label": "Kleine Beerstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893695,
+          52.415831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198678",
+        "label": "Oostzanerdijk 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895047,
+          52.416065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198610",
+        "label": "Oostzanerdijk 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895134,
+          52.416102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198609",
+        "label": "Oostzanerdijk 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889705,
+          52.4155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198651",
+        "label": "Oostzanerdijk 156",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892697,
+          52.415678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198561",
+        "label": "Kometensingel 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891963,
+          52.414839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198094",
+        "label": "Kometensingel 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892374,
+          52.415833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198633",
+        "label": "Oostzanerdijk 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890533,
+          52.41485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198223",
+        "label": "Kleine Beerstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893608,
+          52.415935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198623",
+        "label": "Oostzanerdijk 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890715,
+          52.4156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198647",
+        "label": "Oostzanerdijk 138",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892528,
+          52.415646
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198563",
+        "label": "Kometensingel 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890896,
+          52.414996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198307",
+        "label": "Spicastraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891113,
+          52.414905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198311",
+        "label": "Spicastraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889358,
+          52.414825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198117",
+        "label": "Kometensingel 139",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890348,
+          52.414933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198226",
+        "label": "Kleine Beerstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889305,
+          52.414795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198118",
+        "label": "Kometensingel 141",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896606,
+          52.416209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198664",
+        "label": "Oostzanerdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889693,
+          52.414898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198113",
+        "label": "Kometensingel 131",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892236,
+          52.41496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198090",
+        "label": "Kometensingel 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890482,
+          52.415045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198107",
+        "label": "Kometensingel 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890566,
+          52.415062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198106",
+        "label": "Kometensingel 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895668,
+          52.41622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198604",
+        "label": "Oostzanerdijk 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890786,
+          52.415619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198646",
+        "label": "Oostzanerdijk 136",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895193,
+          52.416115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198608",
+        "label": "Oostzanerdijk 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890632,
+          52.415074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198105",
+        "label": "Kometensingel 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895283,
+          52.416147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198607",
+        "label": "Oostzanerdijk 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897929,
+          52.416172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198653",
+        "label": "Oostzanerdijk 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889841,
+          52.414921
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198111",
+        "label": "Kometensingel 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897841,
+          52.416338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198590",
+        "label": "Oostzanerdijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898046,
+          52.41659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198587",
+        "label": "Oostzanerdijk 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893622,
+          52.415962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198625",
+        "label": "Oostzanerdijk 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890039,
+          52.414789
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197132",
+        "label": "Maanstraat 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88962,
+          52.414881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198114",
+        "label": "Kometensingel 133",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89254,
+          52.414816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198085",
+        "label": "Kometensingel 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892612,
+          52.415854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198632",
+        "label": "Oostzanerdijk 106",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890658,
+          52.414791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198221",
+        "label": "Kleine Beerstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892102,
+          52.414948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198091",
+        "label": "Kometensingel 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89778,
+          52.416198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198655",
+        "label": "Oostzanerdijk 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891977,
+          52.415783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198636",
+        "label": "Oostzanerdijk 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895478,
+          52.416182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198606",
+        "label": "Oostzanerdijk 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.897703,
+          52.416208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198656",
+        "label": "Oostzanerdijk 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887718,
+          52.414983
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198582",
+        "label": "Kometensingel 174",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894955,
+          52.416044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198611",
+        "label": "Oostzanerdijk 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890936,
+          52.415639
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198645",
+        "label": "Oostzanerdijk 134",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890401,
+          52.414905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198225",
+        "label": "Kleine Beerstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898072,
+          52.4163
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198586",
+        "label": "Oostzanerdijk 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888104,
+          52.414969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198581",
+        "label": "Kometensingel 156",
+        "year": "1943"
+      }
+    }
+  ]
+}

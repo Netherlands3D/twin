@@ -1,0 +1,4715 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870619,
+          52.367405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170720",
+        "label": "Kwakerspad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870853,
+          52.368178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170736",
+        "label": "Kwakerspad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873094,
+          52.362056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137343",
+        "label": "Vondelkade 135",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871254,
+          52.36193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154647",
+        "label": "Overtoom 210",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869558,
+          52.367491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170739",
+        "label": "Kwakerspad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87201,
+          52.362119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154672",
+        "label": "Overtoom 192",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871883,
+          52.368109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170718",
+        "label": "Kwakerspad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87282,
+          52.362509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154727",
+        "label": "Overtoom 158",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872105,
+          52.368209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170715",
+        "label": "Kwakerspad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868265,
+          52.367527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170753",
+        "label": "Kwakerspad 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871138,
+          52.361539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137401",
+        "label": "Vondelkade 183",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872316,
+          52.361849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137373",
+        "label": "Vondelkade 159",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868356,
+          52.367402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170749",
+        "label": "Kwakerspad 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871336,
+          52.367758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170711",
+        "label": "Kwakerspad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873153,
+          52.362072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137340",
+        "label": "Vondelkade 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872804,
+          52.362333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154710",
+        "label": "Overtoom 164",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872927,
+          52.362531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154730",
+        "label": "Overtoom 156",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872384,
+          52.369161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170760",
+        "label": "Kwakersdijk 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872607,
+          52.361923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137358",
+        "label": "Vondelkade 149",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872033,
+          52.369109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170761",
+        "label": "Kwakersdijk 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872254,
+          52.361825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137376",
+        "label": "Vondelkade 161",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86996,
+          52.368363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170768",
+        "label": "Kwakersdijk 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86958,
+          52.367428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170738",
+        "label": "Kwakerspad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87273,
+          52.362313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154707",
+        "label": "Overtoom 166",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869862,
+          52.368518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170766",
+        "label": "Kwakersdijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871339,
+          52.361954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154650",
+        "label": "Overtoom 208",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872171,
+          52.368124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170716",
+        "label": "Kwakerspad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872892,
+          52.362354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154713",
+        "label": "Overtoom 162",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872342,
+          52.362206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154690",
+        "label": "Overtoom 180",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871425,
+          52.361975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154653",
+        "label": "Overtoom 206",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868792,
+          52.367085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170730",
+        "label": "Kwakerspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871953,
+          52.3621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154669",
+        "label": "Overtoom 194",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871043,
+          52.361515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137404",
+        "label": "Vondelkade 185",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872963,
+          52.362372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154716",
+        "label": "Overtoom 160",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869019,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170725",
+        "label": "Kwakerspad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867102,
+          52.369661
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170938",
+        "label": "Korte Bleekerspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871609,
+          52.362024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154659",
+        "label": "Overtoom 202",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872395,
+          52.36222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154693",
+        "label": "Overtoom 178",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873035,
+          52.362554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154733",
+        "label": "Overtoom 154",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867041,
+          52.369647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170939",
+        "label": "Korte Bleekerspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872693,
+          52.361934
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137355",
+        "label": "Vondelkade 147",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86721,
+          52.369689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170937",
+        "label": "Korte Bleekerspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869809,
+          52.368509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170767",
+        "label": "Kwakersdijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872973,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170707",
+        "label": "Kwakerspad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872443,
+          52.36154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170512",
+        "label": "Vondelkade 169",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868373,
+          52.366528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170732",
+        "label": "Kwakerspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867383,
+          52.369445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170935",
+        "label": "Korte Bleekerspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868541,
+          52.367142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170742",
+        "label": "Kwakerspad 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870808,
+          52.368793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170765",
+        "label": "Kwakersdijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872604,
+          52.362382
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170681",
+        "label": "Overtoom 168",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872178,
+          52.361808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137379",
+        "label": "Vondelkade 163",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872123,
+          52.361791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137379",
+        "label": "Vondelkade 163",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872172,
+          52.368231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170714",
+        "label": "Kwakerspad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866836,
+          52.369604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170942",
+        "label": "Korte Bleekerspad 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869696,
+          52.36871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170775",
+        "label": "Kwakersdijk 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868287,
+          52.367498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170752",
+        "label": "Kwakerspad 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873073,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170706",
+        "label": "Kwakerspad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872935,
+          52.362009
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137349",
+        "label": "Vondelkade 139",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871897,
+          52.361736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170516",
+        "label": "Vondelkade 173",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868312,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170751",
+        "label": "Kwakerspad 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872015,
+          52.361756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137388",
+        "label": "Vondelkade 167",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872369,
+          52.361858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137370",
+        "label": "Vondelkade 157",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87224,
+          52.368141
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170713",
+        "label": "Kwakerspad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872493,
+          52.361893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137364",
+        "label": "Vondelkade 153",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87182,
+          52.361714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170517",
+        "label": "Vondelkade 175",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868206,
+          52.367122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170754",
+        "label": "Kwakerspad 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872234,
+          52.362176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154684",
+        "label": "Overtoom 184",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868461,
+          52.367267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170745",
+        "label": "Kwakerspad 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873292,
+          52.362104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137334",
+        "label": "Vondelkade 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869206,
+          52.367079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170728",
+        "label": "Kwakerspad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868476,
+          52.368268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170770",
+        "label": "Kwakersdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872287,
+          52.362189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154687",
+        "label": "Overtoom 182",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868982,
+          52.367171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170726",
+        "label": "Kwakerspad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872145,
+          52.361561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170514",
+        "label": "Vondelkade 171",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867955,
+          52.366439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170733",
+        "label": "Kwakerspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871788,
+          52.36147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170518",
+        "label": "Vondelkade 177",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872583,
+          52.362272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154702",
+        "label": "Overtoom 172",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868333,
+          52.367432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170750",
+        "label": "Kwakerspad 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87065,
+          52.367354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170721",
+        "label": "Kwakerspad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872065,
+          52.362134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154675",
+        "label": "Overtoom 190",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872069,
+          52.361775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137385",
+        "label": "Vondelkade 165",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872432,
+          52.361876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137367",
+        "label": "Vondelkade 155",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871887,
+          52.362086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154666",
+        "label": "Overtoom 196",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871521,
+          52.362001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154656",
+        "label": "Overtoom 204",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871519,
+          52.362172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170682",
+        "label": "Overtoom 200",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873212,
+          52.362081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137337",
+        "label": "Vondelkade 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873361,
+          52.362123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137331",
+        "label": "Vondelkade 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86894,
+          52.367162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170727",
+        "label": "Kwakerspad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872469,
+          52.369172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170759",
+        "label": "Kwakersdijk 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872122,
+          52.362148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154678",
+        "label": "Overtoom 188",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871219,
+          52.361559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137398",
+        "label": "Vondelkade 181",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866907,
+          52.369623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170941",
+        "label": "Korte Bleekerspad 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870302,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170719",
+        "label": "Kwakerspad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871594,
+          52.362216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170683",
+        "label": "Overtoom 198",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872516,
+          52.362252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154699",
+        "label": "Overtoom 174",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867297,
+          52.369423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170936",
+        "label": "Korte Bleekerspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86903,
+          52.366614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170731",
+        "label": "Kwakerspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873002,
+          52.368183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170708",
+        "label": "Kwakerspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87088,
+          52.367831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170734",
+        "label": "Kwakerspad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871094,
+          52.368853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170762",
+        "label": "Kwakersdijk 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872181,
+          52.362161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154681",
+        "label": "Overtoom 186",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873012,
+          52.362033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137346",
+        "label": "Vondelkade 137",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872551,
+          52.361908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137361",
+        "label": "Vondelkade 151",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866973,
+          52.369633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170940",
+        "label": "Korte Bleekerspad 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868431,
+          52.367292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170746",
+        "label": "Kwakerspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868487,
+          52.367223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170744",
+        "label": "Kwakerspad 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870992,
+          52.367973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170735",
+        "label": "Kwakerspad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86841,
+          52.367333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170747",
+        "label": "Kwakerspad 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87246,
+          52.362232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154696",
+        "label": "Overtoom 176",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872837,
+          52.361977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137352",
+        "label": "Vondelkade 141",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868385,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170748",
+        "label": "Kwakerspad 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868513,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170743",
+        "label": "Kwakerspad 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870892,
+          52.368811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170764",
+        "label": "Kwakersdijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869659,
+          52.367607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170740",
+        "label": "Kwakerspad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871409,
+          52.361606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137393",
+        "label": "Vondelkade 179",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872724,
+          52.361897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170508",
+        "label": "Vondelkade 145",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872758,
+          52.361843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170509",
+        "label": "Vondelkade 143",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872799,
+          52.361786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170511",
+        "label": "Vondelkade 141 a",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872346,
+          52.364318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170701",
+        "label": "Pestlaan 144",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871258,
+          52.364062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170702",
+        "label": "Pestlaan 146",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871002,
+          52.364004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170703",
+        "label": "Pestlaan 148",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87289,
+          52.368008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170709",
+        "label": "Kwakerspad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872263,
+          52.367963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170710",
+        "label": "Kwakerspad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871602,
+          52.367612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170712",
+        "label": "Kwakerspad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872039,
+          52.368158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170717",
+        "label": "Kwakerspad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870617,
+          52.367278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170722",
+        "label": "Kwakerspad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87014,
+          52.367419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170723",
+        "label": "Kwakerspad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869883,
+          52.367094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170724",
+        "label": "Kwakerspad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869059,
+          52.367048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170729",
+        "label": "Kwakerspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870668,
+          52.367981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170737",
+        "label": "Kwakerspad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869235,
+          52.367579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170741",
+        "label": "Kwakerspad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867385,
+          52.367366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170755",
+        "label": "Jan Hansenpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867325,
+          52.367355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170756",
+        "label": "Jan Hansenpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867267,
+          52.367342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170757",
+        "label": "Jan Hansenpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867148,
+          52.367584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170758",
+        "label": "Jan Hansenpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870911,
+          52.36864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170763",
+        "label": "Kwakersdijk 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869625,
+          52.368289
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170769",
+        "label": "Kwakersdijk 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.36873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170774",
+        "label": "Kwakersdijk 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869333,
+          52.369658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170890",
+        "label": "Kwakersdwarsdijk 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869578,
+          52.369531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170891",
+        "label": "Kwakersdwarsdijk 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869622,
+          52.369543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170892",
+        "label": "Kwakersdwarsdijk 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869756,
+          52.369682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170904",
+        "label": "Kwakersdwarsdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.369612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170905",
+        "label": "Kwakersdwarsdijk 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869814,
+          52.369577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170906",
+        "label": "Kwakersdwarsdijk 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170907",
+        "label": "Kwakersdwarsdijk 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869864,
+          52.369509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170908",
+        "label": "Kwakersdwarsdijk 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869889,
+          52.369467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170909",
+        "label": "Kwakersdwarsdijk 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869914,
+          52.369436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170910",
+        "label": "Kwakersdwarsdijk 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869937,
+          52.369397
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170911",
+        "label": "Kwakersdwarsdijk 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869963,
+          52.369353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170912",
+        "label": "Kwakersdwarsdijk 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86999,
+          52.369309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170913",
+        "label": "Kwakersdwarsdijk 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870058,
+          52.369195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170914",
+        "label": "Kwakersdwarsdijk 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170915",
+        "label": "Kwakersdwarsdijk 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870166,
+          52.369101
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170916",
+        "label": "Kwakersdwarsdijk 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870619,
+          52.367405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170720",
+        "label": "Kwakerspad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870853,
+          52.368178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170736",
+        "label": "Kwakerspad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873094,
+          52.362056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137343",
+        "label": "Vondelkade 135",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871254,
+          52.36193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154647",
+        "label": "Overtoom 210",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869558,
+          52.367491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170739",
+        "label": "Kwakerspad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87201,
+          52.362119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154672",
+        "label": "Overtoom 192",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871883,
+          52.368109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170718",
+        "label": "Kwakerspad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87282,
+          52.362509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154727",
+        "label": "Overtoom 158",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872105,
+          52.368209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170715",
+        "label": "Kwakerspad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868265,
+          52.367527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170753",
+        "label": "Kwakerspad 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871138,
+          52.361539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137401",
+        "label": "Vondelkade 183",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872316,
+          52.361849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137373",
+        "label": "Vondelkade 159",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868356,
+          52.367402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170749",
+        "label": "Kwakerspad 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871336,
+          52.367758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170711",
+        "label": "Kwakerspad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873153,
+          52.362072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137340",
+        "label": "Vondelkade 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872804,
+          52.362333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154710",
+        "label": "Overtoom 164",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872927,
+          52.362531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154730",
+        "label": "Overtoom 156",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872384,
+          52.369161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170760",
+        "label": "Kwakersdijk 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872607,
+          52.361923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137358",
+        "label": "Vondelkade 149",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872033,
+          52.369109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170761",
+        "label": "Kwakersdijk 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872254,
+          52.361825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137376",
+        "label": "Vondelkade 161",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86996,
+          52.368363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170768",
+        "label": "Kwakersdijk 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86958,
+          52.367428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170738",
+        "label": "Kwakerspad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87273,
+          52.362313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154707",
+        "label": "Overtoom 166",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869862,
+          52.368518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170766",
+        "label": "Kwakersdijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871339,
+          52.361954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154650",
+        "label": "Overtoom 208",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872171,
+          52.368124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170716",
+        "label": "Kwakerspad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872892,
+          52.362354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154713",
+        "label": "Overtoom 162",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872342,
+          52.362206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154690",
+        "label": "Overtoom 180",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871425,
+          52.361975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154653",
+        "label": "Overtoom 206",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868792,
+          52.367085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170730",
+        "label": "Kwakerspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871953,
+          52.3621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154669",
+        "label": "Overtoom 194",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871043,
+          52.361515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137404",
+        "label": "Vondelkade 185",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872963,
+          52.362372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154716",
+        "label": "Overtoom 160",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869019,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170725",
+        "label": "Kwakerspad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867102,
+          52.369661
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170938",
+        "label": "Korte Bleekerspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871609,
+          52.362024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154659",
+        "label": "Overtoom 202",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872395,
+          52.36222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154693",
+        "label": "Overtoom 178",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873035,
+          52.362554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154733",
+        "label": "Overtoom 154",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867041,
+          52.369647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170939",
+        "label": "Korte Bleekerspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872693,
+          52.361934
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137355",
+        "label": "Vondelkade 147",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86721,
+          52.369689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170937",
+        "label": "Korte Bleekerspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869809,
+          52.368509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170767",
+        "label": "Kwakersdijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872973,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170707",
+        "label": "Kwakerspad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872443,
+          52.36154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170512",
+        "label": "Vondelkade 169",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868373,
+          52.366528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170732",
+        "label": "Kwakerspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867383,
+          52.369445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170935",
+        "label": "Korte Bleekerspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868541,
+          52.367142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170742",
+        "label": "Kwakerspad 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870808,
+          52.368793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170765",
+        "label": "Kwakersdijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872604,
+          52.362382
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170681",
+        "label": "Overtoom 168",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872178,
+          52.361808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137379",
+        "label": "Vondelkade 163",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872123,
+          52.361791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137379",
+        "label": "Vondelkade 163",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872172,
+          52.368231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170714",
+        "label": "Kwakerspad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866836,
+          52.369604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170942",
+        "label": "Korte Bleekerspad 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869696,
+          52.36871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170775",
+        "label": "Kwakersdijk 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868287,
+          52.367498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170752",
+        "label": "Kwakerspad 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873073,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170706",
+        "label": "Kwakerspad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872935,
+          52.362009
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137349",
+        "label": "Vondelkade 139",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871897,
+          52.361736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170516",
+        "label": "Vondelkade 173",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868312,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170751",
+        "label": "Kwakerspad 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872015,
+          52.361756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137388",
+        "label": "Vondelkade 167",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872369,
+          52.361858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137370",
+        "label": "Vondelkade 157",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87224,
+          52.368141
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170713",
+        "label": "Kwakerspad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872493,
+          52.361893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137364",
+        "label": "Vondelkade 153",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87182,
+          52.361714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170517",
+        "label": "Vondelkade 175",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868206,
+          52.367122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170754",
+        "label": "Kwakerspad 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872234,
+          52.362176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154684",
+        "label": "Overtoom 184",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154437",
+        "label": "Overtoom 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868461,
+          52.367267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170745",
+        "label": "Kwakerspad 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873292,
+          52.362104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137334",
+        "label": "Vondelkade 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869206,
+          52.367079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170728",
+        "label": "Kwakerspad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868476,
+          52.368268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170770",
+        "label": "Kwakersdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872287,
+          52.362189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154687",
+        "label": "Overtoom 182",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868982,
+          52.367171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170726",
+        "label": "Kwakerspad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872145,
+          52.361561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170514",
+        "label": "Vondelkade 171",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867955,
+          52.366439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170733",
+        "label": "Kwakerspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871788,
+          52.36147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170518",
+        "label": "Vondelkade 177",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872583,
+          52.362272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154702",
+        "label": "Overtoom 172",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868333,
+          52.367432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170750",
+        "label": "Kwakerspad 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87065,
+          52.367354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170721",
+        "label": "Kwakerspad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872065,
+          52.362134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154675",
+        "label": "Overtoom 190",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872069,
+          52.361775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137385",
+        "label": "Vondelkade 165",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872432,
+          52.361876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137367",
+        "label": "Vondelkade 155",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871887,
+          52.362086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154666",
+        "label": "Overtoom 196",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871521,
+          52.362001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154656",
+        "label": "Overtoom 204",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871519,
+          52.362172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170682",
+        "label": "Overtoom 200",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873212,
+          52.362081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137337",
+        "label": "Vondelkade 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873361,
+          52.362123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137331",
+        "label": "Vondelkade 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86894,
+          52.367162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170727",
+        "label": "Kwakerspad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872469,
+          52.369172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170759",
+        "label": "Kwakersdijk 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872122,
+          52.362148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154678",
+        "label": "Overtoom 188",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871219,
+          52.361559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137398",
+        "label": "Vondelkade 181",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866907,
+          52.369623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170941",
+        "label": "Korte Bleekerspad 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870302,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170719",
+        "label": "Kwakerspad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871594,
+          52.362216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170683",
+        "label": "Overtoom 198",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872516,
+          52.362252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154699",
+        "label": "Overtoom 174",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867297,
+          52.369423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170936",
+        "label": "Korte Bleekerspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86903,
+          52.366614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170731",
+        "label": "Kwakerspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873002,
+          52.368183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170708",
+        "label": "Kwakerspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87088,
+          52.367831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170734",
+        "label": "Kwakerspad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871094,
+          52.368853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170762",
+        "label": "Kwakersdijk 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872181,
+          52.362161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154681",
+        "label": "Overtoom 186",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873012,
+          52.362033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137346",
+        "label": "Vondelkade 137",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872551,
+          52.361908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137361",
+        "label": "Vondelkade 151",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.866973,
+          52.369633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170940",
+        "label": "Korte Bleekerspad 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868431,
+          52.367292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170746",
+        "label": "Kwakerspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868487,
+          52.367223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170744",
+        "label": "Kwakerspad 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870992,
+          52.367973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170735",
+        "label": "Kwakerspad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86841,
+          52.367333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170747",
+        "label": "Kwakerspad 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87246,
+          52.362232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A154696",
+        "label": "Overtoom 176",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872837,
+          52.361977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137352",
+        "label": "Vondelkade 141",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868385,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170748",
+        "label": "Kwakerspad 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868513,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170743",
+        "label": "Kwakerspad 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870892,
+          52.368811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170764",
+        "label": "Kwakersdijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869659,
+          52.367607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170740",
+        "label": "Kwakerspad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871409,
+          52.361606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A137393",
+        "label": "Vondelkade 179",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872724,
+          52.361897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170508",
+        "label": "Vondelkade 145",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872758,
+          52.361843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170509",
+        "label": "Vondelkade 143",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872799,
+          52.361786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170511",
+        "label": "Vondelkade 141 a",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872346,
+          52.364318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170701",
+        "label": "Pestlaan 144",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871258,
+          52.364062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170702",
+        "label": "Pestlaan 146",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871002,
+          52.364004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170703",
+        "label": "Pestlaan 148",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87289,
+          52.368008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170709",
+        "label": "Kwakerspad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872263,
+          52.367963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170710",
+        "label": "Kwakerspad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871602,
+          52.367612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170712",
+        "label": "Kwakerspad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872039,
+          52.368158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170717",
+        "label": "Kwakerspad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870617,
+          52.367278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170722",
+        "label": "Kwakerspad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87014,
+          52.367419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170723",
+        "label": "Kwakerspad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869883,
+          52.367094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170724",
+        "label": "Kwakerspad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869059,
+          52.367048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170729",
+        "label": "Kwakerspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870668,
+          52.367981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170737",
+        "label": "Kwakerspad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869235,
+          52.367579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170741",
+        "label": "Kwakerspad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867385,
+          52.367366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170755",
+        "label": "Jan Hansenpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867325,
+          52.367355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170756",
+        "label": "Jan Hansenpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867267,
+          52.367342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170757",
+        "label": "Jan Hansenpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867148,
+          52.367584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170758",
+        "label": "Jan Hansenpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870911,
+          52.36864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170763",
+        "label": "Kwakersdijk 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869625,
+          52.368289
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170769",
+        "label": "Kwakersdijk 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.36873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170774",
+        "label": "Kwakersdijk 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869333,
+          52.369658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170890",
+        "label": "Kwakersdwarsdijk 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869578,
+          52.369531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170891",
+        "label": "Kwakersdwarsdijk 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869622,
+          52.369543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170892",
+        "label": "Kwakersdwarsdijk 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869756,
+          52.369682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170904",
+        "label": "Kwakersdwarsdijk 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.369612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170905",
+        "label": "Kwakersdwarsdijk 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869814,
+          52.369577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170906",
+        "label": "Kwakersdwarsdijk 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170907",
+        "label": "Kwakersdwarsdijk 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869864,
+          52.369509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170908",
+        "label": "Kwakersdwarsdijk 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869889,
+          52.369467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170909",
+        "label": "Kwakersdwarsdijk 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869914,
+          52.369436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170910",
+        "label": "Kwakersdwarsdijk 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869937,
+          52.369397
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170911",
+        "label": "Kwakersdwarsdijk 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869963,
+          52.369353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170912",
+        "label": "Kwakersdwarsdijk 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86999,
+          52.369309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170913",
+        "label": "Kwakersdwarsdijk 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870058,
+          52.369195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170914",
+        "label": "Kwakersdwarsdijk 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170915",
+        "label": "Kwakersdwarsdijk 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870166,
+          52.369101
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170916",
+        "label": "Kwakersdwarsdijk 47",
+        "year": "1876"
+      }
+    }
+  ]
+}

@@ -1,0 +1,875 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899095,
+          52.372558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227487",
+        "label": "K 252 a (Barndesteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900597,
+          52.37358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227708",
+        "label": "K 417 a (Gelderschekade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901283,
+          52.37315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227709",
+        "label": "O 361 a (Gelderschekade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894536,
+          52.377762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227786",
+        "label": "L 612 b (Groot Hemelrijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894527,
+          52.377732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227787",
+        "label": "L 612 a (Groot Hemelrijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89129,
+          52.370021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227919",
+        "label": "E 269 a (Kalverstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901465,
+          52.371779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227993",
+        "label": "O 385 a (Kleerenslootje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891563,
+          52.377256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228013",
+        "label": "SS 56 a (Korsjespoortsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892857,
+          52.376828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228018",
+        "label": "G 498 (Korte Korsjespoortsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894763,
+          52.375437
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228324",
+        "label": "H 205 a (Nieuwendijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894788,
+          52.375482
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228324",
+        "label": "H 205 a (Nieuwendijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890945,
+          52.372317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228325",
+        "label": "E 573 (NZ Voorburgwal Pijpenmarkt)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892694,
+          52.375362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228327",
+        "label": "H 517 (NZ Voorburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892501,
+          52.37658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228345",
+        "label": "G 487 a (Oude Nieuwstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896291,
+          52.37113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228347",
+        "label": "B 8 b (OZ Achterburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895233,
+          52.370954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228348",
+        "label": "B 8 a (OZ Voorburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898966,
+          52.369915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228601",
+        "label": "C 252 a (Raamgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893284,
+          52.371681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228625",
+        "label": "A 425 (Rokin)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88927,
+          52.370381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228626",
+        "label": "F 101 a (Rosmarijnsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896031,
+          52.370086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228635",
+        "label": "B 164 a (Rusland)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892054,
+          52.376575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228752",
+        "label": "G 450 a (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88847,
+          52.370081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228753",
+        "label": "F 528 (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893171,
+          52.377588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228754",
+        "label": "L 690 a (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89133,
+          52.370765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228755",
+        "label": "E 371 a (Sint Luciensteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889955,
+          52.373496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228788",
+        "label": "G 66 (Spuistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892655,
+          52.37468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228859",
+        "label": "H 322 ('t Hol)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899482,
+          52.375942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229052",
+        "label": "M 283 a (Wijngaardstraatje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899625,
+          52.375902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229053",
+        "label": "M 284 a (Wijngaardstraatje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901282,
+          52.369952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229076",
+        "label": "C 52 a (Zwanenburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899095,
+          52.372558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227487",
+        "label": "K 252 a (Barndesteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900597,
+          52.37358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227708",
+        "label": "K 417 a (Gelderschekade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901283,
+          52.37315
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227709",
+        "label": "O 361 a (Gelderschekade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894536,
+          52.377762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227786",
+        "label": "L 612 b (Groot Hemelrijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894527,
+          52.377732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227787",
+        "label": "L 612 a (Groot Hemelrijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89129,
+          52.370021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227919",
+        "label": "E 269 a (Kalverstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901465,
+          52.371779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227993",
+        "label": "O 385 a (Kleerenslootje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891563,
+          52.377256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228013",
+        "label": "SS 56 a (Korsjespoortsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892857,
+          52.376828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228018",
+        "label": "G 498 (Korte Korsjespoortsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894763,
+          52.375437
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228324",
+        "label": "H 205 a (Nieuwendijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.894788,
+          52.375482
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228324",
+        "label": "H 205 a (Nieuwendijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890945,
+          52.372317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228325",
+        "label": "E 573 (NZ Voorburgwal Pijpenmarkt)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892694,
+          52.375362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228327",
+        "label": "H 517 (NZ Voorburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892501,
+          52.37658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228345",
+        "label": "G 487 a (Oude Nieuwstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896291,
+          52.37113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228347",
+        "label": "B 8 b (OZ Achterburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.895233,
+          52.370954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228348",
+        "label": "B 8 a (OZ Voorburgwal)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.898966,
+          52.369915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228601",
+        "label": "C 252 a (Raamgracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893284,
+          52.371681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228625",
+        "label": "A 425 (Rokin)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88927,
+          52.370381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228626",
+        "label": "F 101 a (Rosmarijnsteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.896031,
+          52.370086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228635",
+        "label": "B 164 a (Rusland)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892054,
+          52.376575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228752",
+        "label": "G 450 a (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88847,
+          52.370081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228753",
+        "label": "F 528 (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893171,
+          52.377588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228754",
+        "label": "L 690 a (Singel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89133,
+          52.370765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228755",
+        "label": "E 371 a (Sint Luciensteeg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889955,
+          52.373496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228788",
+        "label": "G 66 (Spuistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.892655,
+          52.37468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228859",
+        "label": "H 322 ('t Hol)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899482,
+          52.375942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229052",
+        "label": "M 283 a (Wijngaardstraatje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.899625,
+          52.375902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229053",
+        "label": "M 284 a (Wijngaardstraatje)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901282,
+          52.369952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229076",
+        "label": "C 52 a (Zwanenburgwal)",
+        "year": "1870"
+      }
+    }
+  ]
+}

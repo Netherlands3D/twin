@@ -10,11 +10,11 @@ namespace Netherlands3D.Twin
         [SerializeField] private TextAsset csv;
         [SerializeField] private HiddenBagIds hiddenBagIds;
         private Dictionary<string, DateTime> availableBagIdStartTimes = new();
-        private BagIdHider bagIdHider;
+        private ATMBagIdHider bagIdHider;
 
         private void Awake()
         {
-            bagIdHider = GetComponent<BagIdHider>();
+            bagIdHider = GetComponent<ATMBagIdHider>();
         }
 
         private void OnEnable()

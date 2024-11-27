@@ -1,0 +1,2345 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917818,
+          52.37206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230637",
+        "label": "Wijk 16, nr 384",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918578,
+          52.372555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230647",
+        "label": "Wijk 16, nr 398",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920728,
+          52.370546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230722",
+        "label": "Wijk 16, nr 715",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917362,
+          52.370508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230697",
+        "label": "Wijk 16, nr 552",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919388,
+          52.373083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230649",
+        "label": "Wijk 16, nr 415",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921029,
+          52.37127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230711",
+        "label": "Wijk 16, nr 605",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919192,
+          52.370282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230705",
+        "label": "Wijk 16, nr 570",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924172,
+          52.370099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230733",
+        "label": "Wijk 16, nr 818-3",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920983,
+          52.371238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230712",
+        "label": "Wijk 16, nr 606",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921266,
+          52.373973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230657",
+        "label": "Wijk 16, nr 450",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920916,
+          52.373884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230663",
+        "label": "Wijk 16, nr 456",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921468,
+          52.373945
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230655",
+        "label": "Wijk 16, nr 448",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918005,
+          52.372181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230641",
+        "label": "Wijk 16, nr 388",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918358,
+          52.370167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230702",
+        "label": "Wijk 16, nr 557-1",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918201,
+          52.370226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230700",
+        "label": "Wijk 16, nr 555",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924126,
+          52.370074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230734",
+        "label": "Wijk 16, nr 819",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917906,
+          52.372116
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230639",
+        "label": "Wijk 16, nr 386",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920826,
+          52.373818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230665",
+        "label": "Wijk 16, nr 458",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917348,
+          52.372054
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230594",
+        "label": "Wijk 16, nr 325",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921476,
+          52.371713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230708",
+        "label": "Wijk 16, nr 585",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917715,
+          52.371841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230674",
+        "label": "Wijk 16, nr 509",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918401,
+          52.370153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230703",
+        "label": "Wijk 16, nr 557-2",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917966,
+          52.370307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230698",
+        "label": "Wijk 16, nr 553",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91786,
+          52.372085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230638",
+        "label": "Wijk 16, nr 385",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919445,
+          52.373119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230650",
+        "label": "Wijk 16, nr 416",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920374,
+          52.370325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230723",
+        "label": "Wijk 16, nr 722",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917961,
+          52.372148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230640",
+        "label": "Wijk 16, nr 387",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923999,
+          52.369994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230737",
+        "label": "Wijk 16, nr 822",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91934,
+          52.373052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230648",
+        "label": "Wijk 16, nr 414",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921093,
+          52.37399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230659",
+        "label": "Wijk 16, nr 452",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921151,
+          52.373988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230659",
+        "label": "Wijk 16, nr 452",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92096,
+          52.37391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230662",
+        "label": "Wijk 16, nr 455",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918225,
+          52.372002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91826,
+          52.371984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918303,
+          52.371958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921439,
+          52.371688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230707",
+        "label": "Wijk 16, nr 584",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920323,
+          52.374048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230589",
+        "label": "Wijk 16, nr 258",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920883,
+          52.371166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230714",
+        "label": "Wijk 16, nr 608",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921204,
+          52.373981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230658",
+        "label": "Wijk 16, nr 451",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918138,
+          52.370249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230699",
+        "label": "Wijk 16, nr 554",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920766,
+          52.373782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230666",
+        "label": "Wijk 16, nr 459",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91956,
+          52.370322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230717",
+        "label": "Wijk 16, nr 637",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920764,
+          52.37057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230721",
+        "label": "Wijk 16, nr 714",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924217,
+          52.370126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230732",
+        "label": "Wijk 16, nr 818-2",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918009,
+          52.371859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918093,
+          52.371907
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91813,
+          52.371954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924082,
+          52.37005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230735",
+        "label": "Wijk 16, nr 820",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920557,
+          52.370962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230715",
+        "label": "Wijk 16, nr 616",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924041,
+          52.370021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230736",
+        "label": "Wijk 16, nr 821",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920875,
+          52.373857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230664",
+        "label": "Wijk 16, nr 457",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91993,
+          52.370048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230725",
+        "label": "Wijk 16, nr 731",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92105,
+          52.373967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230660",
+        "label": "Wijk 16, nr 453",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918444,
+          52.370138
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230704",
+        "label": "Wijk 16, nr 558",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918287,
+          52.372215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230670",
+        "label": "Wijk 16, nr 499",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921392,
+          52.37166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230706",
+        "label": "Wijk 16, nr 583",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92005,
+          52.370119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230724",
+        "label": "Wijk 16, nr 728-1",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921538,
+          52.371065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230719",
+        "label": "Wijk 16, nr 701",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920924,
+          52.371196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230713",
+        "label": "Wijk 16, nr 607",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920807,
+          52.370596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230720",
+        "label": "Wijk 16, nr 713",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918399,
+          52.372287
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230667",
+        "label": "Wijk 16, nr 496",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921349,
+          52.373966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230656",
+        "label": "Wijk 16, nr 449",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918298,
+          52.370189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230701",
+        "label": "Wijk 16, nr 556",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918179,
+          52.372297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230645",
+        "label": "Wijk 16, nr 392",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91824,
+          52.372334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230646",
+        "label": "Wijk 16, nr 393",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920039,
+          52.370625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230716",
+        "label": "Wijk 16, nr 628",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920081,
+          52.370655
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230716",
+        "label": "Wijk 16, nr 628",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91812,
+          52.372256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230644",
+        "label": "Wijk 16, nr 391",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920368,
+          52.374077
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230588",
+        "label": "Wijk 16, nr 257",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918331,
+          52.372248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230669",
+        "label": "Wijk 16, nr 498",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921905,
+          52.371302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230718",
+        "label": "Wijk 16, nr 692-15",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919426,
+          52.373262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230592",
+        "label": "Wijk 16, nr 280",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918093,
+          52.37224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230643",
+        "label": "Wijk 16, nr 390",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921001,
+          52.37394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230661",
+        "label": "Wijk 16, nr 454",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918046,
+          52.372207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230642",
+        "label": "Wijk 16, nr 389",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919767,
+          52.373684
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230591",
+        "label": "Wijk 16, nr 270",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918366,
+          52.372265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230668",
+        "label": "Wijk 16, nr 497",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918211,
+          52.372169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230671",
+        "label": "Wijk 16, nr 500",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917818,
+          52.37206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230637",
+        "label": "Wijk 16, nr 384",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918578,
+          52.372555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230647",
+        "label": "Wijk 16, nr 398",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920728,
+          52.370546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230722",
+        "label": "Wijk 16, nr 715",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917362,
+          52.370508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230697",
+        "label": "Wijk 16, nr 552",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919388,
+          52.373083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230649",
+        "label": "Wijk 16, nr 415",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921029,
+          52.37127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230711",
+        "label": "Wijk 16, nr 605",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919192,
+          52.370282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230705",
+        "label": "Wijk 16, nr 570",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924172,
+          52.370099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230733",
+        "label": "Wijk 16, nr 818-3",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920983,
+          52.371238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230712",
+        "label": "Wijk 16, nr 606",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921266,
+          52.373973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230657",
+        "label": "Wijk 16, nr 450",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920916,
+          52.373884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230663",
+        "label": "Wijk 16, nr 456",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921468,
+          52.373945
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230655",
+        "label": "Wijk 16, nr 448",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918005,
+          52.372181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230641",
+        "label": "Wijk 16, nr 388",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918358,
+          52.370167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230702",
+        "label": "Wijk 16, nr 557-1",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918201,
+          52.370226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230700",
+        "label": "Wijk 16, nr 555",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924126,
+          52.370074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230734",
+        "label": "Wijk 16, nr 819",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917906,
+          52.372116
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230639",
+        "label": "Wijk 16, nr 386",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920826,
+          52.373818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230665",
+        "label": "Wijk 16, nr 458",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917348,
+          52.372054
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230594",
+        "label": "Wijk 16, nr 325",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921476,
+          52.371713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230708",
+        "label": "Wijk 16, nr 585",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917715,
+          52.371841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230674",
+        "label": "Wijk 16, nr 509",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918401,
+          52.370153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230703",
+        "label": "Wijk 16, nr 557-2",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917966,
+          52.370307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230698",
+        "label": "Wijk 16, nr 553",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91786,
+          52.372085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230638",
+        "label": "Wijk 16, nr 385",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919445,
+          52.373119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230650",
+        "label": "Wijk 16, nr 416",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920374,
+          52.370325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230723",
+        "label": "Wijk 16, nr 722",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917961,
+          52.372148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230640",
+        "label": "Wijk 16, nr 387",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923999,
+          52.369994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230737",
+        "label": "Wijk 16, nr 822",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91934,
+          52.373052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230648",
+        "label": "Wijk 16, nr 414",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921093,
+          52.37399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230659",
+        "label": "Wijk 16, nr 452",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921151,
+          52.373988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230659",
+        "label": "Wijk 16, nr 452",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92096,
+          52.37391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230662",
+        "label": "Wijk 16, nr 455",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918225,
+          52.372002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91826,
+          52.371984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918303,
+          52.371958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230672",
+        "label": "Wijk 16, nr 507",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921439,
+          52.371688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230707",
+        "label": "Wijk 16, nr 584",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920323,
+          52.374048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230589",
+        "label": "Wijk 16, nr 258",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920883,
+          52.371166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230714",
+        "label": "Wijk 16, nr 608",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921204,
+          52.373981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230658",
+        "label": "Wijk 16, nr 451",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918138,
+          52.370249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230699",
+        "label": "Wijk 16, nr 554",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920766,
+          52.373782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230666",
+        "label": "Wijk 16, nr 459",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91956,
+          52.370322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230717",
+        "label": "Wijk 16, nr 637",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920764,
+          52.37057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230721",
+        "label": "Wijk 16, nr 714",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924217,
+          52.370126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230732",
+        "label": "Wijk 16, nr 818-2",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918009,
+          52.371859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918093,
+          52.371907
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91813,
+          52.371954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230673",
+        "label": "Wijk 16, nr 508",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924082,
+          52.37005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230735",
+        "label": "Wijk 16, nr 820",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920557,
+          52.370962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230715",
+        "label": "Wijk 16, nr 616",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924041,
+          52.370021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230736",
+        "label": "Wijk 16, nr 821",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920875,
+          52.373857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230664",
+        "label": "Wijk 16, nr 457",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91993,
+          52.370048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230725",
+        "label": "Wijk 16, nr 731",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92105,
+          52.373967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230660",
+        "label": "Wijk 16, nr 453",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918444,
+          52.370138
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230704",
+        "label": "Wijk 16, nr 558",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918287,
+          52.372215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230670",
+        "label": "Wijk 16, nr 499",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921392,
+          52.37166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230706",
+        "label": "Wijk 16, nr 583",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92005,
+          52.370119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230724",
+        "label": "Wijk 16, nr 728-1",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921538,
+          52.371065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230719",
+        "label": "Wijk 16, nr 701",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920924,
+          52.371196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230713",
+        "label": "Wijk 16, nr 607",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920807,
+          52.370596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230720",
+        "label": "Wijk 16, nr 713",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918399,
+          52.372287
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230667",
+        "label": "Wijk 16, nr 496",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921349,
+          52.373966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230656",
+        "label": "Wijk 16, nr 449",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918298,
+          52.370189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230701",
+        "label": "Wijk 16, nr 556",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918179,
+          52.372297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230645",
+        "label": "Wijk 16, nr 392",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91824,
+          52.372334
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230646",
+        "label": "Wijk 16, nr 393",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920039,
+          52.370625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230716",
+        "label": "Wijk 16, nr 628",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920081,
+          52.370655
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230716",
+        "label": "Wijk 16, nr 628",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91812,
+          52.372256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230644",
+        "label": "Wijk 16, nr 391",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920368,
+          52.374077
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230588",
+        "label": "Wijk 16, nr 257",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918331,
+          52.372248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230669",
+        "label": "Wijk 16, nr 498",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921905,
+          52.371302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230718",
+        "label": "Wijk 16, nr 692-15",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919426,
+          52.373262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230592",
+        "label": "Wijk 16, nr 280",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918093,
+          52.37224
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230643",
+        "label": "Wijk 16, nr 390",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921001,
+          52.37394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230661",
+        "label": "Wijk 16, nr 454",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918046,
+          52.372207
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230642",
+        "label": "Wijk 16, nr 389",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919767,
+          52.373684
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230591",
+        "label": "Wijk 16, nr 270",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918366,
+          52.372265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230668",
+        "label": "Wijk 16, nr 497",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918211,
+          52.372169
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A230671",
+        "label": "Wijk 16, nr 500",
+        "year": "1802"
+      }
+    }
+  ]
+}

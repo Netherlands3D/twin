@@ -1,0 +1,695 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958686,
+          52.364753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153733",
+        "label": "Diemerdijk 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958554,
+          52.364715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153727",
+        "label": "Diemerdijk 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958575,
+          52.36461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153729",
+        "label": "Diemerdijk 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958599,
+          52.364503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153731",
+        "label": "Diemerdijk 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958757,
+          52.364493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153735",
+        "label": "Diemerdijk 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956129,
+          52.365733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153737",
+        "label": "Zeeburgerdijk 196",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955688,
+          52.365873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153739",
+        "label": "Zeeburgerdijk 194",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955273,
+          52.365896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153740",
+        "label": "Zeeburgerdijk 192",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954252,
+          52.365925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153742",
+        "label": "Zeeburgerdijk 190",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949617,
+          52.366006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153744",
+        "label": "Zeeburgerdijk 184",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950249,
+          52.366295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153750",
+        "label": "Zeeburgerdijk 167",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950526,
+          52.366393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153751",
+        "label": "Zeeburgerdijk 169",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954212,
+          52.366214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153753",
+        "label": "Zeeburgerdijk 183",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954278,
+          52.366218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153755",
+        "label": "Zeeburgerdijk 185",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954355,
+          52.366219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153757",
+        "label": "Zeeburgerdijk 187",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954421,
+          52.366217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153758",
+        "label": "Zeeburgerdijk 189",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954495,
+          52.366216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153760",
+        "label": "Zeeburgerdijk 191",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95534,
+          52.366231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153761",
+        "label": "Zeeburgerdijk 193",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950169,
+          52.367075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153762",
+        "label": "Zeeburgerpad 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951215,
+          52.36879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153870",
+        "label": "Cruquiusweg 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958355,
+          52.368806
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153906",
+        "label": "Entrepothaven 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958263,
+          52.368701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153912",
+        "label": "Entrepothaven 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958425,
+          52.369019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153915",
+        "label": "Entrepothaven 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958686,
+          52.364753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153733",
+        "label": "Diemerdijk 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958554,
+          52.364715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153727",
+        "label": "Diemerdijk 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958575,
+          52.36461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153729",
+        "label": "Diemerdijk 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958599,
+          52.364503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153731",
+        "label": "Diemerdijk 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958757,
+          52.364493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153735",
+        "label": "Diemerdijk 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956129,
+          52.365733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153737",
+        "label": "Zeeburgerdijk 196",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955688,
+          52.365873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153739",
+        "label": "Zeeburgerdijk 194",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955273,
+          52.365896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153740",
+        "label": "Zeeburgerdijk 192",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954252,
+          52.365925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153742",
+        "label": "Zeeburgerdijk 190",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949617,
+          52.366006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153744",
+        "label": "Zeeburgerdijk 184",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950249,
+          52.366295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153750",
+        "label": "Zeeburgerdijk 167",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950526,
+          52.366393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153751",
+        "label": "Zeeburgerdijk 169",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954212,
+          52.366214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153753",
+        "label": "Zeeburgerdijk 183",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954278,
+          52.366218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153755",
+        "label": "Zeeburgerdijk 185",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954355,
+          52.366219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153757",
+        "label": "Zeeburgerdijk 187",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954421,
+          52.366217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153758",
+        "label": "Zeeburgerdijk 189",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954495,
+          52.366216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153760",
+        "label": "Zeeburgerdijk 191",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95534,
+          52.366231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153761",
+        "label": "Zeeburgerdijk 193",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950169,
+          52.367075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153762",
+        "label": "Zeeburgerpad 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951215,
+          52.36879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153870",
+        "label": "Cruquiusweg 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958355,
+          52.368806
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153906",
+        "label": "Entrepothaven 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958263,
+          52.368701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153912",
+        "label": "Entrepothaven 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958425,
+          52.369019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153915",
+        "label": "Entrepothaven 3",
+        "year": "1909"
+      }
+    }
+  ]
+}

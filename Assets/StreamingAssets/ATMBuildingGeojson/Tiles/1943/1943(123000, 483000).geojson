@@ -1,0 +1,8315 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924789,
+          52.340571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184687",
+        "label": "Duivendrechtsekade 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924021,
+          52.342523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170005",
+        "label": "Reaumurstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.340341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184688",
+        "label": "Duivendrechtsekade 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925404,
+          52.342642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169887",
+        "label": "Celsiusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925195,
+          52.342514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169895",
+        "label": "Celsiusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927783,
+          52.342628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184618",
+        "label": "Von Liebigweg 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923734,
+          52.342347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169991",
+        "label": "Reaumurstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924051,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170013",
+        "label": "Torricellistraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923817,
+          52.342399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169995",
+        "label": "Reaumurstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92557,
+          52.342491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169855",
+        "label": "Celsiusstraat 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926055,
+          52.341579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184666",
+        "label": "Von Liebigweg 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925414,
+          52.342391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169849",
+        "label": "Celsiusstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923371,
+          52.342208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169981",
+        "label": "Weesperzijde 290",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924647,
+          52.342915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169915",
+        "label": "Reaumurstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924718,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170125",
+        "label": "Celsiusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92688,
+          52.342776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182154",
+        "label": "Von Guerickestraat 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925846,
+          52.342657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169865",
+        "label": "Celsiusstraat 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925897,
+          52.341694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184663",
+        "label": "Von Liebigweg 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923834,
+          52.342821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170015",
+        "label": "Fahrenheitstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923982,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170003",
+        "label": "Reaumurstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924968,
+          52.341676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184631",
+        "label": "Von Liebigweg 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924702,
+          52.342948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169917",
+        "label": "Reaumurstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92583,
+          52.342912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182104",
+        "label": "Celsiusstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923854,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169997",
+        "label": "Reaumurstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924871,
+          52.342778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169899",
+        "label": "Reaumurstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921303,
+          52.342248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180805",
+        "label": "Duivendrechtsekade 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923044,
+          52.342624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169959",
+        "label": "Fahrenheitstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926367,
+          52.341904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184674",
+        "label": "Von Liebigweg 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925246,
+          52.342545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169893",
+        "label": "Celsiusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923373,
+          52.342828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169943",
+        "label": "Fahrenheitstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925483,
+          52.341641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184659",
+        "label": "Von Liebigweg 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169857",
+        "label": "Celsiusstraat 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924897,
+          52.341621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184630",
+        "label": "Von Liebigweg 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92477,
+          52.341999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170123",
+        "label": "Celsiusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92346,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169939",
+        "label": "Fahrenheitstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923614,
+          52.3427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170025",
+        "label": "Fahrenheitstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923606,
+          52.34227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169985",
+        "label": "Reaumurstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92389,
+          52.34217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170069",
+        "label": "Reaumurstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924298,
+          52.342412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170049",
+        "label": "Reaumurstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926597,
+          52.341755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184678",
+        "label": "Von Liebigweg 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924629,
+          52.342325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170105",
+        "label": "Torricellistraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925903,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169867",
+        "label": "Celsiusstraat 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92331,
+          52.342233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169979",
+        "label": "Weesperzijde 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925664,
+          52.342815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182101",
+        "label": "Celsiusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924776,
+          52.34159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184629",
+        "label": "Von Liebigweg 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926543,
+          52.342957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182149",
+        "label": "Von Guerickestraat 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925584,
+          52.34136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184654",
+        "label": "Von Liebigweg 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926271,
+          52.342442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184644",
+        "label": "Von Liebigweg 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92327,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170041",
+        "label": "Fahrenheitstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924623,
+          52.342622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169831",
+        "label": "Torricellistraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924417,
+          52.341788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170137",
+        "label": "Celsiusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926537,
+          52.342605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184647",
+        "label": "Von Liebigweg 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926685,
+          52.342892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182151",
+        "label": "Von Guerickestraat 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925651,
+          52.341743
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184662",
+        "label": "Von Liebigweg 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92541,
+          52.341924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184636",
+        "label": "Von Liebigweg 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924369,
+          52.341757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170139",
+        "label": "Celsiusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922799,
+          52.341174
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184681",
+        "label": "Duivendrechtsekade 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925197,
+          52.34297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169911",
+        "label": "Reaumurstraat 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924921,
+          52.342808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169901",
+        "label": "Reaumurstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92475,
+          52.342978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169919",
+        "label": "Reaumurstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923286,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169947",
+        "label": "Fahrenheitstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926745,
+          52.342857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182152",
+        "label": "Von Guerickestraat 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925029,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169905",
+        "label": "Reaumurstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922723,
+          52.342956
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181813",
+        "label": "Fahrenheitsingel 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924364,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170089",
+        "label": "Celsiusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92579,
+          52.342623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169863",
+        "label": "Celsiusstraat 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925913,
+          52.34223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184640",
+        "label": "Von Liebigweg 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923184,
+          52.342295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169975",
+        "label": "Weesperzijde 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925366,
+          52.342358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169847",
+        "label": "Celsiusstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924732,
+          52.342251
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170103",
+        "label": "Celsiusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919804,
+          52.342969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180822",
+        "label": "Weesperzijde 250 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924063,
+          52.342966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169931",
+        "label": "Fahrenheitstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924987,
+          52.342122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170115",
+        "label": "Celsiusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169833",
+        "label": "Torricellistraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925515,
+          52.341398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184653",
+        "label": "Von Liebigweg 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925715,
+          52.342841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182102",
+        "label": "Celsiusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924878,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170119",
+        "label": "Celsiusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926017,
+          52.343001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182119",
+        "label": "Von Guerickestraat 94",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926559,
+          52.342669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184628",
+        "label": "Von Guerickestraat 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925463,
+          52.342423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169851",
+        "label": "Celsiusstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918763,
+          52.341474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180799",
+        "label": "Ouderkerker Dijk 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923416,
+          52.34285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169941",
+        "label": "Fahrenheitstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924309,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169825",
+        "label": "Torricellistraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92609,
+          52.342335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184642",
+        "label": "Von Liebigweg 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923201,
+          52.342725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169951",
+        "label": "Fahrenheitstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926009,
+          52.34228
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184641",
+        "label": "Von Liebigweg 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920786,
+          52.34241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180803",
+        "label": "Duivendrechtsekade 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92497,
+          52.342838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169903",
+        "label": "Reaumurstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924339,
+          52.342436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170047",
+        "label": "Reaumurstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924805,
+          52.34301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169921",
+        "label": "Reaumurstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925501,
+          52.341986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184637",
+        "label": "Von Liebigweg 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925513,
+          52.342458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169853",
+        "label": "Celsiusstraat 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924394,
+          52.342462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170045",
+        "label": "Reaumurstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924412,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170091",
+        "label": "Celsiusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927576,
+          52.342744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184614",
+        "label": "Von Liebigweg 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923974,
+          52.342219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170065",
+        "label": "Reaumurstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923518,
+          52.341202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184685",
+        "label": "Duivendrechtsekade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923442,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170033",
+        "label": "Fahrenheitstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927871,
+          52.342929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184623",
+        "label": "Von Liebigweg 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92278,
+          52.341572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180810",
+        "label": "Duivendrechtsekade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924722,
+          52.34255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169835",
+        "label": "Torricellistraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922074,
+          52.342637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180813",
+        "label": "Weesperzijde 270",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923436,
+          52.342171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169983",
+        "label": "Weesperzijde 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92482,
+          52.342487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169839",
+        "label": "Torricellistraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924527,
+          52.341849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170133",
+        "label": "Celsiusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925143,
+          52.341775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184633",
+        "label": "Von Liebigweg 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925592,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182100",
+        "label": "Celsiusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923884,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170079",
+        "label": "Weesperzijde 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924161,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170011",
+        "label": "Reaumurstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924614,
+          52.341901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170129",
+        "label": "Celsiusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92498,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169845",
+        "label": "Torricellistraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923651,
+          52.342726999999996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170023",
+        "label": "Fahrenheitstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925472,
+          52.341431
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184652",
+        "label": "Von Liebigweg 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924618,
+          52.342189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170099",
+        "label": "Celsiusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924474,
+          52.341821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170135",
+        "label": "Celsiusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925853,
+          52.340154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184690",
+        "label": "Duivendrechtsekade 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926083,
+          52.341991
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184672",
+        "label": "Von Liebigweg 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927718,
+          52.34266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184617",
+        "label": "Von Liebigweg 78",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926478,
+          52.341836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184676",
+        "label": "Von Liebigweg 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.342722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169869",
+        "label": "Celsiusstraat 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925833,
+          52.342185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184639",
+        "label": "Von Liebigweg 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925953,
+          52.341923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184670",
+        "label": "Von Liebigweg 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92508,
+          52.342902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169907",
+        "label": "Reaumurstraat 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926063,
+          52.342787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169873",
+        "label": "Celsiusstraat 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925776,
+          52.342876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182103",
+        "label": "Celsiusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924135,
+          52.342316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170057",
+        "label": "Reaumurstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923274,
+          52.341326
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184682",
+        "label": "Duivendrechtsekade 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.342852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169877",
+        "label": "Celsiusstraat 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923927,
+          52.342196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170067",
+        "label": "Reaumurstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924662,
+          52.341935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170127",
+        "label": "Celsiusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925763,
+          52.342143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184638",
+        "label": "Von Liebigweg 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.34277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169827",
+        "label": "Torricellistraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927136,
+          52.343009
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184611",
+        "label": "Dulongstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925338,
+          52.34188
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184635",
+        "label": "Von Liebigweg 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923164,
+          52.342701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169953",
+        "label": "Fahrenheitstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924082,
+          52.34053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184686",
+        "label": "Duivendrechtsekade 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924925,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169843",
+        "label": "Torricellistraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92601,
+          52.342752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169871",
+        "label": "Celsiusstraat 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.342576
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169891",
+        "label": "Celsiusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92505,
+          52.341724
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184632",
+        "label": "Von Liebigweg 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925162,
+          52.342214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170109",
+        "label": "Celsiusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.342357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169971",
+        "label": "Weesperzijde 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926448,
+          52.342553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184646",
+        "label": "Von Liebigweg 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921711,
+          52.342075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180806",
+        "label": "Duivendrechtsekade 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170101",
+        "label": "Celsiusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924926,
+          52.342091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170117",
+        "label": "Celsiusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.930773,
+          52.33836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184587",
+        "label": "Duivendrechtsekade 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924415,
+          52.342735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169829",
+        "label": "Torricellistraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923779,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170017",
+        "label": "Fahrenheitstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925353,
+          52.34261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169889",
+        "label": "Celsiusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170085",
+        "label": "Weesperzijde 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.342674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169885",
+        "label": "Celsiusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926178,
+          52.341509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184668",
+        "label": "Von Liebigweg 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170121",
+        "label": "Celsiusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.930629,
+          52.336551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184588",
+        "label": "Duivendrechtsekade 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923936,
+          52.341942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170081",
+        "label": "Weesperzijde 298",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924311,
+          52.341998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170087",
+        "label": "Celsiusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925947,
+          52.34165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184664",
+        "label": "Von Liebigweg 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929305,
+          52.338146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184584",
+        "label": "Duivendrechtsekade 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926002,
+          52.341622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184665",
+        "label": "Von Liebigweg 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923247,
+          52.342265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169977",
+        "label": "Weesperzijde 288",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92354,
+          52.342926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169935",
+        "label": "Fahrenheitstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924599,
+          52.34288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169913",
+        "label": "Reaumurstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184643",
+        "label": "Von Liebigweg 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92446,
+          52.342086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170093",
+        "label": "Celsiusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926364,
+          52.342502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184645",
+        "label": "Von Liebigweg 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.341067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184684",
+        "label": "Duivendrechtsekade 19 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926318,
+          52.34194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184673",
+        "label": "Von Liebigweg 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92623,
+          52.342883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169879",
+        "label": "Celsiusstraat 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923127,
+          52.342675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169955",
+        "label": "Fahrenheitstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923599,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169933",
+        "label": "Fahrenheitstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924104,
+          52.342575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170009",
+        "label": "Reaumurstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924268,
+          52.342834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169823",
+        "label": "Torricellistraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925135,
+          52.342935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169909",
+        "label": "Reaumurstraat 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923035,
+          52.341115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184683",
+        "label": "Duivendrechtsekade 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923758,
+          52.342032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170073",
+        "label": "Weesperzijde 294",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925126,
+          52.341424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184649",
+        "label": "Von Liebigweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.34133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184655",
+        "label": "Von Liebigweg 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922964,
+          52.342574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169963",
+        "label": "Fahrenheitstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925514,
+          52.342708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169883",
+        "label": "Celsiusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925737,
+          52.341258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184657",
+        "label": "Von Liebigweg 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922825,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169965",
+        "label": "Fahrenheitstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91812,
+          52.34103
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180802",
+        "label": "Ouderkerker Dijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923055,
+          52.341425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184680",
+        "label": "Duivendrechtsekade 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.341286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184656",
+        "label": "Von Liebigweg 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925237,
+          52.341834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184634",
+        "label": "Von Liebigweg 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924092,
+          52.342292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170059",
+        "label": "Reaumurstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928035,
+          52.342826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184620",
+        "label": "Von Liebigweg 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924106,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169929",
+        "label": "Fahrenheitstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923256,
+          52.336518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184692",
+        "label": "Ouderkerker Dijk 59",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924064,
+          52.342551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170007",
+        "label": "Reaumurstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923838,
+          52.341988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170077",
+        "label": "Weesperzijde 296",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924519,
+          52.342394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170107",
+        "label": "Torricellistraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93223,
+          52.338178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184590",
+        "label": "Duivendrechtsekade 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925564,
+          52.342745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169881",
+        "label": "Celsiusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927216,
+          52.342981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184610",
+        "label": "Dulongstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929697,
+          52.338108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184586",
+        "label": "Duivendrechtsekade 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924563,
+          52.342156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170097",
+        "label": "Celsiusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926535,
+          52.341797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184677",
+        "label": "Von Liebigweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923086,
+          52.342651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169957",
+        "label": "Fahrenheitstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921899,
+          52.341973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180807",
+        "label": "Duivendrechtsekade 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924515,
+          52.342126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170095",
+        "label": "Celsiusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923718,
+          52.342071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170071",
+        "label": "Reaumurstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924568,
+          52.341877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170131",
+        "label": "Celsiusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923355,
+          52.342549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170037",
+        "label": "Fahrenheitstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925188,
+          52.341456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184650",
+        "label": "Von Liebigweg 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928388,
+          52.342976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184627",
+        "label": "Von Liebigweg 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925545,
+          52.341682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184660",
+        "label": "Von Liebigweg 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927631,
+          52.342715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184615",
+        "label": "Von Liebigweg 74",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922637,
+          52.341644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180809",
+        "label": "Duivendrechtsekade 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921631,
+          52.342846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180811",
+        "label": "Weesperzijde 260",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.342324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169973",
+        "label": "Weesperzijde 286",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.342154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170113",
+        "label": "Celsiusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923694,
+          52.342751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170021",
+        "label": "Fahrenheitstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9239,
+          52.342447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169999",
+        "label": "Reaumurstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918572,
+          52.341333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180800",
+        "label": "Ouderkerker Dijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923005,
+          52.3426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169961",
+        "label": "Fahrenheitstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924777,
+          52.342517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169837",
+        "label": "Torricellistraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925063,
+          52.341385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184648",
+        "label": "Von Liebigweg 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923523,
+          52.34265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170029",
+        "label": "Fahrenheitstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926114,
+          52.341551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184667",
+        "label": "Von Liebigweg 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926821,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182153",
+        "label": "Von Guerickestraat 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923314,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170039",
+        "label": "Fahrenheitstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923687,
+          52.342322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169989",
+        "label": "Reaumurstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926023,
+          52.341961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184671",
+        "label": "Von Liebigweg 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927676,
+          52.342683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184616",
+        "label": "Von Liebigweg 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925599,
+          52.341711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184661",
+        "label": "Von Liebigweg 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928328,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184626",
+        "label": "Von Liebigweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925093,
+          52.342183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170111",
+        "label": "Celsiusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92523,
+          52.343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182095",
+        "label": "Reaumurstraat 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923327,
+          52.342804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169945",
+        "label": "Fahrenheitstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925706,
+          52.340221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184689",
+        "label": "Duivendrechtsekade 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921902,
+          52.342713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180812",
+        "label": "Weesperzijde 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.342557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169859",
+        "label": "Celsiusstraat 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.342748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169897",
+        "label": "Reaumurstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924869,
+          52.342456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169841",
+        "label": "Torricellistraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923244,
+          52.342754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169949",
+        "label": "Fahrenheitstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922756,
+          52.34298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181814",
+        "label": "Fahrenheitsingel 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926425,
+          52.34187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184675",
+        "label": "Von Liebigweg 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926621,
+          52.34055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170146",
+        "label": "Weesperzijde 340",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923775,
+          52.34237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169993",
+        "label": "Reaumurstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924057,
+          52.342267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170061",
+        "label": "Reaumurstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.341917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170083",
+        "label": "Weesperzijde 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926012,
+          52.340096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184691",
+        "label": "Duivendrechtsekade 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923399,
+          52.342573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170035",
+        "label": "Fahrenheitstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926603,
+          52.342917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182150",
+        "label": "Von Guerickestraat 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92524,
+          52.341491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184651",
+        "label": "Von Liebigweg 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923233,
+          52.342475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170043",
+        "label": "Fahrenheitstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923484,
+          52.342626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170031",
+        "label": "Fahrenheitstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926118,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169875",
+        "label": "Celsiusstraat 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929871,
+          52.337372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184585",
+        "label": "Duivendrechtsekade 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924215,
+          52.342364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170053",
+        "label": "Reaumurstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924255,
+          52.342383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170051",
+        "label": "Reaumurstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926475,
+          52.342994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182148",
+        "label": "Von Guerickestraat 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92278,
+          52.342992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181815",
+        "label": "Fahrenheitsingel 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925738,
+          52.342589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169861",
+        "label": "Celsiusstraat 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925808,
+          52.341216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184658",
+        "label": "Von Liebigweg 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928079,
+          52.342794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184619",
+        "label": "Von Liebigweg 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925901,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184669",
+        "label": "Von Liebigweg 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9238,
+          52.342007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170075",
+        "label": "Weesperzijde 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923648,
+          52.342296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169987",
+        "label": "Reaumurstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924017,
+          52.342245
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170063",
+        "label": "Reaumurstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923939,
+          52.342472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170001",
+        "label": "Reaumurstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922901,
+          52.341495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184679",
+        "label": "Duivendrechtsekade 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92374,
+          52.342777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170019",
+        "label": "Fahrenheitstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924174,
+          52.342338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170055",
+        "label": "Reaumurstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927922,
+          52.342892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184622",
+        "label": "Von Liebigweg 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923499,
+          52.3429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169937",
+        "label": "Fahrenheitstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927526,
+          52.342785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184613",
+        "label": "Von Liebigweg 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927813,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184624",
+        "label": "Von Liebigweg 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923566,
+          52.342672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170027",
+        "label": "Fahrenheitstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927243,
+          52.342928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184612",
+        "label": "Von Liebigweg 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932159,
+          52.338192
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184589",
+        "label": "Duivendrechtsekade 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92798,
+          52.342859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184621",
+        "label": "Von Liebigweg 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91827,
+          52.341123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180801",
+        "label": "Ouderkerker Dijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92104,
+          52.342337
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180804",
+        "label": "Duivendrechtsekade 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922104,
+          52.341867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180808",
+        "label": "Duivendrechtsekade 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924789,
+          52.340571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184687",
+        "label": "Duivendrechtsekade 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924021,
+          52.342523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170005",
+        "label": "Reaumurstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.340341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184688",
+        "label": "Duivendrechtsekade 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925404,
+          52.342642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169887",
+        "label": "Celsiusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925195,
+          52.342514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169895",
+        "label": "Celsiusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927783,
+          52.342628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184618",
+        "label": "Von Liebigweg 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923734,
+          52.342347
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169991",
+        "label": "Reaumurstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924051,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170013",
+        "label": "Torricellistraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923817,
+          52.342399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169995",
+        "label": "Reaumurstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92557,
+          52.342491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169855",
+        "label": "Celsiusstraat 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926055,
+          52.341579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184666",
+        "label": "Von Liebigweg 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925414,
+          52.342391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169849",
+        "label": "Celsiusstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923371,
+          52.342208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169981",
+        "label": "Weesperzijde 290",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924647,
+          52.342915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169915",
+        "label": "Reaumurstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924718,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170125",
+        "label": "Celsiusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92688,
+          52.342776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182154",
+        "label": "Von Guerickestraat 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925846,
+          52.342657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169865",
+        "label": "Celsiusstraat 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925897,
+          52.341694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184663",
+        "label": "Von Liebigweg 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923834,
+          52.342821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170015",
+        "label": "Fahrenheitstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923982,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170003",
+        "label": "Reaumurstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924968,
+          52.341676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184631",
+        "label": "Von Liebigweg 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924702,
+          52.342948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169917",
+        "label": "Reaumurstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92583,
+          52.342912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182104",
+        "label": "Celsiusstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923854,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169997",
+        "label": "Reaumurstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924871,
+          52.342778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169899",
+        "label": "Reaumurstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921303,
+          52.342248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180805",
+        "label": "Duivendrechtsekade 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923044,
+          52.342624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169959",
+        "label": "Fahrenheitstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926367,
+          52.341904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184674",
+        "label": "Von Liebigweg 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925246,
+          52.342545
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169893",
+        "label": "Celsiusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923373,
+          52.342828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169943",
+        "label": "Fahrenheitstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925483,
+          52.341641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184659",
+        "label": "Von Liebigweg 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169857",
+        "label": "Celsiusstraat 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924897,
+          52.341621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184630",
+        "label": "Von Liebigweg 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92477,
+          52.341999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170123",
+        "label": "Celsiusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92346,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169939",
+        "label": "Fahrenheitstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923614,
+          52.3427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170025",
+        "label": "Fahrenheitstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923606,
+          52.34227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169985",
+        "label": "Reaumurstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92389,
+          52.34217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170069",
+        "label": "Reaumurstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924298,
+          52.342412
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170049",
+        "label": "Reaumurstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926597,
+          52.341755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184678",
+        "label": "Von Liebigweg 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924629,
+          52.342325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170105",
+        "label": "Torricellistraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925903,
+          52.342687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169867",
+        "label": "Celsiusstraat 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92331,
+          52.342233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169979",
+        "label": "Weesperzijde 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925664,
+          52.342815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182101",
+        "label": "Celsiusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924776,
+          52.34159
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184629",
+        "label": "Von Liebigweg 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926543,
+          52.342957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182149",
+        "label": "Von Guerickestraat 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925584,
+          52.34136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184654",
+        "label": "Von Liebigweg 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926271,
+          52.342442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184644",
+        "label": "Von Liebigweg 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92327,
+          52.3425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170041",
+        "label": "Fahrenheitstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924623,
+          52.342622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169831",
+        "label": "Torricellistraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924417,
+          52.341788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170137",
+        "label": "Celsiusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926537,
+          52.342605
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184647",
+        "label": "Von Liebigweg 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926685,
+          52.342892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182151",
+        "label": "Von Guerickestraat 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925651,
+          52.341743
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184662",
+        "label": "Von Liebigweg 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92541,
+          52.341924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184636",
+        "label": "Von Liebigweg 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924369,
+          52.341757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170139",
+        "label": "Celsiusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922799,
+          52.341174
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184681",
+        "label": "Duivendrechtsekade 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925197,
+          52.34297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169911",
+        "label": "Reaumurstraat 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924921,
+          52.342808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169901",
+        "label": "Reaumurstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92475,
+          52.342978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169919",
+        "label": "Reaumurstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923286,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169947",
+        "label": "Fahrenheitstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926745,
+          52.342857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182152",
+        "label": "Von Guerickestraat 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925029,
+          52.342874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169905",
+        "label": "Reaumurstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922723,
+          52.342956
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181813",
+        "label": "Fahrenheitsingel 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924364,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170089",
+        "label": "Celsiusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92579,
+          52.342623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169863",
+        "label": "Celsiusstraat 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925913,
+          52.34223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184640",
+        "label": "Von Liebigweg 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923184,
+          52.342295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169975",
+        "label": "Weesperzijde 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925366,
+          52.342358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169847",
+        "label": "Celsiusstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924732,
+          52.342251
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170103",
+        "label": "Celsiusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919804,
+          52.342969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180822",
+        "label": "Weesperzijde 250 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924063,
+          52.342966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169931",
+        "label": "Fahrenheitstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924987,
+          52.342122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170115",
+        "label": "Celsiusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342584
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169833",
+        "label": "Torricellistraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925515,
+          52.341398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184653",
+        "label": "Von Liebigweg 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925715,
+          52.342841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182102",
+        "label": "Celsiusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924878,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170119",
+        "label": "Celsiusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926017,
+          52.343001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182119",
+        "label": "Von Guerickestraat 94",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926559,
+          52.342669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184628",
+        "label": "Von Guerickestraat 96",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925463,
+          52.342423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169851",
+        "label": "Celsiusstraat 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918763,
+          52.341474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180799",
+        "label": "Ouderkerker Dijk 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923416,
+          52.34285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169941",
+        "label": "Fahrenheitstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924309,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169825",
+        "label": "Torricellistraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92609,
+          52.342335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184642",
+        "label": "Von Liebigweg 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923201,
+          52.342725
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169951",
+        "label": "Fahrenheitstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926009,
+          52.34228
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184641",
+        "label": "Von Liebigweg 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920786,
+          52.34241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180803",
+        "label": "Duivendrechtsekade 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92497,
+          52.342838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169903",
+        "label": "Reaumurstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924339,
+          52.342436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170047",
+        "label": "Reaumurstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924805,
+          52.34301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169921",
+        "label": "Reaumurstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925501,
+          52.341986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184637",
+        "label": "Von Liebigweg 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925513,
+          52.342458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169853",
+        "label": "Celsiusstraat 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924394,
+          52.342462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170045",
+        "label": "Reaumurstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924412,
+          52.342056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170091",
+        "label": "Celsiusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927576,
+          52.342744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184614",
+        "label": "Von Liebigweg 72",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923974,
+          52.342219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170065",
+        "label": "Reaumurstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923518,
+          52.341202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184685",
+        "label": "Duivendrechtsekade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923442,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170033",
+        "label": "Fahrenheitstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927871,
+          52.342929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184623",
+        "label": "Von Liebigweg 90",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92278,
+          52.341572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180810",
+        "label": "Duivendrechtsekade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924722,
+          52.34255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169835",
+        "label": "Torricellistraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922074,
+          52.342637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180813",
+        "label": "Weesperzijde 270",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923436,
+          52.342171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169983",
+        "label": "Weesperzijde 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92482,
+          52.342487
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169839",
+        "label": "Torricellistraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924527,
+          52.341849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170133",
+        "label": "Celsiusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925143,
+          52.341775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184633",
+        "label": "Von Liebigweg 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925592,
+          52.342779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182100",
+        "label": "Celsiusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923884,
+          52.341968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170079",
+        "label": "Weesperzijde 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924161,
+          52.342601
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170011",
+        "label": "Reaumurstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924614,
+          52.341901
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170129",
+        "label": "Celsiusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92498,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169845",
+        "label": "Torricellistraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923651,
+          52.342726999999996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170023",
+        "label": "Fahrenheitstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925472,
+          52.341431
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184652",
+        "label": "Von Liebigweg 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924618,
+          52.342189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170099",
+        "label": "Celsiusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924474,
+          52.341821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170135",
+        "label": "Celsiusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925853,
+          52.340154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184690",
+        "label": "Duivendrechtsekade 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926083,
+          52.341991
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184672",
+        "label": "Von Liebigweg 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927718,
+          52.34266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184617",
+        "label": "Von Liebigweg 78",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926478,
+          52.341836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184676",
+        "label": "Von Liebigweg 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.342722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169869",
+        "label": "Celsiusstraat 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925833,
+          52.342185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184639",
+        "label": "Von Liebigweg 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925953,
+          52.341923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184670",
+        "label": "Von Liebigweg 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92508,
+          52.342902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169907",
+        "label": "Reaumurstraat 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926063,
+          52.342787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169873",
+        "label": "Celsiusstraat 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925776,
+          52.342876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182103",
+        "label": "Celsiusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924135,
+          52.342316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170057",
+        "label": "Reaumurstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923274,
+          52.341326
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184682",
+        "label": "Duivendrechtsekade 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.342852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169877",
+        "label": "Celsiusstraat 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923927,
+          52.342196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170067",
+        "label": "Reaumurstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924662,
+          52.341935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170127",
+        "label": "Celsiusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925763,
+          52.342143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184638",
+        "label": "Von Liebigweg 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.34277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169827",
+        "label": "Torricellistraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927136,
+          52.343009
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184611",
+        "label": "Dulongstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925338,
+          52.34188
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184635",
+        "label": "Von Liebigweg 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923164,
+          52.342701
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169953",
+        "label": "Fahrenheitstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924082,
+          52.34053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184686",
+        "label": "Duivendrechtsekade 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924925,
+          52.342424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169843",
+        "label": "Torricellistraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92601,
+          52.342752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169871",
+        "label": "Celsiusstraat 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.342576
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169891",
+        "label": "Celsiusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92505,
+          52.341724
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184632",
+        "label": "Von Liebigweg 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925162,
+          52.342214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170109",
+        "label": "Celsiusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923064,
+          52.342357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169971",
+        "label": "Weesperzijde 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926448,
+          52.342553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184646",
+        "label": "Von Liebigweg 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921711,
+          52.342075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180806",
+        "label": "Duivendrechtsekade 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924673,
+          52.342216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170101",
+        "label": "Celsiusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924926,
+          52.342091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170117",
+        "label": "Celsiusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.930773,
+          52.33836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184587",
+        "label": "Duivendrechtsekade 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924415,
+          52.342735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169829",
+        "label": "Torricellistraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923779,
+          52.342798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170017",
+        "label": "Fahrenheitstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925353,
+          52.34261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169889",
+        "label": "Celsiusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924044,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170085",
+        "label": "Weesperzijde 300",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925461,
+          52.342674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169885",
+        "label": "Celsiusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926178,
+          52.341509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184668",
+        "label": "Von Liebigweg 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.34203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170121",
+        "label": "Celsiusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.930629,
+          52.336551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184588",
+        "label": "Duivendrechtsekade 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923936,
+          52.341942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170081",
+        "label": "Weesperzijde 298",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924311,
+          52.341998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170087",
+        "label": "Celsiusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925947,
+          52.34165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184664",
+        "label": "Von Liebigweg 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929305,
+          52.338146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184584",
+        "label": "Duivendrechtsekade 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926002,
+          52.341622
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184665",
+        "label": "Von Liebigweg 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923247,
+          52.342265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169977",
+        "label": "Weesperzijde 288",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92354,
+          52.342926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169935",
+        "label": "Fahrenheitstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924599,
+          52.34288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169913",
+        "label": "Reaumurstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926175,
+          52.34239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184643",
+        "label": "Von Liebigweg 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92446,
+          52.342086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170093",
+        "label": "Celsiusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926364,
+          52.342502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184645",
+        "label": "Von Liebigweg 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.341067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184684",
+        "label": "Duivendrechtsekade 19 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926318,
+          52.34194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184673",
+        "label": "Von Liebigweg 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92623,
+          52.342883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169879",
+        "label": "Celsiusstraat 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923127,
+          52.342675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169955",
+        "label": "Fahrenheitstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923599,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169933",
+        "label": "Fahrenheitstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924104,
+          52.342575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170009",
+        "label": "Reaumurstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924268,
+          52.342834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169823",
+        "label": "Torricellistraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925135,
+          52.342935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169909",
+        "label": "Reaumurstraat 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923035,
+          52.341115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184683",
+        "label": "Duivendrechtsekade 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923758,
+          52.342032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170073",
+        "label": "Weesperzijde 294",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925126,
+          52.341424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184649",
+        "label": "Von Liebigweg 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92563,
+          52.34133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184655",
+        "label": "Von Liebigweg 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922964,
+          52.342574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169963",
+        "label": "Fahrenheitstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925514,
+          52.342708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169883",
+        "label": "Celsiusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925737,
+          52.341258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184657",
+        "label": "Von Liebigweg 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922825,
+          52.342499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169965",
+        "label": "Fahrenheitstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91812,
+          52.34103
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180802",
+        "label": "Ouderkerker Dijk 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923055,
+          52.341425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184680",
+        "label": "Duivendrechtsekade 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.341286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184656",
+        "label": "Von Liebigweg 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925237,
+          52.341834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184634",
+        "label": "Von Liebigweg 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924092,
+          52.342292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170059",
+        "label": "Reaumurstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928035,
+          52.342826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184620",
+        "label": "Von Liebigweg 84",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924106,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169929",
+        "label": "Fahrenheitstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923256,
+          52.336518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184692",
+        "label": "Ouderkerker Dijk 59",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924064,
+          52.342551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170007",
+        "label": "Reaumurstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923838,
+          52.341988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170077",
+        "label": "Weesperzijde 296",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924519,
+          52.342394
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170107",
+        "label": "Torricellistraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93223,
+          52.338178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184590",
+        "label": "Duivendrechtsekade 61",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925564,
+          52.342745
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169881",
+        "label": "Celsiusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927216,
+          52.342981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184610",
+        "label": "Dulongstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929697,
+          52.338108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184586",
+        "label": "Duivendrechtsekade 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924563,
+          52.342156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170097",
+        "label": "Celsiusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926535,
+          52.341797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184677",
+        "label": "Von Liebigweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923086,
+          52.342651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169957",
+        "label": "Fahrenheitstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921899,
+          52.341973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180807",
+        "label": "Duivendrechtsekade 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924515,
+          52.342126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170095",
+        "label": "Celsiusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923718,
+          52.342071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170071",
+        "label": "Reaumurstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924568,
+          52.341877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170131",
+        "label": "Celsiusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923355,
+          52.342549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170037",
+        "label": "Fahrenheitstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925188,
+          52.341456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184650",
+        "label": "Von Liebigweg 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928388,
+          52.342976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184627",
+        "label": "Von Liebigweg 104",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925545,
+          52.341682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184660",
+        "label": "Von Liebigweg 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927631,
+          52.342715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184615",
+        "label": "Von Liebigweg 74",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922637,
+          52.341644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180809",
+        "label": "Duivendrechtsekade 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921631,
+          52.342846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180811",
+        "label": "Weesperzijde 260",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923123,
+          52.342324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169973",
+        "label": "Weesperzijde 286",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.342154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170113",
+        "label": "Celsiusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923694,
+          52.342751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170021",
+        "label": "Fahrenheitstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9239,
+          52.342447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169999",
+        "label": "Reaumurstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918572,
+          52.341333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180800",
+        "label": "Ouderkerker Dijk 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923005,
+          52.3426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169961",
+        "label": "Fahrenheitstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924777,
+          52.342517
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169837",
+        "label": "Torricellistraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925063,
+          52.341385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184648",
+        "label": "Von Liebigweg 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923523,
+          52.34265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170029",
+        "label": "Fahrenheitstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926114,
+          52.341551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184667",
+        "label": "Von Liebigweg 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926821,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182153",
+        "label": "Von Guerickestraat 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923314,
+          52.342525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170039",
+        "label": "Fahrenheitstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923687,
+          52.342322
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169989",
+        "label": "Reaumurstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926023,
+          52.341961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184671",
+        "label": "Von Liebigweg 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927676,
+          52.342683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184616",
+        "label": "Von Liebigweg 76",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925599,
+          52.341711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184661",
+        "label": "Von Liebigweg 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928328,
+          52.342998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184626",
+        "label": "Von Liebigweg 102",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925093,
+          52.342183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170111",
+        "label": "Celsiusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92523,
+          52.343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182095",
+        "label": "Reaumurstraat 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923327,
+          52.342804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169945",
+        "label": "Fahrenheitstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925706,
+          52.340221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184689",
+        "label": "Duivendrechtsekade 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921902,
+          52.342713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180812",
+        "label": "Weesperzijde 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92568,
+          52.342557
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169859",
+        "label": "Celsiusstraat 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924823,
+          52.342748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169897",
+        "label": "Reaumurstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924869,
+          52.342456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169841",
+        "label": "Torricellistraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923244,
+          52.342754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169949",
+        "label": "Fahrenheitstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922756,
+          52.34298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181814",
+        "label": "Fahrenheitsingel 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926425,
+          52.34187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184675",
+        "label": "Von Liebigweg 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926621,
+          52.34055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170146",
+        "label": "Weesperzijde 340",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923775,
+          52.34237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169993",
+        "label": "Reaumurstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924057,
+          52.342267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170061",
+        "label": "Reaumurstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.341917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170083",
+        "label": "Weesperzijde 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926012,
+          52.340096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184691",
+        "label": "Duivendrechtsekade 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923399,
+          52.342573
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170035",
+        "label": "Fahrenheitstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926603,
+          52.342917
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182150",
+        "label": "Von Guerickestraat 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92524,
+          52.341491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184651",
+        "label": "Von Liebigweg 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923233,
+          52.342475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170043",
+        "label": "Fahrenheitstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923484,
+          52.342626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170031",
+        "label": "Fahrenheitstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926118,
+          52.342819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169875",
+        "label": "Celsiusstraat 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.929871,
+          52.337372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184585",
+        "label": "Duivendrechtsekade 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924215,
+          52.342364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170053",
+        "label": "Reaumurstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924255,
+          52.342383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170051",
+        "label": "Reaumurstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926475,
+          52.342994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182148",
+        "label": "Von Guerickestraat 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92278,
+          52.342992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181815",
+        "label": "Fahrenheitsingel 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925738,
+          52.342589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169861",
+        "label": "Celsiusstraat 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925808,
+          52.341216
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184658",
+        "label": "Von Liebigweg 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.928079,
+          52.342794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184619",
+        "label": "Von Liebigweg 82",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925901,
+          52.341892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184669",
+        "label": "Von Liebigweg 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9238,
+          52.342007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170075",
+        "label": "Weesperzijde 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923648,
+          52.342296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169987",
+        "label": "Reaumurstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924017,
+          52.342245
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170063",
+        "label": "Reaumurstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923939,
+          52.342472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170001",
+        "label": "Reaumurstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922901,
+          52.341495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184679",
+        "label": "Duivendrechtsekade 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92374,
+          52.342777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170019",
+        "label": "Fahrenheitstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924174,
+          52.342338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170055",
+        "label": "Reaumurstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927922,
+          52.342892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184622",
+        "label": "Von Liebigweg 88",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923499,
+          52.3429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169937",
+        "label": "Fahrenheitstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927526,
+          52.342785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184613",
+        "label": "Von Liebigweg 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927813,
+          52.342962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184624",
+        "label": "Von Liebigweg 92",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923566,
+          52.342672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170027",
+        "label": "Fahrenheitstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927243,
+          52.342928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184612",
+        "label": "Von Liebigweg 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932159,
+          52.338192
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184589",
+        "label": "Duivendrechtsekade 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92798,
+          52.342859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A184621",
+        "label": "Von Liebigweg 86",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91827,
+          52.341123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180801",
+        "label": "Ouderkerker Dijk 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92104,
+          52.342337
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180804",
+        "label": "Duivendrechtsekade 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922104,
+          52.341867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A180808",
+        "label": "Duivendrechtsekade 12",
+        "year": "1943"
+      }
+    }
+  ]
+}

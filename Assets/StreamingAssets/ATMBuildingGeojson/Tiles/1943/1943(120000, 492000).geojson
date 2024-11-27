@@ -1,0 +1,6605 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883505,
+          52.415494
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197315",
+        "label": "Uranusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882983,
+          52.415398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197350",
+        "label": "Saturnusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882257,
+          52.41593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198190",
+        "label": "Kometensingel 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881257,
+          52.41514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198201",
+        "label": "Kometensingel 309",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884009,
+          52.41588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198165",
+        "label": "Kometensingel 237",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883037,
+          52.415368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197349",
+        "label": "Saturnusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883119,
+          52.416045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197285",
+        "label": "Neptunusstraat 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882363,
+          52.415157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197294",
+        "label": "Neptunusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883004,
+          52.416354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198177",
+        "label": "Kometensingel 261",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881881,
+          52.414776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197289",
+        "label": "Neptunusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882502,
+          52.415272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197297",
+        "label": "Neptunusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883611,
+          52.415103
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197341",
+        "label": "Saturnusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883878,
+          52.41594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198167",
+        "label": "Kometensingel 241",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88274,
+          52.415038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197365",
+        "label": "Jupiterstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882458,
+          52.415234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197296",
+        "label": "Neptunusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882354,
+          52.415493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197271",
+        "label": "Neptunusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883932,
+          52.41507
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196960",
+        "label": "Mercuriusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883315,
+          52.415837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197337",
+        "label": "Uranusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883272,
+          52.416155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197288",
+        "label": "Neptunusstraat 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883336,
+          52.415567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197318",
+        "label": "Uranusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883067,
+          52.415011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197373",
+        "label": "Jupiterstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883251,
+          52.416235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198173",
+        "label": "Kometensingel 253",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881918,
+          52.415629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197404",
+        "label": "Neptunusplein 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882451,
+          52.414979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197382",
+        "label": "Marsstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881775,
+          52.415349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197408",
+        "label": "Neptunusplein 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883686,
+          52.415697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197332",
+        "label": "Uranusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88318,
+          52.415344
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197348",
+        "label": "Saturnusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883006,
+          52.414963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197372",
+        "label": "Jupiterstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884056,
+          52.415484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197326",
+        "label": "Uranusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882874,
+          52.415233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197359",
+        "label": "Saturnusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884,
+          52.415288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197308",
+        "label": "Uranusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882929,
+          52.415987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197283",
+        "label": "Neptunusstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88336,
+          52.41526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197345",
+        "label": "Saturnusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884139,
+          52.414933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196970",
+        "label": "Mercuriusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88193,
+          52.414815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197290",
+        "label": "Neptunusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887105,
+          52.414914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198584",
+        "label": "Kometensingel 186",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883249,
+          52.415642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197319",
+        "label": "Uranusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883241,
+          52.415319
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197347",
+        "label": "Saturnusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882408,
+          52.415197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197295",
+        "label": "Neptunusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881874,
+          52.415115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197268",
+        "label": "Neptunusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881721,
+          52.415376
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197409",
+        "label": "Neptunusplein 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883672,
+          52.415081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197340",
+        "label": "Saturnusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882517,
+          52.414949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197381",
+        "label": "Marsstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881339,
+          52.414937
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197496",
+        "label": "Meteorenweg 238",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883623,
+          52.415727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197333",
+        "label": "Uranusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884462,
+          52.414974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198148",
+        "label": "Kometensingel 203",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884581,
+          52.414923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198146",
+        "label": "Kometensingel 199",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88384,
+          52.414996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196958",
+        "label": "Mercuriusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882643,
+          52.414958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197363",
+        "label": "Jupiterstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883067,
+          52.416326
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198176",
+        "label": "Kometensingel 259",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882924,
+          52.415428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197351",
+        "label": "Saturnusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882046,
+          52.415566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197402",
+        "label": "Neptunusplein 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881947,
+          52.415268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197405",
+        "label": "Neptunusplein 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882444,
+          52.415989
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198188",
+        "label": "Kometensingel 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884118,
+          52.415453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197325",
+        "label": "Uranusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881987,
+          52.4156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197403",
+        "label": "Neptunusplein 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881462,
+          52.415298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198198",
+        "label": "Kometensingel 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882165,
+          52.415857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198192",
+        "label": "Kometensingel 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88404,
+          52.414859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196968",
+        "label": "Mercuriusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88407,
+          52.41585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198164",
+        "label": "Kometensingel 235",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883696,
+          52.416074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198170",
+        "label": "Kometensingel 247",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882337,
+          52.414812
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197395",
+        "label": "Marsstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884031,
+          52.415143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196962",
+        "label": "Mercuriusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883814,
+          52.415965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198168",
+        "label": "Kometensingel 243",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881558,
+          52.414811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197261",
+        "label": "Neptunusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884275,
+          52.415075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198151",
+        "label": "Kometensingel 209",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883063,
+          52.415726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197322",
+        "label": "Uranusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883938,
+          52.415318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197309",
+        "label": "Uranusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881292,
+          52.415177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198200",
+        "label": "Kometensingel 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882882,
+          52.415155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197368",
+        "label": "Jupiterstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883739,
+          52.415048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197339",
+        "label": "Saturnusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883127,
+          52.416296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198175",
+        "label": "Kometensingel 257",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883242,
+          52.415861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197338",
+        "label": "Uranusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883482,
+          52.415163
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197343",
+        "label": "Saturnusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883633,
+          52.416104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198171",
+        "label": "Kometensingel 249",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88323,
+          52.416117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197287",
+        "label": "Neptunusstraat 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883451,
+          52.415513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197316",
+        "label": "Uranusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882161,
+          52.414895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197398",
+        "label": "Marsstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884704,
+          52.414863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198144",
+        "label": "Kometensingel 195",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883878,
+          52.415346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197310",
+        "label": "Uranusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882479,
+          52.416025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198187",
+        "label": "Kometensingel 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884367,
+          52.415415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198153",
+        "label": "Kometensingel 213",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883369,
+          52.415807
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197336",
+        "label": "Uranusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882759,
+          52.415754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197278",
+        "label": "Neptunusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881114,
+          52.41503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198204",
+        "label": "Kometensingel 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882888,
+          52.415574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197300",
+        "label": "Neptunusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882839,
+          52.415114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197367",
+        "label": "Jupiterstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882547,
+          52.415307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197298",
+        "label": "Neptunusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88343,
+          52.414965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197355",
+        "label": "Saturnusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882111,
+          52.415537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197401",
+        "label": "Neptunusplein 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882813,
+          52.415259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197360",
+        "label": "Saturnusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881923,
+          52.415152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197269",
+        "label": "Neptunusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882893,
+          52.41595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197282",
+        "label": "Neptunusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882064,
+          52.415784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198194",
+        "label": "Kometensingel 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882665,
+          52.415686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197276",
+        "label": "Neptunusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884177,
+          52.415426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197324",
+        "label": "Uranusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881149,
+          52.415062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198203",
+        "label": "Kometensingel 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881255,
+          52.414972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197497",
+        "label": "Meteorenweg 240",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883397,
+          52.415971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197304",
+        "label": "Neptunusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882935,
+          52.416381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198178",
+        "label": "Kometensingel 263",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884497,
+          52.415606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198157",
+        "label": "Kometensingel 221",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883562,
+          52.415756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197334",
+        "label": "Uranusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881954,
+          52.415707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198196",
+        "label": "Kometensingel 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883306,
+          52.415025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197357",
+        "label": "Saturnusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881753,
+          52.414961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197265",
+        "label": "Neptunusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882173,
+          52.415514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197400",
+        "label": "Neptunusplein 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882985,
+          52.415653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197302",
+        "label": "Neptunusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88234,
+          52.415038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197384",
+        "label": "Marsstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883354,
+          52.415936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197303",
+        "label": "Neptunusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887204,
+          52.414922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198583",
+        "label": "Kometensingel 184",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88376,
+          52.416047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198169",
+        "label": "Kometensingel 245",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882898,
+          52.414774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197380",
+        "label": "Marsstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882535,
+          52.416063
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198186",
+        "label": "Kometensingel 279",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882879,
+          52.414856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197369",
+        "label": "Jupiterstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884082,
+          52.415179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196963",
+        "label": "Mercuriusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883387,
+          52.415541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197317",
+        "label": "Uranusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884395,
+          52.415004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198149",
+        "label": "Kometensingel 205",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883303,
+          52.415292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197346",
+        "label": "Saturnusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883762,
+          52.415373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197311",
+        "label": "Uranusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882231,
+          52.415485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197399",
+        "label": "Neptunusplein 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881975,
+          52.415194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197270",
+        "label": "Neptunusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882926,
+          52.414897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197370",
+        "label": "Jupiterstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883983,
+          52.415109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196961",
+        "label": "Mercuriusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883807,
+          52.415641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197330",
+        "label": "Uranusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882399,
+          52.415005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197383",
+        "label": "Marsstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.415823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198193",
+        "label": "Kometensingel 293",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88249,
+          52.415608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197274",
+        "label": "Neptunusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884304,
+          52.415692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198160",
+        "label": "Kometensingel 227",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882606,
+          52.415643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197275",
+        "label": "Neptunusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882768,
+          52.416331
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198180",
+        "label": "Kometensingel 267",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88263,
+          52.416135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198184",
+        "label": "Kometensingel 275",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884438,
+          52.415629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198158",
+        "label": "Kometensingel 223",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884469,
+          52.415489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198155",
+        "label": "Kometensingel 217",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883588,
+          52.416128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198172",
+        "label": "Kometensingel 251",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883134,
+          52.4157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197321",
+        "label": "Uranusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883579,
+          52.414775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196954",
+        "label": "Mercuriusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881391,
+          52.414912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197495",
+        "label": "Meteorenweg 236",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882936,
+          52.415614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197301",
+        "label": "Neptunusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881613,
+          52.414849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197262",
+        "label": "Neptunusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884647,
+          52.414891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198145",
+        "label": "Kometensingel 197",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882277,
+          52.414835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197396",
+        "label": "Marsstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88222,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197397",
+        "label": "Marsstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883616,
+          52.414803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196955",
+        "label": "Mercuriusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883945,
+          52.41591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198166",
+        "label": "Kometensingel 239",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88391,
+          52.414763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198317",
+        "label": "Mercuriusplein 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884066,
+          52.415261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197307",
+        "label": "Uranusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883632,
+          52.415431
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197313",
+        "label": "Uranusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881659,
+          52.41541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197410",
+        "label": "Neptunusplein 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884337,
+          52.415032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198150",
+        "label": "Kometensingel 207",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883491,
+          52.414936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197354",
+        "label": "Saturnusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884508,
+          52.415518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198156",
+        "label": "Kometensingel 219",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883889,
+          52.415033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196959",
+        "label": "Mercuriusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882964,
+          52.414932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197371",
+        "label": "Jupiterstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881447,
+          52.414884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197494",
+        "label": "Meteorenweg 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883433,
+          52.415779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197335",
+        "label": "Uranusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882024,
+          52.415743
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198195",
+        "label": "Kometensingel 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882665,
+          52.416255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198182",
+        "label": "Kometensingel 271",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884084,
+          52.414899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196969",
+        "label": "Mercuriusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882024,
+          52.414893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197292",
+        "label": "Neptunusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.415291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197406",
+        "label": "Neptunusplein 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881704,
+          52.41492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197264",
+        "label": "Neptunusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883506,
+          52.416045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197306",
+        "label": "Neptunusstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88399,
+          52.415559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197327",
+        "label": "Uranusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883426,
+          52.415191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197344",
+        "label": "Saturnusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881511,
+          52.415338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198197",
+        "label": "Kometensingel 301",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883934,
+          52.415581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197328",
+        "label": "Uranusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881659,
+          52.414885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197263",
+        "label": "Neptunusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883167,
+          52.416083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197286",
+        "label": "Neptunusstraat 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882712,
+          52.41572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197277",
+        "label": "Neptunusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884177,
+          52.414972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196971",
+        "label": "Mercuriusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882846,
+          52.415538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197299",
+        "label": "Neptunusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883689,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196957",
+        "label": "Mercuriusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882305,
+          52.41597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198189",
+        "label": "Kometensingel 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882688,
+          52.415317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197362",
+        "label": "Saturnusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881825,
+          52.415084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197267",
+        "label": "Neptunusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882213,
+          52.415894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198191",
+        "label": "Kometensingel 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883371,
+          52.414997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197356",
+        "label": "Saturnusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883444,
+          52.416014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197305",
+        "label": "Neptunusstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884132,
+          52.415827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198163",
+        "label": "Kometensingel 233",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882712,
+          52.416295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198181",
+        "label": "Kometensingel 269",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883868,
+          52.415611
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197329",
+        "label": "Uranusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882583,
+          52.4161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198185",
+        "label": "Kometensingel 277",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881349,
+          52.415217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198199",
+        "label": "Kometensingel 305",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883694,
+          52.415402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197312",
+        "label": "Uranusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883543,
+          52.415137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197342",
+        "label": "Saturnusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883193,
+          52.415671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197320",
+        "label": "Uranusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881838,
+          52.415318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197407",
+        "label": "Neptunusplein 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882988,
+          52.416026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197284",
+        "label": "Neptunusstraat 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886992,
+          52.414902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198585",
+        "label": "Kometensingel 188",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882446,
+          52.415565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197273",
+        "label": "Neptunusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88423,
+          52.415401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197323",
+        "label": "Uranusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882677,
+          52.416167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198183",
+        "label": "Kometensingel 273",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882962,
+          52.414744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197379",
+        "label": "Marsstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88239,
+          52.41553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197272",
+        "label": "Neptunusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883112,
+          52.415043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197374",
+        "label": "Jupiterstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882745,
+          52.41585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197279",
+        "label": "Neptunusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882314,
+          52.415123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197293",
+        "label": "Neptunusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883187,
+          52.41627
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198174",
+        "label": "Kometensingel 255",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881208,
+          52.415107
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198202",
+        "label": "Kometensingel 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882792,
+          52.415075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197366",
+        "label": "Jupiterstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884412,
+          52.415449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198154",
+        "label": "Kometensingel 215",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884188,
+          52.415798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198162",
+        "label": "Kometensingel 231",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884247,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198161",
+        "label": "Kometensingel 229",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881978,
+          52.414855
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197291",
+        "label": "Neptunusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882842,
+          52.415914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197281",
+        "label": "Neptunusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884758,
+          52.415171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198152",
+        "label": "Kometensingel 211",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882816,
+          52.416368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198179",
+        "label": "Kometensingel 265",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883247,
+          52.415056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197358",
+        "label": "Saturnusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882855,
+          52.415464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197352",
+        "label": "Saturnusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88279,
+          52.415878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197280",
+        "label": "Neptunusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883552,
+          52.414912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197353",
+        "label": "Saturnusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8827,
+          52.415004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197364",
+        "label": "Jupiterstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884522,
+          52.414946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198147",
+        "label": "Kometensingel 201",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881805,
+          52.414995
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197266",
+        "label": "Neptunusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883571,
+          52.415458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197314",
+        "label": "Uranusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884369,
+          52.41566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198159",
+        "label": "Kometensingel 225",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884588,
+          52.414778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196979",
+        "label": "Centaurusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883654,
+          52.414833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196956",
+        "label": "Mercuriusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882747,
+          52.41529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197361",
+        "label": "Saturnusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883741,
+          52.415666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197331",
+        "label": "Uranusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883505,
+          52.415494
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197315",
+        "label": "Uranusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882983,
+          52.415398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197350",
+        "label": "Saturnusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882257,
+          52.41593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198190",
+        "label": "Kometensingel 287",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881257,
+          52.41514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198201",
+        "label": "Kometensingel 309",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884009,
+          52.41588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198165",
+        "label": "Kometensingel 237",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883037,
+          52.415368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197349",
+        "label": "Saturnusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883119,
+          52.416045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197285",
+        "label": "Neptunusstraat 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882363,
+          52.415157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197294",
+        "label": "Neptunusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883004,
+          52.416354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198177",
+        "label": "Kometensingel 261",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881881,
+          52.414776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197289",
+        "label": "Neptunusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882502,
+          52.415272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197297",
+        "label": "Neptunusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883611,
+          52.415103
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197341",
+        "label": "Saturnusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883878,
+          52.41594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198167",
+        "label": "Kometensingel 241",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88274,
+          52.415038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197365",
+        "label": "Jupiterstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882458,
+          52.415234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197296",
+        "label": "Neptunusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882354,
+          52.415493
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197271",
+        "label": "Neptunusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883932,
+          52.41507
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196960",
+        "label": "Mercuriusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883315,
+          52.415837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197337",
+        "label": "Uranusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883272,
+          52.416155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197288",
+        "label": "Neptunusstraat 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883336,
+          52.415567
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197318",
+        "label": "Uranusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883067,
+          52.415011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197373",
+        "label": "Jupiterstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883251,
+          52.416235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198173",
+        "label": "Kometensingel 253",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881918,
+          52.415629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197404",
+        "label": "Neptunusplein 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882451,
+          52.414979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197382",
+        "label": "Marsstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881775,
+          52.415349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197408",
+        "label": "Neptunusplein 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883686,
+          52.415697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197332",
+        "label": "Uranusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88318,
+          52.415344
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197348",
+        "label": "Saturnusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883006,
+          52.414963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197372",
+        "label": "Jupiterstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884056,
+          52.415484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197326",
+        "label": "Uranusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882874,
+          52.415233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197359",
+        "label": "Saturnusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884,
+          52.415288
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197308",
+        "label": "Uranusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882929,
+          52.415987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197283",
+        "label": "Neptunusstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88336,
+          52.41526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197345",
+        "label": "Saturnusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884139,
+          52.414933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196970",
+        "label": "Mercuriusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88193,
+          52.414815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197290",
+        "label": "Neptunusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887105,
+          52.414914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198584",
+        "label": "Kometensingel 186",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883249,
+          52.415642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197319",
+        "label": "Uranusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883241,
+          52.415319
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197347",
+        "label": "Saturnusstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882408,
+          52.415197
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197295",
+        "label": "Neptunusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881874,
+          52.415115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197268",
+        "label": "Neptunusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881721,
+          52.415376
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197409",
+        "label": "Neptunusplein 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883672,
+          52.415081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197340",
+        "label": "Saturnusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882517,
+          52.414949
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197381",
+        "label": "Marsstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881339,
+          52.414937
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197496",
+        "label": "Meteorenweg 238",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883623,
+          52.415727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197333",
+        "label": "Uranusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884462,
+          52.414974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198148",
+        "label": "Kometensingel 203",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884581,
+          52.414923
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198146",
+        "label": "Kometensingel 199",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88384,
+          52.414996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196958",
+        "label": "Mercuriusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882643,
+          52.414958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197363",
+        "label": "Jupiterstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883067,
+          52.416326
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198176",
+        "label": "Kometensingel 259",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882924,
+          52.415428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197351",
+        "label": "Saturnusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882046,
+          52.415566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197402",
+        "label": "Neptunusplein 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881947,
+          52.415268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197405",
+        "label": "Neptunusplein 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882444,
+          52.415989
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198188",
+        "label": "Kometensingel 283",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884118,
+          52.415453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197325",
+        "label": "Uranusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881987,
+          52.4156
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197403",
+        "label": "Neptunusplein 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881462,
+          52.415298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198198",
+        "label": "Kometensingel 303",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882165,
+          52.415857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198192",
+        "label": "Kometensingel 291",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88404,
+          52.414859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196968",
+        "label": "Mercuriusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88407,
+          52.41585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198164",
+        "label": "Kometensingel 235",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883696,
+          52.416074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198170",
+        "label": "Kometensingel 247",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882337,
+          52.414812
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197395",
+        "label": "Marsstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884031,
+          52.415143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196962",
+        "label": "Mercuriusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883814,
+          52.415965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198168",
+        "label": "Kometensingel 243",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881558,
+          52.414811
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197261",
+        "label": "Neptunusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884275,
+          52.415075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198151",
+        "label": "Kometensingel 209",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883063,
+          52.415726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197322",
+        "label": "Uranusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883938,
+          52.415318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197309",
+        "label": "Uranusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881292,
+          52.415177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198200",
+        "label": "Kometensingel 307",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882882,
+          52.415155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197368",
+        "label": "Jupiterstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883739,
+          52.415048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197339",
+        "label": "Saturnusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883127,
+          52.416296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198175",
+        "label": "Kometensingel 257",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883242,
+          52.415861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197338",
+        "label": "Uranusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883482,
+          52.415163
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197343",
+        "label": "Saturnusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883633,
+          52.416104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198171",
+        "label": "Kometensingel 249",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88323,
+          52.416117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197287",
+        "label": "Neptunusstraat 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883451,
+          52.415513
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197316",
+        "label": "Uranusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882161,
+          52.414895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197398",
+        "label": "Marsstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884704,
+          52.414863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198144",
+        "label": "Kometensingel 195",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883878,
+          52.415346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197310",
+        "label": "Uranusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882479,
+          52.416025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198187",
+        "label": "Kometensingel 281",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884367,
+          52.415415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198153",
+        "label": "Kometensingel 213",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883369,
+          52.415807
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197336",
+        "label": "Uranusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882759,
+          52.415754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197278",
+        "label": "Neptunusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881114,
+          52.41503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198204",
+        "label": "Kometensingel 315",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882888,
+          52.415574
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197300",
+        "label": "Neptunusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882839,
+          52.415114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197367",
+        "label": "Jupiterstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882547,
+          52.415307
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197298",
+        "label": "Neptunusstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88343,
+          52.414965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197355",
+        "label": "Saturnusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882111,
+          52.415537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197401",
+        "label": "Neptunusplein 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882813,
+          52.415259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197360",
+        "label": "Saturnusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881923,
+          52.415152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197269",
+        "label": "Neptunusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882893,
+          52.41595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197282",
+        "label": "Neptunusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882064,
+          52.415784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198194",
+        "label": "Kometensingel 295",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882665,
+          52.415686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197276",
+        "label": "Neptunusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884177,
+          52.415426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197324",
+        "label": "Uranusstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881149,
+          52.415062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198203",
+        "label": "Kometensingel 313",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881255,
+          52.414972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197497",
+        "label": "Meteorenweg 240",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883397,
+          52.415971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197304",
+        "label": "Neptunusstraat 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882935,
+          52.416381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198178",
+        "label": "Kometensingel 263",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884497,
+          52.415606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198157",
+        "label": "Kometensingel 221",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883562,
+          52.415756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197334",
+        "label": "Uranusstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881954,
+          52.415707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198196",
+        "label": "Kometensingel 299",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883306,
+          52.415025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197357",
+        "label": "Saturnusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881753,
+          52.414961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197265",
+        "label": "Neptunusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882173,
+          52.415514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197400",
+        "label": "Neptunusplein 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882985,
+          52.415653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197302",
+        "label": "Neptunusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88234,
+          52.415038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197384",
+        "label": "Marsstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883354,
+          52.415936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197303",
+        "label": "Neptunusstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887204,
+          52.414922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198583",
+        "label": "Kometensingel 184",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88376,
+          52.416047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198169",
+        "label": "Kometensingel 245",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882898,
+          52.414774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197380",
+        "label": "Marsstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882535,
+          52.416063
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198186",
+        "label": "Kometensingel 279",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882879,
+          52.414856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197369",
+        "label": "Jupiterstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884082,
+          52.415179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196963",
+        "label": "Mercuriusstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883387,
+          52.415541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197317",
+        "label": "Uranusstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884395,
+          52.415004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198149",
+        "label": "Kometensingel 205",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883303,
+          52.415292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197346",
+        "label": "Saturnusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883762,
+          52.415373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197311",
+        "label": "Uranusstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882231,
+          52.415485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197399",
+        "label": "Neptunusplein 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881975,
+          52.415194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197270",
+        "label": "Neptunusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882926,
+          52.414897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197370",
+        "label": "Jupiterstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883983,
+          52.415109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196961",
+        "label": "Mercuriusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883807,
+          52.415641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197330",
+        "label": "Uranusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882399,
+          52.415005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197383",
+        "label": "Marsstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.415823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198193",
+        "label": "Kometensingel 293",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88249,
+          52.415608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197274",
+        "label": "Neptunusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884304,
+          52.415692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198160",
+        "label": "Kometensingel 227",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882606,
+          52.415643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197275",
+        "label": "Neptunusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882768,
+          52.416331
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198180",
+        "label": "Kometensingel 267",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88263,
+          52.416135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198184",
+        "label": "Kometensingel 275",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884438,
+          52.415629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198158",
+        "label": "Kometensingel 223",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884469,
+          52.415489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198155",
+        "label": "Kometensingel 217",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883588,
+          52.416128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198172",
+        "label": "Kometensingel 251",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883134,
+          52.4157
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197321",
+        "label": "Uranusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883579,
+          52.414775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196954",
+        "label": "Mercuriusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881391,
+          52.414912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197495",
+        "label": "Meteorenweg 236",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882936,
+          52.415614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197301",
+        "label": "Neptunusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881613,
+          52.414849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197262",
+        "label": "Neptunusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884647,
+          52.414891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198145",
+        "label": "Kometensingel 197",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882277,
+          52.414835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197396",
+        "label": "Marsstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88222,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197397",
+        "label": "Marsstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883616,
+          52.414803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196955",
+        "label": "Mercuriusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883945,
+          52.41591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198166",
+        "label": "Kometensingel 239",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88391,
+          52.414763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198317",
+        "label": "Mercuriusplein 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884066,
+          52.415261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197307",
+        "label": "Uranusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883632,
+          52.415431
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197313",
+        "label": "Uranusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881659,
+          52.41541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197410",
+        "label": "Neptunusplein 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884337,
+          52.415032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198150",
+        "label": "Kometensingel 207",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883491,
+          52.414936
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197354",
+        "label": "Saturnusstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884508,
+          52.415518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198156",
+        "label": "Kometensingel 219",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883889,
+          52.415033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196959",
+        "label": "Mercuriusstraat 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882964,
+          52.414932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197371",
+        "label": "Jupiterstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881447,
+          52.414884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197494",
+        "label": "Meteorenweg 234",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883433,
+          52.415779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197335",
+        "label": "Uranusstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882024,
+          52.415743
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198195",
+        "label": "Kometensingel 297",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882665,
+          52.416255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198182",
+        "label": "Kometensingel 271",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884084,
+          52.414899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196969",
+        "label": "Mercuriusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882024,
+          52.414893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197292",
+        "label": "Neptunusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.415291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197406",
+        "label": "Neptunusplein 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881704,
+          52.41492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197264",
+        "label": "Neptunusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883506,
+          52.416045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197306",
+        "label": "Neptunusstraat 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88399,
+          52.415559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197327",
+        "label": "Uranusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883426,
+          52.415191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197344",
+        "label": "Saturnusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881511,
+          52.415338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198197",
+        "label": "Kometensingel 301",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883934,
+          52.415581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197328",
+        "label": "Uranusstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881659,
+          52.414885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197263",
+        "label": "Neptunusstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883167,
+          52.416083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197286",
+        "label": "Neptunusstraat 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882712,
+          52.41572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197277",
+        "label": "Neptunusstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884177,
+          52.414972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196971",
+        "label": "Mercuriusstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882846,
+          52.415538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197299",
+        "label": "Neptunusstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883689,
+          52.414867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196957",
+        "label": "Mercuriusstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882305,
+          52.41597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198189",
+        "label": "Kometensingel 285",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882688,
+          52.415317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197362",
+        "label": "Saturnusstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881825,
+          52.415084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197267",
+        "label": "Neptunusstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882213,
+          52.415894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198191",
+        "label": "Kometensingel 289",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883371,
+          52.414997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197356",
+        "label": "Saturnusstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883444,
+          52.416014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197305",
+        "label": "Neptunusstraat 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884132,
+          52.415827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198163",
+        "label": "Kometensingel 233",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882712,
+          52.416295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198181",
+        "label": "Kometensingel 269",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883868,
+          52.415611
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197329",
+        "label": "Uranusstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882583,
+          52.4161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198185",
+        "label": "Kometensingel 277",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881349,
+          52.415217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198199",
+        "label": "Kometensingel 305",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883694,
+          52.415402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197312",
+        "label": "Uranusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883543,
+          52.415137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197342",
+        "label": "Saturnusstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883193,
+          52.415671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197320",
+        "label": "Uranusstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881838,
+          52.415318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197407",
+        "label": "Neptunusplein 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882988,
+          52.416026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197284",
+        "label": "Neptunusstraat 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886992,
+          52.414902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198585",
+        "label": "Kometensingel 188",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882446,
+          52.415565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197273",
+        "label": "Neptunusstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88423,
+          52.415401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197323",
+        "label": "Uranusstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882677,
+          52.416167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198183",
+        "label": "Kometensingel 273",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882962,
+          52.414744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197379",
+        "label": "Marsstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88239,
+          52.41553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197272",
+        "label": "Neptunusstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883112,
+          52.415043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197374",
+        "label": "Jupiterstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882745,
+          52.41585
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197279",
+        "label": "Neptunusstraat 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882314,
+          52.415123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197293",
+        "label": "Neptunusstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883187,
+          52.41627
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198174",
+        "label": "Kometensingel 255",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881208,
+          52.415107
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198202",
+        "label": "Kometensingel 311",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882792,
+          52.415075
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197366",
+        "label": "Jupiterstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884412,
+          52.415449
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198154",
+        "label": "Kometensingel 215",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884188,
+          52.415798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198162",
+        "label": "Kometensingel 231",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884247,
+          52.415766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198161",
+        "label": "Kometensingel 229",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881978,
+          52.414855
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197291",
+        "label": "Neptunusstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882842,
+          52.415914
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197281",
+        "label": "Neptunusstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884758,
+          52.415171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198152",
+        "label": "Kometensingel 211",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882816,
+          52.416368
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198179",
+        "label": "Kometensingel 265",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883247,
+          52.415056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197358",
+        "label": "Saturnusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882855,
+          52.415464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197352",
+        "label": "Saturnusstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88279,
+          52.415878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197280",
+        "label": "Neptunusstraat 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883552,
+          52.414912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197353",
+        "label": "Saturnusstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8827,
+          52.415004
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197364",
+        "label": "Jupiterstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884522,
+          52.414946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198147",
+        "label": "Kometensingel 201",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881805,
+          52.414995
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197266",
+        "label": "Neptunusstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883571,
+          52.415458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197314",
+        "label": "Uranusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884369,
+          52.41566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198159",
+        "label": "Kometensingel 225",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884588,
+          52.414778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196979",
+        "label": "Centaurusstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883654,
+          52.414833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196956",
+        "label": "Mercuriusstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882747,
+          52.41529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197361",
+        "label": "Saturnusstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883741,
+          52.415666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A197331",
+        "label": "Uranusstraat 18",
+        "year": "1943"
+      }
+    }
+  ]
+}

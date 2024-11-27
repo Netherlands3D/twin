@@ -1,0 +1,245 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858014,
+          52.405727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169063",
+        "label": "Hemweg 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857926,
+          52.405762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169064",
+        "label": "Hemweg 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856513,
+          52.406384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169065",
+        "label": "Hemweg 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856351,
+          52.406542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169066",
+        "label": "Hemweg 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856236,
+          52.406594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169067",
+        "label": "Hemweg 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856152,
+          52.406631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169068",
+        "label": "Hemweg 101",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853434,
+          52.407594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169069",
+        "label": "Hemweg 107",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85334,
+          52.407634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169070",
+        "label": "Hemweg 105",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.858014,
+          52.405727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169063",
+        "label": "Hemweg 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857926,
+          52.405762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169064",
+        "label": "Hemweg 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856513,
+          52.406384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169065",
+        "label": "Hemweg 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856351,
+          52.406542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169066",
+        "label": "Hemweg 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856236,
+          52.406594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169067",
+        "label": "Hemweg 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856152,
+          52.406631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169068",
+        "label": "Hemweg 101",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853434,
+          52.407594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169069",
+        "label": "Hemweg 107",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85334,
+          52.407634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169070",
+        "label": "Hemweg 105",
+        "year": "1909"
+      }
+    }
+  ]
+}

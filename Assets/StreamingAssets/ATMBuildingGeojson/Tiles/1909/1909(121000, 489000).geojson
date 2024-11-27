@@ -1,0 +1,2075 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887989,
+          52.388854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128396",
+        "label": "Barentszstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889503,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128432",
+        "label": "Barentszplein 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889249,
+          52.389003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128426",
+        "label": "Barentszplein 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891206,
+          52.3893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128440",
+        "label": "Westerdoksdijk 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889169,
+          52.388994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128424",
+        "label": "Barentszplein 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888074,
+          52.388864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128397",
+        "label": "Barentszstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888566,
+          52.388916
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128406",
+        "label": "Barentszstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891249,
+          52.389196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128444",
+        "label": "Westerdoksdijk 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889415,
+          52.389025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128430",
+        "label": "Barentszplein 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888346,
+          52.388894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128400",
+        "label": "Barentszstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888495,
+          52.388908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128404",
+        "label": "Barentszstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887843,
+          52.388835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128393",
+        "label": "Barentszstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889573,
+          52.389044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128434",
+        "label": "Barentszplein 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889675,
+          52.389061
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128435",
+        "label": "Barentszplein 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889042,
+          52.388974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128420",
+        "label": "Barentszplein 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891301,
+          52.38909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128448",
+        "label": "Westerdoksdijk 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888818,
+          52.388948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128414",
+        "label": "Barentszplein 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891054,
+          52.389264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128438",
+        "label": "Barentszplein 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88897,
+          52.388967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128418",
+        "label": "Barentszplein 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88889,
+          52.388954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128416",
+        "label": "Barentszplein 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88842,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128402",
+        "label": "Barentszstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891229,
+          52.38925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128442",
+        "label": "Westerdoksdijk 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890879,
+          52.389247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128436",
+        "label": "Barentszplein 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887763,
+          52.388826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128391",
+        "label": "Barentszstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888692,
+          52.388933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128410",
+        "label": "Barentszplein 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889108,
+          52.388987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128422",
+        "label": "Barentszplein 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888752,
+          52.38894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128412",
+        "label": "Barentszplein 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888266,
+          52.388885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128399",
+        "label": "Barentszstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889332,
+          52.389012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128428",
+        "label": "Barentszplein 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888631,
+          52.388926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128408",
+        "label": "Barentszstraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890965,
+          52.389255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128437",
+        "label": "Barentszplein 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887918,
+          52.388843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128395",
+        "label": "Barentszstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88817,
+          52.388874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128398",
+        "label": "Barentszstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891279,
+          52.389143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128446",
+        "label": "Westerdoksdijk 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887866,
+          52.388575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128338",
+        "label": "Zoutkeetsgracht 26 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89133,
+          52.38903
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128450",
+        "label": "Westerdoksdijk 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888488,
+          52.38783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128640",
+        "label": "Vierwindenstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887794,
+          52.387874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128643",
+        "label": "Vierwindenstraat 4 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889512,
+          52.389311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109122",
+        "label": "Planciusstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889662,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109166",
+        "label": "Barentszplein 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889717,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109171",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889608,
+          52.388608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109171",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88885,
+          52.388556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888777,
+          52.388552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888689,
+          52.388546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888612,
+          52.388543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109198",
+        "label": "Zoutkeetsgracht 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888541,
+          52.388541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109203",
+        "label": "Zoutkeetsgracht 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888457,
+          52.388534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109208",
+        "label": "Zoutkeetsgracht 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888116,
+          52.388705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109212",
+        "label": "Zoutkeetsgracht 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888108,
+          52.388643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109215",
+        "label": "Zoutkeetsgracht 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888115,
+          52.388582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109218",
+        "label": "Zoutkeetsgracht 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888129,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109221",
+        "label": "Zoutkeetsgracht 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888942,
+          52.388048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109286",
+        "label": "Zoutkeetsgracht 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889418,
+          52.388093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109290",
+        "label": "Zoutkeetsgracht 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109293",
+        "label": "Zandhoek 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109298",
+        "label": "Zandhoek 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.388006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109303",
+        "label": "Zandhoek 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109308",
+        "label": "Zandhoek 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889947,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109313",
+        "label": "Zandhoek 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889944,
+          52.387858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109318",
+        "label": "Zandhoek 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889934,
+          52.387816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109323",
+        "label": "Zandhoek 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891093,
+          52.390732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128452",
+        "label": "Westerdoksdijk 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888089,
+          52.38976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128462",
+        "label": "Roggeveenstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888372,
+          52.389707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128465",
+        "label": "Roggeveenstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88867,
+          52.389666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128466",
+        "label": "Roggeveenstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888038,
+          52.387814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128642",
+        "label": "Vierwindenstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887989,
+          52.388854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128396",
+        "label": "Barentszstraat 17",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889503,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128432",
+        "label": "Barentszplein 33",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889249,
+          52.389003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128426",
+        "label": "Barentszplein 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891206,
+          52.3893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128440",
+        "label": "Westerdoksdijk 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889169,
+          52.388994
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128424",
+        "label": "Barentszplein 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888074,
+          52.388864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128397",
+        "label": "Barentszstraat 15",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888566,
+          52.388916
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128406",
+        "label": "Barentszstraat 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891249,
+          52.389196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128444",
+        "label": "Westerdoksdijk 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889415,
+          52.389025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128430",
+        "label": "Barentszplein 35",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888346,
+          52.388894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128400",
+        "label": "Barentszstraat 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888495,
+          52.388908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128404",
+        "label": "Barentszstraat 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887843,
+          52.388835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128393",
+        "label": "Barentszstraat 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889573,
+          52.389044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128434",
+        "label": "Barentszplein 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889675,
+          52.389061
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128435",
+        "label": "Barentszplein 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889042,
+          52.388974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128420",
+        "label": "Barentszplein 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891301,
+          52.38909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128448",
+        "label": "Westerdoksdijk 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888818,
+          52.388948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128414",
+        "label": "Barentszplein 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891054,
+          52.389264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128438",
+        "label": "Barentszplein 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88897,
+          52.388967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128418",
+        "label": "Barentszplein 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88889,
+          52.388954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128416",
+        "label": "Barentszplein 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88842,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128402",
+        "label": "Barentszstraat 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891229,
+          52.38925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128442",
+        "label": "Westerdoksdijk 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890879,
+          52.389247
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128436",
+        "label": "Barentszplein 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887763,
+          52.388826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128391",
+        "label": "Barentszstraat 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888692,
+          52.388933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128410",
+        "label": "Barentszplein 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889108,
+          52.388987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128422",
+        "label": "Barentszplein 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888752,
+          52.38894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128412",
+        "label": "Barentszplein 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888266,
+          52.388885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128399",
+        "label": "Barentszstraat 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889332,
+          52.389012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128428",
+        "label": "Barentszplein 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888631,
+          52.388926
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128408",
+        "label": "Barentszstraat 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890965,
+          52.389255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128437",
+        "label": "Barentszplein 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887918,
+          52.388843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128395",
+        "label": "Barentszstraat 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88817,
+          52.388874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128398",
+        "label": "Barentszstraat 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891279,
+          52.389143
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128446",
+        "label": "Westerdoksdijk 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887866,
+          52.388575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128338",
+        "label": "Zoutkeetsgracht 26 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.89133,
+          52.38903
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128450",
+        "label": "Westerdoksdijk 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888488,
+          52.38783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128640",
+        "label": "Vierwindenstraat 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887794,
+          52.387874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128643",
+        "label": "Vierwindenstraat 4 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889512,
+          52.389311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109122",
+        "label": "Planciusstraat 31",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889662,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109166",
+        "label": "Barentszplein 25",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889717,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109171",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889608,
+          52.388608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109171",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88885,
+          52.388556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888777,
+          52.388552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888689,
+          52.388546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109185",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888612,
+          52.388543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109198",
+        "label": "Zoutkeetsgracht 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888541,
+          52.388541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109203",
+        "label": "Zoutkeetsgracht 16",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888457,
+          52.388534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109208",
+        "label": "Zoutkeetsgracht 18",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888116,
+          52.388705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109212",
+        "label": "Zoutkeetsgracht 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888108,
+          52.388643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109215",
+        "label": "Zoutkeetsgracht 22",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888115,
+          52.388582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109218",
+        "label": "Zoutkeetsgracht 24",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888129,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109221",
+        "label": "Zoutkeetsgracht 26",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109273",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888942,
+          52.388048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109286",
+        "label": "Zoutkeetsgracht 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889418,
+          52.388093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109290",
+        "label": "Zoutkeetsgracht 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109293",
+        "label": "Zandhoek 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109298",
+        "label": "Zandhoek 13",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.388006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109303",
+        "label": "Zandhoek 12",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109308",
+        "label": "Zandhoek 11",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889947,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109313",
+        "label": "Zandhoek 10",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889944,
+          52.387858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109318",
+        "label": "Zandhoek 9",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889934,
+          52.387816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109323",
+        "label": "Zandhoek 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.891093,
+          52.390732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128452",
+        "label": "Westerdoksdijk 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888089,
+          52.38976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128462",
+        "label": "Roggeveenstraat 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888372,
+          52.389707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128465",
+        "label": "Roggeveenstraat 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88867,
+          52.389666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128466",
+        "label": "Roggeveenstraat 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888038,
+          52.387814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A128642",
+        "label": "Vierwindenstraat 4",
+        "year": "1909"
+      }
+    }
+  ]
+}

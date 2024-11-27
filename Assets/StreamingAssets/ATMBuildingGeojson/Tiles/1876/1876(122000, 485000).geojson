@@ -1,0 +1,8375 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906231,
+          52.360629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112363",
+        "label": "Sarphatistraat 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908563,
+          52.355987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172351",
+        "label": "Oetgenspad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908568,
+          52.355739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172195",
+        "label": "Oetgenspad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908594,
+          52.355566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172185",
+        "label": "Achterpad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907588,
+          52.356073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172391",
+        "label": "Weesperzijde 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906706,
+          52.36018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112423",
+        "label": "Tulpstraat 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908643,
+          52.356007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172349",
+        "label": "Oetgenspad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907662,
+          52.355927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172385",
+        "label": "Weesperzijde 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908696,
+          52.354809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172135",
+        "label": "Weesperzijde 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908979,
+          52.354687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172133",
+        "label": "Weesperzijde 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906138,
+          52.360072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112411",
+        "label": "Tulpstraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906876,
+          52.360566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112333",
+        "label": "Huddestraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902832,
+          52.360884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93195",
+        "label": "Binnen Amstel 338",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908712,
+          52.356021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172347",
+        "label": "Oetgenspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908769,
+          52.35544
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172167",
+        "label": "Achterpad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112377",
+        "label": "Tulpstraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908492,
+          52.355039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172137",
+        "label": "Weesperzijde 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906615,
+          52.360166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112420",
+        "label": "Tulpstraat 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909105,
+          52.35552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172177",
+        "label": "Achterpad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9052,
+          52.360757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112264",
+        "label": "Sarphatistraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909191,
+          52.356119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172333",
+        "label": "Oetgenspad 53",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910685,
+          52.356178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169379",
+        "label": "Oetgenspad 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902933,
+          52.357547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145212",
+        "label": "Govert Flinckstraat 394",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909631,
+          52.356221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172323",
+        "label": "Oetgenspad 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909754,
+          52.356252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172320",
+        "label": "Oetgenspad 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908705,
+          52.356208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172344",
+        "label": "Oetgenspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907983,
+          52.355841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172375",
+        "label": "Oetgenspad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908217,
+          52.355897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172363",
+        "label": "Oetgenspad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908538,
+          52.355643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172181",
+        "label": "Achterpad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907888,
+          52.355432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172143",
+        "label": "Weesperzijde 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906357,
+          52.359865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112404",
+        "label": "Huddestraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906926,
+          52.360496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112335",
+        "label": "Huddestraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903453,
+          52.357689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145184",
+        "label": "Govert Flinckstraat 408",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908417,
+          52.355946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172355",
+        "label": "Oetgenspad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909777,
+          52.356039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172215",
+        "label": "Oetgenspad 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912513,
+          52.356589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172242",
+        "label": "Oetgenspad 70",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909012,
+          52.356077
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172340",
+        "label": "Oetgenspad 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111473",
+        "label": "Spinozastraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910222,
+          52.360867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111518",
+        "label": "Spinozastraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90772,
+          52.355773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172379",
+        "label": "Weesperzijde 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905069,
+          52.35538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170626",
+        "label": "Amsteldijk 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90412,
+          52.357472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145149",
+        "label": "Amsteldijk 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903765,
+          52.356842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145149",
+        "label": "Amsteldijk 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912907,
+          52.356805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172248",
+        "label": "Oetgenspad 76",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910125,
+          52.356128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172221",
+        "label": "Oetgenspad 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909803,
+          52.356263
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172319",
+        "label": "Oetgenspad 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9029,
+          52.360537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93205",
+        "label": "Binnen Amstel 334",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907986,
+          52.355303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172147",
+        "label": "Weesperzijde 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902798,
+          52.357505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145220",
+        "label": "Govert Flinckstraat 390",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908717,
+          52.355775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172199",
+        "label": "Oetgenspad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90863,
+          52.355403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172163",
+        "label": "Achterpad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912158,
+          52.356624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172234",
+        "label": "Oetgenspad 62",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908044,
+          52.355993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172370",
+        "label": "Oetgenspad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905941,
+          52.360571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112351",
+        "label": "Sarphatistraat 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111479",
+        "label": "Spinozastraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907722,
+          52.355818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172381",
+        "label": "Weesperzijde 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906561,
+          52.360325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112394",
+        "label": "Tulpstraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907028,
+          52.357558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172396",
+        "label": "Weesperzijde 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913182,
+          52.35686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172258",
+        "label": "Oetgenspad 86",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909582,
+          52.356211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172324",
+        "label": "Oetgenspad 71",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9129,
+          52.356691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172244",
+        "label": "Oetgenspad 72",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903527,
+          52.357709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145180",
+        "label": "Govert Flinckstraat 410",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90652,
+          52.360146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112417",
+        "label": "Tulpstraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908237,
+          52.355963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172360",
+        "label": "Oetgenspad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906979,
+          52.360413
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112337",
+        "label": "Huddestraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905688,
+          52.360856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112284",
+        "label": "Sarphatistraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903006,
+          52.357713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145027",
+        "label": "Govert Flinckstraat 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9132,
+          52.35673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172256",
+        "label": "Oetgenspad 84",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145048",
+        "label": "Amsteldijk 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908163,
+          52.355885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172365",
+        "label": "Oetgenspad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909676,
+          52.354308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172129",
+        "label": "Weesperzijde 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907337,
+          52.357594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172394",
+        "label": "Weesperzijde 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906038,
+          52.360589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112355",
+        "label": "Sarphatistraat 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913024,
+          52.356829
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172252",
+        "label": "Oetgenspad 80",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91031,
+          52.356168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172224",
+        "label": "Oetgenspad 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909171,
+          52.355539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172179",
+        "label": "Achterpad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908868,
+          52.355809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172203",
+        "label": "Oetgenspad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90997,
+          52.356304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172312",
+        "label": "Oetgenspad 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908802,
+          52.356035
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172346",
+        "label": "Oetgenspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913389,
+          52.356909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172262",
+        "label": "Oetgenspad 92",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90949,
+          52.356187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172326",
+        "label": "Oetgenspad 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910763,
+          52.356202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169381",
+        "label": "Oetgenspad 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903974,
+          52.357742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145162",
+        "label": "Amsteldijk 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908491,
+          52.355965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172353",
+        "label": "Oetgenspad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911936,
+          52.356569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172232",
+        "label": "Oetgenspad 60",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906324,
+          52.360648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112367",
+        "label": "Sarphatistraat 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906447,
+          52.359885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112402",
+        "label": "Huddestraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908033,
+          52.355849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172373",
+        "label": "Oetgenspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905398,
+          52.360794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112271",
+        "label": "Sarphatistraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905327,
+          52.36087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112271",
+        "label": "Sarphatistraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903396,
+          52.357817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145041",
+        "label": "Govert Flinckstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903475,
+          52.357839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145041",
+        "label": "Govert Flinckstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909423,
+          52.354285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172131",
+        "label": "Weesperzijde 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912839,
+          52.356791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172246",
+        "label": "Oetgenspad 74",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909287,
+          52.356144
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172331",
+        "label": "Oetgenspad 57",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909052,
+          52.356086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172338",
+        "label": "Oetgenspad 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906748,
+          52.357948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147622",
+        "label": "Weesperzijde 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910698,
+          52.356478
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172278",
+        "label": "Oetgenspad 123",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910664,
+          52.356468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172280",
+        "label": "Oetgenspad 121",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907919,
+          52.355392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172144",
+        "label": "Weesperzijde 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907638,
+          52.355973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172387",
+        "label": "Weesperzijde 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90333,
+          52.357797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145038",
+        "label": "Govert Flinckstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90588,
+          52.360898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112290",
+        "label": "Sarphatistraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910212,
+          52.356147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172222",
+        "label": "Oetgenspad 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907126,
+          52.36082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112441",
+        "label": "Sarphatistraat 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906862,
+          52.360761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112432",
+        "label": "Sarphatistraat 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909155,
+          52.356108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172334",
+        "label": "Oetgenspad 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909853,
+          52.35606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172217",
+        "label": "Oetgenspad 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90796,
+          52.355351
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172146",
+        "label": "Weesperzijde 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911465,
+          52.356995
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172276",
+        "label": "Oetgenspad 135",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90511,
+          52.359992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112342",
+        "label": "Tulpplein 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903015,
+          52.357566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145208",
+        "label": "Govert Flinckstraat 396",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908757,
+          52.356126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172345",
+        "label": "Oetgenspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908957,
+          52.35606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172342",
+        "label": "Oetgenspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172321",
+        "label": "Oetgenspad 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906271,
+          52.35985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112406",
+        "label": "Huddestraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90691,
+          52.357691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172398",
+        "label": "Weesperzijde 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907695,
+          52.355851
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172383",
+        "label": "Weesperzijde 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906948,
+          52.360779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112435",
+        "label": "Sarphatistraat 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902862,
+          52.360826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93190",
+        "label": "Binnen Amstel 340",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906408,
+          52.360298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112389",
+        "label": "Tulpstraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913294,
+          52.356887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172260",
+        "label": "Oetgenspad 90",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909537,
+          52.356201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172325",
+        "label": "Oetgenspad 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902779,
+          52.358401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145074",
+        "label": "Stadhouderskade 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90287,
+          52.358422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145074",
+        "label": "Stadhouderskade 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906419,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112414",
+        "label": "Tulpstraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912446,
+          52.356581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172240",
+        "label": "Oetgenspad 68",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90985,
+          52.356274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172318",
+        "label": "Oetgenspad 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908279,
+          52.355909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172361",
+        "label": "Oetgenspad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905096,
+          52.360736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112261",
+        "label": "Sarphatistraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909674,
+          52.356231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172322",
+        "label": "Oetgenspad 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908466,
+          52.355712
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172193",
+        "label": "Oetgenspad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910085,
+          52.356332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172306",
+        "label": "Oetgenspad 95",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908725,
+          52.35543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172165",
+        "label": "Achterpad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902865,
+          52.357524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145216",
+        "label": "Govert Flinckstraat 392",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907318,
+          52.36086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112447",
+        "label": "Sarphatistraat 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906639,
+          52.360342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112397",
+        "label": "Tulpstraat 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90605,
+          52.360234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112380",
+        "label": "Tulpstraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910064,
+          52.356329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172308",
+        "label": "Oetgenspad 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904665,
+          52.360838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112249",
+        "label": "Binnen Amstel 173",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909239,
+          52.356127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172332",
+        "label": "Oetgenspad 55",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90932,
+          52.356155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172330",
+        "label": "Oetgenspad 59",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909391,
+          52.360863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111470",
+        "label": "Spinozastraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906204,
+          52.360261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112383",
+        "label": "Tulpstraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903084,
+          52.357583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145204",
+        "label": "Govert Flinckstraat 398",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908492,
+          52.355373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172159",
+        "label": "Achterpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90368,
+          52.357753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145172",
+        "label": "Govert Flinckstraat 414",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904179,
+          52.357338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145141",
+        "label": "Amsteldijk 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904721,
+          52.355497
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145141",
+        "label": "Amsteldijk 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913095,
+          52.356845
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172254",
+        "label": "Oetgenspad 82",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909409,
+          52.356172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172328",
+        "label": "Oetgenspad 63",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909681,
+          52.356019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172213",
+        "label": "Oetgenspad 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906717,
+          52.360356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112400",
+        "label": "Tulpstraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905786,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112287",
+        "label": "Sarphatistraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908339,
+          52.355675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172191",
+        "label": "Oetgenspad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908656,
+          52.355472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172189",
+        "label": "Achterpad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903302,
+          52.357645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145192",
+        "label": "Govert Flinckstraat 404",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908882,
+          52.355466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172171",
+        "label": "Achterpad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905311,
+          52.360781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112268",
+        "label": "Sarphatistraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90615,
+          52.360612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112359",
+        "label": "Sarphatistraat 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903158,
+          52.357609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145200",
+        "label": "Govert Flinckstraat 400",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904013,
+          52.357664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145159",
+        "label": "Amsteldijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904174,
+          52.357283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145159",
+        "label": "Amsteldijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908217,
+          52.356002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172358",
+        "label": "Oetgenspad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908833,
+          52.355456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172169",
+        "label": "Achterpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905732,
+          52.360532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112345",
+        "label": "Sarphatistraat 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906863,
+          52.357869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172400",
+        "label": "Weesperzijde 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90558,
+          52.360833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112281",
+        "label": "Sarphatistraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912977,
+          52.356818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172250",
+        "label": "Oetgenspad 78",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909367,
+          52.356161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172329",
+        "label": "Oetgenspad 61",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906191,
+          52.359836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112408",
+        "label": "Huddestraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906423,
+          52.360668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112371",
+        "label": "Sarphatistraat 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909983,
+          52.356095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172219",
+        "label": "Oetgenspad 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908623,
+          52.355229
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172139",
+        "label": "Weesperzijde 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903379,
+          52.357667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145188",
+        "label": "Govert Flinckstraat 406",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904151,
+          52.357405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145145",
+        "label": "Amsteldijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904696,
+          52.355944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145145",
+        "label": "Amsteldijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907229,
+          52.360839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112444",
+        "label": "Sarphatistraat 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908625,
+          52.355516
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172187",
+        "label": "Achterpad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909885,
+          52.356282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172316",
+        "label": "Oetgenspad 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90956,
+          52.360897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111476",
+        "label": "Spinozastraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908193,
+          52.356038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172357",
+        "label": "Oetgenspad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911265,
+          52.357109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172274",
+        "label": "Oetgenspad 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903759,
+          52.357777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145168",
+        "label": "Govert Flinckstraat 416",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906798,
+          52.360198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112426",
+        "label": "Tulpstraat 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908104,
+          52.355868
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172367",
+        "label": "Oetgenspad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90894,
+          52.355837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172205",
+        "label": "Oetgenspad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906484,
+          52.360314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112391",
+        "label": "Tulpstraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910219,
+          52.356364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172300",
+        "label": "Oetgenspad 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904632,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112246",
+        "label": "Binnen Amstel 171",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907898,
+          52.35582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172377",
+        "label": "Oetgenspad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912412,
+          52.35668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172236",
+        "label": "Oetgenspad 64",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903601,
+          52.357728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145176",
+        "label": "Govert Flinckstraat 412",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904691,
+          52.360783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112252",
+        "label": "Binnen Amstel 175",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907836,
+          52.355509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172141",
+        "label": "Weesperzijde 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905838,
+          52.360551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112348",
+        "label": "Sarphatistraat 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904719,
+          52.360727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112255",
+        "label": "Binnen Amstel 177",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908569,
+          52.355608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172183",
+        "label": "Achterpad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910135,
+          52.356345
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172304",
+        "label": "Oetgenspad 97",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907857,
+          52.355474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172142",
+        "label": "Weesperzijde 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902952,
+          52.357695
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145023",
+        "label": "Govert Flinckstraat 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907429,
+          52.360882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112449",
+        "label": "Sarphatistraat 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909213,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111467",
+        "label": "Andrieszkade 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903223,
+          52.357626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145196",
+        "label": "Govert Flinckstraat 402",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911215,
+          52.356733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172269",
+        "label": "Oetgenspad 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906779,
+          52.360744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112429",
+        "label": "Sarphatistraat 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910314,
+          52.356383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172296",
+        "label": "Oetgenspad 105",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91044,
+          52.356416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172290",
+        "label": "Oetgenspad 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908553,
+          52.355385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172161",
+        "label": "Achterpad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90911,
+          52.356098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172336",
+        "label": "Oetgenspad 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910179,
+          52.356355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172302",
+        "label": "Oetgenspad 99",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910353,
+          52.356393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172294",
+        "label": "Oetgenspad 107",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90944,
+          52.356179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172327",
+        "label": "Oetgenspad 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.3608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112438",
+        "label": "Sarphatistraat 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906325,
+          52.360282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112386",
+        "label": "Tulpstraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908336,
+          52.355339
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172155",
+        "label": "Achterpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907624,
+          52.356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172389",
+        "label": "Weesperzijde 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903952,
+          52.35781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145165",
+        "label": "Amsteldijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908009,
+          52.355266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172149",
+        "label": "Weesperzijde 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910396,
+          52.356406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172292",
+        "label": "Oetgenspad 109",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904375,
+          52.356902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904086,
+          52.357535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904356,
+          52.356958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904336,
+          52.357005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904349,
+          52.356952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911092,
+          52.35692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172267",
+        "label": "Oetgenspad 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904056,
+          52.357592
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145156",
+        "label": "Amsteldijk 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9042,
+          52.357202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145156",
+        "label": "Amsteldijk 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91027,
+          52.356372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172298",
+        "label": "Oetgenspad 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903077,
+          52.35773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145014",
+        "label": "Govert Flinckstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903159,
+          52.357755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145014",
+        "label": "Govert Flinckstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910574,
+          52.356445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172284",
+        "label": "Oetgenspad 117",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908403,
+          52.355353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172157",
+        "label": "Achterpad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908194,
+          52.355302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172151",
+        "label": "Achterpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91062,
+          52.356457
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172282",
+        "label": "Oetgenspad 119",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910533,
+          52.356434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172286",
+        "label": "Oetgenspad 115",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906524,
+          52.360687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112374",
+        "label": "Sarphatistraat 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909011,
+          52.355495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172175",
+        "label": "Achterpad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905489,
+          52.360813
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112278",
+        "label": "Sarphatistraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911362,
+          52.356633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172271",
+        "label": "Oetgenspad 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909131,
+          52.355847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172209",
+        "label": "Oetgenspad 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909923,
+          52.356295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172314",
+        "label": "Oetgenspad 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907533,
+          52.360906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112451",
+        "label": "Sarphatistraat 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908956,
+          52.355483
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172173",
+        "label": "Achterpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90475,
+          52.360667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112258",
+        "label": "Binnen Amstel 179",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910011,
+          52.356317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172310",
+        "label": "Oetgenspad 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908647,
+          52.355758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172197",
+        "label": "Oetgenspad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903256,
+          52.357782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145035",
+        "label": "Govert Flinckstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910486,
+          52.356425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172288",
+        "label": "Oetgenspad 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908788,
+          52.355796
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172201",
+        "label": "Oetgenspad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908262,
+          52.355323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172153",
+        "label": "Achterpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902893,
+          52.360758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93185",
+        "label": "Binnen Amstel 342",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903781,
+          52.358117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145053",
+        "label": "Amsteldijk 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903756,
+          52.358178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145056",
+        "label": "Amsteldijk 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90372,
+          52.358248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145059",
+        "label": "Amsteldijk 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.358014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147611",
+        "label": "Olijphantspad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906894,
+          52.357982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147616",
+        "label": "Olijphantspad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913483,
+          52.356938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913232,
+          52.356877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908201,
+          52.355641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908146,
+          52.355629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908095,
+          52.355616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908047,
+          52.355606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907985,
+          52.355595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913538,
+          52.356956
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9136,
+          52.356971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913726,
+          52.356999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909268,
+          52.3559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169377",
+        "label": "Oetgenspad 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908965,
+          52.355688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172207",
+        "label": "Oetgenspad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909471,
+          52.355965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172211",
+        "label": "Oetgenspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909376,
+          52.355801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172226",
+        "label": "Oetgenspad 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912399,
+          52.356563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172238",
+        "label": "Oetgenspad 66",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911013,
+          52.357033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172265",
+        "label": "Oetgenspad 125",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908153,
+          52.355912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172369",
+        "label": "Oetgenspad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907914,
+          52.355899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172371",
+        "label": "Oetgenspad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908373,
+          52.358281
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172402",
+        "label": "Olijphantspad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911684,
+          52.358464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172405",
+        "label": "Olijphantspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911149,
+          52.359122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172413",
+        "label": "Olijphantspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908198,
+          52.358506
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172415",
+        "label": "Olijphantspad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906231,
+          52.360629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112363",
+        "label": "Sarphatistraat 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908563,
+          52.355987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172351",
+        "label": "Oetgenspad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908568,
+          52.355739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172195",
+        "label": "Oetgenspad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908594,
+          52.355566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172185",
+        "label": "Achterpad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907588,
+          52.356073
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172391",
+        "label": "Weesperzijde 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906706,
+          52.36018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112423",
+        "label": "Tulpstraat 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908643,
+          52.356007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172349",
+        "label": "Oetgenspad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907662,
+          52.355927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172385",
+        "label": "Weesperzijde 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908696,
+          52.354809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172135",
+        "label": "Weesperzijde 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908979,
+          52.354687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172133",
+        "label": "Weesperzijde 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906138,
+          52.360072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112411",
+        "label": "Tulpstraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906876,
+          52.360566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112333",
+        "label": "Huddestraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902832,
+          52.360884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93195",
+        "label": "Binnen Amstel 338",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908712,
+          52.356021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172347",
+        "label": "Oetgenspad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908769,
+          52.35544
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172167",
+        "label": "Achterpad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112377",
+        "label": "Tulpstraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908492,
+          52.355039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172137",
+        "label": "Weesperzijde 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906615,
+          52.360166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112420",
+        "label": "Tulpstraat 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909105,
+          52.35552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172177",
+        "label": "Achterpad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9052,
+          52.360757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112264",
+        "label": "Sarphatistraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909191,
+          52.356119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172333",
+        "label": "Oetgenspad 53",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910685,
+          52.356178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169379",
+        "label": "Oetgenspad 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902933,
+          52.357547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145212",
+        "label": "Govert Flinckstraat 394",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909631,
+          52.356221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172323",
+        "label": "Oetgenspad 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909754,
+          52.356252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172320",
+        "label": "Oetgenspad 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908705,
+          52.356208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172344",
+        "label": "Oetgenspad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907983,
+          52.355841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172375",
+        "label": "Oetgenspad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908217,
+          52.355897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172363",
+        "label": "Oetgenspad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908538,
+          52.355643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172181",
+        "label": "Achterpad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907888,
+          52.355432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172143",
+        "label": "Weesperzijde 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906357,
+          52.359865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112404",
+        "label": "Huddestraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906926,
+          52.360496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112335",
+        "label": "Huddestraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903453,
+          52.357689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145184",
+        "label": "Govert Flinckstraat 408",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908417,
+          52.355946
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172355",
+        "label": "Oetgenspad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909777,
+          52.356039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172215",
+        "label": "Oetgenspad 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912513,
+          52.356589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172242",
+        "label": "Oetgenspad 70",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909012,
+          52.356077
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172340",
+        "label": "Oetgenspad 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111473",
+        "label": "Spinozastraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910222,
+          52.360867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111518",
+        "label": "Spinozastraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90772,
+          52.355773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172379",
+        "label": "Weesperzijde 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905069,
+          52.35538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170626",
+        "label": "Amsteldijk 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90412,
+          52.357472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145149",
+        "label": "Amsteldijk 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903765,
+          52.356842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145149",
+        "label": "Amsteldijk 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912907,
+          52.356805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172248",
+        "label": "Oetgenspad 76",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910125,
+          52.356128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172221",
+        "label": "Oetgenspad 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909803,
+          52.356263
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172319",
+        "label": "Oetgenspad 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9029,
+          52.360537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93205",
+        "label": "Binnen Amstel 334",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907986,
+          52.355303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172147",
+        "label": "Weesperzijde 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902798,
+          52.357505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145220",
+        "label": "Govert Flinckstraat 390",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908717,
+          52.355775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172199",
+        "label": "Oetgenspad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90863,
+          52.355403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172163",
+        "label": "Achterpad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912158,
+          52.356624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172234",
+        "label": "Oetgenspad 62",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908044,
+          52.355993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172370",
+        "label": "Oetgenspad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905941,
+          52.360571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112351",
+        "label": "Sarphatistraat 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111479",
+        "label": "Spinozastraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907722,
+          52.355818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172381",
+        "label": "Weesperzijde 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906561,
+          52.360325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112394",
+        "label": "Tulpstraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907028,
+          52.357558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172396",
+        "label": "Weesperzijde 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913182,
+          52.35686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172258",
+        "label": "Oetgenspad 86",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909582,
+          52.356211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172324",
+        "label": "Oetgenspad 71",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9129,
+          52.356691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172244",
+        "label": "Oetgenspad 72",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903527,
+          52.357709
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145180",
+        "label": "Govert Flinckstraat 410",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90652,
+          52.360146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112417",
+        "label": "Tulpstraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908237,
+          52.355963
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172360",
+        "label": "Oetgenspad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906979,
+          52.360413
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112337",
+        "label": "Huddestraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905688,
+          52.360856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112284",
+        "label": "Sarphatistraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903006,
+          52.357713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145027",
+        "label": "Govert Flinckstraat 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9132,
+          52.35673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172256",
+        "label": "Oetgenspad 84",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145048",
+        "label": "Amsteldijk 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908163,
+          52.355885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172365",
+        "label": "Oetgenspad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909676,
+          52.354308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172129",
+        "label": "Weesperzijde 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907337,
+          52.357594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172394",
+        "label": "Weesperzijde 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906038,
+          52.360589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112355",
+        "label": "Sarphatistraat 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913024,
+          52.356829
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172252",
+        "label": "Oetgenspad 80",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91031,
+          52.356168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172224",
+        "label": "Oetgenspad 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909171,
+          52.355539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172179",
+        "label": "Achterpad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908868,
+          52.355809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172203",
+        "label": "Oetgenspad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90997,
+          52.356304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172312",
+        "label": "Oetgenspad 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908802,
+          52.356035
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172346",
+        "label": "Oetgenspad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913389,
+          52.356909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172262",
+        "label": "Oetgenspad 92",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90949,
+          52.356187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172326",
+        "label": "Oetgenspad 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910763,
+          52.356202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169381",
+        "label": "Oetgenspad 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903974,
+          52.357742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145162",
+        "label": "Amsteldijk 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908491,
+          52.355965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172353",
+        "label": "Oetgenspad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911936,
+          52.356569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172232",
+        "label": "Oetgenspad 60",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906324,
+          52.360648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112367",
+        "label": "Sarphatistraat 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906447,
+          52.359885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112402",
+        "label": "Huddestraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908033,
+          52.355849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172373",
+        "label": "Oetgenspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905398,
+          52.360794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112271",
+        "label": "Sarphatistraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905327,
+          52.36087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112271",
+        "label": "Sarphatistraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903396,
+          52.357817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145041",
+        "label": "Govert Flinckstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903475,
+          52.357839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145041",
+        "label": "Govert Flinckstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909423,
+          52.354285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172131",
+        "label": "Weesperzijde 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912839,
+          52.356791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172246",
+        "label": "Oetgenspad 74",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909287,
+          52.356144
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172331",
+        "label": "Oetgenspad 57",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909052,
+          52.356086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172338",
+        "label": "Oetgenspad 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906748,
+          52.357948
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147622",
+        "label": "Weesperzijde 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910698,
+          52.356478
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172278",
+        "label": "Oetgenspad 123",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910664,
+          52.356468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172280",
+        "label": "Oetgenspad 121",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907919,
+          52.355392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172144",
+        "label": "Weesperzijde 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907638,
+          52.355973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172387",
+        "label": "Weesperzijde 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90333,
+          52.357797
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145038",
+        "label": "Govert Flinckstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90588,
+          52.360898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112290",
+        "label": "Sarphatistraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910212,
+          52.356147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172222",
+        "label": "Oetgenspad 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907126,
+          52.36082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112441",
+        "label": "Sarphatistraat 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906862,
+          52.360761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112432",
+        "label": "Sarphatistraat 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909155,
+          52.356108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172334",
+        "label": "Oetgenspad 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909853,
+          52.35606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172217",
+        "label": "Oetgenspad 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90796,
+          52.355351
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172146",
+        "label": "Weesperzijde 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911465,
+          52.356995
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172276",
+        "label": "Oetgenspad 135",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90511,
+          52.359992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112342",
+        "label": "Tulpplein 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903015,
+          52.357566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145208",
+        "label": "Govert Flinckstraat 396",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908757,
+          52.356126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172345",
+        "label": "Oetgenspad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908957,
+          52.35606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172342",
+        "label": "Oetgenspad 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172321",
+        "label": "Oetgenspad 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906271,
+          52.35985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112406",
+        "label": "Huddestraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90691,
+          52.357691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172398",
+        "label": "Weesperzijde 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907695,
+          52.355851
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172383",
+        "label": "Weesperzijde 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906948,
+          52.360779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112435",
+        "label": "Sarphatistraat 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902862,
+          52.360826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93190",
+        "label": "Binnen Amstel 340",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906408,
+          52.360298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112389",
+        "label": "Tulpstraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913294,
+          52.356887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172260",
+        "label": "Oetgenspad 90",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909537,
+          52.356201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172325",
+        "label": "Oetgenspad 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902779,
+          52.358401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145074",
+        "label": "Stadhouderskade 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90287,
+          52.358422
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145074",
+        "label": "Stadhouderskade 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906419,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112414",
+        "label": "Tulpstraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912446,
+          52.356581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172240",
+        "label": "Oetgenspad 68",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90985,
+          52.356274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172318",
+        "label": "Oetgenspad 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908279,
+          52.355909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172361",
+        "label": "Oetgenspad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905096,
+          52.360736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112261",
+        "label": "Sarphatistraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909674,
+          52.356231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172322",
+        "label": "Oetgenspad 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908466,
+          52.355712
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172193",
+        "label": "Oetgenspad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910085,
+          52.356332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172306",
+        "label": "Oetgenspad 95",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908725,
+          52.35543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172165",
+        "label": "Achterpad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902865,
+          52.357524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145216",
+        "label": "Govert Flinckstraat 392",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907318,
+          52.36086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112447",
+        "label": "Sarphatistraat 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906639,
+          52.360342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112397",
+        "label": "Tulpstraat 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90605,
+          52.360234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112380",
+        "label": "Tulpstraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910064,
+          52.356329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172308",
+        "label": "Oetgenspad 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904665,
+          52.360838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112249",
+        "label": "Binnen Amstel 173",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909239,
+          52.356127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172332",
+        "label": "Oetgenspad 55",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90932,
+          52.356155
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172330",
+        "label": "Oetgenspad 59",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909391,
+          52.360863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111470",
+        "label": "Spinozastraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906204,
+          52.360261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112383",
+        "label": "Tulpstraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903084,
+          52.357583
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145204",
+        "label": "Govert Flinckstraat 398",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908492,
+          52.355373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172159",
+        "label": "Achterpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90368,
+          52.357753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145172",
+        "label": "Govert Flinckstraat 414",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904179,
+          52.357338
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145141",
+        "label": "Amsteldijk 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904721,
+          52.355497
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145141",
+        "label": "Amsteldijk 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913095,
+          52.356845
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172254",
+        "label": "Oetgenspad 82",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909409,
+          52.356172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172328",
+        "label": "Oetgenspad 63",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909681,
+          52.356019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172213",
+        "label": "Oetgenspad 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906717,
+          52.360356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112400",
+        "label": "Tulpstraat 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905786,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112287",
+        "label": "Sarphatistraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908339,
+          52.355675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172191",
+        "label": "Oetgenspad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908656,
+          52.355472
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172189",
+        "label": "Achterpad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903302,
+          52.357645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145192",
+        "label": "Govert Flinckstraat 404",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908882,
+          52.355466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172171",
+        "label": "Achterpad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905311,
+          52.360781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112268",
+        "label": "Sarphatistraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90615,
+          52.360612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112359",
+        "label": "Sarphatistraat 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903158,
+          52.357609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145200",
+        "label": "Govert Flinckstraat 400",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904013,
+          52.357664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145159",
+        "label": "Amsteldijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904174,
+          52.357283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145159",
+        "label": "Amsteldijk 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908217,
+          52.356002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172358",
+        "label": "Oetgenspad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908833,
+          52.355456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172169",
+        "label": "Achterpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905732,
+          52.360532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112345",
+        "label": "Sarphatistraat 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906863,
+          52.357869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172400",
+        "label": "Weesperzijde 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90558,
+          52.360833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112281",
+        "label": "Sarphatistraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912977,
+          52.356818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172250",
+        "label": "Oetgenspad 78",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909367,
+          52.356161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172329",
+        "label": "Oetgenspad 61",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906191,
+          52.359836
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112408",
+        "label": "Huddestraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906423,
+          52.360668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112371",
+        "label": "Sarphatistraat 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909983,
+          52.356095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172219",
+        "label": "Oetgenspad 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908623,
+          52.355229
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172139",
+        "label": "Weesperzijde 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903379,
+          52.357667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145188",
+        "label": "Govert Flinckstraat 406",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904151,
+          52.357405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145145",
+        "label": "Amsteldijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904696,
+          52.355944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145145",
+        "label": "Amsteldijk 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907229,
+          52.360839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112444",
+        "label": "Sarphatistraat 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908625,
+          52.355516
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172187",
+        "label": "Achterpad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909885,
+          52.356282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172316",
+        "label": "Oetgenspad 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90956,
+          52.360897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111476",
+        "label": "Spinozastraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908193,
+          52.356038
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172357",
+        "label": "Oetgenspad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911265,
+          52.357109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172274",
+        "label": "Oetgenspad 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903759,
+          52.357777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145168",
+        "label": "Govert Flinckstraat 416",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906798,
+          52.360198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112426",
+        "label": "Tulpstraat 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908104,
+          52.355868
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172367",
+        "label": "Oetgenspad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90894,
+          52.355837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172205",
+        "label": "Oetgenspad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906484,
+          52.360314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112391",
+        "label": "Tulpstraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910219,
+          52.356364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172300",
+        "label": "Oetgenspad 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904632,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112246",
+        "label": "Binnen Amstel 171",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907898,
+          52.35582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172377",
+        "label": "Oetgenspad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912412,
+          52.35668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172236",
+        "label": "Oetgenspad 64",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903601,
+          52.357728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145176",
+        "label": "Govert Flinckstraat 412",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904691,
+          52.360783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112252",
+        "label": "Binnen Amstel 175",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907836,
+          52.355509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172141",
+        "label": "Weesperzijde 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905838,
+          52.360551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112348",
+        "label": "Sarphatistraat 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904719,
+          52.360727
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112255",
+        "label": "Binnen Amstel 177",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908569,
+          52.355608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172183",
+        "label": "Achterpad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910135,
+          52.356345
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172304",
+        "label": "Oetgenspad 97",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907857,
+          52.355474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172142",
+        "label": "Weesperzijde 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902952,
+          52.357695
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145023",
+        "label": "Govert Flinckstraat 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907429,
+          52.360882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112449",
+        "label": "Sarphatistraat 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909213,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A111467",
+        "label": "Andrieszkade 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903223,
+          52.357626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145196",
+        "label": "Govert Flinckstraat 402",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911215,
+          52.356733
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172269",
+        "label": "Oetgenspad 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906779,
+          52.360744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112429",
+        "label": "Sarphatistraat 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910314,
+          52.356383
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172296",
+        "label": "Oetgenspad 105",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91044,
+          52.356416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172290",
+        "label": "Oetgenspad 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908553,
+          52.355385
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172161",
+        "label": "Achterpad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90911,
+          52.356098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172336",
+        "label": "Oetgenspad 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910179,
+          52.356355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172302",
+        "label": "Oetgenspad 99",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910353,
+          52.356393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172294",
+        "label": "Oetgenspad 107",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90944,
+          52.356179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172327",
+        "label": "Oetgenspad 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.3608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112438",
+        "label": "Sarphatistraat 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906325,
+          52.360282
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112386",
+        "label": "Tulpstraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908336,
+          52.355339
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172155",
+        "label": "Achterpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907624,
+          52.356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172389",
+        "label": "Weesperzijde 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903952,
+          52.35781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145165",
+        "label": "Amsteldijk 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908009,
+          52.355266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172149",
+        "label": "Weesperzijde 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910396,
+          52.356406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172292",
+        "label": "Oetgenspad 109",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904375,
+          52.356902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904086,
+          52.357535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904356,
+          52.356958
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904336,
+          52.357005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904349,
+          52.356952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145153",
+        "label": "Amsteldijk 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911092,
+          52.35692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172267",
+        "label": "Oetgenspad 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904056,
+          52.357592
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145156",
+        "label": "Amsteldijk 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9042,
+          52.357202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145156",
+        "label": "Amsteldijk 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91027,
+          52.356372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172298",
+        "label": "Oetgenspad 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903077,
+          52.35773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145014",
+        "label": "Govert Flinckstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903159,
+          52.357755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145014",
+        "label": "Govert Flinckstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910574,
+          52.356445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172284",
+        "label": "Oetgenspad 117",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908403,
+          52.355353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172157",
+        "label": "Achterpad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908194,
+          52.355302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172151",
+        "label": "Achterpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91062,
+          52.356457
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172282",
+        "label": "Oetgenspad 119",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910533,
+          52.356434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172286",
+        "label": "Oetgenspad 115",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906524,
+          52.360687
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112374",
+        "label": "Sarphatistraat 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909011,
+          52.355495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172175",
+        "label": "Achterpad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905489,
+          52.360813
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112278",
+        "label": "Sarphatistraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911362,
+          52.356633
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172271",
+        "label": "Oetgenspad 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909131,
+          52.355847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172209",
+        "label": "Oetgenspad 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909923,
+          52.356295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172314",
+        "label": "Oetgenspad 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907533,
+          52.360906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112451",
+        "label": "Sarphatistraat 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908956,
+          52.355483
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172173",
+        "label": "Achterpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90475,
+          52.360667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A112258",
+        "label": "Binnen Amstel 179",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910011,
+          52.356317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172310",
+        "label": "Oetgenspad 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908647,
+          52.355758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172197",
+        "label": "Oetgenspad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903256,
+          52.357782
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145035",
+        "label": "Govert Flinckstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910486,
+          52.356425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172288",
+        "label": "Oetgenspad 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908788,
+          52.355796
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172201",
+        "label": "Oetgenspad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908262,
+          52.355323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172153",
+        "label": "Achterpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902893,
+          52.360758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A93185",
+        "label": "Binnen Amstel 342",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903781,
+          52.358117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145053",
+        "label": "Amsteldijk 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903756,
+          52.358178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145056",
+        "label": "Amsteldijk 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90372,
+          52.358248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A145059",
+        "label": "Amsteldijk 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.358014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147611",
+        "label": "Olijphantspad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906894,
+          52.357982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A147616",
+        "label": "Olijphantspad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913483,
+          52.356938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913232,
+          52.356877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908201,
+          52.355641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908146,
+          52.355629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908095,
+          52.355616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908047,
+          52.355606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907985,
+          52.355595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913538,
+          52.356956
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9136,
+          52.356971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913726,
+          52.356999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169354",
+        "label": "Oetgenspad",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909268,
+          52.3559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169377",
+        "label": "Oetgenspad 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908965,
+          52.355688
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172207",
+        "label": "Oetgenspad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909471,
+          52.355965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172211",
+        "label": "Oetgenspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909376,
+          52.355801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172226",
+        "label": "Oetgenspad 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912399,
+          52.356563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172238",
+        "label": "Oetgenspad 66",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911013,
+          52.357033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172265",
+        "label": "Oetgenspad 125",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908153,
+          52.355912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172369",
+        "label": "Oetgenspad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907914,
+          52.355899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172371",
+        "label": "Oetgenspad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908373,
+          52.358281
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172402",
+        "label": "Olijphantspad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911684,
+          52.358464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172405",
+        "label": "Olijphantspad 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911149,
+          52.359122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172413",
+        "label": "Olijphantspad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908198,
+          52.358506
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172415",
+        "label": "Olijphantspad 3",
+        "year": "1876"
+      }
+    }
+  ]
+}

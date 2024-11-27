@@ -1,0 +1,5825 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902003,
+          52.386498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227253",
+        "label": "Ericastraat 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900474,
+          52.386514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227059",
+        "label": "Badhuisweg 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902346,
+          52.385912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227191",
+        "label": "Crocusstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901266,
+          52.385877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227116",
+        "label": "Hyacinthenstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900974,
+          52.385849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227104",
+        "label": "Hyacinthenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900624,
+          52.386104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227051",
+        "label": "Badhuisweg 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902305,
+          52.38659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227166",
+        "label": "Irisstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900848,
+          52.386062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227068",
+        "label": "Orchideestraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901962,
+          52.386752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227172",
+        "label": "Irisstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901841,
+          52.386809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227174",
+        "label": "Irisstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901842,
+          52.38561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227320",
+        "label": "Rietweg 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902121,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227251",
+        "label": "Ericastraat 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900886,
+          52.386428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227085",
+        "label": "Narcisstraat 25",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901699,
+          52.385613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227322",
+        "label": "Rietweg 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902073,
+          52.386838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227182",
+        "label": "Irisstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901707,
+          52.386417
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227272",
+        "label": "Ericastraat 41",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901121,
+          52.385765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227113",
+        "label": "Hyacinthenstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901924,
+          52.385892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227132",
+        "label": "Cliviastraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901877,
+          52.385854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227131",
+        "label": "Cliviastraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900703,
+          52.385878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227048",
+        "label": "Badhuisweg 22",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90194,
+          52.386527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227254",
+        "label": "Ericastraat 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900891,
+          52.386095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227069",
+        "label": "Orchideestraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90159,
+          52.386473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227274",
+        "label": "Ericastraat 45",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901769,
+          52.386388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227271",
+        "label": "Ericastraat 39",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901605,
+          52.385821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227124",
+        "label": "Cliviastraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902433,
+          52.386529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227164",
+        "label": "Irisstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901996,
+          52.385603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227318",
+        "label": "Rietweg 26",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902454,
+          52.385816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227195",
+        "label": "Crocusstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90206,
+          52.386473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227252",
+        "label": "Ericastraat 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9014,
+          52.386324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227097",
+        "label": "Narcisstraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901896,
+          52.386781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227173",
+        "label": "Irisstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902234,
+          52.387014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227026",
+        "label": "Biezenweg 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902301,
+          52.387025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227025",
+        "label": "Biezenweg 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901698,
+          52.386182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227092",
+        "label": "Narcisstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90244,
+          52.385586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227314",
+        "label": "Rietweg 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900837,
+          52.385746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227101",
+        "label": "Hyacinthenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900533,
+          52.386362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227057",
+        "label": "Badhuisweg 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902419,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227178",
+        "label": "Irisstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900547,
+          52.386318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227056",
+        "label": "Badhuisweg 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901709,
+          52.386637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227258",
+        "label": "Ericastraat 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901168,
+          52.385616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227327",
+        "label": "Rietweg 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902134,
+          52.386808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227181",
+        "label": "Irisstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901835,
+          52.385821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227130",
+        "label": "Cliviastraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901815,
+          52.385982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227073",
+        "label": "Narcisstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901799,
+          52.386129
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227090",
+        "label": "Narcisstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90129,
+          52.386092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227111",
+        "label": "Hyacinthenstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900843,
+          52.386236
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227065",
+        "label": "Orchideestraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902403,
+          52.385778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227194",
+        "label": "Crocusstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902367,
+          52.38703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227024",
+        "label": "Biezenweg 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902452,
+          52.386001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227277",
+        "label": "Ericaplein 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902073,
+          52.386698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227170",
+        "label": "Irisstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901946,
+          52.386894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227184",
+        "label": "Irisstraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900435,
+          52.386629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227062",
+        "label": "Badhuisweg 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902168,
+          52.387007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227027",
+        "label": "Biezenweg 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902303,
+          52.385876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227190",
+        "label": "Crocusstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901634,
+          52.386212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227093",
+        "label": "Narcisstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902023,
+          52.385967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227134",
+        "label": "Cliviastraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901943,
+          52.386305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227268",
+        "label": "Ericastraat 33",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901357,
+          52.385944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227118",
+        "label": "Hyacinthenstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901651,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227273",
+        "label": "Ericastraat 43",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901592,
+          52.38693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227031",
+        "label": "Biezenweg 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90202,
+          52.386723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227171",
+        "label": "Irisstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902204,
+          52.385798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227188",
+        "label": "Crocusstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901413,
+          52.385988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227119",
+        "label": "Hyacinthenstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902403,
+          52.386024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227278",
+        "label": "Ericaplein 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901037,
+          52.386205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227072",
+        "label": "Orchideestraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901112,
+          52.385957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227107",
+        "label": "Hyacinthenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901992,
+          52.38628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227267",
+        "label": "Ericastraat 31",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900557,
+          52.386275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227055",
+        "label": "Badhuisweg 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90174,
+          52.386951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227029",
+        "label": "Biezenweg 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90132,
+          52.385608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227325",
+        "label": "Rietweg 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901011,
+          52.386369
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227083",
+        "label": "Narcisstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900795,
+          52.386199
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227064",
+        "label": "Orchideestraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900418,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227063",
+        "label": "Badhuisweg 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901497,
+          52.386739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227260",
+        "label": "Ericastraat 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902053,
+          52.386249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227266",
+        "label": "Ericastraat 29",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901664,
+          52.38694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227030",
+        "label": "Biezenweg 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901825,
+          52.38658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227256",
+        "label": "Ericastraat 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901082,
+          52.385734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227112",
+        "label": "Hyacinthenstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90128,
+          52.386239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227080",
+        "label": "Narcisstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901509,
+          52.38627
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227095",
+        "label": "Narcisstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901221,
+          52.385842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227115",
+        "label": "Hyacinthenstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901623,
+          52.385618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227323",
+        "label": "Rietweg 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901743,
+          52.386158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227091",
+        "label": "Narcisstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901923,
+          52.385606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227319",
+        "label": "Rietweg 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901461,
+          52.386294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227096",
+        "label": "Narcisstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902102,
+          52.386998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227028",
+        "label": "Biezenweg 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902061,
+          52.385697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227185",
+        "label": "Crocusstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901629,
+          52.386074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227076",
+        "label": "Narcisstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902163,
+          52.385771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227187",
+        "label": "Crocusstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900447,
+          52.386593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227061",
+        "label": "Badhuisweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901336,
+          52.386355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227098",
+        "label": "Narcisstraat 22",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900578,
+          52.386232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227054",
+        "label": "Badhuisweg 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902259,
+          52.386612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227167",
+        "label": "Irisstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900676,
+          52.385966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227050",
+        "label": "Badhuisweg 26",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900685,
+          52.38681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227035",
+        "label": "Biezenweg 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902311,
+          52.385707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227192",
+        "label": "Crocusstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900933,
+          52.385818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227103",
+        "label": "Hyacinthenstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902431,
+          52.38704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227023",
+        "label": "Biezenweg 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900806,
+          52.386025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227067",
+        "label": "Orchideestraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90236,
+          52.385744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227193",
+        "label": "Crocusstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900393,
+          52.38677
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227039",
+        "label": "Biezenweg 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901379,
+          52.386796
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227262",
+        "label": "Ericastraat 56",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901736,
+          52.385749
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227128",
+        "label": "Cliviastraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900944,
+          52.386398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227084",
+        "label": "Narcisstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901883,
+          52.386332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227269",
+        "label": "Ericastraat 35",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901529,
+          52.386499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227275",
+        "label": "Ericastraat 47",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902114,
+          52.385732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227186",
+        "label": "Crocusstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90218,
+          52.386419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227250",
+        "label": "Ericastraat 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902114,
+          52.386219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227265",
+        "label": "Ericastraat 27",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901785,
+          52.385784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227129",
+        "label": "Cliviastraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90117,
+          52.385803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227114",
+        "label": "Hyacinthenstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901438,
+          52.386771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227261",
+        "label": "Ericastraat 54",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901472,
+          52.386528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227276",
+        "label": "Ericastraat 49",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900534,
+          52.386791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227037",
+        "label": "Biezenweg 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902372,
+          52.386696
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227179",
+        "label": "Irisstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900939,
+          52.38613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227070",
+        "label": "Orchideestraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900461,
+          52.38678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227038",
+        "label": "Biezenweg 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901218,
+          52.386272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227081",
+        "label": "Narcisstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902103,
+          52.386029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227136",
+        "label": "Cliviastraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901892,
+          52.386551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227255",
+        "label": "Ericastraat 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901573,
+          52.386098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227077",
+        "label": "Narcisstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901459,
+          52.38572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227121",
+        "label": "Cliviastraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9017,
+          52.385896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227126",
+        "label": "Cliviastraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901652,
+          52.386666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227259",
+        "label": "Ericastraat 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900798,
+          52.385717
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227100",
+        "label": "Hyacinthenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901655,
+          52.385862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227125",
+        "label": "Cliviastraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902195,
+          52.386641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227168",
+        "label": "Irisstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901264,
+          52.386854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227264",
+        "label": "Ericastraat 60",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902192,
+          52.386784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227180",
+        "label": "Irisstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901285,
+          52.386381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227099",
+        "label": "Narcisstraat 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901517,
+          52.386922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227032",
+        "label": "Biezenweg 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901396,
+          52.385603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227324",
+        "label": "Rietweg 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902247,
+          52.385835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227189",
+        "label": "Crocusstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902065,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227135",
+        "label": "Cliviastraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902131,
+          52.386671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227169",
+        "label": "Irisstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901863,
+          52.386104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227089",
+        "label": "Narcisstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901509,
+          52.385754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227122",
+        "label": "Cliviastraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90061,
+          52.386801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227036",
+        "label": "Biezenweg 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90125,
+          52.38561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227326",
+        "label": "Rietweg 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900591,
+          52.386189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227053",
+        "label": "Badhuisweg 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900606,
+          52.386147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227052",
+        "label": "Badhuisweg 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90102,
+          52.385887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227105",
+        "label": "Hyacinthenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901162,
+          52.386299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227082",
+        "label": "Narcisstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902009,
+          52.386868
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227183",
+        "label": "Irisstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901251,
+          52.386063
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227110",
+        "label": "Hyacinthenstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9014,
+          52.386181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227078",
+        "label": "Narcisstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901754,
+          52.386012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227074",
+        "label": "Narcisstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900884,
+          52.385786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227102",
+        "label": "Hyacinthenstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900489,
+          52.386476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227058",
+        "label": "Badhuisweg 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901011,
+          52.385618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227329",
+        "label": "Rietweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901157,
+          52.385987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227108",
+        "label": "Hyacinthenstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90109,
+          52.385616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227328",
+        "label": "Rietweg 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900827,
+          52.386457
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227086",
+        "label": "Narcisstraat 27",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901444,
+          52.38691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227033",
+        "label": "Biezenweg 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901464,
+          52.386019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227120",
+        "label": "Hyacinthenstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901819,
+          52.38636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227270",
+        "label": "Ericastraat 37",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901769,
+          52.385613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227321",
+        "label": "Rietweg 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902293,
+          52.386359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227248",
+        "label": "Ericastraat 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900757,
+          52.386819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227034",
+        "label": "Biezenweg 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901344,
+          52.38621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227079",
+        "label": "Narcisstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901065,
+          52.385924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227106",
+        "label": "Hyacinthenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901979,
+          52.385925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227133",
+        "label": "Cliviastraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901921,
+          52.386078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227088",
+        "label": "Narcisstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902252,
+          52.386095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227280",
+        "label": "Ericaplein 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901687,
+          52.386043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227075",
+        "label": "Narcisstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900992,
+          52.386166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227071",
+        "label": "Orchideestraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901327,
+          52.386827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227263",
+        "label": "Ericastraat 58",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901561,
+          52.385788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227123",
+        "label": "Cliviastraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900894,
+          52.386272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227066",
+        "label": "Orchideestraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901774,
+          52.386607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227257",
+        "label": "Ericastraat 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902361,
+          52.385589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227315",
+        "label": "Rietweg 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902218,
+          52.385594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227317",
+        "label": "Rietweg 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902338,
+          52.386053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227279",
+        "label": "Ericaplein 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901565,
+          52.386241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227094",
+        "label": "Narcisstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901697,
+          52.385715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227127",
+        "label": "Cliviastraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901308,
+          52.385909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227117",
+        "label": "Hyacinthenstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901198,
+          52.386023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227109",
+        "label": "Hyacinthenstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902239,
+          52.386384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227249",
+        "label": "Ericastraat 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900464,
+          52.386553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227060",
+        "label": "Badhuisweg 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900776,
+          52.386481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227087",
+        "label": "Narcisstraat 29",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900687,
+          52.385922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227049",
+        "label": "Badhuisweg 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90065,
+          52.386563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227040",
+        "label": "Seringenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900691,
+          52.386593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227041",
+        "label": "Seringenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900737,
+          52.386623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227042",
+        "label": "Seringenstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90078,
+          52.386654
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227043",
+        "label": "Seringenstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900824,
+          52.386689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227044",
+        "label": "Seringenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900863,
+          52.38672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227045",
+        "label": "Seringenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900908,
+          52.386752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227046",
+        "label": "Seringenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900948,
+          52.386783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227047",
+        "label": "Seringenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902311,
+          52.386863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227152",
+        "label": "Margrietenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902358,
+          52.386897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227153",
+        "label": "Margrietenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902364,
+          52.386559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227165",
+        "label": "Irisstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902285,
+          52.385591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227316",
+        "label": "Rietweg 22",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902003,
+          52.386498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227253",
+        "label": "Ericastraat 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900474,
+          52.386514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227059",
+        "label": "Badhuisweg 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902346,
+          52.385912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227191",
+        "label": "Crocusstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901266,
+          52.385877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227116",
+        "label": "Hyacinthenstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900974,
+          52.385849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227104",
+        "label": "Hyacinthenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900624,
+          52.386104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227051",
+        "label": "Badhuisweg 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902305,
+          52.38659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227166",
+        "label": "Irisstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900848,
+          52.386062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227068",
+        "label": "Orchideestraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901962,
+          52.386752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227172",
+        "label": "Irisstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901841,
+          52.386809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227174",
+        "label": "Irisstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901842,
+          52.38561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227320",
+        "label": "Rietweg 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902121,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227251",
+        "label": "Ericastraat 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900886,
+          52.386428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227085",
+        "label": "Narcisstraat 25",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901699,
+          52.385613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227322",
+        "label": "Rietweg 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902073,
+          52.386838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227182",
+        "label": "Irisstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901707,
+          52.386417
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227272",
+        "label": "Ericastraat 41",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901121,
+          52.385765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227113",
+        "label": "Hyacinthenstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901924,
+          52.385892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227132",
+        "label": "Cliviastraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901877,
+          52.385854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227131",
+        "label": "Cliviastraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900703,
+          52.385878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227048",
+        "label": "Badhuisweg 22",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90194,
+          52.386527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227254",
+        "label": "Ericastraat 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900891,
+          52.386095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227069",
+        "label": "Orchideestraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90159,
+          52.386473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227274",
+        "label": "Ericastraat 45",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901769,
+          52.386388
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227271",
+        "label": "Ericastraat 39",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901605,
+          52.385821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227124",
+        "label": "Cliviastraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902433,
+          52.386529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227164",
+        "label": "Irisstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901996,
+          52.385603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227318",
+        "label": "Rietweg 26",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902454,
+          52.385816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227195",
+        "label": "Crocusstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90206,
+          52.386473
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227252",
+        "label": "Ericastraat 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9014,
+          52.386324
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227097",
+        "label": "Narcisstraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901896,
+          52.386781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227173",
+        "label": "Irisstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902234,
+          52.387014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227026",
+        "label": "Biezenweg 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902301,
+          52.387025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227025",
+        "label": "Biezenweg 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901698,
+          52.386182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227092",
+        "label": "Narcisstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90244,
+          52.385586
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227314",
+        "label": "Rietweg 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900837,
+          52.385746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227101",
+        "label": "Hyacinthenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900533,
+          52.386362
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227057",
+        "label": "Badhuisweg 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902419,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227178",
+        "label": "Irisstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900547,
+          52.386318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227056",
+        "label": "Badhuisweg 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901709,
+          52.386637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227258",
+        "label": "Ericastraat 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901168,
+          52.385616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227327",
+        "label": "Rietweg 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902134,
+          52.386808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227181",
+        "label": "Irisstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901835,
+          52.385821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227130",
+        "label": "Cliviastraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901815,
+          52.385982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227073",
+        "label": "Narcisstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901799,
+          52.386129
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227090",
+        "label": "Narcisstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90129,
+          52.386092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227111",
+        "label": "Hyacinthenstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900843,
+          52.386236
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227065",
+        "label": "Orchideestraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902403,
+          52.385778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227194",
+        "label": "Crocusstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902367,
+          52.38703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227024",
+        "label": "Biezenweg 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902452,
+          52.386001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227277",
+        "label": "Ericaplein 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902073,
+          52.386698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227170",
+        "label": "Irisstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901946,
+          52.386894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227184",
+        "label": "Irisstraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900435,
+          52.386629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227062",
+        "label": "Badhuisweg 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902168,
+          52.387007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227027",
+        "label": "Biezenweg 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902303,
+          52.385876
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227190",
+        "label": "Crocusstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901634,
+          52.386212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227093",
+        "label": "Narcisstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902023,
+          52.385967
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227134",
+        "label": "Cliviastraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901943,
+          52.386305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227268",
+        "label": "Ericastraat 33",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901357,
+          52.385944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227118",
+        "label": "Hyacinthenstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901651,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227273",
+        "label": "Ericastraat 43",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901592,
+          52.38693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227031",
+        "label": "Biezenweg 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90202,
+          52.386723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227171",
+        "label": "Irisstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902204,
+          52.385798
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227188",
+        "label": "Crocusstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901413,
+          52.385988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227119",
+        "label": "Hyacinthenstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902403,
+          52.386024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227278",
+        "label": "Ericaplein 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901037,
+          52.386205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227072",
+        "label": "Orchideestraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901112,
+          52.385957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227107",
+        "label": "Hyacinthenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901992,
+          52.38628
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227267",
+        "label": "Ericastraat 31",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900557,
+          52.386275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227055",
+        "label": "Badhuisweg 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90174,
+          52.386951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227029",
+        "label": "Biezenweg 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90132,
+          52.385608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227325",
+        "label": "Rietweg 40",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901011,
+          52.386369
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227083",
+        "label": "Narcisstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900795,
+          52.386199
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227064",
+        "label": "Orchideestraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900418,
+          52.386673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227063",
+        "label": "Badhuisweg 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901497,
+          52.386739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227260",
+        "label": "Ericastraat 52",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902053,
+          52.386249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227266",
+        "label": "Ericastraat 29",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901664,
+          52.38694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227030",
+        "label": "Biezenweg 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901825,
+          52.38658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227256",
+        "label": "Ericastraat 44",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901082,
+          52.385734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227112",
+        "label": "Hyacinthenstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90128,
+          52.386239
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227080",
+        "label": "Narcisstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901509,
+          52.38627
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227095",
+        "label": "Narcisstraat 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901221,
+          52.385842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227115",
+        "label": "Hyacinthenstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901623,
+          52.385618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227323",
+        "label": "Rietweg 36",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901743,
+          52.386158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227091",
+        "label": "Narcisstraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901923,
+          52.385606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227319",
+        "label": "Rietweg 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901461,
+          52.386294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227096",
+        "label": "Narcisstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902102,
+          52.386998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227028",
+        "label": "Biezenweg 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902061,
+          52.385697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227185",
+        "label": "Crocusstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901629,
+          52.386074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227076",
+        "label": "Narcisstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902163,
+          52.385771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227187",
+        "label": "Crocusstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900447,
+          52.386593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227061",
+        "label": "Badhuisweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901336,
+          52.386355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227098",
+        "label": "Narcisstraat 22",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900578,
+          52.386232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227054",
+        "label": "Badhuisweg 34",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902259,
+          52.386612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227167",
+        "label": "Irisstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900676,
+          52.385966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227050",
+        "label": "Badhuisweg 26",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900685,
+          52.38681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227035",
+        "label": "Biezenweg 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902311,
+          52.385707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227192",
+        "label": "Crocusstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900933,
+          52.385818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227103",
+        "label": "Hyacinthenstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902431,
+          52.38704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227023",
+        "label": "Biezenweg 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900806,
+          52.386025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227067",
+        "label": "Orchideestraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90236,
+          52.385744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227193",
+        "label": "Crocusstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900393,
+          52.38677
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227039",
+        "label": "Biezenweg 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901379,
+          52.386796
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227262",
+        "label": "Ericastraat 56",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901736,
+          52.385749
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227128",
+        "label": "Cliviastraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900944,
+          52.386398
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227084",
+        "label": "Narcisstraat 23",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901883,
+          52.386332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227269",
+        "label": "Ericastraat 35",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901529,
+          52.386499
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227275",
+        "label": "Ericastraat 47",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902114,
+          52.385732
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227186",
+        "label": "Crocusstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90218,
+          52.386419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227250",
+        "label": "Ericastraat 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902114,
+          52.386219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227265",
+        "label": "Ericastraat 27",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901785,
+          52.385784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227129",
+        "label": "Cliviastraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90117,
+          52.385803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227114",
+        "label": "Hyacinthenstraat 6",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901438,
+          52.386771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227261",
+        "label": "Ericastraat 54",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901472,
+          52.386528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227276",
+        "label": "Ericastraat 49",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900534,
+          52.386791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227037",
+        "label": "Biezenweg 16",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902372,
+          52.386696
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227179",
+        "label": "Irisstraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900939,
+          52.38613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227070",
+        "label": "Orchideestraat 8",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900461,
+          52.38678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227038",
+        "label": "Biezenweg 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901218,
+          52.386272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227081",
+        "label": "Narcisstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902103,
+          52.386029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227136",
+        "label": "Cliviastraat 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901892,
+          52.386551
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227255",
+        "label": "Ericastraat 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901573,
+          52.386098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227077",
+        "label": "Narcisstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901459,
+          52.38572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227121",
+        "label": "Cliviastraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9017,
+          52.385896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227126",
+        "label": "Cliviastraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901652,
+          52.386666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227259",
+        "label": "Ericastraat 50",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900798,
+          52.385717
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227100",
+        "label": "Hyacinthenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901655,
+          52.385862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227125",
+        "label": "Cliviastraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902195,
+          52.386641
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227168",
+        "label": "Irisstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901264,
+          52.386854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227264",
+        "label": "Ericastraat 60",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902192,
+          52.386784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227180",
+        "label": "Irisstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901285,
+          52.386381
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227099",
+        "label": "Narcisstraat 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901517,
+          52.386922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227032",
+        "label": "Biezenweg 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901396,
+          52.385603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227324",
+        "label": "Rietweg 38",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902247,
+          52.385835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227189",
+        "label": "Crocusstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902065,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227135",
+        "label": "Cliviastraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902131,
+          52.386671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227169",
+        "label": "Irisstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901863,
+          52.386104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227089",
+        "label": "Narcisstraat 4",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901509,
+          52.385754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227122",
+        "label": "Cliviastraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90061,
+          52.386801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227036",
+        "label": "Biezenweg 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90125,
+          52.38561
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227326",
+        "label": "Rietweg 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900591,
+          52.386189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227053",
+        "label": "Badhuisweg 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900606,
+          52.386147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227052",
+        "label": "Badhuisweg 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90102,
+          52.385887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227105",
+        "label": "Hyacinthenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901162,
+          52.386299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227082",
+        "label": "Narcisstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902009,
+          52.386868
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227183",
+        "label": "Irisstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901251,
+          52.386063
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227110",
+        "label": "Hyacinthenstraat 21",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9014,
+          52.386181
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227078",
+        "label": "Narcisstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901754,
+          52.386012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227074",
+        "label": "Narcisstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900884,
+          52.385786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227102",
+        "label": "Hyacinthenstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900489,
+          52.386476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227058",
+        "label": "Badhuisweg 42",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901011,
+          52.385618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227329",
+        "label": "Rietweg 48",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901157,
+          52.385987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227108",
+        "label": "Hyacinthenstraat 17",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90109,
+          52.385616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227328",
+        "label": "Rietweg 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900827,
+          52.386457
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227086",
+        "label": "Narcisstraat 27",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901444,
+          52.38691
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227033",
+        "label": "Biezenweg 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901464,
+          52.386019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227120",
+        "label": "Hyacinthenstraat 18",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901819,
+          52.38636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227270",
+        "label": "Ericastraat 37",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901769,
+          52.385613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227321",
+        "label": "Rietweg 32",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902293,
+          52.386359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227248",
+        "label": "Ericastraat 28",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900757,
+          52.386819
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227034",
+        "label": "Biezenweg 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901344,
+          52.38621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227079",
+        "label": "Narcisstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901065,
+          52.385924
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227106",
+        "label": "Hyacinthenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901979,
+          52.385925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227133",
+        "label": "Cliviastraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901921,
+          52.386078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227088",
+        "label": "Narcisstraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902252,
+          52.386095
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227280",
+        "label": "Ericaplein 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901687,
+          52.386043
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227075",
+        "label": "Narcisstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900992,
+          52.386166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227071",
+        "label": "Orchideestraat 10",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901327,
+          52.386827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227263",
+        "label": "Ericastraat 58",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901561,
+          52.385788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227123",
+        "label": "Cliviastraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900894,
+          52.386272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227066",
+        "label": "Orchideestraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901774,
+          52.386607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227257",
+        "label": "Ericastraat 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902361,
+          52.385589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227315",
+        "label": "Rietweg 20",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902218,
+          52.385594
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227317",
+        "label": "Rietweg 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902338,
+          52.386053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227279",
+        "label": "Ericaplein 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901565,
+          52.386241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227094",
+        "label": "Narcisstraat 14",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901697,
+          52.385715
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227127",
+        "label": "Cliviastraat 2",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901308,
+          52.385909
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227117",
+        "label": "Hyacinthenstraat 12",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.901198,
+          52.386023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227109",
+        "label": "Hyacinthenstraat 19",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902239,
+          52.386384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227249",
+        "label": "Ericastraat 30",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900464,
+          52.386553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227060",
+        "label": "Badhuisweg 46",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900776,
+          52.386481
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227087",
+        "label": "Narcisstraat 29",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900687,
+          52.385922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227049",
+        "label": "Badhuisweg 24",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90065,
+          52.386563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227040",
+        "label": "Seringenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900691,
+          52.386593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227041",
+        "label": "Seringenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900737,
+          52.386623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227042",
+        "label": "Seringenstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90078,
+          52.386654
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227043",
+        "label": "Seringenstraat 7",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900824,
+          52.386689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227044",
+        "label": "Seringenstraat 9",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900863,
+          52.38672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227045",
+        "label": "Seringenstraat 11",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900908,
+          52.386752
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227046",
+        "label": "Seringenstraat 13",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.900948,
+          52.386783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227047",
+        "label": "Seringenstraat 15",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902311,
+          52.386863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227152",
+        "label": "Margrietenstraat 1",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902358,
+          52.386897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227153",
+        "label": "Margrietenstraat 3",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902364,
+          52.386559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227165",
+        "label": "Irisstraat 5",
+        "year": "1920"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902285,
+          52.385591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227316",
+        "label": "Rietweg 22",
+        "year": "1920"
+      }
+    }
+  ]
+}

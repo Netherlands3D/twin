@@ -1,0 +1,4595 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847721,
+          52.388815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193102",
+        "label": "Spaarndammerdijk 569",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848288,
+          52.389088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193186",
+        "label": "Spaarndammerdijk 546",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844012,
+          52.38802
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193005",
+        "label": "Velserweg 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846626,
+          52.388128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193135",
+        "label": "Spaarndammerdijk 617",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85328,
+          52.39002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215271",
+        "label": "Spaarndammerdijk 422",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84994,
+          52.38927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193068",
+        "label": "Spaarndammerdijk 485",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8471,
+          52.388515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193119",
+        "label": "Spaarndammerdijk 587",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847441,
+          52.388693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193110",
+        "label": "Spaarndammerdijk 577",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847493,
+          52.38872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193108",
+        "label": "Spaarndammerdijk 575",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846622,
+          52.388106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193137",
+        "label": "Spaarndammerdijk 619",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846532,
+          52.387987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193144",
+        "label": "Spaarndammerdijk 629",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848006,
+          52.389023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193194",
+        "label": "Spaarndammerdijk 554",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844344,
+          52.387846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193006",
+        "label": "Velserweg 95 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846652,
+          52.388165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193132",
+        "label": "Spaarndammerdijk 613",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854919,
+          52.390323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215268",
+        "label": "Spaarndammerdijk 396",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846765,
+          52.38827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193123",
+        "label": "Spaarndammerdijk 601",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846655,
+          52.388142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193134",
+        "label": "Spaarndammerdijk 615",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846485,
+          52.387659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193154",
+        "label": "Spaarndammerdijk 643 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193140",
+        "label": "Spaarndammerdijk 623",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847087,
+          52.388429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193121",
+        "label": "Spaarndammerdijk 589",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847806,
+          52.388809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193101",
+        "label": "Spaarndammerdijk 567 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855364,
+          52.390407
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215266",
+        "label": "Spaarndammerdijk 390",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850156,
+          52.389309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193060",
+        "label": "Spaarndammerdijk 473",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847523,
+          52.388694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193109",
+        "label": "Spaarndammerdijk 575 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846716,
+          52.388234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193126",
+        "label": "Spaarndammerdijk 605",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846661,
+          52.388102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193136",
+        "label": "Spaarndammerdijk 617 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846551,
+          52.388025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193142",
+        "label": "Spaarndammerdijk 627",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847269,
+          52.388596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193116",
+        "label": "Spaarndammerdijk 583",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856728,
+          52.39105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215263",
+        "label": "Spaarndammerdijk 366",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847968,
+          52.389014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193196",
+        "label": "Spaarndammerdijk 556",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848872,
+          52.389083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193092",
+        "label": "Spaarndammerdijk 531",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848194,
+          52.389071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193188",
+        "label": "Spaarndammerdijk 548",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849842,
+          52.389246
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193073",
+        "label": "Spaarndammerdijk 491",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846696,
+          52.388193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193129",
+        "label": "Spaarndammerdijk 609",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849632,
+          52.389222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193076",
+        "label": "Spaarndammerdijk 499",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844129,
+          52.387978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193004",
+        "label": "Velserweg 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849096,
+          52.389125
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193086",
+        "label": "Spaarndammerdijk 525",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849803,
+          52.389241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193074",
+        "label": "Spaarndammerdijk 493",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850077,
+          52.389294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193062",
+        "label": "Spaarndammerdijk 477",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846428,
+          52.387666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193153",
+        "label": "Spaarndammerdijk 643",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193143",
+        "label": "Spaarndammerdijk 627 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848882,
+          52.389045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193093",
+        "label": "Spaarndammerdijk 531 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849879,
+          52.389254
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193072",
+        "label": "Spaarndammerdijk 489",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847163,
+          52.388559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193117",
+        "label": "Spaarndammerdijk 585",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844242,
+          52.387933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193003",
+        "label": "Velserweg 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846443,
+          52.387711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193151",
+        "label": "Spaarndammerdijk 641",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849261,
+          52.388932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193085",
+        "label": "Spaarndammerdijk 517",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854806,
+          52.390305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215269",
+        "label": "Spaarndammerdijk 398",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848046,
+          52.389025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193192",
+        "label": "Spaarndammerdijk 552",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849562,
+          52.389206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193078",
+        "label": "Spaarndammerdijk 501",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847732,
+          52.388784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193103",
+        "label": "Spaarndammerdijk 569 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846452,
+          52.387757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193149",
+        "label": "Spaarndammerdijk 639",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847759,
+          52.388962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193204",
+        "label": "Spaarndammerdijk 568",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850041,
+          52.389291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193064",
+        "label": "Spaarndammerdijk 479",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844384,
+          52.387859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193001",
+        "label": "Velserweg 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848114,
+          52.389052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193190",
+        "label": "Spaarndammerdijk 550",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846848,
+          52.388285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193122",
+        "label": "Spaarndammerdijk 597",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85596,
+          52.390666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215264",
+        "label": "Spaarndammerdijk 376",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844953,
+          52.387644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193040",
+        "label": "Velserweg 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849969,
+          52.389276
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193067",
+        "label": "Spaarndammerdijk 483",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844,
+          52.38771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193013",
+        "label": "Velserweg 95 h",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848941,
+          52.389096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193090",
+        "label": "Spaarndammerdijk 529",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850665,
+          52.389537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193057",
+        "label": "Spaarndammerdijk 468",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851678,
+          52.389713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193052",
+        "label": "Spaarndammerdijk 442",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850187,
+          52.389316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193058",
+        "label": "Spaarndammerdijk 471",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847328,
+          52.388642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193114",
+        "label": "Spaarndammerdijk 581",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847778,
+          52.388834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193100",
+        "label": "Spaarndammerdijk 567",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848175,
+          52.389093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193189",
+        "label": "Spaarndammerdijk 548 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851202,
+          52.389905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193054",
+        "label": "Spaarndammerdijk 454",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850754,
+          52.389547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193056",
+        "label": "Spaarndammerdijk 466",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846513,
+          52.387746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193150",
+        "label": "Spaarndammerdijk 639 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849313,
+          52.388906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193084",
+        "label": "Spaarndammerdijk 515",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847902,
+          52.389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193198",
+        "label": "Spaarndammerdijk 560",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847865,
+          52.388984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193200",
+        "label": "Spaarndammerdijk 562",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849909,
+          52.389269
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193070",
+        "label": "Spaarndammerdijk 487",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844348,
+          52.387887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193002",
+        "label": "Velserweg 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846499,
+          52.387828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193148",
+        "label": "Spaarndammerdijk 635",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849906,
+          52.389218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193071",
+        "label": "Spaarndammerdijk 487 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847622,
+          52.388784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193104",
+        "label": "Spaarndammerdijk 571",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846713,
+          52.38821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193128",
+        "label": "Spaarndammerdijk 607",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844117,
+          52.387751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193011",
+        "label": "Velserweg 95 f",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848029,
+          52.38906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193193",
+        "label": "Spaarndammerdijk 552 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848269,
+          52.389129
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193187",
+        "label": "Spaarndammerdijk 546 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844186,
+          52.387779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193010",
+        "label": "Velserweg 95 e",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848171,
+          52.388929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193096",
+        "label": "Spaarndammerdijk 551",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847883,
+          52.388864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193098",
+        "label": "Spaarndammerdijk 565",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844925,
+          52.387712
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193041",
+        "label": "Velserweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857274,
+          52.390852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215262",
+        "label": "Spaarndammerdijk 362",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849399,
+          52.388821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193082",
+        "label": "Spaarndammerdijk 511",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847957,
+          52.389047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193195",
+        "label": "Spaarndammerdijk 554 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84809,
+          52.389082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193191",
+        "label": "Spaarndammerdijk 550 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.852884,
+          52.389514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196085",
+        "label": "Spaarndammerdijk 431",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847544,
+          52.388742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193106",
+        "label": "Spaarndammerdijk 573",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847222,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193118",
+        "label": "Spaarndammerdijk 585 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849493,
+          52.389193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193080",
+        "label": "Spaarndammerdijk 503",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84794,
+          52.389008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193197",
+        "label": "Spaarndammerdijk 558",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847891,
+          52.389023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193199",
+        "label": "Spaarndammerdijk 560 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84765,
+          52.388756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193105",
+        "label": "Spaarndammerdijk 571 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853177,
+          52.39
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215272",
+        "label": "Spaarndammerdijk 424",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846748,
+          52.388249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193125",
+        "label": "Spaarndammerdijk 603",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851127,
+          52.389883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193055",
+        "label": "Spaarndammerdijk 456",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847827,
+          52.388984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193202",
+        "label": "Spaarndammerdijk 564",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.845904,
+          52.387676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193185",
+        "label": "Spaarndammerdijk 648",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846576,
+          52.38805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193141",
+        "label": "Spaarndammerdijk 625",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849028,
+          52.389108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193088",
+        "label": "Spaarndammerdijk 527",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846676,
+          52.388178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193131",
+        "label": "Spaarndammerdijk 611",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847831,
+          52.389012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193201",
+        "label": "Spaarndammerdijk 562 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849645,
+          52.389189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193077",
+        "label": "Spaarndammerdijk 499 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850123,
+          52.389301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193061",
+        "label": "Spaarndammerdijk 475",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853519,
+          52.390065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215270",
+        "label": "Spaarndammerdijk 416",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847387,
+          52.388666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193112",
+        "label": "Spaarndammerdijk 579",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847898,
+          52.388838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193099",
+        "label": "Spaarndammerdijk 565 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84833,
+          52.388978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193095",
+        "label": "Spaarndammerdijk 545",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848001,
+          52.388893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193097",
+        "label": "Spaarndammerdijk 559",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84741,
+          52.388644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193113",
+        "label": "Spaarndammerdijk 579 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844077,
+          52.387739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193012",
+        "label": "Velserweg 95 g",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849952,
+          52.389244
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193069",
+        "label": "Spaarndammerdijk 485 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85159,
+          52.38969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193053",
+        "label": "Spaarndammerdijk 444",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855357,
+          52.390427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215267",
+        "label": "Spaarndammerdijk 390 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846713,
+          52.388168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193130",
+        "label": "Spaarndammerdijk 609 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847466,
+          52.388667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193111",
+        "label": "Spaarndammerdijk 577 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848618,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193094",
+        "label": "Spaarndammerdijk 537",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849819,
+          52.389212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193075",
+        "label": "Spaarndammerdijk 493 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850017,
+          52.389277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193066",
+        "label": "Spaarndammerdijk 481",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84431,
+          52.387827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193007",
+        "label": "Velserweg 95 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846502,
+          52.387702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193152",
+        "label": "Spaarndammerdijk 641 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855446,
+          52.390424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215265",
+        "label": "Spaarndammerdijk 388",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846502,
+          52.38794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193146",
+        "label": "Spaarndammerdijk 631",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849348,
+          52.38887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193083",
+        "label": "Spaarndammerdijk 513",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844261,
+          52.387802
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193009",
+        "label": "Velserweg 95 d",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849576,
+          52.389177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193079",
+        "label": "Spaarndammerdijk 501 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843899,
+          52.387951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193015",
+        "label": "Velserweg 101 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844225,
+          52.387832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193008",
+        "label": "Velserweg 95 c",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843943,
+          52.387985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193014",
+        "label": "Velserweg 101 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847363,
+          52.388613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193115",
+        "label": "Spaarndammerdijk 581 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850181,
+          52.389274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193059",
+        "label": "Spaarndammerdijk 471 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850098,
+          52.389261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193063",
+        "label": "Spaarndammerdijk 477 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850036,
+          52.389258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193065",
+        "label": "Spaarndammerdijk 479 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849504,
+          52.389162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193081",
+        "label": "Spaarndammerdijk 503 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849107,
+          52.389091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193087",
+        "label": "Spaarndammerdijk 525 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849033,
+          52.38908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193089",
+        "label": "Spaarndammerdijk 527 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848967,
+          52.38906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193091",
+        "label": "Spaarndammerdijk 529 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847579,
+          52.388722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193107",
+        "label": "Spaarndammerdijk 573 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84713,
+          52.388484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193120",
+        "label": "Spaarndammerdijk 587 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846791,
+          52.388242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193124",
+        "label": "Spaarndammerdijk 601 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846756,
+          52.388206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193127",
+        "label": "Spaarndammerdijk 605 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846688,
+          52.388136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193133",
+        "label": "Spaarndammerdijk 613 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193138",
+        "label": "Spaarndammerdijk 621",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846642,
+          52.388067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193139",
+        "label": "Spaarndammerdijk 621 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846579,
+          52.387972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193145",
+        "label": "Spaarndammerdijk 629 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846569,
+          52.387927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193147",
+        "label": "Spaarndammerdijk 631 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847801,
+          52.388974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193203",
+        "label": "Spaarndammerdijk 566 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847742,
+          52.388986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193205",
+        "label": "Spaarndammerdijk 568 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847721,
+          52.388815
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193102",
+        "label": "Spaarndammerdijk 569",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848288,
+          52.389088
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193186",
+        "label": "Spaarndammerdijk 546",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844012,
+          52.38802
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193005",
+        "label": "Velserweg 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846626,
+          52.388128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193135",
+        "label": "Spaarndammerdijk 617",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85328,
+          52.39002
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215271",
+        "label": "Spaarndammerdijk 422",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84994,
+          52.38927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193068",
+        "label": "Spaarndammerdijk 485",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8471,
+          52.388515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193119",
+        "label": "Spaarndammerdijk 587",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847441,
+          52.388693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193110",
+        "label": "Spaarndammerdijk 577",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847493,
+          52.38872
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193108",
+        "label": "Spaarndammerdijk 575",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846622,
+          52.388106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193137",
+        "label": "Spaarndammerdijk 619",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846532,
+          52.387987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193144",
+        "label": "Spaarndammerdijk 629",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848006,
+          52.389023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193194",
+        "label": "Spaarndammerdijk 554",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844344,
+          52.387846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193006",
+        "label": "Velserweg 95 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846652,
+          52.388165
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193132",
+        "label": "Spaarndammerdijk 613",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854919,
+          52.390323
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215268",
+        "label": "Spaarndammerdijk 396",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846765,
+          52.38827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193123",
+        "label": "Spaarndammerdijk 601",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846655,
+          52.388142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193134",
+        "label": "Spaarndammerdijk 615",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846485,
+          52.387659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193154",
+        "label": "Spaarndammerdijk 643 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388074
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193140",
+        "label": "Spaarndammerdijk 623",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847087,
+          52.388429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193121",
+        "label": "Spaarndammerdijk 589",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847806,
+          52.388809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193101",
+        "label": "Spaarndammerdijk 567 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855364,
+          52.390407
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215266",
+        "label": "Spaarndammerdijk 390",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850156,
+          52.389309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193060",
+        "label": "Spaarndammerdijk 473",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847523,
+          52.388694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193109",
+        "label": "Spaarndammerdijk 575 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846716,
+          52.388234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193126",
+        "label": "Spaarndammerdijk 605",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846661,
+          52.388102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193136",
+        "label": "Spaarndammerdijk 617 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846551,
+          52.388025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193142",
+        "label": "Spaarndammerdijk 627",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847269,
+          52.388596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193116",
+        "label": "Spaarndammerdijk 583",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856728,
+          52.39105
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215263",
+        "label": "Spaarndammerdijk 366",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847968,
+          52.389014
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193196",
+        "label": "Spaarndammerdijk 556",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848872,
+          52.389083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193092",
+        "label": "Spaarndammerdijk 531",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848194,
+          52.389071
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193188",
+        "label": "Spaarndammerdijk 548",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849842,
+          52.389246
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193073",
+        "label": "Spaarndammerdijk 491",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846696,
+          52.388193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193129",
+        "label": "Spaarndammerdijk 609",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849632,
+          52.389222
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193076",
+        "label": "Spaarndammerdijk 499",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844129,
+          52.387978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193004",
+        "label": "Velserweg 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849096,
+          52.389125
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193086",
+        "label": "Spaarndammerdijk 525",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849803,
+          52.389241
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193074",
+        "label": "Spaarndammerdijk 493",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850077,
+          52.389294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193062",
+        "label": "Spaarndammerdijk 477",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846428,
+          52.387666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193153",
+        "label": "Spaarndammerdijk 643",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193143",
+        "label": "Spaarndammerdijk 627 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848882,
+          52.389045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193093",
+        "label": "Spaarndammerdijk 531 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849879,
+          52.389254
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193072",
+        "label": "Spaarndammerdijk 489",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847163,
+          52.388559
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193117",
+        "label": "Spaarndammerdijk 585",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844242,
+          52.387933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193003",
+        "label": "Velserweg 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846443,
+          52.387711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193151",
+        "label": "Spaarndammerdijk 641",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849261,
+          52.388932
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193085",
+        "label": "Spaarndammerdijk 517",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.854806,
+          52.390305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215269",
+        "label": "Spaarndammerdijk 398",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848046,
+          52.389025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193192",
+        "label": "Spaarndammerdijk 552",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849562,
+          52.389206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193078",
+        "label": "Spaarndammerdijk 501",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847732,
+          52.388784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193103",
+        "label": "Spaarndammerdijk 569 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846452,
+          52.387757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193149",
+        "label": "Spaarndammerdijk 639",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847759,
+          52.388962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193204",
+        "label": "Spaarndammerdijk 568",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850041,
+          52.389291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193064",
+        "label": "Spaarndammerdijk 479",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844384,
+          52.387859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193001",
+        "label": "Velserweg 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848114,
+          52.389052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193190",
+        "label": "Spaarndammerdijk 550",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846848,
+          52.388285
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193122",
+        "label": "Spaarndammerdijk 597",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85596,
+          52.390666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215264",
+        "label": "Spaarndammerdijk 376",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844953,
+          52.387644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193040",
+        "label": "Velserweg 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849969,
+          52.389276
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193067",
+        "label": "Spaarndammerdijk 483",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844,
+          52.38771
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193013",
+        "label": "Velserweg 95 h",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848941,
+          52.389096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193090",
+        "label": "Spaarndammerdijk 529",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850665,
+          52.389537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193057",
+        "label": "Spaarndammerdijk 468",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851678,
+          52.389713
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193052",
+        "label": "Spaarndammerdijk 442",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850187,
+          52.389316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193058",
+        "label": "Spaarndammerdijk 471",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847328,
+          52.388642
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193114",
+        "label": "Spaarndammerdijk 581",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847778,
+          52.388834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193100",
+        "label": "Spaarndammerdijk 567",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848175,
+          52.389093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193189",
+        "label": "Spaarndammerdijk 548 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851202,
+          52.389905
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193054",
+        "label": "Spaarndammerdijk 454",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850754,
+          52.389547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193056",
+        "label": "Spaarndammerdijk 466",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846513,
+          52.387746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193150",
+        "label": "Spaarndammerdijk 639 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849313,
+          52.388906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193084",
+        "label": "Spaarndammerdijk 515",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847902,
+          52.389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193198",
+        "label": "Spaarndammerdijk 560",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847865,
+          52.388984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193200",
+        "label": "Spaarndammerdijk 562",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849909,
+          52.389269
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193070",
+        "label": "Spaarndammerdijk 487",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844348,
+          52.387887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193002",
+        "label": "Velserweg 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846499,
+          52.387828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193148",
+        "label": "Spaarndammerdijk 635",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849906,
+          52.389218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193071",
+        "label": "Spaarndammerdijk 487 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847622,
+          52.388784
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193104",
+        "label": "Spaarndammerdijk 571",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846713,
+          52.38821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193128",
+        "label": "Spaarndammerdijk 607",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844117,
+          52.387751
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193011",
+        "label": "Velserweg 95 f",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848029,
+          52.38906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193193",
+        "label": "Spaarndammerdijk 552 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848269,
+          52.389129
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193187",
+        "label": "Spaarndammerdijk 546 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844186,
+          52.387779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193010",
+        "label": "Velserweg 95 e",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848171,
+          52.388929
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193096",
+        "label": "Spaarndammerdijk 551",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847883,
+          52.388864
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193098",
+        "label": "Spaarndammerdijk 565",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844925,
+          52.387712
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193041",
+        "label": "Velserweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.857274,
+          52.390852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215262",
+        "label": "Spaarndammerdijk 362",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849399,
+          52.388821
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193082",
+        "label": "Spaarndammerdijk 511",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847957,
+          52.389047
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193195",
+        "label": "Spaarndammerdijk 554 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84809,
+          52.389082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193191",
+        "label": "Spaarndammerdijk 550 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.852884,
+          52.389514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196085",
+        "label": "Spaarndammerdijk 431",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847544,
+          52.388742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193106",
+        "label": "Spaarndammerdijk 573",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847222,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193118",
+        "label": "Spaarndammerdijk 585 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849493,
+          52.389193
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193080",
+        "label": "Spaarndammerdijk 503",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84794,
+          52.389008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193197",
+        "label": "Spaarndammerdijk 558",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847891,
+          52.389023
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193199",
+        "label": "Spaarndammerdijk 560 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84765,
+          52.388756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193105",
+        "label": "Spaarndammerdijk 571 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853177,
+          52.39
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215272",
+        "label": "Spaarndammerdijk 424",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846748,
+          52.388249
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193125",
+        "label": "Spaarndammerdijk 603",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.851127,
+          52.389883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193055",
+        "label": "Spaarndammerdijk 456",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847827,
+          52.388984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193202",
+        "label": "Spaarndammerdijk 564",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.845904,
+          52.387676
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193185",
+        "label": "Spaarndammerdijk 648",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846576,
+          52.38805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193141",
+        "label": "Spaarndammerdijk 625",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849028,
+          52.389108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193088",
+        "label": "Spaarndammerdijk 527",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846676,
+          52.388178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193131",
+        "label": "Spaarndammerdijk 611",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847831,
+          52.389012
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193201",
+        "label": "Spaarndammerdijk 562 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849645,
+          52.389189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193077",
+        "label": "Spaarndammerdijk 499 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850123,
+          52.389301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193061",
+        "label": "Spaarndammerdijk 475",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853519,
+          52.390065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215270",
+        "label": "Spaarndammerdijk 416",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847387,
+          52.388666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193112",
+        "label": "Spaarndammerdijk 579",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847898,
+          52.388838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193099",
+        "label": "Spaarndammerdijk 565 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84833,
+          52.388978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193095",
+        "label": "Spaarndammerdijk 545",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848001,
+          52.388893
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193097",
+        "label": "Spaarndammerdijk 559",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84741,
+          52.388644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193113",
+        "label": "Spaarndammerdijk 579 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844077,
+          52.387739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193012",
+        "label": "Velserweg 95 g",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849952,
+          52.389244
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193069",
+        "label": "Spaarndammerdijk 485 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.85159,
+          52.38969
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193053",
+        "label": "Spaarndammerdijk 444",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855357,
+          52.390427
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215267",
+        "label": "Spaarndammerdijk 390 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846713,
+          52.388168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193130",
+        "label": "Spaarndammerdijk 609 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847466,
+          52.388667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193111",
+        "label": "Spaarndammerdijk 577 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848618,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193094",
+        "label": "Spaarndammerdijk 537",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849819,
+          52.389212
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193075",
+        "label": "Spaarndammerdijk 493 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850017,
+          52.389277
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193066",
+        "label": "Spaarndammerdijk 481",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84431,
+          52.387827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193007",
+        "label": "Velserweg 95 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846502,
+          52.387702
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193152",
+        "label": "Spaarndammerdijk 641 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855446,
+          52.390424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215265",
+        "label": "Spaarndammerdijk 388",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846502,
+          52.38794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193146",
+        "label": "Spaarndammerdijk 631",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849348,
+          52.38887
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193083",
+        "label": "Spaarndammerdijk 513",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844261,
+          52.387802
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193009",
+        "label": "Velserweg 95 d",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849576,
+          52.389177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193079",
+        "label": "Spaarndammerdijk 501 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843899,
+          52.387951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193015",
+        "label": "Velserweg 101 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.844225,
+          52.387832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193008",
+        "label": "Velserweg 95 c",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843943,
+          52.387985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193014",
+        "label": "Velserweg 101 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847363,
+          52.388613
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193115",
+        "label": "Spaarndammerdijk 581 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850181,
+          52.389274
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193059",
+        "label": "Spaarndammerdijk 471 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850098,
+          52.389261
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193063",
+        "label": "Spaarndammerdijk 477 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.850036,
+          52.389258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193065",
+        "label": "Spaarndammerdijk 479 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849504,
+          52.389162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193081",
+        "label": "Spaarndammerdijk 503 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849107,
+          52.389091
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193087",
+        "label": "Spaarndammerdijk 525 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.849033,
+          52.38908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193089",
+        "label": "Spaarndammerdijk 527 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.848967,
+          52.38906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193091",
+        "label": "Spaarndammerdijk 529 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847579,
+          52.388722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193107",
+        "label": "Spaarndammerdijk 573 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84713,
+          52.388484
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193120",
+        "label": "Spaarndammerdijk 587 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846791,
+          52.388242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193124",
+        "label": "Spaarndammerdijk 601 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846756,
+          52.388206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193127",
+        "label": "Spaarndammerdijk 605 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846688,
+          52.388136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193133",
+        "label": "Spaarndammerdijk 613 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8466,
+          52.388096
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193138",
+        "label": "Spaarndammerdijk 621",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846642,
+          52.388067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193139",
+        "label": "Spaarndammerdijk 621 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846579,
+          52.387972
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193145",
+        "label": "Spaarndammerdijk 629 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.846569,
+          52.387927
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193147",
+        "label": "Spaarndammerdijk 631 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847801,
+          52.388974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193203",
+        "label": "Spaarndammerdijk 566 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.847742,
+          52.388986
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193205",
+        "label": "Spaarndammerdijk 568 a",
+        "year": "1943"
+      }
+    }
+  ]
+}

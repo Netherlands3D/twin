@@ -1,0 +1,2015 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904691,
+          52.360783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227470",
+        "label": "W 667 (Binnen Amstel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90475,
+          52.360667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227471",
+        "label": "W 665 z (Binnen Amstel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227473",
+        "label": "YY 216 k (Amsteldijk Utrechtsezijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227474",
+        "label": "YY 216 x (Amsteldijk Utr zijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905069,
+          52.35538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227475",
+        "label": "YY 229 (Amsteldijk Utrechtschezijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909213,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227479",
+        "label": "W 92 u (Andrieskade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911265,
+          52.357109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227654",
+        "label": "ZZ 59 (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909754,
+          52.356252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227655",
+        "label": "ZZ 66 b (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227656",
+        "label": "ZZ 66 r (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227657",
+        "label": "ZZ 66 c (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909631,
+          52.356221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227658",
+        "label": "ZZ 66 e (Oetgespad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909537,
+          52.356201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227659",
+        "label": "ZZ 66 g (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909409,
+          52.356172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227660",
+        "label": "ZZ 66 k (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909239,
+          52.356127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227661",
+        "label": "ZZ 66 o (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909191,
+          52.356119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227662",
+        "label": "ZZ 66 p (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909155,
+          52.356108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227663",
+        "label": "ZZ 66 q (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90911,
+          52.356098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227664",
+        "label": "ZZ 66 v (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908705,
+          52.356208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227665",
+        "label": "ZZ 69 b (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908757,
+          52.356126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227666",
+        "label": "ZZ 69 a (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906876,
+          52.360566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227844",
+        "label": "W 657 k (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906447,
+          52.359885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227845",
+        "label": "W 658 e (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906357,
+          52.359865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227846",
+        "label": "W 658 m (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906271,
+          52.35985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227847",
+        "label": "W 658 n (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90863,
+          52.355403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228328",
+        "label": "ZZ 11 a (Achterpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909011,
+          52.355495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228329",
+        "label": "ZZ 6 a (Achterpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228590",
+        "label": "W 658 a (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228591",
+        "label": "W 664 (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90605,
+          52.360234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228592",
+        "label": "W 664 c (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906408,
+          52.360298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228593",
+        "label": "W 658 f (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906484,
+          52.360314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228594",
+        "label": "W 658 g (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906561,
+          52.360325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228595",
+        "label": "W 658 h (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906639,
+          52.360342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228596",
+        "label": "W 658 i (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906717,
+          52.360356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228597",
+        "label": "W 658 k (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906138,
+          52.360072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228598",
+        "label": "W 664 a (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906419,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228599",
+        "label": "W 658 d (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906615,
+          52.360166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228600",
+        "label": "W 658 b (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905096,
+          52.360736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228677",
+        "label": "W 665 u (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9052,
+          52.360757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228678",
+        "label": "W 665 h (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905311,
+          52.360781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228679",
+        "label": "W 665 n (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905398,
+          52.360794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228680",
+        "label": "W 665 v (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905327,
+          52.36087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228680",
+        "label": "W 665 v (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90558,
+          52.360833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228681",
+        "label": "W 665 t (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905688,
+          52.360856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228682",
+        "label": "W 665 s (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905786,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228683",
+        "label": "W 665 r (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90588,
+          52.360898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228684",
+        "label": "W 665 p (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906038,
+          52.360589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228694",
+        "label": "W 660 c (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90615,
+          52.360612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228695",
+        "label": "W 660 b (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906231,
+          52.360629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228696",
+        "label": "W 660 a (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906423,
+          52.360668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228697",
+        "label": "W 659 a (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906779,
+          52.360744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228698",
+        "label": "W 657 i (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906862,
+          52.360761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228699",
+        "label": "W 657 h (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.3608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228700",
+        "label": "W 657 f (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907229,
+          52.360839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228701",
+        "label": "W 657 d (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907318,
+          52.36086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228702",
+        "label": "W 657 c (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907429,
+          52.360882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228703",
+        "label": "W 657 b (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907533,
+          52.360906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228704",
+        "label": "W 657 a (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909391,
+          52.360863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228771",
+        "label": "W 92 t (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228772",
+        "label": "W 92 s (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228773",
+        "label": "W 98 s (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90956,
+          52.360897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228774",
+        "label": "W 92 r (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228775",
+        "label": "W 92 (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228776",
+        "label": "W 92 g (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910222,
+          52.360867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228787",
+        "label": "W 93 (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907836,
+          52.355509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229013",
+        "label": "ZZ 130 o (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907857,
+          52.355474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229014",
+        "label": "ZZ 17 b (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907888,
+          52.355432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229015",
+        "label": "ZZ 17 a (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90796,
+          52.355351
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229016",
+        "label": "ZZ 16 (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.904691,
+          52.360783
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227470",
+        "label": "W 667 (Binnen Amstel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90475,
+          52.360667
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227471",
+        "label": "W 665 z (Binnen Amstel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227473",
+        "label": "YY 216 k (Amsteldijk Utrechtsezijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90385,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227474",
+        "label": "YY 216 x (Amsteldijk Utr zijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905069,
+          52.35538
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227475",
+        "label": "YY 229 (Amsteldijk Utrechtschezijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909213,
+          52.360895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227479",
+        "label": "W 92 u (Andrieskade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911265,
+          52.357109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227654",
+        "label": "ZZ 59 (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909754,
+          52.356252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227655",
+        "label": "ZZ 66 b (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227656",
+        "label": "ZZ 66 r (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909716,
+          52.35624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227657",
+        "label": "ZZ 66 c (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909631,
+          52.356221
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227658",
+        "label": "ZZ 66 e (Oetgespad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909537,
+          52.356201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227659",
+        "label": "ZZ 66 g (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909409,
+          52.356172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227660",
+        "label": "ZZ 66 k (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909239,
+          52.356127
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227661",
+        "label": "ZZ 66 o (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909191,
+          52.356119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227662",
+        "label": "ZZ 66 p (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909155,
+          52.356108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227663",
+        "label": "ZZ 66 q (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90911,
+          52.356098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227664",
+        "label": "ZZ 66 v (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908705,
+          52.356208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227665",
+        "label": "ZZ 69 b (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908757,
+          52.356126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227666",
+        "label": "ZZ 69 a (Oetgenspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906876,
+          52.360566
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227844",
+        "label": "W 657 k (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906447,
+          52.359885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227845",
+        "label": "W 658 e (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906357,
+          52.359865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227846",
+        "label": "W 658 m (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906271,
+          52.35985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227847",
+        "label": "W 658 n (Huddestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90863,
+          52.355403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228328",
+        "label": "ZZ 11 a (Achterpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909011,
+          52.355495
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228329",
+        "label": "ZZ 6 a (Achterpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228590",
+        "label": "W 658 a (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905873,
+          52.360204
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228591",
+        "label": "W 664 (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90605,
+          52.360234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228592",
+        "label": "W 664 c (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906408,
+          52.360298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228593",
+        "label": "W 658 f (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906484,
+          52.360314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228594",
+        "label": "W 658 g (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906561,
+          52.360325
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228595",
+        "label": "W 658 h (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906639,
+          52.360342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228596",
+        "label": "W 658 i (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906717,
+          52.360356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228597",
+        "label": "W 658 k (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906138,
+          52.360072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228598",
+        "label": "W 664 a (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906419,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228599",
+        "label": "W 658 d (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906615,
+          52.360166
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228600",
+        "label": "W 658 b (Tulpstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905096,
+          52.360736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228677",
+        "label": "W 665 u (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9052,
+          52.360757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228678",
+        "label": "W 665 h (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905311,
+          52.360781
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228679",
+        "label": "W 665 n (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905398,
+          52.360794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228680",
+        "label": "W 665 v (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905327,
+          52.36087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228680",
+        "label": "W 665 v (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90558,
+          52.360833
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228681",
+        "label": "W 665 t (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905688,
+          52.360856
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228682",
+        "label": "W 665 s (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905786,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228683",
+        "label": "W 665 r (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90588,
+          52.360898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228684",
+        "label": "W 665 p (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906038,
+          52.360589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228694",
+        "label": "W 660 c (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90615,
+          52.360612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228695",
+        "label": "W 660 b (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906231,
+          52.360629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228696",
+        "label": "W 660 a (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906423,
+          52.360668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228697",
+        "label": "W 659 a (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906779,
+          52.360744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228698",
+        "label": "W 657 i (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.906862,
+          52.360761
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228699",
+        "label": "W 657 h (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907036,
+          52.3608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228700",
+        "label": "W 657 f (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907229,
+          52.360839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228701",
+        "label": "W 657 d (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907318,
+          52.36086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228702",
+        "label": "W 657 c (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907429,
+          52.360882
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228703",
+        "label": "W 657 b (Sarphatiestraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907533,
+          52.360906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228704",
+        "label": "W 657 a (Sarphatistraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909391,
+          52.360863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228771",
+        "label": "W 92 t (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228772",
+        "label": "W 92 s (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909474,
+          52.360877
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228773",
+        "label": "W 98 s (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90956,
+          52.360897
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228774",
+        "label": "W 92 r (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228775",
+        "label": "W 92 (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909643,
+          52.360915
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228776",
+        "label": "W 92 g (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910222,
+          52.360867
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228787",
+        "label": "W 93 (Spinozastraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907836,
+          52.355509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229013",
+        "label": "ZZ 130 o (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907857,
+          52.355474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229014",
+        "label": "ZZ 17 b (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907888,
+          52.355432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229015",
+        "label": "ZZ 17 a (Weesperzijde)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90796,
+          52.355351
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A229016",
+        "label": "ZZ 16 (Weesperzijde)",
+        "year": "1870"
+      }
+    }
+  ]
+}

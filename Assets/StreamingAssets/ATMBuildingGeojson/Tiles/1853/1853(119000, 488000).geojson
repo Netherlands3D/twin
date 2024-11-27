@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871426,
+          52.385142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168150",
+        "label": "WW 58 a",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872808,
+          52.385211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171703",
+        "label": "WW 58",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871109,
+          52.385078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171705",
+        "label": "WW 58 b",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870919,
+          52.385378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171854",
+        "label": "WW 58 c",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871426,
+          52.385142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A168150",
+        "label": "WW 58 a",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872808,
+          52.385211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171703",
+        "label": "WW 58",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871109,
+          52.385078
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171705",
+        "label": "WW 58 b",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870919,
+          52.385378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171854",
+        "label": "WW 58 c",
+        "year": "1853"
+      }
+    }
+  ]
+}

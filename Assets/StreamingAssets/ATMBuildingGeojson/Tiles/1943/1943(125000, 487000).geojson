@@ -1,0 +1,425 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953915,
+          52.370722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207364",
+        "label": "Cruquiusweg 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954769,
+          52.371626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207369",
+        "label": "Cruquiusweg 154",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953922,
+          52.37083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207365",
+        "label": "Cruquiusweg 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953873,
+          52.371391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207367",
+        "label": "Cruquiusweg 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954657,
+          52.371619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207368",
+        "label": "Cruquiusweg 152",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953762,
+          52.371225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207366",
+        "label": "Cruquiusweg 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95624,
+          52.377227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153917",
+        "label": "Ijdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956269,
+          52.376947
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207305",
+        "label": "IJdijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956208,
+          52.377296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207306",
+        "label": "IJdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956169,
+          52.377514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207307",
+        "label": "IJdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956168,
+          52.377578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207308",
+        "label": "IJdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956185,
+          52.377686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207309",
+        "label": "IJdijk 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956196,
+          52.377753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207310",
+        "label": "IJdijk 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956778,
+          52.376869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207311",
+        "label": "IJdijk 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953915,
+          52.370722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207364",
+        "label": "Cruquiusweg 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954769,
+          52.371626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207369",
+        "label": "Cruquiusweg 154",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953922,
+          52.37083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207365",
+        "label": "Cruquiusweg 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953873,
+          52.371391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207367",
+        "label": "Cruquiusweg 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954657,
+          52.371619
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207368",
+        "label": "Cruquiusweg 152",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.953762,
+          52.371225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207366",
+        "label": "Cruquiusweg 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95624,
+          52.377227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153917",
+        "label": "Ijdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956269,
+          52.376947
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207305",
+        "label": "IJdijk 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956208,
+          52.377296
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207306",
+        "label": "IJdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956169,
+          52.377514
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207307",
+        "label": "IJdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956168,
+          52.377578
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207308",
+        "label": "IJdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956185,
+          52.377686
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207309",
+        "label": "IJdijk 37",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956196,
+          52.377753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207310",
+        "label": "IJdijk 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956778,
+          52.376869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207311",
+        "label": "IJdijk 40",
+        "year": "1943"
+      }
+    }
+  ]
+}

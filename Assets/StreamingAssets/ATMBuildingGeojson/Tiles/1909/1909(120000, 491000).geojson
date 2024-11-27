@@ -1,0 +1,275 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878328,
+          52.408346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169310",
+        "label": "Middenweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873646,
+          52.409795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169304",
+        "label": "Noordelijke Kanaaldijk 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.874122,
+          52.409569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169305",
+        "label": "Noordelijke Kanaaldijk 100",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.874321,
+          52.409477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169306",
+        "label": "Noordelijke Kanaaldijk 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877792,
+          52.408835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169307",
+        "label": "Middenweg 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878037,
+          52.408722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169308",
+        "label": "Middenweg 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878552,
+          52.409018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169309",
+        "label": "Middenweg 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878431,
+          52.408295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169311",
+        "label": "Middenweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883486,
+          52.405858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169312",
+        "label": "Noordelijke Kanaaldijk 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878328,
+          52.408346
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169310",
+        "label": "Middenweg 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873646,
+          52.409795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169304",
+        "label": "Noordelijke Kanaaldijk 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.874122,
+          52.409569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169305",
+        "label": "Noordelijke Kanaaldijk 100",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.874321,
+          52.409477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169306",
+        "label": "Noordelijke Kanaaldijk 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877792,
+          52.408835
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169307",
+        "label": "Middenweg 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878037,
+          52.408722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169308",
+        "label": "Middenweg 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878552,
+          52.409018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169309",
+        "label": "Middenweg 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878431,
+          52.408295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169311",
+        "label": "Middenweg 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883486,
+          52.405858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169312",
+        "label": "Noordelijke Kanaaldijk 50",
+        "year": "1909"
+      }
+    }
+  ]
+}

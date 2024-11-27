@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920085,
+          52.381989
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169266",
+        "label": "Droogdok 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922025,
+          52.379255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169267",
+        "label": "Verbindingsdam 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920085,
+          52.381989
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169266",
+        "label": "Droogdok 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922025,
+          52.379255
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169267",
+        "label": "Verbindingsdam 6",
+        "year": "1909"
+      }
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856604,
+          52.409185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196184",
+        "label": "Kanaalweg 91 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856155,
+          52.40913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196185",
+        "label": "Kanaalweg 91 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855059,
+          52.409275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196186",
+        "label": "Kanaalweg 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853186,
+          52.408863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196187",
+        "label": "Hemweg 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853242,
+          52.408912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196188",
+        "label": "Hemweg 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853477,
+          52.409086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196189",
+        "label": "Hemweg 120",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856604,
+          52.409185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196184",
+        "label": "Kanaalweg 91 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.856155,
+          52.40913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196185",
+        "label": "Kanaalweg 91 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.855059,
+          52.409275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196186",
+        "label": "Kanaalweg 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853186,
+          52.408863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196187",
+        "label": "Hemweg 116",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853242,
+          52.408912
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196188",
+        "label": "Hemweg 118",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.853477,
+          52.409086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A196189",
+        "label": "Hemweg 120",
+        "year": "1943"
+      }
+    }
+  ]
+}

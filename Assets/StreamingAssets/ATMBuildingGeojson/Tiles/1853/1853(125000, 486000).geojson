@@ -1,0 +1,155 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947412,
+          52.367589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172498",
+        "label": "ZZ 191",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947684,
+          52.367805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172499",
+        "label": "ZZ 193 a",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94775,
+          52.367874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172500",
+        "label": "ZZ 193",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94938,
+          52.367846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172501",
+        "label": "ZZ 194",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950658,
+          52.367862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172502",
+        "label": "ZZ 195",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947412,
+          52.367589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172498",
+        "label": "ZZ 191",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947684,
+          52.367805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172499",
+        "label": "ZZ 193 a",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94775,
+          52.367874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172500",
+        "label": "ZZ 193",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94938,
+          52.367846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172501",
+        "label": "ZZ 194",
+        "year": "1853"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950658,
+          52.367862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A172502",
+        "label": "ZZ 195",
+        "year": "1853"
+      }
+    }
+  ]
+}
