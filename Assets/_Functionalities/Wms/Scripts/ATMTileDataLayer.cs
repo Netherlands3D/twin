@@ -87,7 +87,6 @@ namespace Netherlands3D.Twin
         private void Update()
         {            
             //zoomLevel = CalculateZoomLevel();
-            Debug.Log(zoomLevel);
             if (zoomLevel != previousZoomLevel)
             {
                 this.previousZoomLevel = zoomLevel;
