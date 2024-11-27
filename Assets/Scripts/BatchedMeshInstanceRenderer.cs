@@ -42,7 +42,11 @@ namespace Netherlands3D.Twin
         public Material Material
         {
             get => material;
-            set => material = value;
+            set
+            {
+                material = value;
+                SetDefaultColors();
+            }
         }
 
         public float MeshScale
