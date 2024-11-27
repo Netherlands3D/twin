@@ -122,7 +122,7 @@ namespace Netherlands3D.Twin
 
             //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            xyzTiles.UrlTemplate = timeController.GetUrl();
+            xyzTiles.UrlTemplate = atmDataController.GetUrl();
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
 
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
@@ -141,13 +141,12 @@ namespace Netherlands3D.Twin
             }
             else
             {
-                if (tiles[tileKey] != null && tiles[tileKey].gameObject != null)
+                if (tiles[tileKey] != null && !(tiles[tileKey].gameObject))
                 {
                     tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector);
                     ((TextureDecalProjector)projector).debugUrl = xyzTile.URL;
                 }
-
-
+                
                 ClearPreviousTexture(tile);                
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
@@ -199,7 +198,7 @@ namespace Netherlands3D.Twin
         {
             // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
             // that after casting
-            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, timeController);
+            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel);
             var referenceTileIndex = pos.TileIndex;
             var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
             referenceTileWidth = tileWidth;
@@ -228,7 +227,6 @@ namespace Netherlands3D.Twin
                 (float)(tileCoordRd.Points[1] - minBound.Points[1]) 
             );
         }
-
         
         private void UpdateDrawOrderForChildren()
         {
@@ -332,20 +330,21 @@ namespace Netherlands3D.Twin
         public override void LayerToggled()
         {
             base.LayerToggled();
-            if (!isEnabled)
+            if (isEnabled) return;
+            
+            //get current tiles
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
             {
-                //get current tiles
-                foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+                if (tile.Value == null) continue;
+                if (tile.Value.gameObject == null) continue;
+
+                if (tile.Value.runningCoroutine != null)
                 {
-                    if (tile.Value == null || tile.Value.gameObject == null)
-                        continue;
-
-                    if (tile.Value.runningCoroutine != null)
-                        StopCoroutine(tile.Value.runningCoroutine);
-
-                    //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                    //projector.gameObject.SetActive(false);
+                    StopCoroutine(tile.Value.runningCoroutine);
                 }
+
+                //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                //projector.gameObject.SetActive(false);
             }
         }
     }
