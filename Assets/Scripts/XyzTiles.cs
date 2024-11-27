@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+using KindMen.Uxios;
 using Netherlands3D.Coordinates;
 using UnityEngine;
+using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Twin
 {
     /// <see href="en.wikipedia.org/wiki/Tiled_web_map"/>
     public class XyzTiles : MonoBehaviour
-    {
-
+    {        
+        public string UrlTemplate { get; set; } = "https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png";
         private static Dictionary<Vector3Int, XyzTile> debugTiles = new Dictionary<Vector3Int, XyzTile>();
         
         /// <summary>
@@ -30,10 +32,10 @@ namespace Netherlands3D.Twin
             public int ZoomLevel { get; set; }
             public Coordinate MinBound;
             public Coordinate MaxBound;
-            public string URL;
+            public TemplatedUri URL;
         }
         
-        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel, ATMDataController timeController)
+        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel)
         {
             // Ensure the coordinate is in EPSG:3857
             at = at.Convert(CoordinateSystem.WGS84_PseudoMercator);
@@ -48,7 +50,7 @@ namespace Netherlands3D.Twin
             {
                 TileIndex = tileIndex,
                 ZoomLevel = zoomLevel,
-                URL = this.GetTileUrl(tileIndex, zoomLevel, timeController),
+                URL = this.GetTileUrl(tileIndex, zoomLevel),
                 MaxBound = maxBound,
                 MinBound = minBound
             };
@@ -68,12 +70,16 @@ namespace Netherlands3D.Twin
             debugTiles.Clear();
         }
 
-        private string GetTileUrl(Vector2Int tileIndex, int zoomLevel, ATMDataController timeController)
+        private TemplatedUri GetTileUrl(Vector2Int tileIndex, int zoomLevel)
         {
-            string url = timeController.GetUrl();
-            return url.Replace("{z}", zoomLevel.ToString())
-                .Replace("{x}", tileIndex.x.ToString())
-                .Replace("{y}", tileIndex.y.ToString());
+            var parameters = new QueryParameters()
+            {
+                {"x", tileIndex.x.ToString()},
+                {"y", tileIndex.y.ToString()},
+                {"z", zoomLevel.ToString()}
+            };
+
+            return new TemplatedUri(UrlTemplate, parameters);
         }
 
         private Vector2Int CoordinateToTileXY(Coordinate coord, int zoomLevel)

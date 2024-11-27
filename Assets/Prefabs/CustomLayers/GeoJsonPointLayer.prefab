@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3618778040791522139}
   - component: {fileID: -4723935055048165154}
   - component: {fileID: 4062645045739546207}
+  - component: {fileID: -2785417149522329819}
   m_Layer: 12
   m_Name: GeoJsonPointLayer
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b28f725f4c154ce8828d58c83e4bc9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 
+  prefabIdentifier: 267c8f33152cac142b8e40a7bdc54523
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -104,3 +105,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &-2785417149522329819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

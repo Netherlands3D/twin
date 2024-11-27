@@ -6,34 +6,75 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Netherlands3D.Visualisers;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject
+    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public List<FeatureLineVisualisations> SpawnedVisualisations = new();
+        public bool IsPolygon  => false;
+        public Transform Transform { get => transform; }
 
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeatureLineVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            if(data == null)
+            {
+                Debug.LogWarning("visualisation was not spawned for feature" + feature.Id);
+                return meshes;
+            }
+
+            foreach (List<Coordinate> points in data.Data)
+            {
+                Mesh mesh = new Mesh();
+                meshes.Add(mesh);
+                List<Vector3> vertices = new List<Vector3>();
+                foreach (Coordinate point in points)
+                {
+                    vertices.Add(point.ToUnity());
+                }
+                mesh.SetVertices(vertices);
+            }
+
+            return meshes;
+        }
+        
+        //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
+        //the vertex positions will equal world space
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            lineRenderer3D.SetDefaultColors();
+            foreach (Mesh mesh in meshes)
+            {              
+                Vector3[] vertices = mesh.vertices;                
+                lineRenderer3D.SetLineColorFromPoints(vertices, color);
+            }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            lineRenderer3D.SetDefaultColors();
+        }
+
+        public Color GetRenderColor()
+        {
+            return LineRenderer3D.LineMaterial.color;
+        }
+
+        public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
         public LineRenderer3D LineRenderer3D
         {
-            get { return lineRenderer3D; }
-            set
-            {
-                //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-                // value.SetLines(lineRenderer3D.Lines); 
-                // Destroy(lineRenderer3D.gameObject);
-                lineRenderer3D = value;
-            }
-        }       
+            get => lineRenderer3D;
+            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            set => lineRenderer3D = value;
+        }
 
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -47,41 +88,36 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeatureLineVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            // Create visual with random color if enabled
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            ApplyStyling();
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
-                var newLines = GeoJSONGeometryVisualizerUtility.VisualizeMultiLineString(multiLineString, originalCoordinateSystem, lineRenderer3D);
-                newFeatureVisualisation.lines.AddRange(newLines);
+                var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.Data.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
-                var newLine = GeoJSONGeometryVisualizerUtility.VisualizeLineString(lineString, originalCoordinateSystem, lineRenderer3D);
-                newFeatureVisualisation.lines.Add(newLine);
+                var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
+                newFeatureVisualisation.Data.Add(newLine);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
+        }
+        
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
+            return new Material(lineRenderer3D.LineMaterial)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(lineRenderer3D.LineMaterial) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = strokeColor
+            };
         }
 
         /// <summary>
@@ -108,7 +144,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
-            foreach (var line in featureVisualisation.lines)
+            foreach (var line in featureVisualisation.Data)
                 lineRenderer3D.RemoveLine(line);
 
             SpawnedVisualisations.Remove(featureVisualisation);

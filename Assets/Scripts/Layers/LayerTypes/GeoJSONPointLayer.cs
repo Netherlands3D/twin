@@ -5,18 +5,63 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject
+    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public List<FeaturePointVisualisations> SpawnedVisualisations = new();
+        public bool IsPolygon => false;
+        public Transform Transform { get => transform; }
 
-        private bool randomizeColorPerFeature = false;
-        public bool RandomizeColorPerFeature { get => randomizeColorPerFeature; set => randomizeColorPerFeature = value; }
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeaturePointVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            foreach (List<Coordinate> points in data.Data)
+            {
+                Mesh mesh = new Mesh();
+                meshes.Add(mesh);
+                List<Vector3> vertices = new List<Vector3>();
+                foreach (Coordinate point in points)
+                {
+                    vertices.Add(point.ToUnity());
+                }
+                mesh.SetVertices(vertices);                
+            }
+
+            return meshes;
+        }
+
+        //here we have to local offset the vertices with the position of the transform because the transform gets shifted
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            foreach (Mesh mesh in meshes)
+            {
+                Vector3[] vertices = mesh.vertices;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    Vector3 localOffset = vertices[i] - mesh.bounds.center;
+                    pointRenderer3D.SetLineColorClosestToPoint(transform.position + localOffset, color);
+                }
+            }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            PointRenderer3D.SetDefaultColors();
+        }
+
+        public Color GetRenderColor()
+        {
+            return pointRenderer3D.Material.color;
+        }
+
+        public List<FeaturePointVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
 
@@ -44,41 +89,35 @@ namespace Netherlands3D.Twin.Layers
             if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
                 return;
 
-            var newFeatureVisualisation = new FeaturePointVisualisations() { feature = feature };
+            var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
 
-            // Create visual with random color if enabled
-            pointRenderer3D.Material = GetMaterialInstance();
+            ApplyStyling();
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
-                var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizeMultiPoint(multiPoint, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
             else if(feature.Geometry is Point point)
             {
-                var newPointCollection = GeoJSONGeometryVisualizerUtility.VisualizePoint(point, originalCoordinateSystem, PointRenderer3D);
-                newFeatureVisualisation.pointCollection.Add(newPointCollection);
+                var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
+                newFeatureVisualisation.Data.Add(newPointCollection);
             }
 
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
+        public void ApplyStyling()
+        {
+            pointRenderer3D.Material = GetMaterialInstance();
+        }
+
         private Material GetMaterialInstance()
         {
-            Material featureMaterialInstance;
-            // Create material with random color if randomize per feature is enabled
-            if (RandomizeColorPerFeature)
+            return new Material(pointRenderer3D.Material)
             {
-                var randomColor = UnityEngine.Random.ColorHSV();
-                randomColor.a = LayerData.Color.a;
-
-                featureMaterialInstance = new Material(pointRenderer3D.Material) { color = randomColor };
-                return featureMaterialInstance;
-            }
-
-            // Default to material with layer color
-            featureMaterialInstance = new Material(pointRenderer3D.Material) { color = LayerData.Color };
-            return featureMaterialInstance;
+                color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
+            };
         }
 
         /// <summary>
@@ -105,7 +144,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach(var pointCollection in featureVisualisation.pointCollection)
+            foreach(var pointCollection in featureVisualisation.Data)
                 PointRenderer3D.RemoveCollection(pointCollection);
 
             SpawnedVisualisations.Remove(featureVisualisation);
