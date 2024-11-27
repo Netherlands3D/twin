@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4710062469627514548}
-  - component: {fileID: 842094372904105818}
+  - component: {fileID: 7900750136681183864}
   - component: {fileID: 8159352025500753490}
   m_Layer: 0
   m_Name: ATMPointLayer
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &842094372904105818
+--- !u!114 &7900750136681183864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2250704767723318026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6adee75b6714242e4a02b0feb1221af2, type: 3}
+  m_Script: {fileID: 11500000, guid: d78df97517ce8f84998b5568d798564d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isenabled: 1
@@ -56,7 +56,6 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
-  years: 0a0700003d0700004e07000054070000750700008007000097070000
   year: 1943
   tileFolderPath: ATMBuildingGeojson/Tiles
 --- !u!114 &8159352025500753490
@@ -85,7 +84,6 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
-  randomizeColorPerFeature: 0
   OnParseError:
     m_PersistentCalls:
       m_Calls: []

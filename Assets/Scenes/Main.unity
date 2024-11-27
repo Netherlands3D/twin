@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3aae7effa6ed4c2f9a245da364c84d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointLayerPrefab: {fileID: 842094372904105818, guid: 75e6a0e53e42c40ff98b86d754b04c96,
+  pointLayerPrefab: {fileID: 7900750136681183864, guid: 75e6a0e53e42c40ff98b86d754b04c96,
     type: 3}
   years: 0a0700003d0700004e07000054070000750700008007000097070000c1070000
 --- !u!1 &767208734 stripped
