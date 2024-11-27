@@ -7,6 +7,42 @@ namespace Netherlands3D.Tiles3D{
         public BoundingVolumeType boundingVolumeType;
         public double[] values;
 
+        public void ApplyTileTransform(TileTransform tiletransform)
+        {
+            switch (boundingVolumeType)
+            {
+                case BoundingVolumeType.Box:
+                    Coordinate center = new Coordinate(CoordinateSystem.Undefined, values[0], values[1], values[2]);
+                    Coordinate newCenter = tiletransform.MultiplyPoint3x4(center);
+                    values[0] = newCenter.Points[0];
+                    values[1] = newCenter.Points[1];
+                    values[2] = newCenter.Points[2];
+                    Coordinate xAxis = new Coordinate(CoordinateSystem.Undefined, values[3], values[4], values[5]);
+                    Coordinate newXAxis = tiletransform.MultiplyVector(xAxis);
+                    values[3] = newXAxis.Points[0];
+                    values[4] = newXAxis.Points[1];
+                    values[5] = newXAxis.Points[2];
+                    Coordinate yAxis = new Coordinate(CoordinateSystem.Undefined, values[6], values[7], values[8]);
+                    Coordinate newYAxis = tiletransform.MultiplyVector(yAxis);
+                    values[6] = newYAxis.Points[0];
+                    values[7] = newYAxis.Points[1];
+                    values[8] = newYAxis.Points[2];
+                    Coordinate zAxis = new Coordinate(CoordinateSystem.Undefined, values[9], values[10], values[11]);
+                    Coordinate newZAxis = tiletransform.MultiplyVector(zAxis);
+                    values[9] = newZAxis.Points[0];
+                    values[10] = newZAxis.Points[1];
+                    values[11] = newZAxis.Points[2];
+                    break;
+                case BoundingVolumeType.Sphere:
+                    break;
+                case BoundingVolumeType.Region:
+                    // is explicitly in EPSG:4979 coordinates. so no transformation to apply
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public BoundingVolume GetChildBoundingVolume(int childIndex, SubdivisionScheme subdivisionScheme)
         {
             BoundingVolume newBoundingVolume = new BoundingVolume();

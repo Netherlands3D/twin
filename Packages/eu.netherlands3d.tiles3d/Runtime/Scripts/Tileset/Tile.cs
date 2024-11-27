@@ -33,6 +33,7 @@ namespace Netherlands3D.Tiles3D
 
         [SerializeField] public List<Tile> children = new List<Tile>();
 
+        public TileTransform tileTransform = TileTransform.Identity();
         public double[] transform = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
         public double geometricError;
         public float screenSpaceError = float.MaxValue;
@@ -329,6 +330,7 @@ namespace Netherlands3D.Tiles3D
                 case BoundingVolumeType.Region:
 
                     Debug.Log("region");
+
                     //Array order: west, south, east, north, minimum height, maximum height
                     double West = (boundingVolume.values[0] * 180.0f) / Mathf.PI;
                     double South = (boundingVolume.values[1] * 180.0f) / Mathf.PI;
@@ -337,19 +339,74 @@ namespace Netherlands3D.Tiles3D
                     double MaxHeight = boundingVolume.values[4];
                     double minHeight = boundingVolume.values[5];
 
-                    var ecefMin = CoordinateConverter.WGS84toECEF(new Vector3WGS((boundingVolume.values[0] * 180.0f) / Mathf.PI, (boundingVolume.values[1] * 180.0f) / Mathf.PI, boundingVolume.values[4]));
-                    Coordinate  wgsMin = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,South,West,minHeight);
-                    Coordinate wgsMax = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, East, MaxHeight);
+                    var mincoord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, South, West, minHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    var maxcoord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, South, West, minHeight).Convert(CoordinateSystem.WGS84_ECEF);
 
-                    var unityMin = wgsMin.ToUnity();
-                    var unityMax = wgsMax.ToUnity();
+                    var coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, South, West, MaxHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting<mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing<mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting >maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing>maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height >maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, South, East, minHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, South, East, MaxHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, West, minHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, West, MaxHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, East, minHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    coord = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, North, East, MaxHeight).Convert(CoordinateSystem.WGS84_ECEF);
+                    if (coord.easting < mincoord.easting) mincoord.easting = coord.easting;
+                    if (coord.northing < mincoord.northing) mincoord.northing = coord.northing;
+                    if (coord.height < mincoord.height) mincoord.height = coord.height;
+                    if (coord.easting > maxcoord.easting) maxcoord.easting = coord.easting;
+                    if (coord.northing > maxcoord.northing) maxcoord.northing = coord.northing;
+                    if (coord.height > maxcoord.height) maxcoord.height = coord.height;
+
+                    var unityMin = mincoord.ToUnity();
+                    var unityMax = maxcoord.ToUnity();
 
                     unityBounds.size = Vector3.zero;
                     unityBounds.center = unityMin;
                     unityBounds.Encapsulate(unityMax);
 
-                    BottomLeft = wgsMin.Convert(CoordinateSystem.WGS84_ECEF);
-                    TopRight = wgsMax.Convert(CoordinateSystem.WGS84_ECEF);
+                    BottomLeft = mincoord;
+                    TopRight = maxcoord;
                     break;
                 default:
                     break;
