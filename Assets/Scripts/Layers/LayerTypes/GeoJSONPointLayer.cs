@@ -131,25 +131,24 @@ namespace Netherlands3D.Twin.Layers
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             var keys = spawnedVisualisationDictionary.Keys.ToList();
-            for (int i = spawnedVisualisationDictionary.Count - 1; i >= 0; i--)
+            foreach (var key in keys)
             {
-                var kvp = spawnedVisualisationDictionary.ElementAt(i);
-                var visualisation = kvp.Value;
+                var visualisation = spawnedVisualisationDictionary[key];
                 visualisation.CalculateBounds();
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, visualisation.bounds);
                 if (inCameraFrustum)
                     continue;
 
-                RemoveFeature(kvp);
+                RemoveFeature(key);
             }
         }
 
-        private void RemoveFeature(KeyValuePair<int, FeaturePointVisualisations> featureVisualisationDictionaryEntry)
+        private void RemoveFeature(int featureVisualisationKey)
         {
-            foreach (var pointCollection in featureVisualisationDictionaryEntry.Value.Data)
+            foreach (var pointCollection in spawnedVisualisationDictionary[featureVisualisationKey].Data)
                 PointRenderer3D.RemoveCollection(pointCollection);
 
-            spawnedVisualisationDictionary.Remove(featureVisualisationDictionaryEntry.Key);
+            spawnedVisualisationDictionary.Remove(featureVisualisationKey);
         }
 
         public override void DestroyLayerGameObject()
