@@ -146,9 +146,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.DownloadGeoJSON, Assembly-CSharp
-        m_MethodName: DownloadFileFromURL
+      - m_Target: {fileID: 314689352903473804}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.AtmInformationListItem, Assembly-CSharp
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 7823922722719253330}
   - component: {fileID: 2373743494144311157}
   - component: {fileID: 5471916875883121308}
+  - component: {fileID: 314689352903473804}
   m_Layer: 5
   m_Name: Foto element
   m_TagString: Untagged
@@ -328,6 +329,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &314689352903473804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819709314307839895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08cb7ab29cdad574e91cb3fa5ba7a941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thumbnailPlaceholder: {fileID: 0}
+  titleField: {fileID: 7135416982533806912}
+  subTextField: {fileID: 8137651330941699210}
+  photoField: {fileID: 6306539367379105678}
 --- !u!1 &2793399166716847095
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +453,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 46.699646, y: -15.2496}
-  m_SizeDelta: {x: 26.91, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4131925075457128519
 CanvasRenderer:
