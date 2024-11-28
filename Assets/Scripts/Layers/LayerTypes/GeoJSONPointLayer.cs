@@ -126,21 +126,26 @@ namespace Netherlands3D.Twin.Layers
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
         /// </summary>
+        private List<int> keysToRemove = new List<int>();
         public void RemoveFeaturesOutOfView()
         {
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            var keys = spawnedVisualisationDictionary.Keys.ToList();
-            foreach (var key in keys)
+            //keysToRemove.Clear();
+            foreach (var kvp in spawnedVisualisationDictionary)
             {
-                var visualisation = spawnedVisualisationDictionary[key];
+                var visualisation = kvp.Value;
                 visualisation.CalculateBounds();
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, visualisation.bounds);
                 if (inCameraFrustum)
                     continue;
 
-                RemoveFeature(key);
+                keysToRemove.Add(kvp.Key);
             }
+            foreach(int key in keysToRemove)
+                RemoveFeature(key);
+
+            keysToRemove.Clear();
         }
 
         private void RemoveFeature(int featureVisualisationKey)
