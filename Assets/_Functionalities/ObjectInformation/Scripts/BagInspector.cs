@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
 using GG.Extensions;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
@@ -66,7 +67,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private float minClickTime = 0.5f;
 		private float lastTimeClicked = 0;
 		private int currentSelectedMappingIndex = -1;
-
+		private bool filterDuplicateFeatures = true;
 
         private void Awake()
 		{
@@ -102,7 +103,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			if (waitingForRelease && !draggedBeforeRelease)
 			{
 				//Check if next release should be ignored ( if we dragged too much )
-				draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0;
+				draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
 			}
 
 			if (Pointer.current.press.wasReleasedThisFrame == false) return false;
@@ -145,10 +146,21 @@ namespace Netherlands3D.Twin.Interface.BAG
                 //lets order all mappings by layerorder (rootindex) from layerdata
                 if (featureSelector.HasFeatureMapping)
 				{
+					List<Feature> filterDuplicates = new List<Feature>();
 					foreach (FeatureMapping feature in featureSelector.FeatureMappings)
 					{
-						if(feature.VisualisationParent.LayerData.ActiveInHierarchy)
+						if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
+						{
+							if(filterDuplicateFeatures)
+							{
+								if (!filterDuplicates.Contains(feature.Feature))
+									filterDuplicates.Add(feature.Feature);
+								else
+									continue;
+							}
+
 							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+						}
                     }
                 }
 				if (subObjectSelector.HasObjectMapping)
@@ -162,6 +174,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 				}
 
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
+				
                 currentSelectedMappingIndex = 0;
 			}
 			else
@@ -196,8 +209,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 		}
 		
 		private void SelectFeatureOnHit(FeatureMapping mapping)
-		{          
-            ShowFeatureInformation();
+		{
+		    ShowFeatureInformation();
 			ExtrudePointsForSelection(mapping);
             featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
