@@ -17,7 +17,8 @@ namespace Netherlands3D.Twin.Layers
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         private GeoJsonParser parser = new GeoJsonParser(0.01f);
-
+        public GeoJsonParser Parser => parser;
+        
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
