@@ -130,8 +130,10 @@ namespace Netherlands3D.Twin.Layers
         {
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            foreach (var kvp in spawnedVisualisationDictionary)
+            var keys = spawnedVisualisationDictionary.Keys.ToList();
+            for (int i = spawnedVisualisationDictionary.Count - 1; i >= 0; i--)
             {
+                var kvp = spawnedVisualisationDictionary.ElementAt(i);
                 var visualisation = kvp.Value;
                 visualisation.CalculateBounds();
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, visualisation.bounds);

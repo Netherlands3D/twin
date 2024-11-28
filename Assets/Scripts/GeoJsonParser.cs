@@ -131,7 +131,6 @@ namespace Netherlands3D.Twin
                 features.Add(feature);
                 OnFeatureParsed.Invoke(feature);
 
-
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
                 {
