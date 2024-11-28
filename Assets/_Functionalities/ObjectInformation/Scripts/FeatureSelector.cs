@@ -46,22 +46,6 @@ namespace Netherlands3D.Twin.ObjectInformation
             opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
         }
 
-        private void OnEnable()
-        {
-            ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
-        }
-
-        private void OnDisable()
-        {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
-        }
-
-        private void ProcessClick()
-        {
-           
-            
-        }
-
         public void Select(FeatureMapping mapping)
         {
             mapping.SelectFeature();
@@ -131,8 +115,8 @@ namespace Netherlands3D.Twin.ObjectInformation
                     {
                         Vector3 closestPoint = raycastHits[i].collider.ClosestPoint(new Vector3(groundPosition.x, raycastHits[i].collider.bounds.center.y, groundPosition.z)); //xz plane 2d distance check
                         closestPoint.y = groundPosition.y; //make points equal in xz plane
-                        float dist = Vector3.Distance(closestPoint, groundPosition);
-                        if (dist > pointHitRadius)
+                        float dist = Vector3.SqrMagnitude(groundPosition - closestPoint);// Vector3.Distance(closestPoint, groundPosition);
+                        if (dist > pointHitRadius*pointHitRadius)
                             continue;
                     }
 
