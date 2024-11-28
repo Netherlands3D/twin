@@ -67,6 +67,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 		private float lastTimeClicked = 0;
 		private int currentSelectedMappingIndex = -1;
 
+		private GetBagIdInTimeRange bagIdTimeRange;
+
 
         private void Awake()
 		{
@@ -178,7 +180,14 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 			GameObject selection = orderedMappings[currentSelectedMappingIndex];
 			if (selection.GetComponent<ObjectMapping>())
-			{				
+			{	
+				//for the amsterdam time machine this is the fastest way to keep from selecting a hidden bag id by year
+				if(bagIdTimeRange == null)
+					bagIdTimeRange = FindObjectOfType<GetBagIdInTimeRange>();
+
+				if (bagIdTimeRange.IsBagIdHidden(bagId))
+					return;
+
 				SelectBuildingOnHit(bagId);
 			}
 			else

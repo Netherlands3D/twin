@@ -42,6 +42,18 @@ namespace Netherlands3D.Twin
             bagIdHider.UpdateHiddenBuildings(true);
         }
 
+        public bool IsBagIdHidden(string bagId)
+        {
+            if(availableBagIdStartTimes.ContainsKey(bagId))
+            {
+                DateTime buildingTime = availableBagIdStartTimes[bagId];
+                DateTime projectTime = ProjectData.Current.CurrentDateTime;
+                if (projectTime < buildingTime)
+                    return true;
+            }
+            return false;
+        }
+
         private void Start()
         {
             var lines = CsvParser.ReadLines(csv.text, 1);
