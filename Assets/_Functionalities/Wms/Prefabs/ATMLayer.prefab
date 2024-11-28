@@ -56,9 +56,6 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  TransparencyEnabled: 1
-  DefaultEnabledLayersMax: 5
-  PreferredImageSize: {x: 512, y: 512}
 --- !u!114 &2816984785408510274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +85,6 @@ MonoBehaviour:
   onLogMessage:
     m_PersistentCalls:
       m_Calls: []
-  zoomLevel: 17
 --- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +106,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerGameObject, Assembly-CSharp
-        m_MethodName: DestroyLayer
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

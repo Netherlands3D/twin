@@ -1,11 +1,9 @@
-using Netherlands3D.Coordinates;
-using Netherlands3D.Rendering;
-using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers.Properties;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Netherlands3D.Rendering;
+using Netherlands3D.Twin._Functionalities.Wms.Scripts;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -14,83 +12,29 @@ namespace Netherlands3D.Twin.Layers
     /// </summary>
     public class ATMLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
-        public ATMTileDataLayer ATMProjectionLayer { get { return ATMTileDataLayers[GetZoomLayerIndex(zoomLevel)]; } }
-        private const float earthRadius = 6378.137f;
-        private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
-        private const double log2x = 0.30102999566d;
         public LayerPropertyData PropertyData => urlPropertyData;
-
-        private ATMTileDataLayer[] ATMTileDataLayers;
-        private ATMTileDataLayer currentDataLayer;
-        private ATMDataController timeController;
-        private ATMDataController.ATMDataHandler ATMDataHandler;
-
-        private int zoomLevel = -1;
-        private int lastZoomLevel = -1;
-        private Vector2Int zoomBounds = Vector2Int.zero;
 
         protected LayerURLPropertyData urlPropertyData = new();
 
-        private bool isParentLayer = false;
-        
+        private ATMLayerManager layerManager;
+
         void Update()
         {
-            if (!isParentLayer)
-                return;
-
-            zoomLevel = CalculateZoomLevel();          
-           
-            UpdateCurrentZoomLayer();
+            layerManager?.SwitchLayerToCurrentZoomLevel();
         }
-
-        private void UpdateCurrentZoomLayer(bool force = false)
-        {
-            if(ATMTileDataLayers == null || !isParentLayer)
-                return;
-
-            if (zoomLevel != lastZoomLevel || force)
-            {
-                CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();
-               
-                //get the current enabled zoom layer and update it with setvisibletilesdirty
-                int index = GetZoomLayerIndex(zoomLevel);
-
-                for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                {
-                    ATMTileDataLayers[i].isEnabled = index == i;
-                    if(i != index)
-                        ATMTileDataLayers[i].CancelTiles();
-                }
-                ATMTileDataLayers[index].SetVisibleTilesDirty();
-
-                lastZoomLevel = zoomLevel;
-            }
-        }
-
+        
         protected override void Start()
         {
             base.Start();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
 
             ATMLayerGameObject parent = transform.parent.GetComponent<ATMLayerGameObject>();
-            if (parent != null)
-            {
-                //when instantiating as a sublayer this overrides the parent, so we need to disable this agian
-                currentDataLayer = GetComponent<ATMTileDataLayer>();                
-                currentDataLayer.isEnabled = parent.zoomLevel == currentDataLayer.ZoomLevel;
-                return;
-            }
+            if (parent == null) DoStartAsParent();
+        }
 
-            isParentLayer = true;
-
-            if (timeController == null)
-            {
-                timeController = gameObject.AddComponent<ATMDataController>();
-                ATMDataHandler = (a) => UpdateCurrentZoomLayer(true);
-                timeController.ChangeYear += ATMDataHandler;
-            }
-
-            currentDataLayer = GetComponent<ATMTileDataLayer>();
+        private void DoStartAsParent()
+        {
+            var currentDataLayer = GetComponent<ATMTileDataLayer>();
             TextureProjectorBase projectorPrefab = currentDataLayer.ProjectorPrefab;
             currentDataLayer.SetZoomLevel(-1);
             currentDataLayer.isEnabled = false;
@@ -98,58 +42,20 @@ namespace Netherlands3D.Twin.Layers
             Destroy(GetComponent<WorldTransform>());
             Destroy(GetComponent<ChildWorldTransformShifter>());
 
-            CartesianTiles.TileHandler handler = GetComponentInParent<CartesianTiles.TileHandler>();           
-
-            zoomLevel = CalculateZoomLevel();
-            zoomBounds = timeController.GetZoomBoundsAllYears();
-            int length = zoomBounds.y - zoomBounds.x + 1;
-            ATMTileDataLayers = new ATMTileDataLayer[length];
-            for (int i = 0; i < ATMTileDataLayers.Length; i++)
-            {
-                GameObject zoomLayerObject = new GameObject((zoomBounds.x + i).ToString());
-                zoomLayerObject.AddComponent<XyzTiles>();
-                WorldTransform wt = zoomLayerObject.AddComponent<WorldTransform>();
-                ChildWorldTransformShifter cts = zoomLayerObject.AddComponent<ChildWorldTransformShifter>();
-                wt.SetShifter(cts);
-                Destroy(zoomLayerObject.GetComponent<GameObjectWorldTransformShifter>());
-                
-                ATMTileDataLayers[i] = zoomLayerObject.AddComponent<ATMTileDataLayer>();
-                
-                ATMTileDataLayer zoomLayer = ATMTileDataLayers[i].GetComponent<ATMTileDataLayer>();
-                zoomLayer.ProjectorPrefab = projectorPrefab;
-                zoomLayer.SetDataController(timeController);                
-                zoomLayer.SetZoomLevel(zoomBounds.x + i);
-                zoomLayer.tileSize = timeController.GetTileSizeForZoomLevel(zoomLayer.ZoomLevel);
-                zoomLayerObject.AddComponent<ATMLayerGameObject>();
-                ATMTileDataLayers[i].transform.SetParent(transform, false);
-            }
-            //yes afterwards or the tilehandler will clear the tilesizes for inactive layers
-            int index = GetZoomLayerIndex(zoomLevel);
-            for (int i = 0; i < ATMTileDataLayers.Length; i++)
-            {
-                if (i != index)
-                    ATMTileDataLayers[i].isEnabled = false;
-            }
-
-            UpdateCurrentZoomLayer(true);
             SetRenderOrder(LayerData.RootIndex);
+
+            layerManager = new ATMLayerManager(gameObject.AddComponent<ATMDataController>());
+            layerManager.CreateTileHandlerForEachZoomLevel(transform, projectorPrefab);
+            layerManager.SwitchLayerToCurrentZoomLevel(true);
         }
 
-        public void SetZoomBounds(Vector2Int bounds)
+
+        private void SetRenderOrder(int order)
         {
-            zoomBounds = bounds;
-        }
+            if (layerManager == null) return;
 
-        private int GetZoomLayerIndex(int zoomLevel)
-        {          
-            return zoomLevel - zoomBounds.x;
-        }
-
-        //a higher order means rendering over lower indices
-        public void SetRenderOrder(int order)
-        {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
-            ATMProjectionLayer.RenderIndex = -order;
+            layerManager.ATMProjectionLayer.RenderIndex = -order;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
@@ -161,30 +67,11 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public int CalculateZoomLevel()
-        {
-            Vector3 camPosition = Camera.main.transform.position;      
-            var unityCoordinate = new Coordinate(
-                  CoordinateSystem.Unity,
-                  camPosition.x,
-                  camPosition.y,
-                  camPosition.z
-              );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-            double latitude = coord.northing;
-            double cosLatitude = Math.Cos(latitude * Mathf.Deg2Rad);
-            double zoomLevel = Math.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
-            var currentYearZoomBounds = timeController.GetZoomBounds();
-            zoomLevel = Math.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
-            return (int)zoomLevel;  
-        }
-
         public override void DestroyLayerGameObject()
         {
             base.DestroyLayerGameObject();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
-            if (timeController != null && ATMDataHandler != null)
-                timeController.ChangeYear -= ATMDataHandler;
+            layerManager?.Dispose();
         }
     }
 }

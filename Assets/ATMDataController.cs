@@ -2,6 +2,7 @@ using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,10 @@ namespace Netherlands3D.Twin
 {
     public class ATMDataController : MonoBehaviour
     {
+        private const float earthRadius = 6378.137f;
+        private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
+        private const double log2x = 0.30102999566d;
+
         private int currentYear;
         private int lastValidYear;
         public delegate void ATMDataHandler (int year);
@@ -74,6 +79,32 @@ namespace Netherlands3D.Twin
             if (yearZoomBounds.ContainsKey(year))
                 return (yearZoomBounds[year].x, yearZoomBounds[year].y);
             return (16, 16); //closest to default
+        }
+
+        public int CalculateZoomLevel()
+        {
+            Vector3 camPosition = Camera.main.transform.position;      
+            var unityCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                camPosition.x,
+                camPosition.y,
+                camPosition.z
+            );
+            Coordinate coord = unityCoordinate.Convert(CoordinateSystem.WGS84);
+            double latitude = coord.northing;
+            double cosLatitude = Math.Cos(latitude * Mathf.Deg2Rad);
+            double zoomLevel = Math.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
+            var currentYearZoomBounds = GetZoomBounds();
+            zoomLevel = Math.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
+
+            return (int)zoomLevel;  
+        }
+
+        public int GetZoomLayerIndex(int zoomLevel)
+        {          
+            var zoomBounds = GetZoomBoundsAllYears();
+
+            return zoomLevel - zoomBounds.x;
         }
 
         public Vector2Int GetZoomBoundsAllYears()

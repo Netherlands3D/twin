@@ -176,14 +176,8 @@ namespace Netherlands3D.Twin
                 if (ProjectorHeight >= decalProjector.size.z)
                     textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
 
-                Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
-                var rdCoordinate = new Coordinate(
-                    CoordinateSystem.RD,
-                    origin.x,
-                    origin.y,
-                    0.0d
-                );
-                var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+                var rdCoordinate = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y, 0.0d);
+                var originCoordinate = rdCoordinate.ToUnity();
                 originCoordinate.y = ProjectorHeight;
                 tile.gameObject.transform.position = originCoordinate;
                 decalProjector.transform.position -= projectorOffset;
