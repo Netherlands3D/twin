@@ -10,11 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: 1950731496240471435}
-  - component: {fileID: 2816984785408510274}
   - component: {fileID: 7900166245345724691}
-  - component: {fileID: -8300356283678966299}
-  - component: {fileID: -7699739382070360042}
-  - component: {fileID: 2276412889401467713}
+  - component: {fileID: -8440748944381979600}
   m_Layer: 0
   m_Name: ATMLayer
   m_TagString: Untagged
@@ -56,35 +53,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2816984785408510274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418701555395206593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b2f74f99bfca46eb9c97d84673cf066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isenabled: 1
-  tileSize: 188
-  layerPriority: 0
-  Datasets: []
-  pauseLoading: 0
-  onLayerEnabled:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerDisabled:
-    m_PersistentCalls:
-      m_Calls: []
-  compressLoadedTextures: 0
-  projectorPrefab: {fileID: 4500353898809890024, guid: d62ffe26c4958754e9ee3be0a03b28f6,
-    type: 3}
-  onLogMessage:
-    m_PersistentCalls:
-      m_Calls: []
+  atmLayerGameObjectPrefab: {fileID: 0}
 --- !u!114 &7900166245345724691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +85,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-8300356283678966299
+--- !u!114 &-8440748944381979600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,38 +94,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 8560a4d50b3047b9a1a1e48ec2761067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: -7699739382070360042}
-  referenceCoordinateSystem: 2
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &-7699739382070360042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418701555395206593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2276412889401467713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418701555395206593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6b3fb76cb96645348155bd1ea16ae5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  layerPrefab: {fileID: -9063389018957865507, guid: 7754a70567866e44dac229dd8715bc58,
+    type: 3}

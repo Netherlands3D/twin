@@ -9,11 +9,7 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
 {
     public class ATMLayerManager : IDisposable
     {
-        public ATMTileDataLayer[] ATMTileDataLayers => atmTileDataLayers;
-        public ATMTileDataLayer ATMProjectionLayer => ATMTileDataLayers[timeController.GetZoomLayerIndex(zoomLevel)];
-        
-        private ATMDataController.ATMDataHandler ATMDataHandler;
-
+        private ATMTileDataLayer[] ATMTileDataLayers => atmTileDataLayers;
 
         private int zoomLevel = -1;
         private int lastZoomLevel = -1;
@@ -23,10 +19,12 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
         public ATMLayerManager(ATMDataController timeController)
         {
             this.timeController = timeController;
-            
-            ATMDataHandler = (a) => UpdateCurrentZoomLayer(true);
-            timeController.ChangeYear += ATMDataHandler;
+            timeController.ChangeYear += OnYearChanged;
+        }
 
+        private void OnYearChanged(int a)
+        {
+            UpdateCurrentZoomLayer(true);
         }
 
         public void SwitchLayerToCurrentZoomLevel(bool force = false)
@@ -48,6 +46,17 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             ATMTileDataLayers[index].SetVisibleTilesDirty();
 
             lastZoomLevel = zoomLevel;
+        }
+
+        public void CreateTileHandlerForEachZoomLevel(Transform parent, ATMMapLayerGameObject layerGameObjectPrefab)
+        {
+            var zoomBounds = timeController.GetZoomBoundsAllYears();
+            int numberOfZoomLevels = zoomBounds.y - zoomBounds.x + 1;
+            atmTileDataLayers = new ATMTileDataLayer[numberOfZoomLevels];
+            for (int i = 0; i < ATMTileDataLayers.Length; i++)
+            {
+                CreateTileLayerForDataLayer(parent, i, zoomBounds.x + i, layerGameObjectPrefab);
+            }
         }
 
         public void CreateTileHandlerForEachZoomLevel(Transform parent, TextureProjectorBase projectorPrefab)
@@ -74,8 +83,8 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
                 }
             }
         }
-        
-        public void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, TextureProjectorBase projectorPrefab)
+
+        private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, TextureProjectorBase projectorPrefab)
         {
             GameObject zoomLayerObject = new GameObject(forZoomLevel.ToString());
             zoomLayerObject.AddComponent<XyzTiles>();
@@ -95,10 +104,22 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             ATMTileDataLayers[i].transform.SetParent(parent, false);
         }
 
+        private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, ATMMapLayerGameObject layerGameObjectPrefab)
+        {
+            var zoomLayerObject = Object.Instantiate(layerGameObjectPrefab, parent, false);
+            zoomLayerObject.gameObject.name = forZoomLevel.ToString();
+
+            ATMTileDataLayer zoomLayer = zoomLayerObject.GetComponent<ATMTileDataLayer>();
+            ATMTileDataLayers[i] = zoomLayer;
+            
+            zoomLayer.SetDataController(timeController);                
+            zoomLayer.SetZoomLevel(forZoomLevel);
+            zoomLayer.tileSize = timeController.GetTileSizeForZoomLevel(zoomLayer.ZoomLevel);
+        }
 
         public void Dispose()
         {
-            timeController.ChangeYear -= ATMDataHandler;
+            timeController.ChangeYear -= OnYearChanged;
         }
     }
 }
