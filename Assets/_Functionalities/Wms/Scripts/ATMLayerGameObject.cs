@@ -15,9 +15,6 @@ namespace Netherlands3D.Twin.Layers
     public class ATMLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
     {
         public ATMTileDataLayer ATMProjectionLayer { get { return ATMTileDataLayers[GetZoomLayerIndex(zoomLevel)]; } }
-        public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
-        public int DefaultEnabledLayersMax = 5;  //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
-        public Vector2Int PreferredImageSize = Vector2Int.one * 512;
         private const float earthRadius = 6378.137f;
         private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
         private const double log2x = 0.30102999566d;
@@ -36,11 +33,6 @@ namespace Netherlands3D.Twin.Layers
 
         private bool isParentLayer = false;
         
-        protected override void Awake()
-        {
-            base.Awake();  
-        }
-
         void Update()
         {
             if (!isParentLayer)
@@ -69,36 +61,7 @@ namespace Netherlands3D.Twin.Layers
                     if(i != index)
                         ATMTileDataLayers[i].CancelTiles();
                 }
-
-
-
-                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                //{
-                //    ATMTileDataLayers[i].isEnabled = true;
-                //}
-
-                //if (handler.layers.Contains(currentDataLayer))
-                //    handler.RemoveLayer(currentDataLayer);
-
-                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                //{
-                //    if (i != index)
-                //    {
-                //        handler.RemoveLayer(ATMTileDataLayers[i]);
-                //        handler.AddLayer(ATMTileDataLayers[i]);
-                //    }
-                //}
-                //if (!handler.layers.Contains(ATMTileDataLayers[index]))
-                //    handler.AddLayer(ATMTileDataLayers[index]);
-                
                 ATMTileDataLayers[index].SetVisibleTilesDirty();
-
-                //for (int i = 0; i < ATMTileDataLayers.Length; i++)
-                //    if (i != index)
-                //    {
-                //        //disable each layer after the refresh loop or tilehandler will error on the cached tilesizes
-                //        ATMTileDataLayers[i].isEnabled = false;
-                //    }
 
                 lastZoomLevel = zoomLevel;
             }
@@ -130,7 +93,6 @@ namespace Netherlands3D.Twin.Layers
             currentDataLayer = GetComponent<ATMTileDataLayer>();
             TextureProjectorBase projectorPrefab = currentDataLayer.ProjectorPrefab;
             currentDataLayer.SetZoomLevel(-1);
-            //current.enabled = false;
             currentDataLayer.isEnabled = false;
 
             Destroy(GetComponent<WorldTransform>());
@@ -158,8 +120,6 @@ namespace Netherlands3D.Twin.Layers
                 zoomLayer.SetDataController(timeController);                
                 zoomLayer.SetZoomLevel(zoomBounds.x + i);
                 zoomLayer.tileSize = timeController.GetTileSizeForZoomLevel(zoomLayer.ZoomLevel);
-                //zoomLayer.enabled = true;
-                //handler.AddLayer(zoomLayer);
                 zoomLayerObject.AddComponent<ATMLayerGameObject>();
                 ATMTileDataLayers[i].transform.SetParent(transform, false);
             }
@@ -167,14 +127,9 @@ namespace Netherlands3D.Twin.Layers
             int index = GetZoomLayerIndex(zoomLevel);
             for (int i = 0; i < ATMTileDataLayers.Length; i++)
             {
-                //if (!handler.layers.Contains(ATMTileDataLayers[i]))
-                //    handler.AddLayer(ATMTileDataLayers[i]);
-
                 if (i != index)
                     ATMTileDataLayers[i].isEnabled = false;
             }
-
-            //handler.RemoveLayer(currentDataLayer);
 
             UpdateCurrentZoomLayer(true);
             SetRenderOrder(LayerData.RootIndex);

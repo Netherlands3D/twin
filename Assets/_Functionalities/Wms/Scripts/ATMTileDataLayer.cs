@@ -120,7 +120,6 @@ namespace Netherlands3D.Twin
 
             Tile tile = tiles[tileKey];
 
-            //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
             var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
             xyzTiles.UrlTemplate = atmDataController.GetUrl();
             var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
