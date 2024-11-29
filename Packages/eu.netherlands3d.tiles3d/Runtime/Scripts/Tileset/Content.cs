@@ -145,13 +145,20 @@ namespace Netherlands3D.Tiles3D
 
                     if (parsedGltf.rtcCenter != null)
                     {
+                        //Debug.Log("Has RTC-Center "+ parsedGltf.rtcCenter[0] +";"+ parsedGltf.rtcCenter[1]+";"+ parsedGltf.rtcCenter[2]);
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
-                        Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
+                        Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, parsedGltf.rtcCenter[0], parsedGltf.rtcCenter[1], parsedGltf.rtcCenter[2]);
+                        Coordinate transformedCoordinate = parentTile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
+                        Vector3 unityPosition = transformedCoordinate.ToUnity();
+
+                        //Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
                         scene.position = unityPosition;
                     }
                     else
                     {
-                        Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(-scene.localPosition.x + parentTile.transform[12], -scene.localPosition.z + parentTile.transform[13], scene.localPosition.y + parentTile.transform[14]));
+                        Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
+                        Coordinate transformedCoordinate = parentTile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
+                        Vector3 unityPosition = transformedCoordinate.ToUnity();
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         scene.position = unityPosition;
                     }

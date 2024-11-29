@@ -453,39 +453,42 @@ namespace Netherlands3D.Tiles3D
                     visibleTiles.RemoveAt(i);
                     continue;
                 }
-                if (tile.refine == "REPLACE")
+
+
+                var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
+                if (enoughDetail) // tile has (more then) enoug detail
                 {
-                    if (tile.parent.CountLoadedParents() + tile.parent.CountLoadingParents() > 1)
+                    if (tile.parent.screenSpaceError<maximumScreenSpaceError) //parent tile also has enough detail
                     {
-                        tilePrioritiser.RequestDispose(tile, true);
-                        visibleTiles.RemoveAt(i);
-                        continue;
+                        // can be removed if a parentTile is loaded
+                        if (tile.parent.CountLoadedParents() > 0)
+                        {
+                            tilePrioritiser.RequestDispose(tile, true);
+                            visibleTiles.RemoveAt(i);
+                            continue;
+                        }
                     }
+                   
+
                 }
-                if (tile.screenSpaceError > maximumScreenSpaceError) //too little detail
+
+                else //too little detail
                 {
-                    if (tile.CountLoadingChildren() == 0)
+                    if (tile.refine=="ADD")
+                    {
+                        // tile should remain
+                    }
+                    else if (tile.CountLoadingChildren() == 0)
                     {
                         if (tile.CountLoadedChildren() > 0)
                         {
                             tilePrioritiser.RequestDispose(tile);
 
-
                             visibleTiles.RemoveAt(i);
                         }
                     }
-                }
 
-                if (tile.screenSpaceError < maximumScreenSpaceError) //too much detail
-                {
-                    if (tile.CountLoadedParents() > 0)
-                    {
-                        if (tile.getParentSSE() < maximumScreenSpaceError)
-                        {
-                            tilePrioritiser.RequestDispose(tile, true);
-                            visibleTiles.RemoveAt(i);
-                        }
-                    }
+
                 }
             }
         }
@@ -540,33 +543,48 @@ namespace Netherlands3D.Tiles3D
             var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
             CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
             var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
-
-            if (enoughDetail || tile.children.Count == 0)
+            var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json") && !tile.contentUri.Contains(".subtree");
+            if (enoughDetail == false)  
             {
-                var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json") && !tile.contentUri.Contains(".subtree");
-
-                if (Has3DContent)
+                if (tile.refine == "ADD" && Has3DContent)
                 {
-                    int loadingParentsCount = tile.CountLoadingParents();
-                    int loadedParentsCount = tile.CountLoadedParents();
-                    if (loadedParentsCount + loadingParentsCount < 2)
+                    if (!visibleTiles.Contains(tile))
                     {
-                        if (!visibleTiles.Contains(tile))
-                        {
-                            RequestContentUpdate(tile);
-                            visibleTiles.Add(tile);
-                        }
+                        RequestContentUpdate(tile);
+                        visibleTiles.Add(tile);
                     }
                 }
-
-                return;
+                else if (tile.children.Count == 0 && Has3DContent) //show the geometry if more detailed geometry is not available
+                {
+                    if (!visibleTiles.Contains(tile))
+                    {
+                        RequestContentUpdate(tile);
+                        visibleTiles.Add(tile);
+                    }
+                }
+                foreach (var childTile in tile.children)
+                {
+                    LoadInViewRecursively(childTile, currentCamera);
+                }
             }
-
-
-            foreach (var childTile in tile.children)
+            else
             {
-                LoadInViewRecursively(childTile, currentCamera);
+                    if (Has3DContent)
+                    {
+                        int loadingParentsCount = tile.CountLoadingParents();
+                        int loadedParentsCount = tile.CountLoadedParents();
+                        //if (loadedParentsCount + loadingParentsCount < 2)
+                        //{
+                            if (!visibleTiles.Contains(tile))
+                            {
+                                RequestContentUpdate(tile);
+                                visibleTiles.Add(tile);
+                            }
+                        //}
+                    }
             }
+
+           
         }
 
         public void subtreeLoaded(Tile tile)
