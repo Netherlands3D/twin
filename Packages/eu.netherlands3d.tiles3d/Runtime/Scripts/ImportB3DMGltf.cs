@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GLTFast;
 using System;
 using SimpleJSON;
+using System.Text;
 #if UNITY_EDITOR
 using System.IO.Compression;
 #endif
@@ -66,10 +67,18 @@ namespace Netherlands3D.Tiles3D
                     var memoryStream = new MemoryStream(bytes);
 
                     var b3dm = B3dmReader.ReadB3dm(memoryStream);
-                    bytes = b3dm.GlbData;
 
-                    //Optional RTC_CENTER from b3DM header
-                    rtcCenter = GetRTCCenter(rtcCenter, b3dm);
+                    rtcCenter = GetRTCCenter(b3dm);
+                    //if (rtcCenter!=null)
+                    //{
+                        RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
+                    //}
+                   
+                    bytes = b3dm.GlbData;
+                    int finalSlash = url.LastIndexOf("/");
+                    string filename = "c:/test/"+url.Substring(finalSlash).Replace(".b3dm", ".glb");
+                    File.WriteAllBytes(filename, bytes);
+                    
                 }
                 
                 //else sdfsdfsdf
@@ -79,23 +88,106 @@ namespace Netherlands3D.Tiles3D
             webRequest.Dispose();
         }
 
-        private static double[] GetRTCCenter(double[] rtcCenter, B3dm b3dm)
+        private static void RemoveCesiumRtcFromRequieredExtentions(ref B3dm b3dm)
         {
-            if (b3dm.FeatureTableJson.Length > 0)
+            int jsonstart = 20;
+            int jsonlength = (b3dm.GlbData[15]) * 255;
+            jsonlength = (jsonlength+b3dm.GlbData[14]) * 255;
+            jsonlength = (jsonlength + b3dm.GlbData[13]) * 255;
+            jsonlength = (jsonlength + b3dm.GlbData[12]);
+
+            string jsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
+
+            string ExtentionsRequiredString = "extensionsRequired" ;
+            int extentionsStart = jsonstring.IndexOf(ExtentionsRequiredString);
+            if (extentionsStart < 0)
             {
-                JSONNode rootnode = JSON.Parse(b3dm.FeatureTableJson);
-                var rtcCenterValues = rootnode["RTC_CENTER"];
-                rtcCenter = new double[3];
-                if (rtcCenterValues != null)
+                return;
+            }
+            int extentionstringEnd = extentionsStart + ExtentionsRequiredString.Length;
+
+            int arrayEnd = jsonstring.IndexOf("]", extentionstringEnd);
+            string cesiumString = "\"CESIUM_RTC\"";
+            int cesiumstringStart = jsonstring.IndexOf(cesiumString, extentionstringEnd);
+            if (cesiumstringStart < 0)
+            {
+                return;
+            }
+            int cesiumstringEnd = cesiumstringStart + cesiumString.Length;
+            int seperatorPosition = jsonstring.IndexOf(",", extentionstringEnd);
+
+            if (seperatorPosition > 0 && seperatorPosition < arrayEnd)
+            {
+                if (seperatorPosition < cesiumstringStart)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        rtcCenter[i] = rtcCenterValues[i].AsDouble;
-                    }
+                    cesiumstringStart = seperatorPosition;
+                }
+                if (seperatorPosition > cesiumstringEnd)
+                {
+                    cesiumstringEnd = seperatorPosition;
                 }
             }
 
-            return rtcCenter;
+            for (int i = cesiumstringStart; i < cesiumstringEnd + 1; i++)
+            {
+                b3dm.GlbData[i+ jsonstart] = 0x20;
+            }
+
+
+
+
+
+            
+           
+            
+        }
+       
+
+        private static double[] GetRTCCenter( B3dm b3dm)
+        {
+
+            int jsonstart = 20;
+            int jsonlength = (b3dm.GlbData[15]) * 255;
+            jsonlength = (jsonlength + b3dm.GlbData[14]) * 255;
+            jsonlength = (jsonlength + b3dm.GlbData[13]) * 255;
+            jsonlength = (jsonlength + b3dm.GlbData[12]);
+
+            string gltfjsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
+
+
+            if (gltfjsonstring.Length > 0)
+            {
+
+                JSONNode rootnode = JSON.Parse(gltfjsonstring);
+                JSONNode extensionsNode = rootnode["extensions"];
+                if (extensionsNode==null)
+                {
+                    return null;
+                }
+                JSONNode cesiumRTCNode = extensionsNode["CESIUM_RTC"];
+                if (cesiumRTCNode==null)
+                {
+                    return null;
+                }
+                JSONNode centernode = cesiumRTCNode["center"];
+                if (centernode==null)
+                {
+                    return null;
+                }
+                
+                    double[] rtcCenter = new double[3];
+
+                        for (int i = 0; i < 3; i++)
+                        {
+                            rtcCenter[i] = centernode[i].AsDouble;
+                        }
+                        return rtcCenter;
+
+               
+               
+            }
+
+            return null;
         }
 
         /// <summary>

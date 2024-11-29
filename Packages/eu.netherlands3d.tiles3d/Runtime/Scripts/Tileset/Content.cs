@@ -145,6 +145,7 @@ namespace Netherlands3D.Tiles3D
 
                     if (parsedGltf.rtcCenter != null)
                     {
+                        
                         //Debug.Log("Has RTC-Center "+ parsedGltf.rtcCenter[0] +";"+ parsedGltf.rtcCenter[1]+";"+ parsedGltf.rtcCenter[2]);
                         scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
                         Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, parsedGltf.rtcCenter[0], parsedGltf.rtcCenter[1], parsedGltf.rtcCenter[2]);
