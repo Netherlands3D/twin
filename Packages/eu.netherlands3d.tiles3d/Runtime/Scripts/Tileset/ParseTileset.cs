@@ -45,8 +45,9 @@ namespace Netherlands3D.Tiles3D
                 case TilingMethod.ExplicitTiling:
                     Debug.Log("Explicit tiling");
                     Tile rootTile = new Tile();
-                    root = ReadExplicitNode(rootnode, rootTile);
                     rootTile.tileTransform = root.tileTransform;
+                    root = ReadExplicitNode(rootnode, rootTile);
+                    
                     rootTile.transform = root.transform;
 
                     if (rootTile.children.Count==0 )
@@ -107,7 +108,15 @@ namespace Netherlands3D.Tiles3D
             tile.boundingVolume.ApplyTileTransform(tile.tileTransform);
             tile.CalculateUnitBounds();
             tile.geometricError = double.Parse(node["geometricError"].Value);
-            tile.refine = node["refine"].Value;
+            if (node["refine"] !=null)
+            {
+                tile.refine = node["refine"].Value;
+            }
+            else
+            {
+                tile.refine = tile.parent.refine;
+            }
+            
             JSONNode childrenNode = node["children"];
 
             tile.children = new List<Tile>();
