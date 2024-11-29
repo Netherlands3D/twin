@@ -59,28 +59,35 @@ namespace Netherlands3D.Tiles3D
             else
             {
                 byte[] bytes = webRequest.downloadHandler.data;
-                var memory = new ReadOnlyMemory<byte>(bytes);
                 double[] rtcCenter = null;
 
-                if (url.Contains(".b3dm"))
+                //readMagic
+                string magic = Encoding.UTF8.GetString(bytes,0, 4);
+
+
+                if (magic == "b3dm")
                 {
                     var memoryStream = new MemoryStream(bytes);
 
                     var b3dm = B3dmReader.ReadB3dm(memoryStream);
+                    rtcCenter = GetRTCCenterFromB3dm(b3dm);
+                    if (rtcCenter == null)
+                    { 
+                        rtcCenter = GetRTCCenterFromGlb(b3dm);
+                        if (rtcCenter != null)
+                        {
+                            RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
+                        }
+                    }
 
-                    rtcCenter = GetRTCCenter(b3dm);
-                    //if (rtcCenter!=null)
-                    //{
-                        RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
-                    //}
-                   
-                    bytes = b3dm.GlbData;
+                bytes = b3dm.GlbData;
+                    //write the glb-blob to disk for analysis
                     int finalSlash = url.LastIndexOf("/");
-                    string filename = "c:/test/"+url.Substring(finalSlash).Replace(".b3dm", ".glb");
+                    string filename = "c:/test/" + url.Substring(finalSlash).Replace(".b3dm", ".glb");
                     File.WriteAllBytes(filename, bytes);
-                    
+
                 }
-                
+
                 //else sdfsdfsdf
                 yield return ParseFromBytes(bytes, url, callbackGltf, rtcCenter);
             }
@@ -91,14 +98,14 @@ namespace Netherlands3D.Tiles3D
         private static void RemoveCesiumRtcFromRequieredExtentions(ref B3dm b3dm)
         {
             int jsonstart = 20;
-            int jsonlength = (b3dm.GlbData[15]) * 255;
-            jsonlength = (jsonlength+b3dm.GlbData[14]) * 255;
-            jsonlength = (jsonlength + b3dm.GlbData[13]) * 255;
+            int jsonlength = (b3dm.GlbData[15]) * 256;
+            jsonlength = (jsonlength+b3dm.GlbData[14]) * 256;
+            jsonlength = (jsonlength + b3dm.GlbData[13]) * 256;
             jsonlength = (jsonlength + b3dm.GlbData[12]);
 
             string jsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
 
-            string ExtentionsRequiredString = "extensionsRequired" ;
+            string ExtentionsRequiredString = "\"extensionsRequired\"" ;
             int extentionsStart = jsonstring.IndexOf(ExtentionsRequiredString);
             if (extentionsStart < 0)
             {
@@ -116,19 +123,27 @@ namespace Netherlands3D.Tiles3D
             int cesiumstringEnd = cesiumstringStart + cesiumString.Length;
             int seperatorPosition = jsonstring.IndexOf(",", extentionstringEnd);
 
-            if (seperatorPosition > 0 && seperatorPosition < arrayEnd)
+
+            int removalStart=cesiumstringStart;
+            int removalEnd = cesiumstringEnd;
+            if (seperatorPosition > arrayEnd)
             {
+                removalStart = extentionsStart-1;
+                removalEnd = arrayEnd+1;
+            }
+            else 
+            { 
                 if (seperatorPosition < cesiumstringStart)
                 {
-                    cesiumstringStart = seperatorPosition;
+                    removalStart = seperatorPosition;
                 }
                 if (seperatorPosition > cesiumstringEnd)
                 {
-                    cesiumstringEnd = seperatorPosition;
+                    removalEnd = seperatorPosition;
                 }
             }
 
-            for (int i = cesiumstringStart; i < cesiumstringEnd + 1; i++)
+            for (int i = removalStart; i < removalEnd; i++)
             {
                 b3dm.GlbData[i+ jsonstart] = 0x20;
             }
@@ -142,16 +157,35 @@ namespace Netherlands3D.Tiles3D
             
         }
        
+        private static double[] GetRTCCenterFromB3dm(B3dm b3dm)
+        {
+            string batchttableJSONstring = b3dm.FeatureTableJson;
+            JSONNode root = JSON.Parse(batchttableJSONstring);
+            JSONNode centernode = root["RTC_CENTER"];
+            if (centernode==null)
+            {
+                return null;
+            }
+            if (centernode.Count!=3)
+            {
+                return null;
+            }
+            double[] result = new double[3];
+            result[0] = centernode[0].AsDouble;
+            result[1]=centernode[1].AsDouble;
+            result[2]=centernode[2].AsDouble;
+            return result;
 
-        private static double[] GetRTCCenter( B3dm b3dm)
+        }
+        private static double[] GetRTCCenterFromGlb( B3dm b3dm)
         {
 
             int jsonstart = 20;
-            int jsonlength = (b3dm.GlbData[15]) * 255;
-            jsonlength = (jsonlength + b3dm.GlbData[14]) * 255;
-            jsonlength = (jsonlength + b3dm.GlbData[13]) * 255;
+            int jsonlength = (b3dm.GlbData[15]) * 256;
+            jsonlength = (jsonlength + b3dm.GlbData[14]) * 256;
+            jsonlength = (jsonlength + b3dm.GlbData[13]) * 256;
             jsonlength = (jsonlength + b3dm.GlbData[12]);
-
+            
             string gltfjsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
 
 
