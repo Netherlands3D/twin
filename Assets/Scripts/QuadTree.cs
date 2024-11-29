@@ -1,5 +1,4 @@
 using System;
-using System.Xml;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -11,23 +10,16 @@ namespace Netherlands3D.Twin
         public double MaxX { get; }
         public double MaxY { get; }
 
-        public double cx;
-        public double cy;
-
         public BoundingBox(double minX, double minY, double maxX, double maxY)
         {
             MinX = minX;
             MinY = minY;
             MaxX = maxX;
             MaxY = maxY;
-            cx = (maxX - minX) * 0.5f + minX;
-            cy = (maxY - minY) * 0.5f + minY;
         }
 
         public double Width => MaxX - MinX;
         public double Height => MaxY - MinY;
-
-        public (double centerX, double centerY) Center => (cx, cy);
 
         public bool Contains(double x, double y)
         {
@@ -62,12 +54,12 @@ namespace Netherlands3D.Twin
         }
         
         /// <summary>
-        /// Returns the bounding box in meters according within the bounds according to subdivision of the boundingbox
+        /// Returns the bounding box in units according within the bounds according to subdivision of the boundingbox
         /// in the constructor.
         /// </summary>
         public BoundingBox GetTileBoundingBox(Vector2Int tileIndex, int z)
         {
-            var (tileSizeX, tileSizeY) = GetTileSizeInMeters(z);
+            var (tileSizeX, tileSizeY) = GetTileSize(z);
 
             // Calculate minX and maxX
             double tileMinX = this.boundingBox.MinX + tileIndex.x * tileSizeX;
@@ -83,17 +75,16 @@ namespace Netherlands3D.Twin
         public Vector2Int GetTileIndex(double x, double y, int zoomLevel)
         {
             // Calculate the size of each tile in meters at the given zoom level
-            var (tileSizeX, tileSizeY) = GetTileSizeInMeters(zoomLevel);
+            var (tileSizeX, tileSizeY) = GetTileSize(zoomLevel);
 
             // Calculate the X and Y indices
             int tileIndexX = (int)((x - this.boundingBox.MinX) / tileSizeX);
             int tileIndexY = (int)((this.boundingBox.MaxY - y) / tileSizeY);
-            //int tileIndexY = (int)((y - this.boundingBox.MinY) / tileSizeY);
 
             return new Vector2Int(tileIndexX, tileIndexY);
         }
 
-        public (double width, double height) GetTileSizeInMeters(int zoomLevel)
+        public (double width, double height) GetTileSize(int zoomLevel)
         {
             var width = this.boundingBox.Width / Math.Pow(2, zoomLevel);
             var height = this.boundingBox.Height / Math.Pow(2, zoomLevel);

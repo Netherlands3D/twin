@@ -174,7 +174,10 @@ namespace Netherlands3D.Twin
                 DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
                 TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
                 if (ProjectorHeight >= decalProjector.size.z)
+                {
                     textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+                }
+                decalProjector.pivot = new Vector3(decalProjector.size.x / 2f, decalProjector.size.y / 2f, ProjectorMinDepth / 2f);
 
                 var rdCoordinate = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y, 0.0d);
                 var originCoordinate = rdCoordinate.ToUnity();
@@ -191,13 +194,13 @@ namespace Netherlands3D.Twin
         {
             // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
             // that after casting
-            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel);
+            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, true);
             var referenceTileIndex = pos.TileIndex;
             var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
             referenceTileWidth = tileWidth;
             referenceTileHeight = tileHeight;
 
-            //tileSize = (int)tileWidth; 
+            tileSize = (int)tileWidth; 
         }
 
         private (double tileWidth, double tileHeight) CalculateTileDimensionsInRdMeters(Vector2Int tileIndex)
@@ -238,6 +241,7 @@ namespace Netherlands3D.Twin
             if (zoomLevel < 0)
                 return;
 
+            xyzTiles.ClearDebugTiles();
             UpdateReferenceSizes();
 
             //is the update already running cancel it
