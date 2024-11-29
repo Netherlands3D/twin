@@ -8,48 +8,55 @@ namespace Netherlands3D.Tiles3D
    [System.Serializable]
     public class Tile : IDisposable
     {
-        public bool isLoading = false;
+       
+
+        //implicit tiling properties
         public int level;
         public int X;
         public int Y;
         public bool hascontent;
 
+        //webtileprioritizer properties
         public int priority = 0;
+        public int childrenCountDelayingDispose = 0;
 
+        //BoundingVolume properties
         internal bool boundsAvailable = false;
         private Bounds unityBounds = new Bounds();
         public BoundingVolume boundingVolume;
-
         public Coordinate BottomLeft;
         public Coordinate TopRight;
+        bool boundsAreValid = true;
 
+        // load and dispose properties
+
+        public bool inView = false;
         public bool requestedDispose = false;
         public bool requestedUpdate = false;
         internal bool nestedTilesLoaded = false;
-        bool boundsAreValid = true;
+        public bool isLoading = false;
 
-        public int childrenCountDelayingDispose = 0;
+        // tiletree properties
         public Tile parent;
-
         [SerializeField] public List<Tile> children = new List<Tile>();
+
+        //tileproperties
 
         public TileTransform tileTransform = TileTransform.Identity();
         public double[] transform = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
         public double geometricError;
         public float screenSpaceError = float.MaxValue;
-
         public string refine;
-
-        public bool inView = false;
-        public bool canRefine = false;
-
         public string contentUri = "";
-
         public Content content; //Gltf content
 
         public int CountLoadingChildren()
         {
             int result = 0;
+            if (refine == "ADD")
+            {
+                return 0;
+            }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
@@ -64,10 +71,7 @@ namespace Netherlands3D.Tiles3D
                     }
                 }
             }
-            foreach (var childTile in children)
-                {
-                    result += childTile.CountLoadingChildren();
-                }
+           
             
             return result;
         }
@@ -75,6 +79,10 @@ namespace Netherlands3D.Tiles3D
         public int CountLoadedChildren()
         {
             int result = 0;
+            if (refine=="ADD")
+            {
+                return 0;
+            }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
@@ -100,6 +108,10 @@ namespace Netherlands3D.Tiles3D
 
         public int CountLoadedParents()
         {
+            if (refine == "ADD")
+            {
+                return 1;
+            }
             int result = 0;
             if (parent !=null)
             {
