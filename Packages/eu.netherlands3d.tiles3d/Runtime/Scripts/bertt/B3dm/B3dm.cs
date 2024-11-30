@@ -35,7 +35,7 @@ public class B3dm
         var batchTableBinary = BufferPadding.AddPadding(BatchTableBinary);
         var glbBinary = BufferPadding.AddPadding(GlbData);
 
-        B3dmHeader.ByteLength = glbBinary.Length + header_length + featureTableJson.Length + Encoding.UTF8.GetByteCount(batchTableJson) + batchTableBinary.Length + featureTableBinary.Length;
+        B3dmHeader.fileLength = glbBinary.Length + header_length + featureTableJson.Length + Encoding.UTF8.GetByteCount(batchTableJson) + batchTableBinary.Length + featureTableBinary.Length;
 
         B3dmHeader.FeatureTableJsonByteLength = featureTableJson.Length;
         B3dmHeader.BatchTableJsonByteLength = Encoding.UTF8.GetByteCount(batchTableJson);

@@ -13,6 +13,7 @@ using Unity.Collections;
 using System.Linq;
 using UnityEngine.Events;
 using GLTFast.Schema;
+using Netherlands3D.Coordinates;
 
 
 #endif
@@ -36,7 +37,8 @@ namespace Netherlands3D.Tiles3D
 
         public Dictionary<int, Color> uniqueColors = new Dictionary<int, Color>();
         public List<int> featureTableFloats = new List<int>();
-
+        Transform parentTransform;
+        Tile tile;
         /// <summary>
         /// Iterate through all scenes and instantiate them
         /// </summary>
@@ -44,18 +46,49 @@ namespace Netherlands3D.Tiles3D
         /// <returns>Async Task</returns>
         public async Task SpawnGltfScenes(Transform parent)
         {
+            parentTransform = parent;
             if (gltfImport != null)
             {
+                Content parentContent = parent.GetComponent<Content>();
+                if (parentContent!=null)
+                {
+                    tile = parentContent.ParentTile;
+                }
+
                 var scenes = gltfImport.SceneCount;
 
                 //Spawn all scenes (InstantiateMainSceneAsync only possible if main scene was referenced in gltf)
                 for (int i = 0; i < scenes; i++)
                 {
                     await gltfImport.InstantiateSceneAsync(parent, i);
+                    var scene = parent.GetChild(i).transform;
+                    if (scene == null) continue;
+
+                    //set unitylayer for all gameon=bjects in scene to unityLayer of container
+                    foreach (var child in scene.GetComponentsInChildren<Transform>(true)) //getting the Transform components ensures the layer of each recursive child is set 
+                    {
+                        child.gameObject.layer = parent.gameObject.layer;
+                    }
+                    PositionGameObject(scene, rtcCenter, tile);
                 }
             }
         }
+        void PositionGameObject(Transform scene, double[] rtcCenter, Tile tile)
+        {
+            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.z, scene.localPosition.x, scene.localPosition.y);
+            if (rtcCenter != null)
+            {
+                sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2])+sceneCoordinate;
+            }
+            if (tile!=null)
+            {
+                sceneCoordinate = tile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
 
+            }
+            scene.position = sceneCoordinate.ToUnity();
+            scene.rotation = sceneCoordinate.RotationToLocalGravityUp() * (scene.rotation);
+
+        }
         public void ParseAssetMetaData(Content content)
         {
             //Extract json from glb
@@ -278,6 +311,18 @@ namespace Netherlands3D.Tiles3D
             System.Buffer.BlockCopy(glbData, binaryChunkOffset, binaryData, 0, (int)binaryChunkLength);
 
             return (json, binaryData);
+        }
+
+        public void OverrideAllMaterials(UnityEngine.Material overrideMaterial)
+        {
+            if (parentTransform == null)
+            {
+                return;
+            }
+            foreach (var renderer in parentTransform.GetComponentsInChildren<Renderer>())
+            {
+                renderer.material = overrideMaterial;
+            }
         }
     }
 }

@@ -361,6 +361,10 @@ namespace Netherlands3D.Tiles3D
 
         private void RequestContentUpdate(Tile tile)
         {
+            if (tile.content!=null)
+            {
+                return;
+            }
             if (!tile.content)
             {
                 var newContentGameObject = new GameObject($"{tile.level},{tile.X},{tile.Y} content");

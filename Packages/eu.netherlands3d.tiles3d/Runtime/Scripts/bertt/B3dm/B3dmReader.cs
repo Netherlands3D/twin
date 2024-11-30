@@ -13,8 +13,9 @@ public static class B3dmReader
         var featureTableBytes = reader.ReadBytes(b3dmHeader.FeatureTableBinaryByteLength);
         var batchTableJson = Encoding.UTF8.GetString(reader.ReadBytes(b3dmHeader.BatchTableJsonByteLength));
         var batchTableBytes = reader.ReadBytes(b3dmHeader.BatchTableBinaryByteLength);
+        
 
-        var glbLength = b3dmHeader.ByteLength - b3dmHeader.Length;
+        var glbLength = b3dmHeader.fileLength - b3dmHeader.Length;
         
         var glbBuffer = reader.ReadBytes(glbLength);
 
@@ -42,7 +43,6 @@ public static class B3dmReader
         }
         
         glbBuffer = bytes.ToArray();
-
 
         var b3dm = new B3dm {
             B3dmHeader = b3dmHeader,

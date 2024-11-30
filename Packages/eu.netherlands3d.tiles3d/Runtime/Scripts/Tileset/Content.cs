@@ -85,7 +85,7 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null)
         {
-            if(overrideMaterial != null)
+            if (overrideMaterial != null)
             {
                 this.overrideMaterial = overrideMaterial;
             }
@@ -95,7 +95,21 @@ namespace Netherlands3D.Tiles3D
 
             State = ContentLoadState.DOWNLOADING;
             parentTile.isLoading = true;
+            runningContentRequest = StartCoroutine(
+           TIleContentLoader.LoadContent(
+               uri,
+               transform,
+               ParentTile,
+               FinishedLoading,
+               parseAssetMetaData,
+               parseSubObjects,
+               overrideMaterial,
+               false,
+               headers
 
+               )
+           );
+            return;
             runningContentRequest = StartCoroutine(
                 ImportB3DMGltf.ImportBinFromURL(
                     uri, 
@@ -109,6 +123,15 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// After parsing gltf content spawn gltf scenes
         /// </summary>
+        /// 
+        private void FinishedLoading(bool succes)
+        {
+            State = ContentLoadState.DOWNLOADED;
+            if (succes)
+            {
+                onDoneDownloading.Invoke();
+            }
+        }
         private async void GotGltfContent(ParsedGltf parsedGltf)
         {
             if (State != ContentLoadState.DOWNLOADING)

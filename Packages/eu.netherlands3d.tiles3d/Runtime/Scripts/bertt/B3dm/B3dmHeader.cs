@@ -8,7 +8,7 @@ public class B3dmHeader
 {
     public string Magic { get; set; }
     public int Version { get; set; }
-    public int ByteLength { get; set; }
+    public int fileLength { get; set; }
     public int FeatureTableJsonByteLength { get; set; }
     public int FeatureTableBinaryByteLength { get; set; }
     public int BatchTableJsonByteLength { get; set; }
@@ -28,7 +28,7 @@ public class B3dmHeader
     {
         Magic = Encoding.UTF8.GetString(reader.ReadBytes(4));
         Version = (int)reader.ReadUInt32();
-        ByteLength = (int)reader.ReadUInt32();
+        fileLength = (int)reader.ReadUInt32();
 
         FeatureTableJsonByteLength = (int)reader.ReadUInt32();
         FeatureTableBinaryByteLength = (int)reader.ReadUInt32();
@@ -46,7 +46,7 @@ public class B3dmHeader
     {
         var magicBytes = Encoding.UTF8.GetBytes(Magic);
         var versionBytes = BitConverter.GetBytes(Version);
-        var byteLengthBytes = BitConverter.GetBytes(ByteLength);
+        var byteLengthBytes = BitConverter.GetBytes(fileLength);
         var featureTableJsonByteLengthBytes = BitConverter.GetBytes(FeatureTableJsonByteLength);
         var featureTableBinaryByteLengthBytes = BitConverter.GetBytes(FeatureTableBinaryByteLength);
         var batchTableJsonByteLength = BitConverter.GetBytes(BatchTableJsonByteLength);
