@@ -104,7 +104,8 @@ namespace Netherlands3D.Twin.Layers
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
-
+            
+            newFeatureVisualisation.CalculateBounds();
             spawnedVisualisationDictionary.Add(feature.GetHashCode(), newFeatureVisualisation);
         }
 
@@ -135,7 +136,6 @@ namespace Netherlands3D.Twin.Layers
             foreach (var kvp in spawnedVisualisationDictionary)
             {
                 var visualisation = kvp.Value;
-                visualisation.CalculateBounds();
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, visualisation.bounds);
                 if (inCameraFrustum)
                     continue;
