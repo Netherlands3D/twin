@@ -152,6 +152,7 @@ namespace Netherlands3D.Twin.Layers
                     break;
             }
 
+            // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
             SpawnedVisualisations.Add(newFeatureVisualisation);
             newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
         }
@@ -200,9 +201,6 @@ namespace Netherlands3D.Twin.Layers
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
             {
-                // Make sure to recalculate bounds because they can change due to shifts
-                SpawnedVisualisations[i].CalculateBounds();
-
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
                 if (inCameraFrustum)
                     continue;
