@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin._Functionalities.Wms.Scripts;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
@@ -9,10 +10,14 @@ namespace Netherlands3D.Twin._Functionalities.Wms
         public ATMMapLayerGameObject layerPrefab;
         private ATMLayerManager layerManager;
 
-        private void Start()
+        private void Awake()
         {
             layerManager = new ATMLayerManager(gameObject.AddComponent<ATMDataController>());
             layerManager.CreateTileHandlerForEachZoomLevel(transform, layerPrefab);
+        }
+
+        private void Start()
+        {
             layerManager.SwitchLayerToCurrentZoomLevel(true);
         }
 

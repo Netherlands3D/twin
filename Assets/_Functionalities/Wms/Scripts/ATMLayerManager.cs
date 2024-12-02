@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Netherlands3D.Rendering;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
@@ -82,6 +83,15 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
                     ATMTileDataLayers[i].CancelTiles();
                 }
             }
+
+            // I know .. reflection. But this will ensure that if another zoom level enables, that the tilesizes doesn't
+            // go mad. And trying to disable and enable all gameobjects that have a cartesian tile layer seems like
+            // overkill and might have issues due to onEnable and onDisable's triggering 
+            MethodInfo privateMethod = typeof(CartesianTiles.TileHandler).GetMethod("GetTilesizes", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (privateMethod != null)
+            {
+                privateMethod.Invoke(Object.FindObjectOfType<CartesianTiles.TileHandler>(), null);
+            }
         }
 
         private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, TextureProjectorBase projectorPrefab)
@@ -106,6 +116,11 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
 
         private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, ATMMapLayerGameObject layerGameObjectPrefab)
         {
+            var tileSize = timeController.GetTileSizeForZoomLevel(forZoomLevel);
+
+            // hack the prefab because we need the tileSize to be set before instantiation
+            layerGameObjectPrefab.GetComponent<ATMTileDataLayer>().tileSize = tileSize;
+            
             var zoomLayerObject = Object.Instantiate(layerGameObjectPrefab, parent, false);
             zoomLayerObject.gameObject.name = forZoomLevel.ToString();
 
@@ -114,7 +129,7 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             
             zoomLayer.SetDataController(timeController);                
             zoomLayer.SetZoomLevel(forZoomLevel);
-            zoomLayer.tileSize = timeController.GetTileSizeForZoomLevel(zoomLayer.ZoomLevel);
+            zoomLayer.tileSize = tileSize;
         }
 
         public void Dispose()
