@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -18,6 +19,21 @@ namespace Netherlands3D.Twin.Layers
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
 
+            public FeaturePointVisualisations()
+            {
+                Origin.current.onPostShift.AddListener(OnOriginShifted);
+            }
+
+            ~FeaturePointVisualisations()
+            {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
+            }
+
+            private void OnOriginShifted(Coordinate from, Coordinate to)
+            {
+                CalculateBounds();
+            }
+            
             /// <summary>
             /// Calculate bounds by combining all visualisation bounds
             /// </summary>
