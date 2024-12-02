@@ -8,6 +8,7 @@ using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -22,6 +23,7 @@ namespace Netherlands3D.CartesianTiles
         [SerializeField] private string year = "1943";
         [SerializeField] private string tileFolderPath = "ATMBuildingGeojson/Tiles";
         private LayerURLPropertyData urlPropertyData;
+        private ATMVlooienburgController vlooienburgController;
 
         public string Year
         {
@@ -47,6 +49,7 @@ namespace Netherlands3D.CartesianTiles
         private void Awake()
         {
             geoJsonLayer = GetComponent<GeoJsonLayerGameObject>();
+            geoJsonLayer.AddPoint += OnAddPoint;
 
             UpdateUri(Year);
             
@@ -62,6 +65,25 @@ namespace Netherlands3D.CartesianTiles
             }
 
             StartCoroutine(FindTileHandler());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            vlooienburgController = FindObjectOfType<ATMVlooienburgController>();
+        }
+
+        private void OnAddPoint(Feature feature)
+        {
+            object linkObject;
+            feature.Properties.TryGetValue("id", out linkObject);
+            string link = (string)linkObject;
+            bool hasLink = vlooienburgController.HasAdamlink(link);
+            if(hasLink)
+            {
+
+            }
+
         }
 
         public void UpdateUri(string year)
@@ -128,6 +150,10 @@ namespace Netherlands3D.CartesianTiles
 
         private void OnDestroy()
         {
+            foreach (GeoJsonLayerGameObject.FeatureHandler handler in geoJsonLayer.AddPoint.GetInvocationList())
+                if(handler == OnAddPoint)
+                    geoJsonLayer.AddPoint -= OnAddPoint;
+
             if (tileHandler)
                 tileHandler.RemoveLayer(this);
         }

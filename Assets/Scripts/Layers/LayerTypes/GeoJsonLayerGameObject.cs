@@ -44,6 +44,9 @@ namespace Netherlands3D.Twin.Layers
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
 
+        public delegate void FeatureHandler(Feature feature);
+        public FeatureHandler AddPoint;
+
         protected override void Start()
         {
             base.Start();
@@ -448,6 +451,7 @@ namespace Netherlands3D.Twin.Layers
                 pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
+            AddPoint?.Invoke(feature);
         }
 
         private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)

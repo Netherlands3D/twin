@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 4152247717
+CRC: 1071540883
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: zuidoostbundle
+      Dependencies: {}
+    Info_1:
+      Name: atmvlooienburg
       Dependencies: {}

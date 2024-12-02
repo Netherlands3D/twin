@@ -970,6 +970,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f341058c5dabc4a43b6fc5ed44249159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1379159429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1379159431}
+  - component: {fileID: 1379159430}
+  m_Layer: 0
+  m_Name: VlooienburgAssetBundle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1379159430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379159429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8d7e62293860340a75d954d53c22bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bundleName: atmvlooienburg
+  prefabName: 
+--- !u!4 &1379159431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379159429}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 174.43983, y: 2.32397, z: 515.43097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1496310523}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1401761936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1049,6 +1095,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7467978407973705017, guid: 9963fec33e379324db2affcb3f83332f,
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1496310523 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2488954073963816146}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1759892628 stripped
 GameObject:
@@ -2275,7 +2327,11 @@ PrefabInstance:
     - {fileID: 14766991358654834, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
     - {fileID: 4584510761074344704, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
     - {fileID: 6821619882049014163, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1379159431}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3169299583019647348, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
