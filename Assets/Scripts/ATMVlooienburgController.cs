@@ -39,6 +39,13 @@ namespace Netherlands3D.Twin
             return addressAdamlinks.Keys.Contains(address);
         }
 
+        public string GetAddressFromAdamlink(string link)
+        {
+            if(HasAdamlink(link))
+                return addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
+            return null;
+        } 
+
         public void LoadAssetForAdamLink(string link)
         {
             string adress = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;

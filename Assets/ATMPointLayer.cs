@@ -81,7 +81,7 @@ namespace Netherlands3D.CartesianTiles
             bool hasLink = vlooienburgController.HasAdamlink(link);
             if(hasLink)
             {
-
+                Debug.Log(vlooienburgController.GetAddressFromAdamlink(link));
             }
 
         }
