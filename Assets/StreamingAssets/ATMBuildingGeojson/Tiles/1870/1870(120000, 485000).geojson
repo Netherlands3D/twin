@@ -1,0 +1,1295 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888083,
+          52.354881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227746",
+        "label": "YY 171 a (Gerard Doustraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888133,
+          52.354896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227747",
+        "label": "YY 171 d (Gerard Doustraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878929,
+          52.359898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228494",
+        "label": "YY 31 q (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879019,
+          52.359928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228495",
+        "label": "YY 31 f (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880352,
+          52.360275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228496",
+        "label": "YY 29 aa (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880432,
+          52.360301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228497",
+        "label": "YY 29 z (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880513,
+          52.360321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228498",
+        "label": "YY 29 ij (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228499",
+        "label": "YY 29 k (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228500",
+        "label": "YY 29 x (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228501",
+        "label": "YY 29 w (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880761,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228502",
+        "label": "YY 29 v (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880957,
+          52.360441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228503",
+        "label": "YY 29 f (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881037,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228504",
+        "label": "YY 29 s (P C Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881125,
+          52.360485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228505",
+        "label": "YY 29 r (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881341,
+          52.360558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228506",
+        "label": "YY 29 o (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881518,
+          52.360591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228507",
+        "label": "YY 29 m (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881608,
+          52.36062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228508",
+        "label": "YY 29 l (Pieter Corneliszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881798,
+          52.36067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228509",
+        "label": "YY 29 h (P C Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881877,
+          52.360697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228510",
+        "label": "YY 29 g (P.C. Hooftst)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882042,
+          52.360742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228511",
+        "label": "YY 29 e (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.360772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228512",
+        "label": "YY 29 d (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882189,
+          52.360795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228513",
+        "label": "YY 29 c (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882297,
+          52.36081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228514",
+        "label": "YY 29 b (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882752,
+          52.360694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228516",
+        "label": "YY 30 q (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882402,
+          52.360604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228517",
+        "label": "YY 30 u (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882319,
+          52.360582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228518",
+        "label": "YY 30 v (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882226,
+          52.360565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228519",
+        "label": "YY 30 w (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882145,
+          52.360535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228520",
+        "label": "YY 30 x (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228521",
+        "label": "YY 30 y (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228522",
+        "label": "YY 30 ij (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881969,
+          52.360489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228523",
+        "label": "YY 30 z (Pieter Corneliszoon Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228524",
+        "label": "YY 31 a (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881797,
+          52.360442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228525",
+        "label": "YY 31 b (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228526",
+        "label": "YY 30 i (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228527",
+        "label": "YY 31 i (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880929,
+          52.360205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228528",
+        "label": "YY 31 k (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880858,
+          52.360176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228529",
+        "label": "YY 31 l (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880775,
+          52.360154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228530",
+        "label": "YY 31 m (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228531",
+        "label": "YY 31 n (P C Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228532",
+        "label": "YY 31 c (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228533",
+        "label": "YY 31 d (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878222,
+          52.35996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228719",
+        "label": "YY 23 b (Schapenburgerpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884719,
+          52.360148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228828",
+        "label": "YY 32 e (Stadhouderskade)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888083,
+          52.354881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227746",
+        "label": "YY 171 a (Gerard Doustraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888133,
+          52.354896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227747",
+        "label": "YY 171 d (Gerard Doustraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878929,
+          52.359898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228494",
+        "label": "YY 31 q (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879019,
+          52.359928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228495",
+        "label": "YY 31 f (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880352,
+          52.360275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228496",
+        "label": "YY 29 aa (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880432,
+          52.360301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228497",
+        "label": "YY 29 z (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880513,
+          52.360321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228498",
+        "label": "YY 29 ij (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228499",
+        "label": "YY 29 k (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228500",
+        "label": "YY 29 x (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228501",
+        "label": "YY 29 w (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880761,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228502",
+        "label": "YY 29 v (Pieter Cornszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880957,
+          52.360441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228503",
+        "label": "YY 29 f (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881037,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228504",
+        "label": "YY 29 s (P C Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881125,
+          52.360485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228505",
+        "label": "YY 29 r (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881341,
+          52.360558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228506",
+        "label": "YY 29 o (PC Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881518,
+          52.360591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228507",
+        "label": "YY 29 m (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881608,
+          52.36062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228508",
+        "label": "YY 29 l (Pieter Corneliszn Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881798,
+          52.36067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228509",
+        "label": "YY 29 h (P C Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881877,
+          52.360697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228510",
+        "label": "YY 29 g (P.C. Hooftst)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882042,
+          52.360742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228511",
+        "label": "YY 29 e (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.360772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228512",
+        "label": "YY 29 d (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882189,
+          52.360795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228513",
+        "label": "YY 29 c (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882297,
+          52.36081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228514",
+        "label": "YY 29 b (PC Hooftstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882752,
+          52.360694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228516",
+        "label": "YY 30 q (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882402,
+          52.360604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228517",
+        "label": "YY 30 u (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882319,
+          52.360582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228518",
+        "label": "YY 30 v (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882226,
+          52.360565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228519",
+        "label": "YY 30 w (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882145,
+          52.360535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228520",
+        "label": "YY 30 x (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228521",
+        "label": "YY 30 y (Pieter Corneliszoon Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228522",
+        "label": "YY 30 ij (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881969,
+          52.360489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228523",
+        "label": "YY 30 z (Pieter Corneliszoon Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228524",
+        "label": "YY 31 a (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881797,
+          52.360442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228525",
+        "label": "YY 31 b (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228526",
+        "label": "YY 30 i (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228527",
+        "label": "YY 31 i (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880929,
+          52.360205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228528",
+        "label": "YY 31 k (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880858,
+          52.360176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228529",
+        "label": "YY 31 l (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880775,
+          52.360154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228530",
+        "label": "YY 31 m (PC Hoofdstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228531",
+        "label": "YY 31 n (P C Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228532",
+        "label": "YY 31 c (Pieter Cornsz Hooftstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228533",
+        "label": "YY 31 d (PC Hoofdstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878222,
+          52.35996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228719",
+        "label": "YY 23 b (Schapenburgerpad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884719,
+          52.360148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228828",
+        "label": "YY 32 e (Stadhouderskade)",
+        "year": "1870"
+      }
+    }
+  ]
+}

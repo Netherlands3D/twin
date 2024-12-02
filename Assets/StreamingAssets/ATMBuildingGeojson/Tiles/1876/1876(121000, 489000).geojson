@@ -1,0 +1,1355 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889934,
+          52.387816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109324",
+        "label": "Zandhoek 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109299",
+        "label": "Zandhoek 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889944,
+          52.387858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109319",
+        "label": "Zandhoek 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109294",
+        "label": "Zandhoek 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890032,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109158",
+        "label": "Bokkinghangen 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890068,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109146",
+        "label": "Bokkinghangen 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.388006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109304",
+        "label": "Zandhoek 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889947,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109314",
+        "label": "Zandhoek 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890231,
+          52.38883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109135",
+        "label": "Bokkinghangen 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890054,
+          52.388755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109154",
+        "label": "Bokkinghangen 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109309",
+        "label": "Zandhoek 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890082,
+          52.388938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109143",
+        "label": "Bokkinghangen 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889418,
+          52.388093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109291",
+        "label": "Zoutkeetsgracht 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890071,
+          52.388849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109149",
+        "label": "Bokkinghangen 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889608,
+          52.388608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109174",
+        "label": "Zoutkeetsgracht 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890037,
+          52.38866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109156",
+        "label": "Bokkinghangen 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888942,
+          52.388048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109287",
+        "label": "Zoutkeetsgracht 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889512,
+          52.389311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109123",
+        "label": "Voormalig Bolwerk Blaauwhoofd 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889444,
+          52.389454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109126",
+        "label": "Voormalig Bolwerk Blaauwhoofd 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88985,
+          52.389403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109128",
+        "label": "Voormalig Bolwerk Blaauwhoofd 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890773,
+          52.389215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109131",
+        "label": "Voormalig Bolwerk Blaauwhoofd 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890285,
+          52.38879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109138",
+        "label": "Bokkinghangen 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890089,
+          52.388992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109140",
+        "label": "Bokkinghangen 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889797,
+          52.388951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109160",
+        "label": "Voormalig Bolwerk Blaauwhoofd 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890056,
+          52.388707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109164",
+        "label": "Voormalig Bolwerk Blaauwhoofd 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889662,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109164",
+        "label": "Voormalig Bolwerk Blaauwhoofd 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88988,
+          52.388964
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109165",
+        "label": "Voormalig Bolwerk Blaauwhoofd 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889692,
+          52.38879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109169",
+        "label": "Baansteeg 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889717,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109172",
+        "label": "Baansteeg 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889468,
+          52.388598
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109177",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889285,
+          52.388587
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109177",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888933,
+          52.388555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109182",
+        "label": "Zoutkeetsgracht 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88885,
+          52.388556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109186",
+        "label": "Zoutkeetsgracht 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888777,
+          52.388552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109190",
+        "label": "Zoutkeetsgracht 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888689,
+          52.388546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109194",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888612,
+          52.388543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109199",
+        "label": "Zoutkeetsgracht 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888541,
+          52.388541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109204",
+        "label": "Zoutkeetsgracht 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888457,
+          52.388534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109209",
+        "label": "Zoutkeetsgracht 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888116,
+          52.388705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109213",
+        "label": "Zoutkeetsgracht 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888108,
+          52.388643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109216",
+        "label": "Zoutkeetsgracht 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888115,
+          52.388582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109219",
+        "label": "Zoutkeetsgracht 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888129,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109222",
+        "label": "Zoutkeetsgracht 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889934,
+          52.387816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109324",
+        "label": "Zandhoek 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109299",
+        "label": "Zandhoek 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889944,
+          52.387858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109319",
+        "label": "Zandhoek 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.388122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109294",
+        "label": "Zandhoek 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890032,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109158",
+        "label": "Bokkinghangen 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890068,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109146",
+        "label": "Bokkinghangen 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889957,
+          52.388006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109304",
+        "label": "Zandhoek 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889947,
+          52.387904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109314",
+        "label": "Zandhoek 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890231,
+          52.38883
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109135",
+        "label": "Bokkinghangen 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890054,
+          52.388755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109154",
+        "label": "Bokkinghangen 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889954,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109309",
+        "label": "Zandhoek 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890082,
+          52.388938
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109143",
+        "label": "Bokkinghangen 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889418,
+          52.388093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109291",
+        "label": "Zoutkeetsgracht 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890071,
+          52.388849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109149",
+        "label": "Bokkinghangen 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889608,
+          52.388608
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109174",
+        "label": "Zoutkeetsgracht 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890037,
+          52.38866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109156",
+        "label": "Bokkinghangen 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888942,
+          52.388048
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109287",
+        "label": "Zoutkeetsgracht 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889512,
+          52.389311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109123",
+        "label": "Voormalig Bolwerk Blaauwhoofd 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889444,
+          52.389454
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109126",
+        "label": "Voormalig Bolwerk Blaauwhoofd 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88985,
+          52.389403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109128",
+        "label": "Voormalig Bolwerk Blaauwhoofd 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890773,
+          52.389215
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109131",
+        "label": "Voormalig Bolwerk Blaauwhoofd 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890285,
+          52.38879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109138",
+        "label": "Bokkinghangen 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890089,
+          52.388992
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109140",
+        "label": "Bokkinghangen 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889797,
+          52.388951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109160",
+        "label": "Voormalig Bolwerk Blaauwhoofd 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890056,
+          52.388707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109164",
+        "label": "Voormalig Bolwerk Blaauwhoofd 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889662,
+          52.389032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109164",
+        "label": "Voormalig Bolwerk Blaauwhoofd 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88988,
+          52.388964
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109165",
+        "label": "Voormalig Bolwerk Blaauwhoofd 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889692,
+          52.38879
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109169",
+        "label": "Baansteeg 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889717,
+          52.388609
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109172",
+        "label": "Baansteeg 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889468,
+          52.388598
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109177",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.889285,
+          52.388587
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109177",
+        "label": "Zoutkeetsgracht 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888933,
+          52.388555
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109182",
+        "label": "Zoutkeetsgracht 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88885,
+          52.388556
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109186",
+        "label": "Zoutkeetsgracht 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888777,
+          52.388552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109190",
+        "label": "Zoutkeetsgracht 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888689,
+          52.388546
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109194",
+        "label": "Zoutkeetsgracht 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888612,
+          52.388543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109199",
+        "label": "Zoutkeetsgracht 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888541,
+          52.388541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109204",
+        "label": "Zoutkeetsgracht 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888457,
+          52.388534
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109209",
+        "label": "Zoutkeetsgracht 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888116,
+          52.388705
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109213",
+        "label": "Zoutkeetsgracht 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888108,
+          52.388643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109216",
+        "label": "Zoutkeetsgracht 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888115,
+          52.388582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109219",
+        "label": "Zoutkeetsgracht 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888129,
+          52.38852
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109222",
+        "label": "Zoutkeetsgracht 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A109274",
+        "label": "Zoutkeetsgracht 5",
+        "year": "1876"
+      }
+    }
+  ]
+}

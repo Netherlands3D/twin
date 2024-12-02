@@ -1,0 +1,2765 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872469,
+          52.369172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228028",
+        "label": "XX 231 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872384,
+          52.369161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228029",
+        "label": "XX 232 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871094,
+          52.368853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228030",
+        "label": "XX 234 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869862,
+          52.368518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228031",
+        "label": "XX 240 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869809,
+          52.368509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228032",
+        "label": "XX 239 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86996,
+          52.368363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228033",
+        "label": "XX 238 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868476,
+          52.368268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228034",
+        "label": "XX 241 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.36873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228037",
+        "label": "XX 242 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869696,
+          52.36871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228038",
+        "label": "XX 243 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869578,
+          52.369531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228044",
+        "label": "XX 337 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869622,
+          52.369543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228045",
+        "label": "XX 336 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869756,
+          52.369682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228057",
+        "label": "XX 325 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.369612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228058",
+        "label": "XX 325 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869814,
+          52.369577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228059",
+        "label": "XX 326 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228060",
+        "label": "XX 326 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228061",
+        "label": "XX 326 h (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869889,
+          52.369467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228062",
+        "label": "XX 328 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869914,
+          52.369436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228063",
+        "label": "XX 329 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869937,
+          52.369397
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228064",
+        "label": "XX 330 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869963,
+          52.369353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228065",
+        "label": "XX 331 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86999,
+          52.369309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228066",
+        "label": "XX 331 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870058,
+          52.369195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228067",
+        "label": "XX 332 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228068",
+        "label": "XX 333 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228069",
+        "label": "XX 335 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873073,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228070",
+        "label": "XX 200 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872973,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228071",
+        "label": "XX 201 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873002,
+          52.368183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228072",
+        "label": "XX 201 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871336,
+          52.367758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228073",
+        "label": "XX 203 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87224,
+          52.368141
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228074",
+        "label": "XX 230 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872172,
+          52.368231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228075",
+        "label": "XX 230 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872105,
+          52.368209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228076",
+        "label": "XX 229 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872171,
+          52.368124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228077",
+        "label": "XX 229 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872039,
+          52.368158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228078",
+        "label": "XX 228 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871883,
+          52.368109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228079",
+        "label": "XX 227 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870302,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228080",
+        "label": "XX 208 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870619,
+          52.367405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228081",
+        "label": "XX 206 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87065,
+          52.367354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228082",
+        "label": "XX 207 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869019,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228083",
+        "label": "XX 211 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868982,
+          52.367171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228084",
+        "label": "XX 211 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86894,
+          52.367162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228085",
+        "label": "XX 212 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869206,
+          52.367079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228086",
+        "label": "XX 210 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86903,
+          52.366614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228087",
+        "label": "XX 213 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868373,
+          52.366528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228088",
+        "label": "XX 215 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867955,
+          52.366439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228089",
+        "label": "XX 216 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87088,
+          52.367831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228090",
+        "label": "XX 223 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870992,
+          52.367973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228091",
+        "label": "XX 225 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870853,
+          52.368178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228092",
+        "label": "XX 222 d (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870668,
+          52.367981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228093",
+        "label": "XX 222 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86958,
+          52.367428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228094",
+        "label": "XX 221 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869558,
+          52.367491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228095",
+        "label": "XX 220 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869659,
+          52.367607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228096",
+        "label": "XX 219 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869235,
+          52.367579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228097",
+        "label": "XX 219 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868541,
+          52.367142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228098",
+        "label": "XX 218 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868513,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228099",
+        "label": "XX 218 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868487,
+          52.367223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228100",
+        "label": "XX 218 b (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868461,
+          52.367267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228101",
+        "label": "XX 218 c (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868431,
+          52.367292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228102",
+        "label": "XX 218 d (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86841,
+          52.367333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228103",
+        "label": "XX 218 e (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868385,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228104",
+        "label": "XX 218 f (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868356,
+          52.367402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228105",
+        "label": "XX 218 g (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868333,
+          52.367432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228106",
+        "label": "XX 218 h (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868312,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228107",
+        "label": "XX 218 i (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868287,
+          52.367498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228108",
+        "label": "XX 218 k (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868265,
+          52.367527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228109",
+        "label": "XX 218 l (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868206,
+          52.367122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228110",
+        "label": "XX 217 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871339,
+          52.361954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228421",
+        "label": "XX 113 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871425,
+          52.361975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228422",
+        "label": "XX 114 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871521,
+          52.362001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228423",
+        "label": "XX 115 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871609,
+          52.362024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228424",
+        "label": "XX 116 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871887,
+          52.362086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228425",
+        "label": "XX 117 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871953,
+          52.3621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228426",
+        "label": "XX 118 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87201,
+          52.362119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228427",
+        "label": "XX 119 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872065,
+          52.362134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228428",
+        "label": "XX 119 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872122,
+          52.362148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228429",
+        "label": "XX 119 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872181,
+          52.362161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228430",
+        "label": "XX 119 c (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872234,
+          52.362176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228431",
+        "label": "XX 119 d (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872342,
+          52.362206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228432",
+        "label": "XX 119 f (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87246,
+          52.362232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228433",
+        "label": "XX 119 h (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872516,
+          52.362252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228434",
+        "label": "XX 119 i (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872583,
+          52.362272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228435",
+        "label": "XX 120 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87273,
+          52.362313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228436",
+        "label": "XX 122 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872892,
+          52.362354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228437",
+        "label": "XX 123 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872963,
+          52.362372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228438",
+        "label": "XX 124 (Overtoomseweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872927,
+          52.362531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228439",
+        "label": "XX 124 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873035,
+          52.362554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228440",
+        "label": "XX 124 c (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872604,
+          52.362382
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228459",
+        "label": "XX 121 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872469,
+          52.369172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228028",
+        "label": "XX 231 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872384,
+          52.369161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228029",
+        "label": "XX 232 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871094,
+          52.368853
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228030",
+        "label": "XX 234 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869862,
+          52.368518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228031",
+        "label": "XX 240 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869809,
+          52.368509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228032",
+        "label": "XX 239 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86996,
+          52.368363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228033",
+        "label": "XX 238 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868476,
+          52.368268
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228034",
+        "label": "XX 241 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.36873
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228037",
+        "label": "XX 242 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869696,
+          52.36871
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228038",
+        "label": "XX 243 (Kwakersdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869578,
+          52.369531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228044",
+        "label": "XX 337 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869622,
+          52.369543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228045",
+        "label": "XX 336 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869756,
+          52.369682
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228057",
+        "label": "XX 325 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86979,
+          52.369612
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228058",
+        "label": "XX 325 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869814,
+          52.369577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228059",
+        "label": "XX 326 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228060",
+        "label": "XX 326 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869831,
+          52.369549
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228061",
+        "label": "XX 326 h (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869889,
+          52.369467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228062",
+        "label": "XX 328 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869914,
+          52.369436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228063",
+        "label": "XX 329 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869937,
+          52.369397
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228064",
+        "label": "XX 330 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869963,
+          52.369353
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228065",
+        "label": "XX 331 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86999,
+          52.369309
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228066",
+        "label": "XX 331 a (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870058,
+          52.369195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228067",
+        "label": "XX 332 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228068",
+        "label": "XX 333 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870088,
+          52.369147
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228069",
+        "label": "XX 335 (Kwakersdwarsdijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873073,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228070",
+        "label": "XX 200 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872973,
+          52.368218
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228071",
+        "label": "XX 201 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873002,
+          52.368183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228072",
+        "label": "XX 201 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871336,
+          52.367758
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228073",
+        "label": "XX 203 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87224,
+          52.368141
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228074",
+        "label": "XX 230 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872172,
+          52.368231
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228075",
+        "label": "XX 230 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872105,
+          52.368209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228076",
+        "label": "XX 229 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872171,
+          52.368124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228077",
+        "label": "XX 229 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872039,
+          52.368158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228078",
+        "label": "XX 228 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871883,
+          52.368109
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228079",
+        "label": "XX 227 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870302,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228080",
+        "label": "XX 208 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870619,
+          52.367405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228081",
+        "label": "XX 206 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87065,
+          52.367354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228082",
+        "label": "XX 207 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869019,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228083",
+        "label": "XX 211 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868982,
+          52.367171
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228084",
+        "label": "XX 211 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86894,
+          52.367162
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228085",
+        "label": "XX 212 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869206,
+          52.367079
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228086",
+        "label": "XX 210 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86903,
+          52.366614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228087",
+        "label": "XX 213 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868373,
+          52.366528
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228088",
+        "label": "XX 215 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.867955,
+          52.366439
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228089",
+        "label": "XX 216 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87088,
+          52.367831
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228090",
+        "label": "XX 223 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870992,
+          52.367973
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228091",
+        "label": "XX 225 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870853,
+          52.368178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228092",
+        "label": "XX 222 d (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.870668,
+          52.367981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228093",
+        "label": "XX 222 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86958,
+          52.367428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228094",
+        "label": "XX 221 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869558,
+          52.367491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228095",
+        "label": "XX 220 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869659,
+          52.367607
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228096",
+        "label": "XX 219 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.869235,
+          52.367579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228097",
+        "label": "XX 219 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868541,
+          52.367142
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228098",
+        "label": "XX 218 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868513,
+          52.367179
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228099",
+        "label": "XX 218 a (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868487,
+          52.367223
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228100",
+        "label": "XX 218 b (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868461,
+          52.367267
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228101",
+        "label": "XX 218 c (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868431,
+          52.367292
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228102",
+        "label": "XX 218 d (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.86841,
+          52.367333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228103",
+        "label": "XX 218 e (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868385,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228104",
+        "label": "XX 218 f (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868356,
+          52.367402
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228105",
+        "label": "XX 218 g (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868333,
+          52.367432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228106",
+        "label": "XX 218 h (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868312,
+          52.367466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228107",
+        "label": "XX 218 i (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868287,
+          52.367498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228108",
+        "label": "XX 218 k (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868265,
+          52.367527
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228109",
+        "label": "XX 218 l (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.868206,
+          52.367122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228110",
+        "label": "XX 217 (Kwakerspad)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228419",
+        "label": "XX 124 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872751,
+          52.362808
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872653,
+          52.362792
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872568,
+          52.362772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228420",
+        "label": "XX 125 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871339,
+          52.361954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228421",
+        "label": "XX 113 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871425,
+          52.361975
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228422",
+        "label": "XX 114 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871521,
+          52.362001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228423",
+        "label": "XX 115 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871609,
+          52.362024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228424",
+        "label": "XX 116 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871887,
+          52.362086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228425",
+        "label": "XX 117 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.871953,
+          52.3621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228426",
+        "label": "XX 118 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87201,
+          52.362119
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228427",
+        "label": "XX 119 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872065,
+          52.362134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228428",
+        "label": "XX 119 a (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872122,
+          52.362148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228429",
+        "label": "XX 119 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872181,
+          52.362161
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228430",
+        "label": "XX 119 c (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872234,
+          52.362176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228431",
+        "label": "XX 119 d (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872342,
+          52.362206
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228432",
+        "label": "XX 119 f (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87246,
+          52.362232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228433",
+        "label": "XX 119 h (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872516,
+          52.362252
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228434",
+        "label": "XX 119 i (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872583,
+          52.362272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228435",
+        "label": "XX 120 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87273,
+          52.362313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228436",
+        "label": "XX 122 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872892,
+          52.362354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228437",
+        "label": "XX 123 (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872963,
+          52.362372
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228438",
+        "label": "XX 124 (Overtoomseweg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872927,
+          52.362531
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228439",
+        "label": "XX 124 b (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.873035,
+          52.362554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228440",
+        "label": "XX 124 c (Overtoom)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.872604,
+          52.362382
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228459",
+        "label": "XX 121 (Overtoom)",
+        "year": "1870"
+      }
+    }
+  ]
+}

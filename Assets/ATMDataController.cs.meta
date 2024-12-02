@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/ATMPointLayer.cs.meta
+guid: 18e1f17bb2b6bc34c892ceb40d510e4e
+========
 guid: 4835b0f28229bc3478d8d620b04cc81e
+>>>>>>>> d231fa2145a6b214d85546236d8aaf9922bc2771:Assets/ATMDataController.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

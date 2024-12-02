@@ -1,0 +1,274 @@
+fileFormatVersion: 2
+guid: 5a95ef7229658514eada1a7a19fec32c
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ARCHITECTUUR_ONBEKEND
+    second: {fileID: 2100000, guid: d71da6b86797fa844907ca0fb16e7e9b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PaletteMaterial001
+    second: {fileID: 2100000, guid: f91ba653d4a15604882f775dd45639e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PaletteMaterial002
+    second: {fileID: 2100000, guid: b9a3b69decc6841469e34cea2789a3c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PaletteMaterial003
+    second: {fileID: 2100000, guid: 21bd03581a0fe1f48860bc4ceff97485, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PaletteMaterial004
+    second: {fileID: 2100000, guid: f9185969fa16d704d9bd7c5648f90547, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: baksteen_donker_reddish_to_grey
+    second: {fileID: 2100000, guid: 51d411df819b29544b06accec6721958, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: baksteen_oiled
+    second: {fileID: 2100000, guid: 9d8a81deb6ff9e24ab8863b67978ad37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: baksteen_red_dirty
+    second: {fileID: 2100000, guid: 9de749787aa34034f865633c413961d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: baksteen_red_varied_clean
+    second: {fileID: 2100000, guid: da40b062108a1fe488e86577dddd6624, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bridge_street_top
+    second: {fileID: 2100000, guid: 988d432272473ce4baac921a78a10a87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dak_19th_c_donker_pannen
+    second: {fileID: 2100000, guid: ba4c5c395f868cd4b84312803ae9bdd1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: daklei
+    second: {fileID: 2100000, guid: 1752a40e357437d408ed811e77bc424f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dakpannen_oud_rood
+    second: {fileID: 2100000, guid: ea9d206724a3b9945873c960e0c4c6c3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dakteer
+    second: {fileID: 2100000, guid: 4e2fca34b463f1e44ad6b8a41e7ddf4e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: green_paint_planks
+    second: {fileID: 2100000, guid: 244bd0f99285e5041a6484b5183f8e31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grey_plaster
+    second: {fileID: 2100000, guid: 092b3bdb9501da74bbd886a8c591e579, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grey_stone
+    second: {fileID: 2100000, guid: 78aacc1fe8220be43ac9789ee6c36328, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grey_stone.001
+    second: {fileID: 2100000, guid: 31ad0e13b398c5c46bbdb1fadb7f1fbb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: houtwerk_wit_19th_c
+    second: {fileID: 2100000, guid: 6fd5c81f0b17107478d514b70335829f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: iron
+    second: {fileID: 2100000, guid: b0a5a1cb0f389b04e8483a0a51476acc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: loodwerk_dak
+    second: {fileID: 2100000, guid: 7a55cbae7e5f9bd4b85c65c2130dec3f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: planks_dark_grey_wood
+    second: {fileID: 2100000, guid: c32cf88e3ec012742b2d340ddf6fc9a6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: raamstijlen_donker_19th_c
+    second: {fileID: 2100000, guid: b59811085b220b948bfe0b0be35f0445, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: red_paint
+    second: {fileID: 2100000, guid: a7842df3ad9fe5c40a58d9bb7abb3efa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rusted_iron_procedural
+    second: {fileID: 2100000, guid: d4380c693f181264a9152e808d419772, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sandstone
+    second: {fileID: 2100000, guid: c44234e8eaa4a914e81d988bd40eea8e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: street_center
+    second: {fileID: 2100000, guid: b376616fafe40114195568312b939c5a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vensterglas_19th_c
+    second: {fileID: 2100000, guid: 3ba3622155f1b9445b3d2890bd71748b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: voordeur_donker_photo_texture
+    second: {fileID: 2100000, guid: 2b5ac7bf338b4a741bc46fd64809e42e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: white_painted_stone
+    second: {fileID: 2100000, guid: 433e4a88d9b52b2418cce744b87fb16c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_dark_brown
+    second: {fileID: 2100000, guid: fdec833f169ee3f4594c3d343c3113f6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_infrastructure
+    second: {fileID: 2100000, guid: 07330b10e4d12994d916e80a73a83c30, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: zink_platen_dak
+    second: {fileID: 2100000, guid: c4790f419d1f9e041b0c01353804fa9f, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 10
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 0.010000001
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

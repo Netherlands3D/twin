@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890259,
+          52.387906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234974",
+        "label": "Wijk 53, nr 1814",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888638,
+          52.388029
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888715,
+          52.388033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888797,
+          52.38804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234979",
+        "label": "Wijk 53, nr 1918",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890259,
+          52.387906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234974",
+        "label": "Wijk 53, nr 1814",
+        "year": "1802"
+      }
+    }
+  ]
+}

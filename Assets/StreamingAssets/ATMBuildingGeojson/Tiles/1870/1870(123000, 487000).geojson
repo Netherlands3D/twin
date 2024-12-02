@@ -1,0 +1,2135 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917325,
+          52.371848
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227650",
+        "label": "T 769 a (1e Kattenburger dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917876,
+          52.372428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227790",
+        "label": "T 785 d (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918993,
+          52.373137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227791",
+        "label": "T 804 e (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919104,
+          52.373208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227792",
+        "label": "T 804 b (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91915,
+          52.373237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227793",
+        "label": "T 804 c (Gr. Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91913,
+          52.373304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227794",
+        "label": "T 804 n (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919323,
+          52.37341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227795",
+        "label": "T 808 b (Groote Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919555,
+          52.373554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227796",
+        "label": "T 808 f (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919618,
+          52.373593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227797",
+        "label": "T 809 a (Groote Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920169,
+          52.373954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227798",
+        "label": "T 812 j (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919884,
+          52.370526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227799",
+        "label": "T 349 a (Gr Wittenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923259,
+          52.372839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227800",
+        "label": "T 428 b (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923204,
+          52.372804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227801",
+        "label": "T 428 e (Gr Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923145,
+          52.372768
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227802",
+        "label": "T 428 d (Gr Wittenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922527,
+          52.372386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227803",
+        "label": "T 443 a (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919691,
+          52.370596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227804",
+        "label": "T 501 d (Gr Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919649,
+          52.370569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227804",
+        "label": "T 501 d (Gr Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.370543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227805",
+        "label": "T 501 a (Groote Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.370543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227806",
+        "label": "T 501 c (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919566,
+          52.370515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227807",
+        "label": "T 501 b (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919277,
+          52.370335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227808",
+        "label": "T 505 b (Gr Wittenb Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919277,
+          52.370335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227809",
+        "label": "T 508 b (Gr Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.931087,
+          52.370644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227833",
+        "label": "T 5 a (Funen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91784,
+          52.371625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227999",
+        "label": "T 569 (Kl Kattenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918681,
+          52.372468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228000",
+        "label": "T 594 (Kl Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919882,
+          52.373232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228001",
+        "label": "T 611 (Kl Katttenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918989,
+          52.372825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228002",
+        "label": "T 687 a (Kl Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918923,
+          52.372785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228003",
+        "label": "T 687 b (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918406,
+          52.372442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228004",
+        "label": "T 699 (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918346,
+          52.372403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228005",
+        "label": "T 699 a (Kl Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919879,
+          52.370018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228008",
+        "label": "T 283 a (Kl Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920759,
+          52.370728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228009",
+        "label": "T 321 a (Kleine Wittenburger Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920418,
+          52.370518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228010",
+        "label": "T 323 a (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920382,
+          52.370491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228011",
+        "label": "T 323 b (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924944,
+          52.370297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228295",
+        "label": "T 175 b (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923952,
+          52.370773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228296",
+        "label": "T 175 e (Nieuwe Oostenburger dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923952,
+          52.370773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228297",
+        "label": "T 175 f (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924034,
+          52.370726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228298",
+        "label": "T 175 d (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924122,
+          52.370674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228299",
+        "label": "T 175 c (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924202,
+          52.37062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228300",
+        "label": "T 175 a (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923227,
+          52.370017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228301",
+        "label": "T 175 q (Nieuwe Oostenburgerstraaat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923227,
+          52.370017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228302",
+        "label": "T 175 r (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923425,
+          52.370132
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228303",
+        "label": "T 175 s (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.370182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228304",
+        "label": "T 17 t (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.370182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228305",
+        "label": "T 175 t (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923593,
+          52.370235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228306",
+        "label": "T 175 u (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923683,
+          52.370289
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228307",
+        "label": "T 175 v (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923767,
+          52.370343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228308",
+        "label": "T 175 w (Nieuwe Oostenburgerstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923851,
+          52.370393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228309",
+        "label": "T 175 x (Nieuwe Oostenburgerstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923945,
+          52.37045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228310",
+        "label": "T 175 y (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924037,
+          52.370503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228311",
+        "label": "T 175 z (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92301,
+          52.370146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228312",
+        "label": "T 175 p (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923121,
+          52.37021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228313",
+        "label": "T 175 o (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923198,
+          52.370259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228314",
+        "label": "T 175 n (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923295,
+          52.370314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228315",
+        "label": "T 175 m (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923386,
+          52.370366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228316",
+        "label": "T 175 i (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923386,
+          52.370366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228317",
+        "label": "T 175 l (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923477,
+          52.370419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228318",
+        "label": "T 175 k (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923639,
+          52.37052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228319",
+        "label": "T 175 h (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923731,
+          52.370575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228320",
+        "label": "T 115 g (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923731,
+          52.370575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228321",
+        "label": "T 175 g (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923743,
+          52.370001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228340",
+        "label": "T 181 a (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918282,
+          52.372435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228912",
+        "label": "T 789 a (2e Kattenbr dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918282,
+          52.372435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228913",
+        "label": "T 789 b (2e Kattenburgerdwstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922245,
+          52.371359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228917",
+        "label": "T 394 c (2e Wittenbr dwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922071,
+          52.371722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228918",
+        "label": "T 406 f (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922356,
+          52.371739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228919",
+        "label": "T 406 a (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922304,
+          52.37177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228920",
+        "label": "T 406 b (2de Wittenburger Dwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922257,
+          52.371805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228921",
+        "label": "T 406 c (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922221,
+          52.371837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228922",
+        "label": "T 406 d (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922161,
+          52.37187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228923",
+        "label": "T 406 e (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917325,
+          52.371848
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227650",
+        "label": "T 769 a (1e Kattenburger dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917876,
+          52.372428
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227790",
+        "label": "T 785 d (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918993,
+          52.373137
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227791",
+        "label": "T 804 e (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919104,
+          52.373208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227792",
+        "label": "T 804 b (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91915,
+          52.373237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227793",
+        "label": "T 804 c (Gr. Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91913,
+          52.373304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227794",
+        "label": "T 804 n (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919323,
+          52.37341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227795",
+        "label": "T 808 b (Groote Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919555,
+          52.373554
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227796",
+        "label": "T 808 f (Gr Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919618,
+          52.373593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227797",
+        "label": "T 809 a (Groote Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920169,
+          52.373954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227798",
+        "label": "T 812 j (Gr Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919884,
+          52.370526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227799",
+        "label": "T 349 a (Gr Wittenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923259,
+          52.372839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227800",
+        "label": "T 428 b (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923204,
+          52.372804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227801",
+        "label": "T 428 e (Gr Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923145,
+          52.372768
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227802",
+        "label": "T 428 d (Gr Wittenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922527,
+          52.372386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227803",
+        "label": "T 443 a (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919691,
+          52.370596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227804",
+        "label": "T 501 d (Gr Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919649,
+          52.370569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227804",
+        "label": "T 501 d (Gr Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.370543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227805",
+        "label": "T 501 a (Groote Wittenb straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919609,
+          52.370543
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227806",
+        "label": "T 501 c (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919566,
+          52.370515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227807",
+        "label": "T 501 b (Groote Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919277,
+          52.370335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227808",
+        "label": "T 505 b (Gr Wittenb Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919277,
+          52.370335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227809",
+        "label": "T 508 b (Gr Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.931087,
+          52.370644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227833",
+        "label": "T 5 a (Funen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.91784,
+          52.371625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227999",
+        "label": "T 569 (Kl Kattenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918681,
+          52.372468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228000",
+        "label": "T 594 (Kl Kattenbr straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919882,
+          52.373232
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228001",
+        "label": "T 611 (Kl Katttenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918989,
+          52.372825
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228002",
+        "label": "T 687 a (Kl Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918923,
+          52.372785
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228003",
+        "label": "T 687 b (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918406,
+          52.372442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228004",
+        "label": "T 699 (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918346,
+          52.372403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228005",
+        "label": "T 699 a (Kl Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919879,
+          52.370018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228008",
+        "label": "T 283 a (Kl Wittenbr Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920759,
+          52.370728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228009",
+        "label": "T 321 a (Kleine Wittenburger Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920418,
+          52.370518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228010",
+        "label": "T 323 a (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920382,
+          52.370491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228011",
+        "label": "T 323 b (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924944,
+          52.370297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228295",
+        "label": "T 175 b (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923952,
+          52.370773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228296",
+        "label": "T 175 e (Nieuwe Oostenburger dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923952,
+          52.370773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228297",
+        "label": "T 175 f (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924034,
+          52.370726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228298",
+        "label": "T 175 d (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924122,
+          52.370674
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228299",
+        "label": "T 175 c (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924202,
+          52.37062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228300",
+        "label": "T 175 a (Nieuwe Oostenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923227,
+          52.370017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228301",
+        "label": "T 175 q (Nieuwe Oostenburgerstraaat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923227,
+          52.370017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228302",
+        "label": "T 175 r (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923425,
+          52.370132
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228303",
+        "label": "T 175 s (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.370182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228304",
+        "label": "T 17 t (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.370182
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228305",
+        "label": "T 175 t (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923593,
+          52.370235
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228306",
+        "label": "T 175 u (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923683,
+          52.370289
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228307",
+        "label": "T 175 v (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923767,
+          52.370343
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228308",
+        "label": "T 175 w (Nieuwe Oostenburgerstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923851,
+          52.370393
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228309",
+        "label": "T 175 x (Nieuwe Oostenburgerstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923945,
+          52.37045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228310",
+        "label": "T 175 y (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924037,
+          52.370503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228311",
+        "label": "T 175 z (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92301,
+          52.370146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228312",
+        "label": "T 175 p (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923121,
+          52.37021
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228313",
+        "label": "T 175 o (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923198,
+          52.370259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228314",
+        "label": "T 175 n (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923295,
+          52.370314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228315",
+        "label": "T 175 m (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923386,
+          52.370366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228316",
+        "label": "T 175 i (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923386,
+          52.370366
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228317",
+        "label": "T 175 l (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923477,
+          52.370419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228318",
+        "label": "T 175 k (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923639,
+          52.37052
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228319",
+        "label": "T 175 h (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923731,
+          52.370575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228320",
+        "label": "T 115 g (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923731,
+          52.370575
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228321",
+        "label": "T 175 g (Nieuwe Oostenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923743,
+          52.370001
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228340",
+        "label": "T 181 a (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918282,
+          52.372435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228912",
+        "label": "T 789 a (2e Kattenbr dw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918282,
+          52.372435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228913",
+        "label": "T 789 b (2e Kattenburgerdwstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922245,
+          52.371359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228917",
+        "label": "T 394 c (2e Wittenbr dwstr)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922071,
+          52.371722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228918",
+        "label": "T 406 f (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922356,
+          52.371739
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228919",
+        "label": "T 406 a (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922304,
+          52.37177
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228920",
+        "label": "T 406 b (2de Wittenburger Dwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922257,
+          52.371805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228921",
+        "label": "T 406 c (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922221,
+          52.371837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228922",
+        "label": "T 406 d (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922161,
+          52.37187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228923",
+        "label": "T 406 e (2de Wittenburgerdwarsstraat)",
+        "year": "1870"
+      }
+    }
+  ]
+}

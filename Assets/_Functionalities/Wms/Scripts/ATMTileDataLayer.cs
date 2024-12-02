@@ -102,6 +102,21 @@ namespace Netherlands3D.Twin
             this.zoomLevel = zoomLevel;
         }
 
+        private void EnableGroundPlanesInTileRange(bool enabled, Coordinate min, Coordinate max)
+        {
+            Vector3 unityMin = min.ToUnity();
+            Vector3 unityMax = max.ToUnity();
+            ATMBagGroundPlane[] aTMBagGroundPlanes = GetComponentsInChildren<ATMBagGroundPlane>(true);
+            foreach (ATMBagGroundPlane plane in aTMBagGroundPlanes)
+            {
+                Vector3 pos = plane.coord.ToUnity();
+                if (pos.x >= unityMin.x && pos.x < unityMax.x && pos.z >= unityMin.z && pos.z < unityMax.z)
+                {
+                    plane.gameObject.SetActive(enabled);
+                }
+            }
+        }
+        
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
             Action<TileChange> callback = null
@@ -129,6 +144,12 @@ namespace Netherlands3D.Twin
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCenter);
 
+
+            var halfTileSize = tileSize * .5f;
+            var tileCoordinateMin = new Coordinate(CoordinateSystem.RD, tileChange.X - halfTileSize, tileChange.Y - halfTileSize);
+            var tileCoordinateMax = new Coordinate(CoordinateSystem.RD, tileChange.X + halfTileSize, tileChange.Y + halfTileSize);
+            EnableGroundPlanesInTileRange(false, tileCoordinateMin, tileCoordinateMax);
+
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)xyzTile.URL);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
@@ -146,6 +167,7 @@ namespace Netherlands3D.Twin
                     ((TextureDecalProjector)projector).debugUrl = xyzTile.URL;
                 }
                 
+                EnableGroundPlanesInTileRange(true, tileCoordinateMin, tileCoordinateMax);
                 ClearPreviousTexture(tile);                
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;

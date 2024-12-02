@@ -1,0 +1,575 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903702,
+          52.370057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227488",
+        "label": "R 218 d (Batavierstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903512,
+          52.369976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227489",
+        "label": "R 218 a (Batavierstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905705,
+          52.371248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227634",
+        "label": "R 289 a (Eerste Bataviersdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917285,
+          52.371895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227651",
+        "label": "T 769 d (1e Kattenburgerdw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913507,
+          52.370134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227835",
+        "label": "U 434 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913832,
+          52.369981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227836",
+        "label": "U 436 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915863,
+          52.371476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227921",
+        "label": "T 541 g (Kattenb plein)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9171,
+          52.371651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228006",
+        "label": "T 717 a (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902972,
+          52.371961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228023",
+        "label": "O 330 (Kromboomsloot)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90999,
+          52.370477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228603",
+        "label": "U 205 a (Rapenburg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910475,
+          52.370189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228604",
+        "label": "V 540 b (Rapenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903414,
+          52.372069
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228609",
+        "label": "O 337 a (Regtboomsloot)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903234,
+          52.372838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228611",
+        "label": "N 220 a (Ridderstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903761,
+          52.372461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228612",
+        "label": "N 274 a (Ridderstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908359,
+          52.370209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228928",
+        "label": "S 30 b (Valkenb str)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908308,
+          52.37019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228929",
+        "label": "S 30 c (Valkenb str)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907334,
+          52.370058
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228941",
+        "label": "S 200 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907445,
+          52.370084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228942",
+        "label": "S 207 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907503,
+          52.370098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228942",
+        "label": "S 207 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903702,
+          52.370057
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227488",
+        "label": "R 218 d (Batavierstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903512,
+          52.369976
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227489",
+        "label": "R 218 a (Batavierstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.905705,
+          52.371248
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227634",
+        "label": "R 289 a (Eerste Bataviersdwarsstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917285,
+          52.371895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227651",
+        "label": "T 769 d (1e Kattenburgerdw straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913507,
+          52.370134
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227835",
+        "label": "U 434 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913832,
+          52.369981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227836",
+        "label": "U 436 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915863,
+          52.371476
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227921",
+        "label": "T 541 g (Kattenb plein)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9171,
+          52.371651
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228006",
+        "label": "T 717 a (Kleine Kattenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.902972,
+          52.371961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228023",
+        "label": "O 330 (Kromboomsloot)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.90999,
+          52.370477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228603",
+        "label": "U 205 a (Rapenburg)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910475,
+          52.370189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228604",
+        "label": "V 540 b (Rapenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903414,
+          52.372069
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228609",
+        "label": "O 337 a (Regtboomsloot)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903234,
+          52.372838
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228611",
+        "label": "N 220 a (Ridderstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.903761,
+          52.372461
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228612",
+        "label": "N 274 a (Ridderstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908359,
+          52.370209
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228928",
+        "label": "S 30 b (Valkenb str)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.908308,
+          52.37019
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228929",
+        "label": "S 30 c (Valkenb str)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907334,
+          52.370058
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228941",
+        "label": "S 200 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907445,
+          52.370084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228942",
+        "label": "S 207 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.907503,
+          52.370098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228942",
+        "label": "S 207 a (Valkenburgerstraat)",
+        "year": "1870"
+      }
+    }
+  ]
+}

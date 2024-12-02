@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961004,
+          52.404482
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198696",
+        "label": "Papaverweg 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954418,
+          52.401436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199997",
+        "label": "Buikslotermeerdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956061,
+          52.401824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199998",
+        "label": "Buikslotermeerdijk 85 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961004,
+          52.404482
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A198696",
+        "label": "Papaverweg 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954418,
+          52.401436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199997",
+        "label": "Buikslotermeerdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956061,
+          52.401824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A199998",
+        "label": "Buikslotermeerdijk 85 a",
+        "year": "1943"
+      }
+    }
+  ]
+}

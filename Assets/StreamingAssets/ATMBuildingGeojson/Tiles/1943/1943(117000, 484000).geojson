@@ -1,0 +1,215 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.839332,
+          52.345478
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185764",
+        "label": "Sloterweg 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843074,
+          52.346194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185759",
+        "label": "Sloterweg 172",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842768,
+          52.346213
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185761",
+        "label": "Sloterweg 178",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842869,
+          52.346208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185760",
+        "label": "Sloterweg 176",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843352,
+          52.346208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185758",
+        "label": "Sloterweg 170",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.840149,
+          52.345508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185763",
+        "label": "Sloterweg 250",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841687,
+          52.345928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185762",
+        "label": "Sloterweg 210",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.839332,
+          52.345478
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185764",
+        "label": "Sloterweg 266",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843074,
+          52.346194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185759",
+        "label": "Sloterweg 172",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842768,
+          52.346213
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185761",
+        "label": "Sloterweg 178",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842869,
+          52.346208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185760",
+        "label": "Sloterweg 176",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843352,
+          52.346208
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185758",
+        "label": "Sloterweg 170",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.840149,
+          52.345508
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185763",
+        "label": "Sloterweg 250",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841687,
+          52.345928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A185762",
+        "label": "Sloterweg 210",
+        "year": "1943"
+      }
+    }
+  ]
+}

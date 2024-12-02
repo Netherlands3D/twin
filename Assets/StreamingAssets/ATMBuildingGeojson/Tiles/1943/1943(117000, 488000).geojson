@@ -1,0 +1,455 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841947,
+          52.381104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192411",
+        "label": "Sloterdijkermeerweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842611,
+          52.382008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192403",
+        "label": "Sloterdijkermeerweg 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842514,
+          52.381857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192405",
+        "label": "Sloterdijkermeerweg 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843324,
+          52.381039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192422",
+        "label": "Sloterdijkermeerweg 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841895,
+          52.381042
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192412",
+        "label": "Sloterdijkermeerweg 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841283,
+          52.380189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192413",
+        "label": "Sloterdijkermeerweg 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841999,
+          52.381167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192410",
+        "label": "Sloterdijkermeerweg 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841956,
+          52.380196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192423",
+        "label": "Sloterdijkermeerweg 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842566,
+          52.38194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192404",
+        "label": "Sloterdijkermeerweg 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842855,
+          52.3823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192401",
+        "label": "Sloterdijkermeerweg 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842198,
+          52.381354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192409",
+        "label": "Sloterdijkermeerweg 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842243,
+          52.381602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192408",
+        "label": "Sloterdijkermeerweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842392,
+          52.381698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192407",
+        "label": "Sloterdijkermeerweg 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842469,
+          52.381787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192406",
+        "label": "Sloterdijkermeerweg 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842789,
+          52.382196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192402",
+        "label": "Sloterdijkermeerweg 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841947,
+          52.381104
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192411",
+        "label": "Sloterdijkermeerweg 68",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842611,
+          52.382008
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192403",
+        "label": "Sloterdijkermeerweg 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842514,
+          52.381857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192405",
+        "label": "Sloterdijkermeerweg 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843324,
+          52.381039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192422",
+        "label": "Sloterdijkermeerweg 63",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841895,
+          52.381042
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192412",
+        "label": "Sloterdijkermeerweg 70",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841283,
+          52.380189
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192413",
+        "label": "Sloterdijkermeerweg 80",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841999,
+          52.381167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192410",
+        "label": "Sloterdijkermeerweg 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841956,
+          52.380196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192423",
+        "label": "Sloterdijkermeerweg 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842566,
+          52.38194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192404",
+        "label": "Sloterdijkermeerweg 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842855,
+          52.3823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192401",
+        "label": "Sloterdijkermeerweg 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842198,
+          52.381354
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192409",
+        "label": "Sloterdijkermeerweg 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842243,
+          52.381602
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192408",
+        "label": "Sloterdijkermeerweg 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842392,
+          52.381698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192407",
+        "label": "Sloterdijkermeerweg 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842469,
+          52.381787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192406",
+        "label": "Sloterdijkermeerweg 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842789,
+          52.382196
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A192402",
+        "label": "Sloterdijkermeerweg 46",
+        "year": "1943"
+      }
+    }
+  ]
+}

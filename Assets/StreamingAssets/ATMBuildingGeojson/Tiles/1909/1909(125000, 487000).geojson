@@ -1,0 +1,425 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946932,
+          52.37124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153899",
+        "label": "Zeeburgerpolder 108",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947007,
+          52.371271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153900",
+        "label": "Zeeburgerpolder 107",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947921,
+          52.371777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153901",
+        "label": "Zeeburgerpolder 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948824,
+          52.371886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153902",
+        "label": "Zeeburgerpolder 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949249,
+          52.371947
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153903",
+        "label": "Entrepothaven 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949475,
+          52.371977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153904",
+        "label": "Entrepothaven 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950397,
+          52.372056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153905",
+        "label": "Entrepothaven 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950982,
+          52.372082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153906",
+        "label": "Entrepothaven 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94965,
+          52.371384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153907",
+        "label": "Entrepothaven 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950019,
+          52.371094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153908",
+        "label": "Entrepothaven 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950164,
+          52.371006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153909",
+        "label": "Entrepothaven 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950237,
+          52.370954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153910",
+        "label": "Entrepothaven 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956245,
+          52.377158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153916",
+        "label": "Entrepothaven 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95624,
+          52.377227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153918",
+        "label": "Entrepothaven 4",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946932,
+          52.37124
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153899",
+        "label": "Zeeburgerpolder 108",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947007,
+          52.371271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153900",
+        "label": "Zeeburgerpolder 107",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947921,
+          52.371777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153901",
+        "label": "Zeeburgerpolder 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948824,
+          52.371886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153902",
+        "label": "Zeeburgerpolder 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949249,
+          52.371947
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153903",
+        "label": "Entrepothaven 8",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949475,
+          52.371977
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153904",
+        "label": "Entrepothaven 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950397,
+          52.372056
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153905",
+        "label": "Entrepothaven 6",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950982,
+          52.372082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153906",
+        "label": "Entrepothaven 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94965,
+          52.371384
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153907",
+        "label": "Entrepothaven 14",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950019,
+          52.371094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153908",
+        "label": "Entrepothaven 19",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950164,
+          52.371006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153909",
+        "label": "Entrepothaven 20",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.950237,
+          52.370954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153910",
+        "label": "Entrepothaven 21",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956245,
+          52.377158
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153916",
+        "label": "Entrepothaven 5",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95624,
+          52.377227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A153918",
+        "label": "Entrepothaven 4",
+        "year": "1909"
+      }
+    }
+  ]
+}

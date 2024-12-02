@@ -1,0 +1,305 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842731,
+          52.38832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193050",
+        "label": "Velserweg 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841987,
+          52.388359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193044",
+        "label": "Spaarnwouderdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842112,
+          52.388357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193043",
+        "label": "Spaarnwouderdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841925,
+          52.388365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193045",
+        "label": "Spaarnwouderdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842627,
+          52.388329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193051",
+        "label": "Velserweg 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843246,
+          52.388272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193047",
+        "label": "Velserweg 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843016,
+          52.388299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193048",
+        "label": "Velserweg 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843357,
+          52.388257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193046",
+        "label": "Velserweg 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84287,
+          52.388314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193049",
+        "label": "Velserweg 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84181,
+          52.388653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193042",
+        "label": "Spaarnwouderdijk 110",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842731,
+          52.38832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193050",
+        "label": "Velserweg 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841987,
+          52.388359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193044",
+        "label": "Spaarnwouderdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842112,
+          52.388357
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193043",
+        "label": "Spaarnwouderdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.841925,
+          52.388365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193045",
+        "label": "Spaarnwouderdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.842627,
+          52.388329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193051",
+        "label": "Velserweg 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843246,
+          52.388272
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193047",
+        "label": "Velserweg 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843016,
+          52.388299
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193048",
+        "label": "Velserweg 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.843357,
+          52.388257
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193046",
+        "label": "Velserweg 115",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84287,
+          52.388314
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193049",
+        "label": "Velserweg 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.84181,
+          52.388653
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A193042",
+        "label": "Spaarnwouderdijk 110",
+        "year": "1943"
+      }
+    }
+  ]
+}

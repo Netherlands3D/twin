@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962692,
+          52.362298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208685",
+        "label": "Diemerzeedijk 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.962692,
+          52.362298
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A208685",
+        "label": "Diemerzeedijk 5",
+        "year": "1943"
+      }
+    }
+  ]
+}

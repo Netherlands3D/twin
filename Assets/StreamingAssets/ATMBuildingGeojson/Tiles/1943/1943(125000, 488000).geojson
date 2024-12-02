@@ -1,0 +1,5585 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948968,
+          52.388026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206999",
+        "label": "Monnikendammerweg 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947839,
+          52.387426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206943",
+        "label": "Schouwstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955083,
+          52.386426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207144",
+        "label": "Schellingwouderdijk 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948031,
+          52.386697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202935",
+        "label": "Nieuwendammerdijk 531",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956124,
+          52.38634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207154",
+        "label": "Schellingwouderdijk 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9477,
+          52.38753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206946",
+        "label": "Schouwstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947353,
+          52.387494
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206931",
+        "label": "Schouwstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948299,
+          52.387925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204725",
+        "label": "Wognumerstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947979,
+          52.386723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202934",
+        "label": "Nieuwendammerdijk 529",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948756,
+          52.387787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206923",
+        "label": "Wognumerplantsoen 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955724,
+          52.38638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207150",
+        "label": "Schellingwouderdijk 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948146,
+          52.387599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204775",
+        "label": "Wognumerstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95784,
+          52.386018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207171",
+        "label": "Schellingwouderdijk 161 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960837,
+          52.383006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207234",
+        "label": "Ijdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956947,
+          52.386256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207163",
+        "label": "Schellingwouderdijk 143",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961025,
+          52.382913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207231",
+        "label": "Ijdijk 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94838,
+          52.388034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206968",
+        "label": "Graftdijkerstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947763,
+          52.387717
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206949",
+        "label": "Schouwstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960395,
+          52.385114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207196",
+        "label": "Schellingwouderdijk 215",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947565,
+          52.387348
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206927",
+        "label": "Schouwstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948383,
+          52.387794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204722",
+        "label": "Wognumerstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949575,
+          52.386552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202953",
+        "label": "Nieuwendammerdijk 567",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94743,
+          52.388032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204784",
+        "label": "Wognumerstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946846,
+          52.387424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202921",
+        "label": "Nieuwendammerdijk 503",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948501,
+          52.386657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202940",
+        "label": "Nieuwendammerdijk 541",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947992,
+          52.387329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204770",
+        "label": "Wognumerstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951952,
+          52.386485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207131",
+        "label": "Schellingwouderdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958928,
+          52.385683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207182",
+        "label": "Schellingwouderdijk 185",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948249,
+          52.38625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202671",
+        "label": "Nieuwendammerdijk 538",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956531,
+          52.386308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207158",
+        "label": "Schellingwouderdijk 133",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955558,
+          52.386395
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207149",
+        "label": "Schellingwouderdijk 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954511,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207138",
+        "label": "Schellingwouderdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948921,
+          52.386631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202945",
+        "label": "Nieuwendammerdijk 551",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948556,
+          52.387363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206919",
+        "label": "Wognumerplantsoen 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949088,
+          52.387854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206925",
+        "label": "Wognumerplantsoen 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956681,
+          52.386294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207160",
+        "label": "Schellingwouderdijk 137",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957817,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207170",
+        "label": "Schellingwouderdijk 161",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952161,
+          52.386496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207133",
+        "label": "Schellingwouderdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955326,
+          52.386415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207147",
+        "label": "Schellingwouderdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956027,
+          52.38635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207153",
+        "label": "Schellingwouderdijk 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959149,
+          52.385595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207185",
+        "label": "Schellingwouderdijk 191",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948682,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202942",
+        "label": "Nieuwendammerdijk 545",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955446,
+          52.386409
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207148",
+        "label": "Schellingwouderdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960853,
+          52.3849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207198",
+        "label": "Schellingwouderdijk 223",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948332,
+          52.387891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204724",
+        "label": "Wognumerstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954313,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207136",
+        "label": "Schellingwouderdijk 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948125,
+          52.387486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204774",
+        "label": "Wognumerstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954608,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207139",
+        "label": "Schellingwouderdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955917,
+          52.386358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207152",
+        "label": "Schellingwouderdijk 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947822,
+          52.387908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206942",
+        "label": "Schouwstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95901,
+          52.38565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207183",
+        "label": "Schellingwouderdijk 187",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948108,
+          52.38769
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204777",
+        "label": "Wognumerstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947242,
+          52.387734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206935",
+        "label": "Schouwstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.38665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202941",
+        "label": "Nieuwendammerdijk 543",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946942,
+          52.387371
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202923",
+        "label": "Nieuwendammerdijk 505",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946733,
+          52.38753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202918",
+        "label": "Nieuwendammerdijk 499",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956851,
+          52.386306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207162",
+        "label": "Schellingwouderdijk 141",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947262,
+          52.387776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206936",
+        "label": "Schouwstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948066,
+          52.3874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204772",
+        "label": "Wognumerstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947832,
+          52.386092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202670",
+        "label": "Nieuwendammerdijk 534",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959851,
+          52.385304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207191",
+        "label": "Schellingwouderdijk 207",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959436,
+          52.385468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207187",
+        "label": "Schellingwouderdijk 199",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948431,
+          52.386664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202939",
+        "label": "Nieuwendammerdijk 539",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947065,
+          52.387293
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202927",
+        "label": "Nieuwendammerdijk 509",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947204,
+          52.387217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202929",
+        "label": "Nieuwendammerdijk 513",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948824,
+          52.38664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202944",
+        "label": "Nieuwendammerdijk 549",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949441,
+          52.386579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202951",
+        "label": "Nieuwendammerdijk 563",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94734,
+          52.387128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202931",
+        "label": "Nieuwendammerdijk 517",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94929,
+          52.386603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202949",
+        "label": "Nieuwendammerdijk 559",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951744,
+          52.386462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207129",
+        "label": "Schellingwouderdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948023,
+          52.387361
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204771",
+        "label": "Wognumerstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946839,
+          52.387492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202920",
+        "label": "Nieuwendammerdijk 501 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947742,
+          52.387895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206941",
+        "label": "Schouwstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94703,
+          52.387355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202926",
+        "label": "Nieuwendammerdijk 507 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946804,
+          52.387471
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202919",
+        "label": "Nieuwendammerdijk 501",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960959,
+          52.38294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207232",
+        "label": "Ijdijk 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947784,
+          52.387467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206944",
+        "label": "Schouwstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957155,
+          52.386227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207165",
+        "label": "Schellingwouderdijk 147",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94673,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204791",
+        "label": "Wognumerstraat 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949069,
+          52.386625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202947",
+        "label": "Nieuwendammerdijk 555",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947913,
+          52.387744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206951",
+        "label": "Schouwstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.387763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206921",
+        "label": "Wognumerplantsoen 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959507,
+          52.385438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207188",
+        "label": "Schellingwouderdijk 201",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949368,
+          52.38659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202950",
+        "label": "Nieuwendammerdijk 561",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95206,
+          52.386498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207132",
+        "label": "Schellingwouderdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960729,
+          52.384987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207197",
+        "label": "Schellingwouderdijk 221",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947183,
+          52.387981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204786",
+        "label": "Wognumerstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955149,
+          52.386423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207145",
+        "label": "Schellingwouderdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948686,
+          52.387777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206922",
+        "label": "Wognumerplantsoen 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95872,
+          52.385735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207180",
+        "label": "Schellingwouderdijk 181",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954403,
+          52.386443
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207137",
+        "label": "Schellingwouderdijk 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947534,
+          52.387846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206938",
+        "label": "Schouwstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94761,
+          52.38731
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206926",
+        "label": "Schouwstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947109,
+          52.387962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204787",
+        "label": "Wognumerstraat 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957619,
+          52.386066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207168",
+        "label": "Schellingwouderdijk 157",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956257,
+          52.386342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207155",
+        "label": "Schellingwouderdijk 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958139,
+          52.385922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207175",
+        "label": "Schellingwouderdijk 169",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947268,
+          52.387184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202930",
+        "label": "Nieuwendammerdijk 515",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948099,
+          52.387446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204773",
+        "label": "Wognumerstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957287,
+          52.386176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207166",
+        "label": "Schellingwouderdijk 149",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957927,
+          52.38599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207172",
+        "label": "Schellingwouderdijk 163",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947203,
+          52.387638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206933",
+        "label": "Schouwstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95974,
+          52.38535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207190",
+        "label": "Schellingwouderdijk 205",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947849,
+          52.387136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204768",
+        "label": "Wognumerstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954902,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207142",
+        "label": "Schellingwouderdijk 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947886,
+          52.387167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204769",
+        "label": "Wognumerstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960903,
+          52.382966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207233",
+        "label": "Ijdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947131,
+          52.387258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202928",
+        "label": "Nieuwendammerdijk 511",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951657,
+          52.386458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207128",
+        "label": "Schellingwouderdijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959271,
+          52.385525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207186",
+        "label": "Schellingwouderdijk 195",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94661,
+          52.387623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202916",
+        "label": "Nieuwendammerdijk 495",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946675,
+          52.387569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202917",
+        "label": "Nieuwendammerdijk 497",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956448,
+          52.386321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207157",
+        "label": "Schellingwouderdijk 131",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959071,
+          52.385629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207184",
+        "label": "Schellingwouderdijk 189",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948134,
+          52.386675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202936",
+        "label": "Nieuwendammerdijk 533",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951862,
+          52.386475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207130",
+        "label": "Schellingwouderdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947304,
+          52.387539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206932",
+        "label": "Schouwstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947043,
+          52.38795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204788",
+        "label": "Wognumerstraat 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96112,
+          52.384847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207199",
+        "label": "Schellingwouderdijk 227",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948765,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202943",
+        "label": "Nieuwendammerdijk 547",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954143,
+          52.386477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207134",
+        "label": "Schellingwouderdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947444,
+          52.387045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202933",
+        "label": "Nieuwendammerdijk 521",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948125,
+          52.387644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204776",
+        "label": "Wognumerstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961209,
+          52.382834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207228",
+        "label": "Ijdijk 73",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949022,
+          52.387931
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206997",
+        "label": "Monnikendammerweg 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947853,
+          52.387728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206950",
+        "label": "Schouwstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956592,
+          52.386302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207159",
+        "label": "Schellingwouderdijk 135",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947388,
+          52.387085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202932",
+        "label": "Nieuwendammerdijk 519",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948823,
+          52.387805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206924",
+        "label": "Wognumerplantsoen 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946987,
+          52.387335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202925",
+        "label": "Nieuwendammerdijk 507",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958202,
+          52.3859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207176",
+        "label": "Schellingwouderdijk 171",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947593,
+          52.38787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206939",
+        "label": "Schouwstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947422,
+          52.387452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206930",
+        "label": "Schouwstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959606,
+          52.385403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207189",
+        "label": "Schellingwouderdijk 203",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949514,
+          52.386562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202952",
+        "label": "Nieuwendammerdijk 565",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947464,
+          52.387416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206929",
+        "label": "Schouwstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948355,
+          52.386666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202938",
+        "label": "Nieuwendammerdijk 537",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947454,
+          52.387842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206937",
+        "label": "Schouwstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946973,
+          52.387933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204789",
+        "label": "Wognumerstraat 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947742,
+          52.387501
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206945",
+        "label": "Schouwstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955846,
+          52.386371
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207151",
+        "label": "Schellingwouderdijk 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955264,
+          52.386418
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207146",
+        "label": "Schellingwouderdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948358,
+          52.387842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204723",
+        "label": "Wognumerstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946799,
+          52.387942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204790",
+        "label": "Wognumerstraat 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958617,
+          52.385773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207179",
+        "label": "Schellingwouderdijk 179",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957986,
+          52.38597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207173",
+        "label": "Schellingwouderdijk 165",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949044,
+          52.387892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206996",
+        "label": "Monnikendammerweg 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958398,
+          52.385837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207177",
+        "label": "Schellingwouderdijk 175",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946903,
+          52.387452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202922",
+        "label": "Nieuwendammerdijk 503 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948995,
+          52.387974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206998",
+        "label": "Monnikendammerweg 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948224,
+          52.386657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202937",
+        "label": "Nieuwendammerdijk 535",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954796,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207141",
+        "label": "Schellingwouderdijk 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956811,
+          52.38632
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207161",
+        "label": "Schellingwouderdijk 139",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95805,
+          52.385951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207174",
+        "label": "Schellingwouderdijk 167",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960216,
+          52.385195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207194",
+        "label": "Schellingwouderdijk 213 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947693,
+          52.387694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206948",
+        "label": "Schouwstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954982,
+          52.386429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207143",
+        "label": "Schellingwouderdijk 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949156,
+          52.386615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202948",
+        "label": "Nieuwendammerdijk 557",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958523,
+          52.385801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207178",
+        "label": "Schellingwouderdijk 177",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957447,
+          52.386114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207167",
+        "label": "Schellingwouderdijk 151",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9484069999999996,
+          52.38775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204721",
+        "label": "Wognumerstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957748,
+          52.386033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207169",
+        "label": "Schellingwouderdijk 159",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947669,
+          52.387885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206940",
+        "label": "Schouwstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947641,
+          52.38756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206947",
+        "label": "Schouwstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947907,
+          52.388024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204778",
+        "label": "Wognumerstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961084,
+          52.382889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207230",
+        "label": "Ijdijk 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954226,
+          52.38647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207135",
+        "label": "Schellingwouderdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949288,
+          52.38747
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206920",
+        "label": "Wognumerplantsoen 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9588,
+          52.385706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207181",
+        "label": "Schellingwouderdijk 183",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957011,
+          52.386238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207164",
+        "label": "Schellingwouderdijk 145",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947221,
+          52.387685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206934",
+        "label": "Schouwstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954706,
+          52.386436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207140",
+        "label": "Schellingwouderdijk 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949008,
+          52.386626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202946",
+        "label": "Nieuwendammerdijk 553",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956328,
+          52.386337
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207156",
+        "label": "Schellingwouderdijk 129",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959926,
+          52.385262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207192",
+        "label": "Schellingwouderdijk 209",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960274,
+          52.38516
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207195",
+        "label": "Schellingwouderdijk 213 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960098,
+          52.385225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207193",
+        "label": "Schellingwouderdijk 213",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947354,
+          52.388017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204785",
+        "label": "Wognumerstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961143,
+          52.38286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207229",
+        "label": "Ijdijk 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9478,
+          52.386211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202669",
+        "label": "Nieuwendammerdijk 532",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948435,
+          52.387711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204720",
+        "label": "Wognumerstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946987,
+          52.387395
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202924",
+        "label": "Nieuwendammerdijk 505 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947516,
+          52.387386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206928",
+        "label": "Schouwstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946559,
+          52.387658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202915",
+        "label": "Nieuwendammerdijk 493",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958836,
+          52.380839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207312",
+        "label": "IJdijk 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959761,
+          52.381202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207313",
+        "label": "IJdijk 57",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948968,
+          52.388026
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206999",
+        "label": "Monnikendammerweg 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947839,
+          52.387426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206943",
+        "label": "Schouwstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955083,
+          52.386426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207144",
+        "label": "Schellingwouderdijk 103",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948031,
+          52.386697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202935",
+        "label": "Nieuwendammerdijk 531",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956124,
+          52.38634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207154",
+        "label": "Schellingwouderdijk 125",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9477,
+          52.38753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206946",
+        "label": "Schouwstraat 8",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947353,
+          52.387494
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206931",
+        "label": "Schouwstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948299,
+          52.387925
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204725",
+        "label": "Wognumerstraat 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947979,
+          52.386723
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202934",
+        "label": "Nieuwendammerdijk 529",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948756,
+          52.387787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206923",
+        "label": "Wognumerplantsoen 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955724,
+          52.38638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207150",
+        "label": "Schellingwouderdijk 117",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948146,
+          52.387599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204775",
+        "label": "Wognumerstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95784,
+          52.386018
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207171",
+        "label": "Schellingwouderdijk 161 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960837,
+          52.383006
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207234",
+        "label": "Ijdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956947,
+          52.386256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207163",
+        "label": "Schellingwouderdijk 143",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961025,
+          52.382913
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207231",
+        "label": "Ijdijk 79",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94838,
+          52.388034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206968",
+        "label": "Graftdijkerstraat 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947763,
+          52.387717
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206949",
+        "label": "Schouwstraat 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960395,
+          52.385114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207196",
+        "label": "Schellingwouderdijk 215",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947565,
+          52.387348
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206927",
+        "label": "Schouwstraat 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948383,
+          52.387794
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204722",
+        "label": "Wognumerstraat 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949575,
+          52.386552
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202953",
+        "label": "Nieuwendammerdijk 567",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94743,
+          52.388032
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204784",
+        "label": "Wognumerstraat 41",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946846,
+          52.387424
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202921",
+        "label": "Nieuwendammerdijk 503",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948501,
+          52.386657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202940",
+        "label": "Nieuwendammerdijk 541",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947992,
+          52.387329
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204770",
+        "label": "Wognumerstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951952,
+          52.386485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207131",
+        "label": "Schellingwouderdijk 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958928,
+          52.385683
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207182",
+        "label": "Schellingwouderdijk 185",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948249,
+          52.38625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202671",
+        "label": "Nieuwendammerdijk 538",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956531,
+          52.386308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207158",
+        "label": "Schellingwouderdijk 133",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955558,
+          52.386395
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207149",
+        "label": "Schellingwouderdijk 113",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954511,
+          52.386445
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207138",
+        "label": "Schellingwouderdijk 91",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948921,
+          52.386631
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202945",
+        "label": "Nieuwendammerdijk 551",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948556,
+          52.387363
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206919",
+        "label": "Wognumerplantsoen 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949088,
+          52.387854
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206925",
+        "label": "Wognumerplantsoen 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956681,
+          52.386294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207160",
+        "label": "Schellingwouderdijk 137",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957817,
+          52.385997
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207170",
+        "label": "Schellingwouderdijk 161",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.952161,
+          52.386496
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207133",
+        "label": "Schellingwouderdijk 35",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955326,
+          52.386415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207147",
+        "label": "Schellingwouderdijk 109",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956027,
+          52.38635
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207153",
+        "label": "Schellingwouderdijk 123",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959149,
+          52.385595
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207185",
+        "label": "Schellingwouderdijk 191",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948682,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202942",
+        "label": "Nieuwendammerdijk 545",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955446,
+          52.386409
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207148",
+        "label": "Schellingwouderdijk 111",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960853,
+          52.3849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207198",
+        "label": "Schellingwouderdijk 223",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948332,
+          52.387891
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204724",
+        "label": "Wognumerstraat 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954313,
+          52.386447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207136",
+        "label": "Schellingwouderdijk 87",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948125,
+          52.387486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204774",
+        "label": "Wognumerstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954608,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207139",
+        "label": "Schellingwouderdijk 93",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955917,
+          52.386358
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207152",
+        "label": "Schellingwouderdijk 121",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947822,
+          52.387908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206942",
+        "label": "Schouwstraat 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95901,
+          52.38565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207183",
+        "label": "Schellingwouderdijk 187",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948108,
+          52.38769
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204777",
+        "label": "Wognumerstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947242,
+          52.387734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206935",
+        "label": "Schouwstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.38665
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202941",
+        "label": "Nieuwendammerdijk 543",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946942,
+          52.387371
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202923",
+        "label": "Nieuwendammerdijk 505",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946733,
+          52.38753
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202918",
+        "label": "Nieuwendammerdijk 499",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956851,
+          52.386306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207162",
+        "label": "Schellingwouderdijk 141",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947262,
+          52.387776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206936",
+        "label": "Schouwstraat 21",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948066,
+          52.3874
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204772",
+        "label": "Wognumerstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947832,
+          52.386092
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202670",
+        "label": "Nieuwendammerdijk 534",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959851,
+          52.385304
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207191",
+        "label": "Schellingwouderdijk 207",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959436,
+          52.385468
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207187",
+        "label": "Schellingwouderdijk 199",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948431,
+          52.386664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202939",
+        "label": "Nieuwendammerdijk 539",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947065,
+          52.387293
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202927",
+        "label": "Nieuwendammerdijk 509",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947204,
+          52.387217
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202929",
+        "label": "Nieuwendammerdijk 513",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948824,
+          52.38664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202944",
+        "label": "Nieuwendammerdijk 549",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949441,
+          52.386579
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202951",
+        "label": "Nieuwendammerdijk 563",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94734,
+          52.387128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202931",
+        "label": "Nieuwendammerdijk 517",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94929,
+          52.386603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202949",
+        "label": "Nieuwendammerdijk 559",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951744,
+          52.386462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207129",
+        "label": "Schellingwouderdijk 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948023,
+          52.387361
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204771",
+        "label": "Wognumerstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946839,
+          52.387492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202920",
+        "label": "Nieuwendammerdijk 501 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947742,
+          52.387895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206941",
+        "label": "Schouwstraat 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94703,
+          52.387355
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202926",
+        "label": "Nieuwendammerdijk 507 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946804,
+          52.387471
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202919",
+        "label": "Nieuwendammerdijk 501",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960959,
+          52.38294
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207232",
+        "label": "Ijdijk 81",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947784,
+          52.387467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206944",
+        "label": "Schouwstraat 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957155,
+          52.386227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207165",
+        "label": "Schellingwouderdijk 147",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94673,
+          52.387961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204791",
+        "label": "Wognumerstraat 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949069,
+          52.386625
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202947",
+        "label": "Nieuwendammerdijk 555",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947913,
+          52.387744
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206951",
+        "label": "Schouwstraat 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948608,
+          52.387763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206921",
+        "label": "Wognumerplantsoen 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959507,
+          52.385438
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207188",
+        "label": "Schellingwouderdijk 201",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949368,
+          52.38659
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202950",
+        "label": "Nieuwendammerdijk 561",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95206,
+          52.386498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207132",
+        "label": "Schellingwouderdijk 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960729,
+          52.384987
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207197",
+        "label": "Schellingwouderdijk 221",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947183,
+          52.387981
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204786",
+        "label": "Wognumerstraat 45",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955149,
+          52.386423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207145",
+        "label": "Schellingwouderdijk 105",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948686,
+          52.387777
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206922",
+        "label": "Wognumerplantsoen 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95872,
+          52.385735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207180",
+        "label": "Schellingwouderdijk 181",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954403,
+          52.386443
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207137",
+        "label": "Schellingwouderdijk 89",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947534,
+          52.387846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206938",
+        "label": "Schouwstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94761,
+          52.38731
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206926",
+        "label": "Schouwstraat 1",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947109,
+          52.387962
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204787",
+        "label": "Wognumerstraat 47",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957619,
+          52.386066
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207168",
+        "label": "Schellingwouderdijk 157",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956257,
+          52.386342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207155",
+        "label": "Schellingwouderdijk 127",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958139,
+          52.385922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207175",
+        "label": "Schellingwouderdijk 169",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947268,
+          52.387184
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202930",
+        "label": "Nieuwendammerdijk 515",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948099,
+          52.387446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204773",
+        "label": "Wognumerstraat 19",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957287,
+          52.386176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207166",
+        "label": "Schellingwouderdijk 149",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957927,
+          52.38599
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207172",
+        "label": "Schellingwouderdijk 163",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947203,
+          52.387638
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206933",
+        "label": "Schouwstraat 15",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95974,
+          52.38535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207190",
+        "label": "Schellingwouderdijk 205",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947849,
+          52.387136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204768",
+        "label": "Wognumerstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954902,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207142",
+        "label": "Schellingwouderdijk 99",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947886,
+          52.387167
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204769",
+        "label": "Wognumerstraat 11",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960903,
+          52.382966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207233",
+        "label": "Ijdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947131,
+          52.387258
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202928",
+        "label": "Nieuwendammerdijk 511",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951657,
+          52.386458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207128",
+        "label": "Schellingwouderdijk 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959271,
+          52.385525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207186",
+        "label": "Schellingwouderdijk 195",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.94661,
+          52.387623
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202916",
+        "label": "Nieuwendammerdijk 495",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946675,
+          52.387569
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202917",
+        "label": "Nieuwendammerdijk 497",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956448,
+          52.386321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207157",
+        "label": "Schellingwouderdijk 131",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959071,
+          52.385629
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207184",
+        "label": "Schellingwouderdijk 189",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948134,
+          52.386675
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202936",
+        "label": "Nieuwendammerdijk 533",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.951862,
+          52.386475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207130",
+        "label": "Schellingwouderdijk 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947304,
+          52.387539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206932",
+        "label": "Schouwstraat 13",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947043,
+          52.38795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204788",
+        "label": "Wognumerstraat 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.96112,
+          52.384847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207199",
+        "label": "Schellingwouderdijk 227",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948765,
+          52.386645
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202943",
+        "label": "Nieuwendammerdijk 547",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954143,
+          52.386477
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207134",
+        "label": "Schellingwouderdijk 83",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947444,
+          52.387045
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202933",
+        "label": "Nieuwendammerdijk 521",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948125,
+          52.387644
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204776",
+        "label": "Wognumerstraat 25",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961209,
+          52.382834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207228",
+        "label": "Ijdijk 73",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949022,
+          52.387931
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206997",
+        "label": "Monnikendammerweg 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947853,
+          52.387728
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206950",
+        "label": "Schouwstraat 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956592,
+          52.386302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207159",
+        "label": "Schellingwouderdijk 135",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947388,
+          52.387085
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202932",
+        "label": "Nieuwendammerdijk 519",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948823,
+          52.387805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206924",
+        "label": "Wognumerplantsoen 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946987,
+          52.387335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202925",
+        "label": "Nieuwendammerdijk 507",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958202,
+          52.3859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207176",
+        "label": "Schellingwouderdijk 171",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947593,
+          52.38787
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206939",
+        "label": "Schouwstraat 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947422,
+          52.387452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206930",
+        "label": "Schouwstraat 9",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959606,
+          52.385403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207189",
+        "label": "Schellingwouderdijk 203",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949514,
+          52.386562
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202952",
+        "label": "Nieuwendammerdijk 565",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947464,
+          52.387416
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206929",
+        "label": "Schouwstraat 7",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948355,
+          52.386666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202938",
+        "label": "Nieuwendammerdijk 537",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947454,
+          52.387842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206937",
+        "label": "Schouwstraat 23",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946973,
+          52.387933
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204789",
+        "label": "Wognumerstraat 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947742,
+          52.387501
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206945",
+        "label": "Schouwstraat 6",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955846,
+          52.386371
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207151",
+        "label": "Schellingwouderdijk 119",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.955264,
+          52.386418
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207146",
+        "label": "Schellingwouderdijk 107",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948358,
+          52.387842
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204723",
+        "label": "Wognumerstraat 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946799,
+          52.387942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204790",
+        "label": "Wognumerstraat 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958617,
+          52.385773
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207179",
+        "label": "Schellingwouderdijk 179",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957986,
+          52.38597
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207173",
+        "label": "Schellingwouderdijk 165",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949044,
+          52.387892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206996",
+        "label": "Monnikendammerweg 27",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958398,
+          52.385837
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207177",
+        "label": "Schellingwouderdijk 175",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946903,
+          52.387452
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202922",
+        "label": "Nieuwendammerdijk 503 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948995,
+          52.387974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206998",
+        "label": "Monnikendammerweg 31",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948224,
+          52.386657
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202937",
+        "label": "Nieuwendammerdijk 535",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954796,
+          52.386434
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207141",
+        "label": "Schellingwouderdijk 97",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956811,
+          52.38632
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207161",
+        "label": "Schellingwouderdijk 139",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.95805,
+          52.385951
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207174",
+        "label": "Schellingwouderdijk 167",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960216,
+          52.385195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207194",
+        "label": "Schellingwouderdijk 213 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947693,
+          52.387694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206948",
+        "label": "Schouwstraat 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954982,
+          52.386429
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207143",
+        "label": "Schellingwouderdijk 101",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949156,
+          52.386615
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202948",
+        "label": "Nieuwendammerdijk 557",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958523,
+          52.385801
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207178",
+        "label": "Schellingwouderdijk 177",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957447,
+          52.386114
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207167",
+        "label": "Schellingwouderdijk 151",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9484069999999996,
+          52.38775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204721",
+        "label": "Wognumerstraat 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957748,
+          52.386033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207169",
+        "label": "Schellingwouderdijk 159",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947669,
+          52.387885
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206940",
+        "label": "Schouwstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947641,
+          52.38756
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206947",
+        "label": "Schouwstraat 10",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947907,
+          52.388024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204778",
+        "label": "Wognumerstraat 29",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961084,
+          52.382889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207230",
+        "label": "Ijdijk 77",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954226,
+          52.38647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207135",
+        "label": "Schellingwouderdijk 85",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949288,
+          52.38747
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206920",
+        "label": "Wognumerplantsoen 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9588,
+          52.385706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207181",
+        "label": "Schellingwouderdijk 183",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.957011,
+          52.386238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207164",
+        "label": "Schellingwouderdijk 145",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947221,
+          52.387685
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206934",
+        "label": "Schouwstraat 17",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.954706,
+          52.386436
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207140",
+        "label": "Schellingwouderdijk 95",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.949008,
+          52.386626
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202946",
+        "label": "Nieuwendammerdijk 553",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.956328,
+          52.386337
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207156",
+        "label": "Schellingwouderdijk 129",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959926,
+          52.385262
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207192",
+        "label": "Schellingwouderdijk 209",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960274,
+          52.38516
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207195",
+        "label": "Schellingwouderdijk 213 b",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.960098,
+          52.385225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207193",
+        "label": "Schellingwouderdijk 213",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947354,
+          52.388017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204785",
+        "label": "Wognumerstraat 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.961143,
+          52.38286
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207229",
+        "label": "Ijdijk 75",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.9478,
+          52.386211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202669",
+        "label": "Nieuwendammerdijk 532",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.948435,
+          52.387711
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A204720",
+        "label": "Wognumerstraat 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946987,
+          52.387395
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202924",
+        "label": "Nieuwendammerdijk 505 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.947516,
+          52.387386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A206928",
+        "label": "Schouwstraat 5",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.946559,
+          52.387658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A202915",
+        "label": "Nieuwendammerdijk 493",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.958836,
+          52.380839
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207312",
+        "label": "IJdijk 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.959761,
+          52.381202
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207313",
+        "label": "IJdijk 57",
+        "year": "1943"
+      }
+    }
+  ]
+}

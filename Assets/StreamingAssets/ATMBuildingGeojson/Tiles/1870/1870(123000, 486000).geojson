@@ -1,0 +1,695 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920625,
+          52.36226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227508",
+        "label": "ZZ 138 (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920625,
+          52.36226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227509",
+        "label": "ZZ 138 a (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92599,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227834",
+        "label": "T 15 (Funen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917944,
+          52.368741
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227838",
+        "label": "U 481 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918297,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227839",
+        "label": "U 483 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918297,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227840",
+        "label": "U 483 b (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918145,
+          52.368791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227841",
+        "label": "U 483 e (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.368881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227842",
+        "label": "U 483 c (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.368881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227843",
+        "label": "U 483 d (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919632,
+          52.369869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228007",
+        "label": "T 251 b (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923778,
+          52.368895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228330",
+        "label": "T 27 a (Oostenburger Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923719,
+          52.368857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228331",
+        "label": "T 27 b (Oostenburger Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923341,
+          52.368614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228332",
+        "label": "T 34 b (Oostenbr Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923619,
+          52.369621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228333",
+        "label": "T 149 a (Oostb dw Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921415,
+          52.369099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228334",
+        "label": "T 219 b (Oostenburgergracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923431,
+          52.368793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228335",
+        "label": "T 87 a (Nieuwe Oostenb Middenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923278,
+          52.368944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228335",
+        "label": "T 87 a (Nieuwe Oostenb Middenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923813,
+          52.369509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228336",
+        "label": "T 90 a (Oostenburgr Midden Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.369131
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228337",
+        "label": "T 105 (Oostenbr Midden Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.369542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228338",
+        "label": "T 146 (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923195,
+          52.369318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228339",
+        "label": "T 139 a (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923,
+          52.369533
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228341",
+        "label": "T 188 a (Oostenbr Voorstrt)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923,
+          52.369533
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228342",
+        "label": "T 188 b (Oostenb Voorstrt)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920625,
+          52.36226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227508",
+        "label": "ZZ 138 (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920625,
+          52.36226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227509",
+        "label": "ZZ 138 a (Buitensingel)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92599,
+          52.367365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227834",
+        "label": "T 15 (Funen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.917944,
+          52.368741
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227838",
+        "label": "U 481 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918297,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227839",
+        "label": "U 483 a (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918297,
+          52.368957
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227840",
+        "label": "U 483 b (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918145,
+          52.368791
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227841",
+        "label": "U 483 e (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.368881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227842",
+        "label": "U 483 c (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918218,
+          52.368881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227843",
+        "label": "U 483 d (Hoogte van de Kadijk)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919632,
+          52.369869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228007",
+        "label": "T 251 b (Kleine Wittenburgerstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923778,
+          52.368895
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228330",
+        "label": "T 27 a (Oostenburger Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923719,
+          52.368857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228331",
+        "label": "T 27 b (Oostenburger Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923341,
+          52.368614
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228332",
+        "label": "T 34 b (Oostenbr Achterstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923619,
+          52.369621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228333",
+        "label": "T 149 a (Oostb dw Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.921415,
+          52.369099
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228334",
+        "label": "T 219 b (Oostenburgergracht)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923431,
+          52.368793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228335",
+        "label": "T 87 a (Nieuwe Oostenb Middenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923278,
+          52.368944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228335",
+        "label": "T 87 a (Nieuwe Oostenb Middenstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923813,
+          52.369509
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228336",
+        "label": "T 90 a (Oostenburgr Midden Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.922979,
+          52.369131
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228337",
+        "label": "T 105 (Oostenbr Midden Straat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923503,
+          52.369542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228338",
+        "label": "T 146 (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923195,
+          52.369318
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228339",
+        "label": "T 139 a (Oostenbr Voorstraat)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923,
+          52.369533
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228341",
+        "label": "T 188 a (Oostenbr Voorstrt)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923,
+          52.369533
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A228342",
+        "label": "T 188 b (Oostenb Voorstrt)",
+        "year": "1870"
+      }
+    }
+  ]
+}

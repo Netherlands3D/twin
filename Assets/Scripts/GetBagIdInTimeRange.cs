@@ -10,11 +10,11 @@ namespace Netherlands3D.Twin
         [SerializeField] private TextAsset csv;
         [SerializeField] private HiddenBagIds hiddenBagIds;
         private Dictionary<string, DateTime> availableBagIdStartTimes = new();
-        private BagIdHider bagIdHider;
+        private ATMBagIdHider bagIdHider;
 
         private void Awake()
         {
-            bagIdHider = GetComponent<BagIdHider>();
+            bagIdHider = GetComponent<ATMBagIdHider>();
         }
 
         private void OnEnable()
@@ -40,6 +40,18 @@ namespace Netherlands3D.Twin
             }
 
             bagIdHider.UpdateHiddenBuildings(true);
+        }
+
+        public bool IsBagIdHidden(string bagId)
+        {
+            if(availableBagIdStartTimes.ContainsKey(bagId))
+            {
+                DateTime buildingTime = availableBagIdStartTimes[bagId];
+                DateTime projectTime = ProjectData.Current.CurrentDateTime;
+                if (projectTime < buildingTime)
+                    return true;
+            }
+            return false;
         }
 
         private void Start()

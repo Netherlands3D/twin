@@ -1,0 +1,3725 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918844,
+          52.350618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211966",
+        "label": "Ringdijk 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92638,
+          52.345011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181911",
+        "label": "Fahrenheitstraat 99 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923824,
+          52.343106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169822",
+        "label": "Dr. Leijdsstraat 2 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924274,
+          52.343086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169924",
+        "label": "De Wetstraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924212,
+          52.34306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169926",
+        "label": "De Wetstraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924155,
+          52.34303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169928",
+        "label": "De Wetstraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918462,
+          52.350378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181386",
+        "label": "Schoollaan 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918595,
+          52.350283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181389",
+        "label": "Schoollaan 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918965,
+          52.35053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181463",
+        "label": "Schagerlaan 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919005,
+          52.350505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181465",
+        "label": "Schagerlaan 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919117,
+          52.350441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181469",
+        "label": "Schagerlaan 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919449,
+          52.350225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181478",
+        "label": "Schagerlaan 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919592,
+          52.350132
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181481",
+        "label": "Schagerlaan 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919758,
+          52.350022
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181484",
+        "label": "Schagerlaan 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923883,
+          52.343136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181913",
+        "label": "Fahrenheitstraat 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923929,
+          52.34317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181915",
+        "label": "Fahrenheitstraat 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.343203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181917",
+        "label": "Fahrenheitstraat 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92404,
+          52.343234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181919",
+        "label": "Fahrenheitstraat 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924093,
+          52.343265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181921",
+        "label": "Fahrenheitstraat 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924147,
+          52.343297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181923",
+        "label": "Fahrenheitstraat 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924193,
+          52.34333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181925",
+        "label": "Fahrenheitstraat 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924243,
+          52.343359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181927",
+        "label": "Fahrenheitstraat 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924299,
+          52.343386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181929",
+        "label": "Fahrenheitstraat 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.343419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181931",
+        "label": "Fahrenheitstraat 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92441,
+          52.343453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181933",
+        "label": "Fahrenheitstraat 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924463,
+          52.343486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181935",
+        "label": "Fahrenheitstraat 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92452,
+          52.343515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181937",
+        "label": "Fahrenheitstraat 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924574,
+          52.343553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181939",
+        "label": "Fahrenheitstraat 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924636,
+          52.343596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181941",
+        "label": "Fahrenheitstraat 65",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92469,
+          52.343634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181943",
+        "label": "Fahrenheitstraat 67",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924759,
+          52.343671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181945",
+        "label": "Fahrenheitstraat 69",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925083,
+          52.343865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181947",
+        "label": "Fahrenheitstraat 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925155,
+          52.343904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181949",
+        "label": "Fahrenheitstraat 73",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925206,
+          52.343943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181951",
+        "label": "Fahrenheitstraat 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925285,
+          52.343982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181953",
+        "label": "Fahrenheitstraat 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925362,
+          52.344033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181955",
+        "label": "Fahrenheitstraat 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925436,
+          52.344065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181957",
+        "label": "Fahrenheitstraat 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925481,
+          52.344108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181959",
+        "label": "Fahrenheitstraat 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925574,
+          52.344152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181961",
+        "label": "Fahrenheitstraat 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92564,
+          52.344195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181963",
+        "label": "Fahrenheitstraat 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926201,
+          52.344532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181970",
+        "label": "Fahrenheitstraat 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926445,
+          52.344673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181972",
+        "label": "Fahrenheitstraat 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92651,
+          52.344716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181974",
+        "label": "Fahrenheitstraat 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926564,
+          52.344754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181976",
+        "label": "Fahrenheitstraat 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926604,
+          52.344788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181978",
+        "label": "Fahrenheitstraat 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92668,
+          52.344828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181980",
+        "label": "Fahrenheitstraat 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927065,
+          52.345053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181982",
+        "label": "Fahrenheitstraat 101",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924679,
+          52.343823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181985",
+        "label": "Von Guerickestraat 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924756,
+          52.343778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181987",
+        "label": "Von Guerickestraat 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924842,
+          52.343726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181989",
+        "label": "Von Guerickestraat 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925311,
+          52.343432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181991",
+        "label": "Von Guerickestraat 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924308,
+          52.343118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181994",
+        "label": "Fahrenheitstraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924379,
+          52.343154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181996",
+        "label": "Fahrenheitstraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924437,
+          52.343178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181998",
+        "label": "Fahrenheitstraat 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924494,
+          52.343211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182000",
+        "label": "Fahrenheitstraat 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924543,
+          52.343238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182002",
+        "label": "Fahrenheitstraat 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924594,
+          52.343275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182004",
+        "label": "Fahrenheitstraat 52",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924648,
+          52.343311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182006",
+        "label": "Fahrenheitstraat 54",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924701,
+          52.343342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182008",
+        "label": "Fahrenheitstraat 56",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924767,
+          52.343373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182010",
+        "label": "Fahrenheitstraat 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924822,
+          52.343404
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182012",
+        "label": "Fahrenheitstraat 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924877,
+          52.343435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182014",
+        "label": "Fahrenheitstraat 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924923,
+          52.343464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182016",
+        "label": "Fahrenheitstraat 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924972,
+          52.343502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182018",
+        "label": "Fahrenheitstraat 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.343539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182020",
+        "label": "Fahrenheitstraat 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925096,
+          52.343563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182022",
+        "label": "Fahrenheitstraat 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925321,
+          52.343697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182024",
+        "label": "Fahrenheitstraat 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925382,
+          52.343735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182026",
+        "label": "Fahrenheitstraat 74",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925433,
+          52.343776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182028",
+        "label": "Fahrenheitstraat 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925505,
+          52.343814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182030",
+        "label": "Fahrenheitstraat 78",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925574,
+          52.343859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182032",
+        "label": "Fahrenheitstraat 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925636,
+          52.343886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182034",
+        "label": "Fahrenheitstraat 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925695,
+          52.343922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182036",
+        "label": "Fahrenheitstraat 84",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925761,
+          52.343968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182038",
+        "label": "Fahrenheitstraat 86",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925821,
+          52.343996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182040",
+        "label": "Fahrenheitstraat 88",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92588,
+          52.344031
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182042",
+        "label": "Fahrenheitstraat 90",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926373,
+          52.344332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182046",
+        "label": "Fahrenheitstraat 96",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926423,
+          52.344364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182048",
+        "label": "Fahrenheitstraat 98",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926474,
+          52.344392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182050",
+        "label": "Fahrenheitstraat 100",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926541,
+          52.344432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182052",
+        "label": "Fahrenheitstraat 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926598,
+          52.344466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182054",
+        "label": "Fahrenheitstraat 104",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926653,
+          52.344498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182056",
+        "label": "Fahrenheitstraat 106",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926712,
+          52.344532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182058",
+        "label": "Fahrenheitstraat 108",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926767,
+          52.344563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182060",
+        "label": "Fahrenheitstraat 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926825,
+          52.3446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182062",
+        "label": "Fahrenheitstraat 112",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926883,
+          52.344636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182064",
+        "label": "Fahrenheitstraat 114",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927223,
+          52.344832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182066",
+        "label": "Fahrenheitstraat 120",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927277,
+          52.344869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182068",
+        "label": "Fahrenheitstraat 122",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927327,
+          52.344904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182070",
+        "label": "Fahrenheitstraat 124",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927395,
+          52.344935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182072",
+        "label": "Fahrenheitstraat 126",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927445,
+          52.344971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182074",
+        "label": "Fahrenheitstraat 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927511,
+          52.344999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182076",
+        "label": "Fahrenheitstraat 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924877,
+          52.343037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182078",
+        "label": "Reaumurstraat 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924952,
+          52.343072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182080",
+        "label": "Reaumurstraat 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925016,
+          52.343115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182082",
+        "label": "Reaumurstraat 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925077,
+          52.343153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182084",
+        "label": "Reaumurstraat 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92516,
+          52.343198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182086",
+        "label": "Reaumurstraat 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925243,
+          52.343242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182088",
+        "label": "Reaumurstraat 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.343278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182090",
+        "label": "Reaumurstraat 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92535,
+          52.343313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182092",
+        "label": "Reaumurstraat 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925423,
+          52.343367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182094",
+        "label": "Reaumurstraat 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925639,
+          52.343226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182106",
+        "label": "Von Guerickestraat 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925681,
+          52.343191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182108",
+        "label": "Von Guerickestraat 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925739,
+          52.34316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182110",
+        "label": "Von Guerickestraat 84",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925803,
+          52.343126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182112",
+        "label": "Von Guerickestraat 86",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925852,
+          52.343093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182114",
+        "label": "Von Guerickestraat 88",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925902,
+          52.343064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182116",
+        "label": "Von Guerickestraat 90",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.34303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182118",
+        "label": "Von Guerickestraat 92",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925526,
+          52.343593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182122",
+        "label": "Von Guerickestraat 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925582,
+          52.343547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182124",
+        "label": "Von Guerickestraat 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925644,
+          52.343507
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182126",
+        "label": "Von Guerickestraat 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925715,
+          52.343466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182128",
+        "label": "Von Guerickestraat 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925765,
+          52.343425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182130",
+        "label": "Von Guerickestraat 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92584,
+          52.343389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182132",
+        "label": "Von Guerickestraat 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925916,
+          52.343342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182134",
+        "label": "Von Guerickestraat 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925971,
+          52.343303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182136",
+        "label": "Von Guerickestraat 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926027,
+          52.343266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182138",
+        "label": "Von Guerickestraat 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926096,
+          52.343227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182140",
+        "label": "Von Guerickestraat 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926162,
+          52.343183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182142",
+        "label": "Von Guerickestraat 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926219,
+          52.343148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182144",
+        "label": "Von Guerickestraat 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920754,
+          52.351414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211942",
+        "label": "Ringdijk 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920462,
+          52.351308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211944",
+        "label": "Ringdijk 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918672,
+          52.350537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211968",
+        "label": "Ringdijk 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918367,
+          52.350415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215289",
+        "label": "Ringdijk 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918844,
+          52.350618
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211966",
+        "label": "Ringdijk 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92638,
+          52.345011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181911",
+        "label": "Fahrenheitstraat 99 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923824,
+          52.343106
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169822",
+        "label": "Dr. Leijdsstraat 2 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924274,
+          52.343086
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169924",
+        "label": "De Wetstraat 40",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924212,
+          52.34306
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169926",
+        "label": "De Wetstraat 38",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924155,
+          52.34303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169928",
+        "label": "De Wetstraat 36",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918462,
+          52.350378
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181386",
+        "label": "Schoollaan 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918595,
+          52.350283
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181389",
+        "label": "Schoollaan 2",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918965,
+          52.35053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181463",
+        "label": "Schagerlaan 1",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919005,
+          52.350505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181465",
+        "label": "Schagerlaan 3",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919117,
+          52.350441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181469",
+        "label": "Schagerlaan 7",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919449,
+          52.350225
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181478",
+        "label": "Schagerlaan 23",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919592,
+          52.350132
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181481",
+        "label": "Schagerlaan 27",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.919758,
+          52.350022
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181484",
+        "label": "Schagerlaan 29",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923883,
+          52.343136
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181913",
+        "label": "Fahrenheitstraat 37",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923929,
+          52.34317
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181915",
+        "label": "Fahrenheitstraat 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.923987,
+          52.343203
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181917",
+        "label": "Fahrenheitstraat 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92404,
+          52.343234
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181919",
+        "label": "Fahrenheitstraat 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924093,
+          52.343265
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181921",
+        "label": "Fahrenheitstraat 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924147,
+          52.343297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181923",
+        "label": "Fahrenheitstraat 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924193,
+          52.34333
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181925",
+        "label": "Fahrenheitstraat 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924243,
+          52.343359
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181927",
+        "label": "Fahrenheitstraat 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924299,
+          52.343386
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181929",
+        "label": "Fahrenheitstraat 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92436,
+          52.343419
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181931",
+        "label": "Fahrenheitstraat 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92441,
+          52.343453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181933",
+        "label": "Fahrenheitstraat 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924463,
+          52.343486
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181935",
+        "label": "Fahrenheitstraat 59",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92452,
+          52.343515
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181937",
+        "label": "Fahrenheitstraat 61",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924574,
+          52.343553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181939",
+        "label": "Fahrenheitstraat 63",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924636,
+          52.343596
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181941",
+        "label": "Fahrenheitstraat 65",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92469,
+          52.343634
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181943",
+        "label": "Fahrenheitstraat 67",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924759,
+          52.343671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181945",
+        "label": "Fahrenheitstraat 69",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925083,
+          52.343865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181947",
+        "label": "Fahrenheitstraat 71",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925155,
+          52.343904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181949",
+        "label": "Fahrenheitstraat 73",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925206,
+          52.343943
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181951",
+        "label": "Fahrenheitstraat 75",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925285,
+          52.343982
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181953",
+        "label": "Fahrenheitstraat 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925362,
+          52.344033
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181955",
+        "label": "Fahrenheitstraat 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925436,
+          52.344065
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181957",
+        "label": "Fahrenheitstraat 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925481,
+          52.344108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181959",
+        "label": "Fahrenheitstraat 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925574,
+          52.344152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181961",
+        "label": "Fahrenheitstraat 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92564,
+          52.344195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181963",
+        "label": "Fahrenheitstraat 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926201,
+          52.344532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181970",
+        "label": "Fahrenheitstraat 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926445,
+          52.344673
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181972",
+        "label": "Fahrenheitstraat 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92651,
+          52.344716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181974",
+        "label": "Fahrenheitstraat 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926564,
+          52.344754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181976",
+        "label": "Fahrenheitstraat 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926604,
+          52.344788
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181978",
+        "label": "Fahrenheitstraat 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92668,
+          52.344828
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181980",
+        "label": "Fahrenheitstraat 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927065,
+          52.345053
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181982",
+        "label": "Fahrenheitstraat 101",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924679,
+          52.343823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181985",
+        "label": "Von Guerickestraat 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924756,
+          52.343778
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181987",
+        "label": "Von Guerickestraat 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924842,
+          52.343726
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181989",
+        "label": "Von Guerickestraat 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925311,
+          52.343432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181991",
+        "label": "Von Guerickestraat 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924308,
+          52.343118
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181994",
+        "label": "Fahrenheitstraat 42",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924379,
+          52.343154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181996",
+        "label": "Fahrenheitstraat 44",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924437,
+          52.343178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A181998",
+        "label": "Fahrenheitstraat 46",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924494,
+          52.343211
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182000",
+        "label": "Fahrenheitstraat 48",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924543,
+          52.343238
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182002",
+        "label": "Fahrenheitstraat 50",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924594,
+          52.343275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182004",
+        "label": "Fahrenheitstraat 52",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924648,
+          52.343311
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182006",
+        "label": "Fahrenheitstraat 54",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924701,
+          52.343342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182008",
+        "label": "Fahrenheitstraat 56",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924767,
+          52.343373
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182010",
+        "label": "Fahrenheitstraat 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924822,
+          52.343404
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182012",
+        "label": "Fahrenheitstraat 60",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924877,
+          52.343435
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182014",
+        "label": "Fahrenheitstraat 62",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924923,
+          52.343464
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182016",
+        "label": "Fahrenheitstraat 64",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924972,
+          52.343502
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182018",
+        "label": "Fahrenheitstraat 66",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925038,
+          52.343539
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182020",
+        "label": "Fahrenheitstraat 68",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925096,
+          52.343563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182022",
+        "label": "Fahrenheitstraat 70",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925321,
+          52.343697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182024",
+        "label": "Fahrenheitstraat 72",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925382,
+          52.343735
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182026",
+        "label": "Fahrenheitstraat 74",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925433,
+          52.343776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182028",
+        "label": "Fahrenheitstraat 76",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925505,
+          52.343814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182030",
+        "label": "Fahrenheitstraat 78",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925574,
+          52.343859
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182032",
+        "label": "Fahrenheitstraat 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925636,
+          52.343886
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182034",
+        "label": "Fahrenheitstraat 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925695,
+          52.343922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182036",
+        "label": "Fahrenheitstraat 84",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925761,
+          52.343968
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182038",
+        "label": "Fahrenheitstraat 86",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925821,
+          52.343996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182040",
+        "label": "Fahrenheitstraat 88",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92588,
+          52.344031
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182042",
+        "label": "Fahrenheitstraat 90",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926373,
+          52.344332
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182046",
+        "label": "Fahrenheitstraat 96",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926423,
+          52.344364
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182048",
+        "label": "Fahrenheitstraat 98",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926474,
+          52.344392
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182050",
+        "label": "Fahrenheitstraat 100",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926541,
+          52.344432
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182052",
+        "label": "Fahrenheitstraat 102",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926598,
+          52.344466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182054",
+        "label": "Fahrenheitstraat 104",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926653,
+          52.344498
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182056",
+        "label": "Fahrenheitstraat 106",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926712,
+          52.344532
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182058",
+        "label": "Fahrenheitstraat 108",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926767,
+          52.344563
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182060",
+        "label": "Fahrenheitstraat 110",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926825,
+          52.3446
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182062",
+        "label": "Fahrenheitstraat 112",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926883,
+          52.344636
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182064",
+        "label": "Fahrenheitstraat 114",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927223,
+          52.344832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182066",
+        "label": "Fahrenheitstraat 120",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927277,
+          52.344869
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182068",
+        "label": "Fahrenheitstraat 122",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927327,
+          52.344904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182070",
+        "label": "Fahrenheitstraat 124",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927395,
+          52.344935
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182072",
+        "label": "Fahrenheitstraat 126",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927445,
+          52.344971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182074",
+        "label": "Fahrenheitstraat 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.927511,
+          52.344999
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182076",
+        "label": "Fahrenheitstraat 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924877,
+          52.343037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182078",
+        "label": "Reaumurstraat 39",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.924952,
+          52.343072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182080",
+        "label": "Reaumurstraat 41",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925016,
+          52.343115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182082",
+        "label": "Reaumurstraat 43",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925077,
+          52.343153
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182084",
+        "label": "Reaumurstraat 45",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92516,
+          52.343198
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182086",
+        "label": "Reaumurstraat 47",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925243,
+          52.343242
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182088",
+        "label": "Reaumurstraat 49",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925296,
+          52.343278
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182090",
+        "label": "Reaumurstraat 51",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92535,
+          52.343313
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182092",
+        "label": "Reaumurstraat 53",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925423,
+          52.343367
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182094",
+        "label": "Reaumurstraat 55",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925639,
+          52.343226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182106",
+        "label": "Von Guerickestraat 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925681,
+          52.343191
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182108",
+        "label": "Von Guerickestraat 82",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925739,
+          52.34316
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182110",
+        "label": "Von Guerickestraat 84",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925803,
+          52.343126
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182112",
+        "label": "Von Guerickestraat 86",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925852,
+          52.343093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182114",
+        "label": "Von Guerickestraat 88",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925902,
+          52.343064
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182116",
+        "label": "Von Guerickestraat 90",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925955,
+          52.34303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182118",
+        "label": "Von Guerickestraat 92",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925526,
+          52.343593
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182122",
+        "label": "Von Guerickestraat 77",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925582,
+          52.343547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182124",
+        "label": "Von Guerickestraat 79",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925644,
+          52.343507
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182126",
+        "label": "Von Guerickestraat 81",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925715,
+          52.343466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182128",
+        "label": "Von Guerickestraat 83",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925765,
+          52.343425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182130",
+        "label": "Von Guerickestraat 85",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.92584,
+          52.343389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182132",
+        "label": "Von Guerickestraat 87",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925916,
+          52.343342
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182134",
+        "label": "Von Guerickestraat 89",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.925971,
+          52.343303
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182136",
+        "label": "Von Guerickestraat 91",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926027,
+          52.343266
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182138",
+        "label": "Von Guerickestraat 93",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926096,
+          52.343227
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182140",
+        "label": "Von Guerickestraat 95",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926162,
+          52.343183
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182142",
+        "label": "Von Guerickestraat 97",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.926219,
+          52.343148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A182144",
+        "label": "Von Guerickestraat 99",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920754,
+          52.351414
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211942",
+        "label": "Ringdijk 57",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.920462,
+          52.351308
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211944",
+        "label": "Ringdijk 58",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918672,
+          52.350537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A211968",
+        "label": "Ringdijk 80",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.918367,
+          52.350415
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A215289",
+        "label": "Ringdijk 85",
+        "year": "1909"
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
-    public class BagIdHider : MonoBehaviour
+    public class ATMBagIdHider : MonoBehaviour
     {
         [SerializeField] private HiddenBagIds data;
         public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin
         {
             buildingColors.Clear();
             foreach (string id in ids)
-                buildingColors.Add(id, Color.clear);
+                buildingColors.Add(id, new Color(0,2, 0, 0)); //for now a 2 mapping in the y channel to have the shader recognise this as the position vertex key ( use Color.clear to hide entirely)
             ColorSetLayer = new ColorSetLayer(-2, buildingColors);
         }
 

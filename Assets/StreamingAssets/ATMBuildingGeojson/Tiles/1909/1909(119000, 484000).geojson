@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859015,
+          52.346537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135034",
+        "label": "Amstelveenscheweg 217",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859137,
+          52.346564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135035",
+        "label": "Amstelveenscheweg 215",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859015,
+          52.346537
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135034",
+        "label": "Amstelveenscheweg 217",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.859137,
+          52.346564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135035",
+        "label": "Amstelveenscheweg 215",
+        "year": "1909"
+      }
+    }
+  ]
+}

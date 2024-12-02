@@ -1,0 +1,7085 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887771,
+          52.357643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138368",
+        "label": "Jacob van Campenstraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881281,
+          52.360542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131536",
+        "label": "Pieter Corneliszoon Hooftstraat 62",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879698,
+          52.360113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131481",
+        "label": "Pieter Corneliszoon Hooftstraat 100",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878158,
+          52.359456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131790",
+        "label": "Pieter Corneliszoon Hooftstraat 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131694",
+        "label": "Pieter Corneliszoon Hooftstraat 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879506,
+          52.360693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171994",
+        "label": "Schapenburgerpad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881341,
+          52.360558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131539",
+        "label": "Pieter Corneliszoon Hooftstraat 60",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888005,
+          52.354865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170519",
+        "label": "Gerard Doustraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880509,
+          52.360087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131688",
+        "label": "Pieter Corneliszoon Hooftstraat 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87792,
+          52.359643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131421",
+        "label": "Pieter Corneliszoon Hooftstraat 142",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880857,
+          52.360423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131521",
+        "label": "Pieter Corneliszoon Hooftstraat 72",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885836,
+          52.359102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170339",
+        "label": "Mennonietenpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883057,
+          52.360763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131261",
+        "label": "Hooftstraat 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887132,
+          52.358764
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138319",
+        "label": "Ruysdaelkade 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878763,
+          52.360453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171986",
+        "label": "Schapenburgerpad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88719,
+          52.357668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138356",
+        "label": "Jacob van Campenstraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882042,
+          52.360742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131563",
+        "label": "Pieter Corneliszoon Hooftstraat 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878093,
+          52.359684
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131427",
+        "label": "Pieter Corneliszoon Hooftstraat 138",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884993,
+          52.359966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170323",
+        "label": "Stadhouderskade 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878598,
+          52.359572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131775",
+        "label": "Pieter Corneliszoon Hooftstraat 117",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880239,
+          52.360467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170310",
+        "label": "Schapenburgerpad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88748,
+          52.357654
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138362",
+        "label": "Jacob van Campenstraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88027,
+          52.360256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131500",
+        "label": "Pieter Corneliszoon Hooftstraat 86",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883926,
+          52.358722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170351",
+        "label": "Mennonietenpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878413,
+          52.359525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131781",
+        "label": "Pieter Corneliszoon Hooftstraat 121",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879938,
+          52.360172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131490",
+        "label": "Pieter Corneliszoon Hooftstraat 94",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879366,
+          52.360017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131469",
+        "label": "Pieter Corneliszoon Hooftstraat 108",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882145,
+          52.360535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131611",
+        "label": "Pieter Corneliszoon Hooftstraat 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88137,
+          52.35804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170366",
+        "label": "Mennonietenpad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884366,
+          52.360774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131285",
+        "label": "Stadhouderskade 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881202,
+          52.360511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131533",
+        "label": "Pieter Corneliszoon Hooftstraat 64",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887622,
+          52.35765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138365",
+        "label": "Jacob van Campenstraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131620",
+        "label": "Pieter Corneliszoon Hooftstraat 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131515",
+        "label": "Pieter Corneliszoon Hooftstraat 76",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879272,
+          52.359998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131466",
+        "label": "Pieter Corneliszoon Hooftstraat 110",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884919,
+          52.360003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170321",
+        "label": "Stadhouderskade 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881436,
+          52.360571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131542",
+        "label": "Pieter Corneliszoon Hooftstraat 58",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879454,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131472",
+        "label": "Pieter Corneliszoon Hooftstraat 106",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875421,
+          52.358984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131472",
+        "label": "Pieter Corneliszoon Hooftstraat 106",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.360772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131566",
+        "label": "Pieter Corneliszoon Hooftstraat 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878507,
+          52.359547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131778",
+        "label": "Pieter Corneliszoon Hooftstraat 119",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878847,
+          52.359878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131451",
+        "label": "Pieter Corneliszoon Hooftstraat 120",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880032,
+          52.359974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131706",
+        "label": "Pieter Corneliszoon Hooftstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881608,
+          52.36062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131548",
+        "label": "Pieter Corneliszoon Hooftstraat 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88806,
+          52.357621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138374",
+        "label": "Jacob van Campenstraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879537,
+          52.36007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131475",
+        "label": "Pieter Corneliszoon Hooftstraat 104",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131682",
+        "label": "Pieter Corneliszoon Hooftstraat 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880432,
+          52.360301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131506",
+        "label": "Pieter Corneliszoon Hooftstraat 82",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878235,
+          52.359474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131787",
+        "label": "Pieter Corneliszoon Hooftstraat 125",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887357,
+          52.357664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138359",
+        "label": "Jacob van Campenstraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887137,
+          52.358878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138313",
+        "label": "Ruysdaelkade 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879103,
+          52.359954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131460",
+        "label": "Pieter Corneliszoon Hooftstraat 114",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881797,
+          52.360442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131623",
+        "label": "Pieter Corneliszoon Hooftstraat 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878969,
+          52.359669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131763",
+        "label": "Pieter Corneliszoon Hooftstraat 109",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887923,
+          52.357637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138371",
+        "label": "Jacob van Campenstraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880352,
+          52.360275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131503",
+        "label": "Pieter Corneliszoon Hooftstraat 84",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887134,
+          52.358824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138316",
+        "label": "Ruysdaelkade 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880957,
+          52.360441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131524",
+        "label": "Pieter Corneliszoon Hooftstraat 70",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885111,
+          52.359922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170325",
+        "label": "Stadhouderskade 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87927,
+          52.360237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170313",
+        "label": "Schapenburgerpad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887416,
+          52.359138
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138298",
+        "label": "Ruysdaelkade 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878324,
+          52.359492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131784",
+        "label": "Pieter Corneliszoon Hooftstraat 123",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888083,
+          52.354881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170521",
+        "label": "Gerard Doustraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878929,
+          52.359898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131454",
+        "label": "Pieter Corneliszoon Hooftstraat 118",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887148,
+          52.358942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138310",
+        "label": "Ruysdaelkade 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878795,
+          52.359616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131769",
+        "label": "Pieter Corneliszoon Hooftstraat 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88791,
+          52.360816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A79479",
+        "label": "Schans 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88577,
+          52.359185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170337",
+        "label": "Mennonietenpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879019,
+          52.359928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131457",
+        "label": "Pieter Corneliszoon Hooftstraat 116",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87918,
+          52.359978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131463",
+        "label": "Pieter Corneliszoon Hooftstraat 112",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881518,
+          52.360591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131545",
+        "label": "Pieter Corneliszoon Hooftstraat 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887324,
+          52.359115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138301",
+        "label": "Ruysdaelkade 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87788,
+          52.359389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131799",
+        "label": "Pieter Corneliszoon Hooftstraat 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880858,
+          52.360176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131676",
+        "label": "Pieter Corneliszoon Hooftstraat 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882402,
+          52.360604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131602",
+        "label": "Pieter Corneliszoon Hooftstraat 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8811,
+          52.360703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170149",
+        "label": "Schapenburgerpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882565,
+          52.360658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131596",
+        "label": "Pieter Corneliszoon Hooftstraat 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882297,
+          52.36081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131572",
+        "label": "Pieter Corneliszoon Hooftstraat 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887657,
+          52.354741
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A139303",
+        "label": "Gerard Doustraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881961,
+          52.360716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131560",
+        "label": "Pieter Corneliszoon Hooftstraat 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883165,
+          52.360806
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131258",
+        "label": "Hooftstraat 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881037,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131527",
+        "label": "Pieter Corneliszoon Hooftstraat 68",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880559,
+          52.36055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170309",
+        "label": "Schapenburgerpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880761,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131518",
+        "label": "Pieter Corneliszoon Hooftstraat 74",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888035,
+          52.360775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A79484",
+        "label": "Schans 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882583,
+          52.358356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170358",
+        "label": "Mennonietenpad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884719,
+          52.360148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170319",
+        "label": "Stadhouderskade 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887235,
+          52.359082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138304",
+        "label": "Ruysdaelkade 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882476,
+          52.360624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131599",
+        "label": "Pieter Corneliszoon Hooftstraat 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878222,
+          52.35996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170315",
+        "label": "Schapenburgerpad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878063,
+          52.35944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131793",
+        "label": "Pieter Corneliszoon Hooftstraat 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877984,
+          52.359411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131796",
+        "label": "Pieter Corneliszoon Hooftstraat 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881125,
+          52.360485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131530",
+        "label": "Pieter Corneliszoon Hooftstraat 66",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882657,
+          52.360669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131593",
+        "label": "Pieter Corneliszoon Hooftstraat 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881696,
+          52.360655
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131551",
+        "label": "Pieter Corneliszoon Hooftstraat 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879328,
+          52.359766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131751",
+        "label": "Pieter Corneliszoon Hooftstraat 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878691,
+          52.359589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131772",
+        "label": "Pieter Corneliszoon Hooftstraat 115",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878007,
+          52.359664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131424",
+        "label": "Pieter Corneliszoon Hooftstraat 140",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888133,
+          52.354896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170523",
+        "label": "Gerard Doustraat 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879221,
+          52.360606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171991",
+        "label": "Schapenburgerpad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878888,
+          52.359649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131766",
+        "label": "Pieter Corneliszoon Hooftstraat 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880643,
+          52.357704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170376",
+        "label": "Mennonietenpad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880183,
+          52.360005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131700",
+        "label": "Pieter Corneliszoon Hooftstraat 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881969,
+          52.360489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131617",
+        "label": "Pieter Corneliszoon Hooftstraat 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887128,
+          52.358706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138322",
+        "label": "Ruysdaelkade 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88712,
+          52.358648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138322",
+        "label": "Ruysdaelkade 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887592,
+          52.359178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138292",
+        "label": "Ruysdaelkade 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878184,
+          52.359707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131430",
+        "label": "Pieter Corneliszoon Hooftstraat 136",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880775,
+          52.360154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131679",
+        "label": "Pieter Corneliszoon Hooftstraat 71",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879162,
+          52.359708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131757",
+        "label": "Pieter Corneliszoon Hooftstraat 105",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880929,
+          52.360205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131673",
+        "label": "Pieter Corneliszoon Hooftstraat 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881522,
+          52.360805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170305",
+        "label": "Schapenburgerpad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87986,
+          52.360152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131487",
+        "label": "Pieter Corneliszoon Hooftstraat 96",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880592,
+          52.360111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131685",
+        "label": "Pieter Corneliszoon Hooftstraat 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887501,
+          52.359154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138295",
+        "label": "Ruysdaelkade 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885832,
+          52.359952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A141295",
+        "label": "Stadhouderskade 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881877,
+          52.360697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131557",
+        "label": "Pieter Corneliszoon Hooftstraat 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878358,
+          52.359754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131436",
+        "label": "Pieter Corneliszoon Hooftstraat 132",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885337,
+          52.359818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170328",
+        "label": "Stadhouderskade 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879073,
+          52.357928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170318",
+        "label": "Mennonietenpad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882189,
+          52.360795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131569",
+        "label": "Pieter Corneliszoon Hooftstraat 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131614",
+        "label": "Pieter Corneliszoon Hooftstraat 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880009,
+          52.360195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131493",
+        "label": "Pieter Corneliszoon Hooftstraat 92",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878446,
+          52.360403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171980",
+        "label": "Schapenburgerpad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884163,
+          52.358776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170349",
+        "label": "Mennonietenpad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881798,
+          52.36067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131554",
+        "label": "Pieter Corneliszoon Hooftstraat 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882319,
+          52.360582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131605",
+        "label": "Pieter Corneliszoon Hooftstraat 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887143,
+          52.35902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138307",
+        "label": "Ruysdaelkade 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879899,
+          52.35993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131712",
+        "label": "Pieter Corneliszoon Hooftstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879235,
+          52.359736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131754",
+        "label": "Pieter Corneliszoon Hooftstraat 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878707,
+          52.35984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131445",
+        "label": "Pieter Corneliszoon Hooftstraat 124",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880424,
+          52.360069
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131691",
+        "label": "Pieter Corneliszoon Hooftstraat 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878657,
+          52.360426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171983",
+        "label": "Schapenburgerpad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887682,
+          52.359201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138289",
+        "label": "Ruysdaelkade 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131670",
+        "label": "Pieter Corneliszoon Hooftstraat 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880513,
+          52.360321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131509",
+        "label": "Pieter Corneliszoon Hooftstraat 80",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878779,
+          52.359866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131448",
+        "label": "Pieter Corneliszoon Hooftstraat 122",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880249,
+          52.360027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131697",
+        "label": "Pieter Corneliszoon Hooftstraat 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879789,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131484",
+        "label": "Pieter Corneliszoon Hooftstraat 98",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879802,
+          52.360666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131346",
+        "label": "Vossiusstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879902,
+          52.360692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131346",
+        "label": "Vossiusstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878271,
+          52.359734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131433",
+        "label": "Pieter Corneliszoon Hooftstraat 134",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879967,
+          52.359955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131709",
+        "label": "Pieter Corneliszoon Hooftstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882226,
+          52.360565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131608",
+        "label": "Pieter Corneliszoon Hooftstraat 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879627,
+          52.360093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131478",
+        "label": "Pieter Corneliszoon Hooftstraat 102",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88384,
+          52.358698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170353",
+        "label": "Mennonietenpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880928,
+          52.360647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170307",
+        "label": "Schapenburgerpad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879921,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170312",
+        "label": "Schapenburgerpad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882752,
+          52.360694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131590",
+        "label": "Pieter Corneliszoon Hooftstraat 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879067,
+          52.359694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131760",
+        "label": "Pieter Corneliszoon Hooftstraat 107",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882169,
+          52.35863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170333",
+        "label": "Mennonietenpad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131512",
+        "label": "Pieter Corneliszoon Hooftstraat 78",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885733,
+          52.359094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170341",
+        "label": "Mennonietenpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880107,
+          52.359988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131703",
+        "label": "Pieter Corneliszoon Hooftstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883108,
+          52.358861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170336",
+        "label": "Mennonietenpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880542,
+          52.357681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170374",
+        "label": "Mennonietenpad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88563,
+          52.359037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170343",
+        "label": "Mennonietenpad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882503,
+          52.358335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170360",
+        "label": "Mennonietenpad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883263,
+          52.360467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131264",
+        "label": "Jan Luykenstraat 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877429,
+          52.360083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131397",
+        "label": "Van Baerlestraat 160",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877476,
+          52.360024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131400",
+        "label": "Van Baerlestraat 158",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87752,
+          52.359965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131403",
+        "label": "Van Baerlestraat 156",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87756,
+          52.359904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131406",
+        "label": "Van Baerlestraat 154",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877618,
+          52.359847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131409",
+        "label": "Van Baerlestraat 152",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877638,
+          52.359786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131412",
+        "label": "Van Baerlestraat 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884476,
+          52.357603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135918",
+        "label": "Boerenwetering 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887056,
+          52.357678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138353",
+        "label": "Jacob van Campenstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878644,
+          52.357826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170316",
+        "label": "Mennonietenpad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88533,
+          52.359906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170327",
+        "label": "Stadhouderskade 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880593,
+          52.358214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170331",
+        "label": "Mennonietenpad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882474,
+          52.358714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170335",
+        "label": "Mennonietenpad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88449,
+          52.358762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170345",
+        "label": "Mennonietenpad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884459,
+          52.3588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170347",
+        "label": "Mennonietenpad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883754,
+          52.358671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170355",
+        "label": "Mennonietenpad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883203,
+          52.358526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170356",
+        "label": "Mennonietenpad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881984,
+          52.358151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170362",
+        "label": "Mennonietenpad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881658,
+          52.358039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170365",
+        "label": "Mennonietenpad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880153,
+          52.357767
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170368",
+        "label": "Mennonietenpad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879839,
+          52.357581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170370",
+        "label": "Mennonietenpad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880299,
+          52.357621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170372",
+        "label": "Mennonietenpad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886315,
+          52.35904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170379",
+        "label": "Boerenwetering 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886143,
+          52.358985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170380",
+        "label": "Boerenwetering 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885897,
+          52.359011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170381",
+        "label": "Boerenwetering 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885755,
+          52.358974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170382",
+        "label": "Boerenwetering 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884419,
+          52.35861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170383",
+        "label": "Boerenwetering 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884499,
+          52.358349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170384",
+        "label": "Boerenwetering 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884376,
+          52.358541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170385",
+        "label": "Boerenwetering 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884299,
+          52.358548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170387",
+        "label": "Boerenwetering 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884241,
+          52.358529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170389",
+        "label": "Boerenwetering 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884326,
+          52.358187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170391",
+        "label": "Boerenwetering 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883231,
+          52.358291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170393",
+        "label": "Boerenwetering 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882817,
+          52.358148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170394",
+        "label": "Boerenwetering 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882913,
+          52.357809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170395",
+        "label": "Boerenwetering 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882612,
+          52.358072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170396",
+        "label": "Boerenwetering 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882153,
+          52.357964
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170397",
+        "label": "Boerenwetering 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882512,
+          52.357718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170399",
+        "label": "Boerenwetering 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881805,
+          52.357862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170401",
+        "label": "Boerenwetering 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881681,
+          52.357846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170403",
+        "label": "Boerenwetering 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881628,
+          52.357766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170405",
+        "label": "Boerenwetering 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881511,
+          52.357823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170407",
+        "label": "Boerenwetering 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880233,
+          52.357458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170409",
+        "label": "Boerenwetering 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879402,
+          52.356866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170411",
+        "label": "Boerenwetering 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882737,
+          52.357523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170413",
+        "label": "Boerenwetering 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884075,
+          52.357804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170415",
+        "label": "Boerenwetering 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885418,
+          52.358146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170418",
+        "label": "Boerenwetering 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886511,
+          52.358565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170421",
+        "label": "Boerenwetering 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886506,
+          52.358479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170424",
+        "label": "Boerenwetering 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88649,
+          52.358396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170427",
+        "label": "Boerenwetering 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886431,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170430",
+        "label": "Boerenwetering 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886374,
+          52.357911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170432",
+        "label": "Boerenwetering 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886317,
+          52.357892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170434",
+        "label": "Boerenwetering 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886238,
+          52.357875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170436",
+        "label": "Boerenwetering 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886144,
+          52.357849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170438",
+        "label": "Boerenwetering 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886073,
+          52.357834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170440",
+        "label": "Boerenwetering 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885974,
+          52.357799
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170442",
+        "label": "Boerenwetering 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885985,
+          52.357841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170444",
+        "label": "Boerenwetering 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885928,
+          52.357827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170446",
+        "label": "Boerenwetering 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886275,
+          52.357774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170448",
+        "label": "Boerenwetering 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885888,
+          52.357672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170450",
+        "label": "Boerenwetering 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885632,
+          52.357814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170452",
+        "label": "Boerenwetering 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885425,
+          52.357884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170454",
+        "label": "Boerenwetering 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884088,
+          52.357553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170456",
+        "label": "Boerenwetering 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883054,
+          52.357295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170458",
+        "label": "Boerenwetering 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882905,
+          52.357271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170461",
+        "label": "Boerenwetering 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882834,
+          52.357233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170464",
+        "label": "Boerenwetering 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88633,
+          52.357668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170467",
+        "label": "Boerenwetering 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886457,
+          52.357577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170469",
+        "label": "Boerenwetering 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886463,
+          52.357503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170471",
+        "label": "Boerenwetering 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886357,
+          52.357423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170473",
+        "label": "Boerenwetering 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886377,
+          52.357341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170474",
+        "label": "Boerenwetering 53",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885028,
+          52.357011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170477",
+        "label": "Boerenwetering 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883855,
+          52.35637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170478",
+        "label": "Boerenwetering 55",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883014,
+          52.356168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170479",
+        "label": "Boerenwetering 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882114,
+          52.355894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170481",
+        "label": "Boerenwetering 57",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881348,
+          52.355505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170482",
+        "label": "Boerenwetering 58",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885961,
+          52.356123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170484",
+        "label": "Boerenwetering 59",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887771,
+          52.357643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138368",
+        "label": "Jacob van Campenstraat 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881281,
+          52.360542
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131536",
+        "label": "Pieter Corneliszoon Hooftstraat 62",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879698,
+          52.360113
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131481",
+        "label": "Pieter Corneliszoon Hooftstraat 100",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878158,
+          52.359456
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131790",
+        "label": "Pieter Corneliszoon Hooftstraat 127",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880339,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131694",
+        "label": "Pieter Corneliszoon Hooftstraat 81",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879506,
+          52.360693
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171994",
+        "label": "Schapenburgerpad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881341,
+          52.360558
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131539",
+        "label": "Pieter Corneliszoon Hooftstraat 60",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888005,
+          52.354865
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170519",
+        "label": "Gerard Doustraat 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880509,
+          52.360087
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131688",
+        "label": "Pieter Corneliszoon Hooftstraat 77",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87792,
+          52.359643
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131421",
+        "label": "Pieter Corneliszoon Hooftstraat 142",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880857,
+          52.360423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131521",
+        "label": "Pieter Corneliszoon Hooftstraat 72",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885836,
+          52.359102
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170339",
+        "label": "Mennonietenpad 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883057,
+          52.360763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131261",
+        "label": "Hooftstraat 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887132,
+          52.358764
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138319",
+        "label": "Ruysdaelkade 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878763,
+          52.360453
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171986",
+        "label": "Schapenburgerpad 24",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88719,
+          52.357668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138356",
+        "label": "Jacob van Campenstraat 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882042,
+          52.360742
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131563",
+        "label": "Pieter Corneliszoon Hooftstraat 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878093,
+          52.359684
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131427",
+        "label": "Pieter Corneliszoon Hooftstraat 138",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884993,
+          52.359966
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170323",
+        "label": "Stadhouderskade 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878598,
+          52.359572
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131775",
+        "label": "Pieter Corneliszoon Hooftstraat 117",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880239,
+          52.360467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170310",
+        "label": "Schapenburgerpad 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88748,
+          52.357654
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138362",
+        "label": "Jacob van Campenstraat 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88027,
+          52.360256
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131500",
+        "label": "Pieter Corneliszoon Hooftstraat 86",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883926,
+          52.358722
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170351",
+        "label": "Mennonietenpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878413,
+          52.359525
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131781",
+        "label": "Pieter Corneliszoon Hooftstraat 121",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879938,
+          52.360172
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131490",
+        "label": "Pieter Corneliszoon Hooftstraat 94",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879366,
+          52.360017
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131469",
+        "label": "Pieter Corneliszoon Hooftstraat 108",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882145,
+          52.360535
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131611",
+        "label": "Pieter Corneliszoon Hooftstraat 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88137,
+          52.35804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170366",
+        "label": "Mennonietenpad 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884366,
+          52.360774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131285",
+        "label": "Stadhouderskade 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881202,
+          52.360511
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131533",
+        "label": "Pieter Corneliszoon Hooftstraat 64",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887622,
+          52.35765
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138365",
+        "label": "Jacob van Campenstraat 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881883,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131620",
+        "label": "Pieter Corneliszoon Hooftstraat 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360365
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131515",
+        "label": "Pieter Corneliszoon Hooftstraat 76",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879272,
+          52.359998
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131466",
+        "label": "Pieter Corneliszoon Hooftstraat 110",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884919,
+          52.360003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170321",
+        "label": "Stadhouderskade 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881436,
+          52.360571
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131542",
+        "label": "Pieter Corneliszoon Hooftstraat 58",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879454,
+          52.360044
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131472",
+        "label": "Pieter Corneliszoon Hooftstraat 106",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.875421,
+          52.358984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131472",
+        "label": "Pieter Corneliszoon Hooftstraat 106",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882116,
+          52.360772
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131566",
+        "label": "Pieter Corneliszoon Hooftstraat 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878507,
+          52.359547
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131778",
+        "label": "Pieter Corneliszoon Hooftstraat 119",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878847,
+          52.359878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131451",
+        "label": "Pieter Corneliszoon Hooftstraat 120",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880032,
+          52.359974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131706",
+        "label": "Pieter Corneliszoon Hooftstraat 89",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881608,
+          52.36062
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131548",
+        "label": "Pieter Corneliszoon Hooftstraat 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88806,
+          52.357621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138374",
+        "label": "Jacob van Campenstraat 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879537,
+          52.36007
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131475",
+        "label": "Pieter Corneliszoon Hooftstraat 104",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880683,
+          52.360135
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131682",
+        "label": "Pieter Corneliszoon Hooftstraat 73",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880432,
+          52.360301
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131506",
+        "label": "Pieter Corneliszoon Hooftstraat 82",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878235,
+          52.359474
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131787",
+        "label": "Pieter Corneliszoon Hooftstraat 125",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887357,
+          52.357664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138359",
+        "label": "Jacob van Campenstraat 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887137,
+          52.358878
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138313",
+        "label": "Ruysdaelkade 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879103,
+          52.359954
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131460",
+        "label": "Pieter Corneliszoon Hooftstraat 114",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881797,
+          52.360442
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131623",
+        "label": "Pieter Corneliszoon Hooftstraat 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878969,
+          52.359669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131763",
+        "label": "Pieter Corneliszoon Hooftstraat 109",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887923,
+          52.357637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138371",
+        "label": "Jacob van Campenstraat 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880352,
+          52.360275
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131503",
+        "label": "Pieter Corneliszoon Hooftstraat 84",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887134,
+          52.358824
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138316",
+        "label": "Ruysdaelkade 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880957,
+          52.360441
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131524",
+        "label": "Pieter Corneliszoon Hooftstraat 70",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885111,
+          52.359922
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170325",
+        "label": "Stadhouderskade 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87927,
+          52.360237
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170313",
+        "label": "Schapenburgerpad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887416,
+          52.359138
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138298",
+        "label": "Ruysdaelkade 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878324,
+          52.359492
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131784",
+        "label": "Pieter Corneliszoon Hooftstraat 123",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888083,
+          52.354881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170521",
+        "label": "Gerard Doustraat 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878929,
+          52.359898
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131454",
+        "label": "Pieter Corneliszoon Hooftstraat 118",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887148,
+          52.358942
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138310",
+        "label": "Ruysdaelkade 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878795,
+          52.359616
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131769",
+        "label": "Pieter Corneliszoon Hooftstraat 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88791,
+          52.360816
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A79479",
+        "label": "Schans 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88577,
+          52.359185
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170337",
+        "label": "Mennonietenpad 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879019,
+          52.359928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131457",
+        "label": "Pieter Corneliszoon Hooftstraat 116",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87918,
+          52.359978
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131463",
+        "label": "Pieter Corneliszoon Hooftstraat 112",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881518,
+          52.360591
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131545",
+        "label": "Pieter Corneliszoon Hooftstraat 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887324,
+          52.359115
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138301",
+        "label": "Ruysdaelkade 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87788,
+          52.359389
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131799",
+        "label": "Pieter Corneliszoon Hooftstraat 133",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880858,
+          52.360176
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131676",
+        "label": "Pieter Corneliszoon Hooftstraat 69",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882402,
+          52.360604
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131602",
+        "label": "Pieter Corneliszoon Hooftstraat 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8811,
+          52.360703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170149",
+        "label": "Schapenburgerpad 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882565,
+          52.360658
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131596",
+        "label": "Pieter Corneliszoon Hooftstraat 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882297,
+          52.36081
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131572",
+        "label": "Pieter Corneliszoon Hooftstraat 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887657,
+          52.354741
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A139303",
+        "label": "Gerard Doustraat 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881961,
+          52.360716
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131560",
+        "label": "Pieter Corneliszoon Hooftstraat 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883165,
+          52.360806
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131258",
+        "label": "Hooftstraat 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881037,
+          52.360462
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131527",
+        "label": "Pieter Corneliszoon Hooftstraat 68",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880559,
+          52.36055
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170309",
+        "label": "Schapenburgerpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880761,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131518",
+        "label": "Pieter Corneliszoon Hooftstraat 74",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888035,
+          52.360775
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A79484",
+        "label": "Schans 113",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882583,
+          52.358356
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170358",
+        "label": "Mennonietenpad 23",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884719,
+          52.360148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170319",
+        "label": "Stadhouderskade 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887235,
+          52.359082
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138304",
+        "label": "Ruysdaelkade 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882476,
+          52.360624
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131599",
+        "label": "Pieter Corneliszoon Hooftstraat 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878222,
+          52.35996
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170315",
+        "label": "Schapenburgerpad 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878063,
+          52.35944
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131793",
+        "label": "Pieter Corneliszoon Hooftstraat 129",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877984,
+          52.359411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131796",
+        "label": "Pieter Corneliszoon Hooftstraat 131",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881125,
+          52.360485
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131530",
+        "label": "Pieter Corneliszoon Hooftstraat 66",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882657,
+          52.360669
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131593",
+        "label": "Pieter Corneliszoon Hooftstraat 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881696,
+          52.360655
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131551",
+        "label": "Pieter Corneliszoon Hooftstraat 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879328,
+          52.359766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131751",
+        "label": "Pieter Corneliszoon Hooftstraat 101",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878691,
+          52.359589
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131772",
+        "label": "Pieter Corneliszoon Hooftstraat 115",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878007,
+          52.359664
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131424",
+        "label": "Pieter Corneliszoon Hooftstraat 140",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.888133,
+          52.354896
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170523",
+        "label": "Gerard Doustraat 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879221,
+          52.360606
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171991",
+        "label": "Schapenburgerpad 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878888,
+          52.359649
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131766",
+        "label": "Pieter Corneliszoon Hooftstraat 111",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880643,
+          52.357704
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170376",
+        "label": "Mennonietenpad 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880183,
+          52.360005
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131700",
+        "label": "Pieter Corneliszoon Hooftstraat 85",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881969,
+          52.360489
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131617",
+        "label": "Pieter Corneliszoon Hooftstraat 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887128,
+          52.358706
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138322",
+        "label": "Ruysdaelkade 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88712,
+          52.358648
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138322",
+        "label": "Ruysdaelkade 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887592,
+          52.359178
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138292",
+        "label": "Ruysdaelkade 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878184,
+          52.359707
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131430",
+        "label": "Pieter Corneliszoon Hooftstraat 136",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880775,
+          52.360154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131679",
+        "label": "Pieter Corneliszoon Hooftstraat 71",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879162,
+          52.359708
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131757",
+        "label": "Pieter Corneliszoon Hooftstraat 105",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880929,
+          52.360205
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131673",
+        "label": "Pieter Corneliszoon Hooftstraat 67",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881522,
+          52.360805
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170305",
+        "label": "Schapenburgerpad 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87986,
+          52.360152
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131487",
+        "label": "Pieter Corneliszoon Hooftstraat 96",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880592,
+          52.360111
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131685",
+        "label": "Pieter Corneliszoon Hooftstraat 75",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887501,
+          52.359154
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138295",
+        "label": "Ruysdaelkade 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885832,
+          52.359952
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A141295",
+        "label": "Stadhouderskade 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881877,
+          52.360697
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131557",
+        "label": "Pieter Corneliszoon Hooftstraat 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878358,
+          52.359754
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131436",
+        "label": "Pieter Corneliszoon Hooftstraat 132",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885337,
+          52.359818
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170328",
+        "label": "Stadhouderskade 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879073,
+          52.357928
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170318",
+        "label": "Mennonietenpad 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882189,
+          52.360795
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131569",
+        "label": "Pieter Corneliszoon Hooftstraat 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882059,
+          52.360518
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131614",
+        "label": "Pieter Corneliszoon Hooftstraat 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880009,
+          52.360195
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131493",
+        "label": "Pieter Corneliszoon Hooftstraat 92",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878446,
+          52.360403
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171980",
+        "label": "Schapenburgerpad 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884163,
+          52.358776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170349",
+        "label": "Mennonietenpad 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881798,
+          52.36067
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131554",
+        "label": "Pieter Corneliszoon Hooftstraat 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882319,
+          52.360582
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131605",
+        "label": "Pieter Corneliszoon Hooftstraat 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887143,
+          52.35902
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138307",
+        "label": "Ruysdaelkade 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879899,
+          52.35993
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131712",
+        "label": "Pieter Corneliszoon Hooftstraat 93",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879235,
+          52.359736
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131754",
+        "label": "Pieter Corneliszoon Hooftstraat 103",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878707,
+          52.35984
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131445",
+        "label": "Pieter Corneliszoon Hooftstraat 124",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880424,
+          52.360069
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131691",
+        "label": "Pieter Corneliszoon Hooftstraat 79",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878657,
+          52.360426
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A171983",
+        "label": "Schapenburgerpad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887682,
+          52.359201
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138289",
+        "label": "Ruysdaelkade 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881028,
+          52.360219
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131670",
+        "label": "Pieter Corneliszoon Hooftstraat 65",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880513,
+          52.360321
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131509",
+        "label": "Pieter Corneliszoon Hooftstraat 80",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878779,
+          52.359866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131448",
+        "label": "Pieter Corneliszoon Hooftstraat 122",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880249,
+          52.360027
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131697",
+        "label": "Pieter Corneliszoon Hooftstraat 83",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879789,
+          52.360128
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131484",
+        "label": "Pieter Corneliszoon Hooftstraat 98",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879802,
+          52.360666
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131346",
+        "label": "Vossiusstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879902,
+          52.360692
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131346",
+        "label": "Vossiusstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878271,
+          52.359734
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131433",
+        "label": "Pieter Corneliszoon Hooftstraat 134",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879967,
+          52.359955
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131709",
+        "label": "Pieter Corneliszoon Hooftstraat 91",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882226,
+          52.360565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131608",
+        "label": "Pieter Corneliszoon Hooftstraat 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879627,
+          52.360093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131478",
+        "label": "Pieter Corneliszoon Hooftstraat 102",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88384,
+          52.358698
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170353",
+        "label": "Mennonietenpad 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880928,
+          52.360647
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170307",
+        "label": "Schapenburgerpad 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879921,
+          52.360391
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170312",
+        "label": "Schapenburgerpad 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882752,
+          52.360694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131590",
+        "label": "Pieter Corneliszoon Hooftstraat 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879067,
+          52.359694
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131760",
+        "label": "Pieter Corneliszoon Hooftstraat 107",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882169,
+          52.35863
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170333",
+        "label": "Mennonietenpad 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880599,
+          52.36034
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131512",
+        "label": "Pieter Corneliszoon Hooftstraat 78",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885733,
+          52.359094
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170341",
+        "label": "Mennonietenpad 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880107,
+          52.359988
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131703",
+        "label": "Pieter Corneliszoon Hooftstraat 87",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883108,
+          52.358861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170336",
+        "label": "Mennonietenpad 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880542,
+          52.357681
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170374",
+        "label": "Mennonietenpad 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88563,
+          52.359037
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170343",
+        "label": "Mennonietenpad 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882503,
+          52.358335
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170360",
+        "label": "Mennonietenpad 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883263,
+          52.360467
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131264",
+        "label": "Jan Luykenstraat 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877429,
+          52.360083
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131397",
+        "label": "Van Baerlestraat 160",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877476,
+          52.360024
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131400",
+        "label": "Van Baerlestraat 158",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87752,
+          52.359965
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131403",
+        "label": "Van Baerlestraat 156",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.87756,
+          52.359904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131406",
+        "label": "Van Baerlestraat 154",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877618,
+          52.359847
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131409",
+        "label": "Van Baerlestraat 152",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.877638,
+          52.359786
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A131412",
+        "label": "Van Baerlestraat 150",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884476,
+          52.357603
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A135918",
+        "label": "Boerenwetering 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887056,
+          52.357678
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A138353",
+        "label": "Jacob van Campenstraat 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.878644,
+          52.357826
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170316",
+        "label": "Mennonietenpad 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88533,
+          52.359906
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170327",
+        "label": "Stadhouderskade 44",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880593,
+          52.358214
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170331",
+        "label": "Mennonietenpad 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882474,
+          52.358714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170335",
+        "label": "Mennonietenpad 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88449,
+          52.358762
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170345",
+        "label": "Mennonietenpad 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884459,
+          52.3588
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170347",
+        "label": "Mennonietenpad 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883754,
+          52.358671
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170355",
+        "label": "Mennonietenpad 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883203,
+          52.358526
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170356",
+        "label": "Mennonietenpad 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881984,
+          52.358151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170362",
+        "label": "Mennonietenpad 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881658,
+          52.358039
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170365",
+        "label": "Mennonietenpad 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880153,
+          52.357767
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170368",
+        "label": "Mennonietenpad 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879839,
+          52.357581
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170370",
+        "label": "Mennonietenpad 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880299,
+          52.357621
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170372",
+        "label": "Mennonietenpad 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886315,
+          52.35904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170379",
+        "label": "Boerenwetering 1",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886143,
+          52.358985
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170380",
+        "label": "Boerenwetering 2",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885897,
+          52.359011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170381",
+        "label": "Boerenwetering 3",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885755,
+          52.358974
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170382",
+        "label": "Boerenwetering 4",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884419,
+          52.35861
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170383",
+        "label": "Boerenwetering 5",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884499,
+          52.358349
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170384",
+        "label": "Boerenwetering 6",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884376,
+          52.358541
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170385",
+        "label": "Boerenwetering 7",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884299,
+          52.358548
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170387",
+        "label": "Boerenwetering 8",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884241,
+          52.358529
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170389",
+        "label": "Boerenwetering 9",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884326,
+          52.358187
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170391",
+        "label": "Boerenwetering 10",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883231,
+          52.358291
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170393",
+        "label": "Boerenwetering 11",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882817,
+          52.358148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170394",
+        "label": "Boerenwetering 12",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882913,
+          52.357809
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170395",
+        "label": "Boerenwetering 13",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882612,
+          52.358072
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170396",
+        "label": "Boerenwetering 14",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882153,
+          52.357964
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170397",
+        "label": "Boerenwetering 15",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882512,
+          52.357718
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170399",
+        "label": "Boerenwetering 16",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881805,
+          52.357862
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170401",
+        "label": "Boerenwetering 17",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881681,
+          52.357846
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170403",
+        "label": "Boerenwetering 18",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881628,
+          52.357766
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170405",
+        "label": "Boerenwetering 19",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881511,
+          52.357823
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170407",
+        "label": "Boerenwetering 20",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.880233,
+          52.357458
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170409",
+        "label": "Boerenwetering 21",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.879402,
+          52.356866
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170411",
+        "label": "Boerenwetering 22",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882737,
+          52.357523
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170413",
+        "label": "Boerenwetering 25",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884075,
+          52.357804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170415",
+        "label": "Boerenwetering 30",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885418,
+          52.358146
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170418",
+        "label": "Boerenwetering 29",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886511,
+          52.358565
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170421",
+        "label": "Boerenwetering 26",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886506,
+          52.358479
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170424",
+        "label": "Boerenwetering 27",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88649,
+          52.358396
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170427",
+        "label": "Boerenwetering 28",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886431,
+          52.357971
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170430",
+        "label": "Boerenwetering 31",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886374,
+          52.357911
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170432",
+        "label": "Boerenwetering 32",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886317,
+          52.357892
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170434",
+        "label": "Boerenwetering 33",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886238,
+          52.357875
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170436",
+        "label": "Boerenwetering 34",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886144,
+          52.357849
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170438",
+        "label": "Boerenwetering 35",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886073,
+          52.357834
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170440",
+        "label": "Boerenwetering 36",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885974,
+          52.357799
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170442",
+        "label": "Boerenwetering 37",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885985,
+          52.357841
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170444",
+        "label": "Boerenwetering 38",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885928,
+          52.357827
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170446",
+        "label": "Boerenwetering 39",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886275,
+          52.357774
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170448",
+        "label": "Boerenwetering 40",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885888,
+          52.357672
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170450",
+        "label": "Boerenwetering 41",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885632,
+          52.357814
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170452",
+        "label": "Boerenwetering 42",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885425,
+          52.357884
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170454",
+        "label": "Boerenwetering 43",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.884088,
+          52.357553
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170456",
+        "label": "Boerenwetering 45",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883054,
+          52.357295
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170458",
+        "label": "Boerenwetering 46",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882905,
+          52.357271
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170461",
+        "label": "Boerenwetering 47",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882834,
+          52.357233
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170464",
+        "label": "Boerenwetering 48",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.88633,
+          52.357668
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170467",
+        "label": "Boerenwetering 49",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886457,
+          52.357577
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170469",
+        "label": "Boerenwetering 50",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886463,
+          52.357503
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170471",
+        "label": "Boerenwetering 51",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886357,
+          52.357423
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170473",
+        "label": "Boerenwetering 52",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.886377,
+          52.357341
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170474",
+        "label": "Boerenwetering 53",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885028,
+          52.357011
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170477",
+        "label": "Boerenwetering 54",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883855,
+          52.35637
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170478",
+        "label": "Boerenwetering 55",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.883014,
+          52.356168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170479",
+        "label": "Boerenwetering 56",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.882114,
+          52.355894
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170481",
+        "label": "Boerenwetering 57",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.881348,
+          52.355505
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170482",
+        "label": "Boerenwetering 58",
+        "year": "1876"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.885961,
+          52.356123
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A170484",
+        "label": "Boerenwetering 59",
+        "year": "1876"
+      }
+    }
+  ]
+}

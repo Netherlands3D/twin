@@ -1,0 +1,1595 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936273,
+          52.37405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207336",
+        "label": "Oostelijke Handelskade 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936885,
+          52.373857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207339",
+        "label": "Oostelijke Handelskade 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937676,
+          52.373757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207347",
+        "label": "Oostelijke Handelskade 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932038,
+          52.371524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129721",
+        "label": "Czaar Peterstraat 196",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932015,
+          52.371264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129739",
+        "label": "Blankenstraat 189",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937544,
+          52.373776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207346",
+        "label": "Oostelijke Handelskade 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93209,
+          52.371305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129741",
+        "label": "Blankenstraat 191",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933483,
+          52.374491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207322",
+        "label": "Oostelijke Handelskade 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932097,
+          52.371564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129723",
+        "label": "Czaar Peterstraat 198",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937055,
+          52.373832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207341",
+        "label": "Oostelijke Handelskade 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93386,
+          52.374425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207326",
+        "label": "Oostelijke Handelskade 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933575,
+          52.374475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207323",
+        "label": "Oostelijke Handelskade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935927,
+          52.374084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207334",
+        "label": "Oostelijke Handelskade 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936975,
+          52.373843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207340",
+        "label": "Oostelijke Handelskade 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933667,
+          52.374466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207324",
+        "label": "Oostelijke Handelskade 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937142,
+          52.373817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207342",
+        "label": "Oostelijke Handelskade 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933372,
+          52.374522
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207321",
+        "label": "Oostelijke Handelskade 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935826,
+          52.374098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207333",
+        "label": "Oostelijke Handelskade 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935723,
+          52.374117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207332",
+        "label": "Oostelijke Handelskade 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935148,
+          52.374703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207318",
+        "label": "Oostelijke Handelskade 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933323,
+          52.374465
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207320",
+        "label": "Oostelijke Handelskade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937236,
+          52.373804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207343",
+        "label": "Oostelijke Handelskade 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934084,
+          52.374401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207328",
+        "label": "Oostelijke Handelskade 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935925,
+          52.376908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207299",
+        "label": "Javakade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933764,
+          52.374447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207325",
+        "label": "Oostelijke Handelskade 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936763,
+          52.373889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207338",
+        "label": "Oostelijke Handelskade 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932096,
+          52.374689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207319",
+        "label": "Oostelijke Handelskade 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933945,
+          52.374411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207327",
+        "label": "Oostelijke Handelskade 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937432,
+          52.373779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207345",
+        "label": "Oostelijke Handelskade 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936028,
+          52.37406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207335",
+        "label": "Oostelijke Handelskade 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936271,
+          52.370148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207348",
+        "label": "Borneokade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93405,
+          52.374328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207329",
+        "label": "Oostelijke Handelskade 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.939632,
+          52.373746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169278",
+        "label": "Oostelijke Handelskade 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937316,
+          52.373793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207344",
+        "label": "Oostelijke Handelskade 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936621,
+          52.373904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207337",
+        "label": "Oostelijke Handelskade 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937954,
+          52.376151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207361",
+        "label": "Verbindingsdam 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938015,
+          52.371696
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169260",
+        "label": "Koninginnedok 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938408,
+          52.371979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169264",
+        "label": "Koninginnedok 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934823,
+          52.374297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207330",
+        "label": "Oostelijke Handelskade 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934875,
+          52.374253
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207331",
+        "label": "Oostelijke Handelskade 34 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937034,
+          52.371302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207349",
+        "label": "Stadsrietlanden 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937184,
+          52.37133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207350",
+        "label": "Stadsrietlanden 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937323,
+          52.371352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207351",
+        "label": "Stadsrietlanden 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937599,
+          52.371399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207352",
+        "label": "Stadsrietlanden 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937743,
+          52.371425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207353",
+        "label": "Stadsrietlanden 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937882,
+          52.37168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207354",
+        "label": "Stadsrietlanden 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938176,
+          52.371714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207356",
+        "label": "Stadsrietlanden 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938453,
+          52.371748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207357",
+        "label": "Stadsrietlanden 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938249,
+          52.371961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207359",
+        "label": "Stadsrietlanden 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937088,
+          52.372025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207360",
+        "label": "Stadsrietlanden 76 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937895,
+          52.376226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207362",
+        "label": "Verbindingsdam 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93787,
+          52.3763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207363",
+        "label": "Verbindingsdam 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932108,
+          52.371406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A217303",
+        "label": "Blankenstraat 191 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936273,
+          52.37405
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207336",
+        "label": "Oostelijke Handelskade 44",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936885,
+          52.373857
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207339",
+        "label": "Oostelijke Handelskade 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937676,
+          52.373757
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207347",
+        "label": "Oostelijke Handelskade 66",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932038,
+          52.371524
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129721",
+        "label": "Czaar Peterstraat 196",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932015,
+          52.371264
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129739",
+        "label": "Blankenstraat 189",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937544,
+          52.373776
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207346",
+        "label": "Oostelijke Handelskade 64",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93209,
+          52.371305
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129741",
+        "label": "Blankenstraat 191",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933483,
+          52.374491
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207322",
+        "label": "Oostelijke Handelskade 18",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932097,
+          52.371564
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A129723",
+        "label": "Czaar Peterstraat 198",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937055,
+          52.373832
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207341",
+        "label": "Oostelijke Handelskade 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93386,
+          52.374425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207326",
+        "label": "Oostelijke Handelskade 26",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933575,
+          52.374475
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207323",
+        "label": "Oostelijke Handelskade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935927,
+          52.374084
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207334",
+        "label": "Oostelijke Handelskade 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936975,
+          52.373843
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207340",
+        "label": "Oostelijke Handelskade 52",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933667,
+          52.374466
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207324",
+        "label": "Oostelijke Handelskade 22",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937142,
+          52.373817
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207342",
+        "label": "Oostelijke Handelskade 56",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933372,
+          52.374522
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207321",
+        "label": "Oostelijke Handelskade 16",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935826,
+          52.374098
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207333",
+        "label": "Oostelijke Handelskade 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935723,
+          52.374117
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207332",
+        "label": "Oostelijke Handelskade 36",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935148,
+          52.374703
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207318",
+        "label": "Oostelijke Handelskade 33",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933323,
+          52.374465
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207320",
+        "label": "Oostelijke Handelskade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937236,
+          52.373804
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207343",
+        "label": "Oostelijke Handelskade 58",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934084,
+          52.374401
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207328",
+        "label": "Oostelijke Handelskade 30",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.935925,
+          52.376908
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207299",
+        "label": "Javakade 20",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933764,
+          52.374447
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207325",
+        "label": "Oostelijke Handelskade 24",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936763,
+          52.373889
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207338",
+        "label": "Oostelijke Handelskade 48",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932096,
+          52.374689
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207319",
+        "label": "Oostelijke Handelskade 12",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.933945,
+          52.374411
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207327",
+        "label": "Oostelijke Handelskade 28",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937432,
+          52.373779
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207345",
+        "label": "Oostelijke Handelskade 62",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936028,
+          52.37406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207335",
+        "label": "Oostelijke Handelskade 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936271,
+          52.370148
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207348",
+        "label": "Borneokade 14",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93405,
+          52.374328
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207329",
+        "label": "Oostelijke Handelskade 32",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.939632,
+          52.373746
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169278",
+        "label": "Oostelijke Handelskade 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937316,
+          52.373793
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207344",
+        "label": "Oostelijke Handelskade 60",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.936621,
+          52.373904
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207337",
+        "label": "Oostelijke Handelskade 46",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937954,
+          52.376151
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207361",
+        "label": "Verbindingsdam 2",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938015,
+          52.371696
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169260",
+        "label": "Koninginnedok 50",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938408,
+          52.371979
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169264",
+        "label": "Koninginnedok 54",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934823,
+          52.374297
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207330",
+        "label": "Oostelijke Handelskade 34",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.934875,
+          52.374253
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207331",
+        "label": "Oostelijke Handelskade 34 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937034,
+          52.371302
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207349",
+        "label": "Stadsrietlanden 38",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937184,
+          52.37133
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207350",
+        "label": "Stadsrietlanden 39",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937323,
+          52.371352
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207351",
+        "label": "Stadsrietlanden 40",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937599,
+          52.371399
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207352",
+        "label": "Stadsrietlanden 42",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937743,
+          52.371425
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207353",
+        "label": "Stadsrietlanden 43",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937882,
+          52.37168
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207354",
+        "label": "Stadsrietlanden 49",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938176,
+          52.371714
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207356",
+        "label": "Stadsrietlanden 51",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938453,
+          52.371748
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207357",
+        "label": "Stadsrietlanden 53",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.938249,
+          52.371961
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207359",
+        "label": "Stadsrietlanden 55",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937088,
+          52.372025
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207360",
+        "label": "Stadsrietlanden 76 a",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.937895,
+          52.376226
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207362",
+        "label": "Verbindingsdam 3",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.93787,
+          52.3763
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A207363",
+        "label": "Verbindingsdam 4",
+        "year": "1943"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.932108,
+          52.371406
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A217303",
+        "label": "Blankenstraat 191 a",
+        "year": "1943"
+      }
+    }
+  ]
+}

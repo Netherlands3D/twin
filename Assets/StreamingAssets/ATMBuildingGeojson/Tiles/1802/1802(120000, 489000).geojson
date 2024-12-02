@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234976",
+        "label": "Wijk 53, nr 1886",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234977",
+        "label": "Wijk 53, nr 1887",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234978",
+        "label": "Wijk 53, nr 1888",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234976",
+        "label": "Wijk 53, nr 1886",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234977",
+        "label": "Wijk 53, nr 1887",
+        "year": "1802"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.887201,
+          52.387803
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A234978",
+        "label": "Wijk 53, nr 1888",
+        "year": "1802"
+      }
+    }
+  ]
+}

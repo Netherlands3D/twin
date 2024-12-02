@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890068,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227502",
+        "label": "VV 21 (Bokkinghangen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890054,
+          52.388755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227503",
+        "label": "VV 23 b (Bokkinghangen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890068,
+          52.388899
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227502",
+        "label": "VV 21 (Bokkinghangen)",
+        "year": "1870"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.890054,
+          52.388755
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A227503",
+        "label": "VV 23 b (Bokkinghangen)",
+        "year": "1870"
+      }
+    }
+  ]
+}

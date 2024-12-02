@@ -1,0 +1,305 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913307,
+          52.342858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169810",
+        "label": "Amsteldijk 127",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913462,
+          52.341881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169812",
+        "label": "Amsteldijk 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911995,
+          52.34194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169813",
+        "label": "Amsteldijk 129",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913186,
+          52.341433
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169815",
+        "label": "Amsteldijk 129 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913063,
+          52.341259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169816",
+        "label": "Amsteldijk 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912629,
+          52.341003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169817",
+        "label": "Amsteldijk 131",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910018,
+          52.339941
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169818",
+        "label": "Amsteldijk 132",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909619,
+          52.340093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169819",
+        "label": "Amsteldijk 133",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909558,
+          52.340108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169820",
+        "label": "Amsteldijk 134",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909491,
+          52.340122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169821",
+        "label": "Amsteldijk 135",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913307,
+          52.342858
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169810",
+        "label": "Amsteldijk 127",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913462,
+          52.341881
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169812",
+        "label": "Amsteldijk 128",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.911995,
+          52.34194
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169813",
+        "label": "Amsteldijk 129",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913186,
+          52.341433
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169815",
+        "label": "Amsteldijk 129 a",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.913063,
+          52.341259
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169816",
+        "label": "Amsteldijk 130",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.912629,
+          52.341003
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169817",
+        "label": "Amsteldijk 131",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.910018,
+          52.339941
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169818",
+        "label": "Amsteldijk 132",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909619,
+          52.340093
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169819",
+        "label": "Amsteldijk 133",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909558,
+          52.340108
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169820",
+        "label": "Amsteldijk 134",
+        "year": "1909"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.909491,
+          52.340122
+        ]
+      },
+      "properties": {
+        "id": "https://adamlink.nl/geo/address/A169821",
+        "label": "Amsteldijk 135",
+        "year": "1909"
+      }
+    }
+  ]
+}

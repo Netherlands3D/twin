@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1950731496240471435}
   - component: {fileID: 7900166245345724691}
   - component: {fileID: -8440748944381979600}
+  - component: {fileID: -3050132864660565148}
   m_Layer: 0
   m_Name: ATMLayer
   m_TagString: Untagged
@@ -98,4 +99,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layerPrefab: {fileID: -9063389018957865507, guid: 7754a70567866e44dac229dd8715bc58,
+    type: 3}
+--- !u!114 &-3050132864660565148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 426b2d41833c808499f96f51feb06495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: 25
+  groundPlanesLonLat:
+  - {x: 52.371838, y: 4.8931446}
+  - {x: 52.367756, y: 4.900876}
+  - {x: 52.3626, y: 4.9120355}
+  groundPlanePrefab: {fileID: 6216683885916768284, guid: 32348ff05b146f34b8ed64ba53d11546,
     type: 3}
