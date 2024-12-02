@@ -120,14 +120,14 @@ namespace Netherlands3D.Twin
 
             Tile tile = tiles[tileKey];
 
-            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
+            var tileCenter = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
             xyzTiles.UrlTemplate = atmDataController.GetUrl();
-            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
+            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCenter, zoomLevel);
 
             // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
             // for the projector to align both grids; this must be done per tile to prevent rounding issues and
             // have the cleanest match
-            var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+            var offset = CalculateTileOffset(xyzTile, tileCenter);
 
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)xyzTile.URL);
             tile.runningWebRequest = webRequest;
@@ -177,7 +177,6 @@ namespace Netherlands3D.Twin
                 {
                     textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
                 }
-                decalProjector.pivot = new Vector3(decalProjector.size.x / 2f, decalProjector.size.y / 2f, ProjectorMinDepth / 2f);
 
                 var rdCoordinate = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y, 0.0d);
                 var originCoordinate = rdCoordinate.ToUnity();
@@ -214,13 +213,13 @@ namespace Netherlands3D.Twin
             return (tileWidth, tileHeight);
         }
 
-        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCoordRd)
+        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCenter)
         {
-            var minBound = xyzTile.MinBound.Convert(CoordinateSystem.RD);           
+            var xyzCenter = xyzTile.Center.Convert(CoordinateSystem.RD);           
             return new Vector3(
-                (float)(tileCoordRd.Points[0] - minBound.Points[0]), 
+                (float)(tileCenter.Points[0] - xyzCenter.Points[0]), 
                 0,
-                (float)(tileCoordRd.Points[1] - minBound.Points[1]) 
+                (float)(tileCenter.Points[1] - xyzCenter.Points[1]) 
             );
         }
         

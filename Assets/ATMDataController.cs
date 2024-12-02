@@ -31,8 +31,6 @@ namespace Netherlands3D.Twin
             { 1625, @"https://images.huygens.knaw.nl/webmapper/maps/berckenrode/{z}/{x}/{y}.png"}
         };
 
-        //improved performance but too much work for multiple zoom levels
-        //bounds for zoomlevel 16
         private Dictionary<int, Vector4> yearBounds = new Dictionary<int, Vector4>()
         {
             { 1985, new Vector4(33627, 21516, 33691, 21566) },
@@ -45,9 +43,9 @@ namespace Netherlands3D.Twin
 
         private Dictionary<int, Vector2Int> yearZoomBounds = new Dictionary<int, Vector2Int>()
         {
-            { 1985, new Vector2Int(12 , 21) },
-            { 1943, new Vector2Int(12 , 21) },
-            { 1909, new Vector2Int(12 , 21) },
+            { 1985, new Vector2Int(12 , 20) },
+            { 1943, new Vector2Int(12 , 20) },
+            { 1909, new Vector2Int(12 , 20) },
             { 1876, new Vector2Int(12 , 20) },
             { 1724, new Vector2Int(14 , 19) },
             { 1625, new Vector2Int(14 , 19) }
@@ -63,9 +61,7 @@ namespace Netherlands3D.Twin
             { 17, 188 },
             { 18, 94 },
             { 19, 47 },
-            { 20, 23 },
-            { 21, 11 }
-
+            { 20, 23 }
         };
 
         public int GetTileSizeForZoomLevel(int zoomLevel)

@@ -31,6 +31,7 @@ namespace Netherlands3D.Twin
             public Vector2Int TileIndex;
             public int ZoomLevel { get; set; }
             public Coordinate MinBound;
+            public Coordinate Center;
             public Coordinate MaxBound;
             public TemplatedUri URL;
         }
@@ -45,6 +46,14 @@ namespace Netherlands3D.Twin
             
             // Determine the bounds from the tile index
             var (minBound, maxBound) = this.FromTileXYToBoundingBox(tileIndex, zoomLevel);
+
+            var centerDistance = (maxBound - minBound).ToVector3() * 0.5f;
+            var center = new Coordinate(
+                minBound.CoordinateSystem,
+                minBound.Points[0] + centerDistance.x,
+                minBound.Points[1] + centerDistance.y,
+                minBound.Points[2] + centerDistance.z
+            );
            
             XyzTile tile = new XyzTile()
             {
@@ -52,7 +61,8 @@ namespace Netherlands3D.Twin
                 ZoomLevel = zoomLevel,
                 URL = this.GetTileUrl(tileIndex, zoomLevel),
                 MaxBound = maxBound,
-                MinBound = minBound
+                MinBound = minBound,
+                Center = center
             };
 
             Vector3Int key = new Vector3Int(tileIndex.x, tileIndex.y, zoomLevel);
