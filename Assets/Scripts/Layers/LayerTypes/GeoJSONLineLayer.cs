@@ -107,9 +107,14 @@ namespace Netherlands3D.Twin.Layers
             SpawnedVisualisations.Add(newFeatureVisualisation);
         }
 
-        public void ApplyStyling()
+        public override void InitializeStyling()
         {
             lineRenderer3D.LineMaterial = GetMaterialInstance();
+        }
+
+        public void ApplyStyling()
+        {
+            // Currently we don't apply individual styling per feature
         }
         
         private Material GetMaterialInstance()

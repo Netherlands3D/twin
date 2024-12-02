@@ -220,7 +220,6 @@ namespace Netherlands3D.Twin.Layers
             // Replace default style with the parent's default style
             newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
             newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPolygonLayerGameObject.ApplyStyling();
 
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
             
@@ -244,7 +243,6 @@ namespace Netherlands3D.Twin.Layers
             // Replace default style with the parent's default style
             newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
             newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newLineLayerGameObject.ApplyStyling();
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             return newLineLayerGameObject;
@@ -267,7 +265,6 @@ namespace Netherlands3D.Twin.Layers
             // Replace default style with the parent's default style
             newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
             newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPointLayerGameObject.ApplyStyling();
 
             newPointLayerGameObject.LayerData.SetParent(LayerData);
 
