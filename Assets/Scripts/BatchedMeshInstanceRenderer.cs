@@ -24,6 +24,7 @@ namespace Netherlands3D.Twin
         [SerializeField] private float meshScale = 0.2f;
 
         public List<List<Coordinate>> PositionCollections { get; private set; }
+        private int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         private List<List<Matrix4x4>> transformMatrixCache = new List<List<Matrix4x4>>();
 
         private List<MaterialPropertyBlock> materialPropertyBlockCache = new List<MaterialPropertyBlock>();
@@ -203,6 +204,7 @@ namespace Netherlands3D.Twin
         public void SetPositionCollections(List<List<Coordinate>> collections)
         {
             PositionCollections = collections;
+            RecalculatePointCount();
             GenerateTransformMatrixCache();
         }
 
@@ -216,6 +218,7 @@ namespace Netherlands3D.Twin
 
             var startIndex = PositionCollections.Count;
             PositionCollections.Add(collection);
+            RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
 
@@ -229,6 +232,7 @@ namespace Netherlands3D.Twin
 
             var startIndex = PositionCollections.Count;
             PositionCollections.AddRange(collections);
+            RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
 
@@ -241,12 +245,14 @@ namespace Netherlands3D.Twin
 
             PositionCollections.Remove(points);
 
+            RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
 
         public void ClearLines()
         {
             PositionCollections.Clear();
+            RecalculatePointCount();
             materialPropertyBlockCache.Clear();
             segmentColorCache.Clear();
             transformMatrixCache = new List<List<Matrix4x4>>();
@@ -257,7 +263,6 @@ namespace Netherlands3D.Twin
         {
             if (PositionCollections == null || PositionCollections.Count < 1) return;
 
-            var pointCount = PositionCollections.SelectMany(list => list).Count(); //each position should have a matrix
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
 
             if (startIndex < 0) //reset cache completely
@@ -337,6 +342,15 @@ namespace Netherlands3D.Twin
             }
 
             return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
+        }
+        
+        private void RecalculatePointCount()
+        {
+            pointCount = 0;
+            foreach (var list in PositionCollections)
+            {
+                pointCount += list.Count;
+            }
         }
     }
 }
