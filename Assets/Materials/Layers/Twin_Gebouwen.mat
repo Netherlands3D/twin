@@ -137,7 +137,7 @@ Material:
     - _HighlightColor: {r: 0.15686275, g: 0.3921569, b: 1, a: 1}
     - _OffsetMainTexture: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetSecondaryTexture: {r: 0, g: 0, b: 0, a: 0}
-    - _SecondaryHighlightColor: {r: 1, g: 1, b: 0, a: 1}
+    - _SecondaryHighlightColor: {r: 0.5471698, g: 0.47469556, b: 0.40779632, a: 1}
     - _Size: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _TilingMainTexture: {r: 0.1, g: 0.1, b: 0, a: 0}

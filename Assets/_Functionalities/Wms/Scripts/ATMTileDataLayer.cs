@@ -94,6 +94,21 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private void EnableGroundPlanesInTileRange(bool enabled, Coordinate min, Coordinate max)
+        {
+            Vector3 unityMin = min.ToUnity();
+            Vector3 unityMax = max.ToUnity();
+            ATMBagGroundPlane[] aTMBagGroundPlanes = GetComponentsInChildren<ATMBagGroundPlane>(true);
+            foreach (ATMBagGroundPlane plane in aTMBagGroundPlanes)
+            {
+                Vector3 pos = plane.coord.ToUnity();
+                if (pos.x >= unityMin.x && pos.x < unityMax.x && pos.z >= unityMin.z && pos.z < unityMax.z)
+                {
+                    plane.gameObject.SetActive(enabled);
+                }
+            }
+        }
+
         public int CalculateZoomLevel()
         {
             Vector3 camPosition = Camera.main.transform.position;
@@ -139,6 +154,10 @@ namespace Netherlands3D.Twin
             // have the cleanest match
             var offset = CalculateTileOffset(xyzTile, tileCoordinate);
 
+
+            var tileCoordinateMax = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize);
+            EnableGroundPlanesInTileRange(false, tileCoordinate, tileCoordinateMax);
+
             UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)xyzTile.URL);
             tile.runningWebRequest = webRequest;
             yield return webRequest.SendWebRequest();
@@ -150,6 +169,7 @@ namespace Netherlands3D.Twin
             }
             else
             {
+                EnableGroundPlanesInTileRange(true, tileCoordinate, tileCoordinateMax);
                 ClearPreviousTexture(tile);                
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
