@@ -404,6 +404,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 			Dictionary<string, object> properties = mapping.Feature.Properties as Dictionary<string, object>;
 			foreach (KeyValuePair<string, object> property in properties)
 			{
+				if(property.Value == null) continue;
+
 				SpawnKeyValue(property.Key, property.Value.ToString());
 			}
 		}
