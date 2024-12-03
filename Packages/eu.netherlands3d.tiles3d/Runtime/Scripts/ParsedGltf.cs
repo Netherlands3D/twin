@@ -8,12 +8,12 @@ using System.Text;
 using Newtonsoft.Json;
 using Meshoptimizer;
 using Unity.Collections;
-
+using Netherlands3D.Coordinates;
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEngine.Events;
 using GLTFast.Schema;
-using Netherlands3D.Coordinates;
+
 
 
 #endif
@@ -75,7 +75,7 @@ namespace Netherlands3D.Tiles3D
         }
         void PositionGameObject(Transform scene, double[] rtcCenter, Tile tile)
         {
-            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.z, scene.localPosition.x, scene.localPosition.y);
+            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
             if (rtcCenter != null)
             {
                 sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2])+sceneCoordinate;

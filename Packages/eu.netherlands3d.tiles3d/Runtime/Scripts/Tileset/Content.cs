@@ -30,7 +30,7 @@ namespace Netherlands3D.Tiles3D
         private UnityEngine.Material overrideMaterial;
 
         private GltfImport gltf;
-
+        Dictionary<string, string> headers = null;
         public enum ContentLoadState
         {
             NOTLOADING,
@@ -85,6 +85,7 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null)
         {
+            this.headers = headers;
             if (overrideMaterial != null)
             {
                 this.overrideMaterial = overrideMaterial;
@@ -96,11 +97,11 @@ namespace Netherlands3D.Tiles3D
             State = ContentLoadState.DOWNLOADING;
             parentTile.isLoading = true;
             runningContentRequest = StartCoroutine(
-           TIleContentLoader.LoadContent(
+           TIleContentLoader.DownloadContent(
                uri,
                transform,
                ParentTile,
-               FinishedLoading,
+               DownloadedData,
                parseAssetMetaData,
                parseSubObjects,
                overrideMaterial,
@@ -110,14 +111,34 @@ namespace Netherlands3D.Tiles3D
                )
            );
             return;
-            runningContentRequest = StartCoroutine(
-                ImportB3DMGltf.ImportBinFromURL(
-                    uri, 
-                    GotGltfContent,
-                    false,
-                    headers
-                )
-            );
+            //runningContentRequest = StartCoroutine(
+            //    ImportB3DMGltf.ImportBinFromURL(
+            //        uri, 
+            //        GotGltfContent,
+            //        false,
+            //        headers
+                //)
+            //);
+        }
+
+        private void DownloadedData(byte[] data,string uri)
+        {
+            if (data == null)
+            {
+                FinishedLoading(false);
+                return;
+            }
+            TIleContentLoader.LoadContent(
+                data,
+                transform,
+                ParentTile,
+                FinishedLoading,
+                parseAssetMetaData,
+               parseSubObjects,
+               overrideMaterial,
+               false,
+               headers
+                );
         }
 
         /// <summary>
@@ -127,10 +148,8 @@ namespace Netherlands3D.Tiles3D
         private void FinishedLoading(bool succes)
         {
             State = ContentLoadState.DOWNLOADED;
-            if (succes)
-            {
-                onDoneDownloading.Invoke();
-            }
+            onDoneDownloading.Invoke();
+
         }
         private async void GotGltfContent(ParsedGltf parsedGltf)
         {

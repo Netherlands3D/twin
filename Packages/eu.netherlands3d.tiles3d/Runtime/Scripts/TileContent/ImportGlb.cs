@@ -8,34 +8,15 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Netherlands3D.Tiles3D.FeatureTable;
 namespace Netherlands3D.Tiles3D
 {
-    public static class ImportB3dm
+    public  class ImportGlb
     {
-
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
 
-        public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null)
-        { 
-            
-
-            var memoryStream = new System.IO.MemoryStream(data);
-            var b3dm = B3dmReader.ReadB3dm(memoryStream);
-
-            
-            double[] rtcCenter = GetRTCCenterFromB3dm(b3dm);
-
-            RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
-            if (rtcCenter==null)
-            {
-
-               
-                rtcCenter = GetRTCCenterFromGlb(b3dm);
-
-
-            }
-            
-
+        public async Task Load(byte[] data, Tile tile, Transform containerTransform, Action<bool> succesCallback, string sourcePath, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null)
+        {
             var gltf = new GltfImport();
             var success = true;
             Uri uri = null;
@@ -43,9 +24,11 @@ namespace Netherlands3D.Tiles3D
             {
                 uri = new Uri(sourcePath);
             }
+            RemoveCesiumRtcFromRequieredExtentions(ref data);
 
             Debug.Log("starting gltfLoad");
-            success = await gltf.LoadGltfBinary(b3dm.GlbData, null, importSettings);
+            success = await gltf.LoadGltfBinary(data, uri, importSettings);
+            
             Debug.Log("gltfLoad has finished");
 
             if (success == false)
@@ -54,13 +37,11 @@ namespace Netherlands3D.Tiles3D
                 succesCallback.Invoke(false);
                 return;
             }
+            double[] rtcCenter = GetRTCCenterFromGlb(data);
             var parsedGltf = new ParsedGltf()
             {
                 gltfImport = gltf,
                 rtcCenter = rtcCenter,
-#if SUBOBJECT
-                glbBuffer = b3dm.GlbData //Store the glb buffer for access in subobjects
-#endif
             };
             await parsedGltf.SpawnGltfScenes(containerTransform);
 
@@ -69,18 +50,18 @@ namespace Netherlands3D.Tiles3D
             if (parseAssetMetaData)
             {
                 Content content = containerTransform.GetComponent<Content>();
-                if (content!=null)
+                if (content != null)
                 {
-                   // parsedGltf.ParseAssetMetaData(content);
+                    // parsedGltf.ParseAssetMetaData(content);
                 }
-                
+
             }
 
             //Check if mesh features addon is used to define subobjects
 #if SUBOBJECT
             if (parseSubObjects)
             {
-               // parsedGltf.ParseSubObjects(containerTransform);
+                // parsedGltf.ParseSubObjects(containerTransform);
             }
 #endif
 
@@ -88,42 +69,30 @@ namespace Netherlands3D.Tiles3D
             {
                 parsedGltf.OverrideAllMaterials(overrideMaterial);
             }
-
-
-
             succesCallback.Invoke(true);
         }
-        
-        private static double[] GetRTCCenterFromB3dm(B3dm b3dm)
+        static void PositionGameObject(Transform scene, double[] rtcCenter, TileTransform tileTransform)
         {
-            string batchttableJSONstring = b3dm.FeatureTableJson;
-            JSONNode root = JSON.Parse(batchttableJSONstring);
-            JSONNode centernode = root["RTC_CENTER"];
-            if (centernode == null)
+            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
+            if (rtcCenter != null)
             {
-                return null;
+                sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2]);
             }
-            if (centernode.Count != 3)
-            {
-                return null;
-            }
-            double[] result = new double[3];
-            result[0] = centernode[0].AsDouble;
-            result[1] = centernode[1].AsDouble;
-            result[2] = centernode[2].AsDouble;
-            return result;
+            Coordinate transformedCoordinate = tileTransform.MultiplyPoint3x4(sceneCoordinate);
+            scene.position = transformedCoordinate.ToUnity();
+            scene.rotation = transformedCoordinate.RotationToLocalGravityUp();
 
         }
-        private static double[] GetRTCCenterFromGlb(B3dm b3dm)
+        private static double[] GetRTCCenterFromGlb(byte[] GlbData)
         {
 
             int jsonstart = 20;
-            int jsonlength = (b3dm.GlbData[15]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[14]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[13]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[12]);
+            int jsonlength = (GlbData[15]) * 256;
+            jsonlength = (jsonlength + GlbData[14]) * 256;
+            jsonlength = (jsonlength + GlbData[13]) * 256;
+            jsonlength = (jsonlength + GlbData[12]);
 
-            string gltfjsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
+            string gltfjsonstring = Encoding.UTF8.GetString(GlbData, jsonstart, jsonlength);
 
 
             if (gltfjsonstring.Length > 0)
@@ -160,19 +129,20 @@ namespace Netherlands3D.Tiles3D
 
             return null;
         }
-        private static void RemoveCesiumRtcFromRequieredExtentions(ref B3dm b3dm)
+
+        private static void RemoveCesiumRtcFromRequieredExtentions(ref byte[] GlbData)
         {
             int jsonstart = 20;
-            int jsonlength = (b3dm.GlbData[15]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[14]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[13]) * 256;
-            jsonlength = (jsonlength + b3dm.GlbData[12]);
+            int jsonlength = (GlbData[15]) * 256;
+            jsonlength = (jsonlength + GlbData[14]) * 256;
+            jsonlength = (jsonlength + GlbData[13]) * 256;
+            jsonlength = (jsonlength + GlbData[12]);
 
-            string jsonstring = Encoding.UTF8.GetString(b3dm.GlbData, jsonstart, jsonlength);
+            string jsonstring = Encoding.UTF8.GetString(GlbData, jsonstart, jsonlength);
 
             JSONNode gltfJSON = JSON.Parse(jsonstring);
             JSONNode extensionsRequiredNode = gltfJSON["extensionsRequired"];
-            if (extensionsRequiredNode==null)
+            if (extensionsRequiredNode == null)
             {
                 return;
             }
@@ -180,18 +150,18 @@ namespace Netherlands3D.Tiles3D
             int cesiumRTCIndex = -1;
             for (int ii = 0; ii < extensionsRequiredCount; ii++)
             {
-                if (extensionsRequiredNode[ii].Value== "CESIUM_RTC")
+                if (extensionsRequiredNode[ii].Value == "CESIUM_RTC")
                 {
                     cesiumRTCIndex = ii;
                 }
             }
-            if (cesiumRTCIndex<0)
+            if (cesiumRTCIndex < 0)
             {
                 return;
             }
-           
-            
-            if (extensionsRequiredCount==1)
+
+
+            if (extensionsRequiredCount == 1)
             {
                 gltfJSON.Remove(extensionsRequiredNode);
             }
@@ -200,19 +170,19 @@ namespace Netherlands3D.Tiles3D
                 extensionsRequiredNode.Remove(cesiumRTCIndex);
             }
             jsonstring = gltfJSON.ToString();
-           
+
             byte[] resultbytes = Encoding.UTF8.GetBytes(jsonstring);
 
             int i = 0;
-            for ( i = 0; i < resultbytes.Length; i++)
+            for (i = 0; i < resultbytes.Length; i++)
             {
-                b3dm.GlbData[jsonstart+i] = resultbytes[i];
+                GlbData[jsonstart + i] = resultbytes[i];
             }
             for (int j = i; j < jsonlength; j++)
             {
-                b3dm.GlbData[jsonstart+j] = 0x20;
+                GlbData[jsonstart + j] = 0x20;
             }
-            
+
             return;
             //string ExtentionsRequiredString = "\"extensionsRequired\"";
             //int extentionsStart = jsonstring.IndexOf(ExtentionsRequiredString);

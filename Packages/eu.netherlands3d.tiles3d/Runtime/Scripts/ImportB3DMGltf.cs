@@ -14,7 +14,7 @@ using System.IO.Compression;
 #endif
 namespace Netherlands3D.Tiles3D
 {
-    public class ImportB3DMGltf
+    public static class ImportB3DMGltf
     {
         private static CustomCertificateValidation customCertificateHandler = new CustomCertificateValidation();
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
@@ -229,7 +229,7 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         /// <param name="filepath">Path to local .glb,.gltf or .b3dm file</param>
         /// <param name="writeGlbNextToB3dm">Extract/copy .glb file from .b3dm and place it next to it.</param>
-        public async void ImportBinFromFile(string filepath, bool writeGlbNextToB3dm = false)
+        public static async void ImportBinFromFile(string filepath, bool writeGlbNextToB3dm = false)
         {
             byte[] bytes = null;
 

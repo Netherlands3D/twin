@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System;
 using System.Text;
+
+using System.Threading.Tasks;
+
+
 #if UNITY_EDITOR
 using System.IO.Compression;
 #endif
@@ -38,9 +42,9 @@ namespace Netherlands3D.Tiles3D
                 return true;
             }
         }
-        public static IEnumerator LoadContent(string url, Transform containerTransform, Tile tile, Action<bool> succesCallback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
+        public static IEnumerator DownloadContent(string url, Transform containerTransform, Tile tile, Action<byte[],string> Callback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
         {
-
+            Debug.Log("starting download");
             #region download data
             var webRequest = UnityWebRequest.Get(url);
             if (customHeaders != null)
@@ -57,43 +61,61 @@ namespace Netherlands3D.Tiles3D
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogWarning(url + " -> " + webRequest.error);
-                succesCallback.Invoke(false);
+                Callback.Invoke(null,url);
                 yield break;
             }
             #endregion
             byte[] contentBytes = webRequest.downloadHandler.data;
+            Debug.Log("downloaded data");
+            Callback.Invoke(contentBytes, url);
+            
+            
+        }
+
+        public static async Task LoadContent(byte[] contentBytes, Transform containerTransform, Tile tile, Action<bool> succesCallback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
+        {
 
             #region get contentType
             // get contentType
             ContentType contentType = getContentTypeFromBinaryHeader(contentBytes);
-            if (contentType==ContentType.undefined)
-            {
-                contentType = getContentTypeFromFileExtension(url);
-            }
+
             if (contentType == ContentType.undefined)
             {
                 succesCallback.Invoke(false);
-                yield break;
+
             }
             #endregion region
+
+            ImportGlb importGlb;
 
             //handle data
             switch (contentType)
             {
                 case ContentType.b3dm:
                     Debug.Log("loadin b3dm");
-                    ImportB3dm.LoadB3dm(contentBytes, tile, containerTransform, succesCallback, url,parseAssetMetaData,parseSubObjects,overrideMaterial);
+                     await ImportB3dm.LoadB3dm(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.pnts:
-                    ImportPnts.LoadPoints(contentBytes, tile, containerTransform, succesCallback, url, parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    Debug.Log("loading pnts");
+                    await ImportPnts.LoadPoints(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.i3dm:
+                    //Debug.Log("loading i3dm");
+                    //await ImportI3dm.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.cmpt:
+                    Debug.Log("loading cmpt");
+                    await ImportComposite.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.glb:
+                    importGlb = new ImportGlb();
+                    await importGlb.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+
                     break;
                 case ContentType.gltf:
+                    importGlb = new ImportGlb();
+                    await importGlb.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+
                     break;
                 case ContentType.subtree:
                     break;
@@ -108,6 +130,7 @@ namespace Netherlands3D.Tiles3D
         {
             //readMagic bytes
             string magic = Encoding.UTF8.GetString(content, 0, 4);
+            Debug.Log("magic: " + magic);
             switch (magic)
             {
                 case "b3dm":
