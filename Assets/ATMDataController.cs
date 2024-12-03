@@ -31,6 +31,46 @@ namespace Netherlands3D.Twin
             { 1625, @"https://images.huygens.knaw.nl/webmapper/maps/berckenrode/{z}/{x}/{y}.png"}
         };
 
+        private int[] yearsGeoJson = { 1802, 1853, 1870, 1876, 1909, 1920, 1943, 1985 };
+
+        public int RoundDownYearGeoJson(int inputYear)
+        {
+            // Find the largest year in the array that is less than or equal to inputYear
+            int result = yearsGeoJson[0];
+            foreach (var year in yearsGeoJson)
+            {
+                if (year <= inputYear)
+                {
+                    result = year;
+                }
+                else
+                {
+                    break; // Stop checking once we've exceeded the inputYear
+                }
+            }
+
+            return result;
+        }
+
+        public int RoundDownYearMaps(int inputYear)
+        {
+            // Find the largest year in the array that is less than or equal to inputYear
+            int[] years = yearUrls.Keys.ToArray();
+            int result = years[0];
+            foreach (var year in years)
+            {
+                if (year <= inputYear)
+                {
+                    result = year;
+                }
+                else
+                {
+                    break; // Stop checking once we've exceeded the inputYear
+                }
+            }
+            return result;
+        }
+
         private Dictionary<int, Vector4> yearBounds = new Dictionary<int, Vector4>()
         {
             { 1985, new Vector4(33627, 21516, 33691, 21566) },
@@ -71,7 +111,7 @@ namespace Netherlands3D.Twin
 
         public (int minZoom, int maxZoom) GetZoomBounds()
         {
-            int year = ATMUtilities.RoundDownYear(ProjectData.Current.CurrentDateTime.Year);
+            int year = RoundDownYearMaps(ProjectData.Current.CurrentDateTime.Year);
             if (yearZoomBounds.ContainsKey(year))
                 return (yearZoomBounds[year].x, yearZoomBounds[year].y);
             return (16, 16); //closest to default
@@ -128,7 +168,7 @@ namespace Netherlands3D.Twin
 
         private void UpdateYear(DateTime time)
         {
-            currentYear = ATMUtilities.RoundDownYear(time.Year);
+            currentYear = RoundDownYearMaps(time.Year);
             if (yearUrls.ContainsKey(currentYear))
             {
                 if (lastValidYear != currentYear)
@@ -154,7 +194,7 @@ namespace Netherlands3D.Twin
             {
                 //todo fix this default
                 if (lastValidYear == 0)
-                    lastValidYear = ATMUtilities.RoundDownYear(ProjectData.Current.CurrentDateTime.Year);
+                    lastValidYear = RoundDownYearMaps(ProjectData.Current.CurrentDateTime.Year);
                 return yearUrls[lastValidYear];
             }
             else

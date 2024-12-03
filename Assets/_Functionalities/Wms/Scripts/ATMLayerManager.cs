@@ -10,6 +10,8 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
 {
     public class ATMLayerManager : IDisposable
     {
+        public ATMDataController DataController => timeController;
+
         private ATMTileDataLayer[] ATMTileDataLayers => atmTileDataLayers;
 
         private int zoomLevel = -1;
