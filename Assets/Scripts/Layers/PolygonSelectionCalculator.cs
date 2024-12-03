@@ -12,12 +12,12 @@ namespace Netherlands3D.Twin
     public class PolygonSelectionCalculator : MonoBehaviour
     {
         public static List<PolygonSelectionLayer> Layers = new();
-        private OpticalRaycaster opticalRaycaster;
+        private PointerToWorldPosition pointerToWorldPosition;
         private static bool polygonAddedThisFrame;
 
         private void Awake()
         {
-            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
         private void OnEnable()
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
 
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-            var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(camera, Pointer.current.position.ReadValue());
+            var worldPoint = pointerToWorldPosition.WorldPoint;
 
             foreach (var layer in Layers)
             {
