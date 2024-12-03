@@ -79,21 +79,48 @@ namespace Netherlands3D.Twin
             }
             else
             {
+                Coordinate targetPivotCoordinate = new Coordinate(CoordinateSystem.WGS84_LatLon, 52.3677697709198d, 4.90068151319564d);
                 VlooienburgAsset entry = new VlooienburgAsset(link, 0, new Coordinate(), null); //need fake value because of async
                 vlooienburgAssets.Add(link, entry);
                 StartCoroutine(GetCoordinate(link, coord =>
                 {
+                    //we cannot use the coordinate because the coord is mapped to the adress position and not the center of the mesh
                     string adress = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
                     assetBundleLoader.LoadAssetFromAssetBundle(bundleName, adress.ToLower() + ".prefab", go =>
                     {
-                        Vector3 unityPosition = coord.ToUnity();
-                        go.transform.position = unityPosition;
+                        //Vector3 unityPosition = coord.ToUnity();                        
+                        //unityPosition.y = 0;                       
+
+                        //Vector3 targetOffset = new Vector3(-86.7f, 0, -173.47f);
+
+                        //Vector3 worldPositionMesh = go.GetComponent<Renderer>().bounds.center;
+                        //Vector3 localToPivot = (worldPositionMesh - go.transform.position);
+                        //go.transform.position -= localToPivot * 0.5f;
+                        //worldPositionMesh = go.GetComponent<Renderer>().bounds.center;
+                        //Vector3 offset = worldPositionMesh - unityPosition;
+                        //go.transform.position += targetOffset;
+
+                        //Coordinate testCoord = new Coordinate(CoordinateSystem.Unity, go.transform.position.x, go.transform.position.y, go.transform.position.z);
+                        //Coordinate lonlat = testCoord.Convert(CoordinateSystem.WGS84);
+
+                        //go.transform.position = lonlat.ToUnity();
+                        //GameObject test = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        //test.name = adress;
+                        //test.transform.localScale = Vector3.one * 5;
+                        //test.transform.position = go.transform.position - localToPivot + Vector3.up * 25;
+
+                        //go.transform.position = unityPosition;
+                        Vector3 pos = targetPivotCoordinate.ToUnity();
+                        pos.y = 0;
+                        go.transform.position = pos;
+                        go.layer = LayerMask.NameToLayer("Projected2");
                         go.SetActive(true);
 
                         go.AddComponent<HierarchicalObjectLayerGameObject>();
                         WorldTransform wt = go.AddComponent<WorldTransform>();
                         GameObjectWorldTransformShifter shifter = go.GetComponent<GameObjectWorldTransformShifter>();
                         wt.SetShifter(shifter);
+                        
 
                         //GameObject asset = GameObject.Instantiate(go, unityPosition, Quaternion.identity);
                         entry = new VlooienburgAsset(link, 0, coord, go);
