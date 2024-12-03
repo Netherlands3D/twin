@@ -27,7 +27,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 if (layerData == null)
                 {
-                    Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
                 }
                     
@@ -43,8 +42,7 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-
-
+        
         [Space] 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
@@ -71,6 +69,8 @@ namespace Netherlands3D.Twin.Layers
                 CreateProxy();
 
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+
+            InitializeStyling();
         }
         
         private void CreateProxy()
@@ -124,6 +124,11 @@ namespace Netherlands3D.Twin.Layers
         public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             //called when the Proxy's active state changes.          
+        }
+
+        public virtual void InitializeStyling()
+        {
+            //initialize the layer's style        
         }
     }
 }

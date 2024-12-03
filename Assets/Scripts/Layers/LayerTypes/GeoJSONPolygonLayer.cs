@@ -157,7 +157,7 @@ namespace Netherlands3D.Twin.Layers
             newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
         }
 
-        public void ApplyStyling()
+        public override void InitializeStyling()
         {
             foreach (var visualisations in SpawnedVisualisations)
             {

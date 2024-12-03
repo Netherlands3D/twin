@@ -1,16 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
-using GeoJSON.Net.Feature;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
-using Newtonsoft.Json.Linq;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -65,6 +61,12 @@ namespace Netherlands3D.CartesianTiles
             }
 
             StartCoroutine(FindTileHandler());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            geoJsonLayer.LayerData.DefaultSymbolizer.SetFillColor(Color.red);
         }
 
         public void UpdateUri(string year)
