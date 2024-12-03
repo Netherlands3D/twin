@@ -91,7 +91,6 @@ namespace Netherlands3D.Twin.Layers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-
             ApplyStyling();
 
             if (feature.Geometry is MultiPoint multiPoint)
@@ -109,10 +108,14 @@ namespace Netherlands3D.Twin.Layers
             spawnedVisualisationDictionary.Add(feature.GetHashCode(), newFeatureVisualisation);
         }
 
+        public override void InitializeStyling()
+        {
+            pointRenderer3D.Material = GetMaterialInstance();
+        }
+
         public void ApplyStyling()
         {
-            if (!pointRenderer3D.Material)
-                pointRenderer3D.Material = GetMaterialInstance();
+            // Currently we don't apply individual styling per feature
         }
 
         private Material GetMaterialInstance()
