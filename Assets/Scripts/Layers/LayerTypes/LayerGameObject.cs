@@ -27,7 +27,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 if (layerData == null)
                 {
-                    // Debug.Log("ReferencedProxy is null, creating new layer");
                     CreateProxy();
                 }
                     
