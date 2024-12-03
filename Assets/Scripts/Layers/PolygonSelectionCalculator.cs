@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin
 
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-            var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(camera, Pointer.current.position.ReadValue());
+            var worldPoint = opticalRaycaster.WorldPoint;
 
             foreach (var layer in Layers)
             {

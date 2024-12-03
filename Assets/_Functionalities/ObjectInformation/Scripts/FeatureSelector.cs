@@ -72,8 +72,7 @@ namespace Netherlands3D.Twin.ObjectInformation
         public void FindFeature(Ray ray)
         {
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
-            var worldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(mainCamera, Pointer.current.position.ReadValue());
-            Vector3 groundPosition = worldPoint;
+            Vector3 groundPosition = opticalRaycaster.WorldPoint;
             featureMappings.Clear();
             if (blockingObjectMapping != null)
             {

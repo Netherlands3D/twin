@@ -17,8 +17,7 @@ namespace Netherlands3D.Twin
 
         protected override void UpdateCurrentWorldCoordinate()
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var point = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, currentPointerPosition);
+            var point = opticalRaycaster.WorldPoint;
 
             if (point != Vector3.zero)
                 currentWorldCoordinate = point;
