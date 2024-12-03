@@ -7,17 +7,17 @@ namespace Netherlands3D.Twin
 {
     public class PolygonInputWithOpticalRaycastHeight : PolygonInput
     {
-        private OpticalRaycaster opticalRaycaster;
+        private PointerToWorldPosition pointerToWorldPosition;
 
         protected override void Awake()
         {
             base.Awake();
-            opticalRaycaster = GameObject.FindAnyObjectByType<OpticalRaycaster>();
+            pointerToWorldPosition = GameObject.FindAnyObjectByType<PointerToWorldPosition>();
         }
 
         protected override void UpdateCurrentWorldCoordinate()
         {
-            var point = opticalRaycaster.WorldPoint;
+            var point = pointerToWorldPosition.WorldPoint;
 
             if (point != Vector3.zero)
                 currentWorldCoordinate = point;

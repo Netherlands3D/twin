@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin
 {
@@ -12,9 +11,7 @@ namespace Netherlands3D.Twin
         private Texture2D samplerTexture;
 
         [Header("Events")] [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
-
-        public Vector3 WorldPoint { get; private set; } //Constantly updated world point
-
+        
         void Start()
         {
             if (depthCamera.targetTexture == null)
@@ -29,12 +26,6 @@ namespace Netherlands3D.Twin
 
             //Create a red channel texture that we can sample depth from
             samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
-        }
-
-        private void Update()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            WorldPoint = GetWorldPointAtCameraScreenPoint(Camera.main, screenPoint);
         }
 
         private void OnDestroy()

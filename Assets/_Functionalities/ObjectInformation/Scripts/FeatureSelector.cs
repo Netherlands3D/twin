@@ -38,12 +38,12 @@ namespace Netherlands3D.Twin.ObjectInformation
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
 
-        private OpticalRaycaster opticalRaycaster;
+        private PointerToWorldPosition pointerToWorldPosition;
 
         private void Awake()
         {
             mainCamera = Camera.main;
-            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
         public void Select(FeatureMapping mapping)
@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.ObjectInformation
         public void FindFeature(Ray ray)
         {
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
-            Vector3 groundPosition = opticalRaycaster.WorldPoint;
+            Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             featureMappings.Clear();
             if (blockingObjectMapping != null)
             {
