@@ -87,7 +87,6 @@ namespace Netherlands3D.Twin
                     assetBundleLoader.LoadAssetFromAssetBundle(bundleName, adress.ToLower() + ".prefab", go =>
                     {
                         Vector3 unityPosition = coord.ToUnity();
-                        unityPosition.y = 0;
                         go.transform.position = unityPosition;
                         go.SetActive(true);
 
@@ -111,14 +110,30 @@ namespace Netherlands3D.Twin
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
                 string txt = geoJsonRequest.downloadHandler.text;
-                string pattern = @"""coordinates"":\s*\[\s*([\d.]+),\s*([\d.]+)\s*\]";
-                Match match = Regex.Match(txt, pattern);
-                if (match.Success)
+                //string pattern = @"""coordinates"":\s*\[\s*([\d.]+),\s*([\d.]+)\s*\]";
+                //Match match = Regex.Match(txt, pattern);
+                //if (match.Success)
+                //{
+                //    float longitude = float.Parse(match.Groups[1].Value);
+                //    float latitude = float.Parse(match.Groups[2].Value);
+                //    Coordinate coord = new Coordinate(CoordinateSystem.WGS84_LatLon, latitude, longitude);
+                //    onGetCoordinate(coord);
+                //}
+
+                string pattern = @"Point\s*\(\s*([\d.]+)\s+([\d.]+)\s*\)";
+                MatchCollection matches = Regex.Matches(txt, pattern);
+                if (matches.Count > 0)
                 {
-                    float longitude = float.Parse(match.Groups[1].Value);
-                    float latitude = float.Parse(match.Groups[2].Value);
-                    Coordinate coord = new Coordinate(CoordinateSystem.WGS84_LatLon, latitude, longitude);
-                    onGetCoordinate(coord);
+                    foreach (Match match in matches)
+                    {
+                        if (match.Success) //TODO fix multiple matches 
+                        {
+                            float rdX = float.Parse(match.Groups[1].Value);
+                            float rdY = float.Parse(match.Groups[2].Value);                            
+                            Coordinate coord = new Coordinate(CoordinateSystem.RDNAP, rdX, rdY, 0);
+                            onGetCoordinate(coord);
+                        }
+                    }
                 }
             }
         }
