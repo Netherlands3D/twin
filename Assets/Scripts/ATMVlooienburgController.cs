@@ -1,9 +1,12 @@
-using Netherlands3D.Twin.Projects;
+using Netherlands3D.Coordinates;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
@@ -13,6 +16,25 @@ namespace Netherlands3D.Twin
         private Dictionary<string, string> addressAdamlinks = new();
         private AssetBundleLoader assetBundleLoader;
         private const string bundleName = "atmvlooienburg";
+
+        private Dictionary<string, VlooienburgAsset> vlooienburgAssets = new();
+        
+        private struct VlooienburgAsset
+        {
+            public string adamLink;
+            public int year;
+            public Coordinate coord;
+            public GameObject go;
+
+            public VlooienburgAsset(string link, int year, Coordinate coord, GameObject go)
+            {
+                adamLink = link;
+                this.year = year;
+                this.coord = coord;
+                this.go = go;
+            }
+        }
+
 
         private void Awake()
         {
@@ -48,11 +70,50 @@ namespace Netherlands3D.Twin
 
         public void LoadAssetForAdamLink(string link)
         {
-            string adress = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
-            assetBundleLoader.LoadAssetFromAssetBundle(bundleName, adress, go => 
-            { 
-            
-            });
+            if(vlooienburgAssets.ContainsKey(link))
+            {
+                if (vlooienburgAssets[link].go != null)
+                    vlooienburgAssets[link].go.SetActive(true);
+            }
+            else
+            {
+                VlooienburgAsset entry = new VlooienburgAsset(link, 0, new Coordinate(), null); //need fake value because of async
+                vlooienburgAssets.Add(link, entry);
+                StartCoroutine(GetCoordinate(link, coord =>
+                {
+                    string adress = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
+                    assetBundleLoader.LoadAssetFromAssetBundle(bundleName, adress.ToLower() + ".prefab", go =>
+                    {
+                        Vector3 unityPosition = coord.ToUnity();
+                        unityPosition.y = 0;
+                        go.transform.position = unityPosition;
+                        go.SetActive(true);
+
+                        //GameObject asset = GameObject.Instantiate(go, unityPosition, Quaternion.identity);
+                        entry = new VlooienburgAsset(link, 0, coord, go);
+                        vlooienburgAssets[link] = entry;
+                    });
+                }));
+            }
+        }
+
+        private IEnumerator GetCoordinate(string url, Action<Coordinate> onGetCoordinate)
+        {
+            var geoJsonRequest = UnityWebRequest.Get(url);
+            yield return geoJsonRequest.SendWebRequest();
+            if (geoJsonRequest.result == UnityWebRequest.Result.Success)
+            {
+                string txt = geoJsonRequest.downloadHandler.text;
+                string pattern = @"""coordinates"":\s*\[\s*([\d.]+),\s*([\d.]+)\s*\]";
+                Match match = Regex.Match(txt, pattern);
+                if (match.Success)
+                {
+                    float longitude = float.Parse(match.Groups[1].Value);
+                    float latitude = float.Parse(match.Groups[2].Value);
+                    Coordinate coord = new Coordinate(CoordinateSystem.WGS84_LatLon, latitude, longitude);
+                    onGetCoordinate(coord);
+                }
+            }
         }
 
         //private void UpdateBagIds(DateTime newTime)

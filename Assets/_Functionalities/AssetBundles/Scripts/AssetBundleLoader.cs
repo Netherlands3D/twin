@@ -30,6 +30,9 @@ namespace Netherlands3D.Twin
         public string bundleName;
         public string prefabName;
 
+        private Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
+
+
         private void Awake()
         {
             ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
@@ -46,15 +49,17 @@ namespace Netherlands3D.Twin
                 foreach (string name in names)
                 {
                     // if the file is not a match, move on
-                    if (Path.GetFileName(name) != fileName.ToLower()) continue;
+                    string fName = Path.GetFileName(name).ToLower();
+                    if (fName != fileName.ToLower()) continue;
                     
                     GameObject asset = bundle.LoadAsset<GameObject>(name);
                     if (asset != null)
                     {
+                        GameObject copy = Instantiate(asset); //works only for a copy!
 #if UNITY_EDITOR
-                        FixShadersForEditor(asset);
+                        FixShadersForEditor(copy);
 #endif
-                        onAssetLoaded(asset);
+                        onAssetLoaded(copy);
                     }
 
                     bundle.Unload(false);
@@ -79,23 +84,51 @@ namespace Netherlands3D.Twin
                 {
                     renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
                 }
+
+                if(renderer.materials != null)
+                {
+                    Material[] mats = renderer.materials;
+                    for (int i = 0; i < mats.Length; i++)
+                    {
+                        mats[i].shader = Shader.Find(renderer.materials[i].shader.name);
+                    }
+                    renderer.materials = mats;
+                }
+                else if(renderer.sharedMaterials != null)
+                {
+                    Material[] mats = renderer.sharedMaterials;
+                    for (int i = 0; i < mats.Length; i++)
+                    {
+                        mats[i].shader = Shader.Find(renderer.sharedMaterials[i].shader.name);
+                    }
+                    renderer.sharedMaterials = mats;
+                }
             }
         }
 
         public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
         {
+            if (!loadedBundles.ContainsKey(path))
+                loadedBundles.Add(path, null);
+            else if(loadedBundles[path]!= null)
+            {
+                callBack(loadedBundles[path]);
+                yield break;
+            }
+
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError(request.error);
+                Debug.LogError(request.error + "path"+path);
                 callBack?.Invoke(null);
             }
             else
             {
                 // Get downloaded asset bundle
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
+                loadedBundles[path] = bundle;
                 callBack?.Invoke(bundle);
             }
         }

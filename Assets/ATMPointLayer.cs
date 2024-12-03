@@ -9,6 +9,9 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin;
+using System.Text.RegularExpressions;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Events.GenericListeners;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -81,10 +84,9 @@ namespace Netherlands3D.CartesianTiles
             bool hasLink = vlooienburgController.HasAdamlink(link);
             if(hasLink)
             {
-                Debug.Log(vlooienburgController.GetAddressFromAdamlink(link));
+                vlooienburgController.LoadAssetForAdamLink(link);               
             }
-
-        }
+        }     
 
         public void UpdateUri(string year)
         {
