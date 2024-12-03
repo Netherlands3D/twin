@@ -71,7 +71,7 @@ namespace Netherlands3D.Twin
 
         public (int minZoom, int maxZoom) GetZoomBounds()
         {
-            int year = GetClosestMapYearToCurrentYear();
+            int year = ATMUtilities.RoundDownYear(ProjectData.Current.CurrentDateTime.Year);
             if (yearZoomBounds.ContainsKey(year))
                 return (yearZoomBounds[year].x, yearZoomBounds[year].y);
             return (16, 16); //closest to default
@@ -119,28 +119,7 @@ namespace Netherlands3D.Twin
             }
             return new Vector2Int(lowest, highest);
         }
-
-
-        private int GetClosestMapYearToCurrentYear()
-        {
-            int projectYear = ProjectData.Current.CurrentDateTime.Year;
-            int closestYear = -1;
-            float closestDistance = float.MaxValue;
-            foreach(KeyValuePair<int, string> kvp in yearUrls)
-            {
-                if (yearsUnsupported.Contains(kvp.Key))
-                    continue;
-
-                float distToYear = Mathf.Abs(kvp.Key - projectYear);
-                if (distToYear < closestDistance)
-                {
-                    closestDistance = distToYear;
-                    closestYear = kvp.Key;  
-                }
-            }
-            return closestYear;
-        }
-
+        
         private void Start()
         {
             UpdateYear(ProjectData.Current.CurrentDateTime);            
@@ -149,7 +128,7 @@ namespace Netherlands3D.Twin
 
         private void UpdateYear(DateTime time)
         {
-            currentYear = GetClosestMapYearToCurrentYear();
+            currentYear = ATMUtilities.RoundDownYear(time.Year);
             if (yearUrls.ContainsKey(currentYear))
             {
                 if (lastValidYear != currentYear)
@@ -175,7 +154,7 @@ namespace Netherlands3D.Twin
             {
                 //todo fix this default
                 if (lastValidYear == 0)
-                    lastValidYear = GetClosestMapYearToCurrentYear();
+                    lastValidYear = ATMUtilities.RoundDownYear(ProjectData.Current.CurrentDateTime.Year);
                 return yearUrls[lastValidYear];
             }
             else
