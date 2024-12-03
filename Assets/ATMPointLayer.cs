@@ -3,15 +3,10 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
-using GeoJSON.Net.Feature;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin;
-using System.Text.RegularExpressions;
-using Netherlands3D.Coordinates;
-using Netherlands3D.Events.GenericListeners;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -26,7 +21,6 @@ namespace Netherlands3D.CartesianTiles
         [SerializeField] private string year = "1943";
         [SerializeField] private string tileFolderPath = "ATMBuildingGeojson/Tiles";
         private LayerURLPropertyData urlPropertyData;
-        private ATMVlooienburgController vlooienburgController;
 
         public string Year
         {
@@ -52,10 +46,9 @@ namespace Netherlands3D.CartesianTiles
         private void Awake()
         {
             geoJsonLayer = GetComponent<GeoJsonLayerGameObject>();
-            geoJsonLayer.AddPoint += OnAddPoint;
 
             UpdateUri(Year);
-            
+
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
@@ -73,20 +66,8 @@ namespace Netherlands3D.CartesianTiles
         public override void Start()
         {
             base.Start();
-            vlooienburgController = FindObjectOfType<ATMVlooienburgController>();
+            geoJsonLayer.LayerData.DefaultSymbolizer.SetFillColor(Color.red);
         }
-
-        private void OnAddPoint(Feature feature)
-        {
-            object linkObject;
-            feature.Properties.TryGetValue("id", out linkObject);
-            string link = (string)linkObject;
-            bool hasLink = vlooienburgController.HasAdamlink(link);
-            if(hasLink)
-            {
-                vlooienburgController.LoadAssetForAdamLink(link);               
-            }
-        }     
 
         public void UpdateUri(string year)
         {
@@ -152,10 +133,6 @@ namespace Netherlands3D.CartesianTiles
 
         private void OnDestroy()
         {
-            foreach (GeoJsonLayerGameObject.FeatureHandler handler in geoJsonLayer.AddPoint.GetInvocationList())
-                if(handler == OnAddPoint)
-                    geoJsonLayer.AddPoint -= OnAddPoint;
-
             if (tileHandler)
                 tileHandler.RemoveLayer(this);
         }
@@ -180,11 +157,13 @@ namespace Netherlands3D.CartesianTiles
 
             var geoJsonRequest = UnityWebRequest.Get(uri);
             tile.runningWebRequest = geoJsonRequest;
-
+            
             yield return geoJsonRequest.SendWebRequest();
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
-                ParseGeoJSON(geoJsonRequest.downloadHandler.text);
+                var parser = new GeoJsonParser(0.01f);
+                parser.OnFeatureParsed.AddListener(geoJsonLayer.AddFeatureVisualisation);
+                yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
             }
             else
             {
@@ -195,15 +174,8 @@ namespace Netherlands3D.CartesianTiles
                     $"Request to {uri} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
                 );
             }
+
             callback?.Invoke(tileChange);
-        }
-
-        private void ParseGeoJSON(string jsonText)
-        {
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-
-            if (featureCollection.Features.Count > 0)
-                geoJsonLayer.AppendFeatureCollection(featureCollection);
         }
     }
 }
