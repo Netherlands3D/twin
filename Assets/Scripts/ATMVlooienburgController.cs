@@ -1,4 +1,6 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -88,6 +90,11 @@ namespace Netherlands3D.Twin
                         unityPosition.y = 0;
                         go.transform.position = unityPosition;
                         go.SetActive(true);
+
+                        go.AddComponent<HierarchicalObjectLayerGameObject>();
+                        WorldTransform wt = go.AddComponent<WorldTransform>();
+                        GameObjectWorldTransformShifter shifter = go.GetComponent<GameObjectWorldTransformShifter>();
+                        wt.SetShifter(shifter);
 
                         //GameObject asset = GameObject.Instantiate(go, unityPosition, Quaternion.identity);
                         entry = new VlooienburgAsset(link, 0, coord, go);

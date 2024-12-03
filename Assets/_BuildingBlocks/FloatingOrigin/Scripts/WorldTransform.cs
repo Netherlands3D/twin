@@ -47,6 +47,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
             }
         }
 
+        public void SetShifter( WorldTransformShifter worldTransformShifter )
+        {
+            this.worldTransformShifter = worldTransformShifter;
+        }
+
         private void OnEnable()
         {
             Origin.onPreShift.AddListener(PrepareToShift);
