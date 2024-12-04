@@ -66,8 +66,8 @@ namespace Netherlands3D.Twin.Projects
                 }
                 
                 string fullZipToPath = Path.Combine(Application.persistentDataPath, zipEntry.Name);
-                using FileStream streamWriter = File.Create(fullZipToPath);
-                zipStream.CopyTo(streamWriter);
+                //using FileStream streamWriter = File.Create(fullZipToPath);
+                //zipStream.CopyTo(streamWriter);
             }
         }
         

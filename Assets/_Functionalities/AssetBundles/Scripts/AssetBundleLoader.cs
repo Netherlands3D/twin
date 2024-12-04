@@ -71,9 +71,9 @@ namespace Netherlands3D.Twin
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer renderer in renderers)
             {
-                if (renderer.material != null)
+                if (renderer.sharedMaterial != null)
                 {
-                    renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                    renderer.sharedMaterial.shader = Shader.Find(renderer.material.shader.name);
                 }
                 else
                 {

@@ -44,9 +44,7 @@ SpriteAtlas:
     - 1e54484a892db4a4d9ec38e3b70f9bdc: 21300000
     - 7879387aa51ba6542bead94ce812be8f: 21300000
     - 6f6d754b76cca99429d3a5ddde66df5a: 21300000
-    - 40aaffcb371d90b4f80c25b5ef64d6a3: 21300000
     - 18d57e0c862a50e46b2493db10c90efc: 21300000
-    - 9942ab7d6dc1bc243902ddf4d9d5a9b3: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d96ff64012b2ded42897d16e5fecc962, type: 3}
@@ -56,9 +54,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1e54484a892db4a4d9ec38e3b70f9bdc, type: 3}
   - {fileID: 21300000, guid: 7879387aa51ba6542bead94ce812be8f, type: 3}
   - {fileID: 21300000, guid: 6f6d754b76cca99429d3a5ddde66df5a, type: 3}
-  - {fileID: 21300000, guid: 40aaffcb371d90b4f80c25b5ef64d6a3, type: 3}
   - {fileID: 21300000, guid: 18d57e0c862a50e46b2493db10c90efc, type: 3}
-  - {fileID: 21300000, guid: 9942ab7d6dc1bc243902ddf4d9d5a9b3, type: 3}
   m_PackedSpriteNamesToIndex:
   - Camera
   - Search
@@ -67,9 +63,7 @@ SpriteAtlas:
   - Map
   - Polygon
   - Car
-  - AreaSelection
   - Pointer
-  - MinimapPointer
   m_RenderDataMap: {}
   m_Tag: UIAtlas
   m_IsVariant: 0
