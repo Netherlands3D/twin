@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin
         public string bundleName;
         public string prefabName;
 
-        private Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
+        private static Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
 
 
         private void Awake()
@@ -62,12 +62,12 @@ namespace Netherlands3D.Twin
                         onAssetLoaded(copy);
                     }
 
-                    bundle.Unload(false);
+                   // bundle.Unload(false);
                     return;
                 }
             }
 
-            StartCoroutine(GetAssetBundle(path, OnAssetBundleLoaded));
+            StartCoroutine(GetAssetBundle(path, bundleName, OnAssetBundleLoaded));
         }
 
         private void FixShadersForEditor(GameObject asset)
@@ -106,30 +106,33 @@ namespace Netherlands3D.Twin
             }
         }
 
-        public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
+        public IEnumerator GetAssetBundle(string path, string bundleName, UnityAction<AssetBundle> callBack)
         {
-            if (!loadedBundles.ContainsKey(path))
-                loadedBundles.Add(path, null);
-            else if(loadedBundles[path]!= null)
+            string key = path + bundleName;
+            if (!loadedBundles.ContainsKey(key))
             {
-                callBack(loadedBundles[path]);
-                yield break;
-            }
+                loadedBundles.Add(key, null);
+                UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
+                yield return request.SendWebRequest();
 
-            UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError(request.error + "path"+path);
-                callBack?.Invoke(null);
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError(request.error + "path" + path);
+                    loadedBundles.Remove(key);
+                    callBack?.Invoke(null);
+                }
+                else
+                {
+                    // Get downloaded asset bundle
+                    AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
+                    loadedBundles[key] = bundle;
+                    callBack?.Invoke(bundle);
+                }
             }
             else
             {
-                // Get downloaded asset bundle
-                AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
-                loadedBundles[path] = bundle;
-                callBack?.Invoke(bundle);
+                if (loadedBundles[key] != null)
+                    callBack?.Invoke(loadedBundles[key]);                
             }
         }
 

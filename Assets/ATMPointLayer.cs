@@ -17,7 +17,8 @@ namespace Netherlands3D.CartesianTiles
     /// The Twin GeoJSONLayer is used to render the GeoJSON data.
     /// </summary>
     public class ATMPointLayer : Layer
-    {
+    {        
+
         private TileHandler tileHandler;
         [SerializeField] private string year = "1943";
         [SerializeField] private string tileFolderPath = "ATMBuildingGeojson/Tiles";
@@ -71,7 +72,11 @@ namespace Netherlands3D.CartesianTiles
         {
             base.Start();
             geoJsonLayer.LayerData.DefaultSymbolizer.SetFillColor(Color.red);
-            vlooienburgController = FindObjectOfType<ATMVlooienburgController>();
+        }
+
+        public void SetATMVlooienburg(ATMVlooienburgController controller)
+        {
+            vlooienburgController = controller;
         }
 
         private void OnAddPoint(Feature feature)
@@ -79,11 +84,23 @@ namespace Netherlands3D.CartesianTiles
             object linkObject;
             feature.Properties.TryGetValue("id", out linkObject);
             string link = (string)linkObject;
+            object addressObject;
+            feature.Properties.TryGetValue("label", out addressObject);
+            string label = (string)addressObject;
+            label = label.Replace(" ", "_");          
+            //object yearObject;
+            //feature.Properties.TryGetValue("year", out yearObject);
+            //int year;
+            //int.TryParse((string)yearObject, out year);
             bool hasLink = vlooienburgController.HasAdamlink(link);
             if (hasLink)
             {
                 vlooienburgController.LoadAssetForAdamLink(link);
             }
+            //else
+            //{
+            //    vlooienburgController.LoadAssetForAddress(label);
+            //}
         }
 
         public void UpdateUri(string year)
@@ -93,6 +110,9 @@ namespace Netherlands3D.CartesianTiles
 
             urlPropertyData = (LayerURLPropertyData)geoJsonLayer.PropertyData;
             urlPropertyData.Data = new Uri(uri);
+
+            if(vlooienburgController != null) 
+            vlooienburgController.DisableAllAssets();
         }
 
         private IEnumerator FindTileHandler()
