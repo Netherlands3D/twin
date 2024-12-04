@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8176315866441308820}
   - component: {fileID: 8595515180972917436}
-  - component: {fileID: 4263911482410548891}
   - component: {fileID: 5777388999055051634}
   m_Layer: 5
   m_Name: Homepage van je huis
@@ -48,23 +47,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188491741972551289}
   m_CullTransparentMesh: 1
---- !u!114 &4263911482410548891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 188491741972551289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6814c61b70b962846a391b8fe830b489, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textMeshPro: {fileID: 0}
-  rectTransform1: {fileID: 0}
-  rectTransform2: {fileID: 0}
-  additionalHeight: 10
-  rectTransform: {fileID: 8176315866441308820}
 --- !u!114 &5777388999055051634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,12 +168,12 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
@@ -206,12 +188,12 @@ PrefabInstance:
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 107.1427
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1518934753131645070, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15.2496
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2083294629274030569, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
