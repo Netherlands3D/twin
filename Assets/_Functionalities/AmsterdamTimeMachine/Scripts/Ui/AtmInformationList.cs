@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GeoJSON.Net.Feature;
 using KindMen.Uxios;
 using KindMen.Uxios.Api;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace Netherlands3D.Twin
             PopulateList(new TemplatedUri(bagUriTemplate, parameters));
         }
 
-        public void LoadFromFeature(FeatureMapping featureMapping)
+        public void LoadFromFeatureMapping(FeatureMapping featureMapping)
         {
             var adamLinkId = featureMapping.Feature.Properties["id"]?.ToString();
 
@@ -48,6 +49,21 @@ namespace Netherlands3D.Twin
             if (adamLinkId.StartsWith("https://adamlink.nl/geo/address/") == false) return;
 
             QueryParameters parameters = new() {{"id", adamLinkId}};
+
+            PopulateList(new TemplatedUri(adamLinkTemplate, parameters));
+        }
+
+        public void LoadFromFeature(Feature feature)
+        {
+            var adamLinkId = feature.Properties["id"]?.ToString();
+
+            // check for an id field, otherwise it is not an Amsterdam Time Machine feature
+            if (string.IsNullOrEmpty(adamLinkId)) return;
+
+            // check if it is a valid Amsterdam Time Machine feature, otherwise we ignore it 
+            if (adamLinkId.StartsWith("https://adamlink.nl/geo/address/") == false) return;
+
+            QueryParameters parameters = new() { { "id", adamLinkId } };
 
             PopulateList(new TemplatedUri(adamLinkTemplate, parameters));
         }

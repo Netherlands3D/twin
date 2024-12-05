@@ -95,7 +95,7 @@ namespace Netherlands3D.CartesianTiles
             bool hasLink = vlooienburgController.HasAdamlink(link);
             if (hasLink)
             {
-                vlooienburgController.LoadAssetForAdamLink(link);
+                vlooienburgController.LoadAssetForAdamLink(link, feature);
             }
             //else
             //{

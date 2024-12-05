@@ -1,3 +1,4 @@
+using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
@@ -21,26 +22,8 @@ namespace Netherlands3D.Twin
         private AssetBundleLoader assetBundleLoader;
         private const string bundleName = "atmvlooienburg";
         private int currentYear;
-        private Dictionary<string, VlooienburgAsset> vlooienburgAssets = new();
+        private Dictionary<string, ATMAsset> vlooienburgAssets = new();
         private Coordinate targetPivotCoordinate = new Coordinate(CoordinateSystem.WGS84_LatLon, 52.3677697709198d, 4.90068151319564d);
-
-        private struct VlooienburgAsset
-        {
-            public string adamLink;
-            public Coordinate coord;
-            public GameObject go;
-            public bool isActive; //if the asset was still loading we can use this to sync the active state of the gameobject
-            public string address;
-
-            public VlooienburgAsset(string link, string address, Coordinate coord, GameObject go)
-            {
-                adamLink = link;
-                this.address = address;
-                this.coord = coord;
-                this.go = go;
-                isActive = true;
-            }
-        }
 
         private void OnEnable()
         {
@@ -90,37 +73,51 @@ namespace Netherlands3D.Twin
             return null;
         } 
 
-        public void LoadAssetForAdamLink(string link)
+        public void LoadAssetForAdamLink(string link, Feature feature)
         {
             if(vlooienburgAssets.ContainsKey(link))
             {
-                VlooienburgAsset asset = vlooienburgAssets[link];
+                ATMAsset asset = vlooienburgAssets[link];
                 if (asset.go != null)
                     asset.go.SetActive(true);
                 asset.isActive = true;
-                vlooienburgAssets[link] = asset;
             }
             else
             {
                 //we cannot use the coordinate because the coord is mapped to the adress position and not the center of the mesh
                 string address = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
+                string tempLink = link;
+                //this may be a bit inefficient but works for now
+                GameObject loadingObject = new GameObject("loadingasset");
+                ATMAsset asset = loadingObject.AddComponent<ATMAsset>();
 
-                VlooienburgAsset entry = new VlooienburgAsset(link, address, new Coordinate(), null); //need fake value because of async
-                vlooienburgAssets.Add(link, entry);               
+                vlooienburgAssets.Add(link, asset);               
                 assetBundleLoader.LoadAssetFromAssetBundle(bundleName, address.ToLower() + ".prefab", go =>
                 {                    
                     Vector3 pos = targetPivotCoordinate.ToUnity();
                     pos.y = 0;
                     go.transform.position = pos;
                     go.layer = LayerMask.NameToLayer("Projected2");
-                    go.SetActive(vlooienburgAssets[link].isActive);
+                    go.SetActive(asset.isActive);
 
                     go.AddComponent<HierarchicalObjectLayerGameObject>();
                     WorldTransform wt = go.AddComponent<WorldTransform>();
                     GameObjectWorldTransformShifter shifter = go.GetComponent<GameObjectWorldTransformShifter>();
                     wt.SetShifter(shifter);
 
-                    entry = new VlooienburgAsset(link, address, targetPivotCoordinate, go);
+                    ATMAsset previous = vlooienburgAssets[tempLink];
+                    Destroy(previous.gameObject);
+                    vlooienburgAssets[tempLink] = null;
+
+                    ATMAsset entry = go.AddComponent<ATMAsset>();
+
+                    entry.adamLink = tempLink;
+                    entry.address = address;
+                    entry.coord = targetPivotCoordinate;
+                    entry.go = go;
+                    entry.feature = feature;
+                    entry.Initialize();
+
                     vlooienburgAssets[link] = entry;
                 });
             }
@@ -140,14 +137,13 @@ namespace Netherlands3D.Twin
 
         public void DisableAllAssets()
         {
-            for(int i = 0; i <  vlooienburgAssets.Values.Count; i++) 
+            foreach(KeyValuePair<string, ATMAsset> kvp in vlooienburgAssets)
             {
-                VlooienburgAsset va = vlooienburgAssets.Values.ElementAt(i); 
+                ATMAsset va = kvp.Value; 
                 //is null when still loading
                 if (va.go != null)
                     va.go.SetActive(false);
                 va.isActive = false;
-                vlooienburgAssets[va.adamLink] = va;
             }
         }
 
@@ -160,6 +156,24 @@ namespace Netherlands3D.Twin
                 string[] data = line[0].Split(',');                
                 addressAdamlinks.Add(Path.GetFileNameWithoutExtension(data[0]), data[1]);
             }
+        }
+    }
+
+    public class ATMAsset : MonoBehaviour
+    {
+        public string adamLink;
+        public Coordinate coord;
+        public GameObject go;
+        public bool isActive; //if the asset was still loading we can use this to sync the active state of the gameobject
+        public string address;
+        public Feature feature;
+
+        public void Initialize()
+        {
+            MeshCollider box = go.AddComponent<MeshCollider>();
+            //this because sometimes you have a building with a chimney but the boxcollider will stick out alot
+            //box.center = new Vector3(box.center.x, box.center.y, 8.5f);
+            //box.size = new Vector3(box.size.x, box.size.y, 15f);
         }
     }
 }
