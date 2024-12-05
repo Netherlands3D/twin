@@ -5,7 +5,15 @@ namespace Netherlands3D.Twin
 {
     public class MTLImportPropertySection : MonoBehaviour
     {
+        [SerializeField] private GameObject defaultImportPanel;
+        [SerializeField] private GameObject hasMtlPanel;
+        [SerializeField] private GameObject importErrorPanel;
         public ObjSpawner ObjSpawner { get; set; }
+        
+        private void Start()
+        {
+            SetUIPanels();
+        }
 
         //called in the inspector by FileOpen.cs
         public void ImportMTL(string path)
@@ -15,6 +23,17 @@ namespace Netherlands3D.Twin
             
             ObjSpawner.SetMtlPathInPropertyData(path);
             ObjSpawner.StartImport();
+            
+            SetUIPanels();
+        }
+        
+        private void SetUIPanels()
+        {
+            if (ObjSpawner.HasMtl)
+            {
+                defaultImportPanel.SetActive(false);
+                hasMtlPanel.SetActive(true);
+            }
         }
     }
 }

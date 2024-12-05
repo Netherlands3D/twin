@@ -22,6 +22,8 @@ namespace Netherlands3D.Twin.Layers
 
         private ObjImporter.ObjImporter importer;
         private GameObject importedObject;
+        
+        public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;
 
         private void Awake()
         {
@@ -53,26 +55,6 @@ namespace Netherlands3D.Twin.Layers
             var mtlPath = GetMtlPathFromPropertyData();
             
             ImportObj(objPath, mtlPath);
-        }
-
-        private string GetObjPathFromPropertyData()
-        {
-            if (propertyData.ObjFile == null)
-                return "";
-            
-            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            return path;
-        }
-
-        private string GetMtlPathFromPropertyData()
-        {
-            if (propertyData.MtlFile == null)
-                return "";
-            
-            var localPath = propertyData.MtlFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            return path;
         }
 
         private void ImportObj(string objPath, string mtlPath = "")
@@ -125,6 +107,26 @@ namespace Netherlands3D.Twin.Layers
         {
             var propertyData = PropertyData as ObjPropertyData;
             propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
+        }
+        
+        private string GetObjPathFromPropertyData()
+        {
+            if (propertyData.ObjFile == null)
+                return "";
+            
+            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
+            var path = Path.Combine(Application.persistentDataPath, localPath);
+            return path;
+        }
+
+        private string GetMtlPathFromPropertyData()
+        {
+            if (propertyData.MtlFile == null)
+                return "";
+            
+            var localPath = propertyData.MtlFile.LocalPath.TrimStart('/', '\\');
+            var path = Path.Combine(Application.persistentDataPath, localPath);
+            return path;
         }
     }
 }
