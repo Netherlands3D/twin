@@ -12,7 +12,8 @@ namespace Netherlands3D.Twin
         
         private void Start()
         {
-            SetUIPanels();
+            SetNormalUIPanels();
+            ObjSpawner.MtlImportSuccess.AddListener(OnMTLImportError);
         }
 
         //called in the inspector by FileOpen.cs
@@ -24,16 +25,36 @@ namespace Netherlands3D.Twin
             ObjSpawner.SetMtlPathInPropertyData(path);
             ObjSpawner.StartImport();
             
-            SetUIPanels();
+            SetNormalUIPanels();
         }
         
-        private void SetUIPanels()
+        private void SetNormalUIPanels()
         {
+            importErrorPanel.SetActive(false);
             if (ObjSpawner.HasMtl)
             {
                 defaultImportPanel.SetActive(false);
                 hasMtlPanel.SetActive(true);
             }
+        }
+
+        private void OnMTLImportError(bool success)
+        {
+            if (success)
+            {
+                SetNormalUIPanels();
+            }
+            else
+            {
+                importErrorPanel.SetActive(true);
+                defaultImportPanel.SetActive(false);
+                hasMtlPanel.SetActive(false);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            ObjSpawner.MtlImportSuccess.RemoveListener(OnMTLImportError);
         }
     }
 }

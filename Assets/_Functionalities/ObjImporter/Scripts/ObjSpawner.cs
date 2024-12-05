@@ -5,6 +5,7 @@ using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -24,6 +25,7 @@ namespace Netherlands3D.Twin.Layers
         private GameObject importedObject;
         
         public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;
+        public UnityEvent<bool> MtlImportSuccess = new();
 
         private void Awake()
         {
@@ -77,6 +79,7 @@ namespace Netherlands3D.Twin.Layers
                 string copiedMtlFilename = mtlPath + ".temp";
                 File.Copy(mtlPath, copiedMtlFilename);
                 importer.mtlFilePath = copiedMtlFilename;
+                importer.MtlImportSucceeded.AddListener(MtlImportSuccess.Invoke);
             }
 
             importer.imgFilePath = "";
@@ -99,7 +102,11 @@ namespace Netherlands3D.Twin.Layers
 
         private void DisposeImporter()
         {
-            if (importer != null) Destroy(importer.gameObject);
+            if (importer != null)
+            {
+                importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
+                Destroy(importer.gameObject);
+            }
         }
 
         public void SetObjPathInPropertyData(string fullPath)
