@@ -120,7 +120,7 @@ namespace Netherlands3D.ObjImporter
                 return;
             }
             createdGameobjectIsMoveable = !objreader.ObjectUsesRDCoordinates;
-            ObjImportSucceeded.Invoke(succes);
+            ObjImportSucceeded?.Invoke(succes);
             
             if (mtlFilePath != "")
             {
@@ -167,7 +167,7 @@ namespace Netherlands3D.ObjImporter
                 return;
             }
             CreateGameObjectDataSet();
-            MtlImportSucceeded.Invoke(succes);
+            MtlImportSucceeded?.Invoke(succes);
         }
 
 
