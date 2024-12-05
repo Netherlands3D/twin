@@ -5,7 +5,7 @@ using Netherlands3D.ObjImporter.General.GameObjectDataSet;
 using Netherlands3D.ObjImporter.ParseMTL;
 using Netherlands3D.ObjImporter.ParseOBJ;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 namespace Netherlands3D.ObjImporter
 {
@@ -43,6 +43,9 @@ namespace Netherlands3D.ObjImporter
         public System.Action<string> errormessage;
 
         public System.Action<GameObject> returnObjectTo;
+
+        public UnityEvent<bool> ObjImportSucceeded;
+        public UnityEvent<bool> MtlImportSucceeded;
 
         #region send progress and errors
         void BroadcastCurrentActivity(string value)
@@ -117,30 +120,35 @@ namespace Netherlands3D.ObjImporter
                 return;
             }
             createdGameobjectIsMoveable = !objreader.ObjectUsesRDCoordinates;
-
-
+            ObjImportSucceeded.Invoke(succes);
+            
             if (mtlFilePath != "")
             {
-                if (mtlreader == null)
-                {
-                    mtlreader = gameObject.AddComponent<ReadMTL>();
-                    mtlreader.broadcastProgressPercentage = BroadcastProgressPercentage;
-                }
-                BroadcastCurrentActivity("mtl-file lezen");
-
-                // Do we have an image to use?
-                if (imgFilePath.Length != 0)
-                {
-                    mtlreader.AddTexture(System.IO.Path.GetFileName(imgFilePath), imgFilePath);
-                }
-
-                mtlreader.StartMTLParse(System.IO.File.ReadAllText(mtlFilePath), OnMTLRead, mtlFilePath);
+                ReadMtlFile();
             }
             else
             {
                 BroadcastAlertmessage("geen mtl-file, alle objecten krijgen de default-kleur");
                 CreateGameObjectDataSet();
             }
+        }
+
+        public void ReadMtlFile()
+        {
+            if (mtlreader == null)
+            {
+                mtlreader = gameObject.AddComponent<ReadMTL>();
+                mtlreader.broadcastProgressPercentage = BroadcastProgressPercentage;
+            }
+            BroadcastCurrentActivity("mtl-file lezen");
+
+            // Do we have an image to use?
+            if (imgFilePath.Length != 0)
+            {
+                mtlreader.AddTexture(System.IO.Path.GetFileName(imgFilePath), imgFilePath);
+            }
+
+            mtlreader.StartMTLParse(System.IO.File.ReadAllText(mtlFilePath), OnMTLRead, mtlFilePath);
         }
 
         private void OnMTLRead(bool succes)
@@ -159,6 +167,7 @@ namespace Netherlands3D.ObjImporter
                 return;
             }
             CreateGameObjectDataSet();
+            MtlImportSucceeded.Invoke(succes);
         }
 
 
