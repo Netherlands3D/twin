@@ -102,13 +102,19 @@ namespace Netherlands3D.Twin.Layers
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
             }
-
+            
+            newFeatureVisualisation.CalculateBounds();
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        public override void InitializeStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
         }
 
         public void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            // Currently we don't apply individual styling per feature
         }
         
         private Material GetMaterialInstance()
@@ -130,9 +136,6 @@ namespace Netherlands3D.Twin.Layers
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
             {
-                // Make sure to recalculate bounds because they can change due to shifts
-                SpawnedVisualisations[i].CalculateBounds();
-
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
                 if (inCameraFrustum)
                     continue;

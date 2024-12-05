@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -20,6 +22,21 @@ namespace Netherlands3D.Twin.Layers
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
 
+            public FeaturePolygonVisualisations()
+            {
+                Origin.current.onPostShift.AddListener(OnOriginShifted);
+            }
+
+            ~FeaturePolygonVisualisations()
+            {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
+            }
+
+            private void OnOriginShifted(Coordinate from, Coordinate to)
+            {
+                CalculateBounds();
+            }
+            
             /// <summary>
             /// Append a polygon visualisation to this feature visualisation
             /// </summary>
@@ -28,6 +45,7 @@ namespace Netherlands3D.Twin.Layers
                 visualisation.gameObject.SetActive(geoJsonPolygonLayer.isActiveAndEnabled);
                 
                 this.visualisations.Add(visualisation);
+                CalculateBounds();
             }
 
             /// <summary>
@@ -41,6 +59,7 @@ namespace Netherlands3D.Twin.Layers
                 }
 
                 this.visualisations.AddRange(visualisations);
+                CalculateBounds();
             }
 
             /// <summary>
@@ -83,6 +102,7 @@ namespace Netherlands3D.Twin.Layers
                     Destroy(visualisation.gameObject);
                 }
                 visualisations.Clear();
+                bounds = new Bounds();
             }
 
             /// <summary>

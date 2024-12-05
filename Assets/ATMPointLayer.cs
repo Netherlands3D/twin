@@ -3,11 +3,10 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
-using GeoJSON.Net.Feature;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -49,7 +48,7 @@ namespace Netherlands3D.CartesianTiles
             geoJsonLayer = GetComponent<GeoJsonLayerGameObject>();
 
             UpdateUri(Year);
-            
+
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
@@ -62,6 +61,12 @@ namespace Netherlands3D.CartesianTiles
             }
 
             StartCoroutine(FindTileHandler());
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            geoJsonLayer.LayerData.DefaultSymbolizer.SetFillColor(Color.red);
         }
 
         public void UpdateUri(string year)
@@ -152,11 +157,13 @@ namespace Netherlands3D.CartesianTiles
 
             var geoJsonRequest = UnityWebRequest.Get(uri);
             tile.runningWebRequest = geoJsonRequest;
-
+            
             yield return geoJsonRequest.SendWebRequest();
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
-                ParseGeoJSON(geoJsonRequest.downloadHandler.text);
+                var parser = new GeoJsonParser(0.01f);
+                parser.OnFeatureParsed.AddListener(geoJsonLayer.AddFeatureVisualisation);
+                yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
             }
             else
             {
@@ -167,15 +174,8 @@ namespace Netherlands3D.CartesianTiles
                     $"Request to {uri} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
                 );
             }
+
             callback?.Invoke(tileChange);
-        }
-
-        private void ParseGeoJSON(string jsonText)
-        {
-            var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(jsonText);
-
-            if (featureCollection.Features.Count > 0)
-                geoJsonLayer.AppendFeatureCollection(featureCollection);
         }
     }
 }
