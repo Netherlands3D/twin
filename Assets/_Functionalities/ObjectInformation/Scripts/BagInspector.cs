@@ -140,6 +140,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 			GameObject selection;
             string adamlink = atmObjectSelector.FindSubObject(ray, out hit);
             lastWorldClickedPosition = hit.point;
+
+			//skip this for now to be able to select the atmassets easier. 
+			//todo, when the geojson points are hidden because of atmassets, this coudl be changed back
             if (hit.collider == null)
 			{
 				bagId = subObjectSelector.FindSubObject(ray, out hit);
@@ -177,11 +180,11 @@ namespace Netherlands3D.Twin.Interface.BAG
 								mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
 						}
 					}
-					if (atmObjectSelector.HasObjectMapping)
-					{
-						//add max value, we want this on top
-						mappings.TryAdd(atmObjectSelector.Object.gameObject, int.MaxValue);
-					}
+					//if (atmObjectSelector.HasObjectMapping)
+					//{
+					//	//add max value, we want this on top
+					//	mappings.TryAdd(atmObjectSelector.Object.gameObject, int.MaxValue);
+					//}
 
 					orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
 					currentSelectedMappingIndex = 0;
@@ -197,7 +200,6 @@ namespace Netherlands3D.Twin.Interface.BAG
 				if (orderedMappings.Count == 0) return;
 
 				//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
-
 				selection = orderedMappings[currentSelectedMappingIndex];
 			}
 			else

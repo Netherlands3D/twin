@@ -23,33 +23,8 @@ namespace Netherlands3D.Twin
         private const string bundleName = "atmvlooienburg";
         private int currentYear;
         private Dictionary<string, ATMAsset> vlooienburgAssets = new();
+        //the fixed offset to get all the prefabs at the right position (prefabs have offseted pivots), in the future this should be organized correctly by coordinate per prefab
         private Coordinate targetPivotCoordinate = new Coordinate(CoordinateSystem.WGS84_LatLon, 52.3677697709198d, 4.90068151319564d);
-
-        private void OnEnable()
-        {
-            ProjectData.Current.OnDataChanged.AddListener(Initialize);
-        }
-
-        private void OnDisable()
-        {
-            ProjectData.Current.OnDataChanged.RemoveListener(Initialize);
-            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);
-        }
-
-        private void Initialize(ProjectData newProject)
-        {
-            newProject.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
-        }
-
-        private void OnTimeChanged(DateTime newTime)
-        {
-            var yearToLoad = newTime.Year;
-            if (yearToLoad != currentYear)
-            {
-
-                currentYear = yearToLoad;
-            }
-        }
 
         private void Awake()
         {
@@ -170,10 +145,8 @@ namespace Netherlands3D.Twin
 
         public void Initialize()
         {
+            //mesh collider because boxcolliders cause problems with chimneys etc
             MeshCollider box = go.AddComponent<MeshCollider>();
-            //this because sometimes you have a building with a chimney but the boxcollider will stick out alot
-            //box.center = new Vector3(box.center.x, box.center.y, 8.5f);
-            //box.size = new Vector3(box.size.x, box.size.y, 15f);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Netherlands3D.Twin.ObjectInformation
         public string ObjectID => foundId;
 
         [SerializeField] private float hitDistance = 100000f;
-        //private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());
         private ATMAsset foundObject;
         private string foundId;
 
@@ -23,16 +22,10 @@ namespace Netherlands3D.Twin.ObjectInformation
         public void Select(Feature feature)
         {
             Deselect();
-            //ColorSetLayer = GeometryColorizer.InsertCustomColorSet(
-            //    -1,
-            //    new Dictionary<string, Color>
-            //    {
-            //        { adamlink, new Color(1, 0, 0, 0) }
-            //    }
-            //);
 
             if (foundObject != null)
             {
+                //in this case the object has multiple material, lets color them all to prevent artefacts
                 MeshRenderer mr = foundObject.GetComponent<MeshRenderer>();
                 Material[] materials = mr.materials;
                 foreach (Material material in materials)
@@ -41,6 +34,7 @@ namespace Netherlands3D.Twin.ObjectInformation
                 }
                 mr.materials = materials;
 
+                //set the color buffer of the vertices to the selection key to render the thumbnail
                 MeshFilter mf = foundObject.GetComponent<MeshFilter>();
                 Color[] colors = new Color[mf.mesh.vertexCount];
                 for (int i = 0; i < colors.Length; i++)
@@ -50,9 +44,7 @@ namespace Netherlands3D.Twin.ObjectInformation
         }
 
         public void Deselect()
-        {
-            //GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-            //ColorSetLayer = null;
+        {           
             if (foundObject != null)
             {
                 MeshRenderer mr = foundObject.GetComponent<MeshRenderer>();
@@ -63,6 +55,7 @@ namespace Netherlands3D.Twin.ObjectInformation
                 }
                 mr.materials = materials;
 
+                //set the colorbuffer of the vertices back to normal
                 MeshFilter mf = foundObject.GetComponent<MeshFilter>();
                 Color[] colors = new Color[mf.mesh.vertexCount];
                 for (int i = 0; i < colors.Length; i++)
@@ -79,11 +72,10 @@ namespace Netherlands3D.Twin.ObjectInformation
                 hits[i] = new RaycastHit();
 
             hit = new RaycastHit();
-            //if (!Physics.Raycast(ray, out hit, hitDistance, atmProjectedLayer)) return null;
-            int cnt = Physics.RaycastNonAlloc(ray, hits, hitDistance); //new Ray(groundPosition + Vector3.up * 100, Vector3.down)
-            if (cnt == 0) return null;
-            // lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and
+            //because the opticalraycaster bug is still present the nothingplane gets selected so lets make an array and find the closest hit
             // use a nonalloc to prevent memory allocations
+            int cnt = Physics.RaycastNonAlloc(ray, hits, hitDistance); 
+            if (cnt == 0) return null;            
 
             float closest = float.MaxValue;
             for(int i = 0; i < hits.Length; i++)
