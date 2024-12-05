@@ -42,6 +42,11 @@ namespace Netherlands3D.Twin.Layers
             this.propertyData = propertyData;
         }
 
+        private void Start()
+        {
+            StartImport(); //called after loading properties or after setting the file path through the import adapter
+        }
+
         public void StartImport()
         {
             if(importedObject)
