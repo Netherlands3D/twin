@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
                 path = path.Remove(path.Length - 1);
             
             ObjSpawner.SetMtlPathInPropertyData(path);
-            ObjSpawner.ReImport();
+            ObjSpawner.StartImport();
         }
     }
 }

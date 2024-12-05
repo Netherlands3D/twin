@@ -21,15 +21,11 @@ namespace Netherlands3D.Twin.Layers
         public LayerPropertyData PropertyData => propertyData;
 
         private ObjImporter.ObjImporter importer;
+        private GameObject importedObject;
 
         private void Awake()
         {
             gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
-        }
-
-        private void Start()
-        {
-            // StartImport();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -44,14 +40,11 @@ namespace Netherlands3D.Twin.Layers
             this.propertyData = propertyData;
         }
 
-        public void ReImport()
+        public void StartImport()
         {
-            //todo: destroy old model
-            StartImport();
-        }
-
-        private void StartImport()
-        {
+            if(importedObject)
+                Destroy(importedObject);
+            
             DisposeImporter();
 
             importer = Instantiate(importerPrefab);
@@ -110,6 +103,7 @@ namespace Netherlands3D.Twin.Layers
         {
             // By explicitly stating the worldPositionStays to false, we ensure Obj is spawned and it will retain the
             // position and scale in this parent object
+            importedObject = returnedGameObject;
             returnedGameObject.transform.SetParent(this.transform, false);
             returnedGameObject.AddComponent<MeshCollider>();
 

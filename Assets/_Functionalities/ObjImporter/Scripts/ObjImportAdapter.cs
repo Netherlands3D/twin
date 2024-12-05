@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
             newLayer.gameObject.name = fileName;
 
             newLayer.SetObjPathInPropertyData(fullPath);
-            newLayer.ReImport();
+            newLayer.StartImport();
         }
     }
 }
