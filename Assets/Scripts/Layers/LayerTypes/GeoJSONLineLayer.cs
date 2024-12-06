@@ -13,8 +13,58 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject
+    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public bool IsPolygon  => false;
+        public Transform Transform { get => transform; }
+
+        public List<Mesh> GetMeshData(Feature feature)
+        {
+            FeatureLineVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            List<Mesh> meshes = new List<Mesh>();
+            if(data == null)
+            {
+                Debug.LogWarning("visualisation was not spawned for feature" + feature.Id);
+                return meshes;
+            }
+
+            foreach (List<Coordinate> points in data.Data)
+            {
+                Mesh mesh = new Mesh();
+                meshes.Add(mesh);
+                List<Vector3> vertices = new List<Vector3>();
+                foreach (Coordinate point in points)
+                {
+                    vertices.Add(point.ToUnity());
+                }
+                mesh.SetVertices(vertices);
+            }
+
+            return meshes;
+        }
+        
+        //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
+        //the vertex positions will equal world space
+        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        {
+            lineRenderer3D.SetDefaultColors();
+            foreach (Mesh mesh in meshes)
+            {              
+                Vector3[] vertices = mesh.vertices;                
+                lineRenderer3D.SetLineColorFromPoints(vertices, color);
+            }
+        }
+
+        public void SetVisualisationColorToDefault()
+        {
+            lineRenderer3D.SetDefaultColors();
+        }
+
+        public Color GetRenderColor()
+        {
+            return LineRenderer3D.LineMaterial.color;
+        }
+
         public List<FeatureLineVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
@@ -45,20 +95,26 @@ namespace Netherlands3D.Twin.Layers
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
-                newFeatureVisualisation.lines.AddRange(newLines);
+                newFeatureVisualisation.Data.AddRange(newLines);
             }
             else if(feature.Geometry is LineString lineString)
             {
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
-                newFeatureVisualisation.lines.Add(newLine);
+                newFeatureVisualisation.Data.Add(newLine);
             }
-
+            
+            newFeatureVisualisation.CalculateBounds();
             SpawnedVisualisations.Add(newFeatureVisualisation);
+        }
+
+        public override void InitializeStyling()
+        {
+            lineRenderer3D.LineMaterial = GetMaterialInstance();
         }
 
         public void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            // Currently we don't apply individual styling per feature
         }
         
         private Material GetMaterialInstance()
@@ -80,9 +136,6 @@ namespace Netherlands3D.Twin.Layers
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
             {
-                // Make sure to recalculate bounds because they can change due to shifts
-                SpawnedVisualisations[i].CalculateBounds();
-
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
                 if (inCameraFrustum)
                     continue;
@@ -94,7 +147,7 @@ namespace Netherlands3D.Twin.Layers
         
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
-            foreach (var line in featureVisualisation.lines)
+            foreach (var line in featureVisualisation.Data)
                 lineRenderer3D.RemoveLine(line);
 
             SpawnedVisualisations.Remove(featureVisualisation);

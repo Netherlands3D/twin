@@ -30,7 +30,6 @@ namespace Netherlands3D.Twin
 
         void OnValidate()
         {
-
             if (textMeshPro != null)
             {
                 UpdateHeight();
@@ -43,9 +42,7 @@ namespace Netherlands3D.Twin
             {
                 textMeshPro.ForceMeshUpdate();
                 float textHeight = textMeshPro.textBounds.size.y;
-
                 float tallestHeight = Mathf.Max(rectTransform1.rect.height, rectTransform2.rect.height);
-
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, tallestHeight + additionalHeight);
             }
         }

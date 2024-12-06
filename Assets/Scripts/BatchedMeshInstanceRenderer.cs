@@ -24,9 +24,14 @@ namespace Netherlands3D.Twin
         [SerializeField] private float meshScale = 0.2f;
 
         public List<List<Coordinate>> PositionCollections { get; private set; }
+        private int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         private List<List<Matrix4x4>> transformMatrixCache = new List<List<Matrix4x4>>();
 
+        private List<MaterialPropertyBlock> materialPropertyBlockCache = new List<MaterialPropertyBlock>();
+        private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
+
         private Camera projectionCamera;
+        private LayerMask layerMask = -1;
         private bool cacheReady = false;
 
         public Mesh Mesh
@@ -38,7 +43,11 @@ namespace Netherlands3D.Twin
         public Material Material
         {
             get => material;
-            set => material = value;
+            set
+            {
+                material = value;
+                SetDefaultColors();
+            }
         }
 
         public float MeshScale
@@ -74,6 +83,7 @@ namespace Netherlands3D.Twin
         private void Start()
         {
             projectionCamera = GameObject.FindWithTag("ProjectorCamera").GetComponent<Camera>();
+            layerMask = LayerMask.NameToLayer("Projected");
         }
         private void Update()
         {
@@ -91,35 +101,97 @@ namespace Netherlands3D.Twin
             for (var i = 0; i < transformMatrixCache.Count; i++)
             {
                 var batch = transformMatrixCache[i];
-                Graphics.DrawMeshInstanced(Mesh, 0, Material, batch, null, ShadowCastingMode.Off, false, LayerMask.NameToLayer("Projected"), projectionCamera);
+                Graphics.DrawMeshInstanced(Mesh, 0, Material, batch, materialPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, projectionCamera);
             }
         }
 
         /// <summary>
-        /// Return the index of the closest point to a given point.
+        /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
         /// </summary>
-        public int GetClosestLineIndex(Vector3 point)
+        public (int batchIndex, int instanceIndex) GetClosestInstanceIndex(Vector3 point)
         {
+            int closestBatchIndex = -1;
             int closestLineIndex = -1;
             float closestDistance = float.MaxValue;
             for (int i = 0; i < transformMatrixCache.Count; i++)
             {
                 var lineTransforms = transformMatrixCache[i];
-                foreach (var lineTransform in lineTransforms)
+                for(int j = 0; j < lineTransforms.Count; j++)
                 {
-                    var linePoint = lineTransform.GetColumn(3);
+                    var linePoint = lineTransforms[j].GetColumn(3);
                     var distance = Vector3.Distance(linePoint, point);
                     if (distance < closestDistance)
                     {
                         closestDistance = distance;
-                        closestLineIndex = i;
+                        closestBatchIndex = i;
+                        closestLineIndex = j;
                     }
                 }
             }
-
-            return closestLineIndex;
+            return (closestBatchIndex, closestLineIndex);
         }
+
+        private void UpdateBuffers()
+        {
+            while (transformMatrixCache.Count > materialPropertyBlockCache.Count)
+            {
+                MaterialPropertyBlock props = new MaterialPropertyBlock();
+                Vector4[] colorCache = new Vector4[1023];
+                Color defaultColor = Material.GetColor("_Color");
+                for (int j = 0; j < colorCache.Length; j++)
+                    colorCache[j] = defaultColor;
+                segmentColorCache.Add(colorCache);
+                props.SetVectorArray("_SegmentColors", colorCache);
+                materialPropertyBlockCache.Add(props);
+            }
+        }
+
+        public void SetDefaultColors()
+        {
+            Color defaultColor = Material.GetColor("_Color");
+            for (int batchIndex = 0; batchIndex < transformMatrixCache.Count; batchIndex++)
+            {
+                Vector4[] colors = segmentColorCache[batchIndex];
+                for(int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
+                    colors[segmentIndex] = defaultColor;
+                segmentColorCache[batchIndex] = colors;
+                MaterialPropertyBlock props = materialPropertyBlockCache[batchIndex];
+                props.SetVectorArray("_SegmentColors", colors);
+                materialPropertyBlockCache[batchIndex] = props;
+            }
+        }
+
+        /// <summary>
+        /// Set a specific line color by index of the line.
+        /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
+        /// </summary>
+        public void SetSpecificLineColorByIndex(int batchIndex, int segmentIndex, Color color)
+        {
+            if (batchIndex >= materialPropertyBlockCache.Count)
+            {
+                Debug.LogError($"Index {batchIndex} is out of range");
+                return;
+            }
+            UpdateBuffers();            
+            segmentColorCache[batchIndex][segmentIndex] = color;
+            materialPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[batchIndex]);
+        }
+
+        /// <summary>
+        /// Set specific line color for the line closest to a given point.
+        /// </summary>
+        public void SetLineColorClosestToPoint(Vector3 point, Color color)
+        {
+            var indexPosition = GetClosestInstanceIndex(point);
+            if (indexPosition.Item1 == -1 || indexPosition.Item2 == -1)
+            {
+                Debug.LogError("No line found");
+                return;
+            }
+
+            SetSpecificLineColorByIndex(indexPosition.batchIndex, indexPosition.instanceIndex, color);            
+        }        
 
         /// <summary>
         /// Set a single line (overwriting any previous lines)
@@ -136,6 +208,7 @@ namespace Netherlands3D.Twin
         public void SetPositionCollections(List<List<Coordinate>> collections)
         {
             PositionCollections = collections;
+            RecalculatePointCount();
             GenerateTransformMatrixCache();
         }
 
@@ -149,6 +222,7 @@ namespace Netherlands3D.Twin
 
             var startIndex = PositionCollections.Count;
             PositionCollections.Add(collection);
+            RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
 
@@ -162,6 +236,7 @@ namespace Netherlands3D.Twin
 
             var startIndex = PositionCollections.Count;
             PositionCollections.AddRange(collections);
+            RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
 
@@ -174,12 +249,16 @@ namespace Netherlands3D.Twin
 
             PositionCollections.Remove(points);
 
+            RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
 
         public void ClearLines()
         {
             PositionCollections.Clear();
+            RecalculatePointCount();
+            materialPropertyBlockCache.Clear();
+            segmentColorCache.Clear();
             transformMatrixCache = new List<List<Matrix4x4>>();
             cacheReady = false;
         }
@@ -188,7 +267,6 @@ namespace Netherlands3D.Twin
         {
             if (PositionCollections == null || PositionCollections.Count < 1) return;
 
-            var pointCount = PositionCollections.SelectMany(list => list).Count(); //each position should have a matrix
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
 
             if (startIndex < 0) //reset cache completely
@@ -217,6 +295,8 @@ namespace Netherlands3D.Twin
                     AppendMatrixToBatches(transformMatrixCache, ref matrixIndices.batchIndex, ref matrixIndices.matrixIndex, jointTransformMatrix);
                 }
             }
+
+            UpdateBuffers();
 
             cacheReady = true;
         }
@@ -249,10 +329,32 @@ namespace Netherlands3D.Twin
             if (startIndex < 0)
                 return (-1, -1);
 
-            // Iterate over the Lines to find the total number of Vector3s before the startIndex
-            int totalJointsBeforeStartIndex = collections.Take(startIndex).Sum(list => list.Count);
+            int totalJointsBeforeStartIndex = 0;
+            int currentBatchSize = 1023;
 
-            return (totalJointsBeforeStartIndex / 1023, totalJointsBeforeStartIndex % 1023);
+            // Traverse through collections to calculate the cumulative count directly
+            foreach (var collection in collections)
+            {
+                if (startIndex < collection.Count)
+                {
+                    totalJointsBeforeStartIndex += startIndex;
+                    break;
+                }
+
+                startIndex -= collection.Count;
+                totalJointsBeforeStartIndex += collection.Count;
+            }
+
+            return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
+        }
+        
+        private void RecalculatePointCount()
+        {
+            pointCount = 0;
+            foreach (var list in PositionCollections)
+            {
+                pointCount += list.Count;
+            }
         }
     }
 }

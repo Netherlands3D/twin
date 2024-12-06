@@ -1,20 +1,38 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     public partial class GeoJSONLineLayer
     {
-        public class FeatureLineVisualisations : IFeatureVisualisation
+        public class FeatureLineVisualisations : IFeatureVisualisation<List<Coordinate>>
         {
+            public List<List<Coordinate>> Data => lines;
+
             public Feature feature;
-            public List<List<Coordinate>> lines = new();
+            private List<List<Coordinate>> lines = new();
             public Bounds bounds;
 
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
+
+            public FeatureLineVisualisations()
+            {
+                Origin.current.onPostShift.AddListener(OnOriginShifted);
+            }
+
+            ~FeatureLineVisualisations()
+            {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
+            }
+
+            private void OnOriginShifted(Coordinate from, Coordinate to)
+            {
+                CalculateBounds();
+            }
 
             /// <summary>
             /// Calculate bounds by combining all visualisation bounds

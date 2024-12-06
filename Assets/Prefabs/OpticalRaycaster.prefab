@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1811041811788367721}
   - component: {fileID: 6667151011380368307}
   - component: {fileID: 7073721482847640295}
+  - component: {fileID: 4123874669779357784}
   m_Layer: 0
   m_Name: OpticalRaycaster
   m_TagString: Untagged
@@ -66,7 +67,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 1
   orthographic size: 1
@@ -123,12 +124,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!114 &7073721482847640295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,3 +146,15 @@ MonoBehaviour:
   OnDepthSampled:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4123874669779357784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5830911274202297391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa0ac9a7cb99d4277a6e2c306626dfbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
