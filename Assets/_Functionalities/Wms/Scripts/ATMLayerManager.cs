@@ -10,8 +10,6 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
 {
     public class ATMLayerManager : IDisposable
     {
-        public ATMDataController DataController => timeController;
-
         private ATMTileDataLayer[] ATMTileDataLayers => atmTileDataLayers;
 
         private int zoomLevel = -1;
@@ -46,7 +44,10 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             int index = timeController.GetZoomLayerIndex(zoomLevel);
 
             ActivateLayer(zoomLevel);
-            ATMTileDataLayers[index].SetVisibleTilesDirty();
+            if (index >= 0 && index < ATMTileDataLayers.Length)
+            {
+                ATMTileDataLayers[index].SetVisibleTilesDirty();
+            }
 
             lastZoomLevel = zoomLevel;
         }
