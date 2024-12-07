@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin
 
         private List<RectTransform> yearInstances = new List<RectTransform>();
         public int currentYear;
-        public UnityEvent<int> YearChanged;
+        public UnityEvent<int> YearChanged = new ();
 
         private float lerpSpeed = 10f; // Speed of the lerp transition  
         private Vector2 targetPosition; // Target position for the content  
@@ -191,7 +191,7 @@ namespace Netherlands3D.Twin
                 SelectedYearText.text = currentYear.ToString(); // Update the UI text  
                 if (previousYear != year)
                 {
-                    YearChanged.Invoke(year); //Fires the UnityEvent that changes the year
+                    YearChanged?.Invoke(year); //Fires the UnityEvent that changes the year
                     previousYear = year;
                 }
 

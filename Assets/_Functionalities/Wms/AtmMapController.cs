@@ -1,4 +1,3 @@
-using System;
 using Netherlands3D.Twin._Functionalities.Wms.Scripts;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace Netherlands3D.Twin._Functionalities.Wms
 
         private void Awake()
         {
-            layerManager = new ATMLayerManager(gameObject.AddComponent<ATMDataController>());
+            layerManager = new ATMLayerManager(FindObjectOfType<ATMDataController>());
             layerManager.CreateTileHandlerForEachZoomLevel(transform, layerPrefab);
         }
 
