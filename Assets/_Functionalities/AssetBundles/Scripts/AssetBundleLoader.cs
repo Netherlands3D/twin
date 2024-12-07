@@ -71,15 +71,20 @@ namespace Netherlands3D.Twin
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer renderer in renderers)
             {
-                if (renderer.material != null)
+                if (!IsPrefab(asset) && renderer.material)
                 {
                     renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                    continue;
                 }
-                else
-                {
-                    renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
-                }
+
+                renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
             }
+        }
+
+        private static bool IsPrefab(GameObject gameObject)
+        {
+            // A prefab will have a `transform` but no parent if it's a root prefab in play mode
+            return gameObject.scene.name == null;
         }
 
         public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
