@@ -84,7 +84,10 @@ namespace Netherlands3D.Twin.Wms
                 // CRS/SRS may be defined in the current MapNode, but can also inherit from a parent if it is not
                 // specified the flag at the end of this function will check the current node and its parents
                 var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
-                
+
+                var legendNode = mapNode.SelectSingleNode(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
+                var legendUrl = legendNode?.Attributes["xlink:href"]?.Value;
+
                 var map = new MapFilters()
                 {
                     name = layerNameNode,
@@ -94,7 +97,8 @@ namespace Netherlands3D.Twin.Wms
                     transparent = mapTemplate.transparent,
                     spatialReferenceType = mapTemplate.spatialReferenceType,
                     spatialReference = spatialReference,
-                    style = styles.FirstOrDefault()
+                    style = styles.FirstOrDefault(),
+                    legendUrl = legendUrl
                 };
                 maps.Add(map);
             }

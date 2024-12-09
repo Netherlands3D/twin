@@ -26,6 +26,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private Vector2Int legendOffsetFromParent;
 
 
+
         protected override void Awake()
         {
             base.Awake();

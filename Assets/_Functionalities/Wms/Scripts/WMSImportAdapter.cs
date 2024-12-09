@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.IO;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Wms;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin
 {
@@ -90,6 +92,26 @@ namespace Netherlands3D.Twin
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
             propertyData.Data = url;
+
+            newLayer.StartCoroutine(GetLegendGraphic(mapFilters));
+        }
+
+        private IEnumerator GetLegendGraphic(MapFilters mapFilters)
+        {
+            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(mapFilters.legendUrl);         
+            yield return webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Could not download {mapFilters.legendUrl }");
+            }
+            else
+            {              
+                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
+                Texture2D tex = texture as Texture2D;
+                //tex.Compress(true);
+                //tex.filterMode = FilterMode.Bilinear;
+                tex.Apply(false, true);
+            }
         }
     }
 }
