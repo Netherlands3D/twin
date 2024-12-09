@@ -84,7 +84,7 @@ namespace Netherlands3D.Twin
         private static bool IsPrefab(GameObject gameObject)
         {
             // A prefab will have a `transform` but no parent if it's a root prefab in play mode
-            return gameObject.scene.name == null;
+            return string.IsNullOrEmpty(gameObject.scene.name);
         }
 
         public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
