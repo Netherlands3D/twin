@@ -51,16 +51,16 @@ namespace Netherlands3D.Twin.Layers
 
         public void StartImport()
         {
-            if(importedObject)
+            if (importedObject)
                 Destroy(importedObject);
-            
+
             DisposeImporter();
 
             importer = Instantiate(importerPrefab);
 
             var objPath = GetObjPathFromPropertyData();
             var mtlPath = GetMtlPathFromPropertyData();
-            
+
             ImportObj(objPath, mtlPath);
         }
 
@@ -69,6 +69,13 @@ namespace Netherlands3D.Twin.Layers
             // the obj-importer deletes the obj-file after importing.
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
+
+            if (!File.Exists(objPath))
+            {
+                Debug.LogError("Obj at path " + objPath + " does not exist");
+                return;
+            }
+            
             string copiedObjFilename = objPath + ".temp";
             File.Copy(objPath, copiedObjFilename);
             importer.objFilePath = copiedObjFilename;
@@ -114,18 +121,18 @@ namespace Netherlands3D.Twin.Layers
             var propertyData = PropertyData as ObjPropertyData;
             propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
-        
+
         public void SetMtlPathInPropertyData(string fullPath)
         {
             var propertyData = PropertyData as ObjPropertyData;
             propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
-        
+
         private string GetObjPathFromPropertyData()
         {
             if (propertyData.ObjFile == null)
                 return "";
-            
+
             var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
             return path;
@@ -135,7 +142,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (propertyData.MtlFile == null)
                 return "";
-            
+
             var localPath = propertyData.MtlFile.LocalPath.TrimStart('/', '\\');
             var path = Path.Combine(Application.persistentDataPath, localPath);
             return path;
