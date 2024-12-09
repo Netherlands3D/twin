@@ -26,10 +26,19 @@ namespace Netherlands3D.Functionalities.Minimap
         [Test]
         public void MinimapIsShownOnScreen()
         {
-            Debug.LogWarning("Running test");
             var minimap = Object.FindObjectOfType<MinimapUI>();
             
             Assert.That(minimap, Is.InstanceOf<MinimapUI>(), "No active object of type Minimap UI was found in the current scene");
+        }
+
+        [Test]
+        public void MinimapHasAPinShowingTheCurrentPosition()
+        {
+            var minimap = Object.FindObjectOfType<MinimapUI>();
+            var wmtsMap = minimap.transform.GetComponentInChildren<WMTSMap>();
+            var pointer = wmtsMap.transform.Find("Pointer");
+            
+            Assert.That(pointer, Is.Not.Null, "No pointer could be found on the minimap");
         }
     }
 }
