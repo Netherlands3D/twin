@@ -10,6 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
         type: 3}
+      propertyPath: scaleDecimals
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
+        type: 3}
       propertyPath: scaleMultiplier
       value: 1
       objectReference: {fileID: 0}
