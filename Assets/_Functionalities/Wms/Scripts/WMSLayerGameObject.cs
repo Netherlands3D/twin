@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.UI.LayerInspector;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Netherlands3D.Twin.Layers
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData
+    public class WMSLayerGameObject : CartesianTilePropertyLayer, ILayerWithPropertyData
     {
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;       
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       

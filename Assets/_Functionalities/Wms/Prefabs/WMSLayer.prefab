@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7900166245345724691}
   - component: {fileID: -8300356283678966299}
   - component: {fileID: -7699739382070360042}
+  - component: {fileID: -5316186976888283285}
   m_Layer: 0
   m_Name: WMSLayer
   m_TagString: Untagged
@@ -150,3 +151,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5316186976888283285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73aff5cc895e014eb71fd1ca544a57d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: -7746774530263894800, guid: b7f01bf4e2af2954a9f88ac89da5ed51,
+    type: 3}
