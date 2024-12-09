@@ -70,11 +70,11 @@ namespace Netherlands3D.Twin.Layers
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
 
-            if (!File.Exists(objPath))
-            {
-                Debug.LogError("Obj at path " + objPath + " does not exist");
-                return;
-            }
+            // if (!File.Exists(objPath))
+            // {
+            //     Debug.LogError("Obj at path " + objPath + " does not exist");
+            //     return;
+            // }
             
             string copiedObjFilename = objPath + ".temp";
             File.Copy(objPath, copiedObjFilename);
