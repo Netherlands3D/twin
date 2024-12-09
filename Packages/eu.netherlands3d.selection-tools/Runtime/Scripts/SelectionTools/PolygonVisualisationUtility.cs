@@ -80,10 +80,11 @@ namespace Netherlands3D.SelectionTools
                 }
             }
             var newPolygonMesh = Poly2Mesh.CreateMesh(polygon, extrusionHeight, addBottom);
-            if (newPolygonMesh) newPolygonMesh.RecalculateNormals();
-
-            SetUVCoordinates(newPolygonMesh, uvCoordinate);
-
+            if (newPolygonMesh)
+            {
+                newPolygonMesh.RecalculateNormals();
+                SetUVCoordinates(newPolygonMesh, uvCoordinate);
+            }
             return newPolygonMesh;
         }
         #endregion
