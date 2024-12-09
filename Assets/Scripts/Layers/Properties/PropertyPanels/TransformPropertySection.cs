@@ -23,8 +23,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private SetOfXYZ rotation = new();
         [SerializeField] private SetOfXYZ scale = new();
 
-        private const string percentageCharacter = "%";
+        [Header("position settings")]
+        [SerializeField] private int positionDecimals = 0;
+        [SerializeField] private string positionUnitCharacter = "";
 
+        [Header("rotation settings")]
+        [SerializeField] private int rotationDecimals = 2;
+        [SerializeField] private string rotationUnitCharacter = "";
+
+        [Header("scale settings")]
+        [SerializeField] private float scaleMultiplier = 100f;
+        [SerializeField] private int scaleDecimals = 0;
+        [SerializeField] private string scaleUnitCharacter = "%";
+        
         public override HierarchicalObjectLayerGameObject LayerGameObject //todo: possibly remove this and replace it with a direct reference to the TransformLayerProperty
         {
             get => layerGameObject;
@@ -141,38 +152,56 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.Text.Replace(percentageCharacter, ""), out var x);
-            float.TryParse(scale.yField.Text.Replace(percentageCharacter, ""), out var y);
-            float.TryParse(scale.zField.Text.Replace(percentageCharacter, ""), out var z);
+            float.TryParse(scale.xField.Text.Replace(scaleUnitCharacter, ""), out var x);
+            float.TryParse(scale.yField.Text.Replace(scaleUnitCharacter, ""), out var y);
+            float.TryParse(scale.zField.Text.Replace(scaleUnitCharacter, ""), out var z);
 
-            TransformPropertyData.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
+            TransformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
         }
 
         private void UpdatePositionFields(Coordinate coordinate)
         {
             var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
-
-            position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
-            position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
-            position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));
+            var format = GetFormatString(positionDecimals);
+            
+            position.xField.SetTextWithoutNotify($"{rdCoordinate.Points[0].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.yField.SetTextWithoutNotify($"{rdCoordinate.Points[1].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.zField.SetTextWithoutNotify($"{rdCoordinate.Points[2].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
         }
 
         private void UpdateRotationFields(Vector3 eulerAngles)
         {
-            rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
-            rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
-            rotation.zField.SetTextWithoutNotify(eulerAngles.z.ToString("0.00", CultureInfo.InvariantCulture));
+            var format = GetFormatString(rotationDecimals);
+            
+            rotation.xField.SetTextWithoutNotify($"{eulerAngles.x.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.yField.SetTextWithoutNotify($"{eulerAngles.y.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.zField.SetTextWithoutNotify($"{eulerAngles.z.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
         }
 
         private void UpdateScalingFields(Vector3 localScale)
         {
-            var xPercentage = localScale.x * 100;
-            var yPercentage = localScale.y * 100;
-            var zPercentage = localScale.z * 100;
+            var xPercentage = localScale.x * scaleMultiplier;
+            var yPercentage = localScale.y * scaleMultiplier;
+            var zPercentage = localScale.z * scaleMultiplier;
+            var format = GetFormatString(scaleDecimals);
 
-            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+        }
+
+        public static string GetFormatString(int decimals)
+        {
+            if (decimals == 0)
+                return "0";
+
+            string format = "0.";
+            for (int i = 0; i < decimals; i++)
+            {
+                format += '0';
+            }
+
+            return format;
         }
     }
 }
