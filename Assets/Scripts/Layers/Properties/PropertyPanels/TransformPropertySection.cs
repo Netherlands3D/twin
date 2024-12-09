@@ -139,9 +139,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = position.xField.Text.Replace(positionUnitCharacter, "").Replace(",", ".");
-            var yText = position.yField.Text.Replace(positionUnitCharacter, "").Replace(",", ".");
-            var zText = position.zField.Text.Replace(positionUnitCharacter, "").Replace(",", ".");
+            var xText = position.xField.Text.Replace(",", ".");
+            var yText = position.yField.Text.Replace(",", ".");
+            var zText = position.zField.Text.Replace(",", ".");
+            if (positionUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(positionUnitCharacter, "");
+                yText = yText.Replace(positionUnitCharacter, "");
+                zText = zText.Replace(positionUnitCharacter, "");
+            }
+
             
             double.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
             double.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
@@ -160,9 +167,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = rotation.xField.Text.Replace(rotationUnitCharacter, "").Replace(",", ".");
-            var yText = rotation.yField.Text.Replace(rotationUnitCharacter, "").Replace(",", ".");
-            var zText = rotation.zField.Text.Replace(rotationUnitCharacter, "").Replace(",", ".");
+            var xText = rotation.xField.Text.Replace(",", ".");
+            var yText = rotation.yField.Text.Replace(",", ".");
+            var zText = rotation.zField.Text.Replace(",", ".");
+
+            if (rotationUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(rotationUnitCharacter, "");
+                yText = yText.Replace(rotationUnitCharacter, "");
+                zText = zText.Replace(rotationUnitCharacter, "");
+            }
             
             float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
             float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
@@ -179,9 +193,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = scale.xField.Text.Replace(scaleUnitCharacter, "").Replace(",", ".");
-            var yText = scale.yField.Text.Replace(scaleUnitCharacter, "").Replace(",", ".");
-            var zText = scale.zField.Text.Replace(scaleUnitCharacter, "").Replace(",", ".");
+            var xText = scale.xField.Text.Replace(",", ".");
+            var yText = scale.yField.Text.Replace(",", ".");
+            var zText = scale.zField.Text.Replace(",", ".");
+            
+            if (scaleUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(scaleUnitCharacter, "");
+                yText = yText.Replace(scaleUnitCharacter, "");
+                zText = zText.Replace(scaleUnitCharacter, "");
+            }
             
             float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
             float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
