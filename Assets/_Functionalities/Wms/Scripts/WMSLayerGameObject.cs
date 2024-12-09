@@ -21,10 +21,17 @@ namespace Netherlands3D.Twin.Layers
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
 
+        [SerializeField] private GameObject legendPanelPrefab;
+        private static GameObject legend;
+        [SerializeField] private Vector2Int legendOffsetFromParent;
+
+
         protected override void Awake()
         {
             base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+            LayerData.LayerSelected.AddListener(OnSelectLayer);
+            LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }
 
         protected override void Start()
@@ -32,7 +39,18 @@ namespace Netherlands3D.Twin.Layers
             base.Start();
             WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+
             SetRenderOrder(LayerData.RootIndex);
+
+            if (legend == null)
+            {
+                legend = Instantiate(legendPanelPrefab);
+                Inspector inspector = FindObjectOfType<Inspector>();
+                legend.transform.SetParent(inspector.Content);
+            }
+            RectTransform rt = legend.GetComponent<RectTransform>();
+            rt.anchoredPosition = legendOffsetFromParent;
+            rt.localScale = Vector2.one;          
         }
 
         //a higher order means rendering over lower indices
@@ -55,6 +73,20 @@ namespace Netherlands3D.Twin.Layers
         {
             base.OnDestroy();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
+            LayerData.LayerSelected.RemoveListener(OnSelectLayer);
+            LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
+        }
+
+        private void OnSelectLayer(LayerData layer)
+        {
+            if (legend != null)
+                legend.SetActive(true);
+        }
+
+        private void OnDeselectLayer(LayerData layer)
+        {
+            if (legend != null)
+                legend.SetActive(false);
         }
     }
 }

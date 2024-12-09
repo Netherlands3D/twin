@@ -59,6 +59,9 @@ MonoBehaviour:
   TransparencyEnabled: 1
   DefaultEnabledLayersMax: 5
   PreferredImageSize: {x: 1024, y: 1024}
+  legendPanelPrefab: {fileID: 5078733024073835164, guid: ed26e06119f9534478c33195b229d17a,
+    type: 3}
+  legendOffsetFromParent: {x: 12, y: 58}
 --- !u!114 &1347090001780688696
 MonoBehaviour:
   m_ObjectHideFlags: 0
