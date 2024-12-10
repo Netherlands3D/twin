@@ -636,13 +636,13 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = true;
-                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, y);
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
             }
             else if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = false;
-                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
             }
             else
             {
