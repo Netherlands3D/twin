@@ -17,6 +17,7 @@ namespace Netherlands3D.Twin.Layers
 
         [Header("Settings")] 
         [SerializeField] private bool createSubMeshes = false;
+        [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
 
         private ObjPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
@@ -101,7 +102,7 @@ namespace Netherlands3D.Twin.Layers
                 transform.position = returnedGameObject.transform.position;
                 Debug.Log("Geo-referenced object importer, moving camera to this position: " + returnedGameObject.transform.position);
                 var mainCam = Camera.main;
-                mainCam.transform.position = returnedGameObject.transform.position + (-150f * mainCam.transform.forward);
+                mainCam.transform.position = returnedGameObject.transform.position + (-cameraDistanceFromGeoReferencedObject * mainCam.transform.forward);
             }
 
             returnedGameObject.transform.SetParent(this.transform, isGeoReferenced);
