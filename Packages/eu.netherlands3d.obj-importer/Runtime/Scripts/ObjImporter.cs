@@ -87,7 +87,6 @@ namespace Netherlands3D.ObjImporter
             objreader.broadcastProgressPercentage = BroadcastProgressPercentage;
             objreader.BroadcastErrorMessage = BroadcastErrormessage;
 
-
             BroadcastCurrentActivity("obj-bestand inlezen");
 
             objreader.ReadOBJ(objFilePath, OnOBJRead);
@@ -107,7 +106,7 @@ namespace Netherlands3D.ObjImporter
             Debug.Log("cancelling StreamReadOBJ");
         }
 
-
+        public Bounds testBounds = new();
         private void OnOBJRead(bool succes)
         {
             if (!succes) //something went wrong
@@ -120,6 +119,13 @@ namespace Netherlands3D.ObjImporter
                 return;
             }
             createdGameobjectIsMoveable = !objreader.ObjectUsesRDCoordinates;
+            if (objreader.ObjectUsesRDCoordinates)
+            {
+                transform.position = objreader.RDOrigin.ToUnity();
+            }
+
+            testBounds = objreader.testBounds;
+            
             ObjImportSucceeded?.Invoke(succes);
             
             if (mtlFilePath != "")
@@ -186,6 +192,8 @@ namespace Netherlands3D.ObjImporter
             objectDataCreator.normals = objreader.normals;
             objectDataCreator.uvs = objreader.uvs;
             objectDataCreator.broadcastProgressPercentage = progressPercentage;
+            if(objreader.ObjectUsesRDCoordinates)
+                objectDataCreator.origin = objreader.RDOrigin.ToUnity();
 
             List<Submesh> submeshes = new List<Submesh>();
             foreach (KeyValuePair<string, Submesh> kvp in objreader.submeshes)
@@ -194,7 +202,6 @@ namespace Netherlands3D.ObjImporter
             }
             objectDataCreator.submeshes = submeshes;
             objectDataCreator.CreateGameObjectDataSet(OnGameObjectDataSetCreated, !createSubMeshes);
-
         }
 
         void OnGameObjectDataSetCreated(GameObjectDataSet gods)

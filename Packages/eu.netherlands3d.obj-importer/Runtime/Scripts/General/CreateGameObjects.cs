@@ -49,6 +49,7 @@ namespace Netherlands3D.ObjImporter.General
             time = System.DateTime.UtcNow;
             parentobject = new GameObject();
             parentobject.name = gameObjectData.name;
+            parentobject.transform.position = gameobjectDataset.Origin;
             totalgameobjects = gameObjectData.gameObjects.Count;
             gameobjectindex = 0;
             StartCoroutine(createGameObjects());
@@ -98,7 +99,7 @@ namespace Netherlands3D.ObjImporter.General
             }
 
             gameobject.name = gameobjectdata.name;
-            gameobject.transform.parent = parentobject.transform;
+            gameobject.transform.SetParent(parentobject.transform, false);
 
             yield return StartCoroutine(CreateMesh(gameobjectdata.meshdata));
 
