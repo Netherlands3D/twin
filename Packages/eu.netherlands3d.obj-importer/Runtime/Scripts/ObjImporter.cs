@@ -106,7 +106,6 @@ namespace Netherlands3D.ObjImporter
             Debug.Log("cancelling StreamReadOBJ");
         }
 
-        public Bounds testBounds = new();
         private void OnOBJRead(bool succes)
         {
             if (!succes) //something went wrong
@@ -123,8 +122,6 @@ namespace Netherlands3D.ObjImporter
             {
                 transform.position = objreader.RDOrigin.ToUnity();
             }
-
-            testBounds = objreader.testBounds;
             
             ObjImportSucceeded?.Invoke(succes);
             

@@ -592,7 +592,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             }
         }
 
-        public Bounds testBounds = new Bounds();
         void ReadVertex()
         {
             double x = ReadDouble(); //we initially read as doubles, because we need the precision in case the model is geo-referenced
@@ -610,47 +609,29 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     Coordinate coordinate;
                     if (flipYZ)
                     {
-                        // Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, z, y }),CoordinateSystem.Unity);
-                        // coord = coordinate.ToVector3();
-                        // Coordinate coordinate = new Coordinate(CoordinateSystem.RDNAP, new double[3] { x, z, y });
-                        // coord = (coordinate - rdOrigin).ToVector3();
                         coordinate = new Coordinate(CoordinateSystem.RDNAP, x - rdOrigin.easting, z - rdOrigin.northing, y);
-                        // coord[0] = coordinate.easting;
-                        // coord[1] = coordinate.height; //in our unity world y is up, so we need to put the up component in the y slot
-                        // coord[2] = coordinate.northing;
                     }
                     else
                     {
-                        // Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, y, z }), CoordinateSystem.Unity);
-                        // coord = coordinate.ToVector3();
-                        // Coordinate coordinate = new Coordinate(CoordinateSystem.RDNAP, new double[3] { x, y, z });
-                        // coord = (coordinate - rdOrigin).ToVector3();
                         coordinate = new Coordinate(CoordinateSystem.RDNAP, x - rdOrigin.easting, y - rdOrigin.northing, z);
-                        // coord[0] = x - rdOrigin.easting;
-                        // coord[1] = y - rdOrigin.northing;
-                        // coord[2] = z;
                     }
 
-                    testBounds.Encapsulate(new Vector3((float)coordinate.easting, (float)coordinate.height, (float)coordinate.northing));
                     vertices.Add((float)coordinate.easting, (float)coordinate.height, (float)coordinate.northing); //in our unity world y is up, so we need to put the up component in the y slot
                     return;
                 }
 
                 if (FlipYZ)
                 {
-                    testBounds.Encapsulate(new Vector3((float)x, (float)z, (float)y));
                     vertices.Add((float)x, (float)z, (float)y);
                 }
                 else
                 {
-                    testBounds.Encapsulate(new Vector3((float)x, (float)y, (float)-z));
                     vertices.Add((float)x, (float)y, (float)-z);
                 }
             }
         }
         void CheckForRD(double x, double y, double z)
         {
-            print("first vertex: " + x + "," + y + "," + z);
             if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
             {
                 ObjectUsesRDCoordinates = true;
@@ -662,7 +643,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = false;
                 rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-                print("setting origin xyz: " + rdOrigin.ToUnity());
             }
             else
             {
@@ -677,7 +657,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             float y = ReadFloat();
             if (x != float.NaN && y != float.NaN)
             {
-                //buffer.PushUV(new Vector2(x, y));
                 uvs.Add(x, y);
             }
         }
