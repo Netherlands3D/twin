@@ -14,7 +14,6 @@ namespace Netherlands3D.Twin.Wms
         public int width;
         public int height;
         public bool transparent;
-        public string legendUrl;
 
         public static MapFilters FromUrl(Uri url)
         {

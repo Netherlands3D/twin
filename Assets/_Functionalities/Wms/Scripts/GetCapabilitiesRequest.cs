@@ -85,9 +85,6 @@ namespace Netherlands3D.Twin.Wms
                 // specified the flag at the end of this function will check the current node and its parents
                 var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
 
-                var legendNode = mapNode.SelectSingleNode(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
-                var legendUrl = legendNode?.Attributes["xlink:href"]?.Value;
-
                 var map = new MapFilters()
                 {
                     name = layerNameNode,
@@ -97,8 +94,7 @@ namespace Netherlands3D.Twin.Wms
                     transparent = mapTemplate.transparent,
                     spatialReferenceType = mapTemplate.spatialReferenceType,
                     spatialReference = spatialReference,
-                    style = styles.FirstOrDefault(),
-                    legendUrl = legendUrl
+                    style = styles.FirstOrDefault()
                 };
                 maps.Add(map);
             }
