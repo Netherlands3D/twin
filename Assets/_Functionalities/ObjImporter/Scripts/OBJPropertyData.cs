@@ -12,8 +12,10 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class ObjPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets
     {
         [DataMember] private Uri objFile;
+        [DataMember] private Uri mtlFile;
 
-        [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> OnObjUriChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> OnMtlUriChanged = new();
 
         [JsonIgnore]
         public Uri ObjFile
@@ -22,7 +24,18 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 objFile = value;
-                OnDataChanged.Invoke(value);
+                OnObjUriChanged.Invoke(value);
+            }
+        }
+        
+        [JsonIgnore]
+        public Uri MtlFile
+        {
+            get => mtlFile;
+            set
+            {
+                mtlFile= value;
+                OnMtlUriChanged.Invoke(value);
             }
         }
 
@@ -30,7 +43,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             return new List<LayerAsset>()
             {
-                new (this, objFile != null ? objFile : null)
+                new (this, objFile != null ? objFile : null),
+                new (this, mtlFile != null ? mtlFile : null)
             };
         }
     }

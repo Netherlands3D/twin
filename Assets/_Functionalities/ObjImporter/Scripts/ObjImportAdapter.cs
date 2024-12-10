@@ -1,7 +1,5 @@
 using System.IO;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -23,8 +21,7 @@ namespace Netherlands3D.Twin
             ObjSpawner newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
-            var propertyData = newLayer.PropertyData as ObjPropertyData;
-            propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
+            newLayer.SetObjPathInPropertyData(fullPath);
         }
     }
 }
