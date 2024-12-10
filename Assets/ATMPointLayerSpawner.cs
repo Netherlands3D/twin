@@ -13,7 +13,8 @@ namespace Netherlands3D.Twin
         public int[] years = { 1802, 1853, 1870, 1876, 1909, 1920, 1943 };
         private int currentVisibleYear;
         private ATMPointLayer visibleLayer;
-        
+        private ATMVlooienburgController vlooienburgController;
+
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(Initialize);
@@ -28,6 +29,7 @@ namespace Netherlands3D.Twin
         private void Initialize(ProjectData newProject)
         {
             newProject.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
+            vlooienburgController = FindObjectOfType<ATMVlooienburgController>();
         }
         
         private void OnTimeChanged(DateTime newTime)
@@ -39,6 +41,7 @@ namespace Netherlands3D.Twin
                     visibleLayer.GeoJSONLayer.DestroyLayer();
                 
                 visibleLayer = Instantiate(pointLayerPrefab, transform);
+                visibleLayer.SetATMVlooienburg(vlooienburgController);
                 visibleLayer.UpdateUri(yearToLoad.ToString());
                 visibleLayer.GeoJSONLayer.Name = yearToLoad.ToString();
                 currentVisibleYear = yearToLoad;

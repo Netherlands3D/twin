@@ -28,7 +28,10 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        
+
+        public delegate void FeatureHandler(Feature feature);
+        public FeatureHandler AddPoint;
+
         public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
         [Space]
@@ -305,6 +308,7 @@ namespace Netherlands3D.Twin.Layers
                 pointFeaturesLayer = CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
+            AddPoint?.Invoke(feature);
         }
 
         private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
