@@ -115,7 +115,7 @@ Transform:
   m_LocalRotation: {x: 0.00000008146034, y: 0.000000021855698, z: 0.000000029802317,
     w: 1}
   m_LocalPosition: {x: -22, y: 0, z: -1.2640704}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4413744011563999991}
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
+  propertySectionPrefab: {fileID: 796619874070242168, guid: cab41e04a3b554cd69a854280daaaa2d,
     type: 3}
 --- !u!114 &2916134291011604672
 MonoBehaviour:
@@ -204,7 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: 0}
   referenceCoordinateSystem: 4326
   onPreShift:
