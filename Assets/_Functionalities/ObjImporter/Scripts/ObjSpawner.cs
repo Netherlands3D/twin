@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
 
         private ObjImporter.ObjImporter importer;
         private GameObject importedObject;
-        
+
         public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;
         public UnityEvent<bool> MtlImportSuccess = new();
 
@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin.Layers
             // the obj-importer deletes the obj-file after importing.
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
-            
+
             string copiedObjFilename = objPath + ".temp";
             File.Copy(objPath, copiedObjFilename);
             importer.objFilePath = copiedObjFilename;
@@ -94,8 +94,17 @@ namespace Netherlands3D.Twin.Layers
         {
             // By explicitly stating the worldPositionStays to false, we ensure Obj is spawned and it will retain the
             // position and scale in this parent object
+            bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
             importedObject = returnedGameObject;
-            returnedGameObject.transform.SetParent(this.transform, false);
+            if (isGeoReferenced)
+            {
+                transform.position = returnedGameObject.transform.position;
+                Debug.Log("Geo-referenced object importer, moving camera to this position: " + returnedGameObject.transform.position);
+                var mainCam = Camera.main;
+                mainCam.transform.position = returnedGameObject.transform.position + (-150f * mainCam.transform.forward);
+            }
+
+            returnedGameObject.transform.SetParent(this.transform, isGeoReferenced);
             returnedGameObject.AddComponent<MeshCollider>();
 
             DisposeImporter();
