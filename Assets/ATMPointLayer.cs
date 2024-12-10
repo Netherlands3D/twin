@@ -82,12 +82,8 @@ namespace Netherlands3D.CartesianTiles
             object linkObject;
             feature.Properties.TryGetValue("id", out linkObject);
             string link = (string)linkObject;
-            bool hasLink = vlooienburgController.HasAdamlink(link);
-            if (hasLink)
-            {
-                //pass the feature for selection later on
-                vlooienburgController.LoadAssetForAdamLink(link, feature);
-            }
+            //pass the feature for selection later on
+            vlooienburgController.LoadAssetForAdamLink(link, feature);
         }
 
         public void UpdateUri(string year)

@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
     public class ATMVlooienburgController : MonoBehaviour
     {
         [SerializeField] private TextAsset csv;        
-        private Dictionary<string, string> addressAdamlinks = new();
+        private Dictionary<string, List<string>> addressAdamlinks = new();
         private AssetBundleLoader assetBundleLoader;
         private const string bundleName = "atmvlooienburg";
         private int currentYear;
@@ -33,7 +33,12 @@ namespace Netherlands3D.Twin
 
         public bool HasAdamlink(string link)
         {
-            return addressAdamlinks.Values.Contains(link);
+            foreach(KeyValuePair<string, List<string>> kvp in addressAdamlinks)
+            {
+                if (kvp.Value.Contains(link))
+                    return true;
+            }
+            return false;
         }
 
         public bool HasAddress(string address)
@@ -43,13 +48,20 @@ namespace Netherlands3D.Twin
 
         public string GetAddressFromAdamlink(string link)
         {
-            if(HasAdamlink(link))
-                return addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
+            foreach (KeyValuePair<string, List<string>> kvp in addressAdamlinks)
+            {
+                if (kvp.Value.Contains(link))
+                    return kvp.Key;
+            }
             return null;
-        } 
+        }
 
         public void LoadAssetForAdamLink(string link, Feature feature)
         {
+            string address = GetAddressFromAdamlink(link);
+            if (address == null)
+                return;
+
             if(vlooienburgAssets.ContainsKey(link))
             {
                 ATMAsset asset = vlooienburgAssets[link];
@@ -60,9 +72,7 @@ namespace Netherlands3D.Twin
             else
             {
                 //we cannot use the coordinate because the coord is mapped to the adress position and not the center of the mesh
-                string address = addressAdamlinks.FirstOrDefault(pair => pair.Value == link).Key;
                 string tempLink = link;
-                //this may be a bit inefficient but works for now
                 GameObject loadingObject = new GameObject("loadingasset");
                 ATMAsset asset = loadingObject.AddComponent<ATMAsset>();
 
@@ -128,8 +138,12 @@ namespace Netherlands3D.Twin
 
             foreach (var line in lines)
             {                
-                string[] data = line[0].Split(',');                
-                addressAdamlinks.Add(Path.GetFileNameWithoutExtension(data[0]), data[1]);
+                string[] data = line[0].Split(',');     
+                string address = data[0];
+                List<string> links = new List<string>();
+                for(int i = 1; i < data.Length; i++)    
+                    links.Add(data[i]);
+                addressAdamlinks.Add(Path.GetFileNameWithoutExtension(data[0]), links);
             }
         }
     }
