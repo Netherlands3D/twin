@@ -1,13 +1,11 @@
-using KindMen.Uxios;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI.LayerInspector;
 using Netherlands3D.Web;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -61,19 +59,45 @@ namespace Netherlands3D.Twin.Layers
             RectTransform rt = legend.GetComponent<RectTransform>();
             rt.anchoredPosition = legendOffsetFromParent;
             rt.localScale = Vector2.one;
+        }
 
-            //?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER={layer}";
-            var parameters = QueryString.Decode(urlPropertyData.Data.Query.TrimStart('?'));
-            var service = parameters.Get("service"); 
-            var version = parameters.Get("version");             
-            var layers = parameters.Get("layers");
+        private void LoadLegendImage()
+        {            
             var legendUri = new UriBuilder(urlPropertyData.Data.GetLeftPart(UriPartial.Path));
-            legendUri.SetQueryParameter("service", service);
-            legendUri.SetQueryParameter("version", "");
-            legendUri.SetQueryParameter("request", "getlegendgraphic");
-            legendUri.SetQueryParameter("format", "image/png");
-            legendUri.SetQueryParameter("layer", layers);
-            StartCoroutine(GetLegendGraphic(legendUri.Uri.ToString()));
+            legendUri.SetQueryParameter("service", "wms");
+            legendUri.SetQueryParameter("request", "getcapabilities");
+            StartCoroutine(GetCapabilities(legendUri.Uri.ToString(), legendUrl =>
+            {
+                StartCoroutine(GetLegendGraphic(legendUrl));
+            }));
+        }
+
+        private IEnumerator GetCapabilities(string url, Action<string> callBack)
+        {            
+            UnityWebRequest webRequest = UnityWebRequest.Get(url);
+            yield return webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Could not download {url}");                
+            }
+            else
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(webRequest.downloadHandler.text);
+                XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
+                namespaceManager.AddNamespace("xlink", "http://www.w3.org/1999/xlink"); // Update this URI if necessary
+
+                //this was cached before
+                string layerName = this.Name;
+
+                // Find the Layer node with the matching name
+                var layerNode = doc.SelectSingleNode($"//*[local-name()='Layer']/*[local-name()='Name'][text()='{this.Name}']/..", namespaceManager);                
+                string legendUrl = null;
+                var legendNode = layerNode.SelectSingleNode(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
+                if (legendNode != null)
+                    legendUrl = legendNode.Attributes["xlink:href"]?.Value;
+                callBack.Invoke(legendUrl);
+            }
         }
 
         public void SetLegendImage(Texture2D legendImage)
@@ -103,8 +127,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
-                //tex.Compress(true);
-                //tex.filterMode = FilterMode.Bilinear;
                 tex.Apply(false, true);
                 SetLegendImage(tex);
             }
@@ -138,6 +160,8 @@ namespace Netherlands3D.Twin.Layers
         {
             if (legend != null)
                 legend.SetActive(true);
+
+            LoadLegendImage();
         }
 
         private void OnDeselectLayer(LayerData layer)
