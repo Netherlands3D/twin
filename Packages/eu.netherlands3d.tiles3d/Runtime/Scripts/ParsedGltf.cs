@@ -9,10 +9,12 @@ using Newtonsoft.Json;
 using Meshoptimizer;
 using Unity.Collections;
 using Netherlands3D.Coordinates;
+using SimpleJSON;
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEngine.Events;
 using GLTFast.Schema;
+
 
 
 
@@ -36,6 +38,43 @@ namespace Netherlands3D.Tiles3D
         private NativeSlice<byte> source;
 
         public Dictionary<int, Color> uniqueColors = new Dictionary<int, Color>();
+
+        JSONNode gltfJsonRoot = null;
+
+        public bool isSupported()
+        {
+            ReadGLTFJson();
+            if (gltfJsonRoot==null)
+            {
+                Debug.LogError("gltf doesn't contain a valid JSON");
+                return false;
+            }
+
+            JSONNode extensionsRequiredNode = gltfJsonRoot["extensionsRequired"];
+            if (extensionsRequiredNode == null)
+            {
+                return true;
+            }
+            int extensionsRequiredCount = extensionsRequiredNode.Count;
+            int cesiumRTCIndex = -1;
+            for (int ii = 0; ii < extensionsRequiredCount; ii++)
+            {
+                if (extensionsRequiredNode[ii].Value == "CESIUM_RTC")
+                {
+                    cesiumRTCIndex = ii;
+                    continue;
+                }
+
+            }
+            if (cesiumRTCIndex < 0)
+            {
+                return true ;
+            }
+
+
+            return false;
+        }
+
         public List<int> featureTableFloats = new List<int>();
         Transform parentTransform;
         Tile tile;
@@ -44,6 +83,26 @@ namespace Netherlands3D.Tiles3D
         /// </summary>
         /// <param name="parent">Parent spawned scenes to Transform</param>
         /// <returns>Async Task</returns>
+        /// 
+        private void ReadGLTFJson()
+        {
+            int jsonstart = 20;
+            int jsonlength = (glbBuffer[15]) * 256;
+            jsonlength = (jsonlength + glbBuffer[14]) * 256;
+            jsonlength = (jsonlength + glbBuffer[13]) * 256;
+            jsonlength = (jsonlength + glbBuffer[12]);
+
+            string gltfjsonstring = Encoding.UTF8.GetString(glbBuffer, jsonstart, jsonlength);
+
+
+            if (gltfjsonstring.Length > 0)
+            {
+
+                gltfJsonRoot = JSON.Parse(gltfjsonstring);
+            }
+        }
+
+
         public async Task SpawnGltfScenes(Transform parent)
         {
             parentTransform = parent;

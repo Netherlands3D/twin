@@ -130,6 +130,7 @@ namespace Netherlands3D.Tiles3D
             }
             TIleContentLoader.LoadContent(
                 data,
+                uri,
                 transform,
                 ParentTile,
                 FinishedLoading,

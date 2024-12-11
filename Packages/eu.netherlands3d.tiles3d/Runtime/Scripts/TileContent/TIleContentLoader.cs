@@ -72,7 +72,7 @@ namespace Netherlands3D.Tiles3D
             
         }
 
-        public static async Task LoadContent(byte[] contentBytes, Transform containerTransform, Tile tile, Action<bool> succesCallback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
+        public static async Task LoadContent(byte[] contentBytes,string sourceUri, Transform containerTransform, Tile tile, Action<bool> succesCallback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
         {
 
             #region get contentType
@@ -81,8 +81,7 @@ namespace Netherlands3D.Tiles3D
 
             if (contentType == ContentType.undefined)
             {
-                succesCallback.Invoke(false);
-
+                contentType = ContentType.gltf;
             }
             #endregion region
 
@@ -92,20 +91,25 @@ namespace Netherlands3D.Tiles3D
             switch (contentType)
             {
                 case ContentType.b3dm:
-                    Debug.Log("loadin b3dm");
                      await ImportB3dm.LoadB3dm(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.pnts:
-                    Debug.Log("loading pnts");
-                    await ImportPnts.LoadPoints(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    Debug.LogError(".pnts is not supported");
+                    succesCallback.Invoke(false);
+                    //Debug.Log("loading pnts");
+                    //await ImportPnts.LoadPoints(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.i3dm:
+                    Debug.LogError(".i3dm is not supported");
+                    succesCallback.Invoke(false);
                     //Debug.Log("loading i3dm");
                     //await ImportI3dm.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.cmpt:
-                    Debug.Log("loading cmpt");
-                    await ImportComposite.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    Debug.LogError(".cmpt is not supported");
+                    succesCallback.Invoke(false);
+                    //Debug.Log("loading cmpt");
+                    //await ImportComposite.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
                     break;
                 case ContentType.glb:
                     importGlb = new ImportGlb();
@@ -113,8 +117,8 @@ namespace Netherlands3D.Tiles3D
 
                     break;
                 case ContentType.gltf:
-                    importGlb = new ImportGlb();
-                    await importGlb.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    ImportGltf importGltf = new ImportGltf();
+                    await importGltf.Load(contentBytes, tile, containerTransform, succesCallback,sourceUri, parseAssetMetaData, parseSubObjects, overrideMaterial);
 
                     break;
                 case ContentType.subtree:
