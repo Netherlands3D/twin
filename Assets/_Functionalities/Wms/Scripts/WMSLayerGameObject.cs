@@ -8,7 +8,6 @@ using System.Linq;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -27,11 +26,8 @@ namespace Netherlands3D.Twin.Layers
         protected LayerURLPropertyData urlPropertyData = new();
 
         [SerializeField] private GameObject legendPanelPrefab;
-        private static GameObject legend;
-        private Texture2D legendImage;
+        private static Legend legend;
         [SerializeField] private Vector2Int legendOffsetFromParent;
-
-
 
         protected override void Awake()
         {
@@ -52,27 +48,42 @@ namespace Netherlands3D.Twin.Layers
 
             if (legend == null)
             {
-                legend = Instantiate(legendPanelPrefab);
+                GameObject legendObject = Instantiate(legendPanelPrefab);
+                legend = legendObject.GetComponent<Legend>();
                 Inspector inspector = FindObjectOfType<Inspector>();
-                legend.transform.SetParent(inspector.Content);
+                legendObject.transform.SetParent(inspector.Content);
+               
             }
             RectTransform rt = legend.GetComponent<RectTransform>();
             rt.anchoredPosition = legendOffsetFromParent;
             rt.localScale = Vector2.one;
+
+            LoadLegend();
         }
 
-        private void LoadLegendImage()
-        {            
+        public void SetLegendActive(bool active)
+        {
+            if(legend != null) 
+                legend.gameObject.SetActive(active);
+        }
+
+        private void LoadLegend()
+        {
+            if (legend.CurrentLayer == LayerData.ParentLayer)
+                return;
+
+            legend.CurrentLayer = LayerData.ParentLayer;
+
             var legendUri = new UriBuilder(urlPropertyData.Data.GetLeftPart(UriPartial.Path));
             legendUri.SetQueryParameter("service", "wms");
             legendUri.SetQueryParameter("request", "getcapabilities");
-            StartCoroutine(GetCapabilities(legendUri.Uri.ToString(), legendUrl =>
+            StartCoroutine(GetCapabilities(legendUri.Uri.ToString(), legendUrls =>
             {
-                StartCoroutine(GetLegendGraphic(legendUrl));
+                StartCoroutine(GetLegendGraphics(legendUrls));
             }));
         }
 
-        private IEnumerator GetCapabilities(string url, Action<string> callBack)
+        private IEnumerator GetCapabilities(string url, Action<List<string>> callBack)
         {            
             UnityWebRequest webRequest = UnityWebRequest.Get(url);
             yield return webRequest.SendWebRequest();
@@ -87,48 +98,45 @@ namespace Netherlands3D.Twin.Layers
                 XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
                 namespaceManager.AddNamespace("xlink", "http://www.w3.org/1999/xlink"); // Update this URI if necessary
 
-                //this was cached before
-                string layerName = this.Name;
-
-                // Find the Layer node with the matching name
-                var layerNode = doc.SelectSingleNode($"//*[local-name()='Layer']/*[local-name()='Name'][text()='{this.Name}']/..", namespaceManager);                
-                string legendUrl = null;
-                var legendNode = layerNode.SelectSingleNode(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
-                if (legendNode != null)
-                    legendUrl = legendNode.Attributes["xlink:href"]?.Value;
-                callBack.Invoke(legendUrl);
+                List<string> legendUrls = new List<string>();
+                XmlNodeList layers = doc.GetElementsByTagName("Layer");
+                foreach (XmlNode layer in layers)
+                {
+                    XmlNodeList legendNodes = layer.SelectNodes(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
+                    foreach (XmlNode legendNode in legendNodes)
+                    {
+                        string legendUrl = legendNode.Attributes["xlink:href"]?.Value;
+                        if (!string.IsNullOrEmpty(legendUrl) && !legendUrls.Contains(legendUrl))
+                        {
+                            legendUrls.Add(legendUrl);
+                        }
+                    }
+                }
+                callBack.Invoke(legendUrls);
             }
         }
 
-        public void SetLegendImage(Texture2D legendImage)
-        {
-            this.legendImage = legendImage;
-            LegendImage imageObject = legend.GetComponentInChildren<LegendImage>(true);
-            if (legendImage == null)
-            {
-                imageObject.gameObject.SetActive(false);
-                return;
+        private IEnumerator GetLegendGraphics(List<string> urls)
+        {           
+            legend.ShowInactive(urls.Count == 0);
+            legend.ClearGraphics();
+            if (urls.Count == 0)
+            {                
+                yield break;
             }
-            imageObject.gameObject.SetActive(true);
-            Sprite imageSprite = Sprite.Create(legendImage, new Rect(0f, 0f, legendImage.width, legendImage.height), Vector2.one * 0.5f, 100);
-            imageObject.GetComponent<Image>().sprite = imageSprite;
-        }
-
-        private IEnumerator GetLegendGraphic(string url)
-        {
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
-            yield return webRequest.SendWebRequest();
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            
+            foreach (string url in urls)
             {
-                Debug.LogWarning($"Could not download {url}");
-                SetLegendImage(null);
-            }
-            else
-            {
-                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-                Texture2D tex = texture as Texture2D;
-                tex.Apply(false, true);
-                SetLegendImage(tex);
+                UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
+                yield return webRequest.SendWebRequest();
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
+                    Texture2D tex = texture as Texture2D;
+                    tex.Apply(false, true);
+                    Sprite imageSprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
+                    legend.AddGraphic(imageSprite);
+                }
             }
         }
 
@@ -159,15 +167,13 @@ namespace Netherlands3D.Twin.Layers
         private void OnSelectLayer(LayerData layer)
         {
             if (legend != null)
-                legend.SetActive(true);
-
-            LoadLegendImage();
+                legend.gameObject.SetActive(true);           
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
             if (legend != null)
-                legend.SetActive(false);
+                legend.gameObject.SetActive(false);
         }
     }
 }
