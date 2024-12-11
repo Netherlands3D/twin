@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
     public class StreamreadOBJ : MonoBehaviour
     {
         const string glyphs = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //add the characters you want
-        public System.Action<float> broadcastProgressPercentage;
-        public System.Action<string> BroadcastErrorMessage;
+        public Action<float> broadcastProgressPercentage;
+        public Action<string> BroadcastErrorMessage;
         bool needToCancel;
         StringBuilder sb = new StringBuilder();
         [HideInInspector]
@@ -55,9 +56,11 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
         private bool RDCoordinates = false;
         private bool flipFaceDirection = false; // set to true if windingOrder in obj-file is not the standard CounterClockWise
         private bool flipYZ = false; // set to true if Y and Z axes in the obj have been flipped	
+        private Coordinate rdOrigin; // if an object uses RD coordinates, we need to offset all the vertices so we don't get floating point issues in the mesh. the parsed GameObject is then set to this position to maintain the georeference. 
         public bool ObjectUsesRDCoordinates { get => RDCoordinates; set => RDCoordinates = value; }
-        public bool FlipYZ { get => flipYZ; set => flipYZ = value; }
         public bool FlipFaceDirection { get => flipFaceDirection; set => flipFaceDirection = value; }
+        public bool FlipYZ { get => flipYZ; set => flipYZ = value; }
+        public Coordinate RDOrigin => rdOrigin;
         SubMeshRawData rawdata = new SubMeshRawData();
         StreamReader streamReader;
         [HideInInspector]
@@ -92,7 +95,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     if (submeshes.ContainsKey(activeSubmesh.name))
                     {
                         submeshes[activeSubmesh.name] = activeSubmesh;
-
                     }
                 }
                 else
@@ -238,13 +240,12 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     yield break;
                 }
             }
-
+            
             streamReader.Close();
             fileStream.Close();
             vertices.EndWriting();
             normals.EndWriting();
             uvs.EndWriting();
-
 
             rawdata.EndWriting();
 
@@ -593,11 +594,11 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
         void ReadVertex()
         {
-            float x = ReadFloat();
-            float y = ReadFloat();
-            float z = ReadFloat();
+            double x = ReadDouble(); //we initially read as doubles, because we need the precision in case the model is geo-referenced
+            double y = ReadDouble();
+            double z = ReadDouble();
 
-            if (x != float.NaN && y != float.NaN & z != float.NaN)
+            if (x != double.NaN && y != double.NaN & z != double.NaN)
             {
                 if (vertices.Count() == 0)
                 {// this is the first vertex, check if it is in rd-coordinates
@@ -605,53 +606,49 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                 }
                 if (ObjectUsesRDCoordinates)
                 {
-                    Vector3 coord;
+                    Coordinate coordinate;
                     if (flipYZ)
                     {
-                        
-                        Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, z, y }),CoordinateSystem.Unity);
-                        coord = coordinate.ToVector3();
+                        coordinate = new Coordinate(CoordinateSystem.RDNAP, x - rdOrigin.easting, z - rdOrigin.northing, y);
                     }
                     else
                     {
-                        Coordinate coordinate = CoordinateConverter.ConvertTo(new Coordinate(CoordinateSystem.RD, new double[3] { x, y, z }), CoordinateSystem.Unity);
-                        coord = coordinate.ToVector3();
-                       
+                        coordinate = new Coordinate(CoordinateSystem.RDNAP, x - rdOrigin.easting, y - rdOrigin.northing, z);
                     }
-                    vertices.Add(coord.x, coord.y, coord.z);
+
+                    vertices.Add((float)coordinate.easting, (float)coordinate.height, (float)coordinate.northing); //in our unity world y is up, so we need to put the up component in the y slot
                     return;
                 }
 
                 if (FlipYZ)
                 {
-                    vertices.Add(x, z, y);
-
+                    vertices.Add((float)x, (float)z, (float)y);
                 }
                 else
                 {
-                    vertices.Add(x, y, -z);
+                    vertices.Add((float)x, (float)y, (float)-z);
                 }
             }
         }
-        void CheckForRD(float x, float y, float z)
+        void CheckForRD(double x, double y, double z)
         {
-            
             if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = true;
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
             }
             else if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
             {
                 ObjectUsesRDCoordinates = true;
                 FlipYZ = false;
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
             }
             else
             {
                 ObjectUsesRDCoordinates = false;
                 FlipYZ = false;
             }
-
         }
 
         void ReadVertexTexture()
@@ -660,7 +657,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             float y = ReadFloat();
             if (x != float.NaN && y != float.NaN)
             {
-                //buffer.PushUV(new Vector2(x, y));
                 uvs.Add(x, y);
             }
         }
@@ -784,14 +780,10 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                             face.vertexNormal = number - 1;
                         }
                     }
-
                 }
-
-
-
             }
-            else
-            {// couldn't read a valid integer
+            else // couldn't read a valid integer
+            {
                 faceIndex = face;
                 readChar = lastChar;
                 return false;
@@ -867,6 +859,11 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
         float ReadFloat()
         {
+            return (float)ReadDouble();
+        }
+        
+        double ReadDouble()
+        {
             char readChar;
             bool numberFound = false;
             long number = 0;
@@ -877,6 +874,7 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             int exponentSign = 1;
             int exponent = 0;
             bool keepGoing = true;
+
             while (keepGoing)
             {
                 if (NextChar(out readChar))
@@ -884,39 +882,29 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     switch (readChar)
                     {
                         case '\0':
-                            //found a null-value
-                            if (numberFound)
-                            { // if we start with a space we continue
-                                keepGoing = false;
-                            }
-                            break;
                         case ' ':
-                            //found a space
+                        case '\r':
+                        case '\n':
+                            // End of the number
                             if (numberFound)
-                            { // if we start with a space we continue
+                            {
                                 keepGoing = false;
                             }
                             break;
-                        case '\r':
-                            // end of the line, end of the floatvalue
-                            keepGoing = false;
-                            break;
-                        case '\n':
-                            // end of the line, end of the floatvalue
-                            keepGoing = false;
-                            break;
+
                         case '.':
-                            // found a decimalpoint
+                            // Found a decimal point
                             isDecimal = true;
                             break;
+
                         case 'e':
                             if (numberFound)
                             {
                                 hasExponent = true;
                             }
                             break;
+
                         case '-':
-                            // found a negative-sign
                             if (hasExponent)
                             {
                                 exponentSign = -1;
@@ -926,17 +914,13 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                                 sign = -1;
                             }
                             break;
+
                         default:
-                            // no space or endof the line
                             if (isDigit(readChar))
-                            //if (char.IsDigit(readChar))
                             {
                                 numberFound = true;
                                 if (!hasExponent)
                                 {
-
-
-                                    //number = (number * 10) + (int)char.GetNumericValue(readChar);
                                     number = (number * 10) + (int)readChar - 48;
 
                                     if (isDecimal)
@@ -946,33 +930,39 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                                 }
                                 else
                                 {
-                                    exponent = (exponent * 10) + (int)readChar - 48; ;
+                                    exponent = (exponent * 10) + (int)readChar - 48;
                                 }
                             }
                             else
-                            {// found something else, so we stop
+                            {
+                                // Found something invalid, so we stop
                                 keepGoing = false;
                             }
                             break;
                     }
                 }
-                else { keepGoing = false; }
+                else
+                {
+                    keepGoing = false;
+                }
             }
+
             if (numberFound)
             {
-                float value = sign * number / (Mathf.Pow(10, decimalPlaces));
+                double value = sign * number / Math.Pow(10, decimalPlaces);
                 if (hasExponent)
                 {
-                    value *= Mathf.Pow(10, (exponentSign * exponent));
+                    value *= Math.Pow(10, (exponentSign * exponent));
                 }
                 return value;
             }
             else
-            { // no number found, so we return NAN;
-                return float.NaN;
+            {
+                // No number found, so we return NaN
+                return double.NaN;
             }
-
         }
+        
         bool isDigit(char character)
         {
             int waarde = (int)character;
@@ -988,15 +978,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
         private bool NextChar(out char character)
         {
-
-            //if (streamReader.Peek() > -1)
-            //{
-            //	character = (char)streamReader.Read();
-            //	return true;
-            //}
-            //character = 'e';
-            //return false;
-
             if (currentcharindex == charlistlength)
             {
                 //currentCharStartIndex += 100;
@@ -1029,7 +1010,7 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             string returnstring = "";
             for (int i = 0; i < length; i++)
             {
-                returnstring += glyphs[Random.Range(0, glyphs.Length)];
+                returnstring += glyphs[UnityEngine.Random.Range(0, glyphs.Length)];
             }
             return returnstring;
         }

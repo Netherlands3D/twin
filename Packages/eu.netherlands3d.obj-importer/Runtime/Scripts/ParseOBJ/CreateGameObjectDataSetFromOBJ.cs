@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Netherlands3D.ObjImporter.General.GameObjectDataSet;
 using UnityEngine;
 
-
 namespace Netherlands3D.ObjImporter.ParseOBJ
 {
     public class CreateGameObjectDataSetFromOBJ : MonoBehaviour
@@ -31,7 +30,8 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
         public Vector3List normals = new Vector3List();
         public Vector2List uvs = new Vector2List();
         public List<Submesh> submeshes;
-
+        public Vector3 origin;
+        
         // variable for creating the dataset
         Vector3List meshVertices = new Vector3List();
         Vector3List meshNormals = new Vector3List();
@@ -43,7 +43,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
         GameObjectDataSet container = new GameObjectDataSet();
         SubMeshRawData rawdata = new SubMeshRawData();
         int nextindex = 0;
-
 
         // variable for string the returnAdress
         System.Action<GameObjectDataSet> callback;
@@ -60,10 +59,9 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
         public void CreateGameObjectDataSet(System.Action<GameObjectDataSet> callbacktoFunction,bool createMultipleObjects=false)
         {
-
-
             needToCancel = false;
             container = new GameObjectDataSet();
+            container.Origin = origin;
             
             totalSubmeshCount = submeshes.Count;
             currentSubmeshindex = 0;
