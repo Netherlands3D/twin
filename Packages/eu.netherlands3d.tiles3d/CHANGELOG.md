@@ -5,6 +5,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 11-12-2024
+
+### Added
+- Added support for CESIUM_RTC extension in gltf and glb-files
+- Added support for refine-method Add
+- Added support for tiletransforms, (translation only)
+
 ## [1.7.0] - 24-06-2024
 
 ### Added
