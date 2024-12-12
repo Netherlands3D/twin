@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin
             public XyzTiles.XyzTile XyzTile;
             public TextureDecalProjector Projector;
             public List<Vector2Int> LinkedCartesianTiles = new();
+            public UnityWebRequest webRequest = null;
         }
         
         public int RenderIndex
@@ -254,7 +255,8 @@ namespace Netherlands3D.Twin
             var atmTile = new VisibleAtmTile()
             {
                 XyzTile = xyzTile,
-                Projector = projector
+                Projector = projector,
+                webRequest = null
             };
             atmTile.LinkedCartesianTiles.Add(tileKey);
             atmTiles.Add(xyzTile, atmTile);
@@ -264,17 +266,17 @@ namespace Netherlands3D.Twin
                 .With("y", xyzTile.TileIndex.y.ToString())
                 .With("z", zoomLevel.ToString())
             ;
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)templatedUri);
-            yield return webRequest.SendWebRequest();
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            atmTile.webRequest = UnityWebRequestTexture.GetTexture((Uri)templatedUri);
+            yield return atmTile.webRequest.SendWebRequest();
+            if (atmTile.webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"Could not download {xyzTile}: {webRequest.error}");
+                Debug.LogWarning($"Could not download {xyzTile}: {atmTile.webRequest.error}");
                 RemoveGameObjectFromTile(tileKey);
             }
             else
             {
                 projector.ClearTexture();
-                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
+                Texture texture = ((DownloadHandlerTexture)atmTile.webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
                 tex.Compress(true);
                 tex.filterMode = FilterMode.Bilinear;
