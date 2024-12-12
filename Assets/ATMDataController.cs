@@ -172,17 +172,7 @@ namespace Netherlands3D.Twin
 
         public string GetUrl()
         {
-            if (!yearUrls.ContainsKey(currentYear))
-            {
-                //todo fix this default
-                if (lastValidYear == 0)
-                    lastValidYear = RoundDownYearMaps(ProjectData.Current.CurrentDateTime.Year);
-                return yearUrls[lastValidYear];
-            }
-            else
-            {
-                return yearUrls[currentYear];
-            }
+            return yearUrls[RoundDownYearMaps(ProjectData.Current.CurrentDateTime.Year)];
         }
 
         private void OnDestroy()
