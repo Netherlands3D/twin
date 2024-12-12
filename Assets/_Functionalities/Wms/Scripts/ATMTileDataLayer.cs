@@ -102,6 +102,13 @@ namespace Netherlands3D.Twin
             }
         }
 
+        public virtual void InteruptRunningProcesses(Vector2Int tileKey)
+        {
+            base.InteruptRunningProcesses(tileKey);
+            
+            TryRemoveProjectorFrom(tileKey);
+        }
+
         private void OnDisable()
         {
             if (updateTilesRoutine != null)
@@ -261,6 +268,7 @@ namespace Netherlands3D.Twin
                 .With("z", zoomLevel.ToString())
             ;
             atmTile.webRequest = UnityWebRequestTexture.GetTexture((Uri)templatedUri);
+            atmTile.webRequest.timeout = 10; // 10 second timeout - just to ensure things go through
             yield return atmTile.webRequest.SendWebRequest();
             if (atmTile.webRequest.result != UnityWebRequest.Result.Success)
             {
@@ -313,6 +321,11 @@ namespace Netherlands3D.Twin
         private void CleanupAtmTile(VisibleAtmTile atmTile)
         {
             if (atmTile.LinkedCartesianTiles.Count != 0) return;
+
+            if (atmTile.webRequest.result == UnityWebRequest.Result.InProgress)
+            {
+                atmTile.webRequest.Abort();
+            }
 
             Destroy(atmTile.Projector.gameObject);
             atmTiles.Remove(atmTile.XyzTile);
