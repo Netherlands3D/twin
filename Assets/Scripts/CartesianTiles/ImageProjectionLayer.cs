@@ -70,7 +70,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        protected void RemoveGameObjectFromTile(Vector2Int tileKey)
+        protected virtual void RemoveGameObjectFromTile(Vector2Int tileKey)
         {
             if (tiles.ContainsKey(tileKey))
             {
