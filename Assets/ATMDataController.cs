@@ -56,19 +56,15 @@ namespace Netherlands3D.Twin
         {
             // Find the largest year in the array that is less than or equal to inputYear
             int[] years = yearUrls.Keys.ToArray();
-            int result = years[0];
             foreach (var year in years)
             {
-                if (year <= inputYear)
-                {
-                    result = year;
-                }
-                else
-                {
-                    break; // Stop checking once we've exceeded the inputYear
-                }
+                if (year > inputYear) continue;
+                
+                // found the nearest
+                return year;
             }
-            return result;
+
+            return years[0];
         }
 
         private Dictionary<int, Vector4> yearBounds = new Dictionary<int, Vector4>()
