@@ -34,6 +34,22 @@ namespace Netherlands3D.Twin
             public Coordinate Center;
             public Coordinate MaxBound;
             public TemplatedUri URL;
+
+            public override string ToString()
+            {
+                return $"XyzTile{{TileIndex={TileIndex.x}x{TileIndex.y},ZoomLevel={ZoomLevel},URL={URL}}}";
+            }
+
+            /// <summary>
+            /// Ensure the equality of this struct is not determined by reference equality but just by the tileindex
+            /// and zoomlevel combination as this is a value object
+            /// </summary>
+            public override bool Equals(object obj)
+            {
+                if (obj is XyzTile xyzTile == false) return false;
+
+                return TileIndex == xyzTile.TileIndex && ZoomLevel == xyzTile.ZoomLevel;
+            }
         }
         
         public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel, bool doNotAddAsDebugTile = false)
