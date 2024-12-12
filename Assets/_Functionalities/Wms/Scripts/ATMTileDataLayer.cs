@@ -240,10 +240,9 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            var projector = Instantiate(ProjectorPrefab) as TextureDecalProjector;
+            var projector = Instantiate(ProjectorPrefab, transform, false) as TextureDecalProjector;
             projector.name = xyzTile.ToString();
             var decalProjector = projector.GetComponent<DecalProjector>();
-            projector.SetSize(tileSize, tileSize, decalProjector.size.z);
             projector.SetSize(tileSize, tileSize, decalProjector.size.z);
             // DecalProjector uses the position as center, but the position is bottomLeft; so we use the pivot
             // to make sure the positioning is from the bottomLeft

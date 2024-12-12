@@ -8,10 +8,6 @@ namespace Netherlands3D.Twin
 {
     public class ATMDataController : MonoBehaviour
     {
-        private const float earthRadius = 6378.137f;
-        private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
-        private const double log2x = 0.30102999566d;
-
         [Tooltip("The zoomlevels are scaled exponentially across this height range, tweak to get better tiling visuals")]
         [SerializeField] private float minHeightForZoomLevels = 200f;
         [Tooltip("The zoomlevels are scaled exponentially across this height range, tweak to get better tiling visuals")]
