@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin
         /// value and only if it changed will we recompute the tileSize.
         /// </summary>        
         private double referenceTileWidth;
-        private double referenceTileHeight;       
+        private double referenceTileHeight;
 
         private void Awake()
         {
@@ -79,8 +79,6 @@ namespace Netherlands3D.Twin
                 InteruptRunningProcesses(key);
                 if (tiles[key] != null && tiles[key].gameObject != null)
                     ClearPreviousTexture(tiles[key]);
-                //RemoveGameObjectFromTile(key);
-                //tiles.Remove(key);
             }
         }
 

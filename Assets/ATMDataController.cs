@@ -145,9 +145,6 @@ namespace Netherlands3D.Twin
             int highest = 0;
             foreach(KeyValuePair<int, Vector2Int> v in yearZoomBounds)
             {
-                if (yearsUnsupported.Contains(v.Key))
-                    continue;
-
                 if(v.Value.x < lowest)
                     lowest = v.Value.x;
                 if(v.Value.y > highest)
@@ -171,17 +168,6 @@ namespace Netherlands3D.Twin
                     ChangeYear?.Invoke(currentYear);
                 lastValidYear = currentYear;
             }
-        }
-
-        public bool IsTileWithinXY(int x, int y)
-        {
-            if(yearBounds.ContainsKey(currentYear)) 
-            {
-                Vector4 bounds = yearBounds[currentYear];
-                if(x >= bounds.x && x <= bounds.z && y >= bounds.y && y <= bounds.w)
-                        return true;
-            }
-            return false;
         }
 
         public string GetUrl()

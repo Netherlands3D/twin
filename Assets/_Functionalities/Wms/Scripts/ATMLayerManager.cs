@@ -63,17 +63,6 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             }
         }
 
-        public void CreateTileHandlerForEachZoomLevel(Transform parent, TextureProjectorBase projectorPrefab)
-        {
-            var zoomBounds = timeController.GetZoomBoundsAllYears();
-            int numberOfZoomLevels = zoomBounds.y - zoomBounds.x + 1;
-            atmTileDataLayers = new ATMTileDataLayer[numberOfZoomLevels];
-            for (int i = 0; i < ATMTileDataLayers.Length; i++)
-            {
-                CreateTileLayerForDataLayer(parent, i, zoomBounds.x + i, projectorPrefab);
-            }
-        }
-
         private void ActivateLayer(int zoomLevel)
         {
             int index = timeController.GetZoomLayerIndex(zoomLevel);
@@ -95,26 +84,6 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             {
                 privateMethod.Invoke(Object.FindObjectOfType<CartesianTiles.TileHandler>(), null);
             }
-        }
-
-        private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, TextureProjectorBase projectorPrefab)
-        {
-            GameObject zoomLayerObject = new GameObject(forZoomLevel.ToString());
-            zoomLayerObject.AddComponent<XyzTiles>();
-            WorldTransform wt = zoomLayerObject.AddComponent<WorldTransform>();
-            ChildWorldTransformShifter cts = zoomLayerObject.AddComponent<ChildWorldTransformShifter>();
-            wt.SetShifter(cts);
-            Object.Destroy(zoomLayerObject.GetComponent<GameObjectWorldTransformShifter>());
-                
-            ATMTileDataLayers[i] = zoomLayerObject.AddComponent<ATMTileDataLayer>();
-                
-            ATMTileDataLayer zoomLayer = ATMTileDataLayers[i].GetComponent<ATMTileDataLayer>();
-            zoomLayer.ProjectorPrefab = projectorPrefab;
-            zoomLayer.SetDataController(timeController);                
-            zoomLayer.SetZoomLevel(forZoomLevel);
-            zoomLayer.tileSize = timeController.GetTileSizeForZoomLevel(zoomLayer.ZoomLevel);
-            zoomLayerObject.AddComponent<ATMLayerGameObject>();
-            ATMTileDataLayers[i].transform.SetParent(parent, false);
         }
 
         private void CreateTileLayerForDataLayer(Transform parent, int i, int forZoomLevel, ATMMapLayerGameObject layerGameObjectPrefab)
