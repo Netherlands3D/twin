@@ -242,9 +242,14 @@ namespace Netherlands3D.Twin
             projector.name = xyzTile.ToString();
             var decalProjector = projector.GetComponent<DecalProjector>();
             projector.SetSize(tileSize, tileSize, decalProjector.size.z);
-            var vector3 = xyzTile.MinBound.ToUnity();
-            vector3.y = projector.transform.position.y;
-            projector.transform.position = vector3;
+            projector.SetSize(tileSize, tileSize, decalProjector.size.z);
+            // DecalProjector uses the position as center, but the position is bottomLeft; so we use the pivot
+            // to make sure the positioning is from the bottomLeft
+            decalProjector.pivot = new Vector3(tileSize * .5f, tileSize * .5f, 0);
+            
+            var projectorPosition = xyzTile.MinBound.ToUnity();
+            projectorPosition.y = projector.transform.position.y;
+            projector.transform.position = projectorPosition;
 
             var atmTile = new VisibleAtmTile()
             {
