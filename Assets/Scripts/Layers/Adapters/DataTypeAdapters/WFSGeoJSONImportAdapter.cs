@@ -365,8 +365,14 @@ namespace Netherlands3D.Twin
             {
                 XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
                 XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
-                namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
-                namespaceManager.AddNamespace("ows", "http://www.opengis.net/ows");
+                if (namespaceManager.HasNamespace("wfs") == false)
+                {
+                    namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
+                }
+                if (namespaceManager.HasNamespace("ows") == false)
+                {
+                    namespaceManager.AddNamespace("ows", "http://www.opengis.net/ows/1.1");
+                }
 
                 if (elementsWithNamespaces != null)
                 {

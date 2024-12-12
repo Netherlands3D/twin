@@ -8,8 +8,8 @@ namespace Netherlands3D.Twin.UI.LayerInspector
         protected override void CreateObject()
         {
             var layerParent = GameObject.FindWithTag("3DTileParent").transform;
-            var newObject = Instantiate(prefab, Vector3.zero, Quaternion.Euler(initialRotation), layerParent);
-            newObject.transform.localScale = initialScale;
+            var newObject = Instantiate(prefab, Vector3.zero, prefab.transform.rotation, layerParent);
+            
             var layerComponent = newObject.GetComponent<Tile3DLayerGameObject>();
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<Tile3DLayerGameObject>();            

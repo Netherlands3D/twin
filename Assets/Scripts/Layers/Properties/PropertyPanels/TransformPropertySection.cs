@@ -23,8 +23,24 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private SetOfXYZ rotation = new();
         [SerializeField] private SetOfXYZ scale = new();
 
-        private const string percentageCharacter = "%";
+        [Header("position settings")]
+        [SerializeField] private int positionDecimals = 0;
+        [SerializeField] private string positionUnitCharacter = "";
 
+        [Header("rotation settings")]
+        [SerializeField] private int rotationDecimals = 2;
+        [SerializeField] private string rotationUnitCharacter = "";
+
+        [Header("scale settings")]
+        [SerializeField] private float scaleMultiplier = 100f;
+        [SerializeField] private int scaleDecimals = 0;
+        [SerializeField] private string scaleUnitCharacter = "%";
+
+        private string formatString;
+        
+        private const string unparseableDecimalSeparator = ",";
+        private const string parseableDecimalSeparator = ".";
+        
         public override HierarchicalObjectLayerGameObject LayerGameObject //todo: possibly remove this and replace it with a direct reference to the TransformLayerProperty
         {
             get => layerGameObject;
@@ -60,6 +76,11 @@ namespace Netherlands3D.Twin.Layers.Properties
 
                 SetTransformLocks();
             }
+        }
+
+        private void Awake()
+        {
+            formatString = GetFormatString(scaleDecimals);
         }
 
         private void OnEnable()
@@ -122,9 +143,27 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnPositionChanged(string axisValue)
         {
-            double.TryParse(position.xField.Text, out var x);
-            double.TryParse(position.yField.Text, out var y);
-            double.TryParse(position.zField.Text, out var z);
+            var numberFormat = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = parseableDecimalSeparator
+            };
+
+            //remove the unit character and set the correct decimal separator
+            var xText = position.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = position.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = position.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            if (positionUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(positionUnitCharacter, string.Empty);
+                yText = yText.Replace(positionUnitCharacter, string.Empty);
+                zText = zText.Replace(positionUnitCharacter, string.Empty);
+            }
+
+            
+            double.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
+            double.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
+            double.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
+
 
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
             TransformPropertyData.Position = rdCoordinate;
@@ -132,47 +171,90 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnRotationChanged(string axisValue)
         {
-            float.TryParse(rotation.xField.Text, out var x);
-            float.TryParse(rotation.yField.Text, out var y);
-            float.TryParse(rotation.zField.Text, out var z);
+            var numberFormat = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = parseableDecimalSeparator
+            };
+
+            //remove the unit character and set the correct decimal separator
+            var xText = rotation.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = rotation.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = rotation.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+
+            if (rotationUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(rotationUnitCharacter, string.Empty);
+                yText = yText.Replace(rotationUnitCharacter, string.Empty);
+                zText = zText.Replace(rotationUnitCharacter, string.Empty);
+            }
+            
+            float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
+            float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
+            float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
 
             TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
 
         private void OnScaleChanged(string axisValue)
         {
-            float.TryParse(scale.xField.Text.Replace(percentageCharacter, ""), out var x);
-            float.TryParse(scale.yField.Text.Replace(percentageCharacter, ""), out var y);
-            float.TryParse(scale.zField.Text.Replace(percentageCharacter, ""), out var z);
+            var numberFormat = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = parseableDecimalSeparator
+            };
 
-            TransformPropertyData.LocalScale = new Vector3(x / 100.0f, y / 100.0f, z / 100.0f);
+            //remove the unit character and set the correct decimal separator
+            var xText = scale.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = scale.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = scale.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+
+            if (scaleUnitCharacter.Length > 0)
+            {
+                xText = xText.Replace(scaleUnitCharacter, string.Empty);
+                yText = yText.Replace(scaleUnitCharacter, string.Empty);
+                zText = zText.Replace(scaleUnitCharacter, string.Empty);
+            }
+            
+            float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
+            float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
+            float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
+
+            TransformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
         }
 
         private void UpdatePositionFields(Coordinate coordinate)
         {
             var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
-
-            position.xField.SetTextWithoutNotify(rdCoordinate.Points[0].ToString("0", CultureInfo.InvariantCulture));
-            position.yField.SetTextWithoutNotify(rdCoordinate.Points[1].ToString("0", CultureInfo.InvariantCulture));
-            position.zField.SetTextWithoutNotify(rdCoordinate.Points[2].ToString("0", CultureInfo.InvariantCulture));
+            
+            position.xField.SetTextWithoutNotify($"{rdCoordinate.Points[0].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.yField.SetTextWithoutNotify($"{rdCoordinate.Points[1].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.zField.SetTextWithoutNotify($"{rdCoordinate.Points[2].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
         }
 
         private void UpdateRotationFields(Vector3 eulerAngles)
         {
-            rotation.xField.SetTextWithoutNotify(eulerAngles.x.ToString("0.00", CultureInfo.InvariantCulture));
-            rotation.yField.SetTextWithoutNotify(eulerAngles.y.ToString("0.00", CultureInfo.InvariantCulture));
-            rotation.zField.SetTextWithoutNotify(eulerAngles.z.ToString("0.00", CultureInfo.InvariantCulture));
+            rotation.xField.SetTextWithoutNotify($"{eulerAngles.x.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.yField.SetTextWithoutNotify($"{eulerAngles.y.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.zField.SetTextWithoutNotify($"{eulerAngles.z.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
         }
 
         private void UpdateScalingFields(Vector3 localScale)
         {
-            var xPercentage = localScale.x * 100;
-            var yPercentage = localScale.y * 100;
-            var zPercentage = localScale.z * 100;
+            var xPercentage = localScale.x * scaleMultiplier;
+            var yPercentage = localScale.y * scaleMultiplier;
+            var zPercentage = localScale.z * scaleMultiplier;
 
-            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
-            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString("0", CultureInfo.InvariantCulture)}{percentageCharacter}");
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+        }
+
+        private static string GetFormatString(int decimals)
+        {
+            if (decimals == 0)
+                return "0";
+
+            string zeros = new string('0', decimals);
+            return $"0.{zeros}";
         }
     }
 }
