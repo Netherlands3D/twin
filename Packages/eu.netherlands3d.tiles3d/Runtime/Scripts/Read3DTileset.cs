@@ -115,13 +115,17 @@ namespace Netherlands3D.Tiles3D
             //Append the key query parameter
 #if UNITY_EDITOR
             if (!string.IsNullOrEmpty(personalKey))
-#else
-            if (!string.IsNullOrEmpty(publicKey))
-#endif
             {
                 CredentialQuery = $"{QueryKeyName}={personalKey}";
                 uriBuilder.Query += CredentialQuery;
             }
+#else
+            if (!string.IsNullOrEmpty(publicKey))
+            {
+                CredentialQuery = $"{QueryKeyName}={publicKey}";
+                uriBuilder.Query += CredentialQuery;
+            }
+#endif
             tilesetUrl = uriBuilder.ToString();
         }
 
