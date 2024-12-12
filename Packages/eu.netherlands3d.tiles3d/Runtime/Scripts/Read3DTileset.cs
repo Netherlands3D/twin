@@ -87,9 +87,19 @@ namespace Netherlands3D.Tiles3D
         [HideInInspector] public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
         [HideInInspector] public UnityEvent<ContentMetadata> OnLoadAssetMetadata = new();
 
-
+        public string CredentialQuery { get; private set; } = string.Empty;
+        
+        public void ClearKeyFromURL()
+        {
+            if (CredentialQuery != string.Empty)
+            {
+                tilesetUrl = tilesetUrl.Replace(CredentialQuery, string.Empty);
+            }
+        }
+        
         public void ConstructURLWithKey()
         {
+            ClearKeyFromURL(); //remove existing key if any is there
             UriBuilder uriBuilder = new UriBuilder(tilesetUrl);
 
             //Keep an existing query
@@ -105,15 +115,13 @@ namespace Netherlands3D.Tiles3D
             //Append the key query parameter
 #if UNITY_EDITOR
             if (!string.IsNullOrEmpty(personalKey))
-            {
-                uriBuilder.Query += $"{QueryKeyName}={personalKey}";
-            }
 #else
             if (!string.IsNullOrEmpty(publicKey))
-            {
-                uriBuilder.Query += $"{QueryKeyName}={publicKey}";
-            }
 #endif
+            {
+                CredentialQuery = $"{QueryKeyName}={personalKey}";
+                uriBuilder.Query += CredentialQuery;
+            }
             tilesetUrl = uriBuilder.ToString();
         }
 
