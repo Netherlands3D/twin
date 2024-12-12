@@ -345,9 +345,16 @@ namespace Netherlands3D.Twin
                 {
                     using XmlNodeReader reader = new XmlNodeReader(featureTypeNode);
                     
+
                     FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
                     if (featureType == null) continue;
-                        
+
+
+                    var crsNode = featureTypeNode.SelectSingleNode("//*[local-name()='DefaultCRS']");
+                    if (crsNode != null)
+                    {
+                        string crs = crsNode.InnerText;
+                    }
                     featureTypes.Add(featureType);
                 }
 

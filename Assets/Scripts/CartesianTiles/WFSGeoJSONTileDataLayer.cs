@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using System;
+using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -14,6 +16,7 @@ namespace Netherlands3D.CartesianTiles
     /// </summary>
     public class WFSGeoJSONTileDataLayer : Layer
     {
+        private const string DefaultEpsgCoordinateSystem = "28992";
         private TileHandler tileHandler;
         private string wfsUrl = "";
         public string WfsUrl { 
@@ -126,10 +129,33 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
+        private Twin.Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, Twin.Wms.MapFilters mapFilters)
+        {
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+
+            var splitReferenceCode = mapFilters.spatialReference.Split(':');
+            string coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg"
+                ? splitReferenceCode[^1]
+                : DefaultEpsgCoordinateSystem;
+
+            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+
+            var boundingBox = new Twin.Wms.BoundingBox(bottomLeft, topRight);
+            boundingBox.Convert(foundCoordinateSystem);
+
+            return boundingBox;
+        }
+
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {
-            var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-            string url = WfsUrl.Replace("{0}", bboxValue);
+            var mapData = Twin.Wms.MapFilters.FromUrl(new Uri(wfsUrl));
+            var boundingBox = DetermineBoundingBox(tileChange, mapData);
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString());
+
+
+            //var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
+            //string url = WfsUrl.Replace("{0}", bboxValue);
 
             var geoJsonRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = geoJsonRequest;
