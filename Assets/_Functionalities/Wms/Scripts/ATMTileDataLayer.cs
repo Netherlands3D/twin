@@ -151,23 +151,17 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            var tileBottomLeft = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y);
             xyzTiles.UrlTemplate = atmDataController.GetUrl();
 
             var (tileCoordinateMin, tileCoordinateMax) = GetMinAndMaxCoordinate(tileKey);
             var (xyzTileBL, xyzTileBR, xyzTileTR, xyzTileTL) = GetXyzTilesForMinAndMaxCoordinate(tileCoordinateMin, tileCoordinateMax);
 
-            // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
-            // for the projector to align both grids; this must be done per tile to prevent rounding issues and
-            // have the cleanest match
-            var offset = CalculateTileOffset(xyzTileTL, tileBottomLeft);
-
             EnableGroundPlanesInTileRange(false, tileCoordinateMin, tileCoordinateMax);
 
-            yield return TryAddProjector(tileKey, xyzTileBL, offset);
-            yield return TryAddProjector(tileKey, xyzTileBR, offset);
-            yield return TryAddProjector(tileKey, xyzTileTL, offset);
-            yield return TryAddProjector(tileKey, xyzTileTR, offset);
+            yield return TryAddProjector(tileKey, xyzTileBL);
+            yield return TryAddProjector(tileKey, xyzTileBR);
+            yield return TryAddProjector(tileKey, xyzTileTL);
+            yield return TryAddProjector(tileKey, xyzTileTR);
 
             EnableGroundPlanesInTileRange(true, tileCoordinateMin, tileCoordinateMax);
 
@@ -200,7 +194,7 @@ namespace Netherlands3D.Twin
             return (tileCoordinateMin, tileCoordinateMax);
         }
 
-        private void OnTextureDownloaded(Texture2D tex, TextureDecalProjector textureDecalProjector, Vector3 projectorOffset)
+        private void OnTextureDownloaded(Texture2D tex, TextureDecalProjector textureDecalProjector)
         {
             textureDecalProjector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
             textureDecalProjector.gameObject.SetActive(isEnabled);
@@ -225,7 +219,7 @@ namespace Netherlands3D.Twin
             base.RemoveGameObjectFromTile(tileKey);
         }
 
-        private IEnumerator TryAddProjector(Vector2Int tileKey, XyzTiles.XyzTile xyzTile, Vector3 offset)
+        private IEnumerator TryAddProjector(Vector2Int tileKey, XyzTiles.XyzTile xyzTile)
         {
             // The projector has already been added by another tile due to overlap, so we can continue
             var (_, foundAtmTile) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTile));
@@ -281,7 +275,7 @@ namespace Netherlands3D.Twin
                 tex.Compress(true);
                 tex.filterMode = FilterMode.Bilinear;
                 tex.Apply(false, true);
-                OnTextureDownloaded(tex, projector, offset);
+                OnTextureDownloaded(tex, projector);
             }
         }
 
@@ -348,16 +342,6 @@ namespace Netherlands3D.Twin
             return (tileWidth, tileHeight);
         }
 
-        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCenter)
-        {
-            var xyzCenter = xyzTile.Center.Convert(CoordinateSystem.RD);           
-            return new Vector3(
-                (float)(tileCenter.Points[0] - xyzCenter.Points[0]), 
-                0,
-                (float)(tileCenter.Points[1] - xyzCenter.Points[1]) 
-            );
-        }
-        
         private void UpdateDrawOrderForChildren()
         {
             foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
