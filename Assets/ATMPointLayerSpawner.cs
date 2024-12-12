@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.Twin._Functionalities.Wms.Scripts;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 

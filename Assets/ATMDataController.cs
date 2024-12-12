@@ -2,9 +2,7 @@ using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
