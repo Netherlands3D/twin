@@ -6,6 +6,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using System;
 using Netherlands3D.Coordinates;
+using KindMen.Uxios;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -129,16 +130,21 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
-        private Twin.Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, Twin.Wms.MapFilters mapFilters)
+        private Twin.Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, string spatialReference, out string spatialReferenceCode)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
             var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
 
-            var splitReferenceCode = mapFilters.spatialReference.Split(':');
-            string coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg"
-                ? splitReferenceCode[^1]
-                : DefaultEpsgCoordinateSystem;
+            string coordinateSystemAsString = DefaultEpsgCoordinateSystem;
+            var splitReferenceCode = spatialReference.Split(':');
+            for (int i = 0; i < splitReferenceCode.Length - 1; i++)
+                if (splitReferenceCode[i].ToLower() == "epsg")
+                {
+                    coordinateSystemAsString = splitReferenceCode[^1];
+                    break;
+                }
 
+            spatialReferenceCode = coordinateSystemAsString;
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
 
             var boundingBox = new Twin.Wms.BoundingBox(bottomLeft, topRight);
@@ -149,10 +155,10 @@ namespace Netherlands3D.CartesianTiles
 
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {
-            var mapData = Twin.Wms.MapFilters.FromUrl(new Uri(wfsUrl));
-            var boundingBox = DetermineBoundingBox(tileChange, mapData);
-            string url = wfsUrl.Replace("{0}", boundingBox.ToString());
-
+            var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
+            string spatialReference = queryParameters["srsname"];
+            var boundingBox = DetermineBoundingBox(tileChange, spatialReference, out string code);
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + code);
 
             //var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             //string url = WfsUrl.Replace("{0}", bboxValue);

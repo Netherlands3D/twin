@@ -84,8 +84,9 @@ namespace Netherlands3D.Twin
                     //Create a folder layer 
                     foreach (var featureType in featureTypes)
                     {
+                        string crs = featureType.DefaultCRS;
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType.Name, sourceUrl, wfsFolder, featureType.Title);
+                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
                     }
                 
                     wfs = null;
@@ -97,11 +98,13 @@ namespace Netherlands3D.Twin
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
                     var featureType = queryParameters.Get(ParameterNameOfTypeNameBasedOnVersion());
 
+
                     if (string.IsNullOrEmpty(featureType) == false)
                     {
+                        string crs = queryParameters["srsname"];
                         // Can't deduct a human-readable title at the moment, we should add that we always query for the
                         // capabilities; this also helps with things like outputFormat and CRS
-                        AddWFSLayer(featureType, sourceUrl, wfsFolder, featureType);
+                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
                     }
 
                     wfs = null;
@@ -113,10 +116,10 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, FolderLayer folderLayer, string title)
+        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title)
         {
             // Create a GetFeature URL for the specific featureType
-            UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl);
+            UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl, crsType);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
@@ -139,7 +142,7 @@ namespace Netherlands3D.Twin
             symbolizer?.SetStrokeColor(randomLayerColor);
         }
 
-        private UriBuilder CreateLayerUri(string featureType, string sourceUrl)
+        private UriBuilder CreateLayerUri(string featureType, string sourceUrl, string crs)
         {
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
@@ -167,8 +170,8 @@ namespace Netherlands3D.Twin
                     !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"
                 );
             }
+            uriBuilder.SetQueryParameter("srsname", crs);
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
-
             return uriBuilder;
         }
 
