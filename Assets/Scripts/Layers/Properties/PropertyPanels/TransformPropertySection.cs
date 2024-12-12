@@ -36,6 +36,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private int scaleDecimals = 0;
         [SerializeField] private string scaleUnitCharacter = "%";
 
+        private string formatString;
+        
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";
         
@@ -74,6 +76,11 @@ namespace Netherlands3D.Twin.Layers.Properties
 
                 SetTransformLocks();
             }
+        }
+
+        private void Awake()
+        {
+            formatString = GetFormatString(scaleDecimals);
         }
 
         private void OnEnable()
@@ -217,20 +224,17 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void UpdatePositionFields(Coordinate coordinate)
         {
             var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
-            var format = GetFormatString(positionDecimals);
             
-            position.xField.SetTextWithoutNotify($"{rdCoordinate.Points[0].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.yField.SetTextWithoutNotify($"{rdCoordinate.Points[1].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.zField.SetTextWithoutNotify($"{rdCoordinate.Points[2].ToString(format, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.xField.SetTextWithoutNotify($"{rdCoordinate.Points[0].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.yField.SetTextWithoutNotify($"{rdCoordinate.Points[1].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.zField.SetTextWithoutNotify($"{rdCoordinate.Points[2].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
         }
 
         private void UpdateRotationFields(Vector3 eulerAngles)
         {
-            var format = GetFormatString(rotationDecimals);
-            
-            rotation.xField.SetTextWithoutNotify($"{eulerAngles.x.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
-            rotation.yField.SetTextWithoutNotify($"{eulerAngles.y.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
-            rotation.zField.SetTextWithoutNotify($"{eulerAngles.z.ToString(format, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.xField.SetTextWithoutNotify($"{eulerAngles.x.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.yField.SetTextWithoutNotify($"{eulerAngles.y.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.zField.SetTextWithoutNotify($"{eulerAngles.z.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
         }
 
         private void UpdateScalingFields(Vector3 localScale)
@@ -238,11 +242,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             var xPercentage = localScale.x * scaleMultiplier;
             var yPercentage = localScale.y * scaleMultiplier;
             var zPercentage = localScale.z * scaleMultiplier;
-            var format = GetFormatString(scaleDecimals);
 
-            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
-            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
-            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
         }
 
         private static string GetFormatString(int decimals)
@@ -250,13 +253,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (decimals == 0)
                 return "0";
 
-            string format = "0.";
-            for (int i = 0; i < decimals; i++)
-            {
-                format += '0';
-            }
-
-            return format;
+            string zeros = new string('0', decimals);
+            return $"0.{zeros}";
         }
     }
 }
