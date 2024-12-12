@@ -14,6 +14,11 @@ namespace Netherlands3D.Twin
         private const double equatorialCircumference = 2 * Mathf.PI * earthRadius;
         private const double log2x = 0.30102999566d;
 
+        [Tooltip("The zoomlevels are scaled exponentially across this height range, tweak to get better tiling visuals")]
+        [SerializeField] private float minHeightForZoomLevels = 200f;
+        [Tooltip("The zoomlevels are scaled exponentially across this height range, tweak to get better tiling visuals")]
+        [SerializeField] private float maxHeightForZoomLevels = 40_000_000f;
+
         private int currentYear;
         private int lastValidYear;
         public delegate void ATMDataHandler (int year);
@@ -100,6 +105,13 @@ namespace Netherlands3D.Twin
             { 20, 23 }
         };
 
+        private Transform cameraTransform;
+
+        private void Awake()
+        {
+            cameraTransform = Camera.main.transform;
+        }
+
         public int GetTileSizeForZoomLevel(int zoomLevel)
         {
             return atmZoomTileSizes[zoomLevel];
@@ -115,18 +127,19 @@ namespace Netherlands3D.Twin
 
         public int CalculateZoomLevel()
         {
-            Vector3 camPosition = Camera.main.transform.position;      
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                camPosition.x,
-                camPosition.y,
-                camPosition.z
-            );
-            Coordinate coord = unityCoordinate.Convert(CoordinateSystem.WGS84);
-            double latitude = coord.northing;
-            double cosLatitude = Math.Cos(latitude * Mathf.Deg2Rad);
-            double zoomLevel = Math.Log(equatorialCircumference * cosLatitude / camPosition.y) / log2x;
+            Vector3 camPosition = cameraTransform.position;
+
             var currentYearZoomBounds = GetZoomBounds();
+
+            float minimumZoomLevel = atmZoomTileSizes.Keys.Min();
+            float maximumZoomLevel = atmZoomTileSizes.Keys.Max();
+            float currentHeight = camPosition.y;
+            
+            var zoomLevel = maximumZoomLevel
+                - (Mathf.Log(currentHeight / minHeightForZoomLevels) / Mathf.Log(maxHeightForZoomLevels / minHeightForZoomLevels))
+                * (maximumZoomLevel - minimumZoomLevel);
+            
+            // Clamp to the min and max of this specific zoom level.
             zoomLevel = Math.Clamp(zoomLevel, currentYearZoomBounds.minZoom, currentYearZoomBounds.maxZoom);
 
             return (int)zoomLevel;  

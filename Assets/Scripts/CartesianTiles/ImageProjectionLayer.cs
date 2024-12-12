@@ -54,12 +54,16 @@ namespace Netherlands3D.CartesianTiles
                     tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
                     break;
                 case TileAction.Upgrade:
-                    tiles[tileKey].unityLOD++;
-                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
+                    if (tiles.ContainsKey(tileKey)) {
+                        tiles[tileKey].unityLOD++;
+                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
+                    }
                     break;
                 case TileAction.Downgrade:
-                    tiles[tileKey].unityLOD--;
-                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
+                    if (tiles.ContainsKey(tileKey)) {
+                        tiles[tileKey].unityLOD--;
+                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(tileChange, callback));
+                    }
                     break;
                 case TileAction.Remove:
                     InteruptRunningProcesses(tileKey);
