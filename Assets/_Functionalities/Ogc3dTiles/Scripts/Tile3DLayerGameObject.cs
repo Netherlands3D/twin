@@ -163,6 +163,7 @@ namespace Netherlands3D.Twin.Layers
             tileSet.personalKey = "";
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
+            tileSet.ClearKeyFromURL();
             tileSet.RefreshTiles();
         }
 
