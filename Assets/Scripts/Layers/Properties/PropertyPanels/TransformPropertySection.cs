@@ -35,6 +35,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private float scaleMultiplier = 100f;
         [SerializeField] private int scaleDecimals = 0;
         [SerializeField] private string scaleUnitCharacter = "%";
+
+        private const string unparseableDecimalSeparator = ",";
+        private const string parseableDecimalSeparator = ".";
         
         public override HierarchicalObjectLayerGameObject LayerGameObject //todo: possibly remove this and replace it with a direct reference to the TransformLayerProperty
         {
@@ -135,18 +138,18 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             var numberFormat = new NumberFormatInfo
             {
-                NumberDecimalSeparator = "."
+                NumberDecimalSeparator = parseableDecimalSeparator
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = position.xField.Text.Replace(",", ".");
-            var yText = position.yField.Text.Replace(",", ".");
-            var zText = position.zField.Text.Replace(",", ".");
+            var xText = position.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = position.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = position.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
             if (positionUnitCharacter.Length > 0)
             {
-                xText = xText.Replace(positionUnitCharacter, "");
-                yText = yText.Replace(positionUnitCharacter, "");
-                zText = zText.Replace(positionUnitCharacter, "");
+                xText = xText.Replace(positionUnitCharacter, string.Empty);
+                yText = yText.Replace(positionUnitCharacter, string.Empty);
+                zText = zText.Replace(positionUnitCharacter, string.Empty);
             }
 
             
@@ -163,19 +166,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             var numberFormat = new NumberFormatInfo
             {
-                NumberDecimalSeparator = "."
+                NumberDecimalSeparator = parseableDecimalSeparator
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = rotation.xField.Text.Replace(",", ".");
-            var yText = rotation.yField.Text.Replace(",", ".");
-            var zText = rotation.zField.Text.Replace(",", ".");
+            var xText = rotation.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = rotation.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = rotation.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
 
             if (rotationUnitCharacter.Length > 0)
             {
-                xText = xText.Replace(rotationUnitCharacter, "");
-                yText = yText.Replace(rotationUnitCharacter, "");
-                zText = zText.Replace(rotationUnitCharacter, "");
+                xText = xText.Replace(rotationUnitCharacter, string.Empty);
+                yText = yText.Replace(rotationUnitCharacter, string.Empty);
+                zText = zText.Replace(rotationUnitCharacter, string.Empty);
             }
             
             float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
@@ -189,19 +192,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             var numberFormat = new NumberFormatInfo
             {
-                NumberDecimalSeparator = "."
+                NumberDecimalSeparator = parseableDecimalSeparator
             };
 
             //remove the unit character and set the correct decimal separator
-            var xText = scale.xField.Text.Replace(",", ".");
-            var yText = scale.yField.Text.Replace(",", ".");
-            var zText = scale.zField.Text.Replace(",", ".");
-            
+            var xText = scale.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var yText = scale.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = scale.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+
             if (scaleUnitCharacter.Length > 0)
             {
-                xText = xText.Replace(scaleUnitCharacter, "");
-                yText = yText.Replace(scaleUnitCharacter, "");
-                zText = zText.Replace(scaleUnitCharacter, "");
+                xText = xText.Replace(scaleUnitCharacter, string.Empty);
+                yText = yText.Replace(scaleUnitCharacter, string.Empty);
+                zText = zText.Replace(scaleUnitCharacter, string.Empty);
             }
             
             float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
@@ -242,7 +245,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(format, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
         }
 
-        public static string GetFormatString(int decimals)
+        private static string GetFormatString(int decimals)
         {
             if (decimals == 0)
                 return "0";
