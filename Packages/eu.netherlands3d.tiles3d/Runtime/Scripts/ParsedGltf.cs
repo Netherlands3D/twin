@@ -134,18 +134,115 @@ namespace Netherlands3D.Tiles3D
         }
         void PositionGameObject(Transform scene, double[] rtcCenter, Tile tile)
         {
-            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
+            //get the transformationMAtrix from the gameObject created bij GltFast
+            Matrix4x4 BasisMatrix = Matrix4x4.TRS(scene.position, scene.rotation, scene.localScale);
+            TileTransform basistransform = new TileTransform()
+            {
+                m00 = BasisMatrix.m00,
+                m01 = BasisMatrix.m01,
+                m02 = BasisMatrix.m02,
+                m03 = BasisMatrix.m03,
+
+                m10 = BasisMatrix.m10,
+                m11 = BasisMatrix.m11,
+                m12 = BasisMatrix.m12,
+                m13 = BasisMatrix.m13,
+
+                m20 = BasisMatrix.m20,
+                m21 = BasisMatrix.m21,
+                m22 = BasisMatrix.m22,
+                m23 = BasisMatrix.m23,
+
+                m30 = BasisMatrix.m30,
+                m31 = BasisMatrix.m31,
+                m32 = BasisMatrix.m32,
+                m33 = BasisMatrix.m33,
+            };
+
+            // transformation from created gameObject back to GLTF-space
+            // this transformation has to be changed when moving to Unith.GLTFast version 4.0 or older (should then be changed to m00=1,m11=1,m22=-1,m33=1)
+            TileTransform gltFastToGLTF = new TileTransform()
+            {
+                m00 = -1d,
+                m11 = 1,
+                m22 = 1,
+                m33 = 1,
+            };
+
+            //transformation y-up to Z-up, to change form gltf-space to 3dtile-space
+            TileTransform yUpToZUp = new TileTransform()
+            {
+                m00 = 1d,
+                m12 = -1d,
+                m21 = 1,
+                m33 = 1d
+            };
+
+            //get the transformation of the created gameObject in 3dTile-space
+            TileTransform geometryInECEF = yUpToZUp*gltFastToGLTF * basistransform;
+
+            //apply the tileTransform
+            TileTransform geometryInCRS = tile.tileTransform * geometryInECEF;
+
+            //transformation from ECEF to Unity
+            TileTransform ECEFToUnity = new TileTransform() //from ecef to Unity
+            {
+                m01 = 1d,   //unityX = ecefY
+                m12 = 1d,   //unity = ecefZ
+                m20 = -1d,  //unityZ = ecef-x
+                m33=1d
+            };
+
+            // move the transformation to Unity-space
+            TileTransform geometryInUnity = ECEFToUnity * geometryInCRS;
+
+            // create a transformation using floats to be able to extract scale and rotation in unity-space
+            Matrix4x4 final = new Matrix4x4()
+            {
+                m00 = (float)geometryInUnity.m00,
+                m01 = (float)geometryInUnity.m01,
+                m02 = (float)geometryInUnity.m02,
+                m03 = 0f,
+
+                m10 = (float)geometryInUnity.m10,
+                m11 = (float)geometryInUnity.m11,
+                m12 = (float)geometryInUnity.m12,
+                m13 = 0f,
+
+                m20 = (float)geometryInUnity.m20,
+                m21 = (float)geometryInUnity.m21,
+                m22 = (float)geometryInUnity.m22,
+                m23 = 0f,
+
+                m30 = 0f,
+                m31=0f,
+                m32=0f,
+                m33=1f
+            };
+            Vector3 translation;
+            Vector3 scale;
+            Quaternion rotation;
+            // get rotation and scale in unity-space
+            final.Decompose(out translation, out rotation, out scale);
+
+            // get the coordinate of the origin of the created gameobject in the 3d-tiles CoordinateSystem
+            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, geometryInCRS.m03, geometryInCRS.m13, geometryInCRS.m23);
             if (rtcCenter != null)
             {
                 sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2])+sceneCoordinate;
             }
-            if (tile!=null)
-            {
-                sceneCoordinate = tile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
 
-            }
+            /// TEMPORARY FIX
+            /// rotationToGRavityUp applies an extra rotation of -90 degrees around the up-axis in case of ECEF-coordinateSystems. 
+            /// dis should not be done and has to be removed
+            /// until that time, we rotate by 90 degrees around the up-axis to counter the applied rotation
+            rotation = Quaternion.AngleAxis(90, Vector3.up) * rotation;
+
+            //apply scale, position and rotation to the gameobject
+            scene.localScale = scale;
             scene.position = sceneCoordinate.ToUnity();
-            scene.rotation = sceneCoordinate.RotationToLocalGravityUp() * (scene.rotation);
+            scene.rotation = sceneCoordinate.RotationToLocalGravityUp() * rotation;
+            
 
         }
         public void ParseAssetMetaData(Content content)
