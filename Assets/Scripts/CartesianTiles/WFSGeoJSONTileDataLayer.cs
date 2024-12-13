@@ -78,7 +78,7 @@ namespace Netherlands3D.CartesianTiles
             Debug.LogError("No TileHandler found.", gameObject);
         }
 
-        public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
+        public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
             TileAction action = tileChange.action;
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -97,7 +97,6 @@ namespace Netherlands3D.CartesianTiles
                     break;
                 case TileAction.Remove:
                     wfsGeoJSONLayer.RemoveFeaturesOutOfView();
-
                     InteruptRunningProcesses(tileKey);
                     tiles.Remove(tileKey);
                     callback?.Invoke(tileChange);
@@ -130,7 +129,7 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
-        private Twin.Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, string spatialReference, out string spatialReferenceCode)
+        private BoundingBox DetermineBoundingBox(TileChange tileChange, string spatialReference, out string spatialReferenceCode)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
             var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
@@ -147,13 +146,13 @@ namespace Netherlands3D.CartesianTiles
             spatialReferenceCode = coordinateSystemAsString;
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
 
-            var boundingBox = new Twin.Wms.BoundingBox(bottomLeft, topRight);
+            var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(foundCoordinateSystem);
 
             return boundingBox;
         }
 
-        private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
+        private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
             string spatialReference = queryParameters["srsname"];
