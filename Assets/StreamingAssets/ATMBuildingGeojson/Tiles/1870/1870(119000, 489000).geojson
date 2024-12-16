@@ -15,21 +15,6 @@
         "label": "WW 11 (Spaarndammerdijk)",
         "year": "1870"
       }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          4.872986,
-          52.392656
-        ]
-      },
-      "properties": {
-        "id": "https://adamlink.nl/geo/address/A228761",
-        "label": "WW 11 (Spaarndammerdijk)",
-        "year": "1870"
-      }
     }
   ]
 }
