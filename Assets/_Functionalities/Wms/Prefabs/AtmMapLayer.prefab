@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8363319932289052987}
-  - component: {fileID: 1950731496240471435}
-  - component: {fileID: 7900166245345724691}
-  - component: {fileID: -8440748944381979600}
-  - component: {fileID: -3050132864660565148}
+  - component: {fileID: -9063389018957865507}
+  - component: {fileID: 2816984785408510274}
+  - component: {fileID: -8300356283678966299}
+  - component: {fileID: -7699739382070360042}
+  - component: {fileID: 2276412889401467713}
   m_Layer: 0
-  m_Name: ATMLayer
+  m_Name: AtmMapLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1950731496240471435
+--- !u!114 &-9063389018957865507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,18 +45,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b161ae9a7d130d34289c0b84300e7cbf, type: 3}
+  m_Script: {fileID: 11500000, guid: e0d357c611d5430093b7dd1ddce78830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 4bed2799dfbb342c5a5eb194351dcab9
+  prefabIdentifier: 7754a70567866e44dac229dd8715bc58
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  atmLayerGameObjectPrefab: {fileID: 0}
---- !u!114 &7900166245345724691
+--- !u!114 &2816984785408510274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,29 +64,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b2f74f99bfca46eb9c97d84673cf066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionalities: []
-  OnEnableFunctionality:
+  isenabled: 1
+  tileSize: 188
+  layerPriority: 0
+  Datasets: []
+  pauseLoading: 0
+  onLayerEnabled:
     m_PersistentCalls:
       m_Calls: []
-  OnDisableFunctionality:
+  onLayerDisabled:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerGameObject, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &-8440748944381979600
+      m_Calls: []
+  compressLoadedTextures: 0
+  projectorPrefab: {fileID: 4500353898809890024, guid: d62ffe26c4958754e9ee3be0a03b28f6,
+    type: 3}
+  onLogMessage:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-8300356283678966299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,12 +93,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8560a4d50b3047b9a1a1e48ec2761067, type: 3}
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerPrefab: {fileID: -9063389018957865507, guid: 7754a70567866e44dac229dd8715bc58,
-    type: 3}
---- !u!114 &-3050132864660565148
+  worldTransformShifter: {fileID: -7699739382070360042}
+  referenceCoordinateSystem: 2
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-7699739382070360042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,13 +113,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 426b2d41833c808499f96f51feb06495, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scale: 25
-  groundPlanesLonLat:
-  - {x: 52.371838, y: 4.8931446}
-  - {x: 52.367756, y: 4.900876}
-  - {x: 52.3626, y: 4.9120355}
-  groundPlanePrefab: {fileID: 6216683885916768284, guid: 32348ff05b146f34b8ed64ba53d11546,
-    type: 3}
+--- !u!114 &2276412889401467713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b3fb76cb96645348155bd1ea16ae5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

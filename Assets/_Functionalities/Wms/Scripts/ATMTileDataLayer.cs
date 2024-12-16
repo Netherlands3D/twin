@@ -1,34 +1,52 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Timeline;
 
 namespace Netherlands3D.Twin
 {
     public class ATMTileDataLayer : ImageProjectionLayer
     {
-        private ATMDataController timeController;
+        public int ZoomLevel => zoomLevel;
 
         private float lastUpdatedTimeStamp = 0;
         private float lastUpdatedInterval = 1f;
         private bool visibleTilesDirty = false;
         private List<TileChange> queuedChanges = new List<TileChange>();
-        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
-        private Coroutine updateTilesRoutine = null;
+        private WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
+        private Coroutine updateTilesRoutine = null;      
 
-        private const float earthRadius = 6378.137f;
-        private const float equatorialCircumference = 2 * Mathf.PI * earthRadius;
-        private const float log2x = 0.30102999566f;
-
-        [SerializeField] private int zoomLevel = 16;
+        private int zoomLevel = -1;
         private XyzTiles xyzTiles;
+        private ATMDataController atmDataController;
 
+        /// <summary>
+        /// Cartesian Tiles do not align with the XyzTiles because the bottom left of Cartesian Tiles are always a
+        /// multiple of the tileSize added on top of the Unity origin (0,0,0), while XyzTiles bottom left always matches
+        /// a specific WGS84 Coordinate.
+        ///
+        /// This means that a single Cartesian Tile may intersect with multiple XyzTiles, and thus we need to check each
+        /// corner of the CartesianTile to which XyzTile it belongs and dynamically create and destroy these 'Atm Tiles'
+        /// based on whether cartesian tiles are linked to them; only when none are linked: cleanup.
+        /// </summary>
+        private Dictionary<XyzTiles.XyzTile, VisibleAtmTile> atmTiles = new();
+
+        private class VisibleAtmTile
+        {
+            public XyzTiles.XyzTile XyzTile;
+            public TextureDecalProjector Projector;
+            public List<Vector2Int> LinkedCartesianTiles = new();
+            public UnityWebRequest webRequest = null;
+        }
+        
         public int RenderIndex
         {
             get => renderIndex;
@@ -46,21 +64,13 @@ namespace Netherlands3D.Twin
         /// <summary>
         /// Cached zoom level, because we need to compute the actual tilesize from the quad tree; we cache the previous
         /// value and only if it changed will we recompute the tileSize.
-        /// </summary>
-        private int previousZoomLevel;
-
+        /// </summary>        
         private double referenceTileWidth;
         private double referenceTileHeight;
 
         private void Awake()
         {
             xyzTiles = GetComponent<XyzTiles>();
-
-            if (timeController == null)
-            {
-                timeController = gameObject.AddComponent<ATMDataController>();
-                timeController.ChangeYear += OnYearChanged;
-            }
             
             //Make sure Datasets at least has one item
             if (Datasets.Count != 0) return;
@@ -70,28 +80,51 @@ namespace Netherlands3D.Twin
                 maximumDistance = 3000,
                 maximumDistanceSquared = 3000 * 3000
             });
+
+            GetComponent<WorldTransform>().onPostShift.AddListener(ShiftUpdateTiles);
         }
 
-        private void OnDestroy()
+        private void ShiftUpdateTiles(WorldTransform worldTransform, Coordinate cd)
         {
-            if(timeController != null)
-                timeController.ChangeYear -= OnYearChanged;
-        }
-
-        private void OnYearChanged(int year)
-        {
-            xyzTiles.UrlTemplate = timeController.GetUrl();
+            xyzTiles.ClearDebugTiles();
             SetVisibleTilesDirty();
+            // TODO: Recalculate projector positions
+        }
+        
+        public void CancelTiles()
+        {
+            List<Vector2Int> keys = tiles.Keys.ToList();
+            foreach (Vector2Int key in keys)
+            {
+                InteruptRunningProcesses(key);
+                if (tiles[key] != null && tiles[key].gameObject != null)
+                    ClearPreviousTexture(tiles[key]);
+            }
         }
 
-        private void Update()
-        {            
-            //zoomLevel = CalculateZoomLevel();
-            if (zoomLevel != previousZoomLevel)
+        public virtual void InteruptRunningProcesses(Vector2Int tileKey)
+        {
+            base.InteruptRunningProcesses(tileKey);
+            
+            TryRemoveProjectorFrom(tileKey);
+        }
+
+        private void OnDisable()
+        {
+            if (updateTilesRoutine != null)
             {
-                this.previousZoomLevel = zoomLevel;
-                SetVisibleTilesDirty();
+                StopCoroutine(updateTilesRoutine);
             }
+        }
+        
+        public void SetDataController(ATMDataController controller)
+        {
+            atmDataController = controller;
+        }
+
+        public void SetZoomLevel(int zoomLevel)
+        {
+            this.zoomLevel = zoomLevel;
         }
 
         private void EnableGroundPlanesInTileRange(bool enabled, Coordinate min, Coordinate max)
@@ -108,28 +141,7 @@ namespace Netherlands3D.Twin
                 }
             }
         }
-
-        public int CalculateZoomLevel()
-        {
-            Vector3 camPosition = Camera.main.transform.position;
-            float viewDistance = camPosition.y; //lets keep it orthographic?
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                camPosition.x,
-                camPosition.z,
-                0
-            );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
-            float latitude = (float)coord.Points[0];
-            float cosLatitude = Mathf.Cos(latitude * Mathf.Deg2Rad); //to rad
-
-            //https://wiki.openstreetmap.org/wiki/Zoom_levels
-            float numerator = equatorialCircumference * cosLatitude;
-            float zoomLevel = Mathf.Log(numerator / viewDistance) / log2x;
-
-            return Mathf.RoundToInt(zoomLevel);
-        }
-
+        
         protected override IEnumerator DownloadDataAndGenerateTexture(
             TileChange tileChange,
             Action<TileChange> callback = null
@@ -137,97 +149,198 @@ namespace Netherlands3D.Twin
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
+            if (zoomLevel < 0)
+                yield break;
+
             if (!tiles.ContainsKey(tileKey))
             {
                 onLogMessage.Invoke(LogType.Warning, "Tile key does not exist");
                 yield break;
             }
 
-            Tile tile = tiles[tileKey];
+            xyzTiles.UrlTemplate = atmDataController.GetUrl();
 
-            //we need to take the center of the cartesian tile to be sure the coordinate does not fall within the conversion boundaries of the bottomleft quadtreecell
-            var tileCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y);
-            var xyzTile = xyzTiles.FetchTileAtCoordinate(tileCoordinate, zoomLevel);
+            var (tileCoordinateMin, tileCoordinateMax) = GetMinAndMaxCoordinate(tileKey);
+            var (xyzTileBL, xyzTileBR, xyzTileTR, xyzTileTL) = GetXyzTilesForMinAndMaxCoordinate(tileCoordinateMin, tileCoordinateMax);
 
-            // The tile coordinate does not align with the grid of the XYZTiles, so we calculate an offset
-            // for the projector to align both grids; this must be done per tile to prevent rounding issues and
-            // have the cleanest match
-            var offset = CalculateTileOffset(xyzTile, tileCoordinate);
+            EnableGroundPlanesInTileRange(false, tileCoordinateMin, tileCoordinateMax);
 
+            yield return TryAddProjector(tileKey, xyzTileBL);
+            yield return TryAddProjector(tileKey, xyzTileBR);
+            yield return TryAddProjector(tileKey, xyzTileTL);
+            yield return TryAddProjector(tileKey, xyzTileTR);
 
-            var tileCoordinateMax = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize);
-            EnableGroundPlanesInTileRange(false, tileCoordinate, tileCoordinateMax);
+            EnableGroundPlanesInTileRange(true, tileCoordinateMin, tileCoordinateMax);
 
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture((Uri)xyzTile.URL);
-            tile.runningWebRequest = webRequest;
-            yield return webRequest.SendWebRequest();
-            tile.runningWebRequest = null;
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            callback?.Invoke(tileChange);
+        }
+
+        private (XyzTiles.XyzTile xyzTileBL, XyzTiles.XyzTile xyzTileBR, XyzTiles.XyzTile xyzTileTR, XyzTiles.XyzTile xyzTileTL) 
+            GetXyzTilesForMinAndMaxCoordinate(Coordinate minimum, Coordinate maximum)
+        {
+            var bbox = new BoundingBox(
+                minimum.Points[0], 
+                minimum.Points[1], 
+                maximum.Points[0],
+                maximum.Points[1]
+            );
+            
+            // We assume tileSize is correctly set, meaning that if we query each corner of the cartesian tile, that we
+            // know all XYZTiles that may be there.
+            var xyzTileBL = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, bbox.MinX, bbox.MinY), zoomLevel);
+            var xyzTileBR = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, bbox.MaxX, bbox.MinY), zoomLevel);
+            var xyzTileTR = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, bbox.MaxX, bbox.MaxY), zoomLevel);
+            var xyzTileTL = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, bbox.MinX, bbox.MaxY), zoomLevel);
+            return (xyzTileBL, xyzTileBR, xyzTileTR, xyzTileTL);
+        }
+
+        private (Coordinate tileCoordinateMin, Coordinate tileCoordinateMax) GetMinAndMaxCoordinate(Vector2Int tileKey)
+        {
+            var tileCoordinateMin = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y);
+            var tileCoordinateMax = new Coordinate(CoordinateSystem.RD, tileKey.x + tileSize, tileKey.y + tileSize);
+            return (tileCoordinateMin, tileCoordinateMax);
+        }
+
+        private void OnTextureDownloaded(Texture2D tex, TextureDecalProjector textureDecalProjector)
+        {
+            textureDecalProjector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
+            textureDecalProjector.gameObject.SetActive(isEnabled);
+            textureDecalProjector.SetTexture(tex);
+            //force the depth to be at least larger than its height to prevent z-fighting
+            if (!textureDecalProjector) return;
+
+            DecalProjector decalProjector = textureDecalProjector.GetComponent<DecalProjector>();
+            if (ProjectorHeight >= decalProjector.size.z)
             {
-                Debug.LogWarning($"Could not download {xyzTile.URL}");
+                textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+            }
+
+            //set the render index, to make sure the render order is maintained
+            textureDecalProjector.SetPriority(renderIndex);
+        }
+
+        protected override void RemoveGameObjectFromTile(Vector2Int tileKey)
+        {
+            TryRemoveProjectorFrom(tileKey);
+
+            base.RemoveGameObjectFromTile(tileKey);
+        }
+
+        private IEnumerator TryAddProjector(Vector2Int tileKey, XyzTiles.XyzTile xyzTile)
+        {
+            // The projector has already been added by another tile due to overlap, so we can continue
+            var (_, foundAtmTile) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTile));
+            if (foundAtmTile != default)
+            {
+                if (foundAtmTile.LinkedCartesianTiles.Contains(tileKey) == false)
+                {
+                    foundAtmTile.LinkedCartesianTiles.Add(tileKey);
+                }
+
+                yield break;
+            }
+
+            var projector = Instantiate(ProjectorPrefab, transform, false) as TextureDecalProjector;
+            projector.name = xyzTile.ToString();
+            var decalProjector = projector.GetComponent<DecalProjector>();
+            projector.SetSize(tileSize, tileSize, decalProjector.size.z);
+            // DecalProjector uses the position as center, but the position is bottomLeft; so we use the pivot
+            // to make sure the positioning is from the bottomLeft
+            decalProjector.pivot = new Vector3(tileSize * .5f, tileSize * .5f, 0);
+            
+            var projectorPosition = xyzTile.MinBound.ToUnity();
+            projectorPosition.y = projector.transform.position.y;
+            projector.transform.position = projectorPosition;
+
+            var atmTile = new VisibleAtmTile()
+            {
+                XyzTile = xyzTile,
+                Projector = projector,
+                webRequest = null
+            };
+            atmTile.LinkedCartesianTiles.Add(tileKey);
+            atmTiles.Add(xyzTile, atmTile);
+
+            TemplatedUri templatedUri = xyzTile.URL
+                .With("x", xyzTile.TileIndex.x.ToString())
+                .With("y", xyzTile.TileIndex.y.ToString())
+                .With("z", zoomLevel.ToString())
+            ;
+            atmTile.webRequest = UnityWebRequestTexture.GetTexture((Uri)templatedUri);
+            atmTile.webRequest.timeout = 10; // 10 second timeout - just to ensure things go through
+            yield return atmTile.webRequest.SendWebRequest();
+            if (atmTile.webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Could not download {xyzTile}: {atmTile.webRequest.error}");
                 RemoveGameObjectFromTile(tileKey);
             }
             else
             {
-                EnableGroundPlanesInTileRange(true, tileCoordinate, tileCoordinateMax);
-                ClearPreviousTexture(tile);                
-                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
+                projector.ClearTexture();
+                Texture texture = ((DownloadHandlerTexture)atmTile.webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
                 tex.Compress(true);
                 tex.filterMode = FilterMode.Bilinear;
                 tex.Apply(false, true);
-                OnTextureDownloaded(tex, tileKey, offset);
+                OnTextureDownloaded(tex, projector);
             }
-
-            callback(tileChange);
         }
 
-        private void OnTextureDownloaded(Texture2D tex, Vector2Int tileKey, Vector3 projectorOffset)
+        private void TryRemoveProjectorFrom(Vector2Int tileKey)
         {
-            Tile tile = tiles[tileKey];
+            var (tileCoordinateMin, tileCoordinateMax) = GetMinAndMaxCoordinate(tileKey);
+            var (xyzTileBL, xyzTileBR, xyzTileTR, xyzTileTL) = GetXyzTilesForMinAndMaxCoordinate(tileCoordinateMin, tileCoordinateMax);
 
-            if (tiles[tileKey] == null || tiles[tileKey].gameObject == null)
-                return;
-
-            if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+            var (_, atmTileBR) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTileBR));
+            if (atmTileBR != default)
             {
-                projector.SetSize((float)referenceTileWidth, (float)referenceTileWidth, (float)referenceTileHeight);
-                projector.gameObject.SetActive(isEnabled);
-                projector.SetTexture(tex);
-                //force the depth to be at least larger than its height to prevent z-fighting
-                DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
-                TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
-                if (ProjectorHeight >= decalProjector.size.z)
-                    textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
-
-                Vector2Int origin = new Vector2Int(tileKey.x + (tileSize / 2), tileKey.y + (tileSize / 2));
-                var rdCoordinate = new Coordinate(
-                    CoordinateSystem.RD,
-                    origin.x,
-                    origin.y,
-                    0.0d
-                );
-                var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
-                originCoordinate.y = ProjectorHeight;
-                tile.gameObject.transform.position = originCoordinate;
-                decalProjector.transform.position -= projectorOffset;
-
-                //set the render index, to make sure the render order is maintained
-                textureDecalProjector.SetPriority(renderIndex);
+                atmTileBR.LinkedCartesianTiles.Remove(tileKey);
+                CleanupAtmTile(atmTileBR);
             }
+            var (_, atmTileBL) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTileBL));
+            if (atmTileBL != default)
+            {
+                atmTileBL.LinkedCartesianTiles.Remove(tileKey);
+                CleanupAtmTile(atmTileBL);
+            }
+            var (_, atmTileTR) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTileTR));
+            if (atmTileTR != default)
+            {
+                atmTileTR.LinkedCartesianTiles.Remove(tileKey);
+                CleanupAtmTile(atmTileTR);
+            }
+            var (_, atmTileTL) = atmTiles.FirstOrDefault(pair => pair.Key.Equals(xyzTileTL));
+            if (atmTileTL != default)
+            {
+                atmTileTL.LinkedCartesianTiles.Remove(tileKey);
+                CleanupAtmTile(atmTileTL);
+            }
+        }
+
+        private void CleanupAtmTile(VisibleAtmTile atmTile)
+        {
+            if (atmTile.LinkedCartesianTiles.Count != 0) return;
+
+            if (atmTile.webRequest.result == UnityWebRequest.Result.InProgress)
+            {
+                atmTile.webRequest.Abort();
+            }
+
+            Destroy(atmTile.Projector.gameObject);
+            atmTiles.Remove(atmTile.XyzTile);
         }
 
         private void UpdateReferenceSizes()
         {
             // We use this tile as a reference, each tile has a slight variation but if all is well we can ignore
             // that after casting
-            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel);
+            var pos = xyzTiles.FetchTileAtCoordinate(new Coordinate(CoordinateSystem.RD, 120000, 480000, 0), zoomLevel, true);
             var referenceTileIndex = pos.TileIndex;
             var (tileWidth, tileHeight) = CalculateTileDimensionsInRdMeters(referenceTileIndex);
             referenceTileWidth = tileWidth;
             referenceTileHeight = tileHeight;
 
-            tileSize = (int)tileWidth;
+            tileSize = (int)tileWidth; 
         }
 
         private (double tileWidth, double tileHeight) CalculateTileDimensionsInRdMeters(Vector2Int tileIndex)
@@ -240,17 +353,6 @@ namespace Netherlands3D.Twin
 
             return (tileWidth, tileHeight);
         }
-
-        private static Vector3 CalculateTileOffset(XyzTiles.XyzTile xyzTile, Coordinate tileCoordRd)
-        {
-            var minBound = xyzTile.MinBound.Convert(CoordinateSystem.RD);
-
-            return new Vector3(
-                (float)(tileCoordRd.Points[0] - minBound.Points[0]),
-                0,
-                (float)(tileCoordRd.Points[1] - minBound.Points[1])
-            );
-        }        
 
         private void UpdateDrawOrderForChildren()
         {
@@ -266,6 +368,10 @@ namespace Netherlands3D.Twin
 
         public void SetVisibleTilesDirty()
         {
+            if (zoomLevel < 0)
+                return;
+
+            xyzTiles.ClearDebugTiles();
             UpdateReferenceSizes();
 
             //is the update already running cancel it
@@ -291,10 +397,12 @@ namespace Netherlands3D.Twin
                 if (tile.Value.runningCoroutine != null)
                     StopCoroutine(tile.Value.runningCoroutine);
 
-                TileChange tileChange = new TileChange();
-                tileChange.X = tile.Key.x;
-                tileChange.Y = tile.Key.y;
-                queuedChanges.Add(tileChange);
+                queuedChanges.Add(new TileChange
+                {
+                    X = tile.Key.x,
+                    Y = tile.Key.y,
+                    action = TileAction.Upgrade
+                });
             }
 
             if (!isEnabled)
@@ -303,45 +411,16 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
-            bool ready = true;
             while (queuedChanges.Count > 0)
             {
-                //lets wait half a second in case a slider is moving
-                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
+                // lets wait half a second in case a slider is moving
+                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval)
                 {
-                    ready = false;
                     TileChange next = queuedChanges[0];
                     queuedChanges.RemoveAt(0);
-                    Vector2Int key = new Vector2Int(next.X, next.Y);
-                    if (tiles.ContainsKey(key))
-                    {
-                        tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next, key =>
-                        {
-                            ready = true;
-                            Vector2Int downloadedKey = new Vector2Int(key.X, key.Y);
-                            if (tiles[downloadedKey] != null && tiles[downloadedKey].gameObject != null)
-                            {
-                                DecalProjector projector = tiles[downloadedKey].gameObject.GetComponent<DecalProjector>();
-                                if (!projector) return;
-
-                                var localScale = projector.transform.localScale;
-
-                                // because the EPSG:3785 tiles are square, but RD is not square; we make it square by changing the
-                                // projection dimensions
-                                projector.size = new Vector3(
-                                    (float)(referenceTileWidth * localScale.x),
-                                    (float)(referenceTileWidth * localScale.y),
-                                    projector.size.z
-                                );
-                            }
-                        }));
-                    }
-                    else
-                    {
-                        ready = true;
-                    }
+                    HandleTile(next);
                 }
-                yield return wfs;
+                yield return waitForSeconds;
             }
 
             updateTilesRoutine = null;
@@ -351,20 +430,10 @@ namespace Netherlands3D.Twin
         public override void LayerToggled()
         {
             base.LayerToggled();
-            if (!isEnabled)
+
+            foreach (var atmTilePair in atmTiles)
             {
-                //get current tiles
-                foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
-                {
-                    if (tile.Value == null || tile.Value.gameObject == null)
-                        continue;
-
-                    if (tile.Value.runningCoroutine != null)
-                        StopCoroutine(tile.Value.runningCoroutine);
-
-                    //TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                    //projector.gameObject.SetActive(false);
-                }
+                atmTilePair.Value.Projector.gameObject.SetActive(isEnabled);
             }
         }
     }

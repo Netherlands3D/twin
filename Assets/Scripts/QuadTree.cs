@@ -21,8 +21,6 @@ namespace Netherlands3D.Twin
         public double Width => MaxX - MinX;
         public double Height => MaxY - MinY;
 
-        public (double centerX, double centerY) Center => ((MinX + MaxX) / 2, (MinY + MaxY) / 2);
-
         public bool Contains(double x, double y)
         {
             return x >= MinX && x <= MaxX && y >= MinY && y <= MaxY;
@@ -43,7 +41,7 @@ namespace Netherlands3D.Twin
     /// </summary>
     public class QuadTree
     {
-        private readonly BoundingBox boundingBox;
+        public readonly BoundingBox boundingBox;
 
         public QuadTree(BoundingBox boundingBox)
         {
@@ -56,12 +54,12 @@ namespace Netherlands3D.Twin
         }
         
         /// <summary>
-        /// Returns the bounding box in meters according within the bounds according to subdivision of the boundingbox
+        /// Returns the bounding box in units according within the bounds according to subdivision of the boundingbox
         /// in the constructor.
         /// </summary>
         public BoundingBox GetTileBoundingBox(Vector2Int tileIndex, int z)
         {
-            var (tileSizeX, tileSizeY) = GetTileSizeInMeters(z);
+            var (tileSizeX, tileSizeY) = GetTileSize(z);
 
             // Calculate minX and maxX
             double tileMinX = this.boundingBox.MinX + tileIndex.x * tileSizeX;
@@ -69,15 +67,15 @@ namespace Netherlands3D.Twin
 
             // Calculate minY and maxY (note Y increases downwards in the tile grid)
             double tileMaxY = this.boundingBox.MaxY - tileIndex.y * tileSizeY;
-            double tileMinY = tileMaxY - tileSizeY;
+            double tileMinY = tileMaxY - tileSizeY;            
 
             return new BoundingBox(tileMinX, tileMinY, tileMaxX, tileMaxY);
-        }
-        
+        }      
+
         public Vector2Int GetTileIndex(double x, double y, int zoomLevel)
         {
             // Calculate the size of each tile in meters at the given zoom level
-            var (tileSizeX, tileSizeY) = GetTileSizeInMeters(zoomLevel);
+            var (tileSizeX, tileSizeY) = GetTileSize(zoomLevel);
 
             // Calculate the X and Y indices
             int tileIndexX = (int)((x - this.boundingBox.MinX) / tileSizeX);
@@ -86,7 +84,7 @@ namespace Netherlands3D.Twin
             return new Vector2Int(tileIndexX, tileIndexY);
         }
 
-        public (double width, double height) GetTileSizeInMeters(int zoomLevel)
+        public (double width, double height) GetTileSize(int zoomLevel)
         {
             var width = this.boundingBox.Width / Math.Pow(2, zoomLevel);
             var height = this.boundingBox.Height / Math.Pow(2, zoomLevel);
