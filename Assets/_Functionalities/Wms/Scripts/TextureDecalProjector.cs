@@ -26,6 +26,8 @@ namespace Netherlands3D.Rendering
     {
         [SerializeField] private DecalProjector projector;
 
+        public string debugUrl;
+
         public override void SetSize(Vector3 size)
         {
             projector.size = size;

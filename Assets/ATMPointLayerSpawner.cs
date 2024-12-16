@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -10,10 +8,16 @@ namespace Netherlands3D.Twin
     public class ATMPointLayerSpawner : MonoBehaviour
     {
         [SerializeField] private ATMPointLayer pointLayerPrefab;
-        public int[] years = { 1802, 1853, 1870, 1876, 1909, 1920, 1943 };
         private int currentVisibleYear;
         private ATMPointLayer visibleLayer;
-        
+        private ATMDataController atmData;
+
+        private void Start()
+        {
+            //data should exist at start from atmlayermanager
+            atmData = FindObjectOfType<ATMDataController>();
+        }
+
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(Initialize);
@@ -32,7 +36,7 @@ namespace Netherlands3D.Twin
         
         private void OnTimeChanged(DateTime newTime)
         {
-            var yearToLoad = RoundDownYear(newTime.Year);
+            var yearToLoad = atmData.RoundDownYearGeoJson(newTime.Year);
             if (yearToLoad != currentVisibleYear)
             {
                 if(visibleLayer)
@@ -45,23 +49,5 @@ namespace Netherlands3D.Twin
             }
         }
         
-        public int RoundDownYear(int inputYear)
-        {
-            // Find the largest year in the array that is less than or equal to inputYear
-            int result = years[0];
-            foreach (var year in years)
-            {
-                if (year <= inputYear)
-                {
-                    result = year;
-                }
-                else
-                {
-                    break; // Stop checking once we've exceeded the inputYear
-                }
-            }
-        
-            return result;
-        }
     }
 }

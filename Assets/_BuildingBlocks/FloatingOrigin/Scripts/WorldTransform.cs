@@ -26,6 +26,11 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private bool shiftPrepared = false;
 
+        public void SetShifter(WorldTransformShifter shifter)
+        {
+            this.worldTransformShifter = shifter;   
+        }
+
         private void Awake()
         {
             if (!TryGetComponent(out worldTransformShifter))

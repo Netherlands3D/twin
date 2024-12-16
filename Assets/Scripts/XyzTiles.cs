@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KindMen.Uxios;
 using Netherlands3D.Coordinates;
 using UnityEngine;
@@ -10,7 +11,8 @@ namespace Netherlands3D.Twin
     public class XyzTiles : MonoBehaviour
     {        
         public string UrlTemplate { get; set; } = "https://images.huygens.knaw.nl/webmapper/maps/pw-1943/{z}/{x}/{y}.png";
-
+        private static Dictionary<Vector3Int, XyzTile> debugTiles = new Dictionary<Vector3Int, XyzTile>();
+        
         /// <summary>
         /// Initialize a Quadtree with the boundaries for an XYZTiles, which is a modified EPSG:3857 projection space
         /// that is made square by using the same projected height as the projected width. (Yes, this means the top
@@ -29,11 +31,28 @@ namespace Netherlands3D.Twin
             public Vector2Int TileIndex;
             public int ZoomLevel { get; set; }
             public Coordinate MinBound;
+            public Coordinate Center;
             public Coordinate MaxBound;
             public TemplatedUri URL;
+
+            public override string ToString()
+            {
+                return $"XyzTile{{TileIndex={TileIndex.x}x{TileIndex.y},ZoomLevel={ZoomLevel},URL={URL}}}";
+            }
+
+            /// <summary>
+            /// Ensure the equality of this struct is not determined by reference equality but just by the tileindex
+            /// and zoomlevel combination as this is a value object
+            /// </summary>
+            public override bool Equals(object obj)
+            {
+                if (obj is XyzTile xyzTile == false) return false;
+
+                return TileIndex == xyzTile.TileIndex && ZoomLevel == xyzTile.ZoomLevel;
+            }
         }
         
-        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel)
+        public XyzTile FetchTileAtCoordinate(Coordinate at, int zoomLevel, bool doNotAddAsDebugTile = false)
         {
             // Ensure the coordinate is in EPSG:3857
             at = at.Convert(CoordinateSystem.WGS84_PseudoMercator);
@@ -44,14 +63,34 @@ namespace Netherlands3D.Twin
             // Determine the bounds from the tile index
             var (minBound, maxBound) = this.FromTileXYToBoundingBox(tileIndex, zoomLevel);
 
-            return new XyzTile()
+            var centerDistance = (maxBound - minBound).ToVector3() * 0.5f;
+            var center = new Coordinate(
+                minBound.CoordinateSystem,
+                minBound.Points[0] + centerDistance.x,
+                minBound.Points[1] + centerDistance.y,
+                minBound.Points[2] + centerDistance.z
+            );
+           
+            XyzTile tile = new XyzTile()
             {
                 TileIndex = tileIndex,
                 ZoomLevel = zoomLevel,
                 URL = this.GetTileUrl(tileIndex, zoomLevel),
                 MaxBound = maxBound,
-                MinBound = minBound
+                MinBound = minBound,
+                Center = center
             };
+
+            Vector3Int key = new Vector3Int(tileIndex.x, tileIndex.y, zoomLevel);
+            
+            if (!doNotAddAsDebugTile) debugTiles[key] = tile;
+            
+            return tile;
+        }
+
+        public void ClearDebugTiles()
+        {
+            debugTiles.Clear();
         }
 
         private TemplatedUri GetTileUrl(Vector2Int tileIndex, int zoomLevel)
@@ -91,6 +130,20 @@ namespace Netherlands3D.Twin
             var max = new Coordinate(crs, boundingBox.MaxX, boundingBox.MaxY, 0);
             
             return (min, max);
+        }
+
+        private void OnDrawGizmos()
+        {
+            foreach(KeyValuePair<Vector3Int, XyzTile> tile in debugTiles)
+            {
+                Vector3 min = tile.Value.MinBound.ToUnity();
+                Vector3 max = tile.Value.MaxBound.ToUnity();
+
+                Debug.DrawLine(new Vector3(min.x,100, max.z), new Vector3(max.x,100, max.z), Color.green);
+                Debug.DrawLine(new Vector3(max.x, 100, max.z), new Vector3(max.x, 100, min.z), Color.green);
+                Debug.DrawLine(new Vector3(max.x, 100, min.z), new Vector3(min.x, 100, min.z), Color.green);
+                Debug.DrawLine(new Vector3(min.x, 100, min.z), new Vector3(min.x, 100, max.z), Color.green);
+            }
         }
     }
 }
