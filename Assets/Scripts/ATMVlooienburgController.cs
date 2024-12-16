@@ -1,0 +1,166 @@
+using GeoJSON.Net.Feature;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.Networking;
+
+namespace Netherlands3D.Twin
+{
+    public class ATMVlooienburgController : MonoBehaviour
+    {
+        [SerializeField] private TextAsset csv;        
+        private Dictionary<string, List<string>> addressAdamlinks = new();
+        private AssetBundleLoader assetBundleLoader;
+        private const string bundleName = "atmvlooienburg";
+        private int currentYear;
+        private Dictionary<string, ATMAsset> vlooienburgAssets = new();
+        //the fixed offset to get all the prefabs at the right position (prefabs have offseted pivots), in the future this should be organized correctly by coordinate per prefab
+        private Coordinate targetPivotCoordinate = new Coordinate(CoordinateSystem.WGS84_LatLon, 52.3677697709198d, 4.90068151319564d);
+
+        private void Awake()
+        {
+            assetBundleLoader = GameObject.FindObjectsOfType<AssetBundleLoader>().FirstOrDefault(a => a.bundleName == bundleName);            
+        }
+
+        public bool HasAdamlink(string link)
+        {
+            foreach(KeyValuePair<string, List<string>> kvp in addressAdamlinks)
+            {
+                if (kvp.Value.Contains(link))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool HasAddress(string address)
+        {
+            return addressAdamlinks.Keys.Contains(address);
+        }
+
+        public string GetAddressFromAdamlink(string link)
+        {
+            foreach (KeyValuePair<string, List<string>> kvp in addressAdamlinks)
+            {
+                if (kvp.Value.Contains(link))
+                    return kvp.Key;
+            }
+            return null;
+        }
+
+        public void LoadAssetForAdamLink(string link, Feature feature)
+        {
+            string address = GetAddressFromAdamlink(link);
+            if (address == null)
+                return;
+
+            if(vlooienburgAssets.ContainsKey(link))
+            {
+                ATMAsset asset = vlooienburgAssets[link];
+                if (asset.go != null)
+                    asset.go.SetActive(true);
+                asset.isActive = true;
+            }
+            else
+            {
+                //we cannot use the coordinate because the coord is mapped to the adress position and not the center of the mesh
+                string tempLink = link;
+                GameObject loadingObject = new GameObject("loadingasset");
+                ATMAsset asset = loadingObject.AddComponent<ATMAsset>();
+
+                vlooienburgAssets.Add(link, asset);               
+                assetBundleLoader.LoadAssetFromAssetBundle(bundleName, address.ToLower() + ".prefab", go =>
+                {                    
+                    Vector3 pos = targetPivotCoordinate.ToUnity();
+                    pos.y = 0;
+                    go.transform.position = pos;
+                    go.layer = LayerMask.NameToLayer("Projected2");
+                    go.SetActive(asset.isActive);
+
+                    go.AddComponent<HierarchicalObjectLayerGameObject>();
+                    WorldTransform wt = go.AddComponent<WorldTransform>();
+                    GameObjectWorldTransformShifter shifter = go.GetComponent<GameObjectWorldTransformShifter>();
+                    wt.SetShifter(shifter);
+
+                    ATMAsset previous = vlooienburgAssets[tempLink];
+                    Destroy(previous.gameObject);
+                    vlooienburgAssets[tempLink] = null;
+
+                    ATMAsset entry = go.AddComponent<ATMAsset>();
+
+                    entry.adamLink = tempLink;
+                    entry.address = address;
+                    entry.coord = targetPivotCoordinate;
+                    entry.go = go;
+                    entry.feature = feature;
+                    entry.Initialize();
+
+                    vlooienburgAssets[link] = entry;
+                });
+            }
+        }
+
+        //public void LoadAssetForAddress(string address)
+        //{
+        //    foreach (VlooienburgAsset va in vlooienburgAssets.Values)
+        //    {
+        //        if (va.go != null && va.address == address)
+        //        {
+        //            va.go.SetActive(true);
+        //            return;
+        //        }
+        //    }
+        //}
+
+        public void DisableAllAssets()
+        {
+            foreach(KeyValuePair<string, ATMAsset> kvp in vlooienburgAssets)
+            {
+                ATMAsset va = kvp.Value; 
+                //is null when still loading
+                if (va.go != null)
+                    va.go.SetActive(false);
+                va.isActive = false;
+            }
+        }
+
+        private void Start()
+        {
+            var lines = CsvParser.ReadLines(csv.text, 1);
+
+            foreach (var line in lines)
+            {                
+                string[] data = line[0].Split(',');     
+                string address = data[0];
+                List<string> links = new List<string>();
+                for(int i = 1; i < data.Length; i++)    
+                    links.Add(data[i]);
+                addressAdamlinks.Add(Path.GetFileNameWithoutExtension(data[0]), links);
+            }
+        }
+    }
+
+    public class ATMAsset : MonoBehaviour
+    {
+        public string adamLink;
+        public Coordinate coord;
+        public GameObject go;
+        public bool isActive; //if the asset was still loading we can use this to sync the active state of the gameobject
+        public string address;
+        public Feature feature;
+
+        public void Initialize()
+        {
+            //mesh collider because boxcolliders cause problems with chimneys etc
+            MeshCollider box = go.AddComponent<MeshCollider>();
+        }
+    }
+}

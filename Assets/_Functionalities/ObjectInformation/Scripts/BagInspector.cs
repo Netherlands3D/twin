@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
 using GG.Extensions;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
@@ -18,7 +19,8 @@ namespace Netherlands3D.Twin.Interface.BAG
 {
 	[RequireComponent(typeof(FeatureSelector))]
 	[RequireComponent(typeof(SubObjectSelector))]
-	public class BagInspector : MonoBehaviour
+    [RequireComponent(typeof(ATMObjectSelector))]
+    public class BagInspector : MonoBehaviour
 	{
 		[Header("GeoJSON Data Sources")]
 		[Tooltip("Id replacement string will be replaced")]
@@ -56,6 +58,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 
         public UnityEvent<string> BuildingSelected = new();
         public UnityEvent<FeatureMapping> FeatureSelected = new();
+		public UnityEvent<Feature> ATMFeatureSelected = new();
         public UnityEvent Deselected = new();
 
         private Camera mainCamera;
@@ -65,8 +68,9 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
+        private ATMObjectSelector atmObjectSelector;
 
-		private List<GameObject> orderedMappings = new List<GameObject>();
+        private List<GameObject> orderedMappings = new List<GameObject>();
 		private float minClickDistance = 10;
 		private float minClickTime = 0.5f;
 		private float lastTimeClicked = 0;
@@ -81,6 +85,7 @@ namespace Netherlands3D.Twin.Interface.BAG
 			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 			subObjectSelector = GetComponent<SubObjectSelector>();
 			featureSelector = GetComponent<FeatureSelector>();
+			atmObjectSelector = GetComponent<ATMObjectSelector>();
 
 			keyValuePairTemplate.gameObject.SetActive(false);
 		}
@@ -129,61 +134,88 @@ namespace Netherlands3D.Twin.Interface.BAG
 			// Raycast from pointer position using main camera
 			var position = Pointer.current.position.ReadValue();
 			var ray = mainCamera.ScreenPointToRay(position);
+            //the following method calls need to run in order!
+            string bagId = null;
+            RaycastHit hit;
+			GameObject selection;
+            string adamlink = atmObjectSelector.FindSubObject(ray, out hit);
+            lastWorldClickedPosition = hit.point;
 
-			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject(ray, out var hit);			
-			if (hit.collider == null) return;
-
-			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
-            lastWorldClickedPosition = hit.point; 
-			
-			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
-			lastTimeClicked = Time.time;
-
-			if (!clickedSamePosition || refreshSelection)
+			//skip this for now to be able to select the atmassets easier. 
+			//todo, when the geojson points are hidden because of atmassets, this coudl be changed back
+            if (hit.collider == null)
 			{
-                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-                featureSelector.FindFeature(ray);
+				bagId = subObjectSelector.FindSubObject(ray, out hit);
 
-				orderedMappings.Clear();
-                Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
-                //lets order all mappings by layerorder (rootindex) from layerdata
-                if (featureSelector.HasFeatureMapping)
+				if (hit.collider == null) return;
+
+				bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
+				lastWorldClickedPosition = hit.point;
+
+				bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
+				lastTimeClicked = Time.time;
+
+				if (!clickedSamePosition || refreshSelection)
 				{
-					foreach (FeatureMapping feature in featureSelector.FeatureMappings)
+					featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
+					featureSelector.FindFeature(ray);
+
+					orderedMappings.Clear();
+					Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();
+					//lets order all mappings by layerorder (rootindex) from layerdata
+					if (featureSelector.HasFeatureMapping)
 					{
-						if(feature.VisualisationParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
-                    }
-                }
-				if (subObjectSelector.HasObjectMapping)
-				{
-					LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
-					if (subObjectParent != null)
-					{
-						if(subObjectParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+						foreach (FeatureMapping feature in featureSelector.FeatureMappings)
+						{
+							if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
+								mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+						}
 					}
+					if (subObjectSelector.HasObjectMapping)
+					{
+						LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
+						if (subObjectParent != null)
+						{
+							if (subObjectParent.LayerData.ActiveInHierarchy)
+								mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+						}
+					}
+					//if (atmObjectSelector.HasObjectMapping)
+					//{
+					//	//add max value, we want this on top
+					//	mappings.TryAdd(atmObjectSelector.Object.gameObject, int.MaxValue);
+					//}
+
+					orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
+					currentSelectedMappingIndex = 0;
+				}
+				else
+				{
+					//clicking at same position so lets toggle through the list
+					currentSelectedMappingIndex++;
+					if (currentSelectedMappingIndex >= orderedMappings.Count)
+						currentSelectedMappingIndex = 0;
 				}
 
-                orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
-                currentSelectedMappingIndex = 0;
+				if (orderedMappings.Count == 0) return;
+
+				//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
+				selection = orderedMappings[currentSelectedMappingIndex];
 			}
 			else
 			{
-				//clicking at same position so lets toggle through the list
-				currentSelectedMappingIndex++;
-				if (currentSelectedMappingIndex >= orderedMappings.Count)
-					currentSelectedMappingIndex = 0;
-			}
+				selection = atmObjectSelector.Object.gameObject;
+                if (adamlink == null)
+                    return;
 
-			if (orderedMappings.Count == 0) return;
+                SelectATMAsset(selection.GetComponent<ATMAsset>());
+				return;
+            }
 
-			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
-
-			GameObject selection = orderedMappings[currentSelectedMappingIndex];
 			if (selection.GetComponent<ObjectMapping>())
-			{	
+			{
+				if (bagId == null) return;
+
 				//for the amsterdam time machine this is the fastest way to keep from selecting a hidden bag id by year
 				if(bagIdTimeRange == null)
 					bagIdTimeRange = FindObjectOfType<GetBagIdInTimeRange>();
@@ -211,6 +243,16 @@ namespace Netherlands3D.Twin.Interface.BAG
 			ExtrudePointsForSelection(mapping);
 			LoadFeatureContent(mapping);
 			RenderThumbnailForFeature(mapping);            
+        }
+
+		private void SelectATMAsset(ATMAsset asset)
+		{
+			ATMFeatureSelected.Invoke(asset.feature);
+            LoadFeatureContent(asset.feature);
+
+            //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+            Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one * 50.0f);
+            featureThumbnail.RenderThumbnail(currentObjectBounds);
         }
 
 		//we need to make the points visible, so temporary extrude the feature point mesh to a disc 
@@ -392,13 +434,18 @@ namespace Netherlands3D.Twin.Interface.BAG
 
 		private void LoadFeatureContent(FeatureMapping mapping)
 		{
-			ClearKeyVaueItems();
-			Dictionary<string, object> properties = mapping.Feature.Properties as Dictionary<string, object>;
-			foreach (KeyValuePair<string, object> property in properties)
-			{
-				SpawnKeyValue(property.Key, property.Value.ToString());
-			}
+			LoadFeatureContent(mapping.Feature);
 		}
+
+		private void LoadFeatureContent(Feature feature)
+		{
+            ClearKeyVaueItems();
+            Dictionary<string, object> properties = feature.Properties as Dictionary<string, object>;
+            foreach (KeyValuePair<string, object> property in properties)
+            {
+                SpawnKeyValue(property.Key, property.Value.ToString());
+            }
+        }
 
 		#region Supporting methods to load feature content
 		// TODO Add this
