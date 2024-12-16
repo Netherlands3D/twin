@@ -681,6 +681,18 @@ MonoBehaviour:
   NorthColor: {r: 0.46540874, g: 0.106839046, b: 0.106839046, a: 1}
   inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}
+--- !u!114 &767208773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767208734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9c85a45c46c494da4c1f13fa97d5b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1277,6 +1289,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 767208763}
+    - targetCorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 767208773}
   m_SourcePrefab: {fileID: 100100000, guid: 0f6ad95dabe72044aa90eb8ae2e45366, type: 3}
 --- !u!1001 &2488954073963816146
 PrefabInstance:
