@@ -1,20 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using FirebaseWebGL.Database;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
     public class FirebaseInit : MonoBehaviour
     {
+        public static string userId;
+
         private void Start()
         {
+            FirebaseAuth.OnAuthStateChanged(gameObject.name, "DisplayUserInfo", "DisplayInfo");
+
+            Debug.Log("SIGNING IN ANONYMOUSLY");
+            FirebaseAuth.SignInAnonymously(gameObject.name, "DisplayData", "DisplayError");
+
             Debug.Log("GETTING FIREBASE DATA");
             FirebaseDatabase.GetJSON("test/path", gameObject.name, "DisplayData", "DisplayError");
         }
 
         public void DisplayData(string data)
-        {            
+        {
             Debug.Log("DISPLAYING FIREBASEDATA" + data);
         }
 
@@ -22,41 +30,18 @@ namespace Netherlands3D.Twin
         {
             Debug.Log("DISPLAYING FIREBASEERROR" + error);
         }
+
+        public void DisplayUserInfo(string user)
+        {
+            var parsedUser = JsonConvert.DeserializeObject<FirebaseUser>(user);
+            DisplayData($"Email: {parsedUser.email}, UserId: {parsedUser.uid}, EmailVerified: {parsedUser.isEmailVerified}");
+
+            userId = parsedUser.uid;
+        }
+
+        public void DisplayInfo(string info)
+        {
+            Debug.Log("DISPLAY INFO" + info);
+        }
     }
 }
-
-////the following needs to be in the index.html:
-//////////////////////////////////////////////
-
-//< script src = "https://www.gstatic.com/firebasejs/8.8.0/firebase.js" ></ script >
-//< script > 
-
-//const firebaseConfig = {
-//  apiKey: "AIzaSyDlYdgMb-zINsNixTdfrLGmqxiOCIZ95E8",
-//  authDomain: "kerst2024-6c596.firebaseapp.com",
-//  databaseURL: "https://kerst2024-6c596-default-rtdb.europe-west1.firebasedatabase.app",
-//  projectId: "kerst2024-6c596",  
-//  messagingSenderId: "839108749676",
-//  appId: "1:839108749676:web:26ab8b6a2775b683c0eb49"
-//};
-
-//firebase.initializeApp(firebaseConfig);
-//</ script >
-
-
-////then find the script.onload function and add the window instance and the firebase instance and change it to:
-///////////////////////////////////////////////
-
-//script.onload = () => {
-//    createUnityInstance(canvas, config, (progress) => {
-//        progressBarFull.style.width = 100 * progress + "%";
-//    }).then((instance) => {
-//        unityInstance = instance;
-//        window.unityInstance = instance;
-//        this.firebase = firebase;
-//        loadingBar.style.display = "none";
-//        loadingBar.remove();
-//    }).catch((message) => {
-//        alert(message);
-//    });
-//};
