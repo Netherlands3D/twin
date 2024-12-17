@@ -1266,7 +1266,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 67.19999694824219,
+    "m_Value": 82.0999984741211,
     "m_DefaultValue": 500.0,
     "m_Labels": []
 }
@@ -4640,7 +4640,7 @@
     "m_ShaderOutputName": "InMinMax",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": -1.0,
+        "x": -0.20000000298023225,
         "y": 1.0
     },
     "m_DefaultValue": {
