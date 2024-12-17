@@ -105,8 +105,8 @@ public class FreeCamera : MonoBehaviour
 
         worldPlane = new Plane(Vector3.up, Vector3.zero);
 
-        horizontalInput.AddListenerStarted(MoveHorizontally);
-        verticalInput.AddListenerStarted(MoveForwardBackwards);
+        //horizontalInput.AddListenerStarted(MoveHorizontally);
+        //verticalInput.AddListenerStarted(MoveForwardBackwards);
         upDownInput.AddListenerStarted(MoveUpDown);
         lookInput.AddListenerStarted(PointerDelta);
         flyInput.AddListenerStarted(FreeFly);
