@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin
             { 1625, @"https://images.huygens.knaw.nl/webmapper/maps/berckenrode/{z}/{x}/{y}.png"}
         };
 
-        private int[] yearsGeoJson = { 1802, 1853, 1870, 1876, 1909, 1920, 1943, 1985 };
+        private int[] yearsGeoJson = { 1802, 1853, 1876, 1909, 1943, 1985 };
 
         public int RoundDownYearGeoJson(int inputYear)
         {
@@ -169,12 +169,17 @@ namespace Netherlands3D.Twin
         private void UpdateYear(DateTime time)
         {
             currentYear = RoundDownYearMaps(time.Year);
-            if (yearUrls.ContainsKey(currentYear))
+            if (!yearUrls.ContainsKey(currentYear)) return;
+
+            Debug.LogError("updating year to " + currentYear);
+            Debug.LogError(yearUrls);
+
+            if (lastValidYear != currentYear)
             {
-                if (lastValidYear != currentYear)
-                    ChangeYear?.Invoke(currentYear);
-                lastValidYear = currentYear;
+                ChangeYear?.Invoke(currentYear);
             }
+
+            lastValidYear = currentYear;
         }
 
         public string GetUrl()

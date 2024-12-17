@@ -1,3 +1,4 @@
+using System.Collections;
 using Netherlands3D.Twin._Functionalities.Wms.Scripts;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
@@ -15,8 +16,9 @@ namespace Netherlands3D.Twin._Functionalities.Wms
             layerManager.CreateTileHandlerForEachZoomLevel(transform, layerPrefab);
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return null;
             layerManager.SwitchLayerToCurrentZoomLevel(true);
         }
 

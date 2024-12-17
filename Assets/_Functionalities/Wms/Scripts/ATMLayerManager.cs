@@ -102,6 +102,8 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
             zoomLayerObject.gameObject.name = forZoomLevel.ToString();
 
             ATMTileDataLayer zoomLayer = zoomLayerObject.GetComponent<ATMTileDataLayer>();
+            // Disable by default - this should help reduce initial loading times
+            zoomLayer.isEnabled = false;
             ATMTileDataLayers[i] = zoomLayer;
             
             zoomLayer.SetDataController(timeController);                

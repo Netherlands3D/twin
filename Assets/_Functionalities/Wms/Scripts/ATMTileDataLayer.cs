@@ -133,8 +133,20 @@ namespace Netherlands3D.Twin
             TryRemoveProjectorFrom(tileKey);
         }
 
+        private void OnEnable()
+        {
+            atmDataController.ChangeYear += ChangeYear;
+        }
+
+        private void ChangeYear(int year)
+        {
+            Debug.Log("Changing year to " + year);
+            SetVisibleTilesDirty();
+        }
+
         private void OnDisable()
         {
+            atmDataController.ChangeYear -= ChangeYear;
             if (updateTilesRoutine != null)
             {
                 StopCoroutine(updateTilesRoutine);
