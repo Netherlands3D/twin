@@ -45,15 +45,14 @@ namespace Netherlands3D.Twin
 
         [SerializeField] private TextAsset routeFile;
         private List<Vector2> routeCoords = new List<Vector2>();
+        private int currentCoordinateIndex = 0;
 
-        //53.198472, 5.791865
-        private Coordinate coord = new Coordinate(CoordinateSystem.WGS84, 53.198472d, 5.791865d, 0);
+        private MeshCollider nothingMeshCollider;
 
      
         private void Start()
         {
-            freeCam = FindObjectOfType<FreeCamera>();
-            cameraStartRotation = GetCameraStartRotation();
+            freeCam = FindObjectOfType<FreeCamera>();           
 
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
@@ -62,6 +61,8 @@ namespace Netherlands3D.Twin
 
             GetCoordinatesForRoute();
             InitPlayer();
+
+            nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
         }
 
         private void InitPlayer()
@@ -93,6 +94,12 @@ namespace Netherlands3D.Twin
             }
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("HAVING COLLISION" + collision);
+        }
+
+        private Vector3 floorPoint = Vector3.zero;
         private void FixedUpdate()
         {
             if (!isReadyToMove)
@@ -107,10 +114,31 @@ namespace Netherlands3D.Twin
             }
             else
             {
-                Vector2 screenPoint = Camera.main.WorldToScreenPoint(player.transform.position + Vector3.down); //bottom of player
-                Vector3 floorPoint = raycaster.GetWorldPointAtCameraScreenPoint(Camera.main, new Vector3(screenPoint.x, screenPoint.y, 0));
+                //Vector2 screenPoint = Camera.main.WorldToScreenPoint(player.transform.position + Vector3.down); //bottom of player
+                //Vector3 floorPoint = raycaster.GetWorldPointAtCameraScreenPoint(Camera.main, new Vector3(screenPoint.x, screenPoint.y, 0));               
+                RaycastHit[] hits = new RaycastHit[8];
+                Physics.RaycastNonAlloc(playerRigidBody.transform.position + Vector3.up * 10, Vector3.down, hits);
+                int mcCount = 0;
+                float lowestMc = float.MaxValue;
+                for(int i = 0; i < hits.Length; i++)
+                {
+                    if(hits[i].collider == null) continue;
+
+                    if (hits[i].collider is MeshCollider mc && hits[i].collider != nothingMeshCollider)
+                    {
+                        if (hits[i].point.y < lowestMc)
+                        {
+                            //if the next hitpoint is suddenly above the player and the difference is greater than 0.5f then skip this next hitpoint
+                            if (hits[i].point.y > playerRigidBody.transform.position.y && Mathf.Abs(hits[i].point.y - playerRigidBody.transform.position.y) > 0.5f)
+                                continue;
+
+                            lowestMc = hits[i].point.y;
+                            floorPoint.y = lowestMc;
+                        }
+                    }
+                }
                 float yDist = Mathf.Abs(floorPoint.y - player.transform.position.y);
-                floorPoint.y = -1; //ugly fix but better for now
+                //floorPoint.y = -1; //ugly fix but better for now
                 bool isGrounded = yDist < 1f;
                 Debug.Log("isgrounded:" + isGrounded);
                 if(isGrounded)
@@ -118,10 +146,11 @@ namespace Netherlands3D.Twin
                     hasJumped = false;
                 }
 
-                if (playerRigidBody.position.y < floorPoint.y)
+                if (playerRigidBody.position.y < floorPoint.y - 0.1f)
                 {
                     playerRigidBody.transform.SetPositionAndRotation(new Vector3(playerRigidBody.position.x, floorPoint.y, playerRigidBody.position.z), player.transform.rotation);
                 }
+                Debug.Log("FLOORY" + floorPoint.y);
                 //playerRigidBody.transform.SetPositionAndRotation(Vector3.Lerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
                 playerRigidBody.angularVelocity = Vector3.zero;
             }
@@ -129,9 +158,21 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {
+            CheckNextCoordinate();
+            if (routeCoords == null)
+                return;
+
             jumpTimer -= Time.deltaTime;
-            unityStartTarget = coord.ToUnity();
-            unityStartTarget.y = camHeight;
+           
+            if(!isReadyForStart)
+            {
+                Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
+                //nextCoord = new Coordinate(CoordinateSystem.WGS84, 53.198472d, 5.791865d, 0);
+                unityStartTarget = nextCoord.ToUnity();
+                unityStartTarget.y = camHeight;
+                cameraStartRotation = GetCameraStartRotation();
+            }
+
             if ((Vector3.Distance(freeCam.transform.position, unityStartTarget) > 1 || Quaternion.Angle(freeCam.transform.rotation, cameraStartRotation) > 1) && !isReadyForStart)
             {
                 freeCam.transform.position = Vector3.Lerp(freeCam.transform.position, unityStartTarget, Time.deltaTime * camLerpSpeed);
@@ -171,6 +212,25 @@ namespace Netherlands3D.Twin
             isReadyToMove = isGrounded;
             playerRigidBody.useGravity = isGrounded;
         }
+
+        private void CheckNextCoordinate()
+        {
+            if (currentCoordinateIndex >= routeCoords.Count)
+            {
+                //FINISH
+                return;
+            }
+
+            Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[currentCoordinateIndex].x, routeCoords[currentCoordinateIndex].y, 0);
+            Vector3 unityCoord = nextCoord.ToUnity();
+            float distance = Vector3.Distance(player.transform.position, unityCoord);
+            if(distance < 2)
+            {
+                currentCoordinateIndex++;
+                Debug.Log("WE HIT THE COORD" + currentCoordinateIndex);
+            }
+        }
+
 
         private Quaternion GetCameraStartRotation()
         {
@@ -276,18 +336,18 @@ namespace Netherlands3D.Twin
             {
                 routeCoords = ExtractLatLon(routeFile.text);      
                 
-                foreach(Vector2 c in routeCoords)
-                {
-                    Coordinate coord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
-                    GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    routeObject.transform.localScale = Vector3.one * 5f;
-                    WorldTransform wt = routeObject.AddComponent<WorldTransform>();
-                    GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
-                    wt.SetShifter(shifter);
-                    Vector3 unityCoord = coord.ToUnity();
-                    unityCoord.y = 2;
-                    routeObject.transform.position = unityCoord;
-                }
+                //foreach(Vector2 c in routeCoords)
+                //{
+                //    Coordinate coord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
+                //    GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //    routeObject.transform.localScale = Vector3.one * 5f;
+                //    WorldTransform wt = routeObject.AddComponent<WorldTransform>();
+                //    GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
+                //    wt.SetShifter(shifter);
+                //    Vector3 unityCoord = coord.ToUnity();
+                //    unityCoord.y = 2;
+                //    routeObject.transform.position = unityCoord;
+                //}
             }
             else
             {
