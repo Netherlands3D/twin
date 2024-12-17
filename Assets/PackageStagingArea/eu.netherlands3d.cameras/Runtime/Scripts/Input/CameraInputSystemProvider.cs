@@ -9,6 +9,7 @@ using UnityEngine.Serialization;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using Netherlands3D.Events;
 #endif
 
 /* Copyright(C)  X Gemeente
@@ -43,11 +44,13 @@ public class CameraInputSystemProvider : BaseCameraInputProvider
     private InputAction upAction;
     private InputAction downAction;
     private InputAction zoomAction;
-
+    private InputAction jumpAction;
     private InputAction rotateModifierAction;
     private InputAction firstPersonModifierAction;
 
     private InputAction pointerAction;
+
+    public BoolEvent jumpEvent;
 
     private InputSystemUIInputModule inputSystemUIInputModule;
 
@@ -126,6 +129,7 @@ public class CameraInputSystemProvider : BaseCameraInputProvider
         rotateModifierAction = cameraActionMap.FindAction("RotateModifier");
         firstPersonModifierAction = cameraActionMap.FindAction("FirstPersonModifier");
         pointerAction = cameraActionMap.FindAction("Point");
+        jumpAction = cameraActionMap.FindAction("Jump");
 
         SetOriginalProcessors(zoomAction);
 #if !UNITY_EDITOR
@@ -206,6 +210,8 @@ public class CameraInputSystemProvider : BaseCameraInputProvider
         var rotateValue = rotateAction.ReadValue<Vector2>();
         var upPressed = upAction.IsPressed();
         var downPressed = downAction.IsPressed();
+
+        var jumpPressed = jumpAction.IsPressed();
 
         //If there is a secondary input, convert pinch into zoom
         var secondaryPointerPosition = secondaryDragAction.ReadValue<Vector2>();
@@ -288,6 +294,7 @@ public class CameraInputSystemProvider : BaseCameraInputProvider
 
         //Invoke values as events
         InvokeEvents(dragging, moveValue, lookValue, zoomValue, flyValue, rotateValue, upPressed, downPressed);
+        InvokeJumpEvent(jumpPressed);
     }
 
     private void InvokeEvents(bool dragging, Vector2 moveValue, Vector2 lookValue, Vector2 zoomValue, Vector2 flyValue, Vector2 rotateValue, bool upPressed, bool downPressed)
@@ -345,6 +352,11 @@ public class CameraInputSystemProvider : BaseCameraInputProvider
 
         if (pauseHeavyProcess)
             pauseHeavyProcess.InvokeStarted(requiresSmoothMovement);
+    }
+
+    private void InvokeJumpEvent(bool pressed)
+    {
+        jumpEvent?.InvokeStarted(pressed);
     }
 
     private void OnDrawGizmos()

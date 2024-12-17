@@ -5,6 +5,7 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Projects;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,11 +24,13 @@ namespace Netherlands3D.Twin
         private float rotationSpeed = 60f;
         private float playerSpeed = 10f;
         private float slipFactor = 0.99f;
+        public float jumpForce = 10;
 
         private Vector3 unityStartTarget;
         private Vector3 playerMoveVector = Vector3.zero;
         private Quaternion cameraStartRotation;
         private bool isReadyForStart = false;
+        private bool isReadyToMove = false;
         private Layer maaiveld;
         private Layer gebouwen;
 
@@ -38,15 +41,15 @@ namespace Netherlands3D.Twin
         [SerializeField] private FloatEvent horizontalInput;
         [SerializeField] private FloatEvent verticalInput;
         [SerializeField] private FloatEvent upDownInput;
+        [SerializeField] private BoolEvent jumpInput;
+
+        [SerializeField] private TextAsset routeFile;
+        private List<Vector2> routeCoords = new List<Vector2>();
 
         //53.198472, 5.791865
         private Coordinate coord = new Coordinate(CoordinateSystem.WGS84, 53.198472d, 5.791865d, 0);
 
-        private void Awake()
-        {
-            
-        }
-
+     
         private void Start()
         {
             freeCam = FindObjectOfType<FreeCamera>();
@@ -55,24 +58,49 @@ namespace Netherlands3D.Twin
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
             upDownInput.AddListenerStarted(MoveUpDown);
+            jumpInput.AddListenerStarted(Jump);
 
-            player = GameObject.CreatePrimitive(PrimitiveType.Capsule); 
+            GetCoordinatesForRoute();
+            InitPlayer();
+        }
+
+        private void InitPlayer()
+        {
+            player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             playerRigidBody = player.AddComponent<Rigidbody>();
+            WorldTransform wt = player.AddComponent<WorldTransform>();
+            GameObjectWorldTransformShifter shifter = player.AddComponent<GameObjectWorldTransformShifter>();
+            wt.SetShifter(shifter);
             playerRigidBody.useGravity = false;
             playerRigidBody.collisionDetectionMode = CollisionDetectionMode.Continuous;
             playerRigidBody.angularDrag = 0;
             playerRigidBody.angularVelocity = Vector3.zero;
+            playerRigidBody.mass = 100;
+            Physics.gravity = Vector3.down * 30;
+           
+        }
 
-            WorldTransform wt = player.AddComponent<WorldTransform>();
-            GameObjectWorldTransformShifter shifter = player.AddComponent<GameObjectWorldTransformShifter>();
-            wt.SetShifter(shifter);
-            GetLayers();
+        private bool hasJumped = false;
+        private float jumpTimer = 0;
+        private float jumpInterval = 1f;
+        private void Jump(bool jump)
+        {
+            if(!hasJumped && jump && isReadyToMove && jumpTimer < 0)
+            {
+                playerRigidBody.AddForce(Vector3.up * playerRigidBody.mass * jumpForce, ForceMode.Impulse);
+                hasJumped = true;
+                jumpTimer = jumpInterval;
+            }
         }
 
         private void FixedUpdate()
         {
+            if (!isReadyToMove)
+                return;
+
             //playerRigidBody.AddForce(player.transform.rotation * playerMoveVector * Time.fixedDeltaTime);
-            playerRigidBody.velocity = player.transform.rotation * playerMoveVector * Time.fixedDeltaTime;
+            Vector3 vec = player.transform.rotation * playerMoveVector * Time.fixedDeltaTime;
+            playerRigidBody.velocity = new Vector3(vec.x, playerRigidBody.velocity.y, vec.z);
             if (raycaster == null)
             {
                 raycaster = FindObjectOfType<OpticalRaycaster>();
@@ -81,15 +109,27 @@ namespace Netherlands3D.Twin
             {
                 Vector2 screenPoint = Camera.main.WorldToScreenPoint(player.transform.position + Vector3.down); //bottom of player
                 Vector3 floorPoint = raycaster.GetWorldPointAtCameraScreenPoint(Camera.main, new Vector3(screenPoint.x, screenPoint.y, 0));
-                //float yDist = Mathf.Abs(floorPoint.y - player.transform.position.y);
-                floorPoint.y = -1; //ugly fix but bettter for now
-                playerRigidBody.transform.SetPositionAndRotation(Vector3.Slerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
+                float yDist = Mathf.Abs(floorPoint.y - player.transform.position.y);
+                floorPoint.y = -1; //ugly fix but better for now
+                bool isGrounded = yDist < 1f;
+                Debug.Log("isgrounded:" + isGrounded);
+                if(isGrounded)
+                {
+                    hasJumped = false;
+                }
+
+                if (playerRigidBody.position.y < floorPoint.y)
+                {
+                    playerRigidBody.transform.SetPositionAndRotation(new Vector3(playerRigidBody.position.x, floorPoint.y, playerRigidBody.position.z), player.transform.rotation);
+                }
+                //playerRigidBody.transform.SetPositionAndRotation(Vector3.Lerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
                 playerRigidBody.angularVelocity = Vector3.zero;
             }
         }
 
         private void Update()
         {
+            jumpTimer -= Time.deltaTime;
             unityStartTarget = coord.ToUnity();
             unityStartTarget.y = camHeight;
             if ((Vector3.Distance(freeCam.transform.position, unityStartTarget) > 1 || Quaternion.Angle(freeCam.transform.rotation, cameraStartRotation) > 1) && !isReadyForStart)
@@ -98,11 +138,9 @@ namespace Netherlands3D.Twin
                 freeCam.transform.rotation = Quaternion.Slerp(freeCam.transform.rotation, cameraStartRotation, Time.deltaTime * camLerpSpeed);
             }
             else
-            {
-                if (!isReadyForStart)
-                {
-                    player.transform.position = freeCam.transform.position + freeCam.transform.forward * playerDistToCamera;                    
-                }
+            {               
+                if(!isReadyForStart)
+                    player.transform.position = freeCam.transform.position + freeCam.transform.forward * playerDistToCamera;
                 isReadyForStart = true;
             }
 
@@ -127,11 +165,10 @@ namespace Netherlands3D.Twin
 
             playerMoveVector *= slipFactor;
             if (playerMoveVector.magnitude <= 0.02f)
-                playerMoveVector = Vector3.zero;
+                playerMoveVector = Vector3.zero;            
 
-            
-
-            GetClosestTileAndUpdateCollider(player.transform.position, out bool isGrounded);            
+            GetClosestTileAndUpdateCollider(player.transform.position, out bool isGrounded);
+            isReadyToMove = isGrounded;
             playerRigidBody.useGravity = isGrounded;
         }
 
@@ -179,6 +216,11 @@ namespace Netherlands3D.Twin
             Vector2Int tileKey = GetTileKeyFromUnityPosition(position, 1000);
             string tileName = tileKey.x.ToString() + "-" + tileKey.y.ToString();
             isGrounded = false;
+            if(maaiveld == null || gebouwen == null)
+            {
+                GetLayers();
+            }
+
             if (maaiveld != null)
             {
                 foreach (Transform t in maaiveld.transform.GetComponentInChildren<Transform>())
@@ -226,6 +268,55 @@ namespace Netherlands3D.Twin
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
             Vector2Int key = new Vector2Int(Mathf.RoundToInt(((float)coord.Points[0] - 0.5f * tileSize) / 1000) * 1000, Mathf.RoundToInt(((float)coord.Points[1] - 0.5f * tileSize) / 1000) * 1000);
             return key;
+        }
+
+        private void GetCoordinatesForRoute()
+        {
+            if (routeFile != null)
+            {
+                routeCoords = ExtractLatLon(routeFile.text);      
+                
+                foreach(Vector2 c in routeCoords)
+                {
+                    Coordinate coord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
+                    GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    routeObject.transform.localScale = Vector3.one * 5f;
+                    WorldTransform wt = routeObject.AddComponent<WorldTransform>();
+                    GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
+                    wt.SetShifter(shifter);
+                    Vector3 unityCoord = coord.ToUnity();
+                    unityCoord.y = 2;
+                    routeObject.transform.position = unityCoord;
+                }
+            }
+            else
+            {
+                Debug.LogError("GPX file not assigned.");
+            }
+        }
+
+        List<Vector2> ExtractLatLon(string gpxContent)
+        {
+            List<Vector2> latLonList = new List<Vector2>();
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(gpxContent);
+
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("gpx", "http://www.topografix.com/GPX/1/1");
+
+            XmlNodeList trkptNodes = xmlDoc.SelectNodes("//gpx:trkpt", nsmgr);
+
+            foreach (XmlNode trkpt in trkptNodes)
+            {
+                if (trkpt.Attributes["lat"] != null && trkpt.Attributes["lon"] != null)
+                {
+                    float lat = float.Parse(trkpt.Attributes["lat"].Value);
+                    float lon = float.Parse(trkpt.Attributes["lon"].Value);
+                    latLonList.Add(new Vector2(lat, lon));
+                }
+            }
+
+            return latLonList;
         }
     }
 }
