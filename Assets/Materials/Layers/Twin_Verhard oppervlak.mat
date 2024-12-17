@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Twin_Verhard oppervlak
-  m_Shader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
+  m_Shader: {fileID: -6465566751694194690, guid: c371e41465166914da1940cce4bddb1f,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
