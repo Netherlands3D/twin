@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
@@ -78,17 +79,33 @@ namespace Netherlands3D.Twin
 
             Datasets.Add(new DataSet
             {
-                maximumDistance = 3000,
-                maximumDistanceSquared = 3000 * 3000
+                maximumDistance = 5000,
+                maximumDistanceSquared = 5000 * 5000
             });
 
             GetComponent<WorldTransform>().onPostShift.AddListener(ShiftUpdateTiles);
         }
 
-        public void OnEnable()
+        public new IEnumerator Start()
         {
-            Debug.LogError("Enabling layer");
-            transform.GetComponentInParent<AtmMapController>().RefreshTilesizes();
+            base.Start();
+            
+            // skip a frame
+            yield return null;
+
+            RefreshTilesizes();
+        }
+        
+        public void RefreshTilesizes()
+        {
+            // I know .. reflection. But this will ensure that if another zoom level enables, that the tilesizes doesn't
+            // go mad. And trying to disable and enable all gameobjects that have a cartesian tile layer seems like
+            // overkill and might have issues due to onEnable and onDisable's triggering 
+            MethodInfo privateMethod = typeof(CartesianTiles.TileHandler).GetMethod("GetTilesizes", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (privateMethod != null)
+            {
+                privateMethod.Invoke(FindObjectOfType<CartesianTiles.TileHandler>(), null);
+            }
         }
 
         private void ShiftUpdateTiles(WorldTransform worldTransform, Coordinate cd)

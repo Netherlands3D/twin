@@ -1079,8 +1079,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e1f17bb2b6bc34c892ceb40d510e4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minHeightForZoomLevels: 100
-  maxHeightForZoomLevels: 10000
+  minHeightForZoomLevels: 20
+  maxHeightForZoomLevels: 20000
 --- !u!4 &1444587089
 Transform:
   m_ObjectHideFlags: 0
@@ -2332,9 +2332,11 @@ PrefabInstance:
     - {fileID: 14766991358654834, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
     - {fileID: 4584510761074344704, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
     - {fileID: 6821619882049014163, guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}
-    m_AddedGameObjects: [{targetCorrespondingSourceObject: {fileID: 3919916255551741050,
-          guid: 5fbb7c7c8ec47e849afba1b658f3e07e, type: 3}, insertIndex: 0, addedObject: {
-          fileID: 1379159431}}]
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1379159431}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3169299583019647348, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
