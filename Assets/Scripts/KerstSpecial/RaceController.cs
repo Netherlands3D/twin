@@ -22,9 +22,10 @@ namespace Netherlands3D.Twin
         private float camFollowSpeed = 3f;
         private float camYawDelta = 0;
         private float rotationSpeed = 60f;
-        private float playerSpeed = 10f;
+        public float playerSpeed = 10f;
         private float slipFactor = 0.99f;
         public float jumpForce = 10;
+        private float checkPointScale = 5;
 
         private Vector3 unityStartTarget;
         private Vector3 playerMoveVector = Vector3.zero;
@@ -48,7 +49,7 @@ namespace Netherlands3D.Twin
         private int currentCoordinateIndex = 0;
 
         private MeshCollider nothingMeshCollider;
-
+        private GameObject currentCheckpoint;
      
         private void Start()
         {
@@ -140,7 +141,7 @@ namespace Netherlands3D.Twin
                 float yDist = Mathf.Abs(floorPoint.y - player.transform.position.y);
                 //floorPoint.y = -1; //ugly fix but better for now
                 bool isGrounded = yDist < 1f;
-                Debug.Log("isgrounded:" + isGrounded);
+                //Debug.Log("isgrounded:" + isGrounded);
                 if(isGrounded)
                 {
                     hasJumped = false;
@@ -150,7 +151,7 @@ namespace Netherlands3D.Twin
                 {
                     playerRigidBody.transform.SetPositionAndRotation(new Vector3(playerRigidBody.position.x, floorPoint.y, playerRigidBody.position.z), player.transform.rotation);
                 }
-                Debug.Log("FLOORY" + floorPoint.y);
+                //Debug.Log("FLOORY" + floorPoint.y);
                 //playerRigidBody.transform.SetPositionAndRotation(Vector3.Lerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
                 playerRigidBody.angularVelocity = Vector3.zero;
             }
@@ -167,6 +168,8 @@ namespace Netherlands3D.Twin
             if(!isReadyForStart)
             {
                 Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
+                if(currentCheckpoint == null)
+                   currentCheckpoint = SpawnCheckpoint(nextCoord);
                 //nextCoord = new Coordinate(CoordinateSystem.WGS84, 53.198472d, 5.791865d, 0);
                 unityStartTarget = nextCoord.ToUnity();
                 unityStartTarget.y = camHeight;
@@ -223,11 +226,17 @@ namespace Netherlands3D.Twin
 
             Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[currentCoordinateIndex].x, routeCoords[currentCoordinateIndex].y, 0);
             Vector3 unityCoord = nextCoord.ToUnity();
+            unityCoord.y = player.transform.position.y;
             float distance = Vector3.Distance(player.transform.position, unityCoord);
-            if(distance < 2)
+            Debug.Log("distance to next target" +  distance);
+            if(distance < checkPointScale)
             {
+                Destroy(currentCheckpoint);
+
                 currentCoordinateIndex++;
+                nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[currentCoordinateIndex].x, routeCoords[currentCoordinateIndex].y, 0);
                 Debug.Log("WE HIT THE COORD" + currentCoordinateIndex);
+                currentCheckpoint = SpawnCheckpoint(nextCoord);
             }
         }
 
@@ -338,21 +347,26 @@ namespace Netherlands3D.Twin
                 
                 //foreach(Vector2 c in routeCoords)
                 //{
-                //    Coordinate coord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
-                //    GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                //    routeObject.transform.localScale = Vector3.one * 5f;
-                //    WorldTransform wt = routeObject.AddComponent<WorldTransform>();
-                //    GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
-                //    wt.SetShifter(shifter);
-                //    Vector3 unityCoord = coord.ToUnity();
-                //    unityCoord.y = 2;
-                //    routeObject.transform.position = unityCoord;
+                //    
                 //}
             }
             else
             {
                 Debug.LogError("GPX file not assigned.");
             }
+        }
+
+        private GameObject SpawnCheckpoint(Coordinate coord)
+        {            
+            GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            routeObject.transform.localScale = Vector3.one * checkPointScale;
+            WorldTransform wt = routeObject.AddComponent<WorldTransform>();
+            GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
+            wt.SetShifter(shifter);
+            Vector3 unityCoord = coord.ToUnity();
+            unityCoord.y = 3;
+            routeObject.transform.position = unityCoord;
+            return routeObject;
         }
 
         List<Vector2> ExtractLatLon(string gpxContent)
