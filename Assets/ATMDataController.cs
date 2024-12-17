@@ -171,9 +171,6 @@ namespace Netherlands3D.Twin
             currentYear = RoundDownYearMaps(time.Year);
             if (!yearUrls.ContainsKey(currentYear)) return;
 
-            Debug.LogError("updating year to " + currentYear);
-            Debug.LogError(yearUrls);
-
             if (lastValidYear != currentYear)
             {
                 ChangeYear?.Invoke(currentYear);

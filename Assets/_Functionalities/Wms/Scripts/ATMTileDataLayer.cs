@@ -133,20 +133,8 @@ namespace Netherlands3D.Twin
             TryRemoveProjectorFrom(tileKey);
         }
 
-        private void OnEnable()
-        {
-            atmDataController.ChangeYear += ChangeYear;
-        }
-
-        private void ChangeYear(int year)
-        {
-            Debug.Log("Changing year to " + year);
-            SetVisibleTilesDirty();
-        }
-
         private void OnDisable()
         {
-            atmDataController.ChangeYear -= ChangeYear;
             if (updateTilesRoutine != null)
             {
                 StopCoroutine(updateTilesRoutine);
@@ -406,7 +394,7 @@ namespace Netherlands3D.Twin
         {
             if (zoomLevel < 0)
                 return;
-
+            
             xyzTiles.ClearDebugTiles();
             UpdateReferenceSizes();
 
@@ -444,19 +432,22 @@ namespace Netherlands3D.Twin
             if (!isEnabled)
             {
                 queuedChanges.Clear();
+                updateTilesRoutine = null;
+                visibleTilesDirty = false;
                 yield break;
+            }
+
+            // First remove all projectors - so that they can be regenerated
+            foreach (var queuedChange in queuedChanges)
+            {
+                TryRemoveProjectorFrom(new Vector2Int(queuedChange.X, queuedChange.Y));
             }
 
             while (queuedChanges.Count > 0)
             {
-                // lets wait half a second in case a slider is moving
-                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval)
-                {
-                    TileChange next = queuedChanges[0];
-                    queuedChanges.RemoveAt(0);
-                    HandleTile(next);
-                }
-                yield return waitForSeconds;
+                TileChange next = queuedChanges[0];
+                queuedChanges.RemoveAt(0);
+                HandleTile(next);
             }
 
             updateTilesRoutine = null;
