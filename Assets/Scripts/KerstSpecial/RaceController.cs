@@ -82,7 +82,9 @@ namespace Netherlands3D.Twin
                 Vector2 screenPoint = Camera.main.WorldToScreenPoint(player.transform.position + Vector3.down); //bottom of player
                 Vector3 floorPoint = raycaster.GetWorldPointAtCameraScreenPoint(Camera.main, new Vector3(screenPoint.x, screenPoint.y, 0));
                 //float yDist = Mathf.Abs(floorPoint.y - player.transform.position.y);
-                playerRigidBody.transform.SetPositionAndRotation(Vector3.Lerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 10), player.transform.rotation);
+                floorPoint.y = -1; //ugly fix but bettter for now
+                playerRigidBody.transform.SetPositionAndRotation(Vector3.Slerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
+                playerRigidBody.angularVelocity = Vector3.zero;
             }
         }
 
