@@ -6,6 +6,7 @@ using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Rendering;
+using Netherlands3D.Twin._Functionalities.Wms;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -82,6 +83,12 @@ namespace Netherlands3D.Twin
             });
 
             GetComponent<WorldTransform>().onPostShift.AddListener(ShiftUpdateTiles);
+        }
+
+        public void OnEnable()
+        {
+            Debug.LogError("Enabling layer");
+            transform.GetComponentInParent<AtmMapController>().RefreshTilesizes();
         }
 
         private void ShiftUpdateTiles(WorldTransform worldTransform, Coordinate cd)

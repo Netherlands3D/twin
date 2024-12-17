@@ -39,6 +39,7 @@ namespace Netherlands3D.Twin
 
         private void OnTimeChanged(DateTime newTime)
         {
+            if (!atmData) return;
             var yearToLoad = atmData.RoundDownYearGeoJson(newTime.Year);
             if (yearToLoad != currentVisibleYear)
             {

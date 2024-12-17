@@ -76,6 +76,11 @@ namespace Netherlands3D.Twin._Functionalities.Wms.Scripts
                 }
             }
 
+            RefreshTilesizes();
+        }
+
+        public void RefreshTilesizes()
+        {
             // I know .. reflection. But this will ensure that if another zoom level enables, that the tilesizes doesn't
             // go mad. And trying to disable and enable all gameobjects that have a cartesian tile layer seems like
             // overkill and might have issues due to onEnable and onDisable's triggering 

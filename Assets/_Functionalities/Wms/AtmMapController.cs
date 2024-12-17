@@ -25,6 +25,11 @@ namespace Netherlands3D.Twin._Functionalities.Wms
             layerManager?.SwitchLayerToCurrentZoomLevel();
         }
 
+        public void RefreshTilesizes()
+        {
+            layerManager.RefreshTilesizes();
+        }
+
         private void OnDestroy()
         {
             layerManager?.Dispose();
