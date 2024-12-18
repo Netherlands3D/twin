@@ -369,11 +369,11 @@ namespace Netherlands3D.Twin
             if (routeFile != null)
             {
                 routeCoords = ExtractLatLon(routeFile.text);      
-                foreach(Vector2 c in routeCoords)
-                {
-                    Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
-                    SpawnCheckpoint(nextCoord);
-                }    
+                //foreach(Vector2 c in routeCoords)
+                //{
+                //    Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
+                //    SpawnCheckpoint(nextCoord);
+                //}    
                 
             }
             else
