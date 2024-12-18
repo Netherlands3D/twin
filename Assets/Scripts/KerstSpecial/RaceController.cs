@@ -47,8 +47,6 @@ namespace Netherlands3D.Twin
         };
 
         [SerializeField] private FloatEvent horizontalInput;
-        [SerializeField] private FloatEvent verticalInput;
-        [SerializeField] private FloatEvent upDownInput;
         [SerializeField] private BoolEvent jumpInput;
 
         [SerializeField] private TextAsset routeFile;
@@ -61,12 +59,13 @@ namespace Netherlands3D.Twin
      
         private void Start()
         {
-            freeCam = FindObjectOfType<FreeCamera>();           
+            freeCam = FindObjectOfType<FreeCamera>();
 
-            horizontalInput.AddListenerStarted(MoveHorizontally);
-            verticalInput.AddListenerStarted(MoveForwardBackwards);
-            upDownInput.AddListenerStarted(MoveUpDown);
-            jumpInput.AddListenerStarted(Jump);
+            if (!Application.isMobilePlatform)
+            {
+                horizontalInput.AddListenerStarted(MoveHorizontally);
+                jumpInput.AddListenerStarted(Jump);
+            }
 
             GetCoordinatesForRoute();
             GenerateZones();
@@ -179,6 +178,10 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {
+            
+
+
+
             CheckNextCoordinate();
             if (routeCoords == null)
                 return;
@@ -280,16 +283,6 @@ namespace Netherlands3D.Twin
         {
             rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
             playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
-        }
-
-        public void MoveForwardBackwards(float amount)
-        {
-            //playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
-        }
-
-        public void MoveUpDown(float amount)
-        {
-            
         }
 
         public void GetLayers()
