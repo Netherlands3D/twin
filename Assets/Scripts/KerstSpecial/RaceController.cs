@@ -39,6 +39,13 @@ namespace Netherlands3D.Twin
         private Rigidbody playerRigidBody;
         private OpticalRaycaster raycaster;
 
+        private Vector2[] zoneCenters = new Vector2[4] {
+            new Vector2(53.241309f, 5.857816f),
+            new Vector2(53.232692f, 5.853782f),
+            new Vector2(53.224009f, 5.850627f),
+            new Vector2(53.217379f, 5.847194f)
+        };
+
         [SerializeField] private FloatEvent horizontalInput;
         [SerializeField] private FloatEvent verticalInput;
         [SerializeField] private FloatEvent upDownInput;
@@ -50,6 +57,7 @@ namespace Netherlands3D.Twin
 
         private MeshCollider nothingMeshCollider;
         private GameObject currentCheckpoint;
+        private GameObject[] zoneObjects = new GameObject[4];
      
         private void Start()
         {
@@ -61,9 +69,15 @@ namespace Netherlands3D.Twin
             jumpInput.AddListenerStarted(Jump);
 
             GetCoordinatesForRoute();
+            GenerateZones();
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
+        }
+
+        private void OnFinish()
+        {
+
         }
 
         private void InitPlayer()
@@ -95,9 +109,14 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnEnter(Collider other, ZoneTrigger zone)
         {
-            Debug.Log("HAVING COLLISION" + collision);
+            Debug.Log("ONENTER" + other);
+        }
+
+        private void OnExit(Collider other, ZoneTrigger zone)
+        {
+            Debug.Log("ONEXIT:" + other);
         }
 
         private Vector3 floorPoint = Vector3.zero;
@@ -183,9 +202,11 @@ namespace Netherlands3D.Twin
                 freeCam.transform.rotation = Quaternion.Slerp(freeCam.transform.rotation, cameraStartRotation, Time.deltaTime * camLerpSpeed);
             }
             else
-            {               
-                if(!isReadyForStart)
+            {
+                if (!isReadyForStart)
+                {
                     player.transform.position = freeCam.transform.position + freeCam.transform.forward * playerDistToCamera;
+                }
                 isReadyForStart = true;
             }
 
@@ -230,14 +251,14 @@ namespace Netherlands3D.Twin
             Vector3 unityCoord = nextCoord.ToUnity();
             unityCoord.y = player.transform.position.y;
             float distance = Vector3.Distance(player.transform.position, unityCoord);
-            Debug.Log("distance to next target" +  distance);
+            //Debug.Log("distance to next target" +  distance);
             if(distance < checkPointScale)
             {
                 Destroy(currentCheckpoint);
 
                 currentCoordinateIndex++;
                 nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[currentCoordinateIndex].x, routeCoords[currentCoordinateIndex].y, 0);
-                Debug.Log("WE HIT THE COORD" + currentCoordinateIndex);
+                //Debug.Log("WE HIT THE COORD" + currentCoordinateIndex);
                 currentCheckpoint = SpawnCheckpoint(nextCoord);
             }
         }
@@ -348,15 +369,37 @@ namespace Netherlands3D.Twin
             if (routeFile != null)
             {
                 routeCoords = ExtractLatLon(routeFile.text);      
+                foreach(Vector2 c in routeCoords)
+                {
+                    Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, c.x, c.y, 0);
+                    SpawnCheckpoint(nextCoord);
+                }    
                 
-                //foreach(Vector2 c in routeCoords)
-                //{
-                //    
-                //}
             }
             else
             {
                 Debug.LogError("GPX file not assigned.");
+            }
+        }
+
+        private void GenerateZones()
+        {
+            for (int i = 0; i < zoneCenters.Length; i++)
+            {
+                GameObject zoneObject = new GameObject("zonetrigger" + i.ToString());
+                ZoneTrigger trigger = zoneObject.AddComponent<ZoneTrigger>();
+                trigger.OnEnter += OnEnter;
+                trigger.OnExit += OnExit;
+                WorldTransform wt = zoneObject.AddComponent<WorldTransform>();
+                GameObjectWorldTransformShifter shifter = zoneObject.AddComponent<GameObjectWorldTransformShifter>();
+                wt.SetShifter(shifter);
+                BoxCollider bc = zoneObject.AddComponent<BoxCollider>();
+                bc.isTrigger = true;
+                zoneObject.transform.localScale = Vector3.one * 1000; //1km per zone
+                Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, zoneCenters[i].x, zoneCenters[i].y, 0);
+                Vector3 unityCoord = nextCoord.ToUnity();
+                unityCoord.y = 3;
+                zoneObject.transform.position = unityCoord;
             }
         }
 
@@ -373,28 +416,59 @@ namespace Netherlands3D.Twin
             return routeObject;
         }
 
-        List<Vector2> ExtractLatLon(string gpxContent)
+        //List<Vector2> ExtractLatLon(string gpxContent)
+        //{
+        //    List<Vector2> latLonList = new List<Vector2>();
+        //    XmlDocument xmlDoc = new XmlDocument();
+        //    xmlDoc.LoadXml(gpxContent);
+
+        //    XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+        //    nsmgr.AddNamespace("gpx", "http://www.topografix.com/GPX/1/1");
+
+        //    XmlNodeList trkptNodes = xmlDoc.SelectNodes("//gpx:trkpt", nsmgr);
+
+        //    foreach (XmlNode trkpt in trkptNodes)
+        //    {
+        //        if (trkpt.Attributes["lat"] != null && trkpt.Attributes["lon"] != null)
+        //        {
+        //            float lat = float.Parse(trkpt.Attributes["lat"].Value);
+        //            float lon = float.Parse(trkpt.Attributes["lon"].Value);
+        //            latLonList.Add(new Vector2(lat, lon));
+        //        }
+        //    }
+
+        //    return latLonList;
+        //}
+
+        private List<Vector2> ExtractLatLon(string filePath)
         {
-            List<Vector2> latLonList = new List<Vector2>();
+            List<Vector2> coordinates = new List<Vector2>();
+
+            // Load and parse XML
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(gpxContent);
+            xmlDoc.LoadXml(filePath);
 
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
-            nsmgr.AddNamespace("gpx", "http://www.topografix.com/GPX/1/1");
+            // Find all "trkpt" elements (track points)
+            XmlNodeList trackPoints = xmlDoc.GetElementsByTagName("trkpt");
 
-            XmlNodeList trkptNodes = xmlDoc.SelectNodes("//gpx:trkpt", nsmgr);
-
-            foreach (XmlNode trkpt in trkptNodes)
+            foreach (XmlNode node in trackPoints)
             {
-                if (trkpt.Attributes["lat"] != null && trkpt.Attributes["lon"] != null)
+                if (node.Attributes != null)
                 {
-                    float lat = float.Parse(trkpt.Attributes["lat"].Value);
-                    float lon = float.Parse(trkpt.Attributes["lon"].Value);
-                    latLonList.Add(new Vector2(lat, lon));
+                    // Extract latitude and longitude
+                    string lat = node.Attributes["lat"]?.InnerText;
+                    string lon = node.Attributes["lon"]?.InnerText;
+
+                    if (!string.IsNullOrEmpty(lat) && !string.IsNullOrEmpty(lon))
+                    {
+                        float latitude = float.Parse(lat);
+                        float longitude = float.Parse(lon);
+                        coordinates.Add(new Vector2(latitude, longitude));
+                    }
                 }
             }
 
-            return latLonList;
+            return coordinates;
         }
     }
 }

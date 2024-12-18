@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<gpx xmlns="" creator="" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"><trk>
-  <name>ACTIVE LOG072542</name>
-
-<trkseg>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="afstandmeten.nl" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <trk>
+    <name>NL3D2024</name>
+    <desc/>
+    <trkseg>
       <trkpt lat="53.2453155" lon="5.860616">
         <ele>0.00000</ele>
         <time>2024-12-18T00:00:00Z</time>
@@ -92,4 +93,6 @@
         <time>2024-12-18T00:59:59Z</time>
       </trkpt>
     </trkseg>
-</trk></gpx>
+  </trk>
+</gpx>
+
