@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin
         private float camLerpSpeed = 3f;
         private float camFollowSpeed = 3f;
         private float camYawDelta = 0;
-        private float rotationSpeed = 60f;
+        public float rotationSpeed = 60f;
         public float playerSpeed = 10f;
         private float slipFactor = 0.99f;
         public float jumpForce = 10;
@@ -157,6 +157,7 @@ namespace Netherlands3D.Twin
             }
         }
 
+
         private void Update()
         {
             CheckNextCoordinate();
@@ -190,12 +191,13 @@ namespace Netherlands3D.Twin
 
             if(isReadyForStart)
             {
+                camYawDelta = Mathf.Lerp(camYawDelta, rotationDelta, Time.deltaTime * rotationSpeed);
                 if (Mathf.Abs(camYawDelta) > 0.02f)
-                {
+                {                   
                     freeCam.transform.RotateAround(player.transform.position, Vector3.up, camYawDelta);
                     freeCam.transform.LookAt(player.transform);
                 }               
-                camYawDelta *= 0.5f; 
+                rotationDelta *= 0.5f; 
 
                 float distToCam = Vector3.Distance(player.transform.position, freeCam.transform.position);
                 float factor = Mathf.Max(0, distToCam - playerDistToCamera) / playerDistToCamera;
@@ -252,14 +254,16 @@ namespace Netherlands3D.Twin
             return freeCamRotation;
         }
 
+        private float rotationDelta = 0;
         public void MoveHorizontally(float amount)
         {
-            camYawDelta += amount * Time.deltaTime * rotationSpeed;
+            rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
+            playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
         }
 
         public void MoveForwardBackwards(float amount)
         {
-            playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
+            //playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
         }
 
         public void MoveUpDown(float amount)
