@@ -208,6 +208,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public void StartSetup()
         {
+            return;
             if (!configuration.ShouldStartSetup) return;
 
             Open();
