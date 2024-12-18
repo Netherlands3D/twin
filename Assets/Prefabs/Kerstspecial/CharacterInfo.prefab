@@ -157,8 +157,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Wietse
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
-  m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
+  m_fontAsset: {fileID: 11400000, guid: d7ebf92bcaa3051449a3f0f71e0eabe0, type: 2}
+  m_sharedMaterial: {fileID: -3049969205050250096, guid: d7ebf92bcaa3051449a3f0f71e0eabe0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
