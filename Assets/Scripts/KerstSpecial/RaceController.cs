@@ -72,6 +72,39 @@ namespace Netherlands3D.Twin
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
+
+            StartAnimation();
+        }
+
+        private void StartAnimation()
+        {
+            StartCoroutine(StartAnimationLoop());
+        }
+
+        private IEnumerator StartAnimationLoop()
+        {
+            while(!isReadyForStart)
+            {
+                Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
+                if (currentCheckpoint == null)
+                    currentCheckpoint = SpawnCheckpoint(nextCoord);
+                unityStartTarget = nextCoord.ToUnity();
+                unityStartTarget.y = camHeight;
+                cameraStartRotation = GetCameraStartRotation();
+                float distToTarget = Vector3.Distance(freeCam.transform.position, unityStartTarget);
+                float angleToTarget = Quaternion.Angle(freeCam.transform.rotation, cameraStartRotation);
+                if (distToTarget > 1 || angleToTarget > 1)
+                {
+                    freeCam.transform.position = Vector3.Lerp(freeCam.transform.position, unityStartTarget, Time.deltaTime * camLerpSpeed);
+                    freeCam.transform.rotation = Quaternion.Slerp(freeCam.transform.rotation, cameraStartRotation, Time.deltaTime * camLerpSpeed);
+                }
+                else
+                {                    
+                    player.transform.position = freeCam.transform.position + freeCam.transform.forward * playerDistToCamera;
+                    isReadyForStart = true;
+                }
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         private void OnFinish()
@@ -175,67 +208,34 @@ namespace Netherlands3D.Twin
             }
         }
 
-
         private void Update()
         {
             
-
-
-
-            CheckNextCoordinate();
-            if (routeCoords == null)
+            if (routeCoords == null || !isReadyForStart)
                 return;
 
+            CheckNextCoordinate();
             jumpTimer -= Time.deltaTime;
-           
-            if(!isReadyForStart)
+
+            camYawDelta = Mathf.Lerp(camYawDelta, rotationDelta, Time.deltaTime * rotationSpeed);
+            if (Mathf.Abs(camYawDelta) > 0.02f)
             {
-                Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
-                if(currentCheckpoint == null)
-                   currentCheckpoint = SpawnCheckpoint(nextCoord);
-                //nextCoord = new Coordinate(CoordinateSystem.WGS84, 53.198472d, 5.791865d, 0);
-                unityStartTarget = nextCoord.ToUnity();
-                unityStartTarget.y = camHeight;
-                cameraStartRotation = GetCameraStartRotation();
+                freeCam.transform.RotateAround(player.transform.position, Vector3.up, camYawDelta);
+                freeCam.transform.LookAt(player.transform);
             }
+            rotationDelta *= 0.5f;
 
-            if ((Vector3.Distance(freeCam.transform.position, unityStartTarget) > 1 || Quaternion.Angle(freeCam.transform.rotation, cameraStartRotation) > 1) && !isReadyForStart)
-            {
-                freeCam.transform.position = Vector3.Lerp(freeCam.transform.position, unityStartTarget, Time.deltaTime * camLerpSpeed);
-                freeCam.transform.rotation = Quaternion.Slerp(freeCam.transform.rotation, cameraStartRotation, Time.deltaTime * camLerpSpeed);
-            }
-            else
-            {
-                if (!isReadyForStart)
-                {
-                    player.transform.position = freeCam.transform.position + freeCam.transform.forward * playerDistToCamera;
-                }
-                isReadyForStart = true;
-            }
+            float distToCam = Vector3.Distance(player.transform.position, freeCam.transform.position);
+            float factor = Mathf.Max(0, distToCam - playerDistToCamera) / playerDistToCamera;
+            freeCam.transform.position = Vector3.Slerp(freeCam.transform.position, new Vector3(player.transform.position.x, camHeight, player.transform.position.z), Mathf.Min(Time.deltaTime * camFollowSpeed * factor, 0.03f));
 
-            if(isReadyForStart)
-            {
-                camYawDelta = Mathf.Lerp(camYawDelta, rotationDelta, Time.deltaTime * rotationSpeed);
-                if (Mathf.Abs(camYawDelta) > 0.02f)
-                {                   
-                    freeCam.transform.RotateAround(player.transform.position, Vector3.up, camYawDelta);
-                    freeCam.transform.LookAt(player.transform);
-                }               
-                rotationDelta *= 0.5f; 
+            Vector3 camForward = freeCam.transform.forward;
+            camForward.y = 0;
 
-                float distToCam = Vector3.Distance(player.transform.position, freeCam.transform.position);
-                float factor = Mathf.Max(0, distToCam - playerDistToCamera) / playerDistToCamera;
-                freeCam.transform.position = Vector3.Slerp(freeCam.transform.position, new Vector3(player.transform.position.x, camHeight, player.transform.position.z), Mathf.Min(Time.deltaTime * camFollowSpeed * factor, 0.03f));
-                
-                Vector3 camForward = freeCam.transform.forward;
-                camForward.y = 0;
-
-                player.transform.forward = Vector3.Slerp(player.transform.forward, camForward, Time.deltaTime * rotationSpeed);
-            }
-
+            player.transform.forward = Vector3.Slerp(player.transform.forward, camForward, Time.deltaTime * rotationSpeed);
             playerMoveVector *= slipFactor;
             if (playerMoveVector.magnitude <= 0.02f)
-                playerMoveVector = Vector3.zero;            
+                playerMoveVector = Vector3.zero;
 
             GetClosestTileAndUpdateCollider(player.transform.position, out bool isGrounded);
             isReadyToMove = isGrounded;
@@ -282,7 +282,7 @@ namespace Netherlands3D.Twin
         public void MoveHorizontally(float amount)
         {
             rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
-            playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(amount);
+            playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(Mathf.Abs(amount));
         }
 
         public void GetLayers()
