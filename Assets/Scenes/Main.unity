@@ -16400,7 +16400,7 @@ MonoBehaviour:
   height: 0
   overrideHeight: 0
   addMeshCollider: 0
-  prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
+  prefab: {fileID: 5491162952271703092, guid: 1429e8d8da2aeeb4c81ba8f64ad33de6, type: 3}
   latTarget: 53.244886
   lonTarget: 5.860585
   moveSpeed: 1
@@ -25012,7 +25012,7 @@ PrefabInstance:
     - target: {fileID: 7038513169639814724, guid: 01013eea923dc25409c77c014d359058,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: TeleportCameraToStart
+      value: ResetPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 7038513169639814724, guid: 01013eea923dc25409c77c014d359058,
         type: 3}
