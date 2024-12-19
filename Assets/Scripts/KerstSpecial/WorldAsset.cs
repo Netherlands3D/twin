@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin
         public float size = 1;
         public float height;
         public bool overrideHeight = false;
+        public bool addMeshCollider = false;
 
         public GameObject prefab;
         private bool grounded = false;
@@ -36,6 +37,9 @@ namespace Netherlands3D.Twin
             prefab.transform.position = transform.position;
             prefab.transform.rotation = Quaternion.Euler(XRotation, YRotation, 0);
             prefab.transform.localScale = Vector3.one * size;
+
+            if(addMeshCollider)
+                prefab.AddComponent<MeshCollider>();
         }
 
         // Update is called once per frame
