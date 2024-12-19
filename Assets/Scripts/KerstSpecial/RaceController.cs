@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
     {
         private FreeCamera freeCam;
         private float camPitch = 30f;
-        private float camStartYaw = 93.5f;
+        private float camStartYaw = 202f;
         private float camHeight = 15f;
         private float playerDistToCamera = 32f;
         private float camLerpSpeed = 3f;
@@ -23,6 +23,9 @@ namespace Netherlands3D.Twin
         private float camYawDelta = 0;
         public float rotationSpeed = 60f;
         public float playerSpeed = 10f;
+        public float playerOffRoadSpeed = 2.5f;
+        private float playerCurrentSpeed;
+        private float playerTargetSpeed;
         private float slipFactor = 0.99f;
         public float jumpForce = 10;
         private float checkPointScale = 5;
@@ -31,7 +34,7 @@ namespace Netherlands3D.Twin
         private Vector3 playerMoveVector = Vector3.zero;
         private Quaternion cameraStartRotation;
         private bool isReadyForStart = false;
-        private bool isReadyToMove = false;
+        public static bool isReadyToMove = false;
         private Layer maaiveld;
         private Layer gebouwen;
 
@@ -57,6 +60,7 @@ namespace Netherlands3D.Twin
         private GameObject currentCheckpoint;
         private GameObject[] zoneObjects = new GameObject[4];
         private GameObject finishObject;
+        public GameObject scoreBoard;
      
         private void Start()
         {
@@ -115,6 +119,7 @@ namespace Netherlands3D.Twin
             {
                 //finish
                 Debug.Log("Player finished");
+                scoreBoard.SetActive(true);
             }
         }
 
@@ -131,7 +136,7 @@ namespace Netherlands3D.Twin
             playerRigidBody.angularVelocity = Vector3.zero;
             playerRigidBody.mass = 100;
             Physics.gravity = Vector3.down * 30;
-           
+            playerCurrentSpeed = playerSpeed;
         }
 
         private bool hasJumped = false;
@@ -158,6 +163,7 @@ namespace Netherlands3D.Twin
         }
 
         private Vector3 floorPoint = Vector3.zero;
+        private MeshCollider currentMeshCollider;
         private void FixedUpdate()
         {
             if (!isReadyToMove)
@@ -192,6 +198,7 @@ namespace Netherlands3D.Twin
 
                             lowestMc = hits[i].point.y;
                             floorPoint.y = lowestMc;
+                            currentMeshCollider = hits[i].collider as MeshCollider;
                         }
                     }
                 }
@@ -222,6 +229,15 @@ namespace Netherlands3D.Twin
 
             CheckNextCoordinate();
             jumpTimer -= Time.deltaTime;
+            playerCurrentSpeed = Mathf.Lerp(playerCurrentSpeed, playerTargetSpeed, Time.deltaTime);
+            if(currentMeshCollider != null)
+            {
+                if (currentMeshCollider.gameObject.layer == 4) //is on ice
+                    playerTargetSpeed = playerSpeed;
+                else
+                    playerTargetSpeed = playerOffRoadSpeed;
+            }
+
 
             camYawDelta = Mathf.Lerp(camYawDelta, rotationDelta, Time.deltaTime * rotationSpeed);
             if (Mathf.Abs(camYawDelta) > 0.02f)
@@ -288,7 +304,7 @@ namespace Netherlands3D.Twin
         public void MoveHorizontally(float amount)
         {
             rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
-            playerMoveVector += Vector3.forward * playerSpeed * Mathf.Clamp01(Mathf.Abs(amount));
+            playerMoveVector += Vector3.forward * playerCurrentSpeed * Mathf.Clamp01(Mathf.Abs(amount));
         }
 
         public void GetLayers()
@@ -322,11 +338,56 @@ namespace Netherlands3D.Twin
                     {
                         isGrounded = true;
                         //yes very ugly but very easy
-                        if (t.gameObject.GetComponent<Collider>() == null)
+                        if (t.childCount == 0)
                         {
-                            t.gameObject.AddComponent<MeshCollider>();
-                            t.gameObject.isStatic = true;
+                            //t.gameObject.AddComponent<MeshCollider>();
+                            //t.gameObject.isStatic = true;
                             Debug.Log("ADDED MESHCOLLIDER FOR" + tileName);
+
+                            MeshFilter meshFilter = t.gameObject.GetComponent<MeshFilter>();
+                            if (meshFilter == null || meshFilter.mesh == null)
+                            {
+                                Debug.LogError("No MeshFilter or mesh found on this GameObject.");
+                                return;
+                            }
+
+                            Mesh originalMesh = meshFilter.mesh;
+
+                            for (int i = 0; i < originalMesh.subMeshCount; i++)
+                            {
+                                // Extract the submesh
+                                Mesh subMesh = new Mesh
+                                {
+                                    vertices = originalMesh.vertices,
+                                    triangles = originalMesh.GetTriangles(i)
+                                };
+                                subMesh.RecalculateNormals();
+
+                                // Create a new GameObject for the submesh
+                                GameObject subMeshObject = new GameObject($"SubMesh_{i}_Collider");
+                                if(i == originalMesh.subMeshCount - 1)
+                                {
+                                    //IS WATER LAYER
+                                    subMeshObject.layer = LayerMask.NameToLayer("Water");
+                                }
+
+                                subMeshObject.transform.SetParent(t.gameObject.transform);
+                                subMeshObject.transform.localPosition = Vector3.zero;
+                                subMeshObject.transform.localRotation = Quaternion.identity;
+                                subMeshObject.transform.localScale = Vector3.one;
+
+                                // Add MeshFilter and assign the submesh
+                                MeshFilter subMeshFilter = subMeshObject.AddComponent<MeshFilter>();
+                                subMeshFilter.mesh = subMesh;
+
+                                // Optionally hide the submesh visually by not adding a MeshRenderer
+
+                                // Add MeshCollider and assign the submesh
+                                MeshCollider meshCollider = subMeshObject.AddComponent<MeshCollider>();
+                                meshCollider.sharedMesh = subMesh;
+                                meshCollider.convex = false; // Set to true if needed
+
+                            }
                         }
                     }                    
                 }
