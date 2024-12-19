@@ -40,6 +40,7 @@ namespace Netherlands3D.Twin
 
         private GameObject player;
         private Rigidbody playerRigidBody;
+        public Collider playerCollider;
         private OpticalRaycaster raycaster;
 
         private Vector2[] zoneCenters = new Vector2[4] {
@@ -147,6 +148,7 @@ namespace Netherlands3D.Twin
             playerRigidBody.mass = 100;
             Physics.gravity = Vector3.down * 30;
             playerCurrentSpeed = playerSpeed;
+            playerCollider = player.GetComponent<Collider>();
         }
 
         private bool hasJumped = false;
@@ -229,6 +231,11 @@ namespace Netherlands3D.Twin
                 //playerRigidBody.transform.SetPositionAndRotation(Vector3.Lerp(player.transform.position, new Vector3(player.transform.position.x, floorPoint.y, player.transform.position.z), Time.fixedDeltaTime * 3), player.transform.rotation);
                 playerRigidBody.angularVelocity = Vector3.zero;
             }
+        }
+
+        public void GivePenaltySpeedToPlayer(float penalty)
+        {
+            playerCurrentSpeed *= penalty;
         }
 
         private void Update()
@@ -352,7 +359,7 @@ namespace Netherlands3D.Twin
                         {
                             //t.gameObject.AddComponent<MeshCollider>();
                             //t.gameObject.isStatic = true;
-                            Debug.Log("ADDED MESHCOLLIDER FOR" + tileName);
+                            //Debug.Log("ADDED MESHCOLLIDER FOR" + tileName);
 
                             MeshFilter meshFilter = t.gameObject.GetComponent<MeshFilter>();
                             if (meshFilter == null || meshFilter.mesh == null)

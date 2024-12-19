@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin
         public double lat;
         public double lon;
         public float YRotation;
+        public float size = 1;
 
         public GameObject prefab;
         private bool grounded = false;
@@ -31,6 +32,7 @@ namespace Netherlands3D.Twin
             wt.SetShifter(shifter);
             prefab.transform.position = transform.position;
             prefab.transform.rotation = Quaternion.AngleAxis(YRotation, Vector3.up);
+            prefab.transform.localScale = Vector3.one * size;
         }
 
         // Update is called once per frame
