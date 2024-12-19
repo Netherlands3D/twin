@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: 5e4e081a2eb0da74ebfb8687adf9e0bd, type: 3}
   name: Wietse
-  description: Met zijn doorzettingsvermogen en scherpe focus is hij klaar om de
-    Elfstedenroute te veroveren. Of het nu stormt of de kou je om de oren slaat,
-    Wietse blijft onvermurwbaar. Klaar om te strijden tegen de elementen? Wietse
-    wacht op jou om de overwinning te behalen!
+  description: Stormrijder! De kou is zijn beste vriend! Wietse blijft altijd kalm,
+    ongeacht de storm die opsteekt. Wanneer je denkt dat je het niet meer trekt,
+    is Wietse daar om je voorbij te schaatsen.
