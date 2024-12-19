@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin
     {
         private FreeCamera freeCam;
         private float camPitch = 30f;
-        private float camStartYaw = 93.5f;
+        private float camStartYaw = 202f;
         private float camHeight = 15f;
         private float playerDistToCamera = 32f;
         private float camLerpSpeed = 3f;
