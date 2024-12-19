@@ -9,6 +9,7 @@ namespace Netherlands3D.Twin
         public delegate void ZoneHandler(Collider col, ZoneTrigger zone);
         public event ZoneHandler OnEnter;
         public event ZoneHandler OnExit;
+        public event ZoneHandler OnStay;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -18,6 +19,11 @@ namespace Netherlands3D.Twin
         private void OnTriggerExit(Collider other)
         {
             OnExit?.Invoke(other, this);
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            OnStay?.Invoke(other, this);
         }
     }
 }

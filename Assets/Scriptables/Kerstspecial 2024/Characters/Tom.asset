@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: fac183725e7ff6841955d9ca0a653f0c, type: 3}
   name: Tom
+  description: "De risico-junkie. Tom is er voor de adrenaline. Of hij nu een bocht
+    mist of een schaatspower-up gebruikt, hij neemt altijd risico\u2019s voor de
+    overwinning."

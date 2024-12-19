@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: f5b9432e65ebc334c88d801ba701199c, type: 3}
   name: Friso
+  description: De snelheidsduivel. Friso rijdt altijd op de turbo en gelooft dat
+    remmen voor beginners is. Ziet de finishlijn alleen als een stip in de verte.
