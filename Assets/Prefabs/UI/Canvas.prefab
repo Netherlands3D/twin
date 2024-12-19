@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5814169222554322153
 RectTransform:
   m_ObjectHideFlags: 0
@@ -245,7 +245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5554443196822035103
 RectTransform:
   m_ObjectHideFlags: 0
@@ -588,7 +588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2485481246264769512
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5420,28 +5420,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2773908478669454240}
     m_Modifications:
-    - target: {fileID: 1082102342877367991, guid: d08a773255d193f4893dbc1317049c9f,
-        type: 3}
-      propertyPath: m_text
-      value: Adrian
-      objectReference: {fileID: 0}
     - target: {fileID: 6776225724951051203, guid: d08a773255d193f4893dbc1317049c9f,
         type: 3}
       propertyPath: m_Name
       value: CharacterInfo
       objectReference: {fileID: 0}
-    - target: {fileID: 7072661654922142265, guid: d08a773255d193f4893dbc1317049c9f,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 5e4e081a2eb0da74ebfb8687adf9e0bd,
-        type: 3}
-    - target: {fileID: 7253797551313755658, guid: d08a773255d193f4893dbc1317049c9f,
-        type: 3}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 11400000, guid: d2847d6c9740a9f4f8ead7cf3a654a7b,
-        type: 2}
     - target: {fileID: 8820678990986466175, guid: d08a773255d193f4893dbc1317049c9f,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6185,6 +6168,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2773908478669454240}
     m_Modifications:
+    - target: {fileID: 1015952203596709228, guid: bc4769489c9a1c84894c1f325a67ab1c,
+        type: 3}
+      propertyPath: CountdownOne
+      value: 
+      objectReference: {fileID: 902409496825552666}
+    - target: {fileID: 1015952203596709228, guid: bc4769489c9a1c84894c1f325a67ab1c,
+        type: 3}
+      propertyPath: CountdownTwo
+      value: 
+      objectReference: {fileID: 5021766460542810293}
+    - target: {fileID: 1015952203596709228, guid: bc4769489c9a1c84894c1f325a67ab1c,
+        type: 3}
+      propertyPath: CountdownThree
+      value: 
+      objectReference: {fileID: 804213917780729096}
     - target: {fileID: 2774681778801959594, guid: bc4769489c9a1c84894c1f325a67ab1c,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6324,6 +6322,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8531187444926888966}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6882417539366924481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3019557509468884167, guid: bc4769489c9a1c84894c1f325a67ab1c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8531187444926888966}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8540558971345531825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6437,6 +6441,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6893046676294979263, guid: 2d960749c9355f443b68c69a823d1b8e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 6882417539366924481}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
