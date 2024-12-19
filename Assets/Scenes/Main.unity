@@ -1825,7 +1825,7 @@ MonoBehaviour:
   height: 0
   overrideHeight: 0
   addMeshCollider: 0
-  prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
+  prefab: {fileID: 5491162952271703092, guid: 1429e8d8da2aeeb4c81ba8f64ad33de6, type: 3}
   latTarget: 53.244886
   lonTarget: 5.860585
   moveSpeed: 1
@@ -2109,6 +2109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.38208845
+      objectReference: {fileID: 0}
+    - target: {fileID: 3849934062868920523, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
