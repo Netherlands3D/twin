@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin
 
     public class ScoreboardManager : MonoBehaviour
     {
+        [SerializeField] private Timer timer;
         public TMP_InputField nameInputField;
         public TMP_Text scoreField;
         public Button submitButton;
@@ -21,41 +22,41 @@ namespace Netherlands3D.Twin
         private string userId;
         private const string ScoreboardPath = "test/scoreboard"; // Firebase database path for scoreboard
 
+        void OnEnable()
+        {
+            scoreField.text = ((int)timer.FinishedTime).ToString();
+
+            //    string jsonString = @"
+            //{
+            //    '-OEF3fUzzUUxvOvezzb8': {
+            //        'name': 'asdf',
+            //        'score': 193896
+            //    },
+            //    '-OEF3i7L26Ds34mI5QbW': {
+            //        'name': 'sdfg',
+            //        'score': 193896
+            //    },
+            //    '-OEF4BzJLA-ZEz8D0U9Y': {
+            //        'name': 'asdf',
+            //        'score': 772335
+            //    },
+            //    '-OEF4BzJLA-ZEz8D0U9Y': {
+            //        'name': 'asdf',
+            //        'score': 772335
+            //    }
+            //}";
+
+            //    DisplayScores(jsonString);
+        }
+
         void Start()
         {
-            scoreField.text = Mathf.FloorToInt(Random.value * 999999).ToString();
 
-        //    string jsonString = @"
-        //{
-        //    '-OEF3fUzzUUxvOvezzb8': {
-        //        'name': 'asdf',
-        //        'score': 193896
-        //    },
-        //    '-OEF3i7L26Ds34mI5QbW': {
-        //        'name': 'sdfg',
-        //        'score': 193896
-        //    },
-        //    '-OEF4BzJLA-ZEz8D0U9Y': {
-        //        'name': 'asdf',
-        //        'score': 772335
-        //    },
-        //    '-OEF4BzJLA-ZEz8D0U9Y': {
-        //        'name': 'asdf',
-        //        'score': 772335
-        //    }
-        //}";
-
-        //    DisplayScores(jsonString);
-
-
-            // Attach button click listener
+        // Attach button click listener
             submitButton.onClick.AddListener(() => SubmitScore());
 
             // Listen for updates to the scoreboard
             ListenForScoreboardUpdates();
-
-
-            
         }
 
         void SubmitScore()
