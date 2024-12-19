@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin
         private Rigidbody playerRigidBody;
         public Collider playerCollider;
         public Animator PlayerAnimator;
+        public Animator WeatherAnimator;
         private OpticalRaycaster raycaster;
 
         private Vector2[] zoneCenters = new Vector2[4] {
@@ -157,6 +158,8 @@ namespace Netherlands3D.Twin
             playerCurrentSpeed = playerSpeed;
             playerCollider = player.GetComponent<Collider>();
             PlayerAnimator = player.GetComponentInChildren<Animator>();
+            WeatherAnimator = this.GetComponent<Animator>();
+            WeatherAnimator.SetBool("Storm", false);
             PlayerAnimator.SetBool("OnIce", true);
         }
 
@@ -177,11 +180,20 @@ namespace Netherlands3D.Twin
         private void OnEnter(Collider other, ZoneTrigger zone)
         {
             Debug.Log("ONENTER" + other);
+            Debug.Log("zonenaam" + zone);
+            if (zone.name == "zonetrigger2")
+            {
+                WeatherAnimator.SetBool("Storm", true);
+            }
         }
 
         private void OnExit(Collider other, ZoneTrigger zone)
         {
             Debug.Log("ONEXIT:" + other);
+            if (zone.name == "zonetrigger2")
+            {
+                WeatherAnimator.SetBool("Storm", false);
+            }
         }
 
         private Vector3 floorPoint = Vector3.zero;
