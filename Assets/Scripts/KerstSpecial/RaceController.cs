@@ -79,11 +79,21 @@ namespace Netherlands3D.Twin
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
-
-            StartAnimation();
+            
+            TeleportCameraToStart();
         }
 
-        private void StartAnimation()
+        public void TeleportCameraToStart()
+        {
+            Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
+            if (currentCheckpoint == null)
+                currentCheckpoint = SpawnCheckpoint(nextCoord);
+            unityStartTarget = nextCoord.ToUnity();
+            unityStartTarget.y = camHeight;
+            freeCam.transform.position = unityStartTarget;
+        }
+
+        public void StartAnimation()
         {
             StartCoroutine(StartAnimationLoop());
         }
