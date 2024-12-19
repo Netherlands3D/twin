@@ -12,14 +12,14 @@ namespace Netherlands3D.Twin
         private Vector3 target;
         private bool moveToTarget = false;
         public float moveSpeed = 1;
-        public float size = 1;
+        
 
         protected Coordinate targetCoord;
 
         public override void Start()
         {
             base.Start();
-            prefab.transform.localScale = Vector3.one * size;
+            
             
         }
 
