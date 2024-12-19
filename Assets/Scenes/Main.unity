@@ -985,7 +985,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  IsDebugOn: 0
+  IsDebugOn: 1
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2094,22 +2094,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.20579392
+      value: 0.197883
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08769552
+      value: 0.08262063
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.89664197
+      value: 0.90132976
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.38208845
+      value: -0.37632555
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920523, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -10375,7 +10375,7 @@ PrefabInstance:
     - target: {fileID: 7038513169639814724, guid: 01013eea923dc25409c77c014d359058,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: TeleportCameraToStart
+      value: ResetPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 7038513169639814724, guid: 01013eea923dc25409c77c014d359058,
         type: 3}
