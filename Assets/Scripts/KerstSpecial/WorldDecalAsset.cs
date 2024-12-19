@@ -1,8 +1,5 @@
 using Netherlands3D.Rendering;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Netherlands3D.Twin
 {
@@ -13,13 +10,16 @@ namespace Netherlands3D.Twin
         private SphereCollider sphereCollider;
         private ZoneTrigger penaltyTrigger;
         private RaceController raceController;
+        public bool hasTrigger = false;
+
+        public Vector2 decalSize;
 
         public override void Start()
         {
             base.Start();
-            prefab.transform.rotation = Quaternion.Euler(90, 0, 0);
+            prefab.transform.rotation = Quaternion.Euler(90, YRotation, 0);
             TextureDecalProjector projector = prefab.GetComponent<TextureDecalProjector>();
-            projector.SetSize(new Vector3(size, size, 100));
+            projector.SetSize(new Vector3(decalSize.x, decalSize.y, 100));
             projector.SetTexture(texture);
             projector.transform.SetParent(transform);
             raceController = FindObjectOfType<RaceController>();           
@@ -44,16 +44,18 @@ namespace Netherlands3D.Twin
         protected override void OnSetStartPosition(Vector3 startPosition)
         {
             prefab.transform.position = startPosition + Vector3.up * 10;
-
-            GameObject triggerObject = new GameObject("penaltyTrigger");
-            sphereCollider = triggerObject.AddComponent<SphereCollider>();
-            sphereCollider.radius = size * 0.5f;
-            triggerObject.transform.position = startPosition;
-            triggerObject.transform.SetParent(transform, true);
-            sphereCollider.isTrigger = true;
-            penaltyTrigger = triggerObject.AddComponent<ZoneTrigger>();
-            penaltyTrigger.OnEnter += OnHitPlayerStart;
-            penaltyTrigger.OnStay += OnHitPlayer;
+            if (hasTrigger)
+            {
+                GameObject triggerObject = new GameObject("penaltyTrigger");
+                sphereCollider = triggerObject.AddComponent<SphereCollider>();
+                sphereCollider.radius = size * 0.5f;
+                triggerObject.transform.position = startPosition;
+                triggerObject.transform.SetParent(transform, true);
+                sphereCollider.isTrigger = true;
+                penaltyTrigger = triggerObject.AddComponent<ZoneTrigger>();
+                penaltyTrigger.OnEnter += OnHitPlayerStart;
+                penaltyTrigger.OnStay += OnHitPlayer;
+            }
         }
     }
 }
