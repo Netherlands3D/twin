@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Projects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -83,8 +84,20 @@ namespace Netherlands3D.Twin
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
-            
+
+            //StartAnimation();
             TeleportCameraToStart();
+
+            //StartCoroutine(WaitSeconds(20, () =>
+            //{
+            //    ResetPlayer();
+            //}));
+        }
+
+        private IEnumerator WaitSeconds(float seconds, Action action)
+        {
+            yield return new WaitForSeconds(seconds);
+            action?.Invoke();
         }
 
         public void TeleportCameraToStart()
@@ -161,6 +174,13 @@ namespace Netherlands3D.Twin
             WeatherAnimator = this.GetComponent<Animator>();
             WeatherAnimator.SetBool("Storm", false);
             PlayerAnimator.SetBool("OnIce", true);
+        }
+
+        public void ResetPlayer()
+        {
+            isReadyToMove = false;
+            isReadyForStart = false;
+            StartAnimation();
         }
 
         private bool hasJumped = false;
@@ -264,6 +284,10 @@ namespace Netherlands3D.Twin
         private void Update()
         {
             
+            if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
+                Finish();
+            }
+            
             if (routeCoords == null || !isReadyForStart)
                 return;
 
@@ -277,13 +301,12 @@ namespace Netherlands3D.Twin
                 { 
                 playerTargetSpeed = playerSpeed;
                 PlayerAnimator.SetBool("OnIce", true);
-            }
-            else
-            {
-                playerTargetSpeed = playerOffRoadSpeed;
-                PlayerAnimator.SetBool("OnIce", false);
-            }
-              
+                }
+                else
+                {
+                    playerTargetSpeed = playerOffRoadSpeed;
+                    PlayerAnimator.SetBool("OnIce", false);
+                }              
             }
 
 
@@ -350,6 +373,7 @@ namespace Netherlands3D.Twin
 
         private float rotationDelta = 0;
         public UnityEvent Finished;
+        [SerializeField] private bool IsDebugOn = false;
 
         public void MoveHorizontally(float amount)
         {

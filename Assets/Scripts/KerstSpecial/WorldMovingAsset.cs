@@ -19,8 +19,7 @@ namespace Netherlands3D.Twin
         public override void Start()
         {
             base.Start();
-            
-            
+            prefab.AddComponent<SphereCollider>();
         }
 
         protected override void OnSetStartPosition(Vector3 startPosition)
