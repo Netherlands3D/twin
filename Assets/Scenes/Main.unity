@@ -356,7 +356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &199510458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 658036872}
   - component: {fileID: 658036873}
   m_Layer: 0
-  m_Name: testAsset
+  m_Name: bridgeAsset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -811,11 +811,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eca106fdb3561d4087b806531422d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lat: 53.245072
-  lon: 5.860219
-  YRotation: 0
-  size: 1
-  prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
+  lat: 53.240574
+  lon: 5.856962
+  YRotation: 3.5
+  XRotation: -90
+  size: 100
+  height: -3
+  overrideHeight: 1
+  prefab: {fileID: 919132149155446097, guid: be0c0efc75c6b2549990327087cf6ba6, type: 3}
 --- !u!1001 &675407186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2856,7 +2859,10 @@ MonoBehaviour:
   lat: 53.24497
   lon: 5.860161
   YRotation: 0
+  XRotation: 0
   size: 5
+  height: 0
+  overrideHeight: 0
   prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
   latTarget: 53.244886
   lonTarget: 5.860585
@@ -3084,22 +3090,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19782922
+      value: 0.19793637
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08258657
+      value: 0.082654454
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013612
+      value: 0.9012984
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.37628585
+      value: -0.37636504
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -9746,6 +9752,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359357530136689016, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -244.7002
       objectReference: {fileID: 0}
     - target: {fileID: 7376892113393236158, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
