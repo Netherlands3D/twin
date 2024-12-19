@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Projects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -82,8 +83,20 @@ namespace Netherlands3D.Twin
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
-            
+
+            //StartAnimation();
             TeleportCameraToStart();
+
+            //StartCoroutine(WaitSeconds(20, () =>
+            //{
+            //    ResetPlayer();
+            //}));
+        }
+
+        private IEnumerator WaitSeconds(float seconds, Action action)
+        {
+            yield return new WaitForSeconds(seconds);
+            action?.Invoke();
         }
 
         public void TeleportCameraToStart()
@@ -158,6 +171,13 @@ namespace Netherlands3D.Twin
             playerCollider = player.GetComponent<Collider>();
             PlayerAnimator = player.GetComponentInChildren<Animator>();
             PlayerAnimator.SetBool("OnIce", true);
+        }
+
+        public void ResetPlayer()
+        {
+            isReadyToMove = false;
+            isReadyForStart = false;
+            StartAnimation();
         }
 
         private bool hasJumped = false;
@@ -265,13 +285,12 @@ namespace Netherlands3D.Twin
                 { 
                 playerTargetSpeed = playerSpeed;
                 PlayerAnimator.SetBool("OnIce", true);
-            }
-            else
-            {
-                playerTargetSpeed = playerOffRoadSpeed;
-                PlayerAnimator.SetBool("OnIce", false);
-            }
-              
+                }
+                else
+                {
+                    playerTargetSpeed = playerOffRoadSpeed;
+                    PlayerAnimator.SetBool("OnIce", false);
+                }              
             }
 
 
