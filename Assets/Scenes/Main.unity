@@ -1098,7 +1098,10 @@ MonoBehaviour:
   playerSpeed: 30
   playerOffRoadSpeed: 2.5
   jumpForce: 10
+  PlayerPrefab: {fileID: 6049499231298542653, guid: 8e902702d47486d4294553890c1d10be,
+    type: 3}
   playerCollider: {fileID: 0}
+  PlayerAnimator: {fileID: 0}
   horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
   jumpInput: {fileID: 11400000, guid: 46da008daaac56f4c97ac21469b742b5, type: 2}
   routeFile: {fileID: 4900000, guid: 3653738e64b9fdb44a2b7a94ac1bfed4, type: 3}
@@ -3084,22 +3087,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19782922
+      value: 0.1976436
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08258657
+      value: 0.08246903
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013612
+      value: 0.90147
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.37628585
+      value: -0.3761486
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
