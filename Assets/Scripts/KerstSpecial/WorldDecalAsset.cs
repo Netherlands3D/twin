@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin
             TextureDecalProjector projector = prefab.GetComponent<TextureDecalProjector>();
             projector.SetSize(new Vector3(size, size, 100));
             projector.SetTexture(texture);
+            projector.transform.SetParent(transform);
             raceController = FindObjectOfType<RaceController>();           
         }
 

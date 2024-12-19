@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin
@@ -81,11 +82,21 @@ namespace Netherlands3D.Twin
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
-
-            StartAnimation();
+            
+            TeleportCameraToStart();
         }
 
-        private void StartAnimation()
+        public void TeleportCameraToStart()
+        {
+            Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
+            if (currentCheckpoint == null)
+                currentCheckpoint = SpawnCheckpoint(nextCoord);
+            unityStartTarget = nextCoord.ToUnity();
+            unityStartTarget.y = camHeight;
+            freeCam.transform.position = unityStartTarget;
+        }
+
+        public void StartAnimation()
         {
             StartCoroutine(StartAnimationLoop());
         }
@@ -120,10 +131,14 @@ namespace Netherlands3D.Twin
         {
             if(col == player.GetComponent<Collider>())
             {
-                //finish
-                Debug.Log("Player finished");
-                scoreBoard.SetActive(true);
+                Finish();
             }
+        }
+
+        [ContextMenu("Finish now")]
+        public void Finish()
+        {
+            Finished.Invoke();
         }
 
         private void InitPlayer()
@@ -322,6 +337,8 @@ namespace Netherlands3D.Twin
         }
 
         private float rotationDelta = 0;
+        public UnityEvent Finished;
+
         public void MoveHorizontally(float amount)
         {
             rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
