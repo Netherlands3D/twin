@@ -11,7 +11,11 @@ namespace Netherlands3D.Twin
         public double lat;
         public double lon;
         public float YRotation;
+        public float XRotation;
         public float size = 1;
+        public float height;
+        public bool overrideHeight = false;
+        public bool addMeshCollider = false;
 
         public GameObject prefab;
         private bool grounded = false;
@@ -31,8 +35,11 @@ namespace Netherlands3D.Twin
             GameObjectWorldTransformShifter shifter = prefab.AddComponent<GameObjectWorldTransformShifter>();
             wt.SetShifter(shifter);
             prefab.transform.position = transform.position;
-            prefab.transform.rotation = Quaternion.AngleAxis(YRotation, Vector3.up);
+            prefab.transform.rotation = Quaternion.Euler(XRotation, YRotation, 0);
             prefab.transform.localScale = Vector3.one * size;
+
+            if(addMeshCollider)
+                prefab.AddComponent<MeshCollider>();
         }
 
         // Update is called once per frame
@@ -40,6 +47,15 @@ namespace Netherlands3D.Twin
         {
             if (!grounded && RaceController.isReadyToMove)
             {
+                if (overrideHeight)
+                {
+                    Vector3 pos = startCoord.ToUnity();
+                    startPosition = new Vector3(pos.x, height, pos.z);
+                    OnSetStartPosition(startPosition);
+                    grounded = true;
+                    return;
+                }
+
                 RaycastHit[] hits = new RaycastHit[8];
                 Physics.RaycastNonAlloc(startCoord.ToUnity() + Vector3.up * 100, Vector3.down, hits, 1000);
                 for(int i = 0; i < hits.Length; i++) 
@@ -57,6 +73,9 @@ namespace Netherlands3D.Twin
 
         protected virtual void OnSetStartPosition(Vector3 startPosition)
         {
+            if (overrideHeight)
+                startPosition.y = height;
+
             prefab.transform.position = startPosition;
         }
     }
