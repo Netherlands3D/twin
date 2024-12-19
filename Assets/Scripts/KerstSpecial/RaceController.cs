@@ -56,6 +56,7 @@ namespace Netherlands3D.Twin
         private MeshCollider nothingMeshCollider;
         private GameObject currentCheckpoint;
         private GameObject[] zoneObjects = new GameObject[4];
+        private GameObject finishObject;
      
         private void Start()
         {
@@ -69,6 +70,7 @@ namespace Netherlands3D.Twin
 
             GetCoordinatesForRoute();
             GenerateZones();
+            GenerateFinish();
             InitPlayer();
 
             nothingMeshCollider = FindObjectOfType<ClickNothingPlane>().gameObject.GetComponent<MeshCollider>();
@@ -107,9 +109,13 @@ namespace Netherlands3D.Twin
             }
         }
 
-        private void OnFinish()
+        private void OnFinish(Collider col, ZoneTrigger trigger)
         {
-
+            if(col == player.GetComponent<Collider>())
+            {
+                //finish
+                Debug.Log("Player finished");
+            }
         }
 
         private void InitPlayer()
@@ -394,6 +400,24 @@ namespace Netherlands3D.Twin
                 unityCoord.y = 3;
                 zoneObject.transform.position = unityCoord;
             }
+        }
+
+        private void GenerateFinish()
+        {
+            finishObject = new GameObject("finish");
+            ZoneTrigger finishTrigger = finishObject.AddComponent<ZoneTrigger>();
+            finishTrigger.OnEnter += OnFinish;
+            WorldTransform wt = finishObject.AddComponent<WorldTransform>();
+            GameObjectWorldTransformShifter shifter = finishObject.AddComponent<GameObjectWorldTransformShifter>();
+            wt.SetShifter(shifter);
+            BoxCollider bc = finishObject.AddComponent<BoxCollider>();
+            bc.isTrigger = true;
+            finishObject.transform.localScale = new Vector3(100, 100, 10);
+            finishObject.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+            Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[routeCoords.Count -1].x, routeCoords[routeCoords.Count -1].y, 0);
+            Vector3 unityCoord = nextCoord.ToUnity();
+            unityCoord.y = 3;
+            finishObject.transform.position = unityCoord;
         }
 
         private GameObject SpawnCheckpoint(Coordinate coord)
