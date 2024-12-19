@@ -814,6 +814,7 @@ MonoBehaviour:
   lat: 53.245072
   lon: 5.860219
   YRotation: 0
+  size: 1
   prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
 --- !u!1001 &675407186
 PrefabInstance:
@@ -1095,7 +1096,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 60
   playerSpeed: 30
+  playerOffRoadSpeed: 2.5
   jumpForce: 10
+  playerCollider: {fileID: 0}
   horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
   jumpInput: {fileID: 11400000, guid: 46da008daaac56f4c97ac21469b742b5, type: 2}
   routeFile: {fileID: 4900000, guid: 3653738e64b9fdb44a2b7a94ac1bfed4, type: 3}
@@ -2556,6 +2559,80 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1001 &1685315965
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1776585307}
+    m_Modifications:
+    - target: {fileID: 443485034830431996, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_Name
+      value: wakAsset
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 395b6c17c78b4db4eaba043a0b007b36, type: 3}
+--- !u!4 &1685315966 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2862550173031907649, guid: 395b6c17c78b4db4eaba043a0b007b36,
+    type: 3}
+  m_PrefabInstance: {fileID: 1685315965}
+  m_PrefabAsset: {fileID: 0}
 --- !u!225 &1727774869 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 804213917780729096, guid: 9963fec33e379324db2affcb3f83332f,
@@ -2593,6 +2670,7 @@ Transform:
   m_Children:
   - {fileID: 658036872}
   - {fileID: 1972162467}
+  - {fileID: 1685315966}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1790498191
@@ -2778,11 +2856,11 @@ MonoBehaviour:
   lat: 53.24497
   lon: 5.860161
   YRotation: 0
+  size: 5
   prefab: {fileID: 2318991450609453006, guid: 4304b289e9966db478ec0bebd2d7e5ef, type: 3}
   latTarget: 53.244886
   lonTarget: 5.860585
   moveSpeed: 1
-  size: 5
 --- !u!1 &2058067599
 GameObject:
   m_ObjectHideFlags: 0
