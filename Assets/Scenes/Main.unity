@@ -950,7 +950,10 @@ MonoBehaviour:
   playerSpeed: 30
   playerOffRoadSpeed: 2.5
   jumpForce: 10
+  PlayerPrefab: {fileID: 6049499231298542653, guid: 8e902702d47486d4294553890c1d10be,
+    type: 3}
   playerCollider: {fileID: 0}
+  PlayerAnimator: {fileID: 0}
   horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
   jumpInput: {fileID: 11400000, guid: 46da008daaac56f4c97ac21469b742b5, type: 2}
   routeFile: {fileID: 4900000, guid: 3653738e64b9fdb44a2b7a94ac1bfed4, type: 3}

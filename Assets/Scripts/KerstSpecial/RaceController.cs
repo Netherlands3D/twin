@@ -39,9 +39,11 @@ namespace Netherlands3D.Twin
         private Layer maaiveld;
         private Layer gebouwen;
 
+        public GameObject PlayerPrefab;
         private GameObject player;
         private Rigidbody playerRigidBody;
         public Collider playerCollider;
+        public Animator PlayerAnimator;
         private OpticalRaycaster raycaster;
 
         private Vector2[] zoneCenters = new Vector2[4] {
@@ -141,7 +143,7 @@ namespace Netherlands3D.Twin
 
         private void InitPlayer()
         {
-            player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            player = GameObject.Instantiate(PlayerPrefab);
             playerRigidBody = player.AddComponent<Rigidbody>();
             WorldTransform wt = player.AddComponent<WorldTransform>();
             GameObjectWorldTransformShifter shifter = player.AddComponent<GameObjectWorldTransformShifter>();
@@ -154,6 +156,8 @@ namespace Netherlands3D.Twin
             Physics.gravity = Vector3.down * 30;
             playerCurrentSpeed = playerSpeed;
             playerCollider = player.GetComponent<Collider>();
+            PlayerAnimator = player.GetComponentInChildren<Animator>();
+            PlayerAnimator.SetBool("OnIce", true);
         }
 
         private bool hasJumped = false;
@@ -165,6 +169,7 @@ namespace Netherlands3D.Twin
             {
                 playerRigidBody.AddForce(Vector3.up * playerRigidBody.mass * jumpForce, ForceMode.Impulse);
                 hasJumped = true;
+                PlayerAnimator.SetTrigger("Jump");
                 jumpTimer = jumpInterval;
             }
         }
@@ -226,6 +231,7 @@ namespace Netherlands3D.Twin
                 if(isGrounded)
                 {
                     hasJumped = false;
+                    PlayerAnimator.ResetTrigger("Jump");
                 }
 
                 if (playerRigidBody.position.y < floorPoint.y - 0.1f)
@@ -252,12 +258,20 @@ namespace Netherlands3D.Twin
             CheckNextCoordinate();
             jumpTimer -= Time.deltaTime;
             playerCurrentSpeed = Mathf.Lerp(playerCurrentSpeed, playerTargetSpeed, Time.deltaTime);
-            if(currentMeshCollider != null)
+            PlayerAnimator.SetFloat("Speed", (playerMoveVector.z));
+            if (currentMeshCollider != null)
             {
-                if (currentMeshCollider.gameObject.layer == 4) //is on ice
-                    playerTargetSpeed = playerSpeed;
-                else
-                    playerTargetSpeed = playerOffRoadSpeed;
+                if (currentMeshCollider.gameObject.layer == 4)//is on ice
+                { 
+                playerTargetSpeed = playerSpeed;
+                PlayerAnimator.SetBool("OnIce", true);
+            }
+            else
+            {
+                playerTargetSpeed = playerOffRoadSpeed;
+                PlayerAnimator.SetBool("OnIce", false);
+            }
+              
             }
 
 
