@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: 4430a3f455af547468929ad0490d4690, type: 3}
   name: Bas
+  description: De allround kampioen. Bas maakt geen drama, maar schaatst als een
+    geoliede machine. Stabiel, betrouwbaar en altijd op de juiste plek.
