@@ -272,6 +272,10 @@ namespace Netherlands3D.Twin
         private void Update()
         {
             
+            if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
+                Finish();
+            }
+            
             if (routeCoords == null || !isReadyForStart)
                 return;
 
@@ -357,6 +361,7 @@ namespace Netherlands3D.Twin
 
         private float rotationDelta = 0;
         public UnityEvent Finished;
+        [SerializeField] private bool IsDebugOn = false;
 
         public void MoveHorizontally(float amount)
         {
