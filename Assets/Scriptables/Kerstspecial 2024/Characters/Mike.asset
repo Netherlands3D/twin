@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: 513d7eb29a7f257499731db11762e4ac, type: 3}
   name: Mike
+  description: De turbo-kampioen. Mike is constant in de boost-modus. Hij heeft geen
+    remmen, geen strategie, alleen pure snelheid en ijs-kracht.

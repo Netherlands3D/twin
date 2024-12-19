@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 21300000, guid: 08b2af5717e41e943b89d64b6080ade1, type: 3}
   name: W.A. van Buren
+  description: Als een ware undercover koning van de Elfsteden is hij niet bang voor
+    kou, wind of uitdaging. Met zijn leiderschap en vastberadenheid weet WA van Buren
+    altijd de juiste koers te vinden.  De Elfsteden wachten op jou!

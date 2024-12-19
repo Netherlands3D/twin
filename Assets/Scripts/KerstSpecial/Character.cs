@@ -11,5 +11,6 @@ namespace Netherlands3D.Twin
         public Sprite avatar;
 
         public string name;
+        public string description;
     }
 }
