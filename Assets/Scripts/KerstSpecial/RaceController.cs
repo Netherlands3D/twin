@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin
         private Vector3 playerMoveVector = Vector3.zero;
         private Quaternion cameraStartRotation;
         private bool isReadyForStart = false;
-        private bool isReadyToMove = false;
+        public static bool isReadyToMove = false;
         private Layer maaiveld;
         private Layer gebouwen;
 

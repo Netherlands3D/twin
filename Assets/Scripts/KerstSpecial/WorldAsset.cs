@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin
         // Update is called once per frame
         public virtual void Update()
         {
-            if (!grounded)
+            if (!grounded && RaceController.isReadyToMove)
             {
                 RaycastHit[] hits = new RaycastHit[8];
                 Physics.RaycastNonAlloc(startCoord.ToUnity() + Vector3.up * 100, Vector3.down, hits, 1000);
