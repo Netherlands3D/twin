@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin
@@ -128,10 +129,14 @@ namespace Netherlands3D.Twin
         {
             if(col == player.GetComponent<Collider>())
             {
-                //finish
-                Debug.Log("Player finished");
-                scoreBoard.SetActive(true);
+                Finish();
             }
+        }
+
+        [ContextMenu("Finish now")]
+        public void Finish()
+        {
+            Finished.Invoke();
         }
 
         private void InitPlayer()
@@ -318,6 +323,8 @@ namespace Netherlands3D.Twin
         }
 
         private float rotationDelta = 0;
+        public UnityEvent Finished;
+
         public void MoveHorizontally(float amount)
         {
             rotationDelta -= amount * Time.deltaTime * rotationSpeed;            
