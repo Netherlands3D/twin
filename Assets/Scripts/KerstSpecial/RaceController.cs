@@ -412,11 +412,46 @@ namespace Netherlands3D.Twin
 
                             for (int i = 0; i < originalMesh.subMeshCount; i++)
                             {
-                                // Extract the submesh
+                                // Get triangles for the current submesh
+                                int[] triangles = originalMesh.GetTriangles(i);
+
+                                // Estimate maximum vertex count (worst case: each triangle uses unique vertices)
+                                int maxVertices = triangles.Length;
+                                Vector3[] originalVertices = originalMesh.vertices;
+
+                                // Arrays for new vertices and remapped triangle indices
+                                Vector3[] subMeshVertices = new Vector3[maxVertices];
+                                int[] newTriangles = new int[triangles.Length];
+
+                                // Mapping from original vertex index to new submesh index
+                                int[] vertexMapping = new int[originalVertices.Length];
+                                for (int v = 0; v < vertexMapping.Length; v++) vertexMapping[v] = -1;
+
+                                int currentVertexIndex = 0;
+                                for (int j = 0; j < triangles.Length; j++)
+                                {
+                                    int originalVertexIndex = triangles[j];
+
+                                    // If this vertex has not been mapped, add it
+                                    if (vertexMapping[originalVertexIndex] == -1)
+                                    {
+                                        vertexMapping[originalVertexIndex] = currentVertexIndex;
+                                        subMeshVertices[currentVertexIndex] = originalVertices[originalVertexIndex];
+                                        currentVertexIndex++;
+                                    }
+
+                                    // Remap triangle index to the new vertex index
+                                    newTriangles[j] = vertexMapping[originalVertexIndex];
+                                }
+
+                                // Resize the subMeshVertices array to fit only the used vertices
+                                Array.Resize(ref subMeshVertices, currentVertexIndex);
+
+                                // Create a new mesh for the submesh
                                 Mesh subMesh = new Mesh
                                 {
-                                    vertices = originalMesh.vertices,
-                                    triangles = originalMesh.GetTriangles(i)
+                                    vertices = subMeshVertices,
+                                    triangles = newTriangles
                                 };
                                 subMesh.RecalculateNormals();
 
