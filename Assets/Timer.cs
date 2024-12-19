@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,7 @@ namespace Netherlands3D.Twin
         private float initialTime;
 
         public UnityEvent<float> Tick;
+        public UnityEvent<string> TickAsTimeString;
         public UnityEvent<float> Finished;
         private float finishedTime;
 
@@ -16,6 +18,12 @@ namespace Netherlands3D.Twin
         {
             get => finishedTime;
             set => finishedTime = value;
+        }
+
+        public void Reset()
+        {
+            TickAsTimeString.Invoke("00:00");
+            Tick.Invoke(0f);
         }
 
         public void StartTimer()
@@ -28,7 +36,13 @@ namespace Netherlands3D.Twin
         {
             if (!TimeIsRunning) return;
 
-            Tick.Invoke(Time.timeSinceLevelLoad - initialTime);
+            var seconds = Time.timeSinceLevelLoad - initialTime;
+            Tick.Invoke(seconds);
+            
+            TimeSpan time = TimeSpan.FromSeconds(seconds);
+
+            string str = time.ToString(@"mm\:ss");
+            TickAsTimeString.Invoke(str);
         }
 
         public void Finish()

@@ -2230,6 +2230,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1310694631}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1326706463 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 370515047255719538, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1349027655 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2144003548613182812, guid: 9963fec33e379324db2affcb3f83332f,
@@ -2527,6 +2539,21 @@ MonoBehaviour:
   Tick:
     m_PersistentCalls:
       m_Calls: []
+  TickAsTimeString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1326706463}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   Finished:
     m_PersistentCalls:
       m_Calls: []
@@ -2820,22 +2847,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19782922
+      value: 0.19768639
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08258657
+      value: 0.08249614
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013612
+      value: 0.9014449
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.37628585
+      value: -0.3761803
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -10634,7 +10661,7 @@ PrefabInstance:
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1789287229}
+      objectReference: {fileID: 1789287230}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -10653,7 +10680,7 @@ PrefabInstance:
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartAnimation
+      value: StartTimer
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -10663,7 +10690,7 @@ PrefabInstance:
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.RaceController, Assembly-CSharp
+      value: Netherlands3D.Twin.Timer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
