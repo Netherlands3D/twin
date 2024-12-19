@@ -15,11 +15,14 @@ namespace Netherlands3D.Twin
         public GameObject prefab;
         private bool grounded = false;
 
+        protected Vector3 startPosition;
+        protected Coordinate startCoord;
+
         // Start is called before the first frame update
-        void Start()
+        public virtual void Start()
         {
-            Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, lat, lon, 0);
-            Vector3 unityCoord = nextCoord.ToUnity();
+            startCoord = new Coordinate(CoordinateSystem.WGS84, lat, lon, 0);
+            Vector3 unityCoord = startCoord.ToUnity();
             transform.position = unityCoord;
 
             prefab = Instantiate(prefab);
@@ -31,18 +34,28 @@ namespace Netherlands3D.Twin
         }
 
         // Update is called once per frame
-        void Update()
+        public virtual void Update()
         {
             if (!grounded)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(Vector3.up * 100, Vector3.down * 1000, out hit))
+                RaycastHit[] hits = new RaycastHit[8];
+                Physics.RaycastNonAlloc(startCoord.ToUnity() + Vector3.up * 100, Vector3.down, hits, 1000);
+                for(int i = 0; i < hits.Length; i++) 
                 {
-                    Vector3 pos = prefab.transform.position;
-                    prefab.transform.position = new Vector3(pos.x, hit.point.y, pos.z);
+                    if (hits[i].collider is not MeshCollider)
+                        continue;
+                    
+                    Vector3 pos = startCoord.ToUnity();
+                    startPosition = new Vector3(pos.x, hits[i].point.y, pos.z);                       
+                    OnSetStartPosition(startPosition);
                     grounded = true;
                 }
             }
+        }
+
+        protected virtual void OnSetStartPosition(Vector3 startPosition)
+        {
+            prefab.transform.position = startPosition;
         }
     }
 }

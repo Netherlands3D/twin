@@ -57,6 +57,7 @@ namespace Netherlands3D.Twin
         private GameObject currentCheckpoint;
         private GameObject[] zoneObjects = new GameObject[4];
         private GameObject finishObject;
+        public GameObject scoreBoard;
      
         private void Start()
         {
@@ -115,6 +116,7 @@ namespace Netherlands3D.Twin
             {
                 //finish
                 Debug.Log("Player finished");
+                scoreBoard.SetActive(true);
             }
         }
 
