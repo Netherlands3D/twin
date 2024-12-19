@@ -117,6 +117,13 @@
           };
           if (isMobileDevice) {
               config.devicePixelRatio = 2;
+
+              screen.orientation
+                  .lock("landscape")
+                  .then(() => { console.log(`Locked to "landscape"`); })
+                  .catch((error) => { console.error(`${error}`); });
+
+              container.requestFullscreen().catch((error) => { console.error(`${error}`); });
           }
 
           mobileWarning.classList.remove('--visible');
