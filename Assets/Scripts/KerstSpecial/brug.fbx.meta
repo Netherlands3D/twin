@@ -3,7 +3,22 @@ guid: be0c0efc75c6b2549990327087cf6ba6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: asfalt
+    second: {fileID: 2100000, guid: 596ce8864cb4e964880100123f670fc9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brug
+    second: {fileID: 2100000, guid: f4e57427db823b04f906483b08493d58, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: groien
+    second: {fileID: 2100000, guid: e357b451a827b8e4a8616a7c02ae22ab, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
