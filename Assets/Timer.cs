@@ -6,6 +6,7 @@ namespace Netherlands3D.Twin
 {
     public class Timer : MonoBehaviour
     {
+        public float PenaltyTimePerBooth = 5;
         public bool TimeIsRunning = false; 
         private float initialTime;
 
@@ -49,6 +50,14 @@ namespace Netherlands3D.Twin
         {
             TimeIsRunning = false;
             FinishedTime = Time.timeSinceLevelLoad - initialTime;
+
+            float penaltyTime = 0;
+            StempelTrigger[] triggers = FindObjectsOfType<StempelTrigger>();
+            foreach (StempelTrigger trigger in triggers)
+                if (!trigger.IsCollected)
+                    penaltyTime += PenaltyTimePerBooth;
+            FinishedTime += penaltyTime;
+
             Finished.Invoke(FinishedTime);
         }
     }
