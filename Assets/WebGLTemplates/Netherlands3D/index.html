@@ -32,13 +32,10 @@
               </div>
               <div class="paragraph-heading">Let op!</div>
               <p>
-                  Netherlands 3D is nog niet geoptimaliseerd voor weergave op mobiele apparaten. Hierdoor kan het
-                  voorkomen dat de applicatie niet optimaal functioneert en kan daardoor voor onverwachte resultaten
-                  zorgen.
+                  De kerst special is niet beschikbaar op iOS, kom gerust terug op Android of de PC!
               </p>
               <footer class="dialog--footer">
                   <a href="#" onclick="history.back()" class="button" id="nl3d-back-button">Terug</a>
-                  <a href="#" onclick="LoadUnity()" class="button">Ok, begrepen</a>
               </footer>                  
           </div>
 
@@ -157,11 +154,14 @@
       // and default/override low DPI mode on mobile browsers by setting devicePixelRatio to 1.
       if (isMobileDevice) {
           container.className = "unity-mobile";
-          mobileWarning.classList.add('--visible');
           document.querySelector('#nl3d-back-button').classList.toggle('--visible', history.length > 2);
+      }
+
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent) === false) {
+          mobileWarning.classList.add('--visible');
       } else {
           LoadUnity();
       }
-    </script>
+      </script>
   </body>
 </html>
