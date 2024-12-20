@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin
 
     public class ScoreboardManager : MonoBehaviour
     {
+        public int scoreListCount = 5;
         [SerializeField] private Timer timer;
         public TMP_InputField nameInputField;
         public TMP_Text scoreField;
@@ -26,28 +27,8 @@ namespace Netherlands3D.Twin
         void OnEnable()
         {
             scoreField.text = ((int)timer.FinishedTime).ToString();
-
-            //    string jsonString = @"
-            //{
-            //    '-OEF3fUzzUUxvOvezzb8': {
-            //        'name': 'asdf',
-            //        'score': 193896
-            //    },
-            //    '-OEF3i7L26Ds34mI5QbW': {
-            //        'name': 'sdfg',
-            //        'score': 193896
-            //    },
-            //    '-OEF4BzJLA-ZEz8D0U9Y': {
-            //        'name': 'asdf',
-            //        'score': 772335
-            //    },
-            //    '-OEF4BzJLA-ZEz8D0U9Y': {
-            //        'name': 'asdf',
-            //        'score': 772335
-            //    }
-            //}";
-
-            //    DisplayScores(jsonString);
+            nameInputField.gameObject.SetActive(true);
+            submitButton.gameObject.SetActive(true);
         }
 
         void Start()
@@ -63,12 +44,15 @@ namespace Netherlands3D.Twin
         public string SanitizeInput(string input)
         {
             return Regex.Replace(input, @"[^a-zA-Z0-9\s]", ""); // Allows only letters, numbers, and spaces
-        }
+        }        
 
         void SubmitScore()
         {
             string userName = nameInputField.text;
             string userScore = scoreField.text;
+
+            nameInputField.gameObject.SetActive(false);
+            submitButton.gameObject.SetActive(false);
 
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userScore))
             {
@@ -146,10 +130,12 @@ namespace Netherlands3D.Twin
                     scoreList.TryAdd(kvp.Key, score);
                 }
             }
-            var sortedDictionary = scoreList.OrderBy(kvp => kvp.Value.score).ToList();
+            var sortedDictionary = scoreList.OrderBy(kvp => kvp.Value.score).Take(scoreListCount).ToList();
+            int rank = 1;
             foreach (var kvp in sortedDictionary)
-            {
-                scoreboardText.text += $"Name: {kvp.Value.name}, Score: {kvp.Value.score.ToString()} \n";
+            {                
+                scoreboardText.text += $"Rank: {rank}, Name: {kvp.Value.name}, Score: {kvp.Value.score.ToString()} \n";
+                rank++;
             }
         }
 
