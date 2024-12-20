@@ -67,6 +67,8 @@ namespace Netherlands3D.Twin
         private GameObject[] zoneObjects = new GameObject[4];
         private GameObject finishObject;
         public GameObject scoreBoard;
+
+        public List<AudioClip> skateSounds = new List<AudioClip>();
      
         private void Start()
         {
@@ -292,7 +294,11 @@ namespace Netherlands3D.Twin
                 playerSpeed = 200;
                 playerOffRoadSpeed = 200;
             }
-            
+            if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
+            {
+                player.GetComponent<AudioSource>().enabled = false;
+            }
+
             if (routeCoords == null || !isReadyForStart)
                 return;
 
