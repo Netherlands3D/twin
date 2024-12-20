@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Netherlands3D.Twin
 {
@@ -51,12 +52,17 @@ namespace Netherlands3D.Twin
 
         void Start()
         {
-
+            nameInputField.characterLimit = 10;
         // Attach button click listener
             submitButton.onClick.AddListener(() => SubmitScore());
 
             // Listen for updates to the scoreboard
             ListenForScoreboardUpdates();
+        }
+
+        public string SanitizeInput(string input)
+        {
+            return Regex.Replace(input, @"[^a-zA-Z0-9\s]", ""); // Allows only letters, numbers, and spaces
         }
 
         void SubmitScore()
@@ -69,6 +75,8 @@ namespace Netherlands3D.Twin
                 Debug.LogError("Name or score cannot be empty!");
                 return;
             }
+
+            SanitizeInput(userName);
 
             // Create a score entry
             var scoreData = new Dictionary<string, object>
