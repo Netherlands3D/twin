@@ -17867,22 +17867,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19786951
+      value: 0.19790752
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08261209
+      value: 0.08263618
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013376
+      value: 0.90131533
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.3763156
+      value: -0.37634373
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -23967,6 +23967,11 @@ PrefabInstance:
       value: Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime.Scripts.Cameras.Compass,
         Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5661168153764096839, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: moveValue
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5716014825301277601, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -26270,6 +26275,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 5661168153764096839, guid: 9963fec33e379324db2affcb3f83332f, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5460884897478157278, guid: 9963fec33e379324db2affcb3f83332f, type: 3}
     - {fileID: 3246588944541065497, guid: 9963fec33e379324db2affcb3f83332f, type: 3}
