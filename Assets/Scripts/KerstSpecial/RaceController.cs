@@ -199,7 +199,7 @@ namespace Netherlands3D.Twin
             foreach (StempelTrigger trigger in triggers)
                 trigger.IsCollected = false;
 
-            stempelkaart stempelkaart = FindObjectOfType<stempelkaart>();
+            stempelkaart stempelkaart = FindObjectOfType<stempelkaart>(true);
             stempelkaart.SetStampEnabled(1, false);
             stempelkaart.SetStampEnabled(2, false);
             stempelkaart.SetStampEnabled(3, false);
@@ -310,15 +310,15 @@ namespace Netherlands3D.Twin
 
         private void Update()
         {
-            
+
             //if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
             //    Finish();
             //}
-            //if(IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
-            //{
-            //    playerSpeed = 200;
-            //    playerOffRoadSpeed = 200;
-            //}
+            if (IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
+            {
+                playerSpeed = 200;
+                playerOffRoadSpeed = 200;
+            }
             //if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
             //{
             //    player.GetComponent<AudioSource>().enabled = false;
