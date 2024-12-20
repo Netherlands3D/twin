@@ -16221,16 +16221,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: kerstAssets
       objectReference: {fileID: 0}
-    - target: {fileID: 8802069593722899621, guid: ebce7bf1c9549ba42b5ecb2d008acc85,
-        type: 3}
-      propertyPath: lat
-      value: 53.216622
-      objectReference: {fileID: 0}
-    - target: {fileID: 8802069593722899621, guid: ebce7bf1c9549ba42b5ecb2d008acc85,
-        type: 3}
-      propertyPath: lon
-      value: 5.838433
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16252,22 +16242,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19772282
+      value: 0.20579392
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08251918
+      value: 0.08769552
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9014236
+      value: 0.89664197
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.37620714
+      value: -0.38208845
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}

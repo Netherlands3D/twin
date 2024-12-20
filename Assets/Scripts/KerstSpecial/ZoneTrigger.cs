@@ -11,17 +11,17 @@ namespace Netherlands3D.Twin
         public event ZoneHandler OnExit;
         public event ZoneHandler OnStay;
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             OnEnter?.Invoke(other, this);
         }
 
-        private void OnTriggerExit(Collider other)
+        protected virtual void OnTriggerExit(Collider other)
         {
             OnExit?.Invoke(other, this);
         }
 
-        private void OnTriggerStay(Collider other)
+        protected virtual void OnTriggerStay(Collider other)
         {
             OnStay?.Invoke(other, this);
         }
