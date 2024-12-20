@@ -301,18 +301,18 @@ namespace Netherlands3D.Twin
         private void Update()
         {
             
-            if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
-                Finish();
-            }
-            if(IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
-            {
-                playerSpeed = 200;
-                playerOffRoadSpeed = 200;
-            }
-            if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
-            {
-                player.GetComponent<AudioSource>().enabled = false;
-            }
+            //if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
+            //    Finish();
+            //}
+            //if(IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
+            //{
+            //    playerSpeed = 200;
+            //    playerOffRoadSpeed = 200;
+            //}
+            //if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
+            //{
+            //    player.GetComponent<AudioSource>().enabled = false;
+            //}
 
             if (routeCoords == null || !isReadyForStart)
                 return;
