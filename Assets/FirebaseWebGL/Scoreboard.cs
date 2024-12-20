@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Netherlands3D.Twin
 {
@@ -51,12 +52,17 @@ namespace Netherlands3D.Twin
 
         void Start()
         {
-
+            nameInputField.characterLimit = 10;
         // Attach button click listener
             submitButton.onClick.AddListener(() => SubmitScore());
 
             // Listen for updates to the scoreboard
             ListenForScoreboardUpdates();
+        }
+
+        public string SanitizeInput(string input)
+        {
+            return Regex.Replace(input, @"[^a-zA-Z0-9\s]", ""); // Allows only letters, numbers, and spaces
         }
 
         void SubmitScore()
@@ -70,6 +76,8 @@ namespace Netherlands3D.Twin
                 return;
             }
 
+            SanitizeInput(userName);
+
             // Create a score entry
             var scoreData = new Dictionary<string, object>
             {
@@ -79,7 +87,7 @@ namespace Netherlands3D.Twin
 
             // Push the score to Firebase
             string json = JsonConvert.SerializeObject(scoreData);
-            Debug.Log("JSON DATA BEING PUSHED: " + json);
+            //Debug.Log("JSON DATA BEING PUSHED: " + json);
             FirebaseDatabase.PostJSON(ScoreboardPath + "/" + FirebaseInit.userId, json, gameObject.name, nameof(OnScoreSubmitSuccess), nameof(OnScoreSubmitFailure));
         }
 
@@ -100,7 +108,7 @@ namespace Netherlands3D.Twin
 
         public void OnScoreboardUpdated(string json)
         {
-            Debug.Log("Scoreboard updated: " + json);
+            //Debug.Log("Scoreboard updated: " + json);
 
             // Deserialize JSON and update the UI
             DisplayScores(json);
@@ -118,9 +126,9 @@ namespace Netherlands3D.Twin
             scoreboardText.text = "";
             foreach (KeyValuePair<string, object> kvp in scores)
             {
-                Debug.Log("checking entry:" + kvp.Key);
-                bool isDic = kvp.Value is Dictionary<string, object>;
-                Debug.Log(kvp.Value + " isdiciton: " + isDic);
+                //Debug.Log("checking entry:" + kvp.Key);
+                //bool isDic = kvp.Value is Dictionary<string, object>;
+                //Debug.Log(kvp.Value + " isdiciton: " + isDic);
 
                 if (kvp.Value is JObject jObject)
                 {

@@ -199,8 +199,8 @@ namespace Netherlands3D.Twin
 
         private void OnEnter(Collider other, ZoneTrigger zone)
         {
-            Debug.Log("ONENTER" + other);
-            Debug.Log("zonenaam" + zone);
+            //Debug.Log("ONENTER" + other);
+            //Debug.Log("zonenaam" + zone);
             if (zone.name == "zonetrigger2")
             {
                 WeatherAnimator.SetBool("Storm", true);
@@ -209,7 +209,7 @@ namespace Netherlands3D.Twin
 
         private void OnExit(Collider other, ZoneTrigger zone)
         {
-            Debug.Log("ONEXIT:" + other);
+            //Debug.Log("ONEXIT:" + other);
             if (zone.name == "zonetrigger2")
             {
                 WeatherAnimator.SetBool("Storm", false);
@@ -286,6 +286,11 @@ namespace Netherlands3D.Twin
             
             if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
                 Finish();
+            }
+            if(IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
+            {
+                playerSpeed = 200;
+                playerOffRoadSpeed = 200;
             }
             
             if (routeCoords == null || !isReadyForStart)
@@ -512,7 +517,7 @@ namespace Netherlands3D.Twin
                         {
                             t.gameObject.AddComponent<MeshCollider>();
                             t.gameObject.isStatic = true;
-                            Debug.Log("ADDED MESHCOLLIDER FOR" + tileName);
+                            //Debug.Log("ADDED MESHCOLLIDER FOR" + tileName);
                         }
 
                     }
