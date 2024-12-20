@@ -106,8 +106,8 @@ namespace Netherlands3D.Twin
         public void TeleportCameraToStart()
         {
             Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
-            if (currentCheckpoint == null)
-                currentCheckpoint = SpawnCheckpoint(nextCoord);
+            //if (currentCheckpoint == null)
+            //    currentCheckpoint = SpawnCheckpoint(nextCoord);
             unityStartTarget = nextCoord.ToUnity();
             unityStartTarget.y = camHeight;
             freeCam.transform.position = unityStartTarget;
@@ -123,8 +123,8 @@ namespace Netherlands3D.Twin
             while(!isReadyForStart)
             {
                 Coordinate nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[0].x, routeCoords[0].y, 0);
-                if (currentCheckpoint == null)
-                    currentCheckpoint = SpawnCheckpoint(nextCoord);
+                //if (currentCheckpoint == null)
+                //    currentCheckpoint = SpawnCheckpoint(nextCoord);
                 unityStartTarget = nextCoord.ToUnity();
                 unityStartTarget.y = camHeight;
                 cameraStartRotation = GetCameraStartRotation();
@@ -385,7 +385,7 @@ namespace Netherlands3D.Twin
                 currentCoordinateIndex++;
                 nextCoord = new Coordinate(CoordinateSystem.WGS84, routeCoords[currentCoordinateIndex].x, routeCoords[currentCoordinateIndex].y, 0);
                 //Debug.Log("WE HIT THE COORD" + currentCoordinateIndex);
-                currentCheckpoint = SpawnCheckpoint(nextCoord);
+                //currentCheckpoint = SpawnCheckpoint(nextCoord);
             }
         }
 
@@ -620,18 +620,18 @@ namespace Netherlands3D.Twin
             finishObject.transform.position = unityCoord;
         }
 
-        private GameObject SpawnCheckpoint(Coordinate coord)
-        {            
-            GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            routeObject.transform.localScale = Vector3.one * checkPointScale;
-            WorldTransform wt = routeObject.AddComponent<WorldTransform>();
-            GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
-            wt.SetShifter(shifter);
-            Vector3 unityCoord = coord.ToUnity();
-            unityCoord.y = 3;
-            routeObject.transform.position = unityCoord;
-            return routeObject;
-        }
+        //private GameObject SpawnCheckpoint(Coordinate coord)
+        //{            
+        //    GameObject routeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //    routeObject.transform.localScale = Vector3.one * checkPointScale;
+        //    WorldTransform wt = routeObject.AddComponent<WorldTransform>();
+        //    GameObjectWorldTransformShifter shifter = routeObject.AddComponent<GameObjectWorldTransformShifter>();
+        //    wt.SetShifter(shifter);
+        //    Vector3 unityCoord = coord.ToUnity();
+        //    unityCoord.y = 3;
+        //    routeObject.transform.position = unityCoord;
+        //    return routeObject;
+        //}
 
         //List<Vector2> ExtractLatLon(string gpxContent)
         //{
