@@ -69,6 +69,7 @@ namespace Netherlands3D.Twin
         public GameObject scoreBoard;
 
         public List<AudioClip> skateSounds = new List<AudioClip>();
+        private AudioSource skateSource;
      
         private void Start()
         {
@@ -176,6 +177,20 @@ namespace Netherlands3D.Twin
             WeatherAnimator = this.GetComponent<Animator>();
             WeatherAnimator.SetBool("Storm", false);
             PlayerAnimator.SetBool("OnIce", true);
+
+            skateSource = player.AddComponent<AudioSource>();
+            skateSource.loop = false;
+        }
+
+        void PlayRandomClip()
+        {
+            int index = UnityEngine.Random.Range(0, skateSounds.Count - 1);
+            if (skateSource.isPlaying)
+                return;
+
+            skateSource.clip = skateSounds[index];
+            skateSource.pitch = Mathf.Clamp(playerMoveVector.magnitude / 1000f, 1, 5);
+            skateSource.Play();
         }
 
         public void ResetPlayer()
@@ -320,6 +335,10 @@ namespace Netherlands3D.Twin
                 }              
             }
 
+            if(playerMoveVector.magnitude / 1000 > 0.5f)
+            {
+                PlayRandomClip();
+            }
 
             camYawDelta = Mathf.Lerp(camYawDelta, rotationDelta, Time.deltaTime * rotationSpeed);
             if (Mathf.Abs(camYawDelta) > 0.02f)
