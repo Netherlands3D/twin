@@ -23,9 +23,12 @@ namespace Netherlands3D.Twin
         protected Vector3 startPosition;
         protected Coordinate startCoord;
 
+        private RaceController raceController;
+
         // Start is called before the first frame update
         public virtual void Start()
         {
+            raceController = FindObjectOfType<RaceController>();
             startCoord = new Coordinate(CoordinateSystem.WGS84, lat, lon, 0);
             Vector3 unityCoord = startCoord.ToUnity();
             transform.position = unityCoord;
@@ -51,6 +54,13 @@ namespace Netherlands3D.Twin
         // Update is called once per frame
         public virtual void Update()
         {
+            float dist = Vector3.Distance(raceController.playerCollider.gameObject.transform.position, prefab.transform.position);
+            if (prefab.gameObject.activeSelf && dist > 250)
+                prefab.gameObject.SetActive(false);
+            else if(!prefab.gameObject.activeSelf && dist  < 250)
+                prefab.gameObject.SetActive(true);
+
+
             if (!grounded && RaceController.isReadyToMove)
             {
                 if (overrideHeight)
