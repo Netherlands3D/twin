@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin
                     scoreList.TryAdd(kvp.Key, score);
                 }
             }
-            var sortedDictionary = scoreList.OrderByDescending(kvp => kvp.Value.score).ToList();
+            var sortedDictionary = scoreList.OrderBy(kvp => kvp.Value.score).ToList();
             foreach (var kvp in sortedDictionary)
             {
                 scoreboardText.text += $"Name: {kvp.Value.name}, Score: {kvp.Value.score.ToString()} \n";
