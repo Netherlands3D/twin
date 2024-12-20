@@ -157,7 +157,7 @@
           document.querySelector('#nl3d-back-button').classList.toggle('--visible', history.length > 2);
       }
 
-      if (/iPhone|iPad|iPod/i.test(navigator.userAgent) === false) {
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
           mobileWarning.classList.add('--visible');
       } else {
           LoadUnity();
