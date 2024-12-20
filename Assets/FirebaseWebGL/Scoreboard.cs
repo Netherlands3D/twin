@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin
 
             // Push the score to Firebase
             string json = JsonConvert.SerializeObject(scoreData);
-            Debug.Log("JSON DATA BEING PUSHED: " + json);
+            //Debug.Log("JSON DATA BEING PUSHED: " + json);
             FirebaseDatabase.PostJSON(ScoreboardPath + "/" + FirebaseInit.userId, json, gameObject.name, nameof(OnScoreSubmitSuccess), nameof(OnScoreSubmitFailure));
         }
 
@@ -108,7 +108,7 @@ namespace Netherlands3D.Twin
 
         public void OnScoreboardUpdated(string json)
         {
-            Debug.Log("Scoreboard updated: " + json);
+            //Debug.Log("Scoreboard updated: " + json);
 
             // Deserialize JSON and update the UI
             DisplayScores(json);
@@ -126,9 +126,9 @@ namespace Netherlands3D.Twin
             scoreboardText.text = "";
             foreach (KeyValuePair<string, object> kvp in scores)
             {
-                Debug.Log("checking entry:" + kvp.Key);
-                bool isDic = kvp.Value is Dictionary<string, object>;
-                Debug.Log(kvp.Value + " isdiciton: " + isDic);
+                //Debug.Log("checking entry:" + kvp.Key);
+                //bool isDic = kvp.Value is Dictionary<string, object>;
+                //Debug.Log(kvp.Value + " isdiciton: " + isDic);
 
                 if (kvp.Value is JObject jObject)
                 {

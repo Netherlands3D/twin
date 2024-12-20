@@ -71,7 +71,8 @@ namespace Netherlands3D.Twin
             if (moveToTarget)
             {
                 Vector3 forward = target - prefab.transform.position;
-                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * moveSpeed);
+                Quaternion rot = Quaternion.LookRotation(forward) * Quaternion.Euler(XRotation, 0, 0);
+                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, rot, Time.deltaTime * moveSpeed);
                 float dist = Vector3.Distance(prefab.transform.position, target);
                 if (dist > 1f)
                 {
@@ -84,7 +85,8 @@ namespace Netherlands3D.Twin
             else
             {
                 Vector3 forward = startPosition - prefab.transform.position;
-                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * moveSpeed);
+                Quaternion rot = Quaternion.LookRotation(forward) * Quaternion.Euler(XRotation, 0, 0);
+                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, rot, Time.deltaTime * moveSpeed);
                 float dist = Vector3.Distance(prefab.transform.position, startPosition);
                 if (dist > 1f)
                 {
