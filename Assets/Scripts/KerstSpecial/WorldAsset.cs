@@ -55,9 +55,9 @@ namespace Netherlands3D.Twin
         public virtual void Update()
         {
             float dist = Vector3.Distance(raceController.playerCollider.gameObject.transform.position, prefab.transform.position);
-            if (prefab.gameObject.activeSelf && dist > 250)
+            if (prefab.gameObject.activeSelf && dist > 150)
                 prefab.gameObject.SetActive(false);
-            else if(!prefab.gameObject.activeSelf && dist  < 250)
+            else if(!prefab.gameObject.activeSelf && dist  < 150)
                 prefab.gameObject.SetActive(true);
 
 
