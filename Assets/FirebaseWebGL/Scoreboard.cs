@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin
 
     public class ScoreboardManager : MonoBehaviour
     {
-        public int scoreListCount = 5;
+        public int scoreListCount = 10;
         [SerializeField] private Timer timer;
         public TMP_InputField nameInputField;
         public TMP_Text scoreField;
@@ -134,7 +134,7 @@ namespace Netherlands3D.Twin
             int rank = 1;
             foreach (var kvp in sortedDictionary)
             {                
-                scoreboardText.text += $"Rank: {rank}, Name: {kvp.Value.name}, Score: {kvp.Value.score.ToString()} \n";
+                scoreboardText.text += $"Rank: {rank}, Name: {kvp.Value.name}, Time: {kvp.Value.score.ToString()} \n";
                 rank++;
             }
         }

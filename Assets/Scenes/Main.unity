@@ -17867,22 +17867,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.1978738
+      value: 0.19786951
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08261481
+      value: 0.08261209
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013351
+      value: 0.9013376
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.37631875
+      value: -0.3763156
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -26327,6 +26327,11 @@ PrefabInstance:
       propertyPath: timer
       value: 
       objectReference: {fileID: 1789287230}
+    - target: {fileID: 3120498152161033060, guid: 01013eea923dc25409c77c014d359058,
+        type: 3}
+      propertyPath: scoreListCount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7038513169639814724, guid: 01013eea923dc25409c77c014d359058,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
