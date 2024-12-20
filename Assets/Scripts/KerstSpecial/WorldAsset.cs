@@ -34,6 +34,11 @@ namespace Netherlands3D.Twin
             WorldTransform wt = prefab.AddComponent<WorldTransform>();
             GameObjectWorldTransformShifter shifter = prefab.AddComponent<GameObjectWorldTransformShifter>();
             wt.SetShifter(shifter);
+            wt.onPostShift.AddListener((a, b) => {
+                Vector3 pos = startCoord.ToUnity();
+                startPosition = new Vector3(pos.x, height, pos.z);
+                OnSetStartPosition(startPosition);
+            });
             prefab.transform.position = transform.position;
             prefab.transform.rotation = Quaternion.Euler(XRotation, YRotation, 0);
             prefab.transform.localScale = Vector3.one * size;
