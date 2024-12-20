@@ -16242,22 +16242,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.20579392
+      value: 0.19774967
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08769552
+      value: 0.08253619
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.89664197
+      value: 0.90140784
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.38208845
+      value: -0.37622702
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -24072,7 +24072,12 @@ PrefabInstance:
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -24091,6 +24096,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 767208783}
@@ -24104,6 +24114,11 @@ PrefabInstance:
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 1786610096}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1789287230}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -24136,6 +24151,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartTimer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Netherlands3D.Twin.RaceController, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -24151,6 +24176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.Timer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -24162,6 +24192,11 @@ PrefabInstance:
     - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: getReady.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: startGame.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8692171481544253241, guid: 9963fec33e379324db2affcb3f83332f,
