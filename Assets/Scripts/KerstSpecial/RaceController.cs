@@ -195,6 +195,16 @@ namespace Netherlands3D.Twin
 
         public void ResetPlayer()
         {
+            StempelTrigger[] triggers = FindObjectsOfType<StempelTrigger>();
+            foreach (StempelTrigger trigger in triggers)
+                trigger.IsCollected = false;
+
+            stempelkaart stempelkaart = FindObjectOfType<stempelkaart>();
+            stempelkaart.SetStampEnabled(1, false);
+            stempelkaart.SetStampEnabled(2, false);
+            stempelkaart.SetStampEnabled(3, false);
+            stempelkaart.SetStampMarkerEnabled(false);
+
             isReadyToMove = false;
             isReadyForStart = false;
             StartAnimation();
