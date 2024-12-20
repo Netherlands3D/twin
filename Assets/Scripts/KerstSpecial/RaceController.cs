@@ -314,12 +314,12 @@ namespace Netherlands3D.Twin
             //if (IsDebugOn && Keyboard.current[Key.End].wasPressedThisFrame) {
             //    Finish();
             //}
-            if (IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
-            {
-                playerSpeed = 200;
-                playerOffRoadSpeed = 200;
-            }
-            //if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
+            //if (IsDebugOn && Keyboard.current[Key.Home].wasPressedThisFrame)
+            //{
+            //    playerSpeed = 200;
+            //    playerOffRoadSpeed = 200;
+            //}
+            ////if (IsDebugOn && Keyboard.current[Key.PageUp].wasPressedThisFrame)
             //{
             //    player.GetComponent<AudioSource>().enabled = false;
             //}
