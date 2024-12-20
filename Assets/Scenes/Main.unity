@@ -11634,6 +11634,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1786610098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8682305536979075434, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786610096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0a827f570df226499c050398477eab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1789287229
 GameObject:
   m_ObjectHideFlags: 0
@@ -21269,6 +21281,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2967639384774196494, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2967639384774196494, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1786610098}
+    - target: {fileID: 2967639384774196494, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Show
+      objectReference: {fileID: 0}
+    - target: {fileID: 2967639384774196494, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.StartScreen, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2984712510486319644, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}

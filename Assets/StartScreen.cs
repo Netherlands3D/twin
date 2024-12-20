@@ -59,6 +59,7 @@ namespace Netherlands3D.Twin
         private void TriggerGetReady()
         {
             gameObject.SetActive(false);
+            canvasGroup.alpha = 1f;
             getReady.Invoke();
         }
 
