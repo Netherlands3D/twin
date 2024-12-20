@@ -16578,14 +16578,15 @@ MonoBehaviour:
   lon: 5.860161
   YRotation: 0
   XRotation: 0
-  size: 5
+  size: 2
   height: 0
   overrideHeight: 0
   addMeshCollider: 0
   prefab: {fileID: 5491162952271703092, guid: 1429e8d8da2aeeb4c81ba8f64ad33de6, type: 3}
   latTarget: 53.244886
   lonTarget: 5.860585
-  moveSpeed: 1
+  moveSpeed: 6
+  colliderScale: 0.75
 --- !u!1001 &2116737462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16897,22 +16898,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.19779159
+      value: 0.197678
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08256273
+      value: 0.08249082
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9013833
+      value: 0.9014498
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.376258
+      value: -0.37617403
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}

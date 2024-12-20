@@ -37,6 +37,7 @@ namespace Netherlands3D.Twin
             prefab.transform.position = transform.position;
             prefab.transform.rotation = Quaternion.Euler(XRotation, YRotation, 0);
             prefab.transform.localScale = Vector3.one * size;
+            prefab.transform.SetParent(transform, false);
 
             if(addMeshCollider)
                 prefab.AddComponent<MeshCollider>();

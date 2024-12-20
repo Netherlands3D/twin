@@ -12,14 +12,43 @@ namespace Netherlands3D.Twin
         private Vector3 target;
         private bool moveToTarget = false;
         public float moveSpeed = 1;
-        
-
+        public float colliderScale = 1;
+        private RaceController raceController;
+        public float SpeedPenalty = 0.15f;
         protected Coordinate targetCoord;
 
         public override void Start()
         {
             base.Start();
-            prefab.AddComponent<SphereCollider>();
+            raceController = FindObjectOfType<RaceController>();
+            prefab.AddComponent<SphereCollider>().radius = colliderScale;
+
+            GameObject triggerPenalty = new GameObject("penaltyTrigger");
+            ZoneTrigger zTrigger = triggerPenalty.AddComponent<ZoneTrigger>();
+            triggerPenalty.transform.SetParent(prefab.transform, false);
+            triggerPenalty.transform.localPosition = Vector3.zero;
+            SphereCollider trigger = triggerPenalty.AddComponent<SphereCollider>();
+            trigger.radius = colliderScale;
+            trigger.isTrigger = true;
+            zTrigger.OnStay += OnHitPlayer;
+            zTrigger.OnEnter += OnHitPlayerStart;
+
+        }
+
+        private void OnHitPlayerStart(Collider col, ZoneTrigger trigger)
+        {
+            if (col == raceController.playerCollider)
+            {
+                raceController.GivePenaltySpeedToPlayer(0);
+            }
+        }
+
+        private void OnHitPlayer(Collider col, ZoneTrigger trigger)
+        {
+            if (col == raceController.playerCollider)
+            {
+                raceController.GivePenaltySpeedToPlayer(SpeedPenalty);
+            }
         }
 
         protected override void OnSetStartPosition(Vector3 startPosition)
@@ -41,20 +70,26 @@ namespace Netherlands3D.Twin
             base.Update();
             if (moveToTarget)
             {
+                Vector3 forward = target - prefab.transform.position;
+                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * moveSpeed);
                 float dist = Vector3.Distance(prefab.transform.position, target);
                 if (dist > 1f)
                 {
-                    prefab.transform.position = Vector3.Slerp(prefab.transform.position, target, Time.deltaTime * moveSpeed);
+                    prefab.transform.position += forward.normalized * Time.deltaTime * moveSpeed;
+                    
                 }
                 else
                     moveToTarget = false;
             }
             else
             {
+                Vector3 forward = startPosition - prefab.transform.position;
+                prefab.transform.rotation = Quaternion.Slerp(prefab.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * moveSpeed);
                 float dist = Vector3.Distance(prefab.transform.position, startPosition);
                 if (dist > 1f)
                 {
-                    prefab.transform.position = Vector3.Slerp(prefab.transform.position, startPosition, Time.deltaTime * moveSpeed);
+                    prefab.transform.position += forward.normalized * Time.deltaTime * moveSpeed;
+                    
                 }
                 else
                     moveToTarget = true;
