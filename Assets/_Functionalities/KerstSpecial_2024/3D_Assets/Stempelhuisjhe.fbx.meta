@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 02 - Default
-    second: {fileID: 2100000, guid: 37883b4f6a6d19e4bb6d6742fd933e2b, type: 2}
+      name: 01 - Default
+    second: {fileID: 2100000, guid: 0d6852b2bdb95214ebb0c5ffd7db582c, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: hout
+    second: {fileID: 2800000, guid: 68126b4cf18588b46a7f6d72c8a8ef31, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

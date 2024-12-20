@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 02 - Default
-    second: {fileID: 2100000, guid: cc4d35c3684ccf141a88e7e9c41774c9, type: 2}
+      name: arch
+    second: {fileID: 2100000, guid: 7d20fbef07752ae44b8e7b476198ee6c, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: metaal
+    second: {fileID: 2800000, guid: 91a1fca44bfc3304382be4ad9d654eaa, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
