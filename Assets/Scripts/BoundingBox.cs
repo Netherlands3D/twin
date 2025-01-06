@@ -1,7 +1,7 @@
 using System;
 using Netherlands3D.Coordinates;
 
-namespace Netherlands3D.Twin.Wms
+namespace Netherlands3D.Twin
 {
     public class BoundingBox
     {

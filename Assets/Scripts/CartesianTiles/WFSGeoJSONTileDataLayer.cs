@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using System;
+using Netherlands3D.Coordinates;
+using KindMen.Uxios;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -14,6 +17,7 @@ namespace Netherlands3D.CartesianTiles
     /// </summary>
     public class WFSGeoJSONTileDataLayer : Layer
     {
+        private const string DefaultEpsgCoordinateSystem = "28992";
         private TileHandler tileHandler;
         private string wfsUrl = "";
         public string WfsUrl { 
@@ -74,7 +78,7 @@ namespace Netherlands3D.CartesianTiles
             Debug.LogError("No TileHandler found.", gameObject);
         }
 
-        public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
+        public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
             TileAction action = tileChange.action;
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -93,7 +97,6 @@ namespace Netherlands3D.CartesianTiles
                     break;
                 case TileAction.Remove:
                     wfsGeoJSONLayer.RemoveFeaturesOutOfView();
-
                     InteruptRunningProcesses(tileKey);
                     tiles.Remove(tileKey);
                     callback?.Invoke(tileChange);
@@ -126,10 +129,40 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
-        private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
+        private CoordinateSystem GetCoordinateSystem(string spatialReference)
         {
-            var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-            string url = WfsUrl.Replace("{0}", bboxValue);
+            string coordinateSystemAsString = DefaultEpsgCoordinateSystem;
+            var splitReferenceCode = spatialReference.Split(':');
+            for (int i = 0; i < splitReferenceCode.Length - 1; i++)
+                if (splitReferenceCode[i].ToLower() == "epsg")
+                {
+                    coordinateSystemAsString = splitReferenceCode[^1];
+                    break;
+                }
+
+            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+            return foundCoordinateSystem;
+        }
+
+        private BoundingBox DetermineBoundingBox(TileChange tileChange, CoordinateSystem system)
+        {
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);            
+
+            var boundingBox = new BoundingBox(bottomLeft, topRight);
+            boundingBox.Convert(system);
+
+            return boundingBox;
+        }
+
+        private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
+        {
+            var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
+            string spatialReference = queryParameters["srsname"];
+            CoordinateSystem system = GetCoordinateSystem(spatialReference);
+            var boundingBox = DetermineBoundingBox(tileChange, system);
+            //we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + ((int)system).ToString());
 
             var geoJsonRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = geoJsonRequest;
