@@ -129,11 +129,8 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
-        private BoundingBox DetermineBoundingBox(TileChange tileChange, string spatialReference, out string spatialReferenceCode)
+        private CoordinateSystem GetCoordinateSystem(string spatialReference, out string spatialReferenceCode)
         {
-            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
-            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
-
             string coordinateSystemAsString = DefaultEpsgCoordinateSystem;
             var splitReferenceCode = spatialReference.Split(':');
             for (int i = 0; i < splitReferenceCode.Length - 1; i++)
@@ -145,9 +142,16 @@ namespace Netherlands3D.CartesianTiles
 
             spatialReferenceCode = coordinateSystemAsString;
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+            return foundCoordinateSystem;
+        }
+
+        private BoundingBox DetermineBoundingBox(TileChange tileChange, CoordinateSystem system)
+        {
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);            
 
             var boundingBox = new BoundingBox(bottomLeft, topRight);
-            boundingBox.Convert(foundCoordinateSystem);
+            boundingBox.Convert(system);
 
             return boundingBox;
         }
@@ -156,7 +160,8 @@ namespace Netherlands3D.CartesianTiles
         {
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
             string spatialReference = queryParameters["srsname"];
-            var boundingBox = DetermineBoundingBox(tileChange, spatialReference, out string code);
+            CoordinateSystem system = GetCoordinateSystem(spatialReference, out string code);
+            var boundingBox = DetermineBoundingBox(tileChange, system);
             string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + code);
 
             //var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
