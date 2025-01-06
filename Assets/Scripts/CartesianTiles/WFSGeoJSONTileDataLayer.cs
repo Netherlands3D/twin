@@ -129,7 +129,7 @@ namespace Netherlands3D.CartesianTiles
             return tile;
         }
 
-        private CoordinateSystem GetCoordinateSystem(string spatialReference, out string spatialReferenceCode)
+        private CoordinateSystem GetCoordinateSystem(string spatialReference)
         {
             string coordinateSystemAsString = DefaultEpsgCoordinateSystem;
             var splitReferenceCode = spatialReference.Split(':');
@@ -140,7 +140,6 @@ namespace Netherlands3D.CartesianTiles
                     break;
                 }
 
-            spatialReferenceCode = coordinateSystemAsString;
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
             return foundCoordinateSystem;
         }
@@ -160,12 +159,10 @@ namespace Netherlands3D.CartesianTiles
         {
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
             string spatialReference = queryParameters["srsname"];
-            CoordinateSystem system = GetCoordinateSystem(spatialReference, out string code);
+            CoordinateSystem system = GetCoordinateSystem(spatialReference);
             var boundingBox = DetermineBoundingBox(tileChange, system);
-            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + code);
-
-            //var bboxValue = $"{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-            //string url = WfsUrl.Replace("{0}", bboxValue);
+            //we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + ((int)system).ToString());
 
             var geoJsonRequest = UnityWebRequest.Get(url);
             tile.runningWebRequest = geoJsonRequest;
