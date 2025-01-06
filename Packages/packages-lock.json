@@ -422,15 +422,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.9.0",
+      "version": "file:C:/Development/twin_3dtiles",
       "depth": 0,
-      "source": "registry",
+      "source": "local",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.3.0",
         "eu.netherlands3d.gltfast": "5.0.3",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",
