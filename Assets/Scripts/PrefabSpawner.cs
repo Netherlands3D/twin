@@ -40,6 +40,7 @@ namespace Netherlands3D.Twin
                     listenerMapping.Remove(functionalityAndlayer);
                 }
             }
+            listenerMapping.Clear();
         }
 
         private void OnValidate() {
