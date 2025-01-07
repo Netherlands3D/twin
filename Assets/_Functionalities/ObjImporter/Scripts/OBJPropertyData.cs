@@ -27,25 +27,33 @@ namespace Netherlands3D.Twin.Layers.Properties
                 OnObjUriChanged.Invoke(value);
             }
         }
-        
+
         [JsonIgnore]
         public Uri MtlFile
         {
             get => mtlFile;
             set
             {
-                mtlFile= value;
+                mtlFile = value;
                 OnMtlUriChanged.Invoke(value);
             }
         }
 
         public IEnumerable<LayerAsset> GetAssets()
         {
-            return new List<LayerAsset>()
+            var existingAssets = new List<LayerAsset>();
+
+            if (objFile != null)
             {
-                new (this, objFile != null ? objFile : null),
-                new (this, mtlFile != null ? mtlFile : null)
-            };
+                existingAssets.Add(new(this, objFile));
+            }
+
+            if (mtlFile != null)
+            {
+                existingAssets.Add(new(this, mtlFile));
+            }
+
+            return existingAssets;
         }
     }
 }
