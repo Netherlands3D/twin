@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Netherlands3D.Twin.Functionalities;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin
 {
@@ -17,11 +18,27 @@ namespace Netherlands3D.Twin
 
         [Header("Add/remove GameObjects based on functionality active state")]
         [SerializeField] private FunctionalityAndPrefab[] functionalityAndLayers;
-
-        private void Awake() {
+        private Dictionary<FunctionalityAndPrefab, UnityAction> listenerMapping = new Dictionary<FunctionalityAndPrefab, UnityAction>();
+        
+        private void OnEnable() 
+        {
             foreach (var functionalityAndlayer in functionalityAndLayers)
             {
-                functionalityAndlayer.functionality.OnEnable.AddListener(() => Spawn(functionalityAndlayer.spawnedObject));
+                UnityAction action = () => Spawn(functionalityAndlayer.spawnedObject);
+                listenerMapping[functionalityAndlayer] = action;
+                functionalityAndlayer.functionality.OnEnable.AddListener(action);
+            }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var functionalityAndlayer in functionalityAndLayers)
+            {
+                if (listenerMapping.TryGetValue(functionalityAndlayer, out var action))
+                {
+                    functionalityAndlayer.functionality.OnEnable.RemoveListener(action);
+                    listenerMapping.Remove(functionalityAndlayer);
+                }
             }
         }
 
