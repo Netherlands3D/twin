@@ -22,11 +22,12 @@ namespace Netherlands3D.Twin.Layers
         private Vector3 previousScale;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
+        public bool TransformIsSetFromProperty { get; private set; } = false;
 
         protected void Awake()
         {
             transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
-
+         
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
         }
@@ -100,7 +101,8 @@ namespace Netherlands3D.Twin.Layers
                 UpdatePosition(this.transformPropertyData.Position);
                 UpdateRotation(this.transformPropertyData.EulerRotation);
                 UpdateScale(this.transformPropertyData.LocalScale);
-
+                TransformIsSetFromProperty = true;
+                
                 transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
                 transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
                 transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
