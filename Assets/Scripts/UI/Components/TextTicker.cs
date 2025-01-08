@@ -11,8 +11,8 @@ namespace Netherlands3D.Twin
         public float scrollSpeed = 200f; // Speed of scrolling
 
         private RectTransform parentRect;
-        public float childWidth;
-        public float parentWidth;
+        private float childWidth;
+        private float parentWidth;
         private Coroutine scrollingCoroutine;
 
         void Awake()
