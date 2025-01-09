@@ -157,7 +157,7 @@ namespace Netherlands3D.Coordinates
                 //    return Points[2];
                 //}
                 //return 0;
-                return PointsLength > 2 ? y : 0;
+                return PointsLength > 2 ? z : 0;
             }
             set
             {
@@ -166,7 +166,7 @@ namespace Netherlands3D.Coordinates
                 //    Points[2] = value;
                 //}
                 if (PointsLength > 2)
-                    y = value;
+                    z = value;
             }
         }
 
