@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 
 namespace Netherlands3D.Coordinates
 {
-	[Serializable]
+    [Serializable]
     public struct Coordinate
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace Netherlands3D.Coordinates
         [SerializeField]
         private int coordinateSystem;
         public int CoordinateSystem => coordinateSystem;
-        
+
         /// <summary>
         /// Array representing all points for this coordinate.
         ///
@@ -53,27 +53,49 @@ namespace Netherlands3D.Coordinates
         public double extraLongitudeRotation;
         [HideInInspector]
         public double extraLattitudeRotation;
-        public double[] Points;
-        
+
+        //[Obsolete("deprecated convert to x y z")]
+        //public double[] Points;
+        public double x;
+        public double y;
+        public double z;
+        public int PointsLength;
+
         private CoordinateSystemOperation converter;
 
 #if NEWTONSOFT
         [JsonIgnore]
 #endif
-        public double easting { 
-            get {
-                if (converter==null)
-                {
-                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
-                }
-                return Points[converter.EastingIndex()]; 
-            }
-            set {
+        public double easting
+        {
+            get
+            {
                 if (converter == null)
                 {
                     converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
                 }
-                Points[converter.EastingIndex()] = value; 
+                //return Points[converter.EastingIndex()]; 
+                switch (converter.EastingIndex())
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    default: return x;
+                }
+            }
+            set
+            {
+                if (converter == null)
+                {
+                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
+                }
+                //Points[converter.EastingIndex()] = value; 
+                switch (converter.EastingIndex())
+                {
+                    case 0: x = value; break;
+                    case 1: y = value; break;
+                    case 2: z = value; break;
+                }
             }
         }
 #if NEWTONSOFT
@@ -81,18 +103,35 @@ namespace Netherlands3D.Coordinates
 #endif
         public double northing
         {
-            get {
+            get
+            {
                 if (converter == null)
                 {
                     converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
                 }
-                return Points[converter.NorthingIndex()]; }
-            set {
+                //return Points[converter.NorthingIndex()]; 
+                switch (converter.NorthingIndex())
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    default: return x;
+                }
+            }
+            set
+            {
                 if (converter == null)
                 {
                     converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
                 }
-                Points[converter.NorthingIndex()] = value; }
+                //Points[converter.NorthingIndex()] = value; 
+                switch (converter.NorthingIndex())
+                {
+                    case 0: x = value; break;
+                    case 1: y = value; break;
+                    case 2: z = value; break;
+                }
+            }
         }
 #if NEWTONSOFT
         [JsonIgnore]
@@ -101,48 +140,143 @@ namespace Netherlands3D.Coordinates
         {
             get
             {
-                if (Points.Length>2)
-                {
-                    return Points[2];
-                }
-                return 0;
+                //if (Points.Length > 2)
+                //{
+                //    return Points[2];
+                //}
+                //return 0;
+                return PointsLength > 2 ? y : 0;
             }
             set
             {
-                if (Points.Length > 2)
-                {
-                    Points[2]=value;
-                }
-                
+                //if (Points.Length > 2)
+                //{
+                //    Points[2] = value;
+                //}
+                if (PointsLength > 2)
+                    y = value;
             }
         }
 
+        [Obsolete("deprecated convert to x y z")]
         public Coordinate(CoordinateSystem coordinateSystem, params double[] points)
         {
             converter = null;
             this.coordinateSystem = (int)coordinateSystem;
-            Points = points;
+            //Points = points;
+            x = points[0];
+            y = points.Length > 1 ? points[1] : 0;
+            z = points.Length > 2 ? points[2] : 0;
+            PointsLength = points.Length;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
-        
+
+        public Coordinate(CoordinateSystem coordinateSystem, double x, double y)
+        {
+            converter = null;
+            this.coordinateSystem = (int)coordinateSystem;
+            //Points = points;
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+            PointsLength = 2;
+            extraLongitudeRotation = 0;
+            extraLattitudeRotation = 0;
+        }
+
+        public Coordinate(CoordinateSystem coordinateSystem, double x, double y, double z)
+        {
+            converter = null;
+            this.coordinateSystem = (int)coordinateSystem;
+            //Points = points;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            PointsLength = 3;
+            extraLongitudeRotation = 0;
+            extraLattitudeRotation = 0;
+        }
+
 #if NEWTONSOFT
         [JsonConstructor]
 #endif
+        [Obsolete("deprecated convert to x y z")]
         public Coordinate(int coordinateSystem, double[] Points, double extraLongitudeRotation, double extraLatitudeRotation)
         {
             converter = null;
             this.coordinateSystem = coordinateSystem;
-            this.Points = Points;
+            //this.Points = Points;
+            x = Points[0];
+            y = Points.Length > 1 ? Points[1] : 0;
+            z = Points.Length > 2 ? Points[2] : 0;
+            PointsLength = Points.Length;
             this.extraLongitudeRotation = extraLongitudeRotation;
             this.extraLattitudeRotation = extraLatitudeRotation;
         }
-        
+
+        public Coordinate(int coordinateSystem, double x, double y, double extraLongitudeRotation, double extraLatitudeRotation)
+        {
+            converter = null;
+            this.coordinateSystem = coordinateSystem;
+            //this.Points = Points;
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+            PointsLength = 2;
+            this.extraLongitudeRotation = extraLongitudeRotation;
+            this.extraLattitudeRotation = extraLatitudeRotation;
+        }
+
+        public Coordinate(int coordinateSystem, double x, double y, double z, double extraLongitudeRotation, double extraLatitudeRotation)
+        {
+            converter = null;
+            this.coordinateSystem = coordinateSystem;
+            //this.Points = Points;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            PointsLength = 3;
+            this.extraLongitudeRotation = extraLongitudeRotation;
+            this.extraLattitudeRotation = extraLatitudeRotation;
+        }
+
+        [Obsolete("deprecated convert to x y z")]
         public Coordinate(int coordinateSystem, params double[] points)
         {
             converter = null;
             this.coordinateSystem = coordinateSystem;
-            Points = points;
+            //Points = points;
+            x = points[0];
+            y = points.Length > 1 ? points[1] : 0;
+            z = points.Length > 2 ? points[2] : 0;
+            PointsLength = points.Length;
+            extraLongitudeRotation = 0;
+            extraLattitudeRotation = 0;
+        }
+
+        public Coordinate(int coordinateSystem, double x, double y)
+        {
+            converter = null;
+            this.coordinateSystem = coordinateSystem;
+            //Points = points;
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+            PointsLength = 2;
+            extraLongitudeRotation = 0;
+            extraLattitudeRotation = 0;
+        }
+
+        public Coordinate(int coordinateSystem, double x, double y, double z)
+        {
+            converter = null;
+            this.coordinateSystem = coordinateSystem;
+            //Points = points;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            PointsLength = 3;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -160,7 +294,10 @@ namespace Netherlands3D.Coordinates
                 //unity.y = deltaZ;
                 //unity.z = -deltaY;
 
-                Points = new double[3] { -unrotatedRelativePosition.x, -unrotatedRelativePosition.z, unrotatedRelativePosition.y };
+                //Points = new double[3] { -unrotatedRelativePosition.x, -unrotatedRelativePosition.z, unrotatedRelativePosition.y };
+                x = -unrotatedRelativePosition.x;
+                y = -unrotatedRelativePosition.z;
+                z = unrotatedRelativePosition.y;
             }
             else
             {
@@ -168,67 +305,166 @@ namespace Netherlands3D.Coordinates
                 //cartesian Y = unity Z;
                 //cartesian Z = unity Y;
 
-                Points = new double[3] { unrotatedRelativePosition.x, unrotatedRelativePosition.z, unrotatedRelativePosition.y };
+                //Points = new double[3] { unrotatedRelativePosition.x, unrotatedRelativePosition.z, unrotatedRelativePosition.y };
+                x = unrotatedRelativePosition.x;
+                y = unrotatedRelativePosition.z;
+                z = unrotatedRelativePosition.y;
             }
             coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
-            Points = (CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, Points)).Points;
+            //Points = (CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, Points)).Points;
+            Coordinate newCoordinate = CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(coordinateSystem, x, y, z);
+            x = newCoordinate.x;
+            y = newCoordinate.y;
+            z = newCoordinate.z;
+            PointsLength = 3;
         }
+
+        //public Coordinate(CoordinateSystem coordinateSystem)
+        //{
+        //    converter = CoordinateSystems.operators[coordinateSystem];
+        //    Points = new double[converter.AxisCount()];
+        //    this.coordinateSystem = (int)coordinateSystem;
+        //    extraLongitudeRotation = 0;
+        //    extraLattitudeRotation = 0;
+        //}
 
         public Coordinate(CoordinateSystem coordinateSystem)
         {
             converter = CoordinateSystems.operators[coordinateSystem];
-            Points = new double[converter.AxisCount()];
+            //Points = new double[converter.AxisCount()];
+            PointsLength = converter.AxisCount();
+            x = 0;
+            y = 0;
+            z = 0;
             this.coordinateSystem = (int)coordinateSystem;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
-        
+
+        //public static Coordinate operator +(Coordinate a, Coordinate b)
+        //{
+        //    int maxcoordinatecount = a.Points.Length;
+        //    int mincoordinatecount = b.Points.Length;
+        //    Coordinate longestCoordainte = a;
+        //    if (b.Points.Length > maxcoordinatecount)
+        //    {
+        //        maxcoordinatecount = b.Points.Length;
+        //        mincoordinatecount = a.Points.Length;
+        //        longestCoordainte = b;
+        //    }
+        //    double[] points = new double[maxcoordinatecount];
+        //    for (int i = 0; i < mincoordinatecount; i++)
+        //    {
+        //        points[i] = a.Points[i] + b.Points[i];
+        //    }
+        //    for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
+        //    {
+        //        points[i] = longestCoordainte.Points[i];
+        //    }
+        //    return new Coordinate(a.CoordinateSystem, points);
+        //}
+
         public static Coordinate operator +(Coordinate a, Coordinate b)
         {
-            int maxcoordinatecount = a.Points.Length;
-            int mincoordinatecount = b.Points.Length;
+            int maxcoordinatecount = a.PointsLength;
+            int mincoordinatecount = b.PointsLength;
             Coordinate longestCoordainte = a;
-            if (b.Points.Length>maxcoordinatecount)
+            if (b.PointsLength > maxcoordinatecount)
             {
-                maxcoordinatecount = b.Points.Length;
-                mincoordinatecount = a.Points.Length;
+                maxcoordinatecount = b.PointsLength;
+                mincoordinatecount = a.PointsLength;
                 longestCoordainte = b;
             }
-            double[] points = new double[maxcoordinatecount];
+            double newx = 0;
+            double newy = 0;
+            double newz = 0;
             for (int i = 0; i < mincoordinatecount; i++)
             {
-                points[i] = a.Points[i] + b.Points[i];
+                switch (i)
+                {
+                    case 0: newx = a.x + b.x; break;
+                    case 1: newx = a.y + b.y; break;
+                    case 2: newx = a.z + b.z; break;
+                }
             }
             for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
             {
-                points[i] = longestCoordainte.Points[i];
+                switch (i)
+                {
+                    case 0: newx = longestCoordainte.x; break;
+                    case 1: newx = longestCoordainte.y; break;
+                    case 2: newx = longestCoordainte.z; break;
+                }
             }
-            return new Coordinate(a.CoordinateSystem, points);
+            if (maxcoordinatecount > 2)
+                return new Coordinate(a.CoordinateSystem, newx, newy, newz);
+            else
+                return new Coordinate(a.coordinateSystem, newx, newy);
         }
-        
+
+        //public static Coordinate operator -(Coordinate a, Coordinate b)
+        //{
+        //    int maxcoordinatecount = a.Points.Length;
+        //    int mincoordinatecount = b.Points.Length;
+        //    Coordinate longestCoordainte = a;
+        //    double remainMultiplier = 1;
+        //    if (b.Points.Length > maxcoordinatecount)
+        //    {
+        //        maxcoordinatecount = b.Points.Length;
+        //        mincoordinatecount = a.Points.Length;
+        //        longestCoordainte = b;
+        //        remainMultiplier = -1;
+        //    }
+        //    double[] points = new double[maxcoordinatecount];
+        //    for (int i = 0; i < mincoordinatecount; i++)
+        //    {
+        //        points[i] = a.Points[i] - b.Points[i];
+        //    }
+        //    for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
+        //    {
+        //        points[i] = longestCoordainte.Points[i] * remainMultiplier;
+        //    }
+        //    return new Coordinate(a.CoordinateSystem, points);
+        //}
+
         public static Coordinate operator -(Coordinate a, Coordinate b)
         {
-            int maxcoordinatecount = a.Points.Length;
-            int mincoordinatecount = b.Points.Length;
+            int maxcoordinatecount = a.PointsLength;
+            int mincoordinatecount = b.PointsLength;
             Coordinate longestCoordainte = a;
             double remainMultiplier = 1;
-            if (b.Points.Length > maxcoordinatecount)
+            if (b.PointsLength > maxcoordinatecount)
             {
-                maxcoordinatecount = b.Points.Length;
-                mincoordinatecount = a.Points.Length;
+                maxcoordinatecount = b.PointsLength;
+                mincoordinatecount = a.PointsLength;
                 longestCoordainte = b;
                 remainMultiplier = -1;
             }
-            double[] points = new double[maxcoordinatecount];
+            double newx = 0;
+            double newy = 0;
+            double newz = 0;
             for (int i = 0; i < mincoordinatecount; i++)
             {
-                points[i] = a.Points[i] - b.Points[i];
+                switch (i)
+                {
+                    case 0: newx = a.x - b.x; break;
+                    case 1: newx = a.y - b.y; break;
+                    case 2: newx = a.z - b.z; break;
+                }
             }
             for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
             {
-                points[i] = longestCoordainte.Points[i]*remainMultiplier;
+                switch (i)
+                {
+                    case 0: newx = longestCoordainte.x * remainMultiplier; break;
+                    case 1: newx = longestCoordainte.y * remainMultiplier; break;
+                    case 2: newx = longestCoordainte.z * remainMultiplier; break;
+                }
             }
-            return new Coordinate(a.CoordinateSystem, points);
+            if (maxcoordinatecount > 2)
+                return new Coordinate(a.CoordinateSystem, newx, newy, newz);
+            else
+                return new Coordinate(a.coordinateSystem, newx, newy);
         }
 
         public bool IsValid()
@@ -248,8 +484,9 @@ namespace Netherlands3D.Coordinates
 
             if ((CoordinateSystem)this.CoordinateSystem == Coordinates.CoordinateSystem.Unity)
             {
-                Vector3 vector3 = new Vector3((float)Points[0], (float)Points[1], (float)Points[2]);
-                Coordinate coord= new Coordinate(vector3);
+                //Vector3 vector3 = new Vector3((float)Points[0], (float)Points[1], (float)Points[2]);
+                Vector3 vector3 = new Vector3((float)x, (float)y, (float)z);
+                Coordinate coord = new Coordinate(vector3);
                 return coord.Convert(targetCoordinateSystem);
             }
 
@@ -283,16 +520,16 @@ namespace Netherlands3D.Coordinates
             Vector3WGS orientationDifference = connectedConverter.Orientation() - myConverter.Orientation();
 
             Coordinate inConnectedCrs = this.Convert(CoordinateSystems.connectedCoordinateSystem);
-            
+
             Vector3WGS extraRotation = new Vector3WGS(inConnectedCrs.extraLongitudeRotation, inConnectedCrs.extraLattitudeRotation, 0);
-            
+
             orientationDifference += extraRotation;
 
             //calculate the exrtaRotation in the connected coordainteSystem at the UnityOrigin
             Coordinate pointAtOrigin = CoordinateSystems.CoordinateAtUnityOrigin.Convert(Coordinates.CoordinateSystem.WGS84_LatLon);
             Vector3WGS ExtraRotationAtOrigin = new Vector3WGS(-pointAtOrigin.extraLongitudeRotation, -pointAtOrigin.extraLattitudeRotation, 0);
-           // ExtraRotationAtOrigin = new Vector3WGS(0, -pointAtOrigin.extraLattitudeRotation, 0);
-           // orientationDifference += ExtraRotationAtOrigin;
+            // ExtraRotationAtOrigin = new Vector3WGS(0, -pointAtOrigin.extraLattitudeRotation, 0);
+            // orientationDifference += ExtraRotationAtOrigin;
 
 
             Quaternion rotationToEast = Quaternion.AngleAxis((float)orientationDifference.lon, Vector3.up);
@@ -305,24 +542,25 @@ namespace Netherlands3D.Coordinates
             Quaternion rotationToFlat = Quaternion.AngleAxis(-(float)orientationDifference.lat, Vector3.right);
 
             /// when we apply both rotations, we get the rotation required to get the coordinateSystem pointing Up and North at the Unity-Origin
-            Quaternion result = Quaternion.AngleAxis(-(float)ExtraRotationAtOrigin.lon, Vector3.up) *CoordinateSystems.connectedCRSToUnityUp* rotationToFlat * rotationToEast ;
+            Quaternion result = Quaternion.AngleAxis(-(float)ExtraRotationAtOrigin.lon, Vector3.up) * CoordinateSystems.connectedCRSToUnityUp * rotationToFlat * rotationToEast;
 
             return result;
 
         }
-        
+
         public Vector3 ToUnity()
         {
-            
+
             Coordinate connectionCoordinate = CoordinateSystems.CoordinateAtUnityOrigin;
             //transform current coordinate to connectioncoordinate;
 
             Coordinate inConnecedCRS = this.Convert(CoordinateSystems.connectedCoordinateSystem);
-            
+
             //get position relative to origin
             Coordinate difference = inConnecedCRS - connectionCoordinate;
-            Vector3 relativePosition = new Vector3((float)difference.Points[0], (float)difference.Points[1], (float)difference.Points[2]);
-            
+            //Vector3 relativePosition = new Vector3((float)difference.Points[0], (float)difference.Points[1], (float)difference.Points[2]);
+            Vector3 relativePosition = new Vector3((float)difference.x, (float)difference.y, (float)difference.z);
+
             //move axes to unity-equivlent axes
             if (CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem].GetCoordinateSystemType() == CoordinateSystemType.Geocentric)
             {
@@ -343,7 +581,7 @@ namespace Netherlands3D.Coordinates
             //apply rotation from connectedCoordinateSystem to Unity
 
             Vector3 rotatedRelativePosition = CoordinateSystems.connectedCRSToUnityUp * relativePosition;
-            
+
             return rotatedRelativePosition;
         }
     }
