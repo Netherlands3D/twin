@@ -61,11 +61,9 @@ namespace Netherlands3D.Coordinates
             {
                 double[] points = new double[PointsLength];
                 points[0] = x;
-                switch (PointsLength)
-                {
-                    case 2: points[1] = y; break;
-                    case 3: points[2] = z; break;
-                }
+                points[1] = y;
+                if (PointsLength > 2)
+                    points[2] = z;
                 return points;
             }
         }
@@ -324,13 +322,13 @@ namespace Netherlands3D.Coordinates
                 y = unrotatedRelativePosition.z;
                 z = unrotatedRelativePosition.y;
             }
-            coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
+            coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;          
+            PointsLength = 3;
             //Points = (CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, Points)).Points;
-            Coordinate newCoordinate = CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(coordinateSystem, x, y, z);
+            Coordinate newCoordinate = CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, x, y, z);            
             x = newCoordinate.x;
             y = newCoordinate.y;
             z = newCoordinate.z;
-            PointsLength = 3;
         }
 
         //public Coordinate(CoordinateSystem coordinateSystem)
@@ -397,8 +395,8 @@ namespace Netherlands3D.Coordinates
                 switch (i)
                 {
                     case 0: newx = a.x + b.x; break;
-                    case 1: newx = a.y + b.y; break;
-                    case 2: newx = a.z + b.z; break;
+                    case 1: newy = a.y + b.y; break;
+                    case 2: newz = a.z + b.z; break;
                 }
             }
             for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
@@ -406,8 +404,8 @@ namespace Netherlands3D.Coordinates
                 switch (i)
                 {
                     case 0: newx = longestCoordainte.x; break;
-                    case 1: newx = longestCoordainte.y; break;
-                    case 2: newx = longestCoordainte.z; break;
+                    case 1: newy = longestCoordainte.y; break;
+                    case 2: newz = longestCoordainte.z; break;
                 }
             }
             if (maxcoordinatecount > 2)
@@ -462,8 +460,8 @@ namespace Netherlands3D.Coordinates
                 switch (i)
                 {
                     case 0: newx = a.x - b.x; break;
-                    case 1: newx = a.y - b.y; break;
-                    case 2: newx = a.z - b.z; break;
+                    case 1: newy = a.y - b.y; break;
+                    case 2: newz = a.z - b.z; break;
                 }
             }
             for (int i = mincoordinatecount; i < maxcoordinatecount; i++)
@@ -471,8 +469,8 @@ namespace Netherlands3D.Coordinates
                 switch (i)
                 {
                     case 0: newx = longestCoordainte.x * remainMultiplier; break;
-                    case 1: newx = longestCoordainte.y * remainMultiplier; break;
-                    case 2: newx = longestCoordainte.z * remainMultiplier; break;
+                    case 1: newy = longestCoordainte.y * remainMultiplier; break;
+                    case 2: newz = longestCoordainte.z * remainMultiplier; break;
                 }
             }
             if (maxcoordinatecount > 2)
