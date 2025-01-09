@@ -7,7 +7,7 @@ namespace Netherlands3D.Coordinates
 {/// <summary>
 /// Operations for RDNAP
 /// </summary>
-    class RDNAP_Operations: CoordinateSystemOperation
+    class RDNAP_Operations : CoordinateSystemOperation
     {
         public override string Code()
         {
@@ -31,7 +31,7 @@ namespace Netherlands3D.Coordinates
             return CoordinateSystemGroup.RD;
         }
 
-        public static byte[] RDCorrectionX =null;
+        public static byte[] RDCorrectionX = null;
         public static byte[] RDCorrectionY = null;
         public static byte[] RDCorrectionZ = null;
 
@@ -59,14 +59,14 @@ namespace Netherlands3D.Coordinates
 
         static Double RDCorrection(double x, double y, string direction, byte[] bytes)
         {
-            if (direction !="Z")
+            if (direction != "Z")
             {
                 if (XYisValid(x, y) == false)
                 {
                     return 0;
                 }
             }
-            
+
             double value = 0;
 
             if (direction == "X")
@@ -139,11 +139,11 @@ namespace Netherlands3D.Coordinates
 
 
             //coordinates of basepoint in WGS84
-            
-            
 
-            double DeltaLon = 0.36 * (coordinate.Points[1] - refLon);
-            double DeltaLat = 0.36 * (coordinate.Points[0] - refLat);
+
+
+            double DeltaLon = 0.36 * (coordinate.y - refLon);
+            double DeltaLat = 0.36 * (coordinate.x - refLat);
 
             //calculate X
             double DeltaX = 0;
@@ -161,9 +161,9 @@ namespace Netherlands3D.Coordinates
             }
             double Y = DeltaY + refRDY;
 
-            if (RDCorrectionX==null)
+            if (RDCorrectionX == null)
             {
-                 RDCorrectionX = Resources.Load<TextAsset>("x2c").bytes;
+                RDCorrectionX = Resources.Load<TextAsset>("x2c").bytes;
                 RDCorrectionY = Resources.Load<TextAsset>("y2c").bytes;
                 RDCorrectionZ = Resources.Load<TextAsset>("nlgeo04").bytes;
             }
@@ -173,10 +173,10 @@ namespace Netherlands3D.Coordinates
             Y -= correctionY;
 
 
-            double h = coordinate.Points[2] - RDCorrection(coordinate.Points[1], coordinate.Points[0], "Z", RDCorrectionZ);
+            double h = coordinate.z - RDCorrection(coordinate.y, coordinate.x, "Z", RDCorrectionZ);
             Coordinate result = new Coordinate(CoordinateSystem.RDNAP, (float)X, (float)Y, (float)h);
-            result.extraLattitudeRotation = coordinate.Points[0]+coordinate.extraLattitudeRotation - refLat;
-            result.extraLongitudeRotation = coordinate.Points[1] + coordinate.extraLongitudeRotation - refLon;
+            result.extraLattitudeRotation = coordinate.x + coordinate.extraLattitudeRotation - refLat;
+            result.extraLongitudeRotation = coordinate.y + coordinate.extraLongitudeRotation - refLon;
             return result;
 
 
@@ -185,9 +185,9 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            double x = coordinate.Points[0];
-            double y = coordinate.Points[1];
-            double nap = coordinate.Points[2];
+            double x = coordinate.x;
+            double y = coordinate.y;
+            double nap = coordinate.z;
 
             if (RDCorrectionX == null)
             {
@@ -225,19 +225,19 @@ namespace Netherlands3D.Coordinates
             //output height missing
             Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, lat, lon, h);
 
-            result.extraLattitudeRotation = refLat - result.Points[0];
-            result.extraLongitudeRotation = refLon - result.Points[1];
+            result.extraLattitudeRotation = refLat - result.x;
+            result.extraLongitudeRotation = refLon - result.y;
             return result;
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)
         {
-            if (coordinate.Points.Length != 3)
+            if (coordinate.PointsLength != 3)
             {
                 return false;
             }
-            
-            return XYisValid(coordinate.Points[0], coordinate.Points[1]);
+
+            return XYisValid(coordinate.x, coordinate.y);
         }
 
         static bool XYisValid(double x, double y)

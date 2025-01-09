@@ -46,7 +46,7 @@ namespace Netherlands3D.Coordinates
             double longitude = Math.Atan2(ecefCoordinate.Y, ecefCoordinate.X);
             double primeVerticalRadius = semimajorAxis / (Math.Sqrt(1 - (Math.Pow(eccentricity, 2) * Math.Pow(Math.Sin(lattitude), 2))));
             double height = (p / Math.Cos(lattitude)) - primeVerticalRadius;
-            Vector3WGS result = new Vector3WGS( longitude * 180 / Math.PI, lattitude * 180 / Math.PI, height);
+            Vector3WGS result = new Vector3WGS(longitude * 180 / Math.PI, lattitude * 180 / Math.PI, height);
 
             return result;
         }
@@ -75,12 +75,12 @@ namespace Netherlands3D.Coordinates
             Vector3WGS wgslocation = ToWGS84(relativeCenter);
 
 
-             
+
 
 
             //rotate around the up-axis (=counterclockwise) with an angle of the lattitude
             //rotate -90 degrees around the up-axis, to make sure east is in the X-direction;
-            Quaternion rotationToEast = Quaternion.AngleAxis( (float)wgslocation.lon - 90, Vector3.up);
+            Quaternion rotationToEast = Quaternion.AngleAxis((float)wgslocation.lon - 90, Vector3.up);
             Quaternion rotationToFlat = Quaternion.AngleAxis(90 - (float)wgslocation.lat, Vector3.right);
             Quaternion result = rotationToFlat * rotationToEast;
 
@@ -88,7 +88,7 @@ namespace Netherlands3D.Coordinates
 
 
 
-           
+
         }
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
@@ -100,9 +100,9 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3Ecef = new Vector3ECEF(coordinate.Points[0], coordinate.Points[1], coordinate.Points[2]);
+            var vector3Ecef = new Vector3ECEF(coordinate.x, coordinate.y, coordinate.z);
 
-            if (targetCrs== (int)CoordinateSystem.Unity)
+            if (targetCrs == (int)CoordinateSystem.Unity)
             {
                 var result = coordinate.ToUnity();
                 var result2 = ToUnity(vector3Ecef);
@@ -112,18 +112,18 @@ namespace Netherlands3D.Coordinates
             switch (targetCrs)
             {
                 case (int)CoordinateSystem.Unity:
-                {
+                    {
                         var result = coordinate.ToUnity();
-                    var result2 = ToUnity(vector3Ecef);
-                    return new Coordinate(targetCrs, result.x, result.y, result.z);
-                }
+                        var result2 = ToUnity(vector3Ecef);
+                        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                    }
                 case (int)CoordinateSystem.WGS84_LatLonHeight:
-                {
+                    {
                         return coordinate.Convert(CoordinateSystem.WGS84_LatLonHeight);
-                    //var result = ToWGS84(vector3Ecef);
-                    //return new Coordinate(targetCrs, result.lon, result.lat, result.h);
-                }
-                   
+                        //var result = ToWGS84(vector3Ecef);
+                        //return new Coordinate(targetCrs, result.lon, result.lat, result.h);
+                    }
+
             }
             return coordinate.Convert((CoordinateSystem)targetCrs);
 
@@ -135,9 +135,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3ECEF ToVector3ECEF(this Coordinate coordinate)
         {
             return new Vector3ECEF(
-                coordinate.Points[0],
-                coordinate.Points[1],
-                coordinate.Points[2]
+                coordinate.x,
+                coordinate.y,
+                coordinate.z
             );
         }
     }

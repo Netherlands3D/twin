@@ -95,7 +95,7 @@ namespace Netherlands3D.Coordinates
             double Y = DeltaY + refRDY;
 
             double correctionX = EPSG7415.RDCorrection(X, Y, "X", EPSG7415.RDCorrectionX);
-            double correctionY = EPSG7415.RDCorrection(X,Y, "Y", EPSG7415.RDCorrectionY);
+            double correctionY = EPSG7415.RDCorrection(X, Y, "Y", EPSG7415.RDCorrectionY);
             X -= correctionX;
             Y -= correctionY;
 
@@ -116,7 +116,7 @@ namespace Netherlands3D.Coordinates
         {
             Vector3 output = ToUnity(coordinate.lon, coordinate.lat);
             double heightCorrection = EPSG7415.RDCorrection(coordinate.lon, coordinate.lat, "Z", EPSG7415.RDCorrectionZ);
-            output.y = (float)( coordinate.h - heightCorrection);
+            output.y = (float)(coordinate.h - heightCorrection);
 
             return output;
         }
@@ -160,12 +160,12 @@ namespace Netherlands3D.Coordinates
         // See: https://developers.auravant.com/en/blog/2022/09/09/post-3/#epsg4326-to-epsg3857
         private static Coordinate ToEPSG3857(Coordinate coordinate)
         {
-            var x = coordinate.Points[0];
-            var y = coordinate.Points[1];
+            var x = coordinate.x;
+            var y = coordinate.y;
             x = (x * 20037508.34d) / 180d;
             y = Math.Log(Math.Tan(((90d + y) * Math.PI) / 360d)) / (Math.PI / 180d);
             y = (y * 20037508.34d) / 180d;
-            
+
             return new Coordinate(CoordinateSystem.WGS84_PseudoMercator, x, y, 0);
         }
 
@@ -186,7 +186,7 @@ namespace Netherlands3D.Coordinates
 
         public static Vector3 RotationToUp(Vector3WGS position)
         {
-            Vector3 rotation = new Vector3((float)position.lon,-90,(float)-(90-position.lat));
+            Vector3 rotation = new Vector3((float)position.lon, -90, (float)-(90 - position.lat));
             Vector3ECEF positionECEF = ToECEF(position);
             Vector3 direction = new Vector3();
             direction.x = (float)-positionECEF.X;
@@ -208,25 +208,25 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3 = new Vector3WGS(coordinate.Points[0], coordinate.Points[1], coordinate.Points[2]);
+            var vector3 = new Vector3WGS(coordinate.x, coordinate.y, coordinate.z);
 
             switch (targetCrs)
             {
                 case (int)CoordinateSystem.Unity:
-                {
-                    var result = ToUnity(vector3);
-                    return new Coordinate(targetCrs, result.x, result.y, result.z);
-                }
+                    {
+                        var result = ToUnity(vector3);
+                        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                    }
                 case (int)CoordinateSystem.RDNAP:
-                {
-                    var result = ToEPSG7415(vector3.lon, vector3.lat);
-                    return new Coordinate(targetCrs, result.x, result.y, result.z);
-                }
+                    {
+                        var result = ToEPSG7415(vector3.lon, vector3.lat);
+                        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                    }
                 case (int)CoordinateSystem.ETRS89_ECEF:
-                {
-                    var result = ToECEF(vector3);
-                    return new Coordinate(targetCrs, result.X, result.Y, result.Z);
-                }
+                    {
+                        var result = ToECEF(vector3);
+                        return new Coordinate(targetCrs, result.X, result.Y, result.Z);
+                    }
                 case (int)CoordinateSystem.WGS84_PseudoMercator: return ToEPSG3857(coordinate);
             }
 
@@ -238,9 +238,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3WGS ToVector3WGS(this Coordinate coordinate)
         {
             return new Vector3WGS(
-                coordinate.Points[0],
-                coordinate.Points[1],
-                coordinate.Points[2]
+                coordinate.x,
+                coordinate.y,
+                coordinate.z
             );
         }
     }

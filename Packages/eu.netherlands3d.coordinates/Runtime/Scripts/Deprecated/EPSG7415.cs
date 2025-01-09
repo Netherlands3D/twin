@@ -44,7 +44,8 @@ namespace Netherlands3D.Coordinates
         public static float zeroGroundLevelY = 0;
 
         private static Vector2RD relativeCenterCoordinate;
-        public static Vector2RD relativeCenter {
+        public static Vector2RD relativeCenter
+        {
             get => relativeCenterCoordinate;
             set
             {
@@ -72,11 +73,11 @@ namespace Netherlands3D.Coordinates
             double refLon = 5.38720621;
             double refLat = 52.15517440;
 
-            double correctionX = RDCorrection(x,y,"X",RDCorrectionX);
+            double correctionX = RDCorrection(x, y, "X", RDCorrectionX);
             double correctionY = RDCorrection(x, y, "Y", RDCorrectionY);
 
-            double DeltaX = (x+correctionX - refRDX) * Math.Pow(10, -5);
-            double DeltaY = (y+correctionY - refRDY) * Math.Pow(10, -5);
+            double DeltaX = (x + correctionX - refRDX) * Math.Pow(10, -5);
+            double DeltaY = (y + correctionY - refRDY) * Math.Pow(10, -5);
 
             //calculate latitude
             double Deltalat = 0;
@@ -100,7 +101,7 @@ namespace Netherlands3D.Coordinates
             Vector3WGS output = new Vector3WGS();
             output.lon = lon;
             output.lat = lat;
-            output.h = nap+RDCorrection(lon, lat, "Z", RDCorrectionZ);
+            output.h = nap + RDCorrection(lon, lat, "Z", RDCorrectionZ);
             //output height missing
             return output;
         }
@@ -160,15 +161,15 @@ namespace Netherlands3D.Coordinates
             if (locationX < sizeX && locationY < sizeY)
             {
                 float bottomLeft = BitConverter.ToSingle(bytes, 56 + (dataNumber * 4));
-                float bottomRight = BitConverter.ToSingle(bytes, 56 + ((dataNumber+1) * 4));
-                float topLeft = BitConverter.ToSingle(bytes, 56 + ((dataNumber+ sizeX) * 4));
-                float topRight = BitConverter.ToSingle(bytes, 56 + ((dataNumber + sizeX+1) * 4));
+                float bottomRight = BitConverter.ToSingle(bytes, 56 + ((dataNumber + 1) * 4));
+                float topLeft = BitConverter.ToSingle(bytes, 56 + ((dataNumber + sizeX) * 4));
+                float topRight = BitConverter.ToSingle(bytes, 56 + ((dataNumber + sizeX + 1) * 4));
 
-                double YDistance = ((y - Ymin) % rowHeight)/rowHeight;
-                double YOrdinaryLeft = ((topLeft-bottomLeft)*YDistance)+bottomLeft;
-                double YOrdinaryRigth = ((topRight - bottomRight) * YDistance)+bottomRight;
+                double YDistance = ((y - Ymin) % rowHeight) / rowHeight;
+                double YOrdinaryLeft = ((topLeft - bottomLeft) * YDistance) + bottomLeft;
+                double YOrdinaryRigth = ((topRight - bottomRight) * YDistance) + bottomRight;
 
-                double XDistance = ((x - Xmin) % columnWidth)/columnWidth;
+                double XDistance = ((x - Xmin) % columnWidth) / columnWidth;
                 value += ((YOrdinaryRigth - YOrdinaryLeft) * XDistance) + YOrdinaryLeft;
             }
             else
@@ -207,7 +208,7 @@ namespace Netherlands3D.Coordinates
         /// <returns>Vector3 Unity-Coordinate</returns>
         public static Vector3 ToUnity(Vector2RD coordinate)
         {
-            return ToUnity(coordinate.x, coordinate.y,0);
+            return ToUnity(coordinate.x, coordinate.y, 0);
         }
 
         /// <summary>
@@ -217,7 +218,7 @@ namespace Netherlands3D.Coordinates
         /// <returns>Unity-Coordinate</returns>
         public static Vector3 ToUnity(Vector2 coordinate)
         {
-            return ToUnity(coordinate.x, coordinate.y,0);
+            return ToUnity(coordinate.x, coordinate.y, 0);
         }
 
         /// <summary>
@@ -246,20 +247,20 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3 = new Vector3RD(coordinate.Points[0], coordinate.Points[1], coordinate.Points[2]);
+            var vector3 = new Vector3RD(coordinate.x, coordinate.y, coordinate.z);
 
             switch (targetCrs)
             {
                 case (int)CoordinateSystem.Unity:
-                {
-                    var result = ToUnity(vector3);
-                    return new Coordinate(targetCrs, result.x, result.y, result.z);
-                }
+                    {
+                        var result = ToUnity(vector3);
+                        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                    }
                 case (int)CoordinateSystem.WGS84_LatLonHeight:
-                {
-                    var result = ToWGS84(vector3.x, vector3.y, vector3.z);
-                    return new Coordinate(targetCrs, result.lon, result.lat, result.h);
-                }
+                    {
+                        var result = ToWGS84(vector3.x, vector3.y, vector3.z);
+                        return new Coordinate(targetCrs, result.lon, result.lat, result.h);
+                    }
             }
 
             throw new ArgumentOutOfRangeException(
@@ -287,9 +288,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3RD ToVector3RD(this Coordinate coordinate)
         {
             return new Vector3RD(
-                coordinate.Points[0],
-                coordinate.Points[1],
-                coordinate.Points[2]
+                coordinate.x,
+                coordinate.y,
+                coordinate.z
             );
         }
     }
