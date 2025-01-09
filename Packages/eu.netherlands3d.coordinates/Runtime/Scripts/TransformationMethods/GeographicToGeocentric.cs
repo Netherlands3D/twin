@@ -9,22 +9,22 @@ namespace Netherlands3D.Coordinates
 
         internal static Coordinate Forward(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
-            double lattitude = coordinate.Points[0] * Math.PI / 180.0d;
-            double longitude = (coordinate.Points[1]+settings.primeMeridian) * Math.PI / 180.0d;
-            double ellipisoidalHeight = coordinate.Points[2];
+            double lattitude = coordinate.x * Math.PI / 180.0d;
+            double longitude = (coordinate.y + settings.primeMeridian) * Math.PI / 180.0d;
+            double ellipisoidalHeight = coordinate.z;
             //EPSG datset coordinate operation method code 9602)
             double primeVerticalRadius = settings.semiMajorAxis / (Math.Sqrt(1d - (Math.Pow(settings.eccentricity, 2) * Math.Pow(Math.Sin(lattitude), 2))));
             double X = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Cos(longitude);
             double Y = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Sin(longitude);
             double Z = ((1d - Math.Pow(settings.eccentricity, 2)) * primeVerticalRadius + ellipisoidalHeight) * Math.Sin(lattitude);
-            return new Coordinate(CoordinateSystem.Unity,X,Y,Z);
+            return new Coordinate(CoordinateSystem.Unity, X, Y, Z);
 
         }
         internal static Coordinate Reverse(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
-            double X = coordinate.Points[0];
-            double Y = coordinate.Points[1];
-            double Z = coordinate.Points[2];
+            double X = coordinate.x;
+            double Y = coordinate.y;
+            double Z = coordinate.z;
 
             double p = Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
             double q = Math.Atan2((Z * settings.semiMajorAxis), p * settings.b);
@@ -49,8 +49,8 @@ namespace Netherlands3D.Coordinates
             lattitude = iteratedLattitude;
             double longitude = Math.Atan2(Y, X);
             double height = (p / Math.Cos(lattitude)) - primeVerticalRadius;
-            return new Coordinate(CoordinateSystem.Unity, lattitude * 180 / Math.PI, (longitude * 180 / Math.PI)-settings.primeMeridian, height);
-            
+            return new Coordinate(CoordinateSystem.Unity, lattitude * 180 / Math.PI, (longitude * 180 / Math.PI) - settings.primeMeridian, height);
+
         }
     }
 }

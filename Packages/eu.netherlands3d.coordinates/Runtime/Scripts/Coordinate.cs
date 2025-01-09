@@ -54,8 +54,22 @@ namespace Netherlands3D.Coordinates
         [HideInInspector]
         public double extraLattitudeRotation;
 
-        //[Obsolete("deprecated convert to x y z")]
-        //public double[] Points;
+        [Obsolete("deprecated convert to x y z")]
+        public double[] Points
+        {
+            get
+            {
+                double[] points = new double[PointsLength];
+                points[0] = x;
+                switch (PointsLength)
+                {
+                    case 2: points[1] = y; break;
+                    case 3: points[2] = z; break;
+                }
+                return points;
+            }
+        }
+
         public double x;
         public double y;
         public double z;

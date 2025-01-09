@@ -80,7 +80,7 @@ namespace Netherlands3D.Coordinates
 
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS(coordinate.Points[1], coordinate.Points[0], 0);
+            return new Vector3WGS(coordinate.y, coordinate.x, 0);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)

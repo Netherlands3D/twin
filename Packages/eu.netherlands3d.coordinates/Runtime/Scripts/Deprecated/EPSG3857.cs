@@ -57,13 +57,13 @@ namespace Netherlands3D.Coordinates
         // See: https://developers.auravant.com/en/blog/2022/09/09/post-3/#epsg3857-to-epsg4326
         private static Coordinate ToEPSG4326(Coordinate coordinate)
         {
-            var x = coordinate.Points[0];
-            var y = coordinate.Points[1];
+            var x = coordinate.x;
+            var y = coordinate.y;
             x = (x * 180d) / 20037508.34d;
             y = (y * 180d) / 20037508.34d;
             y = (Math.Atan(Math.Exp(y * (Math.PI / 180d))) * 360d) / Math.PI - 90d;
             
-            return new Coordinate(CoordinateSystem.WGS84_LatLon, x, y, coordinate.Points[2]);
+            return new Coordinate(CoordinateSystem.WGS84_LatLon, x, y, coordinate.z);
         }
     }
 }
