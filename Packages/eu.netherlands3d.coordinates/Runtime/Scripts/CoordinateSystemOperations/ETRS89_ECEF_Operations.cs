@@ -37,34 +37,34 @@ namespace Netherlands3D.Coordinates
 
         public override bool CoordinateIsValid(Coordinate coordinate)
         {
-            if (coordinate.Points.Length!=3)
+            if (coordinate.PointsLength != 3)
             {
                 return false;
             }
-            if (coordinate.Points[0] > 449077.15d)
+            if (coordinate.x > 449077.15d)
             {
                 return false;
             }
-            if (coordinate.Points[0] < -1486881.13d)
+            if (coordinate.x < -1486881.13d)
             {
                 return false;
             }
-            if (coordinate.Points[1] > 5361250.91d)
+            if (coordinate.y > 5361250.91d)
             {
                 return false;
             }
-            if (coordinate.Points[1] < 3459328.1d)
+            if (coordinate.y < 3459328.1d)
             {
                 return false;
             }
-            double radiusSquared = (coordinate.Points[0] * coordinate.Points[0]) + (coordinate.Points[1] * coordinate.Points[1]) + (coordinate.Points[2] * coordinate.Points[2]);
-            double minRadiusSquared = 6370000d*6370000d;
-            if (radiusSquared<minRadiusSquared)
+            double radiusSquared = (coordinate.x * coordinate.x) + (coordinate.y * coordinate.y) + (coordinate.z * coordinate.z);
+            double minRadiusSquared = 6370000d * 6370000d;
+            if (radiusSquared < minRadiusSquared)
             {
                 return false;
             }
             double maxRadiusSquared = 6500000d * 6500000d;
-            if (radiusSquared>maxRadiusSquared)
+            if (radiusSquared > maxRadiusSquared)
             {
                 return false;
             }
@@ -84,7 +84,7 @@ namespace Netherlands3D.Coordinates
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
             Coordinate wgs = ConvertToWGS84LatLonH(coordinate);
-            Vector3WGS result = new Vector3WGS(wgs.Points[1], wgs.Points[0], 0);
+            Vector3WGS result = new Vector3WGS(wgs.y, wgs.x, 0);
             return result;
         }
 

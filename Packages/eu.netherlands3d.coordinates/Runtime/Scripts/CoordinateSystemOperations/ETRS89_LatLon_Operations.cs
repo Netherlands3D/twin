@@ -29,8 +29,8 @@ namespace Netherlands3D.Coordinates
         }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
-            double[] newPoints = new double[2] { coordinate.Points[0], coordinate.Points[1] };
-            Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLon, newPoints);
+            //double[] newPoints = new double[2] { coordinate.Points[0], coordinate.Points[1] };
+            Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLon, coordinate.x, coordinate.y);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
             return result;
@@ -38,8 +38,8 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            double[] newPoints = new double[3] { coordinate.Points[0], coordinate.Points[1],0 };
-            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, newPoints);
+            //double[] newPoints = new double[3] { coordinate.Points[0], coordinate.Points[1],0 };
+            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, coordinate.x, coordinate.y, 0);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
             return result;
@@ -47,23 +47,23 @@ namespace Netherlands3D.Coordinates
 
         public override bool CoordinateIsValid(Coordinate coordinate)
         {
-            if (coordinate.Points.Length != 2)
+            if (coordinate.PointsLength != 2)
             {
                 return false;
             }
-            if (coordinate.Points[0] > 84.73d)
+            if (coordinate.x > 84.73d)
             {
                 return false;
             }
-            if (coordinate.Points[0] < 40.18d)
+            if (coordinate.x < 40.18d)
             {
                 return false;
             }
-            if (coordinate.Points[1] > 32.88d)
+            if (coordinate.y > 32.88d)
             {
                 return false;
             }
-            if (coordinate.Points[1] < -16.1d)
+            if (coordinate.y < -16.1d)
             {
                 return false;
             }
@@ -82,7 +82,7 @@ namespace Netherlands3D.Coordinates
 
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS(coordinate.Points[1], coordinate.Points[0], 0);
+            return new Vector3WGS(coordinate.y, coordinate.x, 0);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)
