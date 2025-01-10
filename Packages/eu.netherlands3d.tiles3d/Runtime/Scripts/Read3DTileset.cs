@@ -659,15 +659,15 @@ namespace Netherlands3D.Tiles3D
             //Combine query to pass on session id and API key (Google Maps 3DTiles API style)
             UriBuilder uriBuilder = new(fullPath);
             NameValueCollection contentQueryParameters = ParseQueryString(uriBuilder.Query);
-            foreach (string key in contentQueryParameters.Keys)
+            foreach (string key in queryParameters.Keys)
             {
-                if (!queryParameters.AllKeys.Contains(key))
+                if (!contentQueryParameters.AllKeys.Contains(key))
                 {
-                    queryParameters.Add(key, contentQueryParameters[key]);
+                    contentQueryParameters.Add(key, queryParameters[key]);
                 }
             }
 
-            uriBuilder.Query = ToQueryString(queryParameters);
+            uriBuilder.Query = ToQueryString(contentQueryParameters);
             var url = uriBuilder.ToString();
             return url;
         }
