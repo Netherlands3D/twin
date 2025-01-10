@@ -275,11 +275,10 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.7.1",
+      "version": "file:C:/Users/mvang/OneDrive/Documents/netherlands3DPackages/Coordinates",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "local",
+      "dependencies": {}
     },
     "eu.netherlands3d.event-containers": {
       "version": "0.1.1",
@@ -422,7 +421,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "https://github.com/Netherlands3D/3DTiles.git#implement_pointcouds",
+      "version": "https://github.com/Netherlands3D/3DTiles.git#fix-queryparameters",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -430,7 +429,7 @@
         "eu.netherlands3d.gltfast": "5.0.3",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "hash": "45b42e5e8b86f1efa00f20bb7423e28a3beb9b70"
+      "hash": "337a539f10972562df40ac6f0d633446580aa778"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",
