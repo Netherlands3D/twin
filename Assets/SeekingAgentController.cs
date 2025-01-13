@@ -27,11 +27,13 @@ namespace Netherlands3D.Twin
         private void OnEnable()
         {
             worldTransform.onPostShift.AddListener(OnShift);
+            steerForPoint.OnArrival += StopSteering;
         }
 
         private void OnDisable()
         {
             worldTransform.onPostShift.RemoveListener(OnShift);
+            steerForPoint.OnArrival -= StopSteering;
             Stop();
         }
 
@@ -95,6 +97,11 @@ namespace Netherlands3D.Twin
         public void Stop()
         {
             steerForPoint.enabled = false;
+        }
+
+        private void StopSteering(Steering steering)
+        {
+            Stop();
         }
     }
 }
