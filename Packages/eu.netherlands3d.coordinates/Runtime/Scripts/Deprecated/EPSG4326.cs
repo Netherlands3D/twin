@@ -160,8 +160,8 @@ namespace Netherlands3D.Coordinates
         // See: https://developers.auravant.com/en/blog/2022/09/09/post-3/#epsg4326-to-epsg3857
         private static Coordinate ToEPSG3857(Coordinate coordinate)
         {
-            var x = coordinate.x;
-            var y = coordinate.y;
+            var x = coordinate.value1;
+            var y = coordinate.value2;
             x = (x * 20037508.34d) / 180d;
             y = Math.Log(Math.Tan(((90d + y) * Math.PI) / 360d)) / (Math.PI / 180d);
             y = (y * 20037508.34d) / 180d;
@@ -208,7 +208,7 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3 = new Vector3WGS(coordinate.x, coordinate.y, coordinate.z);
+            var vector3 = new Vector3WGS(coordinate.value1, coordinate.value2, coordinate.value3);
 
             switch (targetCrs)
             {
@@ -238,9 +238,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3WGS ToVector3WGS(this Coordinate coordinate)
         {
             return new Vector3WGS(
-                coordinate.x,
-                coordinate.y,
-                coordinate.z
+                coordinate.value1,
+                coordinate.value2,
+                coordinate.value3
             );
         }
     }

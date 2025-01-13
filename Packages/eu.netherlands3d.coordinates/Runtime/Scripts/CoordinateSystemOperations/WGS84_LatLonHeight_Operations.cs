@@ -42,19 +42,19 @@ namespace Netherlands3D.Coordinates
             {
                 return false;
             }
-            if (coordinate.x > 90d)
+            if (coordinate.value1 > 90d)
             {
                 return false;
             }
-            if (coordinate.x < -90d)
+            if (coordinate.value1 < -90d)
             {
                 return false;
             }
-            if (coordinate.y > 180d)
+            if (coordinate.value2 > 180d)
             {
                 return false;
             }
-            if (coordinate.y < -180d)
+            if (coordinate.value2 < -180d)
             {
                 return false;
             }
@@ -73,7 +73,7 @@ namespace Netherlands3D.Coordinates
 
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS(coordinate.y, coordinate.x, 0);
+            return new Vector3WGS(coordinate.value2, coordinate.value1, 0);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)

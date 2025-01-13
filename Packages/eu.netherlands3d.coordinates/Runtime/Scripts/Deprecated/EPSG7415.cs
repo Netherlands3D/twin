@@ -247,7 +247,7 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3 = new Vector3RD(coordinate.x, coordinate.y, coordinate.z);
+            var vector3 = new Vector3RD(coordinate.value1, coordinate.value2, coordinate.value3);
 
             switch (targetCrs)
             {
@@ -288,9 +288,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3RD ToVector3RD(this Coordinate coordinate)
         {
             return new Vector3RD(
-                coordinate.x,
-                coordinate.y,
-                coordinate.z
+                coordinate.value1,
+                coordinate.value2,
+                coordinate.value3
             );
         }
     }

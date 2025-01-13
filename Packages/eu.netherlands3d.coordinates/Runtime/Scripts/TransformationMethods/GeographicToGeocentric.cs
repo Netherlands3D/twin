@@ -9,9 +9,9 @@ namespace Netherlands3D.Coordinates
 
         internal static Coordinate Forward(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
-            double lattitude = coordinate.x * Math.PI / 180.0d;
-            double longitude = (coordinate.y + settings.primeMeridian) * Math.PI / 180.0d;
-            double ellipisoidalHeight = coordinate.z;
+            double lattitude = coordinate.value1 * Math.PI / 180.0d;
+            double longitude = (coordinate.value2 + settings.primeMeridian) * Math.PI / 180.0d;
+            double ellipisoidalHeight = coordinate.value3;
             //EPSG datset coordinate operation method code 9602)
             double primeVerticalRadius = settings.semiMajorAxis / (Math.Sqrt(1d - (Math.Pow(settings.eccentricity, 2) * Math.Pow(Math.Sin(lattitude), 2))));
             double X = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Cos(longitude);
@@ -22,9 +22,9 @@ namespace Netherlands3D.Coordinates
         }
         internal static Coordinate Reverse(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
-            double X = coordinate.x;
-            double Y = coordinate.y;
-            double Z = coordinate.z;
+            double X = coordinate.value1;
+            double Y = coordinate.value2;
+            double Z = coordinate.value3;
 
             double p = Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
             double q = Math.Atan2((Z * settings.semiMajorAxis), p * settings.b);

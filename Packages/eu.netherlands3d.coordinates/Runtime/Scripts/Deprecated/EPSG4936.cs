@@ -100,7 +100,7 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            var vector3Ecef = new Vector3ECEF(coordinate.x, coordinate.y, coordinate.z);
+            var vector3Ecef = new Vector3ECEF(coordinate.value1, coordinate.value2, coordinate.value3);
 
             if (targetCrs == (int)CoordinateSystem.Unity)
             {
@@ -135,9 +135,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3ECEF ToVector3ECEF(this Coordinate coordinate)
         {
             return new Vector3ECEF(
-                coordinate.x,
-                coordinate.y,
-                coordinate.z
+                coordinate.value1,
+                coordinate.value2,
+                coordinate.value3
             );
         }
     }

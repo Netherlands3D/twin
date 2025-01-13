@@ -142,8 +142,8 @@ namespace Netherlands3D.Coordinates
 
 
 
-            double DeltaLon = 0.36 * (coordinate.y - refLon);
-            double DeltaLat = 0.36 * (coordinate.x - refLat);
+            double DeltaLon = 0.36 * (coordinate.value2 - refLon);
+            double DeltaLat = 0.36 * (coordinate.value1 - refLat);
 
             //calculate X
             double DeltaX = 0;
@@ -173,10 +173,10 @@ namespace Netherlands3D.Coordinates
             Y -= correctionY;
 
 
-            double h = coordinate.z - RDCorrection(coordinate.y, coordinate.x, "Z", RDCorrectionZ);
+            double h = coordinate.value3 - RDCorrection(coordinate.value2, coordinate.value1, "Z", RDCorrectionZ);
             Coordinate result = new Coordinate(CoordinateSystem.RDNAP, (float)X, (float)Y, (float)h);
-            result.extraLattitudeRotation = coordinate.x + coordinate.extraLattitudeRotation - refLat;
-            result.extraLongitudeRotation = coordinate.y + coordinate.extraLongitudeRotation - refLon;
+            result.extraLattitudeRotation = coordinate.value1 + coordinate.extraLattitudeRotation - refLat;
+            result.extraLongitudeRotation = coordinate.value2 + coordinate.extraLongitudeRotation - refLon;
             return result;
 
 
@@ -185,9 +185,9 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            double x = coordinate.x;
-            double y = coordinate.y;
-            double nap = coordinate.z;
+            double x = coordinate.value1;
+            double y = coordinate.value2;
+            double nap = coordinate.value3;
 
             if (RDCorrectionX == null)
             {
@@ -225,8 +225,8 @@ namespace Netherlands3D.Coordinates
             //output height missing
             Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, lat, lon, h);
 
-            result.extraLattitudeRotation = refLat - result.x;
-            result.extraLongitudeRotation = refLon - result.y;
+            result.extraLattitudeRotation = refLat - result.value1;
+            result.extraLongitudeRotation = refLon - result.value2;
             return result;
         }
 
@@ -237,7 +237,7 @@ namespace Netherlands3D.Coordinates
                 return false;
             }
 
-            return XYisValid(coordinate.x, coordinate.y);
+            return XYisValid(coordinate.value1, coordinate.value2);
         }
 
         static bool XYisValid(double x, double y)

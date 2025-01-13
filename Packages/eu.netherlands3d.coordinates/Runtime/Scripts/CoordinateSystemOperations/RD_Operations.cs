@@ -29,10 +29,8 @@ namespace Netherlands3D.Coordinates
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
-
             Coordinate result = converter.ConvertFromWGS84LatLonH(coordinate);
-
-            Coordinate output = new Coordinate(CoordinateSystem.RD, result.x, result.y);
+            Coordinate output = new Coordinate(CoordinateSystem.RD, result.value1, result.value2);
             output.extraLongitudeRotation = result.extraLongitudeRotation;
             output.extraLattitudeRotation = result.extraLattitudeRotation;
             return output;
@@ -41,14 +39,10 @@ namespace Netherlands3D.Coordinates
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
-            //add third dimension to point  
-            //double[] tempPoints = new double[3] { coordinate.Points[0], coordinate.Points[1], 0 };
-            //coordinate.Points = tempPoints;
-            //Coordinate result = converter.ConvertToWGS84LatLonH(coordinate);
-            //result.Points[2] = 0;
-            Coordinate newCoordinate = new Coordinate(coordinate.CoordinateSystem, coordinate.x, coordinate.y, 0);
+            //add third dimension to point              
+            Coordinate newCoordinate = new Coordinate(coordinate.CoordinateSystem, coordinate.value1, coordinate.value2, 0);
             Coordinate result = converter.ConvertToWGS84LatLonH(newCoordinate);
-            result = new Coordinate(result.CoordinateSystem, result.x, result.y, 0);
+            result = new Coordinate(result.CoordinateSystem, result.value1, result.value2, 0);
             return result;
         }
 
@@ -59,8 +53,7 @@ namespace Netherlands3D.Coordinates
                 return false;
             }
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
-            //double[] newPoints = new double[3] {coordinate.x, coordinate.y,0 };
-            Coordinate testCoordinate = new Coordinate(CoordinateSystem.RDNAP, coordinate.x, coordinate.y, 0);
+            Coordinate testCoordinate = new Coordinate(CoordinateSystem.RDNAP, coordinate.value1, coordinate.value2, 0);
             return converter.CoordinateIsValid(testCoordinate);
 
         }
@@ -78,18 +71,14 @@ namespace Netherlands3D.Coordinates
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
-            //double[] tempPoints = new double[3] { coordinate.Points[0], coordinate.Points[1], 0 };
-            //coordinate.Points = tempPoints;
-            Coordinate result = new Coordinate(coordinate.CoordinateSystem, coordinate.x, coordinate.y, 0);
+            Coordinate result = new Coordinate(coordinate.CoordinateSystem, coordinate.value1, coordinate.value2, 0);
             return converter.GlobalUpDirection(result);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
-            //double[] tempPoints = new double[3] { coordinate.Points[0], coordinate.Points[1], 0 };
-            //coordinate.Points = tempPoints;
-            Coordinate result = new Coordinate(coordinate.CoordinateSystem, coordinate.x, coordinate.y, 0);
+            Coordinate result = new Coordinate(coordinate.CoordinateSystem, coordinate.value1, coordinate.value2, 0);
             return converter.LocalUpDirection(coordinate);
         }
 
