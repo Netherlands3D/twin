@@ -38,6 +38,7 @@
     "eu.netherlands3d.web-cursors": "2.0.0",
     "eu.netherlands3d.webgl-copy-paste": "1.1.0",
     "jillejr.newtonsoft.json-for-unity.converters": "1.6.3",
+    "net.tnrd.unitysteer": "3.1.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -85,7 +86,8 @@
         "com.svermeulen.asyncawaitutil",
         "jillejr.newtonsoft",
         "com.kind-men",
-        "com.rsg"
+        "com.rsg",
+        "net.tnrd"
       ]
     }
   ]
