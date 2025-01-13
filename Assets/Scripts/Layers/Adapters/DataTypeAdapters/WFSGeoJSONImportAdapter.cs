@@ -8,7 +8,6 @@ using System.Collections.Specialized;
 using System.Xml.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
-using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 
@@ -47,7 +46,8 @@ namespace Netherlands3D.Twin
 
             //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
             bool IsGetCapabilitiesRequest = wfs.IsGetCapabilitiesRequest();
-            if (!IsGetCapabilitiesRequest) {
+            if (!IsGetCapabilitiesRequest)
+            {
                 Debug.Log("<color=orange>WFS: No GetFeature nor GetCapabilities request type found.</color>");
                 return false;
             }
@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
                         AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
                     }
-                
+
                     wfs = null;
                     return;
                 }
@@ -130,13 +130,13 @@ namespace Netherlands3D.Twin
             newLayer.Name = title;
 
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl); 
-            
+            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
+
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             newLayer.LayerData.Color = randomLayerColor;
-            
+
             var symbolizer = newLayer.LayerData.DefaultSymbolizer;
             symbolizer?.SetFillColor(randomLayerColor);
             symbolizer?.SetStrokeColor(randomLayerColor);
@@ -166,10 +166,11 @@ namespace Netherlands3D.Twin
             {
                 var geoJsonOutputFormatString = wfs.GetGeoJsonOutputFormatString();
                 uriBuilder.SetQueryParameter(
-                    "outputFormat", 
+                    "outputFormat",
                     !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"
                 );
             }
+
             uriBuilder.SetQueryParameter("srsname", crs);
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
             return uriBuilder;
@@ -190,7 +191,7 @@ namespace Netherlands3D.Twin
             public string[] OtherCRS;
             public string MetadataURL;
         }
-        
+
         private class GeoJSONWFS
         {
             private readonly string sourceUrl;
@@ -200,6 +201,7 @@ namespace Netherlands3D.Twin
             private XmlNamespaceManager namespaceManager;
 
             public RequestType requestType;
+
             public enum RequestType
             {
                 GetCapabilities,
@@ -286,7 +288,7 @@ namespace Netherlands3D.Twin
 
             public string GetWFSVersionFromBody()
             {
-                if(xmlDocument == null)
+                if (xmlDocument == null)
                     ParseBodyAsXML();
 
                 var serviceTypeVersion = xmlDocument.DocumentElement.Attributes["version"];
@@ -301,21 +303,21 @@ namespace Netherlands3D.Twin
 
             public string GetTitle()
             {
-                if(xmlDocument == null)
+                if (xmlDocument == null)
                     ParseBodyAsXML();
 
                 var title = xmlDocument?
                     .DocumentElement?
                     .SelectSingleNode("//*[local-name()='ServiceIdentification']/*[local-name()='Title']", namespaceManager);
-                
+
                 return title != null ? title.InnerText : "";
             }
 
             public IEnumerable<FeatureType> GetFeatureTypes()
             {
-                if(xmlDocument == null)
+                if (xmlDocument == null)
                     ParseBodyAsXML();
-
+                
                 var featureTypeListNodeInRoot = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
                 var featureTypeChildNodes = featureTypeListNodeInRoot?.ChildNodes;
@@ -326,39 +328,43 @@ namespace Netherlands3D.Twin
                     return featureTypes;
                 }
 
-                var wfsVersion = GetWFSVersion();
-                string namespaceVersion = wfsVersion switch
-                {
-                    "1.1.0" => "1.1.0",
-                    "2.0.0" => "2.0",
-                    _ => null
-                };
+                var schemaLocation = namespaceManager.LookupNamespace("schemaLocation");
 
                 // Unsupported version
-                if (namespaceVersion == null) return featureTypes;
+                if (string.IsNullOrEmpty(schemaLocation)) return featureTypes;
 
                 XmlSerializer serializer = new XmlSerializer(
-                    typeof(FeatureType), 
+                    typeof(FeatureType),
                     new XmlRootAttribute("FeatureType")
                     {
-                        Namespace = "http://www.opengis.net/wfs/" + namespaceVersion
+                        Namespace = schemaLocation
                     }
                 );
                 foreach (XmlNode featureTypeNode in featureTypeChildNodes)
                 {
-                    using XmlNodeReader reader = new XmlNodeReader(featureTypeNode);
-                    
-
-                    FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
-                    if (featureType == null) continue;
-
-
-                    var crsNode = featureTypeNode.SelectSingleNode("//*[local-name()='DefaultCRS']");
-                    if (crsNode != null)
+                    if (featureTypeNode.LocalName == "Operations") // or any other unwanted element
                     {
-                        string crs = crsNode.InnerText;
+                        continue;
                     }
-                    featureTypes.Add(featureType);
+                    
+                    using (XmlNodeReader reader = new XmlNodeReader(featureTypeNode))
+                    {
+                        reader.MoveToContent(); // Move to the root element of the node
+
+                        // Deserialize the FeatureType element while handling the namespaces properly
+
+                        FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
+                        if (featureType == null) continue;
+
+                        // Handle CRS if it exists
+                        var crsNode = featureTypeNode.SelectSingleNode("//*[local-name()='DefaultCRS']");
+                        if (crsNode != null)
+                        {
+                            string crs = crsNode.InnerText;
+                        }
+
+                        featureTypes.Add(featureType);
+                    }
                 }
 
                 return featureTypes;
@@ -388,6 +394,17 @@ namespace Netherlands3D.Twin
                 {
                     Debug.Log("Adding wfs namespace manually: http://www.opengis.net/wfs");
                     namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
+                }
+                
+                if (rootElement.HasAttribute("xsi:schemaLocation"))
+                {
+                    string schemaLocation = rootElement.GetAttribute("xsi:schemaLocation").Split(' ')[0];
+                    namespaceManager.AddNamespace("schemaLocation", schemaLocation);
+                }
+                else
+                {
+                    Debug.Log("Adding schemaLocation namespace manually: http://www.opengis.net/wfs");
+                    namespaceManager.AddNamespace("schemaLocation", "http://www.opengis.net/wfs");
                 }
 
                 XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
@@ -435,7 +452,7 @@ namespace Netherlands3D.Twin
                 var wfsVersion = GetWFSVersion();
 
                 var featureOutputFormat = xmlNode.SelectSingleNode(
-                    "ows:Parameter[@name='outputFormat']", 
+                    "ows:Parameter[@name='outputFormat']",
                     namespaceManager
                 );
 
@@ -457,7 +474,7 @@ namespace Netherlands3D.Twin
                 {
                     var value = owsValue.InnerText;
                     var lowerCaseValue = value.ToLower();
-                    
+
                     // Immediately return outputFormats containing the word 'geojson'; this is by definition the
                     // most specific and best option
                     if (lowerCaseValue.Contains("geojson"))
@@ -483,13 +500,13 @@ namespace Netherlands3D.Twin
 
             private XmlNode ReadGetFeatureNode(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
             {
-                var getFeatureOperationNode = xmlDocument.SelectSingleNode("//ows:Operation[@name='GetFeature']", namespaceManager);                
+                var getFeatureOperationNode = xmlDocument.SelectSingleNode("//ows:Operation[@name='GetFeature']", namespaceManager);
 
                 if (getFeatureOperationNode == null)
                 {
                     Debug.LogWarning("<color=orange>WFS GetFeature operation not found.</color>");
                 }
-                
+
                 return getFeatureOperationNode;
             }
         }
