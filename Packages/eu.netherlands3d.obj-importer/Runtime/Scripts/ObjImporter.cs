@@ -231,7 +231,7 @@ namespace Netherlands3D.ObjImporter
         {
             BroadcastCurrentActivity("objecten creeren");
 
-            createGameObjects = FindObjectOfType<CreateGameObjects>();
+            createGameObjects = gameObject.GetComponent<CreateGameObjects>();
             if (createGameObjects == null)
             {
                 createGameObjects = gameObject.AddComponent<CreateGameObjects>();
