@@ -367,16 +367,30 @@ namespace Netherlands3D.Twin
             private XmlNamespaceManager ReadNameSpaceManager(XmlDocument xmlDocument)
             {
                 XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
-                XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
-                if (namespaceManager.HasNamespace("wfs") == false)
+                XmlElement rootElement = xmlDocument.DocumentElement;
+                if (rootElement.HasAttribute("xmlns:ows"))
                 {
-                    namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
+                    string owsNamespace = rootElement.GetAttribute("xmlns:ows");
+                    namespaceManager.AddNamespace("ows", owsNamespace);
                 }
-                if (namespaceManager.HasNamespace("ows") == false)
+                else
                 {
+                    Debug.Log("Adding ows namespace manually: http://www.opengis.net/ows/1.1");
                     namespaceManager.AddNamespace("ows", "http://www.opengis.net/ows/1.1");
                 }
 
+                if (rootElement.HasAttribute("xmlns:wfs"))
+                {
+                    string wfsNamespace = rootElement.GetAttribute("xmlns:wfs");
+                    namespaceManager.AddNamespace("wfs", wfsNamespace);
+                }
+                else
+                {
+                    Debug.Log("Adding wfs namespace manually: http://www.opengis.net/wfs");
+                    namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
+                }
+
+                XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
                 if (elementsWithNamespaces != null)
                 {
                     foreach (XmlElement element in elementsWithNamespaces)
@@ -469,11 +483,13 @@ namespace Netherlands3D.Twin
 
             private XmlNode ReadGetFeatureNode(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
             {
-                var getFeatureOperationNode = xmlDocument.SelectSingleNode("//ows:Operation[@name='GetFeature']", namespaceManager);
+                var getFeatureOperationNode = xmlDocument.SelectSingleNode("//ows:Operation[@name='GetFeature']", namespaceManager);                
 
                 if (getFeatureOperationNode == null)
-                    Debug.LogWarning("WFS GetFeature operation not found.");
-
+                {
+                    Debug.LogWarning("<color=orange>WFS GetFeature operation not found.</color>");
+                }
+                
                 return getFeatureOperationNode;
             }
         }
