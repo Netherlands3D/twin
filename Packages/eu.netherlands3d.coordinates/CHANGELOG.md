@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.7.2] 09-01-2025
 
 ### Changed
-* Now using xyz values instead of Points array (performance improvement)
+* Now using value1, value2 and value3 instead of Points array (performance improvement)
 
 ### Deprecated
 * Coordinate constructors using param double[] points
