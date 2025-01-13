@@ -164,22 +164,21 @@ namespace Netherlands3D.Twin.Projects
 
         private void LoadDefaultProject()
         {
-            ///start debugging
+            //start debugging
             var url = "https://provincie-utrecht.netherlands3d.eu/StreamingAssets/ProjectTemplate.nl3d";
             Debug.Log("loading default project file: " + url);
             fileImporter.DetermineAdapter(url);
-            return;
-            ///end debugging
+            //end debugging
             
-#if UNITY_WEBGL && !UNITY_EDITOR
-            var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
-            Debug.Log("loading default project file: " + url);
-            fileImporter.DetermineAdapter(url);
-#else
-            var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
-            Debug.Log("loading default project file: " + filePath);
-            projectDataStore.LoadFromFile(filePath);
-#endif
+// #if UNITY_WEBGL && !UNITY_EDITOR
+//             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+//             Debug.Log("loading default project file: " + url);
+//             fileImporter.DetermineAdapter(url);
+// #else
+//             var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+//             Debug.Log("loading default project file: " + filePath);
+//             projectDataStore.LoadFromFile(filePath);
+// #endif
         }
 
         public void LoadFromFile(string filePaths)
