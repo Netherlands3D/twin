@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Functionalities;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Interface
+namespace Netherlands3D.Twin.Configuration
 {
     public class WindowToggle : MonoBehaviour
     {
