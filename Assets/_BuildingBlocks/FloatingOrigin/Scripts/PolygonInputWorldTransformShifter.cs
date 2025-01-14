@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.FloatingOrigin
 {
     /// <summary>
     /// This class is responsible for shifting the all the polygons their point individualy when the world origin is shifted.
