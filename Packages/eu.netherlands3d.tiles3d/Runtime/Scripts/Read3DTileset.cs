@@ -666,6 +666,13 @@ namespace Netherlands3D.Tiles3D
                     contentQueryParameters.Add(key, queryParameters[key]);
                 }
             }
+            foreach (string key in contentQueryParameters.Keys)
+            {
+                if (!queryParameters.AllKeys.Contains(key))
+                {
+                    queryParameters.Add(key, contentQueryParameters[key]);
+                }
+            }
 
             uriBuilder.Query = ToQueryString(contentQueryParameters);
             var url = uriBuilder.ToString();
