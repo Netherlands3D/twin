@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml;
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
+using System;
 
-namespace Netherlands3D.Functionalities.ProfileRendering 
+namespace Netherlands3D.ProfileRendering
 {
     public class OutputSVGLinesFile : MonoBehaviour
     {

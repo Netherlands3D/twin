@@ -1,10 +1,13 @@
 using Netherlands3D.Events;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using TMPro;
+using Netherlands3D.Core;
 
-namespace Netherlands3D.Functionalities.ProfileRendering 
-{
+namespace Netherlands3D.ProfileRendering {
     public class DrawProfileHeightLines : MonoBehaviour
     {
         [SerializeField] private FloatEvent sizeInWorld;
