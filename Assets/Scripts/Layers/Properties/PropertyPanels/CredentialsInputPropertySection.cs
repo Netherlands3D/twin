@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     handler.PasswordOrKeyOrTokenOrCode = passwordInputField.text;
                     break;
                 case AuthorizationType.InferableSingleKey:
-                    handler.PasswordOrKeyOrTokenOrCode = keyTokenOrCodeInputField.text;
+                    handler.PasswordOrKeyOrTokenOrCode = keyTokenOrCodeInputField.text.Trim();
                     break;
             }
 
