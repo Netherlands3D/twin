@@ -1,7 +1,7 @@
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.ObjImporter
+namespace Netherlands3D.Functionalities.OBJImporter
 {
     public class MTLImportPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
@@ -11,7 +11,7 @@ namespace Netherlands3D.Functionalities.ObjImporter
         public void AddToProperties(RectTransform properties)
         {
             PropertySection = Instantiate(propertySectionPrefab, properties);
-            PropertySection.ObjSpawner = GetComponent<ObjSpawner>();
+            PropertySection.ObjSpawner = GetComponent<OBJSpawner>();
         }
     }
 }

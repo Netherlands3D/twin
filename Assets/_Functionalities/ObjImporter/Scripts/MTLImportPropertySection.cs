@@ -1,14 +1,14 @@
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.ObjImporter
+namespace Netherlands3D.Functionalities.OBJImporter
 {
     public class MTLImportPropertySection : MonoBehaviour
     {
         [SerializeField] private GameObject defaultImportPanel;
         [SerializeField] private GameObject hasMtlPanel;
         [SerializeField] private GameObject importErrorPanel;
-        public ObjSpawner ObjSpawner { get; set; }
+        public OBJSpawner ObjSpawner { get; set; }
         
         private void Start()
         {

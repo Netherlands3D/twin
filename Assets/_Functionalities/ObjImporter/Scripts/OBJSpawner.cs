@@ -8,9 +8,9 @@ using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Functionalities.ObjImporter
+namespace Netherlands3D.Functionalities.OBJImporter
 {
-    public class ObjSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")]
         [SerializeField] private Material baseMaterial;
@@ -20,7 +20,7 @@ namespace Netherlands3D.Functionalities.ObjImporter
         [SerializeField] private bool createSubMeshes = false;
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
 
-        private ObjPropertyData propertyData = new();
+        private OBJPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
 
         private Netherlands3D.ObjImporter.ObjImporter importer;
@@ -36,7 +36,7 @@ namespace Netherlands3D.Functionalities.ObjImporter
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<ObjPropertyData>().FirstOrDefault();
+            var propertyData = properties.OfType<OBJPropertyData>().FirstOrDefault();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -137,13 +137,13 @@ namespace Netherlands3D.Functionalities.ObjImporter
 
         public void SetObjPathInPropertyData(string fullPath)
         {
-            var propertyData = PropertyData as ObjPropertyData;
+            var propertyData = PropertyData as OBJPropertyData;
             propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
         public void SetMtlPathInPropertyData(string fullPath)
         {
-            var propertyData = PropertyData as ObjPropertyData;
+            var propertyData = PropertyData as OBJPropertyData;
             propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
