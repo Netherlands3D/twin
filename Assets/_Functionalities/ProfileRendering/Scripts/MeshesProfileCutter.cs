@@ -1,11 +1,10 @@
 using Netherlands3D.Events;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace Netherlands3D.ProfileRendering
+namespace Netherlands3D.Functionalities.ProfileRendering 
 {
     public class MeshesProfileCutter : MonoBehaviour
     {
