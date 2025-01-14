@@ -19,14 +19,13 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using Netherlands3D.Rendering;
 using UnityEngine.Networking;
-using Netherlands3D.Twin;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Functionalities.Wms;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.CartesianTiles
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        

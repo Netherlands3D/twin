@@ -1,5 +1,4 @@
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.Twin.UI.LayerInspector;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorDataControllerUrbanReleaf : SensorDataController
     {
