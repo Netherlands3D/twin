@@ -116,10 +116,6 @@ namespace Netherlands3D.Twin.Projects
             redoAction.Disable();
         }
 
-        private void Start()
-        {
-        }
-
         private void OnProjectDataChanged(ProjectData project)
         {
             // Add new undo state

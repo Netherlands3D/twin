@@ -98,7 +98,6 @@ namespace Netherlands3D.Twin
             futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
             futureFileInfo.Catch(error => DownloadFailed(urlAndData, error));
             
-            print("downloading file: " + urlAndData.SourceUrl);
             yield return Uxios.WaitForRequest(futureFileInfo);
         }
 
@@ -106,7 +105,6 @@ namespace Netherlands3D.Twin
         {
             // Ideally, we want to keep the fileInfo object because you can do cool stuff with it, but for now:
             // let's fit it in the existing LocalFile object.
-            print("successful download of " + urlAndData.SourceUrl);
             return urlAndData.LocalFilePath = info.FullName;
         }
 
