@@ -7,14 +7,15 @@ using GG.Extensions;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.ObjectInformation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
+using KeyValuePair = Netherlands3D.Twin.KeyValuePair;
 
-namespace Netherlands3D.Twin.Interface.BAG
+namespace Netherlands3D.Functionalities.ObjectInformation
 {
 	[RequireComponent(typeof(FeatureSelector))]
 	[RequireComponent(typeof(SubObjectSelector))]
