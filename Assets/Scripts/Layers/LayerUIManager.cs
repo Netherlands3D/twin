@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.OGC3DTiles;
+using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using SLIDDES.UI;

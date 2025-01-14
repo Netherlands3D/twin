@@ -23,6 +23,7 @@ using Netherlands3D.Rendering;
 using UnityEngine.Networking;
 using Netherlands3D.Twin;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.Wms;
 using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.CartesianTiles

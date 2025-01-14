@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Rendering;
-using Netherlands3D.Twin.Wms;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Wms
 {
     public class WMSTileDataLayer : ImageProjectionLayer
     {
