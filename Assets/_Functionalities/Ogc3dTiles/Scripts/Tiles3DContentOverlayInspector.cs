@@ -1,10 +1,11 @@
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tiles3DContentOverlayInspector : OverlayInspector
     {

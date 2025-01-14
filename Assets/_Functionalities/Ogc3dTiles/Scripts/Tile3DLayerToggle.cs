@@ -1,8 +1,8 @@
 using System.Linq;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tile3DLayerToggle : LayerToggle
     {

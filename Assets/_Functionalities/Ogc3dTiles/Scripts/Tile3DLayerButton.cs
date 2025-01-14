@@ -1,8 +1,7 @@
 using Netherlands3D.Functionalities.ObjectLibrary;
-using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tile3DLayerButton : ObjectLibraryButton
     {

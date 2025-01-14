@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tile3DLayerPropertySection : MonoBehaviour
     {
