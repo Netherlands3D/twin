@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.10.2] - 14-1-2025
 
 ### Fixed
-- QueryParameters now also with previous keys
+- QueryParameters now also works with previous keys
 
 ## [1.10.1] - 10-1-2025
 
