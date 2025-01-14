@@ -1,17 +1,15 @@
 using netDxf;
 using netDxf.Entities;
-using Netherlands3D.Core;
 using Netherlands3D.Events;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using System.IO; //used in the preprocessor
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace Netherlands3D.ProfileRendering
+namespace Netherlands3D.Functionalities.ProfileRendering
 {
     public class OutputDXFLinesFile : MonoBehaviour
     {
