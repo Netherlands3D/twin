@@ -1,8 +1,9 @@
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Windmill")]
     public class WindmillPropertyData : LayerPropertyData

@@ -1,4 +1,3 @@
-using Netherlands3D.ObjectLibrary;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
