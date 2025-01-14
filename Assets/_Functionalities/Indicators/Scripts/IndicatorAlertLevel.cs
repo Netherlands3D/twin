@@ -1,6 +1,6 @@
 using System;
 
-namespace Netherlands3D.Indicators.Dossiers.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers.Indicators
 {
     /// <summary>
     /// Whether the indicator's value should trigger a visual warning, values range from 0 to 2, where 0 is OK, 1 is WARNING and 2 is ALERT

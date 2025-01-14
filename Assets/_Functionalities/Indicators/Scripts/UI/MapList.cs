@@ -1,14 +1,11 @@
-using System;
-using System.Linq;
-using Netherlands3D.Indicators.Dossiers;
-using Netherlands3D.Indicators.Dossiers.DataLayers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using Netherlands3D.Functionalities.Indicators.Dossiers;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
 
-namespace Netherlands3D.Indicators.UI
+namespace Netherlands3D.Functionalities.Indicators.UI
 {
     public class MapList : MonoBehaviour
     {

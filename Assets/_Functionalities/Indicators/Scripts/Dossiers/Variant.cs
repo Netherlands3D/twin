@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
 
-namespace Netherlands3D.Indicators.Dossiers
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     [Serializable]
     public struct Variant

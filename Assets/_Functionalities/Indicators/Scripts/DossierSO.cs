@@ -2,16 +2,15 @@
 using System.Collections;
 using System.Linq;
 using System.Text;
-using Netherlands3D.Indicators.Dossiers;
 using GeoJSON.Net.Feature;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using Netherlands3D.Indicators.Dossiers.DataLayers;
-using Netherlands3D.Indicators.Esri;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Functionalities.Indicators.Esri;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Dossier", fileName = "DossierSO", order = 0)]
     public class DossierSO : ScriptableObject

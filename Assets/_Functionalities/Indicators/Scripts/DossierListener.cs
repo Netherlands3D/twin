@@ -1,10 +1,9 @@
 using System;
 using GeoJSON.Net.Feature;
-using Netherlands3D.Indicators.Dossiers;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     public class DossierListener : MonoBehaviour
     {

@@ -1,12 +1,9 @@
-using System.Globalization;
-using System.Linq;
-using Netherlands3D.Indicators.Dossiers;
-using Netherlands3D.Indicators.Dossiers.Indicators;
-using TMPro;
+using Netherlands3D.Functionalities.Indicators.Dossiers;
+using Netherlands3D.Functionalities.Indicators.Dossiers.Indicators;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Indicators.UI
+namespace Netherlands3D.Functionalities.Indicators.UI
 {
     public class IndicatorList : MonoBehaviour
     {

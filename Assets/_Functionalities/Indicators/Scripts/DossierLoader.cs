@@ -1,12 +1,10 @@
-﻿using Netherlands3D.Indicators;
-using Netherlands3D.Indicators.Dossiers;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Netherlands3D.Twin.Configuration.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     public class DossierLoader : MonoBehaviour
     {
-        [SerializeField] private Configuration configuration;
+        [SerializeField] private Configuration.Configuration configuration;
         [SerializeField] private DossierSO dossier;
 
         private void OnEnable()

@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Indicators.UI
+namespace Netherlands3D.Functionalities.Indicators.UI
 {
     public class Loader : MonoBehaviour
     {
