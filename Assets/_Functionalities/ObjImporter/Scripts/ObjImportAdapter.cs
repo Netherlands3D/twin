@@ -1,8 +1,8 @@
 using System.IO;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjImporter
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
     public class ObjImportAdapter : ScriptableObject, IDataTypeAdapter

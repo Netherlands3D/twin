@@ -1,7 +1,7 @@
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjImporter
 {
     public class MTLImportPropertySection : MonoBehaviour
     {

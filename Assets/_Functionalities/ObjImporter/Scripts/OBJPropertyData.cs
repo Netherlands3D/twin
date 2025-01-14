@@ -1,12 +1,12 @@
-using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using UnityEngine;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.ObjImporter
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Obj")]
     public class ObjPropertyData : LayerPropertyData, ILayerPropertyDataWithAssets

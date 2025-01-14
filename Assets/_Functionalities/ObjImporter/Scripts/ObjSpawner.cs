@@ -1,19 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Functionalities.ObjImporter
 {
     public class ObjSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")]
         [SerializeField] private Material baseMaterial;
-        [SerializeField] private ObjImporter.ObjImporter importerPrefab;
+        [SerializeField] private Netherlands3D.ObjImporter.ObjImporter importerPrefab;
 
         [Header("Settings")]
         [SerializeField] private bool createSubMeshes = false;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         private ObjPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
 
-        private ObjImporter.ObjImporter importer;
+        private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
 
         public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;

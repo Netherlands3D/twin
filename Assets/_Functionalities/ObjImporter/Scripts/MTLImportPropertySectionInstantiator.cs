@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjImporter
 {
     public class MTLImportPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
