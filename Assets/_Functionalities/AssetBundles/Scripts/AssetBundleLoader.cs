@@ -1,16 +1,13 @@
-using ICSharpCode.SharpZipLib.Core;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.AssetBundles
 {
     //for now this is a test scenario loading script for the zuidoostbundle 
     //this could be written as a controller to load assetbundles    
