@@ -5,6 +5,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.1] - 10-1-2025
+
+### Fixed
+- QueryParameters for tileContent no longer overwritten when trying to add authentication-parameters 
+
 ## [1.10.0] - 13-12-2024
 
 ### Added
