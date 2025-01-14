@@ -2,12 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DateTimeToString : MonoBehaviour
+namespace Netherlands3D.Functionalities.Sun
 {
-    [SerializeField] private Text dateTimeText;
-
-    public void SetTextToDateTime(DateTime dateTime)
+    public class DateTimeToString : MonoBehaviour
     {
-        dateTimeText.text = dateTime.ToString();
+        [SerializeField] private Text dateTimeText;
+
+        public void SetTextToDateTime(DateTime dateTime)
+        {
+            dateTimeText.text = dateTime.ToString();
+        }
     }
 }
