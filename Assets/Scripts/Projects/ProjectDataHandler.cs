@@ -83,6 +83,7 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
+            LoadDefaultProject();
         }
 
         private void OnEnable()
@@ -113,11 +114,6 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.performed -= OnRedoAction;
             redoAction.Disable();
-        }
-
-        private void Start()
-        {
-            LoadDefaultProject(); //todo: when undo is implemented, assign the listener after loading this, so the initial load cannot be undone
         }
 
         private void OnProjectDataChanged(ProjectData project)
