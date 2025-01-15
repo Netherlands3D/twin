@@ -11,11 +11,11 @@ namespace Netherlands3D.Twin.Layers
 {
     public class ObjSpawner : MonoBehaviour, ILayerWithPropertyData
     {
-        [Header("Required input")] 
+        [Header("Required input")]
         [SerializeField] private Material baseMaterial;
         [SerializeField] private ObjImporter.ObjImporter importerPrefab;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private bool createSubMeshes = false;
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
 
@@ -93,22 +93,36 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            // By explicitly stating the worldPositionStays to false, we ensure Obj is spawned and it will retain the
-            // position and scale in this parent object
             bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
+            bool hasTransformProperty = false;
+
+            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
+            if (holgo)
+                hasTransformProperty = holgo.TransformIsSetFromProperty;
+
             importedObject = returnedGameObject;
             if (isGeoReferenced)
             {
-                transform.position = returnedGameObject.transform.position;
+                SetObjectPosition(returnedGameObject, hasTransformProperty);
                 Debug.Log("Geo-referenced object importer, moving camera to this position: " + returnedGameObject.transform.position);
                 var mainCam = Camera.main;
                 mainCam.transform.position = returnedGameObject.transform.position + (-cameraDistanceFromGeoReferencedObject * mainCam.transform.forward);
             }
 
-            returnedGameObject.transform.SetParent(this.transform, isGeoReferenced);
+            // In case the returned object is georeferenced, or this (parent) object has its transform set from a property, we will use either of those positionings, and need to retain the world position.
+            returnedGameObject.transform.SetParent(this.transform, isGeoReferenced || hasTransformProperty);
             returnedGameObject.AddComponent<MeshCollider>();
 
             DisposeImporter();
+        }
+
+        private void SetObjectPosition(GameObject returnedGameObject, bool hasTransformProperty)
+        {
+            // if we already have a position from the transform properties, match the returned object's positioning to this saved position, otherwise set it to the returned object's positioning, since this is the georeferenced position.
+            if (hasTransformProperty)
+                returnedGameObject.transform.position = transform.position;
+            else
+                transform.position = returnedGameObject.transform.position;
         }
 
         private void DisposeImporter()
