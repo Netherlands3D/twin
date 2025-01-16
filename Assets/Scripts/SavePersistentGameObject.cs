@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Netherlands3D.Twin.FloatingOrigin;
 
 [Serializable]
 public class MarkerData
@@ -56,6 +57,7 @@ public class SavePersistentGameObject : MonoBehaviour
                 savedObject.transform.position = markerData.position;
                 savedObject.transform.rotation = markerData.rotation;
                 savedObject.transform.localScale = markerData.scale;
+                // savedObject.AddComponent<WorldTransform>();
                 // Duplicate the object to the scene and mark it as not being in prefab mode
                 Undo.RegisterCreatedObjectUndo(savedObject, "Save Persistent GameObject");
                 Debug.Log($"Saved GameObject '{savedObject.name}' to the scene after exiting Play mode.");

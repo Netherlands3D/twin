@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin
         private void CreateMarker(Transform transform)
         {
             var marker = SavePersistentGameObject.CreatePlayModeObject("Virtual Camera Marker");
-            marker.AddComponent<WorldTransform>();
+            // marker.AddComponent<WorldTransform>();
             marker.transform.position = transform.position;
             marker.transform.rotation = transform.rotation;
             marker.transform.localScale = transform.localScale;
