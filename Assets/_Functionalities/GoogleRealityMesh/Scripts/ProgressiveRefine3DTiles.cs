@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Tiles3D;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.GoogleRealityMesh
 {
     public class ProgressiveRefine3DTiles : MonoBehaviour
     {

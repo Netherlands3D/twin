@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Netherlands3D.Indicators.Dossiers.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers.Indicators
 {
     [Serializable]
     public class Definition

@@ -1,8 +1,5 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {

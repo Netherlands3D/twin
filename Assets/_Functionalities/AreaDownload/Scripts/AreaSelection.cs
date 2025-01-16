@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Netherlands3D.Collada;
 using Netherlands3D.MeshClipping;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,7 +14,7 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.AreaDownload
 {
     [CreateAssetMenu(fileName = "AreaSelection", menuName = "Netherlands3D/Data/AreaSelection", order = 1)]
     public class AreaSelection : ScriptableObject

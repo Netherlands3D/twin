@@ -6,7 +6,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
+namespace Netherlands3D.Functionalities.GoogleRealityMesh
 {
     /// <summary>
     /// The configuration class for indicators.

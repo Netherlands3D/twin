@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators
 {
     public class Pin : MonoBehaviour
     {

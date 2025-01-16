@@ -1,9 +1,6 @@
 using Netherlands3D.Twin.UI.LayerInspector;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorLayerToggle : StandardLayerToggle
     {

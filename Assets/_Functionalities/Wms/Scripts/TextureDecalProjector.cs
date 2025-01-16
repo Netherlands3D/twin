@@ -16,11 +16,10 @@
 *  permissions and limitations under the License.
 */
 
-using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Rendering
+namespace Netherlands3D.Functionalities.Wms
 {
     public class TextureDecalProjector : TextureProjectorBase
     {

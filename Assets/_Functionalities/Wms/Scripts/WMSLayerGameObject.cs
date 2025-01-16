@@ -1,10 +1,11 @@
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Functionalities.Wms
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer

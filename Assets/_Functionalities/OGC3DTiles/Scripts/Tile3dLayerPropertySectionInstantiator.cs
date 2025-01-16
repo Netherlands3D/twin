@@ -1,7 +1,7 @@
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tile3DPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {

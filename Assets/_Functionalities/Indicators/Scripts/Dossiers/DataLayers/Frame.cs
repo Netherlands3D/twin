@@ -1,9 +1,9 @@
 ﻿using System;
-using Netherlands3D.Indicators.Esri;
+using Netherlands3D.Functionalities.Indicators.Esri;
 using Netherlands3D.Json.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Netherlands3D.Indicators.Dossiers.DataLayers
+namespace Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers
 {
     [Serializable]
     public class Frame

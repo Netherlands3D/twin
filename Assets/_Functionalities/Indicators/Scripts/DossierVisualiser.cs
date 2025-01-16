@@ -6,13 +6,12 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands.GeoJSON;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Indicators.Dossiers;
-using Netherlands3D.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     public class DossierVisualiser : MonoBehaviour
     {

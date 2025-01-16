@@ -1,9 +1,8 @@
-using System;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Sun
 {
     public class ResetSunTimeToNow : MonoBehaviour
     {

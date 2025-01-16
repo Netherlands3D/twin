@@ -1,6 +1,3 @@
-using System;
-using Netherlands3D.ObjectLibrary;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.UI;
 

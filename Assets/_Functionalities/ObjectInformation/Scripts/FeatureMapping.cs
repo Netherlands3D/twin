@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
-using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureMapping : MonoBehaviour
     {

@@ -1,13 +1,13 @@
 using System.IO;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.OBJImporter
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
-    public class ObjImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class OBJImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private ObjSpawner layerPrefab;
+        [SerializeField] private OBJSpawner layerPrefab;
 
         public bool Supports(LocalFile localFile)
         {
@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin
         {
             var fullPath = localFile.LocalFilePath;
             var fileName = Path.GetFileName(fullPath);
-            ObjSpawner newLayer = Instantiate(layerPrefab);
+            OBJSpawner newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
             newLayer.SetObjPathInPropertyData(fullPath);
