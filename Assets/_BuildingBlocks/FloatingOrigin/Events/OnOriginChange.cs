@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Configuration
+namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class OnOriginChange : MonoBehaviour
     {

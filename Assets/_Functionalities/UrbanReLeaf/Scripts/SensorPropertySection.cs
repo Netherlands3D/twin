@@ -1,10 +1,9 @@
-using Netherlands3D.CartesianTiles;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorPropertySection : MonoBehaviour
     {

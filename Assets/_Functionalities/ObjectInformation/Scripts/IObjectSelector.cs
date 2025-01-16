@@ -1,4 +1,4 @@
-namespace Netherlands3D.Twin.ObjectInformation
+namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public interface IObjectSelector
     {

@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Netherlands3D.CartesianTiles;
+using Netherlands3D.Twin;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorTileSelection : MonoBehaviour
     {

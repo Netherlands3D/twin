@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Netherlands3D.Events;
-using System;
 
-namespace Netherlands3D.ProfileRendering
+namespace Netherlands3D.Functionalities.ProfileRendering
 {
     public class ProfileRenderer : MonoBehaviour
     {

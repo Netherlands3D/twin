@@ -1,11 +1,11 @@
-using Netherlands3D.Twin;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.CartesianTiles
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class TileSensorDataController : MonoBehaviour
     {
@@ -141,7 +141,7 @@ namespace Netherlands3D.CartesianTiles
                     textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString() + "%";
                     break;
                 case SensorDataController.SensorPropertyType.Temperature:
-                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString() + "°C";
+                    textMesh.text = "metingen: \n" + hex.measurements.ToString() + "\n sensoren: \n" + hex.sensors + "\n waarde: \n" + Math.Round(hex.value, 1).ToString() + "ï¿½C";
                     break;
 
             }            

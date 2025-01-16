@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Interface
+namespace Netherlands3D.Twin.Configuration
 {
     public interface IWindow
     {

@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.Configuration
         public IEnumerator Execute()
         {
             configuration.ShouldStartSetup = true;
-            var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Indicators.Configuration>();
+            var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Netherlands3D.Functionalities.Indicators.Configuration.Configuration>();
             indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
             
             OnStartedLoading.Invoke();
@@ -155,7 +155,7 @@ namespace Netherlands3D.Twin.Configuration
         private void UpdateDossierIdAfterLoading(string dossierId)
         {
             var uriBuilder = new UriBuilder(uri); 
-            GetFunctionalityConfigurationOfType<Indicators.Configuration>().SetDossierIdInQueryParameters(uriBuilder);
+            GetFunctionalityConfigurationOfType<Netherlands3D.Functionalities.Indicators.Configuration.Configuration>().SetDossierIdInQueryParameters(uriBuilder);
 
             uri = uriBuilder.Uri;
 #if UNITY_WEBGL && !UNITY_EDITOR

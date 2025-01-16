@@ -1,8 +1,7 @@
 using Netherlands3D.Tiles3D;
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Configuration.GoogleRealityMesh
+namespace Netherlands3D.Functionalities.GoogleRealityMesh
 {
     /// <summary>
     /// The configuration adapter to apply our config parameters to the Google RealityMesh Read3DTileset.

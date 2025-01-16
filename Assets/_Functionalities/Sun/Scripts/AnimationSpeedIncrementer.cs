@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Sun
 {
     public class AnimationSpeedIncrementer : MonoBehaviour
     {

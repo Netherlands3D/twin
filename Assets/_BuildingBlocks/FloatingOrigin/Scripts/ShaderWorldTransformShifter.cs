@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.FloatingOrigin
 {
     public class ShaderWorldTransformShifter : WorldTransformShifter
     {
@@ -20,8 +16,6 @@ namespace Netherlands3D.Twin
         }
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-        
-        
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)

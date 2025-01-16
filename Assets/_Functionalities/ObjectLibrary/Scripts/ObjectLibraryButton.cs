@@ -1,9 +1,10 @@
 using System.Collections;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(Button))]
     public class ObjectLibraryButton : MonoBehaviour

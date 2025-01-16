@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Wms
+namespace Netherlands3D.Functionalities.Wms
 {
     public abstract class BaseRequest
     {

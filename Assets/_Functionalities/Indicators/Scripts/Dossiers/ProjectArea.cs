@@ -1,8 +1,8 @@
 ﻿using System;
 using GeoJSON.Net.Geometry;
-using Netherlands3D.Indicators.Dossiers.Indicators;
+using Netherlands3D.Functionalities.Indicators.Dossiers.Indicators;
 
-namespace Netherlands3D.Indicators.Dossiers
+namespace Netherlands3D.Functionalities.Indicators.Dossiers
 {
     [Serializable]
     public struct ProjectArea

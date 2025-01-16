@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators.Esri
+namespace Netherlands3D.Functionalities.Indicators.Esri
 {
     public class EsriRasterData
     {

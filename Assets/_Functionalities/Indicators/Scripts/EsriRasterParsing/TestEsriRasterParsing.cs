@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 
-namespace Netherlands3D.Indicators.Esri
+namespace Netherlands3D.Functionalities.Indicators.Esri
 {
     public class TestEsriRasterParsing : MonoBehaviour
     {

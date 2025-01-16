@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators.UI
+namespace Netherlands3D.Functionalities.Indicators.UI
 {
     public class LegendItem : MonoBehaviour
     {

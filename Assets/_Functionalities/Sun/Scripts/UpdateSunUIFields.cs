@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Sun;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Sun
 {
     //this is needed because when UI activates, it needs to set the field values to the currently active time without SunTime sending an event.
     public class UpdateSunUIFields : MonoBehaviour

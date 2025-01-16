@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public abstract class SensorDataController : MonoBehaviour
     {

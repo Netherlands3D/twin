@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Tiles3D;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {

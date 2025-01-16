@@ -1,7 +1,7 @@
-using Netherlands3D.ObjectLibrary;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {

@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using Netherlands3D.Indicators.Dossiers;
-using Netherlands3D.Indicators.Dossiers.DataLayers;
-using LegendItemData = Netherlands3D.Indicators.Dossiers.DataLayers.LegendItem;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators.UI
+namespace Netherlands3D.Functionalities.Indicators.UI
 {
     public class Legend : MonoBehaviour
     {
@@ -23,7 +20,7 @@ namespace Netherlands3D.Indicators.UI
             ShowItems(dataLayer.legend);
         }
 
-        public void ShowItems(List<LegendItemData> items)
+        public void ShowItems(List<Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers.LegendItem> items)
         {
             if(clearOld)
                 ClearItems();

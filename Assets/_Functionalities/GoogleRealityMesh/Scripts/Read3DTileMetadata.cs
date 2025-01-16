@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using GltfMeshFeatures;
 using Netherlands3D.Tiles3D;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.GoogleRealityMesh
 {
     public class Read3DTileMetadata : MonoBehaviour
     {

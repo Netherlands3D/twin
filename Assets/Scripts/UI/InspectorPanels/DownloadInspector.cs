@@ -16,10 +16,10 @@
  *  permissions and limitations under the License.
  */
 
-using System;
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.AreaDownload;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

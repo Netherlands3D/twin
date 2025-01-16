@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
-using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Functionalities.Indicators.Dossiers;
 using Netherlands3D.SelectionTools;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators
 {
     public class ProjectAreaVisualisation
     {

@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.FloatingOrigin
 {
     [RequireComponent(typeof(ObjectScatterLayerGameObject))]
     public class ScatterLayerShifter : WorldTransformShifter

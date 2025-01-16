@@ -2,7 +2,7 @@ using System;
 using KindMen.Uxios;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Wms
+namespace Netherlands3D.Functionalities.Wms
 {
     public class GetMapRequest : BaseRequest
     {
