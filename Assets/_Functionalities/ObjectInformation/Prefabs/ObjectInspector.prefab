@@ -581,7 +581,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -519.89}
-  m_SizeDelta: {x: 2535, y: 0}
+  m_SizeDelta: {x: 3815, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &9122227890730904662
 MonoBehaviour:
@@ -701,12 +701,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Klik op een object of gebouw op de kaart om de beschikbare informatie te
-    bekijken. Na uw selectie verschijnt deze informatie in dit venster.
+  m_text: 'Klik op een object of gebouw op de kaart om de beschikbare informatie
+    te bekijken. Na uw selectie verschijnt deze informatie in dit venster.
 
 
-    Voor gebouwobjecten is dit bijvoorbeeld de informatie uit de Basisregistratie
-    Adressen en Gebouwen (BAG), zoals het adres, bouwjaar en wijk van het gebouw.'
+    Voor
+    gebouwobjecten is dit bijvoorbeeld de informatie uit de Basisregistratie Adressen
+    en Gebouwen (BAG), zoals het adres, bouwjaar en wijk van het gebouw.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -979,7 +980,7 @@ MonoBehaviour:
   buildingThumbnail: {fileID: 7958113805271058023}
   featureThumbnail: {fileID: 6807242371195434441}
   buildingContentRectTransform: {fileID: 5723983834121387462}
-  featureContentRectTransform: {fileID: 1118973294889123553}
+  featureContentRectTransform: {fileID: 2688462733659480497}
   badIdText: {fileID: 2556145742903780675}
   districtText: {fileID: 6128135806067866390}
   buildYearText: {fileID: 7445230652623506435}
@@ -3201,7 +3202,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2533
+      value: 3813
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -3246,12 +3247,12 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1268.5
+      value: 1908.5
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -223.475
+      value: -184
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -3468,11 +3469,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4544874626990740323, guid: 72950be68ca8c494bb05ced5a5bba524,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5078733024073835164, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_Name
@@ -3593,12 +3589,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72950be68ca8c494bb05ced5a5bba524, type: 3}
---- !u!224 &1118973294889123553 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5381855212316052579, guid: 72950be68ca8c494bb05ced5a5bba524,
-    type: 3}
-  m_PrefabInstance: {fileID: 4987548044048036482}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3616659956860867579 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8577001676601237881, guid: 72950be68ca8c494bb05ced5a5bba524,
@@ -4450,11 +4440,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1781802643554129927, guid: 115ed422e629e4645bfb5c97e46c2e9b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3286731148600885667, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -4924,7 +4909,7 @@ PrefabInstance:
     - target: {fileID: 8498701842576240929, guid: 1bc51e95ab1754548b597ed6e246cc39,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -320
       objectReference: {fileID: 0}
     - target: {fileID: 8498701842576240929, guid: 1bc51e95ab1754548b597ed6e246cc39,
         type: 3}
@@ -4934,7 +4919,7 @@ PrefabInstance:
     - target: {fileID: 8498701842576240929, guid: 1bc51e95ab1754548b597ed6e246cc39,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -160
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

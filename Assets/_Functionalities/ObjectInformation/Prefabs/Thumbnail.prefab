@@ -126,7 +126,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_SizeDelta: {x: 320, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1752345727994358006
 MonoBehaviour:
@@ -140,12 +140,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cff925d4ac4cd945885b953f77975d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnailRenderWidth: 256
-  thumbnailRendererOverride: {fileID: 11400000, guid: 29cbe7fa0ca3eb9428ef4851d9f9e11e,
-    type: 2}
   thumbnail: {fileID: 4678589494094425758}
+  displayIfNoThumbnail: {fileID: 0}
   margin: 1.5
   cameraRotation: {x: 60, y: 0, z: 0}
+  thumbnailRendererIndex: 2
+  orthographic: 0
+  farClipPlaneCamera: 20000
 --- !u!1 &6779006134154497324
 GameObject:
   m_ObjectHideFlags: 0

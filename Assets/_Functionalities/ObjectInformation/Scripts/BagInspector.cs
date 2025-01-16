@@ -457,8 +457,10 @@ namespace Netherlands3D.Twin.Interface.BAG
 		{
 			GameObject keyValue = Instantiate(keyValuePairTemplate, featureContentRectTransform);
 			KeyValuePair keyValuePair = keyValue.GetComponent<KeyValuePair>();
+			AdjustHeightOnTextChange adjustHeightOnTextChange = keyValue.GetComponent<AdjustHeightOnTextChange>();
 			keyValuePair.Set(key, value);
 			keyValue.gameObject.SetActive(true);
+			StartCoroutine(WaitForNextFrame(() => { adjustHeightOnTextChange.UpdateHeight(); }));			
 			keyValueItems.Add(keyValue.gameObject);
 		}
 
