@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Projects;

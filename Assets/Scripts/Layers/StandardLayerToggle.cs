@@ -1,6 +1,5 @@
 using System.Linq;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.UI.LayerInspector

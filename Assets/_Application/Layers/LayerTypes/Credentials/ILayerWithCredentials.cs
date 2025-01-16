@@ -1,7 +1,7 @@
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes
+namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials
 {
     public interface ILayerWithCredentials
     {

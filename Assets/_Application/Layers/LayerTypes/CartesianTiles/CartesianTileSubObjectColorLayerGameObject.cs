@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.DataSets;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes
+namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {

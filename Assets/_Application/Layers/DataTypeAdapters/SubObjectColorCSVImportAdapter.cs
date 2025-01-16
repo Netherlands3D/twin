@@ -1,8 +1,8 @@
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataSets;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;

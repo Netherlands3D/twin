@@ -1,12 +1,13 @@
 using UnityEngine;
+using Netherlands3D.CartesianTiles;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes
+namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
-    [RequireComponent(typeof(CartesianTiles.Layer))]
+    [RequireComponent(typeof(Layer))]
     public class CartesianTileLayerGameObject : LayerGameObject
     {
-        private CartesianTiles.Layer layer;
-        private CartesianTiles.TileHandler tileHandler;
+        private Layer layer;
+        private Netherlands3D.CartesianTiles.TileHandler tileHandler;
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -16,9 +17,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         
         protected virtual void Awake()
         {
-            tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>();
+            tileHandler = FindAnyObjectByType<Netherlands3D.CartesianTiles.TileHandler>();
             transform.SetParent(tileHandler.transform);
-            layer = GetComponent<CartesianTiles.Layer>();
+            layer = GetComponent<Layer>();
 
             tileHandler.AddLayer(layer);
         }

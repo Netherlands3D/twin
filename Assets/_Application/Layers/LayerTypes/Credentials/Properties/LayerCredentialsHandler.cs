@@ -1,10 +1,9 @@
-using System;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     [RequireComponent(typeof(ILayerWithCredentials))]
     [RequireComponent(typeof(LayerGameObject))]

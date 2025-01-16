@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public class WFSGeoJSONTileDataLayer : Layer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
-        private CartesianTiles.TileHandler tileHandler;
+        private Netherlands3D.CartesianTiles.TileHandler tileHandler;
         private string wfsUrl = "";
         public string WfsUrl { 
             get => wfsUrl; 
@@ -62,10 +62,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             yield return null;
 
             //Find a required TileHandler in our parent, or else in the scene
-            tileHandler = GetComponentInParent<CartesianTiles.TileHandler>();
+            tileHandler = GetComponentInParent<Netherlands3D.CartesianTiles.TileHandler>();
 
             if (!tileHandler)
-                tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>();
+                tileHandler = FindAnyObjectByType<Netherlands3D.CartesianTiles.TileHandler>();
 
             if (tileHandler)
             {

@@ -1,10 +1,7 @@
-using System;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {

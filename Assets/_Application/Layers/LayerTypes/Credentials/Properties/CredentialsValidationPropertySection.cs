@@ -1,7 +1,6 @@
-
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsValidationPropertySection : MonoBehaviour, ILayerCredentialInterface
     {
