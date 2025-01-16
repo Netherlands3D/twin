@@ -10,14 +10,30 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(WorldTransform))]
     public class SeekingAgentController : MonoBehaviour
     {
-        public CoordinateSystem CoordinateSystem = CoordinateSystem.RD;
-        public Vector3Double Destination = new Vector3Double();
+        [Serializable]
+        public struct AllowedDirectionChange
+        {
+            public bool pitch;
+            public bool yaw;
+            public bool roll;
+        }
+        [Serializable]
+        public struct Vector3Double
+        {
+            public double x;
+            public double y;
+            public double z;
+        }
+        public CoordinateSystem CoordinateSystem = CoordinateSystem.RDNAP;
+        public Vector3Double Destination;
+        // TODO: Synchronize pitch with movement direction, not yaw and roll 
+        public AllowedDirectionChange allowedDirectionChange;
         private Vector3 cachedUnityDestination;
         private Coordinate cachedDestinationCoordinate;
         private SteerForPoint steerForPoint;
         private WorldTransform worldTransform;
         public WorldTransform Passenger;
-
+        
         private void Awake()
         {
             steerForPoint = GetComponent<SteerForPoint>();

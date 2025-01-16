@@ -1237,7 +1237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb09c8639f19410409868247fe259d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CoordinateSystem: 28992
+  CoordinateSystem: 2
   Destination:
     x: 0
     y: 0
