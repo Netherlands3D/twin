@@ -1,9 +1,8 @@
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI.Elements.Properties;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
     public class ScatterSettingsPropertySection : MonoBehaviour
     {

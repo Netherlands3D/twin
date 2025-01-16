@@ -1,10 +1,10 @@
 using System;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
     [Serializable]
     public class ScatterGenerationSettingsPropertyData : LayerPropertyData
