@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using SLIDDES.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using SLIDDES.UI;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
     public enum InteractionState
     {
@@ -160,7 +158,7 @@ namespace Netherlands3D.Twin.UI.LayerInspector
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             UpdateColor(Layer.Color);
-            RegisterWithPropertiesPanel(Properties.Instance);
+            RegisterWithPropertiesPanel(Properties.Properties.Instance);
         }
         
         private void OnNameChanged(string newName)
@@ -728,9 +726,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             RecalculateParentStates();
         }
 
-        private void RegisterWithPropertiesPanel(Properties propertiesPanel)
+        private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
-            var layerWithProperties = Properties.TryFindProperties(Layer);
+            var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
             var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
             propertyToggle.gameObject.SetActive(hasProperties);
             
@@ -747,9 +745,9 @@ namespace Netherlands3D.Twin.UI.LayerInspector
             propertyToggle.isOn = onOrOff;
         }
         
-        private void ToggleProperties(bool onOrOff, Properties properties)
+        private void ToggleProperties(bool onOrOff, Properties.Properties properties)
         {
-            var layerWithProperties = Properties.TryFindProperties(Layer);
+            var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
             if (layerWithProperties == null) return; // no properties, no action
 
             if (!onOrOff)

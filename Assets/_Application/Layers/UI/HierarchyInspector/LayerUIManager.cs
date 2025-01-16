@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
@@ -14,7 +13,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
     public class LayerUIManager : MonoBehaviour, IPointerDownHandler
     {

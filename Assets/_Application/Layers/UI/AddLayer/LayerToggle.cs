@@ -1,12 +1,11 @@
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler

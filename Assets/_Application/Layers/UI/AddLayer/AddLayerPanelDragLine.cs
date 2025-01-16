@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     public class AddLayerPanelDragLine : MonoBehaviour, IDragHandler, IEndDragHandler
     {

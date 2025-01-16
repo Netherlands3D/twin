@@ -1,10 +1,7 @@
 using SLIDDES.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     public class AdaptHeightToPanel : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     public class StandardLayerToggle : LayerToggle
     {

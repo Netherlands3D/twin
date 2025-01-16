@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     [RequireComponent(typeof(Button))]
     public abstract class LayerToolBarButtonBase : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler

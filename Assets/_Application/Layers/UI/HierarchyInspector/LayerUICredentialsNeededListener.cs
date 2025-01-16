@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.UI.LayerInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
     public class LayerUICredentialsNeededListener : MonoBehaviour
     {

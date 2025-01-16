@@ -1,12 +1,11 @@
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectLibrary;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     [RequireComponent(typeof(AddLayerPanel))]
     public class PopulateAddLayerPanel : MonoBehaviour

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
     public class DragGhost : MonoBehaviour //, IPointerDownHandler, IPointerUpHandler
     {
