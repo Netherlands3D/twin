@@ -3,6 +3,7 @@ using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections;
 using System.IO;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;

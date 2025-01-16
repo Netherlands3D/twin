@@ -1,5 +1,5 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.FloatingOrigin

@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties

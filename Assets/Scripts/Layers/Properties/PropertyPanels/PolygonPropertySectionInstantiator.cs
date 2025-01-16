@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.Properties
 {
     public class PolygonPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {

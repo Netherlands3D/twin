@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 

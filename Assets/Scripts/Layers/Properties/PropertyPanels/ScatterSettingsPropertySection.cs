@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI.Elements.Properties;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties

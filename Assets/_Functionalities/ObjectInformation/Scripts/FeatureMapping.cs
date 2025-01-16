@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation

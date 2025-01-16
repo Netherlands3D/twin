@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;

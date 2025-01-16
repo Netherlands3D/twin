@@ -9,6 +9,8 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;

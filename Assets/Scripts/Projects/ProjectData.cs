@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using ICSharpCode.SharpZipLib.Zip;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 #if UNITY_EDITOR
 using UnityEditor;
