@@ -1,7 +1,6 @@
-using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
     public abstract class AbstractHierarchicalObjectPropertySection : MonoBehaviour
     {

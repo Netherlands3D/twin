@@ -1,7 +1,7 @@
 using UnityEngine;
 using Netherlands3D.Coordinates;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject
     {

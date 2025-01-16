@@ -1,11 +1,11 @@
 using System;
 using System.Globalization;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
 using RuntimeHandle;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
     public class TransformPropertySection : AbstractHierarchicalObjectPropertySection
     {

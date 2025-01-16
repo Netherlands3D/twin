@@ -1,4 +1,4 @@
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
 using UnityEngine.UI;

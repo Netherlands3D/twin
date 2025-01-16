@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.Editor
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Editor
 {
     [CustomEditor(typeof(HierarchicalObjectLayerGameObject))]
     public class HierarchicalObjectLayerGameObjectEditor : UnityEditor.Editor
