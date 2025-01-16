@@ -1,8 +1,7 @@
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
     public class PolygonPropertySection : MonoBehaviour
     {

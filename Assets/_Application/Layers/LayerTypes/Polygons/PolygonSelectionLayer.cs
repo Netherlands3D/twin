@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine;

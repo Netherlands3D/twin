@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
