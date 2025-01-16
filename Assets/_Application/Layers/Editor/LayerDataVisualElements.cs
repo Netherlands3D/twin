@@ -3,7 +3,7 @@ using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Editor.Layers
+namespace Netherlands3D.Twin.Layers.Editor
 {
     public static class LayerDataVisualElements
     {

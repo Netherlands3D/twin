@@ -1,10 +1,9 @@
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Editor.Layers
+namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers.Editor
 {
     [CustomEditor(typeof(WFSGeoJsonLayerGameObject))]
     public class WfsGeoJsonLayerGameObjectEditor : UnityEditor.Editor

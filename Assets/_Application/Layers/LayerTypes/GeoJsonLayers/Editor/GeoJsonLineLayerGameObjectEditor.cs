@@ -1,12 +1,12 @@
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Editor.Layers
+namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers.Editor
 {
-    [CustomEditor(typeof(GeoJSONPolygonLayer))]
-    public class GeoJsonPolygonLayerGameObjectEditor : UnityEditor.Editor
+    [CustomEditor(typeof(GeoJSONLineLayer))]
+    public class GeoJsonLineLayerGameObjectEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {
@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Editor.Layers
 
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-            var layerGameObject = (GeoJSONPolygonLayer)target;
+            var layerGameObject = (GeoJSONLineLayer)target;
             LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
 
             return root;

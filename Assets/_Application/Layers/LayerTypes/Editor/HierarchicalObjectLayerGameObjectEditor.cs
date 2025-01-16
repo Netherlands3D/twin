@@ -1,9 +1,9 @@
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Editor.Layers
+namespace Netherlands3D.Twin.Layers.LayerTypes.Editor
 {
     [CustomEditor(typeof(HierarchicalObjectLayerGameObject))]
     public class HierarchicalObjectLayerGameObjectEditor : UnityEditor.Editor
