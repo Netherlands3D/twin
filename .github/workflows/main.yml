@@ -94,7 +94,7 @@ jobs:
           name: Build
           path: build/WebGL/WebGL
       
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v3
         name: 'Github Pages: prepare artefact for deployment'
         if: github.ref_name == 'main'
         with:
