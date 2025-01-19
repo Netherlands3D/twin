@@ -2,6 +2,7 @@ using Netherlands3D.Twin.Layers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Netherlands3D.Twin
 {
@@ -20,6 +21,18 @@ namespace Netherlands3D.Twin
             image.gameObject.SetActive(true);
             image.SetSprite(sprite);
             graphics.Add(image);
+
+            try
+            {
+                GetComponentInChildren<LegendClampHeight>().Invoke("AdjustRectHeight", 0);
+                GetComponent<ContentFitterRefresh>().Invoke("RefreshContentFitters", 0);
+            }
+            catch (Exception e)
+            {
+                print("error");
+            }
+
+
         }
 
         public void ClearGraphics()
