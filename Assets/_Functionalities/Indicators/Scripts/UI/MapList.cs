@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Netherlands3D.Functionalities.Indicators.Dossiers;
 using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
+using Netherlands3D.Twin.ExtensionMethods;
 
 namespace Netherlands3D.Functionalities.Indicators.UI
 {

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.ExtensionMethods
 {
     // This class contains extention methods for UnityWebRequest response codes
     // to quickly determine if a server response requires credentials or if it is a server error

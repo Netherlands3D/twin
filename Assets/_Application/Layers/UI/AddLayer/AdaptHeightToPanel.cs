@@ -1,4 +1,4 @@
-using SLIDDES.UI;
+using Netherlands3D.Twin.ExtensionMethods;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.UI.AddLayer
@@ -29,6 +29,5 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         {
             rectTransform.SetBottom(initialBottom + newHeight);
         }
-
     }
 }

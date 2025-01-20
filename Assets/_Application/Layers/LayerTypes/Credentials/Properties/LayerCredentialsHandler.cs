@@ -1,4 +1,5 @@
 using Netherlands3D.Credentials;
+using Netherlands3D.Twin.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;

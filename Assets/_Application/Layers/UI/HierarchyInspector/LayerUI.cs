@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
-using SLIDDES.UI;
+using Netherlands3D.Twin.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {

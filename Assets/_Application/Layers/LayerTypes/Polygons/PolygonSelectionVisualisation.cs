@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 

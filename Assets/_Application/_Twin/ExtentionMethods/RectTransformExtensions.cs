@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SLIDDES.UI
+namespace Netherlands3D.Twin.ExtensionMethods
 {
     /// <summary>
     /// Extension class for RectTransform
