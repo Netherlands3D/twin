@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Samplers
 {
     public struct SampleTexture
     {

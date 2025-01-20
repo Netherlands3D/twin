@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Samplers
 {
     [RequireComponent(typeof(Camera))]
     public class OpticalRaycaster : MonoBehaviour

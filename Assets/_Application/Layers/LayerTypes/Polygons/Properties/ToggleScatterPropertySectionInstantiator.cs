@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties

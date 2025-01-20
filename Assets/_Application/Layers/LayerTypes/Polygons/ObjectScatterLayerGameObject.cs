@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons

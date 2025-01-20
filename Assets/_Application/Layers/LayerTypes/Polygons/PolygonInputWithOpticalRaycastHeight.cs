@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 using Netherlands3D.SelectionTools;
-using UnityEngine.InputSystem;
+using Netherlands3D.Twin.Samplers;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonInputWithOpticalRaycastHeight : PolygonInput
     {

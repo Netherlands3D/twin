@@ -3,9 +3,9 @@ using System.Linq;
 using Netherlands3D.SelectionTools;
 using UnityEngine;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Samplers;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
