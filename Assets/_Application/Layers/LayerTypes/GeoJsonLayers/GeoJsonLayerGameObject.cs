@@ -15,8 +15,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
-        private GeoJsonParser parser = new GeoJsonParser(0.01f);
-        public GeoJsonParser Parser => parser;
+        private GeoJSONParser parser = new GeoJSONParser(0.01f);
+        public GeoJSONParser Parser => parser;
 
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
@@ -272,7 +272,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private void VisualizeFeature(Feature feature)
         {
-            var originalCoordinateSystem = GeoJsonParser.GetCoordinateSystem(feature.CRS);
+            var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
             switch (feature.Geometry.Type)
             {
                 case GeoJSONObjectType.MultiPolygon:

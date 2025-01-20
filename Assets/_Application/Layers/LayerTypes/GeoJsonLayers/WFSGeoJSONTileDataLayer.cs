@@ -168,7 +168,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             if (geoJsonRequest.result == UnityWebRequest.Result.Success)
             {
-                var parser = new GeoJsonParser(0.01f);
+                var parser = new GeoJSONParser(0.01f);
                 parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
                 yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
             }

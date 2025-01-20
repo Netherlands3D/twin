@@ -12,9 +12,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public class GeoJsonParser
+    public class GeoJSONParser
     {
         public float maxParseDuration = 0.01f;
         public GeoJSONObjectType Type { get; private set; }
@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin
         [Space, Header("Parse events")] public UnityEvent<Feature> OnFeatureParsed = new();
         public UnityEvent<string> OnParseError = new();
 
-        public GeoJsonParser(float maxParsePerFrameDuration)
+        public GeoJSONParser(float maxParsePerFrameDuration)
         {
             maxParseDuration = maxParsePerFrameDuration;
         }
