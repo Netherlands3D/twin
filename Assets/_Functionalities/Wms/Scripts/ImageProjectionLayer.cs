@@ -19,12 +19,12 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using UnityEngine.Networking;
 using UnityEngine.Events;
-using Netherlands3D.Functionalities.Wms;
 
-namespace Netherlands3D.CartesianTiles
+namespace Netherlands3D.Functionalities.Wms
 {
     public class ImageProjectionLayer : Layer
     {
