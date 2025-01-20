@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-namespace Netherlands3D.Interface
+namespace Netherlands3D.Twin.Debugging
 {
 	public class Memory : MonoBehaviour
 	{
