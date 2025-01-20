@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UnityEditor;

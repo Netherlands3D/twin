@@ -2,7 +2,7 @@ using System;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Twin.Layers.Properties
 {
     /// <summary>
     /// A LayerAsset represents any asset, remote or embedded in the project, that is used in the
