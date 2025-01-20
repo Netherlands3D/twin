@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Netherlands3D.Twin.Effects
+namespace Netherlands3D.Twin.Quality
 {
     public class PlaneLensFlare : MonoBehaviour
     {

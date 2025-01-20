@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Quality
 {
     public enum GraphicsQualityLevel
     {

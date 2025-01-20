@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Netherlands3D.TileHandler
+namespace Netherlands3D.Twin.Quality
 {
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/EnvironmentProfile", order = 0)]
     public class EnvironmentProfile : ScriptableObject

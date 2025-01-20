@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 
-namespace Netherlands3D.TileHandler
+namespace Netherlands3D.Twin.Quality
 {
     public class EnvironmentSettings : MonoBehaviour
     {
