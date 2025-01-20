@@ -11,6 +11,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Rendering;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
