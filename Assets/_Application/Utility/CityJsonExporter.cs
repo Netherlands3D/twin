@@ -4,9 +4,8 @@ using System.Runtime.InteropServices;
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Text;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Utility
 {
     public class CityJsonExporter : MonoBehaviour
     {

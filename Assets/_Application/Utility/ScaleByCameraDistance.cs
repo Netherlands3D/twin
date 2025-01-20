@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.Utility
 {
     public class ScaleByCameraDistance : MonoBehaviour
     {
