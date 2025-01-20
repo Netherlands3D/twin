@@ -346,23 +346,18 @@ namespace Netherlands3D.Twin
                     {
                         continue;
                     }
-                    
+                    var crsNode = featureTypeNode.SelectSingleNode("wfs:DefaultSRS | wfs:DefaultCRS", namespaceManager);
+                    string crs = crsNode?.InnerText;
+
                     using (XmlNodeReader reader = new XmlNodeReader(featureTypeNode))
                     {
                         reader.MoveToContent(); // Move to the root element of the node
 
                         // Deserialize the FeatureType element while handling the namespaces properly
-
                         FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
                         if (featureType == null) continue;
 
-                        // Handle CRS if it exists
-                        var crsNode = featureTypeNode.SelectSingleNode("//*[local-name()='DefaultCRS']");
-                        if (crsNode != null)
-                        {
-                            string crs = crsNode.InnerText;
-                        }
-
+                        featureType.DefaultCRS = crs;
                         featureTypes.Add(featureType);
                     }
                 }
