@@ -1,4 +1,4 @@
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Credentials
 {
     [System.Serializable]
     public class KnownUrlAuthorizationType

@@ -1,4 +1,4 @@
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
+using Netherlands3D.Credentials;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;

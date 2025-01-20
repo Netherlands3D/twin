@@ -4,10 +4,9 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using Netherlands3D.Web;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Credentials
 {
     public enum AuthorizationType
     {
