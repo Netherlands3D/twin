@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime.Scripts.Cameras
+namespace Netherlands3D.Twin.Cameras
 {
     public class OrthographicSwitcher : MonoBehaviour
     {
