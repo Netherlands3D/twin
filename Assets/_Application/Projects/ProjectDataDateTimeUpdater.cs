@@ -1,9 +1,8 @@
 using System;
 using Netherlands3D.Sun;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Projects
 {
     [RequireComponent(typeof(SunTime))]
     public class ProjectDataDateTimeUpdater : MonoBehaviour

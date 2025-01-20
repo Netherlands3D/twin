@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Newtonsoft.Json;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Projects
 {
     [Serializable]
     public class PrefabGroup

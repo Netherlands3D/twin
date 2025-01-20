@@ -1,8 +1,7 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Projects
 {
     public class ProjectDataCameraUpdater : MonoBehaviour
     {
