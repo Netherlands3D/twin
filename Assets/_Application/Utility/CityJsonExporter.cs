@@ -1,6 +1,7 @@
 using System.IO;
 using Netherlands3D.Coordinates;
 using System.Runtime.InteropServices;
+using System.Text; //used in the preprocessor block
 using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.InputSystem;
