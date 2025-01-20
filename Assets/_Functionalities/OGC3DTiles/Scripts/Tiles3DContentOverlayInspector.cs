@@ -3,7 +3,7 @@ using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
-using Netherlands3D.Twin.UI.LayerInspector;
+using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
 using UnityEngine.Networking;
 

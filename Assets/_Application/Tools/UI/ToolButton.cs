@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Tools.UI
 {
     public class ToolButton : MonoBehaviour
     {

@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.IO
 {
     public class DownloadFile : MonoBehaviour
     {

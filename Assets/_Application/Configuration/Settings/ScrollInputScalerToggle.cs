@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Cameras.Input;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Configuration.Settings
 {
     public class ScrollInputScalerToggle : MonoBehaviour
     {

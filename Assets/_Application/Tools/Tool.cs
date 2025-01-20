@@ -1,10 +1,9 @@
-using UnityEditor;
+using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Tools
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Tool", fileName = "Tool", order = 0)]
     public class Tool : ScriptableObject

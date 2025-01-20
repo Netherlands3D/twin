@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Tools
 {
     public class ToolSpawner : MonoBehaviour
     {

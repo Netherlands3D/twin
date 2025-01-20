@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.UI.LayerInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Tools.UI
 {
     public class ContentOverlayContainer : MonoBehaviour
     {

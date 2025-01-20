@@ -1,6 +1,6 @@
 using System;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.AreaDownload
 {
     [Serializable]
     public enum ExportFormat{
