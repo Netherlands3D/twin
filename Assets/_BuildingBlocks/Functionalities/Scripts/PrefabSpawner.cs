@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Netherlands3D.Twin.Functionalities;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Functionalities
 {
     public class PrefabSpawner : MonoBehaviour
     {
