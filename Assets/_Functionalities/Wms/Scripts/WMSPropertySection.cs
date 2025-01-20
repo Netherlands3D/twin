@@ -1,4 +1,3 @@
-using Netherlands3D.Indicators.UI;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using System.Collections;
