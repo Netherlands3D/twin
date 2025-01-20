@@ -1,11 +1,11 @@
-using Netherlands3D.Functionalities.Wms;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Functionalities.Wms
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
@@ -48,11 +48,6 @@ namespace Netherlands3D.Twin.Layers
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
 
             SetRenderOrder(LayerData.RootIndex);
-
-            //RectTransform rt = Legend.Instance.gameObject.GetComponent<RectTransform>();
-            //rt.anchoredPosition = legendOffsetFromParent;
-            //rt.localScale = Vector2.one;
-
             Legend.Instance.LoadLegend(this);
         }
 

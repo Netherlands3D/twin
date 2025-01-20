@@ -1,7 +1,8 @@
 
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.Functionalities.Wms
 {
     public class WMSPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
