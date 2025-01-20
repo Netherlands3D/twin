@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Wms
 {
     public class LegendClampHeight : MonoBehaviour
     {
         private RectTransform rectTransform;
         public RectTransform TargetsParent;
 
-        void Start()
+        private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
+        }
+
+        void Start()
+        {            
             AdjustRectHeight(); // Adjust height initially if needed  
         }
 

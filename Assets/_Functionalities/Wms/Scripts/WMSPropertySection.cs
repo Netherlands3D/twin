@@ -18,10 +18,13 @@ namespace Netherlands3D.Twin
             set
             {
                 controller = value;
+                
                 legendToggle = GetComponentInChildren<Toggle>();
-                legendToggle.onValueChanged.AddListener(controller.SetLegendActive);
-
-                controller.SetLegendActive(legendToggle.isOn);
+                if (legendToggle != null && controller != null)
+                {
+                    legendToggle.onValueChanged.AddListener(controller.SetLegendActive);
+                    controller.SetLegendActive(legendToggle.isOn);
+                }
             }
         }
        
@@ -30,7 +33,8 @@ namespace Netherlands3D.Twin
 
         private void OnDestroy()
         {
-            legendToggle.onValueChanged.RemoveListener(controller.SetLegendActive);
+            if (legendToggle != null && controller != null)
+                legendToggle.onValueChanged.RemoveListener(controller.SetLegendActive);
         }
     }
 }

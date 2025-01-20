@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Wms
 {
     public class LegendImage : MonoBehaviour
     {        

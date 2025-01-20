@@ -1,22 +1,16 @@
-using Netherlands3D.Functionalities.UrbanReLeaf;
 using Netherlands3D.Functionalities.Wms;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.LayerInspector;
-using Netherlands3D.Web;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : CartesianTilePropertyLayer, ILayerWithPropertyData
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;       
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
@@ -27,9 +21,16 @@ namespace Netherlands3D.Twin.Layers
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
 
-        [SerializeField] private GameObject legendPanelPrefab;
-        private static Legend legend;
+        
         [SerializeField] private Vector2Int legendOffsetFromParent;
+
+        private List<IPropertySectionInstantiator> propertySections = new();
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+            return propertySections;
+        }
 
         protected override void Awake()
         {
@@ -48,99 +49,17 @@ namespace Netherlands3D.Twin.Layers
 
             SetRenderOrder(LayerData.RootIndex);
 
-            if (legend == null)
-            {
-                GameObject legendObject = Instantiate(legendPanelPrefab);
-                legend = legendObject.GetComponent<Legend>();
-                Inspector inspector = FindObjectOfType<Inspector>();
-                legendObject.transform.SetParent(inspector.Content);
-               
-            }
-            RectTransform rt = legend.GetComponent<RectTransform>();
-            rt.anchoredPosition = legendOffsetFromParent;
-            rt.localScale = Vector2.one;
+            //RectTransform rt = Legend.Instance.gameObject.GetComponent<RectTransform>();
+            //rt.anchoredPosition = legendOffsetFromParent;
+            //rt.localScale = Vector2.one;
 
-            LoadLegend();
+            Legend.Instance.LoadLegend(this);
         }
 
         public void SetLegendActive(bool active)
-        {
-            if(legend != null) 
-                legend.gameObject.SetActive(active);
-        }
-
-        private void LoadLegend()
-        {
-            if (legend.CurrentLayer == LayerData.ParentLayer)
-                return;
-
-            legend.CurrentLayer = LayerData.ParentLayer;
-
-            var legendUri = new UriBuilder(urlPropertyData.Data.GetLeftPart(UriPartial.Path));
-            legendUri.SetQueryParameter("service", "wms");
-            legendUri.SetQueryParameter("request", "getcapabilities");
-            StartCoroutine(GetCapabilities(legendUri.Uri.ToString(), legendUrls =>
-            {
-                StartCoroutine(GetLegendGraphics(legendUrls));
-            }));
-        }
-
-        private IEnumerator GetCapabilities(string url, Action<List<string>> callBack)
-        {            
-            UnityWebRequest webRequest = UnityWebRequest.Get(url);
-            yield return webRequest.SendWebRequest();
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogWarning($"Could not download {url}");                
-            }
-            else
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(webRequest.downloadHandler.text);
-                XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
-                namespaceManager.AddNamespace("xlink", "http://www.w3.org/1999/xlink"); // Update this URI if necessary
-
-                List<string> legendUrls = new List<string>();
-                XmlNodeList layers = doc.GetElementsByTagName("Layer");
-                foreach (XmlNode layer in layers)
-                {
-                    XmlNodeList legendNodes = layer.SelectNodes(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
-                    foreach (XmlNode legendNode in legendNodes)
-                    {
-                        string legendUrl = legendNode.Attributes["xlink:href"]?.Value;
-                        if (!string.IsNullOrEmpty(legendUrl) && !legendUrls.Contains(legendUrl))
-                        {
-                            legendUrls.Add(legendUrl);
-                        }
-                    }
-                }
-                callBack.Invoke(legendUrls);
-            }
-        }
-
-        private IEnumerator GetLegendGraphics(List<string> urls)
-        {           
-            legend.ShowInactive(urls.Count == 0);
-            legend.ClearGraphics();
-            if (urls.Count == 0)
-            {                
-                yield break;
-            }
-            
-            foreach (string url in urls)
-            {
-                UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
-                yield return webRequest.SendWebRequest();
-                if (webRequest.result == UnityWebRequest.Result.Success)
-                {
-                    Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-                    Texture2D tex = texture as Texture2D;
-                    tex.Apply(false, true);
-                    Sprite imageSprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
-                    legend.AddGraphic(imageSprite);
-                }
-            }
-        }
+        {         
+            Legend.Instance.gameObject.SetActive(active);
+        }        
 
         //a higher order means rendering over lower indices
         public void SetRenderOrder(int order)
@@ -168,14 +87,12 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnSelectLayer(LayerData layer)
         {
-            if (legend != null)
-                legend.gameObject.SetActive(true);           
+            Legend.Instance.gameObject.SetActive(true);           
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
-            if (legend != null)
-                legend.gameObject.SetActive(false);
+            Legend.Instance.gameObject.SetActive(false);
         }
     }
 }
