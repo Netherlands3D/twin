@@ -5,6 +5,8 @@ namespace Netherlands3D.Twin.Tools.UI
 {
     public class Inspector : MonoBehaviour
     {
+        public Transform Content => contentPanel;
+
         [Tooltip("This inspector shows the content panels for these tools")]
         [SerializeField] private Tool[] tools;
         private GameObject currentContent;

@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.Wms
 {
