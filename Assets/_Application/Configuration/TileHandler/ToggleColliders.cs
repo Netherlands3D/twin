@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using netDxf.Tables;
 using Netherlands3D.CartesianTiles;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Configuration.TileHandler
 {
     public class ToggleColliders : MonoBehaviour
     {
