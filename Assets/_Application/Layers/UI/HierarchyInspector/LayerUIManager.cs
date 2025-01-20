@@ -35,10 +35,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         public Vector2 DragStartOffset { get; set; }
         public bool MouseIsOverButton { get; set; }
 
-        //Context menu
-        [SerializeField] private ContextMenuUI contextMenuPrefab;
-        private ContextMenuUI contextMenu;
-
         private void ReconstructHierarchyUIs()
         {
             DestroyAllUIs();
@@ -198,42 +194,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
         }
 
-        public void EnableContextMenu(bool enable, Vector2 position = default)
-        {
-            if (contextMenu)
-                Destroy(contextMenu.gameObject); //destroy and reinstantiate to also destroy all active submenus
-
-            if (enable)
-                contextMenu = Instantiate(contextMenuPrefab, transform);
-
-            SetContextMenuPosition(position);
-        }
-
-        void SetContextMenuPosition(Vector2 position)
-        {
-            var contextMenuRectTransform = contextMenu.transform as RectTransform;
-            var scaledSize = contextMenuRectTransform.rect.size * contextMenuRectTransform.lossyScale;
-            var clampedPositionX = Mathf.Clamp(position.x, 0, Screen.width - scaledSize.x);
-            var clampedPositionY = Mathf.Clamp(position.y, scaledSize.y, Screen.height);
-            contextMenu.transform.position = new Vector2(clampedPositionX, clampedPositionY);
-        }
-
         private void Update()
         {
             if (Keyboard.current.deleteKey.wasPressedThisFrame && !EventSystem.current.currentSelectedGameObject)
             {
                 DeleteSelectedLayers();
-            }
-
-            if (!contextMenu)
-                return;
-
-            var mousePos = Pointer.current.position.ReadValue();
-            var contextMenuRectTransform = contextMenu.transform as RectTransform;
-            var relativePoint = contextMenuRectTransform.InverseTransformPoint(mousePos);
-            if (Pointer.current.press.wasPressedThisFrame && !ContextMenuUI.OverAnyContextMenuUI)
-            {
-                EnableContextMenu(false);
             }
         }
 
