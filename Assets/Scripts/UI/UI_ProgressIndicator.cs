@@ -10,14 +10,14 @@ namespace Netherlands3D.Interface
 
         private float currentProgress = 0.0f;
 
-        void Awake()
+        private void Awake()
         {
             fillBar.offsetMax = new Vector2(fillBar.offsetMax.x, fillBar.offsetMax.y);
         }
 
         private void LateUpdate()
         {
-            if (currentProgress >= 1 || currentProgress == 0)
+            if (currentProgress >= 1f || currentProgress == 0f)
                 this.gameObject.SetActive(false);
         }
 

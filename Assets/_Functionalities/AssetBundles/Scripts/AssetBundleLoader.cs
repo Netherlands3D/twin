@@ -3,9 +3,13 @@ using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections;
 using System.IO;
+using DG.Tweening;
+using Netherlands3D.Interface;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.AssetBundles
 {
@@ -22,10 +26,14 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
     public class AssetBundleLoader : MonoBehaviour
     {
+        [SerializeField] private UI_ProgressIndicator loadingScreenPrefab;
+        [SerializeField] private RectTransform loadingScreenCanvas;
         private const string GroupName = "ObjectenBibliotheek";
 
         public string bundleName;
         public string prefabName;
+
+        private UI_ProgressIndicator loadingScreen;
 
         private void Awake()
         {
@@ -36,30 +44,36 @@ namespace Netherlands3D.Functionalities.AssetBundles
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
+            loadingScreen = Instantiate(loadingScreenPrefab, loadingScreenCanvas.transform);
+            loadingScreen.ShowProgress(0.1f);
+            StartCoroutine(GetAssetBundle(path, bundle => OnAssetBundleLoaded(bundle, fileName, onAssetLoaded)));
+        }
 
-            void OnAssetBundleLoaded(AssetBundle bundle)
+        void OnAssetBundleLoaded(AssetBundle bundle, string fileName, Action<GameObject> onAssetLoaded)
+        {
+            string[] names = bundle.GetAllAssetNames();
+            foreach (string name in names)
             {
-                string[] names = bundle.GetAllAssetNames();
-                foreach (string name in names)
-                {
-                    // if the file is not a match, move on
-                    if (Path.GetFileName(name) != fileName.ToLower()) continue;
+                // if the file is not a match, move on
+                if (Path.GetFileName(name) != fileName.ToLower()) continue;
                     
-                    GameObject asset = bundle.LoadAsset<GameObject>(name);
-                    if (asset != null)
-                    {
+                GameObject asset = bundle.LoadAsset<GameObject>(name);
+                if (asset != null)
+                {
 #if UNITY_EDITOR
-                        FixShadersForEditor(asset);
+                    FixShadersForEditor(asset);
 #endif
-                        onAssetLoaded(asset);
-                    }
-
-                    bundle.Unload(false);
-                    return;
+                    onAssetLoaded(asset);
                 }
-            }
 
-            StartCoroutine(GetAssetBundle(path, OnAssetBundleLoaded));
+                bundle.Unload(false);
+                break;
+            }
+            
+            loadingScreen.ShowProgress(0.99f);
+            loadingScreen.GetComponent<CanvasGroup>()
+                .DOFade(0, .4f)
+                .OnComplete(() => GameObject.Destroy(loadingScreen));
         }
 
         private void FixShadersForEditor(GameObject asset)
@@ -84,10 +98,16 @@ namespace Netherlands3D.Functionalities.AssetBundles
             return string.IsNullOrEmpty(gameObject.scene.name);
         }
 
-        public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
+        private IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
         {
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
-            yield return request.SendWebRequest();
+            request.SendWebRequest();
+            while (!request.isDone)
+            {
+                loadingScreen.ShowProgress(request.downloadProgress);
+
+                yield return null;
+            }
 
             if (request.result != UnityWebRequest.Result.Success)
             {
