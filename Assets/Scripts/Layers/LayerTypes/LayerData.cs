@@ -226,7 +226,10 @@ namespace Netherlands3D.Twin.Layers
             if (newParent == null)
                 newParent = Root;
 
-            if (newParent == this)
+            //in two cases we should not Set a new parent, since it would create a cyclical reference:
+            //1. if you are trying to parent a layer to itself
+            //2. if this LayerData is somewhere in the parent chain of the new parent.
+            if (newParent == this || IsParentOrAncestor(newParent))
                 return;
             
             var parentChanged = ParentLayer != newParent;
@@ -264,6 +267,22 @@ namespace Netherlands3D.Twin.Layers
                 ParentChanged.Invoke();
                 newParent.ChildrenChanged.Invoke(); //call event on new parent
             }
+        }
+        
+        //This function checks if this LayerData is somewhere in the parent chain of the layerToCheck
+        private bool IsParentOrAncestor(LayerData layerToCheck)
+        {
+            var current = layerToCheck;
+            while (current != null)
+            {
+                if (current == this)
+                {
+                    return true;
+                }
+
+                current = current.ParentLayer;
+            }
+            return false;
         }
 
         public virtual void DestroyLayer()

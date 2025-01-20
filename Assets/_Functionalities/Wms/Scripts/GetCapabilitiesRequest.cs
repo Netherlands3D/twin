@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace Netherlands3D.Twin.Wms
+namespace Netherlands3D.Functionalities.Wms
 {
     public class GetCapabilitiesRequest : BaseRequest
     {

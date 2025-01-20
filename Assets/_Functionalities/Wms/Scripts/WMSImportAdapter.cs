@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.IO;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Wms;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Wms
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WMSImportAdapter", fileName = "WMSImportAdapter", order = 0)]
     public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter

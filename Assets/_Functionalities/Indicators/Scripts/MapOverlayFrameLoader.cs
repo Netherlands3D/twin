@@ -1,8 +1,9 @@
 using System;
-using Netherlands3D.Indicators.Dossiers;
+using Netherlands3D.Functionalities.Indicators.Dossiers;
+using Netherlands3D.Functionalities.Indicators.Dossiers.DataLayers;
 using UnityEngine;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators
 {
     public class MapOverlayFrameLoader : MonoBehaviour
     {

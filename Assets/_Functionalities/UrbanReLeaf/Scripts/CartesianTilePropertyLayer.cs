@@ -3,9 +3,8 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-namespace Netherlands3D.Twin.UI.LayerInspector
+namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class CartesianTilePropertyLayer : CartesianTileLayerGameObject, ILayerWithPropertyPanels
     {

@@ -347,7 +347,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitDistance: 100000
-  tubeHitRadius: 1.5
 --- !u!114 &3250020502134624231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1750,6 +1749,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'KeyValuePair: Wijk'
       objectReference: {fileID: 0}
+    - target: {fileID: 8028583521867663250, guid: f4b8a3735430bf0429d86078c44c0f65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8319399538049710839, guid: f4b8a3735430bf0429d86078c44c0f65,
         type: 3}
       propertyPath: m_text
@@ -2245,7 +2249,7 @@ PrefabInstance:
     - target: {fileID: 4544874626990740323, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5078733024073835164, guid: 72950be68ca8c494bb05ced5a5bba524,
         type: 3}
@@ -2492,7 +2496,7 @@ PrefabInstance:
     - target: {fileID: 1781802643554129927, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3286731148600885667, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}

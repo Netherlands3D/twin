@@ -5,7 +5,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.ObjectLibrary
+namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(LayerGameObject))]
     public class Windmill : MonoBehaviour, ILayerWithPropertyData

@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.TileHandler;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Sun
 {
     public class AngleTimeConverter : MonoBehaviour
     {

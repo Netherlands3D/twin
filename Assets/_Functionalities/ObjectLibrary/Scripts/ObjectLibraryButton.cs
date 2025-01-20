@@ -1,17 +1,16 @@
 using System.Collections;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(Button))]
     public class ObjectLibraryButton : MonoBehaviour
     {
         protected Button button;
         [SerializeField] protected GameObject prefab;
-        [SerializeField] protected Vector3 initialRotation = Vector3.zero;
-        [SerializeField] protected Vector3 initialScale = Vector3.one;
 
         private void Awake()
         {
@@ -60,8 +59,7 @@ namespace Netherlands3D.Twin
                 }
             }
             
-            var newObject = Instantiate(prefab, spawnPoint, Quaternion.Euler(initialRotation));
-            newObject.transform.localScale = initialScale;
+            var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
             var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
             if (!layerComponent)
                 layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();

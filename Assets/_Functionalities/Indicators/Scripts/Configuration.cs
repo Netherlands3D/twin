@@ -7,7 +7,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Configuration.Indicators
+namespace Netherlands3D.Functionalities.Indicators.Configuration
 {
     /// <summary>
     /// The configuration class for indicators.

@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Rendering;
-using Netherlands3D.Twin.Wms;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Wms
 {
     public class WMSTileDataLayer : ImageProjectionLayer
     {
@@ -65,6 +64,10 @@ namespace Netherlands3D.Twin
                 yield break;
             }
 
+            //on loading project form save file this can be empty 
+            if (string.IsNullOrEmpty(wmsUrl))
+                yield break;
+
             var mapData = MapFilters.FromUrl(new Uri(wmsUrl));
             Tile tile = tiles[tileKey];
 
@@ -107,7 +110,7 @@ namespace Netherlands3D.Twin
             callback(tileChange);
         }
 
-        private Wms.BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
+        private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
             var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
@@ -119,7 +122,7 @@ namespace Netherlands3D.Twin
 
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
             
-            var boundingBox = new Wms.BoundingBox(bottomLeft, topRight);
+            var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(foundCoordinateSystem);
             
             return boundingBox;

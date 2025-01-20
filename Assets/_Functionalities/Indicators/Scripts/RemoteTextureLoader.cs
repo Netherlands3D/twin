@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Indicators
+namespace Netherlands3D.Functionalities.Indicators
 {
     public class RemoteTextureLoader : MonoBehaviour
     {

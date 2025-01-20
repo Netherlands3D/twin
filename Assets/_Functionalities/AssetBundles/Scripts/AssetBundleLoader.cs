@@ -1,16 +1,13 @@
-using ICSharpCode.SharpZipLib.Core;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.AssetBundles
 {
     //for now this is a test scenario loading script for the zuidoostbundle 
     //this could be written as a controller to load assetbundles    
@@ -71,15 +68,20 @@ namespace Netherlands3D.Twin
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer renderer in renderers)
             {
-                if (renderer.material != null)
+                if (!IsPrefab(asset) && renderer.material)
                 {
                     renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                    continue;
                 }
-                else
-                {
-                    renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
-                }
+
+                renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
             }
+        }
+
+        private static bool IsPrefab(GameObject gameObject)
+        {
+            // A prefab will have a `transform` but no parent if it's a root prefab in play mode
+            return string.IsNullOrEmpty(gameObject.scene.name);
         }
 
         public IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)

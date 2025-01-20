@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.InputSystem;
-using GeoJSON.Net.Feature;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 
-namespace Netherlands3D.Twin.ObjectInformation
+namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
