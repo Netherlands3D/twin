@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Rendering
 {
     public class LineRenderer3D : MonoBehaviour
     {

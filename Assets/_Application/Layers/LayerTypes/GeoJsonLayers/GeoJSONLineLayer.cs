@@ -6,6 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers

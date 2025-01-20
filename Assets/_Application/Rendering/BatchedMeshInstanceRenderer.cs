@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Coordinates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Rendering
 {
     public class BatchedMeshInstanceRenderer : MonoBehaviour
     {

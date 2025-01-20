@@ -3,6 +3,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
