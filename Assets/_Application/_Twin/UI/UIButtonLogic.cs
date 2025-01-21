@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class UIButtonLogic : MonoBehaviour
     {
-
         public Color BaseTextColor = Color.blue;
         public Color HighlightedTextColor = Color.white;
         public Color DisabledTextColor = Color.grey;

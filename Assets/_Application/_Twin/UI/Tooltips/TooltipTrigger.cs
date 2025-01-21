@@ -1,10 +1,7 @@
-using Netherlands3D.Interface;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.Interface
+namespace Netherlands3D.Twin.UI.Tooltips
 {
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
         IScrollHandler

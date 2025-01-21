@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Interface
+namespace Netherlands3D.Twin.UI.Tooltips
 {
     public class TooltipDialog : MonoBehaviour
     {
