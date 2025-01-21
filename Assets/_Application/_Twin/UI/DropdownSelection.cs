@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class DropdownSelection : MonoBehaviour
     {

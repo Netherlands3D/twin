@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI.ColorPicker
 {
     public class ColorWheel : MonoBehaviour, IPointerDownHandler, IDragHandler
     {
