@@ -31,7 +31,7 @@ namespace Netherlands3D.Functionalities.Wms
             AdjustRectHeight();
         }
 
-        void AdjustRectHeight()
+        public void AdjustRectHeight()
         {
             float totalHeight = 0f;
 

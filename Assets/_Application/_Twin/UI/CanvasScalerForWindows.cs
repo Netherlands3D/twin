@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Runtime.InteropServices;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI
 {
