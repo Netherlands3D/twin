@@ -73,7 +73,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
             loadingScreen.ShowProgress(0.99f);
             loadingScreen.GetComponent<CanvasGroup>()
                 .DOFade(0, .4f)
-                .OnComplete(() => GameObject.Destroy(loadingScreen));
+                .OnComplete(() => GameObject.Destroy(loadingScreen.gameObject));
         }
 
         private void FixShadersForEditor(GameObject asset)
