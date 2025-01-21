@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8942052645519180280}
+  - component: {fileID: 4476188689757322987}
   - component: {fileID: 6731469812728504720}
   - component: {fileID: 6952782567475305714}
   - component: {fileID: -5093186732130595199}
   - component: {fileID: -2468234292356823431}
   - component: {fileID: 258519666352606205}
   - component: {fileID: 5825035565799434744}
-  - component: {fileID: -6121453874124892339}
   - component: {fileID: 219502633430572450}
   m_Layer: 0
   m_Name: SensorsVochtigheid
@@ -39,6 +39,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4476188689757322987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04be831ebb8b7414ab4430daa7dd6e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: 
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6731469812728504720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +112,8 @@ MonoBehaviour:
   Minimum: 0
   MaxColor: {r: 1, g: 0, b: 0.7892847, a: 1}
   MinColor: {r: 0, g: 0.6230023, b: 1, a: 1}
+  heightMultiplier: 500
+  MeasurementsIsValue: 0
   HexagonSelectionPrefabEmpty: {fileID: 163732822759528096, guid: 96759158917151048a44df37d28d88d9,
     type: 3}
   HexagonSelectionPrefabValue: {fileID: 163732822759528096, guid: e117150540d8b5f44afcf333eb19bb4b,
@@ -174,25 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 8621565738462384234, guid: bb5cfe0f7e3f71b44a0c8473aec224e9,
     type: 3}
---- !u!114 &-6121453874124892339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762811913447571165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38fe46b8dda3fda4db70f655d0b3af43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabIdentifier: a3423cc30b04fd74caa657b5830b8985
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &219502633430572450
 MonoBehaviour:
   m_ObjectHideFlags: 0
