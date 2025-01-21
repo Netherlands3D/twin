@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Configuration.Settings
 {
     public class ScrollInputScaler : MonoBehaviour
     {

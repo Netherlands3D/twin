@@ -1,7 +1,7 @@
 using RuntimeHandle;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class TransformHandleInterfaceToggle : MonoBehaviour
     {
@@ -10,7 +10,8 @@ namespace Netherlands3D.Twin
 
         public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
 
-        private void Awake() {
+        private void Awake() 
+        {
             RuntimeTransformHandle = GetComponent<RuntimeTransformHandle>();
             handleButtonsPanel.TransformHandleInterfaceToggle = this;
         }

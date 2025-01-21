@@ -1,7 +1,6 @@
-using Netherlands3D.Events;
 using UnityEngine;
 
-namespace Netherlands3D.Interface
+namespace Netherlands3D.Twin.UI
 {
     public class UI_ProgressIndicator : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using Netherlands3D.Twin.ExtensionMethods;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class ScaleWithInspector : MonoBehaviour
     {
