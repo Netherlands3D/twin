@@ -13,12 +13,23 @@ namespace Netherlands3D.Twin.UI
         public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
-        private void Awake() {
+        private void Awake() 
+        {
             buttonsPanel.gameObject.SetActive(false);
+        }
 
-            positionToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
-            rotationToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
-            scaleToggle.Toggle.onValueChanged.AddListener((toggled) => UpdateGizmoHandles());
+        private void OnEnable()
+        {
+            positionToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
+            rotationToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
+            scaleToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
+        }
+        
+        private void OnDisable()
+        {
+            positionToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
+            rotationToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
+            scaleToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
         }
 
         public void ShowPanel(bool show)
@@ -37,6 +48,11 @@ namespace Netherlands3D.Twin.UI
 
             //If current toggle is enabled but is locked, pick another one
             PickAvailableTransform();
+        }
+        
+        private void UpdateGizmoHandles(bool toggled)
+        {
+            UpdateGizmoHandles();
         }
 
         public void UpdateGizmoHandles()
