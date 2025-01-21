@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI
+namespace Netherlands3D.Twin.UI.Tabbing
 {
     [RequireComponent(typeof(HorizontalOrVerticalLayoutGroup))]
     public class TabGroup : MonoBehaviour

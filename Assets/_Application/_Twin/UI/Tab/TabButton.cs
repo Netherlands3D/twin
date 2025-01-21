@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI
+namespace Netherlands3D.Twin.UI.Tabbing
 {
     [RequireComponent(typeof(Outline))]
     [RequireComponent(typeof(Image))]

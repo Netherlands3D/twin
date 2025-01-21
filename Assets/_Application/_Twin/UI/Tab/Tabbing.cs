@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.Twin.UI
+namespace Netherlands3D.Twin.UI.Tabbing
 {
     public class Tabbing : MonoBehaviour
     {

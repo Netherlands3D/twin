@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI.Elements.Properties
+namespace Netherlands3D.Twin.UI.Properties
 {
     public class DoubleSlider : MonoBehaviour
     {

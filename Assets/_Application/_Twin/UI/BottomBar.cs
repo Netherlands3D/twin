@@ -1,9 +1,8 @@
-using System.Resources;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class BottomBar : MonoBehaviour
     {

@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.UI.Elements.Properties
+namespace Netherlands3D.Twin.UI.Properties
 {
     [RequireComponent(typeof(Slider))]
     public class PropertySlider : MonoBehaviour
