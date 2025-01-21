@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Twin.Functionalities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Configuration.UI
 {
     /// <summary>
     /// A button with a nested checkbox to enable/disable functionaly
