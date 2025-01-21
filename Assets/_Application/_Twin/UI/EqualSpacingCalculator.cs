@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     [RequireComponent(typeof(GridLayoutGroup))]
     public class EqualSpacingCalculator : MonoBehaviour

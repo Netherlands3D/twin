@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-namespace Netherlands3D.Twin
+
+namespace Netherlands3D.Twin.UI
 {
     public class Tabbing : MonoBehaviour
     {
