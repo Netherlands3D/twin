@@ -1,5 +1,6 @@
 using Netherlands3D.Functionalities.Indicators.Dossiers;
 using Netherlands3D.Functionalities.Indicators.Dossiers.Indicators;
+using Netherlands3D.Twin.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UI;
 
