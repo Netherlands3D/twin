@@ -39,6 +39,20 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         private WaitForSeconds wfs = new WaitForSeconds(0.5f);
         private Coroutine updateTilesRoutine = null;
 
+        public int RenderIndex
+        {
+            get => renderIndex;
+            set
+            {
+                int oldIndex = renderIndex;
+                renderIndex = value;
+                if (oldIndex != renderIndex)
+                    UpdateDrawOrderForChildren();
+            }
+        }
+
+        private int renderIndex = -1;
+
         public TileSensorDataController GetTileController(Vector2Int key)
         {
             if(tiles.ContainsKey(key))
@@ -206,6 +220,18 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
                     TileSensorDataController controller = tile.Value.gameObject.GetComponent<TileSensorDataController>();
                     controller.DestroySelectedHexagon();
                 }
+            }
+        }
+
+        private void UpdateDrawOrderForChildren()
+        {
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
+                projector.SetPriority(renderIndex);
             }
         }
     }

@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8942052645519180280}
+  - component: {fileID: 3472074814285716244}
   - component: {fileID: 4798792025898717726}
   - component: {fileID: 1263369775588610449}
   - component: {fileID: -8558701900799187924}
   - component: {fileID: 4683332348422220768}
   - component: {fileID: 1953088678775989159}
   - component: {fileID: -7635511712639531463}
-  - component: {fileID: -5910420814379547441}
   - component: {fileID: 4514186496007414640}
   m_Layer: 0
   m_Name: SensorsThermischOngemak
@@ -39,6 +39,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3472074814285716244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762811913447571165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04be831ebb8b7414ab4430daa7dd6e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: 
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4798792025898717726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,25 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 8621565738462384234, guid: 98f37a0bb63723d44a8a8b584de0ac34,
     type: 3}
---- !u!114 &-5910420814379547441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762811913447571165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38fe46b8dda3fda4db70f655d0b3af43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabIdentifier: 01cef4f031ccfda4aa53cc81dc95674a
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4514186496007414640
 MonoBehaviour:
   m_ObjectHideFlags: 0
