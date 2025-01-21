@@ -17,7 +17,7 @@ namespace Netherlands3D.Interface
 
         private void LateUpdate()
         {
-            if (currentProgress >= 1f || currentProgress == 0f)
+            if (currentProgress >= 1f || currentProgress <= 0f)
                 this.gameObject.SetActive(false);
         }
 
