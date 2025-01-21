@@ -109,9 +109,9 @@ namespace Netherlands3D.Coordinates
         public static Vector3 ToVector3(this Coordinate coordinate)
         {
             return new Vector3(
-                (float)coordinate.Points[0],
-                (float)coordinate.Points[1],
-                (float)coordinate.Points[2]
+                (float)coordinate.value1,
+                (float)coordinate.value2,
+                (float)coordinate.value3
             );
         }
     }

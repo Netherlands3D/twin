@@ -49,11 +49,11 @@ namespace Netherlands3D.Coordinates
 
         public override bool CoordinateIsValid(Coordinate coordinate)
         {
-            if (coordinate.Points.Length!=3)
+            if (coordinate.PointsLength != 3)
             {
                 return false;
             }
-            double radiusSquared = (coordinate.Points[0] * coordinate.Points[0]) + (coordinate.Points[1] * coordinate.Points[1]) + (coordinate.Points[2] * coordinate.Points[2]);
+            double radiusSquared = (coordinate.value1 * coordinate.value1) + (coordinate.value2 * coordinate.value2) + (coordinate.value3 * coordinate.value3);
             double minRadiusSquared = 6370000d * 6370000d;
             if (radiusSquared < minRadiusSquared)
             {
@@ -80,7 +80,7 @@ namespace Netherlands3D.Coordinates
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
             Coordinate latlon = ConvertToWGS84LatLonH(coordinate);
-            return new Vector3WGS(latlon.Points[1], latlon.Points[0], 0);
+            return new Vector3WGS(latlon.value2, latlon.value1, 0);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)

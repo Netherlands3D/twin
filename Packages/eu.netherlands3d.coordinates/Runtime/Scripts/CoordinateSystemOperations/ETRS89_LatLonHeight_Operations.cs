@@ -45,23 +45,23 @@ namespace Netherlands3D.Coordinates
 
         public override bool CoordinateIsValid(Coordinate coordinate)
         {
-            if (coordinate.Points.Length!=3)
+            if (coordinate.PointsLength!=3)
             {
                 return false;
             }
-            if (coordinate.Points[0] > 84.73d)
+            if (coordinate.value1 > 84.73d)
             {
                 return false;
             }
-            if (coordinate.Points[0] < 40.18d)
+            if (coordinate.value1 < 40.18d)
             {
                 return false;
             }
-            if (coordinate.Points[1] > 32.88d)
+            if (coordinate.value2 > 32.88d)
             {
                 return false;
             }
-            if (coordinate.Points[1] < -16.1d)
+            if (coordinate.value2 < -16.1d)
             {
                 return false;
             }
@@ -80,7 +80,7 @@ namespace Netherlands3D.Coordinates
 
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS(coordinate.Points[1], coordinate.Points[0], 0);
+            return new Vector3WGS(coordinate.value2, coordinate.value1, 0);
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)
