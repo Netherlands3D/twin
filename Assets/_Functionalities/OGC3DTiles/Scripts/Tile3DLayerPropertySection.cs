@@ -1,4 +1,4 @@
-using Netherlands3D.Twin;
+using Netherlands3D.Twin.ExtensionMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;

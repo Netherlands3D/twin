@@ -1,5 +1,5 @@
 using System.IO;
-using Netherlands3D.Twin;
+using Netherlands3D.DataTypeAdapters;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
