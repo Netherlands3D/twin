@@ -19,13 +19,13 @@
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Functionalities.AreaDownload;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Interface.BAG
+namespace Netherlands3D.Functionalities.AreaDownload.UI
 {
     public class DownloadInspector : MonoBehaviour
     {

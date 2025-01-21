@@ -1,9 +1,8 @@
-using System;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class TextPopout : MonoBehaviour
     {
