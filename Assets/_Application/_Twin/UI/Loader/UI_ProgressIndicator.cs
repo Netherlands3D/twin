@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Netherlands3D.Twin.UI
+namespace Netherlands3D.Twin.UI.Loader
 {
     public class UI_ProgressIndicator : MonoBehaviour
     {

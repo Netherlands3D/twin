@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Netherlands3D.UIKit.Loader
+namespace Netherlands3D.Twin.UI.Loader
 {
     [RequireComponent(typeof(RectTransform))]
     public class LoaderSpawner : MonoBehaviour

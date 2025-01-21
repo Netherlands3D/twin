@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.UI
 {
     public class KeyValuePair : MonoBehaviour
     {
