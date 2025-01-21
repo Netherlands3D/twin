@@ -13,11 +13,6 @@ namespace Netherlands3D.Twin.UI
         public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
-        private void Awake() 
-        {
-            buttonsPanel.gameObject.SetActive(false);
-        }
-
         private void OnEnable()
         {
             positionToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
@@ -30,6 +25,11 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
+        }
+
+        private void Start()
+        {
+            buttonsPanel.gameObject.SetActive(false);
         }
 
         public void ShowPanel(bool show)
