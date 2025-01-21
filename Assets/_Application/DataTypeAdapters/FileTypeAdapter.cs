@@ -6,7 +6,7 @@ using Netherlands3D.DataTypeAdapters;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Twin.Layers.DataTypeAdapters
+namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [Serializable]
     public class FileTypeEvent

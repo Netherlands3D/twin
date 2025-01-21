@@ -8,7 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 
-namespace Netherlands3D.Twin.Layers.DataTypeAdapters
+namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
