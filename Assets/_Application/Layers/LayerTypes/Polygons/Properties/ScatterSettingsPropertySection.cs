@@ -1,4 +1,4 @@
-using Netherlands3D.Twin.UI.Elements.Properties;
+using Netherlands3D.Twin.UI.Properties;
 using UnityEngine;
 using UnityEngine.UI;
 

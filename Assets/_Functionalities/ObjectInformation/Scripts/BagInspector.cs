@@ -7,16 +7,16 @@ using GG.Extensions;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using KeyValuePair = Netherlands3D.Twin.KeyValuePair;
+using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {

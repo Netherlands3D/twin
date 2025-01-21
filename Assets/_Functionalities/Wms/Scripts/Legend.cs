@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Web;
 using UnityEngine.Networking;
 using System.Xml;
-using System.Runtime.CompilerServices;
+using Netherlands3D.Twin.UI;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -43,9 +42,8 @@ namespace Netherlands3D.Functionalities.Wms
             image.SetSprite(sprite);
             graphics.Add(image);
 
-            GetComponentInChildren<LegendClampHeight>()?.Invoke("AdjustRectHeight", 0);
-            GetComponent<ContentFitterRefresh>()?.Invoke("RefreshContentFitters", 0);
-            
+            GetComponentInChildren<LegendClampHeight>()?.AdjustRectHeight();
+            GetComponent<ContentFitterRefresh>()?.RefreshContentFitters();
         }
 
         public void ClearGraphics()
