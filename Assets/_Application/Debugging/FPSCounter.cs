@@ -10,6 +10,9 @@ namespace Netherlands3D.Twin
         private int fps = 0;
         private TextMeshProUGUI fpsText;
 
+        //since fps wont be a crazy number easily we can cache these strings to prevent any allocation impact
+        private Dictionary<int, string> cachedStrings = new Dictionary<int, string>();
+
         private void Start()
         {
             fpsText = GetComponent<TextMeshProUGUI>();
@@ -20,15 +23,19 @@ namespace Netherlands3D.Twin
         {
             float fpsCount = 1f / Time.deltaTime;
             fps = Mathf.RoundToInt(fpsCount);
-            SetText(fps.ToString());            
+            SetText(fps);            
         }
 
-        private void SetText(string text)
+        private void SetText(int count)
         {
-            fpsText.text = text;
+            if(cachedStrings.ContainsKey(count))
+                fpsText.text = cachedStrings[count];
+            else
+            {
+                string c = count.ToString();
+                cachedStrings.Add(count, c);
+                fpsText.text = c;
+            }
         }
-
-
-        private Dictionary<int, string> cachedStrings = new Dictionary<int, string>();
     }
 }
