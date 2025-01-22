@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers
             InitializeVisualisation();
         }
 
-        protected void InitializeVisualisation()
+        protected virtual void InitializeVisualisation()
         {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();

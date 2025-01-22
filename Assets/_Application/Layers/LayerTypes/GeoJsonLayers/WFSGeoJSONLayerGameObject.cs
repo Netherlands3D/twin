@@ -18,9 +18,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
-        protected new void Start()
+        protected override void StartLoadingData()
         {
-            InitializeVisualisation();
             cartesianTileWFSLayer.WfsUrl = urlPropertyData.Data.ToString();
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -39,10 +40,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
         }
         
-        protected new void Start()
+        protected override void Start()
         {
-            InitializeVisualisation();
+            base.Start();
+            StartLoadingData();
+        }
 
+        protected virtual void StartLoadingData()
+        {
             if (urlPropertyData.Data.IsStoredInProject())
             {
                 string path = Path.Combine(Application.persistentDataPath, urlPropertyData.Data.LocalPath.TrimStart('/', '\\'));
