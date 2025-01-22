@@ -98,7 +98,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
         private IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if !UNITY_EDITOR
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
             request.SendWebRequest();
             while (!request.isDone)
