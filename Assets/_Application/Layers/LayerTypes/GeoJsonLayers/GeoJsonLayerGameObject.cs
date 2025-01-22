@@ -39,9 +39,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
         }
         
-        protected override void Start()
+        protected new void Start()
         {
-            base.Start();
+            InitializeVisualisation();
 
             if (urlPropertyData.Data.IsStoredInProject())
             {
