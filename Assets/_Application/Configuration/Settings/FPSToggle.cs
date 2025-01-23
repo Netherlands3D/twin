@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Configuration.Settings
 {
+    [RequireComponent(typeof(Toggle))]
     public class FPSToggle : MonoBehaviour
     {
         private Toggle toggle;
@@ -18,7 +19,7 @@ namespace Netherlands3D.Twin.Configuration.Settings
                 return;
             }
 
-            Debug.Log("could not find ui scaler or camera scaler, disabling toggle");
+            Debug.LogWarning("could not find fps counter, disabling toggle");
             toggle.interactable = false;
         }
 

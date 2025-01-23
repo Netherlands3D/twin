@@ -5,9 +5,16 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
+    [RequireComponent(typeof(TextMeshProUGUI))]
     public class FPSCounter : MonoBehaviour
     {
-        private int fps = 0;
+        public float updateInterval = 0.25f;
+
+        //using unscaledDT because we wont want the frame time affected by future effects (pausing/slowmo etc)
+        private int fps = 0;        
+        private float accumulatedFPS = 0f;
+        private int frameCount = 0;
+        private float timeElapsed = 0f;
         private TextMeshProUGUI fpsText;
 
         //since fps wont be a crazy number easily we can cache these strings to prevent any allocation impact
@@ -18,12 +25,22 @@ namespace Netherlands3D.Twin
             fpsText = GetComponent<TextMeshProUGUI>();
         }
 
-        // Update is called once per frame
         void Update()
-        {
-            float fpsCount = 1f / Time.deltaTime;
-            fps = Mathf.RoundToInt(fpsCount);
-            SetText(fps);            
+        {           
+            float fpsCount = 1f / Time.unscaledDeltaTime;
+            accumulatedFPS += fpsCount;
+            frameCount++; 
+            timeElapsed += Time.unscaledDeltaTime; 
+
+            if(timeElapsed > updateInterval)
+            {
+                float avgFPS = accumulatedFPS / frameCount;
+                fps = Mathf.RoundToInt(avgFPS);
+                SetText(fps);
+                timeElapsed = 0f;
+                accumulatedFPS = 0f;
+                frameCount = 0;
+            }
         }
 
         private void SetText(int count)
