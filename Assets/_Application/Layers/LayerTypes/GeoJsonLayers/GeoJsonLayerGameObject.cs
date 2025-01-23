@@ -42,7 +42,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void Start()
         {
             base.Start();
+            StartLoadingData();
+        }
 
+        protected virtual void StartLoadingData()
+        {
             if (urlPropertyData.Data.IsStoredInProject())
             {
                 string path = Path.Combine(Application.persistentDataPath, urlPropertyData.Data.LocalPath.TrimStart('/', '\\'));

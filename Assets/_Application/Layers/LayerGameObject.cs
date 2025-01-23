@@ -65,6 +65,11 @@ namespace Netherlands3D.Twin.Layers
         
         protected virtual void Start()
         {
+            InitializeVisualisation();
+        }
+
+        protected virtual void InitializeVisualisation()
+        {
             if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
@@ -72,7 +77,7 @@ namespace Netherlands3D.Twin.Layers
 
             InitializeStyling();
         }
-        
+
         private void CreateProxy()
         {
             ProjectData.AddReferenceLayer(this);
