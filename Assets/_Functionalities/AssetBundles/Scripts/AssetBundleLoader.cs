@@ -98,6 +98,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
         private IEnumerator GetAssetBundle(string path, UnityAction<AssetBundle> callBack)
         {
+#if !UNITY_EDITOR
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path);
             request.SendWebRequest();
             while (!request.isDone)
@@ -110,7 +111,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError(request.error);
-                callBack?.Invoke(null);
             }
             else
             {
@@ -118,6 +118,29 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                 callBack?.Invoke(bundle);
             }
+#else
+            // Use AssetBundle.LoadFromFile for the Editor, this fixes a "Cannot connect to destination host" error on the Mac editor
+            if (File.Exists(path))
+            {
+                // Show some progress (fake, as LoadFromFile doesn't provide progress)
+                loadingScreen.ShowProgress(0.5f);
+                yield return null;
+                
+                AssetBundle bundle = AssetBundle.LoadFromFile(path);
+                if (bundle == null)
+                {
+                    Debug.LogError("Failed to load AssetBundle from path: " + path);
+                }
+                else
+                {
+                    callBack?.Invoke(bundle);
+                }
+            }
+            else
+            {
+                Debug.LogError("File does not exist at path: " + path);
+            }
+#endif
         }
 
         private void AddAssetToObjectLibrary(GameObject asset)

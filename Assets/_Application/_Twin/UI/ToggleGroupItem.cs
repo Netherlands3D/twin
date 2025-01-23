@@ -6,7 +6,17 @@ namespace Netherlands3D.Twin.UI
     public class ToggleGroupItem : MonoBehaviour
     {
         private Toggle toggle;
-        public Toggle Toggle { get => toggle; }
+
+        public Toggle Toggle
+        {
+            get
+            {
+                if (!toggle)
+                    toggle = GetComponent<Toggle>();
+                
+                return toggle;
+            }
+        }
 
         [Header("Icon colors")]
         [SerializeField] private Color enabledIconColor = Color.white;
