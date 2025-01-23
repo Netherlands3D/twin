@@ -101,6 +101,10 @@ namespace Netherlands3D.Tiles3D
             {
                 tile.tileTransform = tile.parent.tileTransform * myTileTransform;
             }
+            else
+            {
+                tile.tileTransform = myTileTransform;
+            }
            
             tile.boundingVolume = new BoundingVolume();
             JSONNode boundingVolumeNode = node["boundingVolume"];
