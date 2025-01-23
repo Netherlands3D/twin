@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.cartesiantiles",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "displayName": "Netherlands3D - Cartesian Tiles",
   "description": "Loads and unloads datasets in a cartesian coordinateSystem",
   "unity": "2022.2",

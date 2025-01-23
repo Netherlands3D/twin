@@ -596,14 +596,21 @@ namespace Netherlands3D.CartesianTiles
                 int tilesizeIndex = tileSizes.IndexOf(layer.tileSize);
                 var neededTiles = tileDistances[tilesizeIndex];
 
-                var neededTileKeys = new HashSet<Vector2Int>(
-                    neededTiles.Select(neededTile => new Vector2Int(neededTile.x, neededTile.y))
-                );
 
                 // check for each active tile if the key is in the list of tilekeys within the viewrange
                 foreach (var kvp in layer.tiles)
                 {
-                    if (neededTileKeys.Contains(kvp.Key)) continue; 
+                    bool isneeded = false;
+                    for (int i = 0; i < neededTiles.Count; i++)
+                    {
+                        if (neededTiles[i].x == kvp.Key.x && neededTiles[i].y == kvp.Key.y)
+                        {
+                            isneeded = true;
+                            i = neededTiles.Count;
+                        }
+                    }
+                    if (isneeded) continue;
+
                     
                     // if the tile is not within the viewrange, set it up for removal
                     AddTileChange(
