@@ -119,7 +119,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 callBack?.Invoke(bundle);
             }
 #else
-            // Use AssetBundle.LoadFromFile for the Editor
+            // Use AssetBundle.LoadFromFile for the Editor, this fixes a "Cannot connect to destination host" error on the Mac editor
             if (File.Exists(path))
             {
                 // Show some progress (fake, as LoadFromFile doesn't provide progress)
