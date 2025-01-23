@@ -37,6 +37,8 @@ jobs:
     needs: ['prepare']
 
     permissions: { contents: read }
+    outputs:
+      buildVersion: steps.buildUnity.outputs.buildVersion 
 
     runs-on: ubuntu-latest
     steps:
@@ -144,7 +146,7 @@ jobs:
         with: { name: '${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}', path: '${{ env.BUILD_OUTPUT_FOLDER }}' }
 
       - name: 'Show Version'
-        run: 'echo "Version: ${{ jobs.build.steps.buildUnity.outputs.buildVersion }}"'
+        run: 'echo "Version: ${{ needs.build.outputs.buildVersion }}"'
 
       - name: 'Docker: Login to GitHub Container Registry'
         uses: docker/login-action@v3
@@ -162,7 +164,7 @@ jobs:
           build-args: |
             SOURCE_PATH=${{ env.BUILD_OUTPUT_FOLDER }}
           tags: |
-            ghcr.io/netherlands3d/twin:${{ jobs.build.steps.buildUnity.outputs.buildVersion }}
+            ghcr.io/netherlands3d/twin:${{ needs.build.outputs.buildVersion }}
             ghcr.io/netherlands3d/twin:latest
 
   deploy:
