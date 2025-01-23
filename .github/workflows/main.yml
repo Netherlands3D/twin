@@ -1,28 +1,25 @@
-﻿# Uses https://game.ci/docs/github/getting-started
-name: Actions
-
+﻿name: Actions
 on: [push]
 
+env:
+  BUILD_OUTPUT_FOLDER: 'build/WebGL/WebGL'
+  PRODUCTION_BUILD_ARTEFACT_NAME: 'viewer'
+  DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-development'
+
 jobs:
-  build:
-    name: Build my project ✨
+  prepare:
+    name: 'Prepare the build'
     runs-on: ubuntu-latest
     
     permissions:
       contents: read
-      packages: write
 
     steps:
-      # Clean space
-      - name: Free Disk Space (Ubuntu)
+      - name: 'Free Disk Space'
+        # see: https://github.com/jlumbroso/free-disk-space  
         uses: jlumbroso/free-disk-space@main
         with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
           tool-cache: false
-          
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
           android: true
           dotnet: true
           haskell: true
@@ -30,32 +27,37 @@ jobs:
           docker-images: true
           swap-storage: true
 
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          lfs: true
+  build:
+    name: 'Build Netherlands3D Viewer ✨'
 
-      # Cache
-      - uses: actions/cache@v2
+    # only run this when a commit was pushed to the main branch
+    if: github.ref_name == 'main'
+
+    # only run this after the 'prepare' stage has successfully completed 
+    needs: ['prepare']
+
+    permissions: { contents: read }
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code from repository'
+        # see: https://github.com/actions/checkout      
+        uses: actions/checkout@v2
+        with: { lfs: true }
+
+      - name: 'Cache Library folder - restore and track'
+        # see: https://github.com/actions/cache      
+        uses: actions/cache@v2
         with:
-          path: Library
+          path: 'Library'
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
 
-      # Test
-#      - name: 'Game-CI: Run tests'
-#        uses: game-ci/unity-test-runner@v2
-#        env:
-#          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-#        with:
-#          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      # Build Unity project
-      - name: 'Game-CI: Build Unity project'
+      - name: 'Build Unity project to WebGL'
+        id: buildUnity # used when building the docker container to get the version number from
+        # See https://game.ci/docs/github/getting-started
         uses: game-ci/unity-builder@v4
-        id: buildUnity
         env:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -66,55 +68,134 @@ jobs:
           # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
           # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
 
+      # Create an artifact in the build pipeline 
+      - name: 'Upload artifact to build pipeline'
+        # see: https://github.com/actions/upload-artifact      
+        uses: actions/upload-artifact@v4
+        with: { name: ${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}, path: ${{ env.BUILD_OUTPUT_FOLDER }} }
+
+  build-development:
+    name: 'Build Development Netherlands3D Viewer ✨'
+
+    # only run this after the 'build' stage has successfully completed 
+    needs: ['prepare']
+
+    permissions: { contents: read }
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code from repository'
+        # see: https://github.com/actions/checkout      
+        uses: actions/checkout@v2
+        with: { lfs: true }
+
+      - name: 'Cache Library folder - restore and track'
+        # see: https://github.com/actions/cache      
+        uses: actions/cache@v3
+        with:
+          path: 'Library'
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: 'Build Unity project to WebGL'
+        # See https://game.ci/docs/github/getting-started
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+          customParameters: '-Development -AllowDebugging'
+          # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
+          # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
+          unityVersion: auto
+
+      # Create an artifact in the build pipeline 
+      - name: 'Upload artifact to build pipeline'
+        # see: https://github.com/actions/download-artifact      
+        uses: actions/upload-artifact@v4
+        with: { name: ${{ env.DEVELOPMENT_BUILD_ARTEFACT_NAME }}, path: ${{ env.BUILD_OUTPUT_FOLDER }} }
+      
+  build-docker-image:
+    name: 'Build and Publish Docker Image ✨'
+
+    # only run this when a commit was pushed to the main branch
+    if: github.ref_name == 'main'
+
+    # only run this after the 'build' stage has successfully completed 
+    needs: [ 'build' ]
+    
+    permissions:
+      contents: read
+      packages: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        # see: https://github.com/actions/checkout
+        uses: actions/checkout@v2
+        with: { lfs: true }
+
+      - name: 'Download built viewer'
+        # see: https://github.com/actions/download-artifact
+        uses: actions/download-artifact@v4
+        with: { name: ${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}, path: ${{ env.BUILD_OUTPUT_FOLDER }} }
+
+      - name: 'Show Version'
+        run: 'echo "Version: ${{ steps.buildUnity.outputs.buildVersion }}"'
+
       - name: 'Docker: Login to GitHub Container Registry'
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: 'ghcr.io'
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      # Build and publish Docker Image on main
       - name: 'Docker: Build and push image'
-        if: github.ref_name == 'main'
         uses: docker/build-push-action@v5
         with:
           context: .
           file: .docker/Dockerfile
           push: true
           build-args: |
-            SOURCE_PATH=build/WebGL/WebGL
+            SOURCE_PATH=${{ env.BUILD_OUTPUT_FOLDER }}
           tags: |
             ghcr.io/netherlands3d/twin:${{ steps.buildUnity.outputs.buildVersion }}
             ghcr.io/netherlands3d/twin:latest
 
-      # Create an artifact in the build pipeline 
-      - uses: actions/upload-artifact@v4
-        name: Upload artifact to build pipeline
-        with:
-          name: Build
-          path: build/WebGL/WebGL
-      
-      - uses: actions/upload-pages-artifact@v3
-        name: 'Github Pages: prepare artefact for deployment'
-        id: deployment
-        if: github.ref_name == 'main'
-        with:
-          path: build/WebGL/WebGL
-
-  # see: https://github.com/actions/deploy-pages
   deploy:
+    name: 'Deploy the viewer to Github Pages'
+    
+    # only run this when a commit was pushed to the main branch
     if: github.ref_name == 'main'
+    
+    # only run this after the 'build' stage has successfully completed 
     needs: build
+    
     permissions:
       pages: write
       id-token: write
     
     environment:
-      name: github-pages
+      name: 'github-pages'
       url: ${{ steps.deployment.outputs.page_url }}
     
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
+      - name: 'Download built viewer'
+        # see: https://github.com/actions/download-artifact
+        uses: actions/download-artifact@v4
+        with: { name: ${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}, path: ${{ env.BUILD_OUTPUT_FOLDER }} }
+      
+      - name: 'Prepare artefact for deployment'
+        # see: https://github.com/actions/upload-pages-artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.BUILD_OUTPUT_FOLDER }}
+      
+      - name: 'Deploy to GitHub Pages'
         id: deployment
+        # see: https://github.com/actions/deploy-pages
         uses: actions/deploy-pages@v4
