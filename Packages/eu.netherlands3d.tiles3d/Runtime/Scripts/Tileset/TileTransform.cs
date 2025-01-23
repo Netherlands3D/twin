@@ -135,17 +135,17 @@ namespace Netherlands3D.Tiles3D
         public Coordinate MultiplyPoint3x4(Coordinate point)
         {
             Coordinate res = new Coordinate(point.CoordinateSystem,0,0,0);
-            res.value1 = this.m00 * point.Points[0] + this.m01 * point.Points[1] + this.m02 * point.height + this.m03;
-            res.value2= this.m10 * point.Points[0] + this.m11 * point.Points[1] + this.m12 * point.height + this.m13;
-            res.value3 = this.m20 * point.Points[0] + this.m21 * point.Points[1] + this.m22 * point.height + this.m23;
+            res.value1 = this.m00 * point.value1 + this.m01 * point.value2 + this.m02 * point.value3 + this.m03;
+            res.value2= this.m10 * point.value1 + this.m11 * point.value2+ this.m12 * point.value3 + this.m13;
+            res.value3 = this.m20 * point.value1 + this.m21 * point.value2+ this.m22 * point.value3 + this.m23;
             return res;
         }
         public Coordinate MultiplyVector(Coordinate point)
         {
             Coordinate res = new Coordinate(point.CoordinateSystem, 0, 0, 0);
-            res.value1 = this.m00 * point.Points[0] + this.m01 * point.Points[1] + this.m02*point.Points[2] ;
-            res.value2 = this.m10 * point.Points[0] + this.m11 * point.Points[1] + this.m12 * point.Points[2];
-            res.value3 = this.m20 * point.Points[0] + this.m21 * point.Points[1] + this.m22 * point.Points[2];
+            res.value1 = this.m00 * point.value1 + this.m01 * point.value2 + this.m02*point.value3 ;
+            res.value2 = this.m10 * point.value1 + this.m11 * point.value2 + this.m12 * point.value3;
+            res.value3 = this.m20 * point.value1 + this.m21 * point.value2 + this.m22 * point.value3;
             return res;
         }
     }
