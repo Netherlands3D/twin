@@ -7,13 +7,17 @@ env:
   DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-development'
 
 jobs:
-  prepare:
-    name: 'Prepare the build'
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
+  build:
+    name: 'Build Netherlands3D Viewer ✨'
 
+    # only run this when a commit was pushed to the main branch
+    if: github.ref_name == 'main'
+
+    permissions: { contents: read }
+    outputs:
+      buildVersion: steps.buildUnity.outputs.buildVersion 
+
+    runs-on: ubuntu-latest
     steps:
       - name: 'Free Disk Space'
         # see: https://github.com/jlumbroso/free-disk-space  
@@ -23,25 +27,10 @@ jobs:
           android: true
           dotnet: true
           haskell: true
-          large-packages: true
+          large-packages: false
           docker-images: true
           swap-storage: true
 
-  build:
-    name: 'Build Netherlands3D Viewer ✨'
-
-    # only run this when a commit was pushed to the main branch
-    if: github.ref_name == 'main'
-
-    # only run this after the 'prepare' stage has successfully completed 
-    needs: ['prepare']
-
-    permissions: { contents: read }
-    outputs:
-      buildVersion: steps.buildUnity.outputs.buildVersion 
-
-    runs-on: ubuntu-latest
-    steps:
       - name: 'Checkout code from repository'
         # see: https://github.com/actions/checkout      
         uses: actions/checkout@v4
@@ -78,14 +67,22 @@ jobs:
 
   build-development:
     name: 'Build Development Netherlands3D Viewer ✨'
-
-    # only run this after the 'build' stage has successfully completed 
-    needs: ['prepare']
-
     permissions: { contents: read }
 
     runs-on: ubuntu-latest
     steps:
+      - name: 'Free Disk Space'
+        # see: https://github.com/jlumbroso/free-disk-space  
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
       - name: 'Checkout code from repository'
         # see: https://github.com/actions/checkout      
         uses: actions/checkout@v4
@@ -156,6 +153,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: 'Docker: Build and push image'
+        if: github.ref_name == 'main' # double ensure this is only on main, in case of debugging
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -198,6 +196,7 @@ jobs:
           path: '${{ env.BUILD_OUTPUT_FOLDER }}'
       
       - name: 'Deploy to GitHub Pages'
+        if: github.ref_name == 'main' # double ensure this is only on main, in case of debugging
         id: deployment
         # see: https://github.com/actions/deploy-pages
         uses: actions/deploy-pages@v4
