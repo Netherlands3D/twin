@@ -14,24 +14,24 @@ namespace Netherlands3D.Tiles3D{
                 case BoundingVolumeType.Box:
                     Coordinate center = new Coordinate(CoordinateSystem.Undefined, values[0], values[1], values[2]);
                     Coordinate newCenter = tiletransform.MultiplyPoint3x4(center);
-                    values[0] = newCenter.Points[0];
-                    values[1] = newCenter.Points[1];
-                    values[2] = newCenter.Points[2];
+                    values[0] = newCenter.value1;
+                    values[1] = newCenter.value2;
+                    values[2] = newCenter.value3;
                     Coordinate xAxis = new Coordinate(CoordinateSystem.Undefined, values[3], values[4], values[5]);
                     Coordinate newXAxis = tiletransform.MultiplyVector(xAxis);
-                    values[3] = newXAxis.Points[0];
-                    values[4] = newXAxis.Points[1];
-                    values[5] = newXAxis.Points[2];
+                    values[3] = newXAxis.value1;
+                    values[4] = newXAxis.value2;
+                    values[5] = newXAxis.value3;
                     Coordinate yAxis = new Coordinate(CoordinateSystem.Undefined, values[6], values[7], values[8]);
                     Coordinate newYAxis = tiletransform.MultiplyVector(yAxis);
-                    values[6] = newYAxis.Points[0];
-                    values[7] = newYAxis.Points[1];
-                    values[8] = newYAxis.Points[2];
+                    values[6] = newYAxis.value1;
+                    values[7] = newYAxis.value2;
+                    values[8] = newYAxis.value3;
                     Coordinate zAxis = new Coordinate(CoordinateSystem.Undefined, values[9], values[10], values[11]);
                     Coordinate newZAxis = tiletransform.MultiplyVector(zAxis);
-                    values[9] = newZAxis.Points[0];
-                    values[10] = newZAxis.Points[1];
-                    values[11] = newZAxis.Points[2];
+                    values[9] = newZAxis.value1;
+                    values[10] = newZAxis.value2;
+                    values[11] = newZAxis.value3;
                     break;
                 case BoundingVolumeType.Sphere:
                     break;
