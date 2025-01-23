@@ -11,7 +11,7 @@ jobs:
     name: 'Build Netherlands3D Viewer ✨'
 
     # only run this when a commit was pushed to the main branch
-    if: github.ref_name == 'main'
+#    if: github.ref_name == 'main'
 
     permissions: { contents: read }
     outputs:
@@ -121,7 +121,7 @@ jobs:
     name: 'Build and Publish Docker Image ✨'
 
     # only run this when a commit was pushed to the main branch
-    if: github.ref_name == 'main'
+#    if: github.ref_name == 'main'
 
     # only run this after the 'build' stage has successfully completed 
     needs: [ 'build' ]
@@ -169,7 +169,7 @@ jobs:
     name: 'Deploy the viewer to Github Pages'
     
     # only run this when a commit was pushed to the main branch
-    if: github.ref_name == 'main'
+#    if: github.ref_name == 'main'
     
     # only run this after the 'build' stage has successfully completed 
     needs: build
