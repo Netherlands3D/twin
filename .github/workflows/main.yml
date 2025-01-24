@@ -8,10 +8,10 @@ env:
 
 jobs:
   build:
-    name: 'Build Netherlands3D Viewer ✨'
+    name: '🗺️ Build Netherlands3D Viewer'
 
     # only run this when a commit was pushed to the main branch
-#    if: github.ref_name == 'main'
+    if: github.ref_name == 'main'
 
     permissions: { contents: read }
     outputs:
@@ -59,14 +59,13 @@ jobs:
           # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
           # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
 
-      # Create an artifact in the build pipeline 
       - name: 'Upload artifact to build pipeline'
         # see: https://github.com/actions/upload-artifact      
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}', path: '${{ env.BUILD_OUTPUT_FOLDER }}' }
 
   build-development:
-    name: 'Build Development Netherlands3D Viewer ✨'
+    name: '🐞 Build Development Netherlands3D Viewer'
     permissions: { contents: read }
 
     runs-on: ubuntu-latest
@@ -111,17 +110,16 @@ jobs:
           # customImage: unityci/editor:ubuntu-2022.3.8f1-webgl-2
           unityVersion: auto
 
-      # Create an artifact in the build pipeline 
       - name: 'Upload artifact to build pipeline'
         # see: https://github.com/actions/download-artifact      
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.DEVELOPMENT_BUILD_ARTEFACT_NAME }}', path: '${{ env.BUILD_OUTPUT_FOLDER }}' }
       
   build-docker-image:
-    name: 'Build and Publish Docker Image ✨'
+    name: '🐳 Build and Publish Docker Image'
 
     # only run this when a commit was pushed to the main branch
-#    if: github.ref_name == 'main'
+    if: github.ref_name == 'main'
 
     # only run this after the 'build' stage has successfully completed 
     needs: [ 'build' ]
@@ -166,10 +164,10 @@ jobs:
             ghcr.io/netherlands3d/twin:latest
 
   deploy:
-    name: 'Deploy the viewer to Github Pages'
+    name: '🌐 Deploy the viewer to Github Pages'
     
     # only run this when a commit was pushed to the main branch
-#    if: github.ref_name == 'main'
+    if: github.ref_name == 'main'
     
     # only run this after the 'build' stage has successfully completed 
     needs: build
@@ -190,6 +188,7 @@ jobs:
         with: { name: '${{ env.PRODUCTION_BUILD_ARTEFACT_NAME }}', path: '${{ env.BUILD_OUTPUT_FOLDER }}' }
       
       - name: 'Prepare artefact for deployment'
+        if: github.ref_name == 'main' # double ensure this is only on main, in case of debugging
         # see: https://github.com/actions/upload-pages-artifact
         uses: actions/upload-pages-artifact@v3
         with:
