@@ -324,37 +324,68 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 if (xmlDocument == null)
                     ParseBodyAsXML();
 
-                var lowerCornerNode = xmlDocument?.DocumentElement?
+                // Try to get a bounding box in the local CRS first
+                var bboxNode = xmlDocument?.DocumentElement?
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='BoundingBox' or local-name()='ows:BoundingBox']", namespaceManager);
+                
+                if (bboxNode != null)
+                {
+                    var lowerCornerNode = bboxNode.SelectSingleNode("*[local-name()='LowerCorner']", namespaceManager);
+                    var upperCornerNode = bboxNode.SelectSingleNode("*[local-name()='UpperCorner']", namespaceManager);
+                    var crsString = bboxNode.Attributes["crs"]?.Value;
+
+                    var hasCRS = CoordinateSystems.FindCoordinateSystem(crsString, out var crs);
+
+                    if (hasCRS)
+                    {
+                        if (lowerCornerNode != null && upperCornerNode != null)
+                        {
+                            var lowerCorner = lowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+                            var upperCorner = upperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+
+                            Coordinate bottomLeft;
+                            Coordinate topRight;
+                            if (lowerCorner.Length > 2)
+                            {
+                                bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1], lowerCorner[2]);
+                                topRight = new Coordinate(crs, upperCorner[0], upperCorner[1], upperCorner[2]);
+                            }
+                            else
+                            {
+                                bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1]);
+                                topRight = new Coordinate(crs, upperCorner[0], upperCorner[1]);
+                            }
+
+                            Debug.Log($"Bounding box in CRS: {crs}");
+                            wfsBounds = new BoundingBox(bottomLeft, topRight);
+                            return wfsBounds;
+                        }
+                    }
+                    
+                    Debug.LogWarning("Custom CRS BBox found, but not able to be parsed, defaulting to WGS84 CRS. Founds CRS string: " + crsString);
+                }
+
+                // Fallback to WGS84BoundingBox
+                var wgs84LowerCornerNode = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='LowerCorner']", namespaceManager);
 
-                var upperCornerNode = xmlDocument?.DocumentElement?
+                var wgs84UpperCornerNode = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='UpperCorner']", namespaceManager);
 
-                if (lowerCornerNode == null || upperCornerNode == null)
+                if (wgs84LowerCornerNode == null || wgs84UpperCornerNode == null)
                 {
                     Debug.LogWarning("Bounding box information not found in WFS GetCapabilities response.");
                     return null;
                 }
-
-                var lowerCorner = lowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
-                var upperCorner = upperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
-
-                var crs = GetCoordinateReferenceSystem();
-                Coordinate bottomLeft;
-                Coordinate topRight;
                 
-                if (lowerCorner.Length > 2)
-                {
-                    bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1], lowerCorner[2]);
-                    topRight = new Coordinate(crs, upperCorner[0], upperCorner[1], upperCorner[2]);
-                }
-                else
-                {
-                    bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1]);
-                    topRight = new Coordinate(crs, upperCorner[0], upperCorner[1]);
-                }
+                var wgs84LowerCorner = wgs84LowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+                var wgs84UpperCorner = wgs84UpperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
 
-                wfsBounds = new BoundingBox(bottomLeft, topRight);
+                var wgs84BottomLeft = new Coordinate(CoordinateSystem.WGS84, wgs84LowerCorner[0], wgs84LowerCorner[1]);
+                var wgs84TopRight = new Coordinate(CoordinateSystem.WGS84, wgs84UpperCorner[0], wgs84UpperCorner[1]);
+
+                Debug.Log("Bounding box found in WGS84 CRS (EPSG:4326).");
+                wfsBounds = new BoundingBox(wgs84BottomLeft, wgs84TopRight);
                 return wfsBounds;
             }
 
@@ -372,6 +403,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     Debug.LogWarning("Coordinate Reference System (CRS) not found in the WFS GetCapabilities response.");
                     return CoordinateSystem.Undefined;
                 }
+
                 var hasCRS = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText, out var crs);
                 if (hasCRS)
                     return crs;
