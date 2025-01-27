@@ -34,6 +34,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             Reference = GameObject.Instantiate(prefab);
             Reference.LayerData = this;
+            Reference.gameObject.name = Name;
             this.layerProperties = layerProperties;
 
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
