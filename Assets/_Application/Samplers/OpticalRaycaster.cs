@@ -7,8 +7,10 @@ namespace Netherlands3D.Twin.Samplers
     public class OpticalRaycaster : MonoBehaviour
     {
         [SerializeField] private Camera depthCamera;
+        public RenderTexture worldPosRenderTexture;
         float totalDepth = 0;
         private Texture2D samplerTexture;
+        public Material depthMaterial;
 
         [Header("Events")] [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
         
@@ -21,16 +23,23 @@ namespace Netherlands3D.Twin.Samplers
                 return;
             }
 
-            //We will only render on demand using camera.Render()
-            depthCamera.enabled = false;
+            worldPosRenderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            worldPosRenderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
+            worldPosRenderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
+            worldPosRenderTexture.enableRandomWrite = true; // Allow GPU writes
+            worldPosRenderTexture.Create();
 
-            //Create a red channel texture that we can sample depth from
+            depthCamera.targetTexture = worldPosRenderTexture;
+
             samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
+
+            depthMaterial = new Material(Shader.Find("Custom/WorldPositionFromDepth"));
         }
 
         private void OnDestroy()
         {
             Destroy(samplerTexture);
+            worldPosRenderTexture.Release();
         }
 
         /// <summary>
@@ -78,13 +87,35 @@ namespace Netherlands3D.Twin.Samplers
 
         public void RenderDepthCamera()
         {
-            //Read pixels from the depth texture
+            ////Read pixels from the depth texture
             depthCamera.Render();
             RenderTexture.active = depthCamera.targetTexture;
             samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
             samplerTexture.Apply();
             RenderTexture.active = null;
+
+            //ReadWorldPositionFromTexture();
         }
+
+        private void RenderDepthCameraWithShader()
+        {
+            // Set camera inverse view-projection matrix for the shader
+            Matrix4x4 invViewProjection = Camera.main.projectionMatrix.inverse * Camera.main.worldToCameraMatrix.inverse;
+            depthMaterial.SetMatrix("_CameraInvViewProjection", invViewProjection);
+
+            // Set near and far clip planes for depth calculations
+            depthMaterial.SetVector("_MyScreenParams", new Vector4(Camera.main.nearClipPlane, Camera.main.farClipPlane, 0, 0));
+
+            // Set the RenderTexture as the target for depthCamera's output
+            depthCamera.targetTexture = worldPosRenderTexture;
+
+            // Use Graphics.Blit to apply the material and render to the RenderTexture
+            Graphics.Blit(null, worldPosRenderTexture, depthMaterial);
+
+            // Reset the target texture (optional, if needed)
+            depthCamera.targetTexture = null;
+        }
+
 
         private Vector3 ReadWorldPositionFromPixel()
         {
@@ -95,6 +126,18 @@ namespace Netherlands3D.Twin.Samplers
                 worldPosition.g,
                 worldPosition.b
             );
+        }
+
+        private Vector3 ReadWorldPositionFromTexture()
+        {
+            // Sample the pixel value from the RenderTexture
+            RenderTexture.active = depthCamera.targetTexture;
+            samplerTexture.ReadPixels(new Rect(0, 0, 1, 1), 0, 0);
+            samplerTexture.Apply();
+            RenderTexture.active = null;
+
+            Color worldPositionColor = samplerTexture.GetPixel(0, 0);
+            return new Vector3(worldPositionColor.r, worldPositionColor.g, worldPositionColor.b);
         }
     }
 }

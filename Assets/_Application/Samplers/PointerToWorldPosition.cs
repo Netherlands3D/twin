@@ -17,6 +17,7 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             WorldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, screenPoint);
+            Debug.Log(WorldPoint);
         }
     }
 }
