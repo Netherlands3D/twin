@@ -511,5 +511,13 @@ namespace Netherlands3D.Coordinates
 
             return rotatedRelativePosition;
         }
+
+        public override string ToString()
+        {
+            if(PointsLength == 2)
+                return string.Format($"({value1}, {value2})");
+
+            return string.Format($"({value1}, {value2}, {value3})");
+        }
     }
 }
