@@ -5,7 +5,9 @@ using System;
 using Netherlands3D.Web;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Xml.Serialization;
+using Netherlands3D.Coordinates;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -81,6 +83,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 case GeoJSONWFS.RequestType.GetCapabilities:
                 {
+                    wfs.GetWFSBounds();
                     var featureTypes = wfs.GetFeatureTypes();
 
                     //Create a folder layer 
@@ -203,6 +206,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             private XmlNamespaceManager namespaceManager;
 
             public RequestType requestType;
+            public BoundingBox wfsBounds;
 
             public enum RequestType
             {
@@ -315,11 +319,72 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 return title != null ? title.InnerText : "";
             }
 
+            public BoundingBox GetWFSBounds()
+            {
+                if (xmlDocument == null)
+                    ParseBodyAsXML();
+
+                var lowerCornerNode = xmlDocument?.DocumentElement?
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='LowerCorner']", namespaceManager);
+
+                var upperCornerNode = xmlDocument?.DocumentElement?
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='UpperCorner']", namespaceManager);
+
+                if (lowerCornerNode == null || upperCornerNode == null)
+                {
+                    Debug.LogWarning("Bounding box information not found in WFS GetCapabilities response.");
+                    return null;
+                }
+
+                var lowerCorner = lowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+                var upperCorner = upperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+
+                var crs = GetCoordinateReferenceSystem();
+                Coordinate bottomLeft;
+                Coordinate topRight;
+                
+                if (lowerCorner.Length > 2)
+                {
+                    bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1], lowerCorner[2]);
+                    topRight = new Coordinate(crs, upperCorner[0], upperCorner[1], upperCorner[2]);
+                }
+                else
+                {
+                    bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1]);
+                    topRight = new Coordinate(crs, upperCorner[0], upperCorner[1]);
+                }
+
+                wfsBounds = new BoundingBox(bottomLeft, topRight);
+                return wfsBounds;
+            }
+
+            public CoordinateSystem GetCoordinateReferenceSystem()
+            {
+                if (xmlDocument == null)
+                    ParseBodyAsXML();
+
+                // Try to find the CRS in the FeatureType's DefaultCRS or DefaultSRS elements
+                var crsNode = xmlDocument?.DocumentElement?
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='DefaultCRS' or local-name()='DefaultSRS']", namespaceManager);
+
+                if (crsNode == null)
+                {
+                    Debug.LogWarning("Coordinate Reference System (CRS) not found in the WFS GetCapabilities response.");
+                    return CoordinateSystem.Undefined;
+                }
+                var hasCRS = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText, out var crs);
+                if (hasCRS)
+                    return crs;
+
+                Debug.LogWarning("Could not parse Coordinate Reference System (CRS) in the WFS GetCapabilities response. Founds CRS string: " + crsNode.InnerText);
+                return CoordinateSystem.Undefined;
+            }
+
             public IEnumerable<FeatureType> GetFeatureTypes()
             {
                 if (xmlDocument == null)
                     ParseBodyAsXML();
-                
+
                 var featureTypeListNodeInRoot = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
                 var featureTypeChildNodes = featureTypeListNodeInRoot?.ChildNodes;
@@ -348,6 +413,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     {
                         continue;
                     }
+
                     var crsNode = featureTypeNode.SelectSingleNode("wfs:DefaultSRS | wfs:DefaultCRS", namespaceManager);
                     string crs = crsNode?.InnerText;
 
@@ -392,7 +458,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     Debug.Log("Adding wfs namespace manually: http://www.opengis.net/wfs");
                     namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
                 }
-                
+
                 if (rootElement.HasAttribute("xsi:schemaLocation"))
                 {
                     string schemaLocation = rootElement.GetAttribute("xsi:schemaLocation").Split(' ')[0];
