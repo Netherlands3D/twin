@@ -16,8 +16,12 @@ namespace Netherlands3D.Twin.Samplers
         private void Update()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            WorldPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, screenPoint);
-            Debug.Log(WorldPoint);
+            opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, screenPoint, w =>
+            {
+                WorldPoint = w;
+                Debug.Log(WorldPoint);
+            });
+            
         }
     }
 }

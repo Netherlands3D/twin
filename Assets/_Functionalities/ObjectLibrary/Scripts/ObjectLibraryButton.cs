@@ -52,11 +52,14 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 for (int i = 0; i < frames; i++)
                 {
                     yield return new WaitForEndOfFrame();
-                    var opticalSpawnPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport);
-                    if (opticalSpawnPoint != Vector3.zero)
+                    opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport, w =>
                     {
-                        spawnPoint = opticalSpawnPoint;
-                    }
+                        var opticalSpawnPoint = w;
+                        if (opticalSpawnPoint != Vector3.zero)
+                        {
+                            spawnPoint = opticalSpawnPoint;
+                        }
+                    });                    
                 }
             }
             
