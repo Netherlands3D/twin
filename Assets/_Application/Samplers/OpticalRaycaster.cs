@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Samplers
         public Material visualizationMaterial; //convert to temp position data
 
         private List<OpticalRequest> requestPool = new List<OpticalRequest>();
+        private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
 
         private class OpticalRequest
         {
@@ -25,6 +26,7 @@ namespace Netherlands3D.Twin.Samplers
             public Action<AsyncGPUReadbackRequest> callback;
             public Action<Vector3> resultCallback;
             public Action onWaitFrameCallback;
+            public int framesActive = 0;
 
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
@@ -91,8 +93,24 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.AlignWithMainCamera();
             opticalRequest.UpdateShaders();           
             opticalRequest.SetResultCallback(callback);
-            //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
-            StartCoroutine(WaitForFrame(opticalRequest.onWaitFrameCallback));            
+            opticalRequest.framesActive = 0;
+            activeRequests.Add(opticalRequest);
+        }
+
+        private void Update()
+        {
+            if (activeRequests.Count == 0) return;
+
+            for(int i = activeRequests.Count - 1; i >= 0; i--) 
+            {
+                activeRequests[i].framesActive++;
+                if(activeRequests[i].framesActive > 1)
+                {
+                    //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
+                    activeRequests[i].onWaitFrameCallback();
+                    activeRequests.RemoveAt(i);
+                }
+            }
         }
 
         private void RequestCallback(OpticalRequest opticalRequest)
