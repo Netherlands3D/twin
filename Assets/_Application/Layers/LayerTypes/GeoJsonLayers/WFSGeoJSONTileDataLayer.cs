@@ -42,7 +42,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         public BoundingBox BoundingBox { get; set; }
-        
+
         private void Awake()
         {
             //Make sure Datasets at least has one item
@@ -82,10 +82,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             if (BoundingBox == null) //no bounds set, so we don't know the extents and always need to load the tile
                 return true;
-            
+
             return BoundingBox.Intersects(tileBox);
         }
-        
+
         public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
             TileAction action = tileChange.action;

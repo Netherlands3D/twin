@@ -40,38 +40,28 @@ namespace Netherlands3D.Twin
         {
             if (other.CoordinateSystem != CoordinateSystem)
                 other = ConvertToCRS(other, CoordinateSystem);
-            
+
             return other.BottomLeft.Points[0] >= this.BottomLeft.Points[0] &&
                    other.BottomLeft.Points[1] >= this.BottomLeft.Points[1] &&
                    other.TopRight.Points[0] <= this.TopRight.Points[0] &&
                    other.TopRight.Points[1] <= this.TopRight.Points[1];
         }
 
-        
+
         public bool Intersects(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
                 other = ConvertToCRS(other, CoordinateSystem);
-            
-            // Check if one box is to the left of the other
-            if (
-                this.TopRight.Points[0] < other.BottomLeft.Points[0] ||
-                other.TopRight.Points[0] < this.BottomLeft.Points[0]
-            )
+
+            if (BottomLeft.PointsLength == 2)
             {
-                return false;
+                return !(TopRight.easting < other.BottomLeft.easting || BottomLeft.easting > other.TopRight.easting ||
+                         TopRight.northing < other.BottomLeft.northing || BottomLeft.northing > other.TopRight.northing);
             }
 
-            // Check if one box is above the other
-            if (
-                this.TopRight.Points[1] < other.BottomLeft.Points[1] ||
-                other.TopRight.Points[1] < this.BottomLeft.Points[1]
-            )
-            {
-                return false;
-            }
-
-            return true;
+            return !(TopRight.easting < other.BottomLeft.easting || BottomLeft.easting > other.TopRight.easting ||
+                     TopRight.northing < other.BottomLeft.northing || BottomLeft.northing > other.TopRight.northing ||
+                     TopRight.height < other.BottomLeft.height || BottomLeft.height > other.TopRight.height);
         }
 
         private BoundingBox ConvertToCRS(BoundingBox box, CoordinateSystem newCoordinateSystem)

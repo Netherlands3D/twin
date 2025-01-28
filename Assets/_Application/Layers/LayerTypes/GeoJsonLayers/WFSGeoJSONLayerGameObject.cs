@@ -11,9 +11,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject
     {
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSLayer;
-        public WFSGeoJSONTileDataLayer CartesianTileWFSLayer { get => cartesianTileWFSLayer; }
 
-        protected void Awake() 
+        public WFSGeoJSONTileDataLayer CartesianTileWFSLayer => cartesianTileWFSLayer;
+        
+        protected void Awake()
         {
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
