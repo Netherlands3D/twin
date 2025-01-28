@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Samplers
             public AsyncGPUReadbackRequest request;
             public Action<AsyncGPUReadbackRequest> callback;
             public Action<Vector3> resultCallback;
-            public Action waitFrameRoutine;
+            public Action onWaitFrameCallback;
 
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.Samplers
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
                 depthCamera.targetTexture = rt;
                 depthCamera.forceIntoRenderTexture = true;
-                waitFrameRoutine = () =>
+                onWaitFrameCallback = () =>
                 {
                     AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
                     SetRequest(request);
@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Samplers
 
             public void SetWaitFrameCallback(Action callback)
             {
-                waitFrameRoutine = callback;
+                onWaitFrameCallback = callback;
             }
 
             public void SetRequest(AsyncGPUReadbackRequest request)
@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.UpdateShaders();           
             opticalRequest.SetResultCallback(callback);
             //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
-            StartCoroutine(WaitForFrame(opticalRequest.waitFrameRoutine));
+            StartCoroutine(WaitForFrame(opticalRequest.onWaitFrameCallback));            
         }
 
         private void RequestCallback(OpticalRequest opticalRequest)
@@ -112,9 +112,10 @@ namespace Netherlands3D.Twin.Samplers
             PoolRequest(opticalRequest);            
         }
 
+        private WaitForEndOfFrame wfs = new WaitForEndOfFrame();
         private IEnumerator WaitForFrame(Action onEnd)
         {
-            yield return new WaitForEndOfFrame();
+            yield return wfs;
             onEnd?.Invoke();
         }
 
