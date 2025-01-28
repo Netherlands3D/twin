@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Samplers
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
 
-        private List<OpticalRequest> requestPool = new List<OpticalRequest>();
+        private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
 
         private class OpticalRequest
@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.depthMaterial = new Material(depthMaterial);
                 this.positionMaterial = new Material(positionMaterial);
                 this.renderTexture = rt;
-                this.depthCamera = GameObject.Instantiate(prefab);
+                this.depthCamera = Instantiate(prefab);
                 depthCamera.clearFlags = CameraClearFlags.SolidColor;
                 depthCamera.backgroundColor = Color.black;
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
@@ -142,12 +142,11 @@ namespace Netherlands3D.Twin.Samplers
             OpticalRequest request = null;
             if(requestPool.Count > 0)
             {
-                request = requestPool[0];
-                requestPool.RemoveAt(0);
+                request = requestPool.Pop();
             }
             else
             {
-                request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), Instantiate(depthCameraPrefab));
+                request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
                 request.SetCallback(w => RequestCallback(request));
             }
@@ -168,7 +167,7 @@ namespace Netherlands3D.Twin.Samplers
         private void PoolRequest(OpticalRequest request)
         {
             request.depthCamera.enabled = false;
-            requestPool.Add(request);
+            requestPool.Push(request);
         }
     }
 }
