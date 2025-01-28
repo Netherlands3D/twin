@@ -8,12 +8,11 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
-        public Camera depthCameraPrefab; // Camera to capture depth information
-        public Material depthToWorldMaterial;
-        public Material visualizationMaterial; // Material to visualize world position
+        public Camera depthCameraPrefab; 
+        public Material depthToWorldMaterial; //capture depth data shader
+        public Material visualizationMaterial; //convert to temp position data
 
         private List<OpticalRequest> requestPool = new List<OpticalRequest>();
-
 
         private class OpticalRequest
         {
@@ -60,39 +59,35 @@ namespace Netherlands3D.Twin.Samplers
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
             }
         }
-              
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithMainCamera();
-            opticalRequest.UpdateShaders();
+            opticalRequest.UpdateShaders();           
 
-            opticalRequest.depthCamera.transform.SetParent(gameObject.transform, false);
-
-            // Trigger async readback
-            AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(opticalRequest.renderTexture, 0, w =>
+            //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
+            StartCoroutine(WaitForFrame(() =>
             {
-                if (w.hasError)
+                AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(opticalRequest.renderTexture, 0, w =>
                 {
-                    Debug.LogError("GPU readback failed!");
+                    if (w.hasError)
+                    {
+                        Debug.LogError("GPU readback failed!");
+                        PoolRequest(opticalRequest);
+                        return;
+                    }
+                    var worldPosData = w.GetData<Vector4>();
+                    float worldPosX = worldPosData[0].x;
+                    float worldPosY = worldPosData[0].y;
+                    float worldPosZ = worldPosData[0].z;
+                    Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                    callback.Invoke(worldPos);
                     PoolRequest(opticalRequest);
-                    return;
-                }
-                // The result is now available in request.GetData<Vector4>()
-                var worldPosData = w.GetData<Vector4>();
-
-                // Example: Extracting the world position from the readback data
-                float worldPosX = worldPosData[0].x;
-                float worldPosY = worldPosData[0].y;
-                float worldPosZ = worldPosData[0].z;
-                Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-                callback.Invoke(worldPos);
-                Debug.Log(worldPos);
-                PoolRequest(opticalRequest);
-            });
-            opticalRequest.SetRequest(request);
+                });
+                opticalRequest.SetRequest(request);
+            }));
         }
 
         private IEnumerator WaitForFrame(Action onEnd)
@@ -112,23 +107,25 @@ namespace Netherlands3D.Twin.Samplers
             else
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), Instantiate(depthCameraPrefab));
+                request.depthCamera.transform.SetParent(gameObject.transform, false);
             }
+            request.depthCamera.enabled = true;
             return request;
         }
-
 
         private RenderTexture GetRenderTexture()
         {
             RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
             renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
             renderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
-            //renderTexture.enableRandomWrite = true; // Allow GPU writes
+            //renderTexture.enableRandomWrite = true; // Allow GPU writes, check on webgl?
             renderTexture.Create();
             return renderTexture;
         }
 
         private void PoolRequest(OpticalRequest request)
         {
+            request.depthCamera.enabled = false;
             requestPool.Add(request);
         }
     }
