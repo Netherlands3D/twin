@@ -83,15 +83,19 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 case GeoJSONWFS.RequestType.GetCapabilities:
                 {
-                    wfs.GetWFSBounds();
+                    wfs.GetWFSBounds(); //global bounds
                     var featureTypes = wfs.GetFeatureTypes();
 
                     //Create a folder layer 
                     foreach (var featureType in featureTypes)
                     {
+                        BoundingBox layerBounds = GetLayerBoundingBox(featureType);
+                        if (layerBounds == null)
+                            layerBounds = wfs.wfsBounds; //use global bounds
+                        
                         string crs = featureType.DefaultCRS;
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
+                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, layerBounds);
                     }
 
                     wfs = null;
@@ -103,13 +107,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
                     var featureType = queryParameters.Get(ParameterNameOfTypeNameBasedOnVersion());
 
-
                     if (string.IsNullOrEmpty(featureType) == false)
                     {
                         string crs = queryParameters["srsname"];
                         // Can't deduct a human-readable title at the moment, we should add that we always query for the
                         // capabilities; this also helps with things like outputFormat and CRS
-                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
+                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, null); //todo: can we get the BBox here?
                     }
 
                     wfs = null;
@@ -120,8 +123,14 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     break;
             }
         }
+        
+        private BoundingBox GetLayerBoundingBox(FeatureType featureType)
+        {
+            return null; //todo: parse bbox of feature types
+        }
+        
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title)
+        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, BoundingBox wfsBounds)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl, crsType);
@@ -131,6 +140,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             //Spawn a new WFS GeoJSON layer
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.SetBoundingBox(wfsBounds);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = title;
 
@@ -380,11 +390,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 
                 var wgs84LowerCorner = wgs84LowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
                 var wgs84UpperCorner = wgs84UpperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+                
+                var wgs84Crs = CoordinateSystem.CRS84; //WFS describes the WGS84BoundingBox as a lower and upper corner in x/y order, regardless of the DefaultCRS for some reason.
+                
+                var wgs84BottomLeft = new Coordinate(wgs84Crs, wgs84LowerCorner[0], wgs84LowerCorner[1]);
+                var wgs84TopRight = new Coordinate(wgs84Crs, wgs84UpperCorner[0], wgs84UpperCorner[1]);
 
-                var wgs84BottomLeft = new Coordinate(CoordinateSystem.WGS84, wgs84LowerCorner[0], wgs84LowerCorner[1]);
-                var wgs84TopRight = new Coordinate(CoordinateSystem.WGS84, wgs84UpperCorner[0], wgs84UpperCorner[1]);
-
-                Debug.Log("Bounding box found in WGS84 CRS (EPSG:4326).");
+                Debug.Log("Bounding box found in WGS84 CRS.");
                 wfsBounds = new BoundingBox(wgs84BottomLeft, wgs84TopRight);
                 return wfsBounds;
             }

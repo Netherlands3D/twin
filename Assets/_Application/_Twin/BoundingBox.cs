@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Coordinates;
+using UnityEngine;
 
 namespace Netherlands3D.Twin
 {
@@ -37,14 +38,21 @@ namespace Netherlands3D.Twin
         // Method to check if this BoundingBox contains another BoundingBox completely
         public bool Contains(BoundingBox other)
         {
+            if (other.CoordinateSystem != CoordinateSystem)
+                other = ConvertToCRS(other, CoordinateSystem);
+            
             return other.BottomLeft.Points[0] >= this.BottomLeft.Points[0] &&
                    other.BottomLeft.Points[1] >= this.BottomLeft.Points[1] &&
                    other.TopRight.Points[0] <= this.TopRight.Points[0] &&
                    other.TopRight.Points[1] <= this.TopRight.Points[1];
         }
 
+        
         public bool Intersects(BoundingBox other)
         {
+            if (other.CoordinateSystem != CoordinateSystem)
+                other = ConvertToCRS(other, CoordinateSystem);
+            
             // Check if one box is to the left of the other
             if (
                 this.TopRight.Points[0] < other.BottomLeft.Points[0] ||
@@ -64,6 +72,13 @@ namespace Netherlands3D.Twin
             }
 
             return true;
+        }
+
+        private BoundingBox ConvertToCRS(BoundingBox box, CoordinateSystem newCoordinateSystem)
+        {
+            var bottomLeft = box.BottomLeft.Convert(newCoordinateSystem);
+            var topRight = box.TopRight.Convert(newCoordinateSystem);
+            return new BoundingBox(bottomLeft, topRight);
         }
 
         /// <summary>

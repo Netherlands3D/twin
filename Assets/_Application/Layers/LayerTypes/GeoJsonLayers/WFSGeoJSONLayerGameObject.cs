@@ -31,5 +31,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 this.urlPropertyData = urlProperty;
             }
         }
+
+        public void SetBoundingBox(BoundingBox boundingBox)
+        {
+            cartesianTileWFSLayer.BoundingBox = boundingBox;
+        }
     }
 }
