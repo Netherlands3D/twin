@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
@@ -157,8 +158,9 @@ namespace Netherlands3D.Twin.Samplers
         private RenderTexture GetRenderTexture()
         {
             RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
-            renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
-            renderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
+            //renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R16G16B16A16_SFloat;
+            renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
+            renderTexture.depthStencilFormat = GraphicsFormat.None;
             //renderTexture.enableRandomWrite = true; // Allow GPU writes, check on webgl?
             renderTexture.Create();
             return renderTexture;
