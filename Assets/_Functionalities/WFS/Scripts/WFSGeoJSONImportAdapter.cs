@@ -20,7 +20,7 @@ namespace Netherlands3D.Functionalities.Wfs
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
-        private GetCapabilitiesRequest getCapabilitiesRequest;
+        private GeoJSONWFSRequest getCapabilitiesRequest;
 
         public bool Supports(LocalFile localFile)
         {
@@ -36,7 +36,7 @@ namespace Netherlands3D.Functionalities.Wfs
             if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            getCapabilitiesRequest = new GetCapabilitiesRequest(sourceUrl, cachedDataPath);
+            getCapabilitiesRequest = new GeoJSONWFSRequest(sourceUrl, cachedDataPath);
 
             //If the body is a specific GetFeature request; directly continue to execute
             bool isGetFeatureRequest = getCapabilitiesRequest.IsGetFeatureRequest();
@@ -76,7 +76,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             switch (getCapabilitiesRequest.requestType)
             {
-                case GetCapabilitiesRequest.RequestType.GetCapabilities:
+                case GeoJSONWFSRequest.RequestType.GetCapabilities:
                 {
                     getCapabilitiesRequest.GetWFSBounds(); //global bounds
                     var featureTypes = getCapabilitiesRequest.GetFeatureTypes();
@@ -96,7 +96,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     getCapabilitiesRequest = null;
                     return;
                 }
-                case GetCapabilitiesRequest.RequestType.GetFeature:
+                case GeoJSONWFSRequest.RequestType.GetFeature:
                 {
                     NameValueCollection queryParameters = new();
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);

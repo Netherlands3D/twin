@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
-    public class GetCapabilitiesRequest
+    public class GeoJSONWFSRequest
     {
         private readonly string sourceUrl;
         private readonly string cachedBodyContent;
@@ -27,7 +27,7 @@ namespace Netherlands3D.Functionalities.Wfs
             Unsupported
         }
 
-        public GetCapabilitiesRequest(string sourceUrl, string cachedBodyFilePath)
+        public GeoJSONWFSRequest(string sourceUrl, string cachedBodyFilePath)
         {
             this.sourceUrl = sourceUrl;
             this.cachedBodyContent = cachedBodyFilePath;
