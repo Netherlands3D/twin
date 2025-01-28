@@ -36,41 +36,26 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         protected virtual void CreateObject()
         {
-            StartCoroutine(CreateObjectCoroutine());
-        }
-
-        private IEnumerator CreateObjectCoroutine()
-        {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();            
-
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
             var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-            if(opticalRaycaster)
+            if (opticalRaycaster)
             {
-                //Retrieve spawnpoint from optical raycaster a few frames in a row to make sure the depth texture is updated
-                var frames = 3;
-                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height / 2, 0);
-                for (int i = 0; i < frames; i++)
+                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+                opticalRaycaster.GetWorldPointAsync(centerOfViewport, w =>
                 {
-                    yield return new WaitForEndOfFrame();
-                    opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport, w =>
+                    var opticalSpawnPoint = w;
+                    if (opticalSpawnPoint != Vector3.zero)
                     {
-                        var opticalSpawnPoint = w;
-                        if (opticalSpawnPoint != Vector3.zero)
-                        {
-                            spawnPoint = opticalSpawnPoint;
-                        }
-                    });                    
-                }
-            }
-            
-            var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
-            if (!layerComponent)
-                layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
-            
-            layerComponent.Name = prefab.name;
+                        spawnPoint = opticalSpawnPoint;
+                    }
+                    var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
+                    var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
+                    if (!layerComponent)
+                        layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
 
-            yield return null;
+                    layerComponent.Name = prefab.name;
+                });
+            }
         }
     }
 }
