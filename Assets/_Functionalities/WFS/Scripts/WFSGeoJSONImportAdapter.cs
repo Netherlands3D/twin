@@ -11,11 +11,11 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Twin.DataTypeAdapters
+namespace Netherlands3D.Functionalities.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter

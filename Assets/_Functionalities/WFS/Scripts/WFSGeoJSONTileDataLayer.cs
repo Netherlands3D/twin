@@ -5,8 +5,10 @@ using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Coordinates;
 using KindMen.Uxios;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
+namespace Netherlands3D.Functionalities.Wfs
 {
     /// <summary>
     /// A custom CartesianTile layer that uses the cartesian tiling system to 'stream' parts of 
