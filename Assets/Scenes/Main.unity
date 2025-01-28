@@ -757,42 +757,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1811041811788367721, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5830911274202297391, guid: ee361773856b5e0419afdbf630604742,
         type: 3}
       propertyPath: m_Name
       value: OpticalRaycaster
       objectReference: {fileID: 0}
-    - target: {fileID: 6667151011380368307, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: m_CameraType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6667151011380368307, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: m_ClearDepth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: depthCamera
-      value: 
-      objectReference: {fileID: 1509221224025641588, guid: a878597ab40688f4a880932399e381ec,
-        type: 3}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: depthMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 5f4b4770e3b06a141aaed4641eeac46b, type: 2}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: sampleMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 8041683e99730df4abd13966dddbff0a, type: 2}
     - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
         type: 3}
       propertyPath: depthCameraPrefab
@@ -809,24 +778,7 @@ PrefabInstance:
       propertyPath: visualizationMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 6986404031f7a3147b16a3526abf03c1, type: 2}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: worldPosSampleMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 8041683e99730df4abd13966dddbff0a, type: 2}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
-        type: 3}
-      propertyPath: OnDepthSampled.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6667151011380368307, guid: ee361773856b5e0419afdbf630604742, type: 3}
-    - {fileID: 1811041811788367721, guid: ee361773856b5e0419afdbf630604742, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
