@@ -1,112 +1,135 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
-        [SerializeField] private Camera depthCamera;
+        public Camera depthCameraPrefab; // Camera to capture depth information
+        public Material depthToWorldMaterial;
+        public Material visualizationMaterial; // Material to visualize world position
 
-        [Header("Events")] [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
-
-        private List<RenderTexture> rtPool = new List<RenderTexture>();
-        private Dictionary<Vector3, GPURequest> activeRequests = new();
+        private List<OpticalRequest> requestPool = new List<OpticalRequest>();
 
 
-        public struct GPURequest
+        private class OpticalRequest
         {
+            public Camera depthCamera;
+            public Material depthMaterial;
+            public Material positionMaterial;
+            public RenderTexture renderTexture;
+            public Vector3 screenPoint;
             public AsyncGPUReadbackRequest request;
-            public List<Action<Vector3>> callbacks;
-            public RenderTexture texture;
 
-            public GPURequest(AsyncGPUReadbackRequest request, RenderTexture texture, Action<Vector3> firstCallback)
+            public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
-                this.request = request;
-                this.texture = texture; 
-                callbacks = new List<Action<Vector3>>();
-                callbacks.Add(firstCallback);
-            }
-        }
+                this.depthMaterial = new Material(depthMaterial);
+                this.positionMaterial = new Material(positionMaterial);
+                this.renderTexture = rt;
+                this.depthCamera = GameObject.Instantiate(prefab);
+                depthCamera.clearFlags = CameraClearFlags.SolidColor;
+                depthCamera.backgroundColor = Color.black;
+                depthCamera.depthTextureMode = DepthTextureMode.Depth;
+                depthCamera.targetTexture = rt;
+                depthCamera.forceIntoRenderTexture = true;
+            }            
 
-        void Start()
-        {
-            depthCamera.depthTextureMode = DepthTextureMode.Depth;
-        }
-
-        private void OnDestroy()
-        {
-            //release all rendertextures
-            foreach (RenderTexture rt in rtPool)
+            public void SetRequest(AsyncGPUReadbackRequest request)
             {
-                rt.Release();
-            }
-        }
-
-        /// <summary>
-        /// Only use this method if it is used continiously in Update.
-        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
-        /// in a Coroutine with a WaitForEndOfFrame between every step.
-        /// </summary>
-        /// <returns></returns>
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> result)
-        {
-            if (activeRequests.ContainsKey(screenPoint))
-            {
-                activeRequests[screenPoint].callbacks.Add(result);
-                return;
+                this.request = request; 
             }
 
-            RenderTexture rt = GetRenderTexture();
-            depthCamera.targetTexture = rt;
-
-            //Align depthcamera to the main camera
-            depthCamera.transform.position = Camera.main.transform.position;
-            depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
-            depthCamera.Render();
-            AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(rt, 0, (req) =>
+            public void SetScreenPoint(Vector3 screenPoint)
             {
-                if (req.hasError)
+                this.screenPoint = screenPoint;
+            }
+
+            public void AlignWithMainCamera()
+            {
+                depthCamera.transform.position = Camera.main.transform.position;
+                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
+            }
+
+            public void UpdateShaders()
+            {
+                depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
+                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
+                positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
+            }
+        }
+              
+
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
+        {
+            OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetScreenPoint(screenPoint);
+            opticalRequest.AlignWithMainCamera();
+            opticalRequest.UpdateShaders();
+
+            opticalRequest.depthCamera.transform.SetParent(gameObject.transform, false);
+
+            // Trigger async readback
+            AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(opticalRequest.renderTexture, 0, w =>
+            {
+                if (w.hasError)
                 {
-                    Debug.LogError("Error in GPU readback");
-                    CompleteRequest(Vector3.zero, screenPoint, rt);
+                    Debug.LogError("GPU readback failed!");
+                    PoolRequest(opticalRequest);
                     return;
-                }              
-                var data = req.GetData<Color>();
-                Color color = data[0];
-                Vector3 worldPos = new Vector3(color.r, color.g, color.b);
-                CompleteRequest(worldPos, screenPoint, rt);
+                }
+                // The result is now available in request.GetData<Vector4>()
+                var worldPosData = w.GetData<Vector4>();
+
+                // Example: Extracting the world position from the readback data
+                float worldPosX = worldPosData[0].x;
+                float worldPosY = worldPosData[0].y;
+                float worldPosZ = worldPosData[0].z;
+                Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                callback.Invoke(worldPos);
+                Debug.Log(worldPos);
+                PoolRequest(opticalRequest);
             });
-            activeRequests.Add(screenPoint, new GPURequest(request, rt, result));
+            opticalRequest.SetRequest(request);
         }
 
-        private void CompleteRequest(Vector3 worldPosition, Vector3 screenPoint, RenderTexture rt)
+        private IEnumerator WaitForFrame(Action onEnd)
         {
-            foreach (var callback in activeRequests[screenPoint].callbacks)
-                callback.Invoke(worldPosition);
-            activeRequests.Remove(screenPoint);
-            rtPool.Add(rt);
+            yield return new WaitForEndOfFrame();
+            onEnd?.Invoke();
         }
 
-        private RenderTexture GetRenderTexture()
+        private OpticalRequest GetRequest()
         {
-            RenderTexture renderTexture = null;
-            if (rtPool.Count > 0)
+            OpticalRequest request = null;
+            if(requestPool.Count > 0)
             {
-                renderTexture = rtPool[0];
-                rtPool.RemoveAt(0);
+                request = requestPool[0];
+                requestPool.RemoveAt(0);
             }
             else
             {
-                renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
-                renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
-                renderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
-                //renderTexture.enableRandomWrite = true; // Allow GPU writes
-                renderTexture.Create();
-            }            
+                request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), Instantiate(depthCameraPrefab));
+            }
+            return request;
+        }
+
+
+        private RenderTexture GetRenderTexture()
+        {
+            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
+            renderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
+            //renderTexture.enableRandomWrite = true; // Allow GPU writes
+            renderTexture.Create();
             return renderTexture;
+        }
+
+        private void PoolRequest(OpticalRequest request)
+        {
+            requestPool.Add(request);
         }
     }
 }
