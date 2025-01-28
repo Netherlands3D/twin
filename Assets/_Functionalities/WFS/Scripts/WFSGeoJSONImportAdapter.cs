@@ -20,7 +20,7 @@ namespace Netherlands3D.Functionalities.Wfs
         private string wfsVersion = "";
         private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
-        private GeoJSONWFS wfs;
+        private GetCapabilitiesRequest getCapabilitiesRequest;
 
         public bool Supports(LocalFile localFile)
         {
@@ -36,35 +36,35 @@ namespace Netherlands3D.Functionalities.Wfs
             if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            wfs = new GeoJSONWFS(sourceUrl, cachedDataPath);
+            getCapabilitiesRequest = new GetCapabilitiesRequest(sourceUrl, cachedDataPath);
 
             //If the body is a specific GetFeature request; directly continue to execute
-            bool isGetFeatureRequest = wfs.IsGetFeatureRequest();
+            bool isGetFeatureRequest = getCapabilitiesRequest.IsGetFeatureRequest();
             if (isGetFeatureRequest)
                 return true;
 
             //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
-            bool IsGetCapabilitiesRequest = wfs.IsGetCapabilitiesRequest();
+            bool IsGetCapabilitiesRequest = getCapabilitiesRequest.IsGetCapabilitiesRequest();
             if (!IsGetCapabilitiesRequest)
             {
                 Debug.Log("<color=orange>WFS: No GetFeature nor GetCapabilities request type found.</color>");
                 return false;
             }
 
-            wfs.ParseBodyAsXML();
-            if (!wfs.HasBboxFilterCapability())
+            getCapabilitiesRequest.ParseBodyAsXML();
+            if (!getCapabilitiesRequest.HasBboxFilterCapability())
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;
             }
 
-            if (!wfs.HasGetFeatureAsGeoJSON())
+            if (!getCapabilitiesRequest.HasGetFeatureAsGeoJSON())
             {
                 Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                 return false;
             }
 
-            wfsVersion = wfs.GetWFSVersion();
+            wfsVersion = getCapabilitiesRequest.GetWFSVersion();
 
             return true;
         }
@@ -72,31 +72,31 @@ namespace Netherlands3D.Functionalities.Wfs
         public void Execute(LocalFile localFile)
         {
             var sourceUrl = localFile.SourceUrl;
-            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfs.GetTitle()) ? wfs.GetTitle() : sourceUrl);
+            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(getCapabilitiesRequest.GetTitle()) ? getCapabilitiesRequest.GetTitle() : sourceUrl);
 
-            switch (wfs.requestType)
+            switch (getCapabilitiesRequest.requestType)
             {
-                case GeoJSONWFS.RequestType.GetCapabilities:
+                case GetCapabilitiesRequest.RequestType.GetCapabilities:
                 {
-                    wfs.GetWFSBounds(); //global bounds
-                    var featureTypes = wfs.GetFeatureTypes();
+                    getCapabilitiesRequest.GetWFSBounds(); //global bounds
+                    var featureTypes = getCapabilitiesRequest.GetFeatureTypes();
 
                     //Create a folder layer 
                     foreach (var featureType in featureTypes)
                     {
                         BoundingBox layerBounds = featureType.BoundingBox;
                         if (layerBounds == null)
-                            layerBounds = wfs.wfsBounds; //use global bounds
+                            layerBounds = getCapabilitiesRequest.wfsBounds; //use global bounds
 
                         string crs = featureType.DefaultCRS;
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
                         AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, layerBounds);
                     }
 
-                    wfs = null;
+                    getCapabilitiesRequest = null;
                     return;
                 }
-                case GeoJSONWFS.RequestType.GetFeature:
+                case GetCapabilitiesRequest.RequestType.GetFeature:
                 {
                     NameValueCollection queryParameters = new();
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
@@ -110,11 +110,11 @@ namespace Netherlands3D.Functionalities.Wfs
                         AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, null); //todo: can we get the BBox here?
                     }
 
-                    wfs = null;
+                    getCapabilitiesRequest = null;
                     return;
                 }
                 default:
-                    Debug.LogError("Unrecognized WFS request type: " + wfs.requestType);
+                    Debug.LogError("Unrecognized WFS request type: " + getCapabilitiesRequest.requestType);
                     break;
             }
         }
@@ -168,7 +168,7 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter(ParameterNameOfTypeNameBasedOnVersion(), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
-                var geoJsonOutputFormatString = wfs.GetGeoJsonOutputFormatString();
+                var geoJsonOutputFormatString = getCapabilitiesRequest.GetGeoJsonOutputFormatString();
                 uriBuilder.SetQueryParameter(
                     "outputFormat",
                     !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"
