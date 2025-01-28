@@ -41,10 +41,20 @@ namespace Netherlands3D.Twin
             if (other.CoordinateSystem != CoordinateSystem)
                 other = ConvertToCRS(other, CoordinateSystem);
 
-            return other.BottomLeft.Points[0] >= this.BottomLeft.Points[0] &&
-                   other.BottomLeft.Points[1] >= this.BottomLeft.Points[1] &&
-                   other.TopRight.Points[0] <= this.TopRight.Points[0] &&
-                   other.TopRight.Points[1] <= this.TopRight.Points[1];
+            if (BottomLeft.PointsLength == 2)
+            {
+                return other.BottomLeft.easting >= this.BottomLeft.easting &&
+                       other.BottomLeft.northing >= this.BottomLeft.northing &&
+                       other.TopRight.easting <= this.TopRight.easting &&
+                       other.TopRight.northing <= this.TopRight.northing;   
+            }
+
+            return other.BottomLeft.easting >= this.BottomLeft.easting &&
+                   other.BottomLeft.northing >= this.BottomLeft.northing &&
+                   other.BottomLeft.height >= this.BottomLeft.height &&
+                   other.TopRight.easting <= this.TopRight.easting &&
+                   other.TopRight.northing <= this.TopRight.northing &&
+                   other.TopRight.height <= this.TopRight.height;
         }
 
 
