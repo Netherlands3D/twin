@@ -22,6 +22,9 @@ namespace Netherlands3D.Twin.Samplers
             public RenderTexture renderTexture;
             public Vector3 screenPoint;
             public AsyncGPUReadbackRequest request;
+            public Action<AsyncGPUReadbackRequest> callback;
+            public Action<Vector3> resultCallback;
+            public Action waitFrameRoutine;
 
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
@@ -34,7 +37,28 @@ namespace Netherlands3D.Twin.Samplers
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
                 depthCamera.targetTexture = rt;
                 depthCamera.forceIntoRenderTexture = true;
-            }            
+                waitFrameRoutine = () =>
+                {
+                    AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
+                    SetRequest(request);
+                };
+
+            }        
+            
+            public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
+            {
+                this.callback = callback;
+            }
+
+            public void SetResultCallback(Action<Vector3> resultCallback)
+            {
+                this.resultCallback = resultCallback;
+            }
+
+            public void SetWaitFrameCallback(Action callback)
+            {
+                waitFrameRoutine = callback;
+            }
 
             public void SetRequest(AsyncGPUReadbackRequest request)
             {
@@ -66,28 +90,26 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithMainCamera();
             opticalRequest.UpdateShaders();           
-
+            opticalRequest.SetResultCallback(callback);
             //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
-            StartCoroutine(WaitForFrame(() =>
+            StartCoroutine(WaitForFrame(opticalRequest.waitFrameRoutine));
+        }
+
+        private void RequestCallback(OpticalRequest opticalRequest)
+        {
+            if (opticalRequest.request.hasError)
             {
-                AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(opticalRequest.renderTexture, 0, w =>
-                {
-                    if (w.hasError)
-                    {
-                        Debug.LogError("GPU readback failed!");
-                        PoolRequest(opticalRequest);
-                        return;
-                    }
-                    var worldPosData = w.GetData<Vector4>();
-                    float worldPosX = worldPosData[0].x;
-                    float worldPosY = worldPosData[0].y;
-                    float worldPosZ = worldPosData[0].z;
-                    Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-                    callback.Invoke(worldPos);
-                    PoolRequest(opticalRequest);
-                });
-                opticalRequest.SetRequest(request);
-            }));
+                Debug.LogError("GPU readback failed!");
+                PoolRequest(opticalRequest);
+                return;
+            }
+            var worldPosData = opticalRequest.request.GetData<Vector4>();
+            float worldPosX = worldPosData[0].x;
+            float worldPosY = worldPosData[0].y;
+            float worldPosZ = worldPosData[0].z;
+            Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+            opticalRequest.resultCallback.Invoke(worldPos);
+            PoolRequest(opticalRequest);            
         }
 
         private IEnumerator WaitForFrame(Action onEnd)
@@ -108,6 +130,7 @@ namespace Netherlands3D.Twin.Samplers
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), Instantiate(depthCameraPrefab));
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
+                request.SetCallback(w => RequestCallback(request));
             }
             request.depthCamera.enabled = true;
             return request;
