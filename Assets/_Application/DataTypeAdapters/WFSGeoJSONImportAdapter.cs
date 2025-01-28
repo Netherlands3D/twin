@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                         BoundingBox layerBounds = GetLayerBoundingBox(featureType);
                         if (layerBounds == null)
                             layerBounds = wfs.wfsBounds; //use global bounds
-                        
+
                         string crs = featureType.DefaultCRS;
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
                         AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, layerBounds);
@@ -123,12 +123,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     break;
             }
         }
-        
+
         private BoundingBox GetLayerBoundingBox(FeatureType featureType)
         {
             return null; //todo: parse bbox of feature types
         }
-        
+
 
         private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, BoundingBox wfsBounds)
         {
@@ -205,6 +205,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             public string DefaultCRS;
             public string[] OtherCRS;
             public string MetadataURL;
+            [XmlIgnore] public BoundingBox BoundingBox;
         }
 
         private class GeoJSONWFS
@@ -334,10 +335,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 if (xmlDocument == null)
                     ParseBodyAsXML();
 
+                Debug.LogError(xmlDocument.OuterXml);
+                
                 // Try to get a bounding box in the local CRS first
                 var bboxNode = xmlDocument?.DocumentElement?
-                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='BoundingBox' or local-name()='ows:BoundingBox']", namespaceManager);
-                
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='BoundingBox' or local-name()='ows:BoundingBox']", namespaceManager);
+
                 if (bboxNode != null)
                 {
                     var lowerCornerNode = bboxNode.SelectSingleNode("*[local-name()='LowerCorner']", namespaceManager);
@@ -353,52 +356,50 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                             var lowerCorner = lowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
                             var upperCorner = upperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
 
-                            Coordinate bottomLeft;
-                            Coordinate topRight;
-                            if (lowerCorner.Length > 2)
-                            {
-                                bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1], lowerCorner[2]);
-                                topRight = new Coordinate(crs, upperCorner[0], upperCorner[1], upperCorner[2]);
-                            }
-                            else
-                            {
-                                bottomLeft = new Coordinate(crs, lowerCorner[0], lowerCorner[1]);
-                                topRight = new Coordinate(crs, upperCorner[0], upperCorner[1]);
-                            }
+                            Coordinate bottomLeft = CreateCoordinate(crs, lowerCorner);
+                            Coordinate topRight = CreateCoordinate(crs, upperCorner);
 
                             Debug.Log($"Bounding box in CRS: {crs}");
                             wfsBounds = new BoundingBox(bottomLeft, topRight);
                             return wfsBounds;
                         }
                     }
-                    
+
                     Debug.LogWarning("Custom CRS BBox found, but not able to be parsed, defaulting to WGS84 CRS. Founds CRS string: " + crsString);
                 }
 
                 // Fallback to WGS84BoundingBox
                 var wgs84LowerCornerNode = xmlDocument?.DocumentElement?
-                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='LowerCorner']", namespaceManager);
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='WGS84BoundingBox']/*[local-name()='LowerCorner']", namespaceManager);
 
                 var wgs84UpperCornerNode = xmlDocument?.DocumentElement?
-                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']/*[local-name()='UpperCorner']", namespaceManager);
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='WGS84BoundingBox']/*[local-name()='UpperCorner']", namespaceManager);
 
                 if (wgs84LowerCornerNode == null || wgs84UpperCornerNode == null)
                 {
                     Debug.LogWarning("Bounding box information not found in WFS GetCapabilities response.");
                     return null;
                 }
-                
+
                 var wgs84LowerCorner = wgs84LowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
                 var wgs84UpperCorner = wgs84UpperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
-                
-                var wgs84Crs = CoordinateSystem.CRS84; //WFS describes the WGS84BoundingBox as a lower and upper corner in x/y order, regardless of the DefaultCRS for some reason.
-                
-                var wgs84BottomLeft = new Coordinate(wgs84Crs, wgs84LowerCorner[0], wgs84LowerCorner[1]);
-                var wgs84TopRight = new Coordinate(wgs84Crs, wgs84UpperCorner[0], wgs84UpperCorner[1]);
 
-                Debug.Log("Bounding box found in WGS84 CRS.");
+                var wgs84Crs = CoordinateSystem.CRS84; //WFS describes the WGS84BoundingBox as a lower and upper corner in x/y order, regardless of the DefaultCRS for some reason.
+
+                var wgs84BottomLeft = CreateCoordinate(wgs84Crs, wgs84LowerCorner);
+                var wgs84TopRight = CreateCoordinate(wgs84Crs, wgs84UpperCorner);
+
+                Debug.Log($"WFS Bounding box found in WGS84 CRS: BL:{wgs84BottomLeft} TR:{wgs84TopRight}");
                 wfsBounds = new BoundingBox(wgs84BottomLeft, wgs84TopRight);
                 return wfsBounds;
+            }
+
+            private Coordinate CreateCoordinate(CoordinateSystem crs, params double[] values)
+            {
+                if (values.Length > 2)
+                    return new Coordinate(crs, values[0], values[1], values[2]);
+
+                return new Coordinate(crs, values[0], values[1]);
             }
 
             public CoordinateSystem GetCoordinateReferenceSystem()
@@ -428,6 +429,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 if (xmlDocument == null)
                     ParseBodyAsXML();
+
 
                 var featureTypeListNodeInRoot = xmlDocument?.DocumentElement?
                     .SelectSingleNode("//*[local-name()='FeatureTypeList']", namespaceManager);
@@ -469,12 +471,48 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                         FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
                         if (featureType == null) continue;
 
+                        featureType.BoundingBox = ReadFeatureBoundingBox();
                         featureType.DefaultCRS = crs;
                         featureTypes.Add(featureType);
                     }
                 }
 
                 return featureTypes;
+            }
+
+            private BoundingBox ReadFeatureBoundingBox()
+            {
+                if (xmlDocument == null)
+                    ParseBodyAsXML();
+
+                var wgs84BoundingBoxNode = xmlDocument?.DocumentElement?
+                    .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']", namespaceManager);
+
+                if (wgs84BoundingBoxNode == null)
+                {
+                    Debug.LogWarning("Feature Bounding box information not found in WFS GetCapabilities response.");
+                    return null;
+                }
+
+                // Extract lower and upper corners
+                var wgs84LowerCornerNode = wgs84BoundingBoxNode.SelectSingleNode("./*[local-name()='LowerCorner']", namespaceManager);
+                var wgs84UpperCornerNode = wgs84BoundingBoxNode.SelectSingleNode("./*[local-name()='UpperCorner']", namespaceManager);
+
+                if (wgs84LowerCornerNode == null || wgs84UpperCornerNode == null)
+                {
+                    Debug.LogWarning("Bounding box corners not found in WGS84BoundingBox node.");
+                    return null;
+                }
+
+                var lowerCornerValues = wgs84LowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+                var upperCornerValues = wgs84UpperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
+
+                var wgs84Crs = CoordinateSystem.WGS84;
+                var wgs84BottomLeft = CreateCoordinate(wgs84Crs, lowerCornerValues);
+                var wgs84TopRight = CreateCoordinate(wgs84Crs, upperCornerValues);
+
+                Debug.Log($"Feature Bounding box found in WGS84 CRS: BL: {wgs84BottomLeft} TR: {wgs84TopRight}");
+                return new BoundingBox(wgs84BottomLeft, wgs84TopRight);
             }
 
             private XmlNamespaceManager ReadNameSpaceManager(XmlDocument xmlDocument)
