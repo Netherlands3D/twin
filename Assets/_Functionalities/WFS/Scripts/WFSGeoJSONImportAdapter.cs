@@ -27,7 +27,9 @@ namespace Netherlands3D.Functionalities.Wfs
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
 
-            var urlContainsWfsSignifier = sourceUrl.ToLower().Contains("service=wfs");
+            Debug.Log(sourceUrl);
+            
+            var urlContainsWfsSignifier = WFSRequest.IsValidWFSURL(sourceUrl);
 
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             var bodyContents = File.ReadAllText(cachedDataPath);
@@ -36,7 +38,7 @@ namespace Netherlands3D.Functionalities.Wfs
             if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            getCapabilitiesRequest = new WFSRequest(sourceUrl, cachedDataPath);
+            getCapabilitiesRequest = new WFSRequest(sourceUrl, bodyContents);
 
             //If the body is a specific GetFeature request; directly continue to execute
             bool isGetFeatureRequest = getCapabilitiesRequest.IsGetFeatureRequest();
@@ -100,7 +102,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 {
                     NameValueCollection queryParameters = new();
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
-                    var featureType = queryParameters.Get(ParameterNameOfTypeNameBasedOnVersion());
+                    var featureType = queryParameters.Get(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
 
                     if (string.IsNullOrEmpty(featureType) == false)
                     {
@@ -165,7 +167,7 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
-            uriBuilder.SetQueryParameter(ParameterNameOfTypeNameBasedOnVersion(), featureType);
+            uriBuilder.SetQueryParameter(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 var geoJsonOutputFormatString = getCapabilitiesRequest.GetGeoJsonOutputFormatString();
@@ -178,11 +180,6 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter("srsname", crs);
             uriBuilder.SetQueryParameter("bbox", "{0}"); // Bbox value is injected by CartesianTileWFSLayer
             return uriBuilder;
-        }
-
-        private string ParameterNameOfTypeNameBasedOnVersion()
-        {
-            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
         }
     }
 }

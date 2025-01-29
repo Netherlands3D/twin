@@ -27,24 +27,23 @@ namespace Netherlands3D.Functionalities.Wfs
             Unsupported
         }
 
-        public WFSRequest(string sourceUrl, string cachedBodyFilePath)
+        public WFSRequest(string sourceUrl, string xml)
         {
             this.sourceUrl = sourceUrl;
-            this.cachedBodyContent = cachedBodyFilePath;
+            this.cachedBodyContent = xml;
         }
 
         public void ParseBodyAsXML()
         {
             this.xmlDocument = new XmlDocument();
-            this.xmlDocument.Load(this.cachedBodyContent);
+            this.xmlDocument.LoadXml(cachedBodyContent);
             this.namespaceManager = ReadNameSpaceManager(this.xmlDocument);
         }
 
         public bool IsGetCapabilitiesRequest()
         {
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
-            var bodyContents = File.ReadAllText(cachedBodyContent);
-            var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
+            var couldBeWfsCapabilities = cachedBodyContent.Contains("<WFS_Capabilities") || cachedBodyContent.Contains("<wfs:WFS_Capabilities");
 
             var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
             requestType = RequestType.GetCapabilities;
@@ -249,7 +248,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     FeatureType featureType = serializer.Deserialize(reader) as FeatureType;
                     if (featureType == null) continue;
 
-                    featureType.BoundingBox = ReadFeatureBoundingBox();
+                    featureType.BoundingBox = ReadFeatureBoundingBox(featureType.Name);
                     featureType.DefaultCRS = crs;
                     featureTypes.Add(featureType);
                 }
@@ -258,17 +257,26 @@ namespace Netherlands3D.Functionalities.Wfs
             return featureTypes;
         }
 
-        private BoundingBox ReadFeatureBoundingBox()
+        private BoundingBox ReadFeatureBoundingBox(string featureTypeName)
         {
             if (xmlDocument == null)
                 ParseBodyAsXML();
 
-            var wgs84BoundingBoxNode = xmlDocument?.DocumentElement?
-                .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='WGS84BoundingBox']", namespaceManager);
+            var featureTypeNode = xmlDocument?.DocumentElement?
+                .SelectSingleNode($"//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType'][*[local-name()='Name']= '{featureTypeName}']", namespaceManager);
+
+            if (featureTypeNode == null)
+            {
+                Debug.LogWarning($"FeatureType '{featureTypeName}' not found in WFS GetCapabilities response.");
+                return null;
+            }
+
+            // Locate the WGS84BoundingBox for the selected FeatureType
+            var wgs84BoundingBoxNode = featureTypeNode.SelectSingleNode("./*[local-name()='WGS84BoundingBox']", namespaceManager);
 
             if (wgs84BoundingBoxNode == null)
             {
-                Debug.LogWarning("Feature Bounding box information not found in WFS GetCapabilities response.");
+                Debug.LogWarning($"Bounding box information not found for featureType '{featureTypeName}'.");
                 return null;
             }
 
@@ -290,7 +298,6 @@ namespace Netherlands3D.Functionalities.Wfs
             var wgs84BottomLeft = CreateCoordinate(wgs84Crs, lowerCornerValues);
             var wgs84TopRight = CreateCoordinate(wgs84Crs, upperCornerValues);
 
-            Debug.Log($"Feature Bounding box found in WGS84 CRS: BL: {wgs84BottomLeft} TR: {wgs84TopRight}");
             return new BoundingBox(wgs84BottomLeft, wgs84TopRight);
         }
 
@@ -432,6 +439,16 @@ namespace Netherlands3D.Functionalities.Wfs
             }
 
             return getFeatureOperationNode;
+        }
+        
+        public static bool IsValidWFSURL(string url)
+        {
+            return url.ToLower().Contains("service=wfs");
+        }
+        
+        public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
+        {
+            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
         }
     }
 }
