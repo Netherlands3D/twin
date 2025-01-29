@@ -11,13 +11,12 @@ namespace Netherlands3D.Twin.UI
     {
         [Header("Camera coordinates")]
         [SerializeField] private TextMeshProUGUI coordinatesText;
-        [SerializeField] private string coordinateFormat = "x{0} y{1} z{2}";
 
-        private string[] cachedValues = new string[10] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-        private string[] currentSet = new string[10];
-        private string[] xyz = new string[3] { "x", "y", "z" };
-        private string negative = "-";
-        private string space = " ";
+        private char[] cachedValues = new char[10] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        private char[] currentSet = new char[10];
+        private char[] xyz = new char[3] { 'x', 'y', 'z' };
+        private char negative = '-';
+        private char space = ' ';
 
         private StringBuilder builder;
         private Vector3Int lastPosition;
@@ -54,14 +53,14 @@ namespace Netherlands3D.Twin.UI
             }            
         }
 
-        private void AppendValueString(int value, string dimension, StringBuilder builder)
+        private void AppendValueString(int value, char dimension, StringBuilder builder)
         {
             bool neg;
             int count;
             for (int i = 0; i < currentSet.Length; i++)
-                currentSet[i] = null;
+                currentSet[i] = ' ';
             builder.Append(dimension);
-            string[] result = GetNumberString(value, currentSet, out neg, out count);
+            char[] result = GetNumberString(value, currentSet, out neg, out count);
             if (neg)
                 builder.Append(negative);
             for (int i = 0; i < count; i++)
@@ -70,7 +69,7 @@ namespace Netherlands3D.Twin.UI
         }
 
 
-        private string[] GetNumberString(int number, string[] set, out bool negative, out int count)
+        private char[] GetNumberString(int number, char[] set, out bool negative, out int count)
         {
             negative = number < 0;
             number = Mathf.Abs(number);
