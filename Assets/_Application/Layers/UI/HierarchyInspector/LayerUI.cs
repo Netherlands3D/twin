@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -213,6 +214,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             gameObject.SetActive(false); //ensure it won't get re-added in LayerManager.RecalculateLayersInInspector
             Destroy(gameObject);
             layerUIManager.RecalculateLayersVisibleInInspector();
+
+            if (ParentUI)
+                ParentUI.RecalculateParentAndChildren();
+
+            RecalculateParentStates();
         }
 
         private void RecalculateCurrentTreeStates()
@@ -328,7 +334,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RecalculateParentAndChildren()
         {
             ParentUI = transform.parent.GetComponentInParent<LayerUI>(true); // use transform.parent.GetComponentInParent to avoid getting the LayerUI on this gameObject
-
+            
             var list = new List<LayerUI>();
             foreach (Transform t in childrenPanel) //loop over the transforms explicitly because using GetComponentsInChildren is recursive.
             {
@@ -374,7 +380,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         }
 
         private void UpdateFoldout()
-        {
+        {            
             foldoutToggle.gameObject.SetActive(ChildrenUI.Length > 0);
             childrenPanel.gameObject.SetActive(foldoutToggle.isOn && (ChildrenUI.Length > 0));
             int index = foldoutToggle.isOn ? 1 : 0;
@@ -719,11 +725,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-            
-            if (ParentUI)
-                ParentUI.RecalculateParentAndChildren();
-
-            RecalculateParentStates();
+           
         }
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
