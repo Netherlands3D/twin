@@ -15,8 +15,8 @@ namespace Netherlands3D.Twin.UI
         private char[] cachedValues = new char[10] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         private char[] currentSet = new char[10];
         private char[] xyz = new char[3] { 'x', 'y', 'z' };
-        private char negative = '-';
-        private char space = ' ';
+        private const char negative = '-';
+        private const char space = ' ';
 
         private StringBuilder builder;
         private Vector3Int lastPosition;
@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.UI
              );
             var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RDNAP);
 
-            Vector3Int position = new Vector3Int(Mathf.RoundToInt((float)rd.value1), Mathf.RoundToInt((float)rd.value2), Mathf.RoundToInt((float)rd.value3));
+            Vector3Int position = new Vector3Int((int)rd.value1, (int)rd.value2, (int)rd.value3);
             if (lastPosition != position)
             {
                 builder.Clear();
@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin.UI
                 AppendValueString(position.y, xyz[2], builder);
                 coordinatesText.text = builder.ToString();
                 lastPosition = position;
-            }            
+            }
         }
 
         private void AppendValueString(int value, char dimension, StringBuilder builder)
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.UI
             bool neg;
             int count;
             for (int i = 0; i < currentSet.Length; i++)
-                currentSet[i] = ' ';
+                currentSet[i] = space;
             builder.Append(dimension);
             char[] result = GetNumberString(value, currentSet, out neg, out count);
             if (neg)
@@ -75,13 +75,12 @@ namespace Netherlands3D.Twin.UI
             number = Mathf.Abs(number);
             int index = 0;
             while (number > 0)
-            {                
+            {
                 int digit = number % 10;
                 number /= 10;
                 set[index] = cachedValues[digit];
                 index++;
             }
-            //set.Reverse();
             count = index;
             return set;
         }
