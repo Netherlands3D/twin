@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Web;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
@@ -158,8 +160,8 @@ namespace Netherlands3D.Functionalities.Wfs
                     var lowerCorner = lowerCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
                     var upperCorner = upperCornerNode.InnerText.Split(' ').Select(double.Parse).ToArray();
 
-                    Coordinate bottomLeft = CreateCoordinate(crs, lowerCorner);
-                    Coordinate topRight = CreateCoordinate(crs, upperCorner);
+                    Coordinate bottomLeft = new Coordinate(crs, lowerCorner);
+                    Coordinate topRight = new Coordinate(crs, upperCorner);
 
                     Debug.Log($"Global Bounding box in CRS: {crs}");
                     wfsBounds = new BoundingBox(bottomLeft, topRight);
@@ -169,14 +171,6 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.LogWarning("Global bounding box information not found in WFS GetCapabilities response.");
             return null;
-        }
-
-        private Coordinate CreateCoordinate(CoordinateSystem crs, params double[] values)
-        {
-            if (values.Length > 2)
-                return new Coordinate(crs, values[0], values[1], values[2]);
-
-            return new Coordinate(crs, values[0], values[1]);
         }
 
         public CoordinateSystem GetCoordinateReferenceSystem()
@@ -295,8 +289,8 @@ namespace Netherlands3D.Functionalities.Wfs
 
             var wgs84Crs = CoordinateSystem.CRS84; //WFS describes the WGS84BoundingBox as a lower and upper corner in x/y order, regardless of the DefaultCRS for some reason.
 
-            var wgs84BottomLeft = CreateCoordinate(wgs84Crs, lowerCornerValues);
-            var wgs84TopRight = CreateCoordinate(wgs84Crs, upperCornerValues);
+            var wgs84BottomLeft = new Coordinate(wgs84Crs, lowerCornerValues);
+            var wgs84TopRight = new Coordinate(wgs84Crs, upperCornerValues);
 
             return new BoundingBox(wgs84BottomLeft, wgs84TopRight);
         }
@@ -449,6 +443,23 @@ namespace Netherlands3D.Functionalities.Wfs
         public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
         {
             return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
+        }
+        
+        public static string CreateGetCapabilitiesURL(string wfsUrl)
+        {
+            var uri = new Uri(wfsUrl);
+            var baseUrl = uri.GetLeftPart(UriPartial.Path);
+            return baseUrl + "?request=GetCapabilities&service=WFS";
+        }
+
+        public static string GetLayerNameFromURL(string url)
+        {
+            var uri = new Uri(url);
+            var nvc = new NameValueCollection();
+            uri.TryParseQueryString(nvc);
+            var version = nvc.Get("version");
+            var featureLayerName = nvc.Get(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(version));
+            return featureLayerName;
         }
     }
 }

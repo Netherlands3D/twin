@@ -28,14 +28,7 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
-        }
-
-        private string CreateGetCapabilitiesURL(string wfsUrl)
-        {
-            var uri = new Uri(wfsUrl);
-            var baseUrl = uri.GetLeftPart(UriPartial.Path);
-            return baseUrl + "?request=GetCapabilities&service=WFS";
+            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(WFSRequest.CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -50,12 +43,7 @@ namespace Netherlands3D.Functionalities.Wfs
         public void SetBoundingBox(WFSBoundingBoxContainer boundingBoxContainer)
         {
             var wfsUrl = urlPropertyData.Data.ToString();
-            var uri = new Uri(wfsUrl);
-            var nvc = new NameValueCollection();
-            uri.TryParseQueryString(nvc);
-            var version = nvc.Get("version");
-            var featureLayerName = nvc.Get(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(version)); 
-            
+            var featureLayerName = WFSRequest.GetLayerNameFromURL(wfsUrl);
             
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {
