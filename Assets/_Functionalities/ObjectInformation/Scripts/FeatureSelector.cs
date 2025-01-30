@@ -6,11 +6,31 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin;
+using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
+        public static FeatureMappingTree MappingTree
+        {
+            get
+            {
+                if(mappingTreeInstance == null)
+                {
+                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84, 50.8037d, 3.31497d);
+                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84, 53.5104d, 7.09205d);
+                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
+                    FeatureMappingTree tree = new FeatureMappingTree(bbox);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }            
+        }
+
+        private static FeatureMappingTree mappingTreeInstance;
+
         public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
         public bool HasPolygons
         {
@@ -231,4 +251,97 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return start + line * d;
         }
     }
+
+    public class FeatureMappingTree
+    {
+        private class Node
+        {
+            public BoundingBox Bounds;
+            public List<FeatureMapping> Mappings = new();
+            public Node[] Children;
+            public bool IsLeaf => Children == null;
+
+            public Node(BoundingBox bounds)
+            {
+                Bounds = bounds;
+                Children = null;
+            }
+        }
+
+        private readonly Node root;
+        private readonly int maxMappings;
+        private readonly int maxDepth;
+
+        public FeatureMappingTree(BoundingBox bounds, int maxObjects = 4, int maxDepth = 6)
+        {
+            root = new Node(bounds);
+            this.maxMappings = maxObjects;
+            this.maxDepth = maxDepth;
+        }
+
+        public void Insert(Vector2 position, FeatureMapping obj) => Insert(root, position, obj, 0);
+
+        private void Insert(Node node, Vector2 position, FeatureMapping obj, int depth)
+        {
+            if (!node.Bounds.Contains(position)) return;
+
+            if (node.IsLeaf)
+            {
+                node.Mappings.Add(obj);
+                if (node.Mappings.Count > maxMappings && depth < maxDepth)
+                {
+                    Subdivide(node);
+                    ReinsertObjects(node);
+                }
+            }
+            else
+            {
+                foreach (var child in node.Children)
+                    Insert(child, position, obj, depth + 1);
+            }
+        }
+
+        public List<FeatureMapping> Query(Rect area)
+        {
+            List<FeatureMapping> results = new();
+            Query(root, area, results);
+            return results;
+        }
+
+        private void Query(Node node, Rect area, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Overlaps(area)) return;
+
+            results.AddRange(node.Mappings);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    Query(child, area, results);
+            }
+        }
+
+        private void Subdivide(Node node)
+        {
+            float x = node.Bounds.x, y = node.Bounds.y;
+            float w = node.Bounds.width * 0.5f, h = node.Bounds.height * 0.5f;
+
+            node.Children = new[]
+            {
+            new Node(new Rect(x, y, w, h)),         // Bottom-left
+            new Node(new Rect(x + w, y, w, h)),     // Bottom-right
+            new Node(new Rect(x, y + h, w, h)),     // Top-left
+            new Node(new Rect(x + w, y + h, w, h))  // Top-right
+        };
+        }
+
+        private void ReinsertObjects(Node node)
+        {
+            var objs = node.Mappings;
+            node.Mappings = new List<FeatureMapping>();
+            foreach (var obj in objs) 
+                Insert(node, node.Bounds.center, obj, 0);
+        }
+    }
+
 }
