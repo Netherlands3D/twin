@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Samplers;
@@ -12,6 +13,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
     {
         protected Button button;
         [SerializeField] protected GameObject prefab;
+        private Action<Vector3> instantiationCallback;
 
         private void Awake()
         {
@@ -32,42 +34,31 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         public void Initialize(GameObject prefab)
         {
             this.prefab = prefab;
+            instantiationCallback = w =>
+            {
+                var opticalSpawnPoint = w;
+                var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+                if (opticalSpawnPoint != Vector3.zero)
+                {
+                    spawnPoint = opticalSpawnPoint;
+                }
+                var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
+                var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
+                if (!layerComponent)
+                    layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
+
+                layerComponent.Name = prefab.name;
+            };
         }
         
         protected virtual void CreateObject()
-        {
-            StartCoroutine(CreateObjectCoroutine());
-        }
-
-        private IEnumerator CreateObjectCoroutine()
-        {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();            
-
+        {           
             var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-            if(opticalRaycaster)
+            if (opticalRaycaster)
             {
-                //Retrieve spawnpoint from optical raycaster a few frames in a row to make sure the depth texture is updated
-                var frames = 3;
-                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height / 2, 0);
-                for (int i = 0; i < frames; i++)
-                {
-                    yield return new WaitForEndOfFrame();
-                    var opticalSpawnPoint = opticalRaycaster.GetWorldPointAtCameraScreenPoint(Camera.main, centerOfViewport);
-                    if (opticalSpawnPoint != Vector3.zero)
-                    {
-                        spawnPoint = opticalSpawnPoint;
-                    }
-                }
+                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+                opticalRaycaster.GetWorldPointAsync(centerOfViewport, instantiationCallback);
             }
-            
-            var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
-            if (!layerComponent)
-                layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
-            
-            layerComponent.Name = prefab.name;
-
-            yield return null;
         }
     }
 }
