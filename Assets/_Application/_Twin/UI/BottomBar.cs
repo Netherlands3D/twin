@@ -1,6 +1,4 @@
 using Netherlands3D.Coordinates;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -60,7 +58,7 @@ namespace Netherlands3D.Twin.UI
             for (int i = 0; i < currentSet.Length; i++)
                 currentSet[i] = space;
             builder.Append(dimension);
-            char[] result = GetNumberString(value, currentSet, out neg, out count);
+            GetNumberForCharSet(value, currentSet, out neg, out count);
             if (neg)
                 builder.Append(negative);
             for (int i = 0; i < count; i++)
@@ -69,7 +67,7 @@ namespace Netherlands3D.Twin.UI
         }
 
 
-        private char[] GetNumberString(int number, char[] set, out bool negative, out int count)
+        private void GetNumberForCharSet(int number, char[] set, out bool negative, out int count)
         {
             negative = number < 0;
             number = Mathf.Abs(number);
@@ -82,7 +80,6 @@ namespace Netherlands3D.Twin.UI
                 index++;
             }
             count = index;
-            return set;
         }
     }
 }
