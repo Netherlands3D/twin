@@ -58,11 +58,6 @@ namespace Netherlands3D.Twin.Samplers
                 this.resultCallback = resultCallback;
             }
 
-            public void SetWaitFrameCallback(Action callback)
-            {
-                onWaitFrameCallback = callback;
-            }
-
             public void SetRequest(AsyncGPUReadbackRequest request)
             {
                 this.request = request; 
@@ -130,14 +125,7 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.resultCallback.Invoke(worldPos);
             PoolRequest(opticalRequest);            
         }
-
-        private WaitForEndOfFrame wfs = new WaitForEndOfFrame();
-        private IEnumerator WaitForFrame(Action onEnd)
-        {
-            yield return wfs;
-            onEnd?.Invoke();
-        }
-
+       
         private OpticalRequest GetRequest()
         {
             OpticalRequest request = null;
@@ -157,11 +145,14 @@ namespace Netherlands3D.Twin.Samplers
 
         private RenderTexture GetRenderTexture()
         {
+            //because of webgl we cannot create a rendertexture with the prefered format.
+            //the following error will occur in webgl if done so:
+            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
+            //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
+            //but we cannot do this since we need a pool and create a rendertexture for each request
             RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
-            //renderTexture.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R16G16B16A16_SFloat;
             renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
             renderTexture.depthStencilFormat = GraphicsFormat.None;
-            //renderTexture.enableRandomWrite = true; // Allow GPU writes, check on webgl?
             renderTexture.Create();
             return renderTexture;
         }
