@@ -109,5 +109,21 @@ namespace Netherlands3D.Twin.Utility
         {
             return $"{BottomLeft.easting},{BottomLeft.northing},{TopRight.easting},{TopRight.northing}";
         }
+
+        public void Debug()
+        {
+            float height = 100;
+            Vector3 unityBottomLeft = BottomLeft.ToUnity();
+            unityBottomLeft.y = height;
+            Vector3 unityTopRight = TopRight.ToUnity();
+            unityTopRight.y = height;
+            Vector3 unityBottomRight = new Vector3(unityTopRight.x, height, unityBottomLeft.z);
+            Vector3 unityTopLeft = new Vector3(unityBottomLeft.x, height, unityTopRight.z);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeft, unityBottomRight, Color.green);
+            UnityEngine.Debug.DrawLine(unityBottomRight, unityTopRight, Color.green);
+            UnityEngine.Debug.DrawLine(unityTopRight, unityTopLeft, Color.green);
+            UnityEngine.Debug.DrawLine(unityTopLeft, unityBottomLeft, Color.green);
+        }
     }
 }

@@ -251,6 +251,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             d = Mathf.Clamp(d, 0f, len);
             return start + line * d;
         }
+
+        public void OnDrawGizmos()
+        {
+            MappingTree.DebugTree();
+        }
     }
 
     public class FeatureMappingTree
@@ -273,7 +278,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private readonly int maxMappings;
         private readonly int maxDepth;
 
-        public FeatureMappingTree(BoundingBox bounds, int maxObjects = 4, int maxDepth = 6)
+        public FeatureMappingTree(BoundingBox bounds, int maxObjects = 4, int maxDepth = 10)
         {
             root = new Node(bounds);
             this.maxMappings = maxObjects;
@@ -361,6 +366,22 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             node.Mappings = new List<FeatureMapping>();
             foreach (var obj in objs) 
                 RootInsert(obj);
+        }
+
+        public void DebugTree()
+        {
+            DebugNode(root, true);
+        }
+
+        private void DebugNode(Node node, bool recursive)
+        {
+            node.Bounds.Debug();
+            foreach (FeatureMapping mapping in node.Mappings)
+                Debug.DrawLine(mapping.Position.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+
+            if (recursive && !node.IsLeaf)
+                foreach (Node child in node.Children)
+                    DebugNode(child, recursive);
         }
     }
 
