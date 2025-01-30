@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
