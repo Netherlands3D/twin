@@ -167,7 +167,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 }
             }
 
-            Debug.LogWarning("Bounding box information not found in WFS GetCapabilities response.");
+            Debug.LogWarning("Global bounding box information not found in WFS GetCapabilities response.");
             return null;
         }
 

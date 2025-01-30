@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            WFSBoundingBoxLibrary.Instance.GetBoundingBoxContainer(CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
+            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
         }
 
         private string CreateGetCapabilitiesURL(string wfsUrl)
@@ -68,7 +68,6 @@ namespace Netherlands3D.Functionalities.Wfs
         
         public void SetBoundingBox(BoundingBox boundingBox)
         {
-            Debug.Log($"Feature Bounding box found in WGS84 CRS: BL: {boundingBox.BottomLeft} TR: {boundingBox.TopRight}");
             cartesianTileWFSLayer.BoundingBox = boundingBox;
         }
     }

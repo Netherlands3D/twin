@@ -80,19 +80,16 @@ namespace Netherlands3D.Functionalities.Wfs
             {
                 case WFSRequest.RequestType.GetCapabilities:
                 {
-                    getCapabilitiesRequest.GetWFSBounds(); //global bounds
+                    // add the bounds directly, since we already have the GetCapabilities information anyway
+                    WFSBoundingBoxCache.AddWfsBoundingBoxContainer(sourceUrl, getCapabilitiesRequest);
                     var featureTypes = getCapabilitiesRequest.GetFeatureTypes();
 
                     //Create a folder layer 
                     foreach (var featureType in featureTypes)
                     {
-                        BoundingBox layerBounds = featureType.BoundingBox;
-                        if (layerBounds == null)
-                            layerBounds = getCapabilitiesRequest.wfsBounds; //use global bounds
-
                         string crs = featureType.DefaultCRS;
                         Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, layerBounds);
+                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
                     }
 
                     getCapabilitiesRequest = null;
@@ -109,7 +106,7 @@ namespace Netherlands3D.Functionalities.Wfs
                         string crs = queryParameters["srsname"];
                         // Can't deduct a human-readable title at the moment, we should add that we always query for the
                         // capabilities; this also helps with things like outputFormat and CRS
-                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, null); //todo: can we get the BBox here?
+                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
                     }
 
                     getCapabilitiesRequest = null;
@@ -121,7 +118,7 @@ namespace Netherlands3D.Functionalities.Wfs
             }
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, BoundingBox wfsBounds)
+        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl, crsType);
@@ -131,7 +128,6 @@ namespace Netherlands3D.Functionalities.Wfs
 
             //Spawn a new WFS GeoJSON layer
             WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.SetBoundingBox(wfsBounds);
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = title;
 

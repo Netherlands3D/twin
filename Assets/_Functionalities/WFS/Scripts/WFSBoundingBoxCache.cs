@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.Wfs
@@ -13,22 +12,27 @@ namespace Netherlands3D.Functionalities.Wfs
         public string url;
         public BoundingBox GlobalBoundingBox;
         public Dictionary<string, BoundingBox> LayerBoundingBoxes = new();
+
+        public WFSBoundingBoxContainer(string url)
+        {
+            this.url = url;
+        }
     }
     
-    public class WFSBoundingBoxLibrary : MonoBehaviour
+    public class WFSBoundingBoxCache : MonoBehaviour
     {
         public static Dictionary<string, WFSBoundingBoxContainer> BoundingBoxContainers = new();
         private List<string> pendingRequests = new();
         
-        private static WFSBoundingBoxLibrary instance;
-        public static WFSBoundingBoxLibrary Instance
+        private static WFSBoundingBoxCache instance;
+        public static WFSBoundingBoxCache Instance
         {
             get
             {
                 if (!instance)
                 {
                     var go = new GameObject("WFSBoundingBoxLibrary_Instance");
-                    instance = go.AddComponent<WFSBoundingBoxLibrary>();
+                    instance = go.AddComponent<WFSBoundingBoxCache>();
                 }
 
                 return instance;
@@ -48,25 +52,29 @@ namespace Netherlands3D.Functionalities.Wfs
 
         public void GetBoundingBoxContainer(string url, Action<WFSBoundingBoxContainer> callback)
         {
+            if (BoundingBoxContainers.ContainsKey(url))
+            {
+                // bboxes in dictionary already
+                callback.Invoke(BoundingBoxContainers[url]);
+                return;
+            } 
+            
             if (pendingRequests.Contains(url))
             {
+                //request for this url already sent, wait for it to complete and return its bboxes
                 StartCoroutine(WaitForExistingRequestToComplete(url, callback));
                 return;
             }
             
             if (!WFSRequest.IsValidWFSURL(url))
             {
+                Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
                 callback.Invoke(null);
                 return;
             }
-
-            if (BoundingBoxContainers.ContainsKey(url))
-            {
-                callback.Invoke(BoundingBoxContainers[url]);
-                return;
-            }
             
-            StartCoroutine(GetBoundingBoxes(url, callback));
+            //send request for Bounding Boxes
+            StartCoroutine(RequestBoundingBoxes(url, callback));
         }
 
         private IEnumerator WaitForExistingRequestToComplete(string url, Action<WFSBoundingBoxContainer> callback)
@@ -80,7 +88,7 @@ namespace Netherlands3D.Functionalities.Wfs
         }
         
         
-        private IEnumerator GetBoundingBoxes(string url, Action<WFSBoundingBoxContainer> callBack)
+        private IEnumerator RequestBoundingBoxes(string url, Action<WFSBoundingBoxContainer> callBack)
         {
             pendingRequests.Add(url);
             UnityWebRequest webRequest = UnityWebRequest.Get(url);
@@ -88,25 +96,31 @@ namespace Netherlands3D.Functionalities.Wfs
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Could not download bounding boxes of {url}");
+                callBack.Invoke(null);
             }
             else
             {
                 WFSRequest wfsRequest = new WFSRequest(url, webRequest.downloadHandler.text);
-
-                var bboxContainer = new WFSBoundingBoxContainer();
-                var globalBounds = wfsRequest.GetWFSBounds();
-                bboxContainer.GlobalBoundingBox = globalBounds;
-                
-                foreach (var feature in wfsRequest.GetFeatureTypes())
-                {
-                    bboxContainer.LayerBoundingBoxes.TryAdd(feature.Name, feature.BoundingBox);
-                }                
-                
-                BoundingBoxContainers.Add(url, bboxContainer);
+                var bboxContainer = AddWfsBoundingBoxContainer(url, wfsRequest);
                 callBack.Invoke(bboxContainer);
             }
 
             pendingRequests.Remove(url);
+        }
+
+        public static WFSBoundingBoxContainer AddWfsBoundingBoxContainer(string url, WFSRequest wfsRequest)
+        {
+            var bboxContainer = new WFSBoundingBoxContainer(url);
+            var globalBounds = wfsRequest.GetWFSBounds();
+            bboxContainer.GlobalBoundingBox = globalBounds;
+
+            foreach (var feature in wfsRequest.GetFeatureTypes())
+            {
+                bboxContainer.LayerBoundingBoxes.TryAdd(feature.Name, feature.BoundingBox);
+            }
+
+            BoundingBoxContainers.Add(url, bboxContainer);
+            return bboxContainer;
         }
     }
 }
